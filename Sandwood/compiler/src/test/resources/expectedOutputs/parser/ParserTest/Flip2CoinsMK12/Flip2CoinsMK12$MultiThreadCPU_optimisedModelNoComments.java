@@ -324,7 +324,7 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample10)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		if(!fixedFlag$sample23)
@@ -338,7 +338,65 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample10)
+			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample23)
+			parallelFor(RNG$, 1, coins, 1,
+				(int forStart$i$var22, int forEnd$i$var22, int threadID$i$var22, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int i$var22 = forStart$i$var22; i$var22 < forEnd$i$var22; i$var22 += 1)
+							bias[i$var22] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				}
+			);
+
+		parallelFor(RNG$, 0, 1, 1,
+			(int forStart$index$j, int forEnd$index$j, int threadID$index$j, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$j = forStart$index$j; index$j < forEnd$index$j; index$j += 1) {
+						int j = index$j;
+						int threadID$j = threadID$index$j;
+						boolean[] var40 = flips[j];
+						parallelFor(RNG$1, 0, length$flipsMeasured[j], 1,
+							(int forStart$var49, int forEnd$var49, int threadID$var49, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int var49 = forStart$var49; var49 < forEnd$var49; var49 += 1)
+										var40[var49] = DistributionSampling.sampleBernoulli(RNG$2, bias[j]);
+							}
+						);
+					}
+			}
+		);
+		parallelFor(RNG$, 1, coins, 1,
+			(int forStart$index$k, int forEnd$index$k, int threadID$index$k, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$k = forStart$index$k; index$k < forEnd$index$k; index$k += 1) {
+						int k = index$k;
+						int threadID$k = threadID$index$k;
+						boolean[] var67 = flips[k];
+						parallelFor(RNG$1, 0, length$flipsMeasured[k], 1,
+							(int forStart$var76, int forEnd$var76, int threadID$var76, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int var76 = forStart$var76; var76 < forEnd$var76; var76 += 1)
+										var67[var76] = DistributionSampling.sampleBernoulli(RNG$2, bias[k]);
+							}
+						);
+					}
+			}
+		);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample10)
+			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample23)
+			parallelFor(RNG$, 1, coins, 1,
+				(int forStart$i$var22, int forEnd$i$var22, int threadID$i$var22, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int i$var22 = forStart$i$var22; i$var22 < forEnd$i$var22; i$var22 += 1)
+							bias[i$var22] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				}
+			);
+
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample10)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		if(!fixedFlag$sample23)
@@ -406,12 +464,7 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample10)
 			logProbabilityValue$sample10();
@@ -437,21 +490,6 @@ class Flip2CoinsMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbabilityValue$sample23();
 		logProbabilityValue$sample50();
 		logProbabilityValue$sample78();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample10)
-			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample23)
-			parallelFor(RNG$, 1, coins, 1,
-				(int forStart$i$var22, int forEnd$i$var22, int threadID$i$var22, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int i$var22 = forStart$i$var22; i$var22 < forEnd$i$var22; i$var22 += 1)
-							bias[i$var22] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
-				}
-			);
-
-		logModelProbabilitiesVal();
 	}
 
 	@Override

@@ -334,13 +334,31 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample5)
 			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample5)
+			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
+		parallelFor(RNG$, 0, length$observed, 1,
+			(int forStart$var18, int forEnd$var18, int threadID$var18, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var18 = forStart$var18; var18 < forEnd$var18; var18 += 1)
+						output[var18] = DistributionSampling.sampleBernoulli(RNG$1, prior);
+			}
+		);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample5)
+			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample5)
 			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
 	}
@@ -376,12 +394,7 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample5)
 			logProbabilityValue$sample5();
@@ -400,13 +413,6 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample5();
 		logProbabilityValue$sample19();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample5)
-			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
-		logModelProbabilitiesVal();
 	}
 
 	@Override

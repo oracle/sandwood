@@ -27,5 +27,4 @@ interface HMMTestPart5$CoreInterface extends org.sandwood.runtime.internal.model
 	public void set$st(int[] cv$value);
 	public int get$states();
 	public double[] get$v();
-	public void logEvidenceGeneration();
 }

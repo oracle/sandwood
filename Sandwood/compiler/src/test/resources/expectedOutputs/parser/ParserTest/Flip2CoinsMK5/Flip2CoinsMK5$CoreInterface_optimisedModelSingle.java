@@ -40,8 +40,4 @@ interface Flip2CoinsMK5$CoreInterface extends org.sandwood.runtime.internal.mode
 
 	// Setter for shape.
 	public void set$shape(int[] cv$value);
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

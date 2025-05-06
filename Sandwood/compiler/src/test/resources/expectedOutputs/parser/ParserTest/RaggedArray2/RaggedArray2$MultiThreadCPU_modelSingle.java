@@ -441,24 +441,24 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						double[] var78 = a[y];
 						
 						// Allocate a local variable to hold the length of the array.
-						int lengthCV$a$82_11 = -1;
+						int lengthCV$a$82_12 = -1;
 						
 						// calculate array length.
 						// 
 						// Looking for a path between Put 34 and consumer double[] 78.
 						{
 							if((1 == y))
-								lengthCV$a$82_11 = 3;
+								lengthCV$a$82_12 = 3;
 						}
 						
 						// Looking for a path between Put 16 and consumer double[] 78.
 						{
 							if((0 == y))
-								lengthCV$a$82_11 = 2;
+								lengthCV$a$82_12 = 2;
 						}
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$82_11))?Math.log(var78[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+						double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$82_12))?Math.log(var78[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -576,14 +576,14 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					{
 						cv$temp$0$c = c;
 					}
-					int cv$temp$1$$var297;
+					int cv$temp$1$$var299;
 					{
-						cv$temp$1$$var297 = 2;
+						cv$temp$1$$var299 = 2;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var297))?Math.log(cv$temp$0$c[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var299))?Math.log(cv$temp$0$c[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 79.
 					{
@@ -609,39 +609,39 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 													double[] var78 = a[traceTempVariable$y$2_1];
 													cv$temp$2$var78 = var78;
 												}
-												int cv$temp$3$$var299;
+												int cv$temp$3$$var301;
 												{
 													// Allocate a local variable to hold the length of the array.
-													int lengthCV$a$82_8 = -1;
+													int lengthCV$a$82_9 = -1;
 													
 													// calculate array length.
 													// 
 													// Looking for a path between Put 34 and consumer double[] 78.
 													{
 														if((1 == traceTempVariable$y$2_1))
-															lengthCV$a$82_8 = 3;
+															lengthCV$a$82_9 = 3;
 													}
 													
 													// Looking for a path between Put 16 and consumer double[] 78.
 													{
 														if((0 == traceTempVariable$y$2_1))
-															lengthCV$a$82_8 = 2;
+															lengthCV$a$82_9 = 2;
 													}
 													
 													// Constructing a random variable input for use later.
-													int $var299 = lengthCV$a$82_8;
-													cv$temp$3$$var299 = $var299;
+													int $var301 = lengthCV$a$82_9;
+													cv$temp$3$$var301 = $var301;
 												}
 												
 												// Record the probability of sample task 84 generating output with current configuration.
-												if(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var299))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var299))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												if(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var301))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var301))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													// If the second value is -infinity.
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var299))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var301))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var299))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var299))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var301))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var301))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)));
 												}
 												
 												// Recorded the probability of reaching sample task 84 with the current configuration.
@@ -819,24 +819,24 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			int cv$numNumStates = 0;
 			{
 				// Allocate a local variable to hold the length of the array.
-				int lengthCV$a$82_9 = -1;
+				int lengthCV$a$82_10 = -1;
 				
 				// calculate array length.
 				// 
 				// Looking for a path between Put 34 and consumer double[] 78.
 				{
 					if((1 == y))
-						lengthCV$a$82_9 = 3;
+						lengthCV$a$82_10 = 3;
 				}
 				
 				// Looking for a path between Put 16 and consumer double[] 78.
 				{
 					if((0 == y))
-						lengthCV$a$82_9 = 2;
+						lengthCV$a$82_10 = 2;
 				}
 				
 				// variable marginalization
-				cv$numNumStates = Math.max(cv$numNumStates, lengthCV$a$82_9);
+				cv$numNumStates = Math.max(cv$numNumStates, lengthCV$a$82_10);
 			}
 			
 			// Get a local reference to the scratch space.
@@ -877,33 +877,33 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						double[] var78 = a[y];
 						cv$temp$0$var78 = var78;
 					}
-					int cv$temp$1$$var321;
+					int cv$temp$1$$var323;
 					{
 						// Allocate a local variable to hold the length of the array.
-						int lengthCV$a$82_10 = -1;
+						int lengthCV$a$82_11 = -1;
 						
 						// calculate array length.
 						// 
 						// Looking for a path between Put 34 and consumer double[] 78.
 						{
 							if((1 == y))
-								lengthCV$a$82_10 = 3;
+								lengthCV$a$82_11 = 3;
 						}
 						
 						// Looking for a path between Put 16 and consumer double[] 78.
 						{
 							if((0 == y))
-								lengthCV$a$82_10 = 2;
+								lengthCV$a$82_11 = 2;
 						}
 						
 						// Constructing a random variable input for use later.
-						int $var321 = lengthCV$a$82_10;
-						cv$temp$1$$var321 = $var321;
+						int $var323 = lengthCV$a$82_11;
+						cv$temp$1$$var323 = $var323;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var321))?Math.log(cv$temp$0$var78[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var323))?Math.log(cv$temp$0$var78[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 83.
 					{
@@ -1109,7 +1109,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			y = DistributionSampling.sampleCategorical(RNG$, c, 2);
 		
 		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$82_12 = -1;
+		int lengthCV$a$82_13 = -1;
 		
 		// calculate array length.
 		// 
@@ -1117,7 +1117,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		{
 			if((1 == y)) {
 				if(!fixedFlag$sample84)
-					lengthCV$a$82_12 = 3;
+					lengthCV$a$82_13 = 3;
 			}
 		}
 		
@@ -1125,11 +1125,11 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		{
 			if((0 == y)) {
 				if(!fixedFlag$sample84)
-					lengthCV$a$82_12 = 2;
+					lengthCV$a$82_13 = 2;
 			}
 		}
 		if(!fixedFlag$sample84)
-			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_12);
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_13);
 		if(!(fixedFlag$sample81 && fixedFlag$sample84))
 			p = b[y][i];
 		
@@ -1146,9 +1146,42 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		if(!fixedFlag$sample81)
+			y = DistributionSampling.sampleCategorical(RNG$, c, 2);
+		
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$82_17 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 34 and consumer double[] 78.
+		{
+			if((1 == y)) {
+				if(!fixedFlag$sample84)
+					lengthCV$a$82_17 = 3;
+			}
+		}
+		
+		// Looking for a path between Put 16 and consumer double[] 78.
+		{
+			if((0 == y)) {
+				if(!fixedFlag$sample84)
+					lengthCV$a$82_17 = 2;
+			}
+		}
+		if(!fixedFlag$sample84)
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_17);
+		p = b[y][i];
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
 		if(!fixedFlag$sample81)
 			y = DistributionSampling.sampleCategorical(RNG$, c, 2);
 		
@@ -1174,8 +1207,18 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 		if(!fixedFlag$sample84)
 			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_14);
-		if(!(fixedFlag$sample81 && fixedFlag$sample84))
-			p = b[y][i];
+		p = b[y][i];
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, length$obs_measured, 1,
+			(int forStart$var95, int forEnd$var95, int threadID$var95, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var95 = forStart$var95; var95 < forEnd$var95; var95 += 1)
+						obs[var95] = DistributionSampling.sampleBernoulli(RNG$1, p);
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -1186,7 +1229,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			y = DistributionSampling.sampleCategorical(RNG$, c, 2);
 		
 		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$82_13 = -1;
+		int lengthCV$a$82_15 = -1;
 		
 		// calculate array length.
 		// 
@@ -1194,7 +1237,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		{
 			if((1 == y)) {
 				if(!fixedFlag$sample84)
-					lengthCV$a$82_13 = 3;
+					lengthCV$a$82_15 = 3;
 			}
 		}
 		
@@ -1202,13 +1245,46 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		{
 			if((0 == y)) {
 				if(!fixedFlag$sample84)
-					lengthCV$a$82_13 = 2;
+					lengthCV$a$82_15 = 2;
 			}
 		}
 		if(!fixedFlag$sample84)
-			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_13);
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_15);
 		if(!(fixedFlag$sample81 && fixedFlag$sample84))
 			p = b[y][i];
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		if(!fixedFlag$sample81)
+			y = DistributionSampling.sampleCategorical(RNG$, c, 2);
+		
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$82_16 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 34 and consumer double[] 78.
+		{
+			if((1 == y)) {
+				if(!fixedFlag$sample84)
+					lengthCV$a$82_16 = 3;
+			}
+		}
+		
+		// Looking for a path between Put 16 and consumer double[] 78.
+		{
+			if((0 == y)) {
+				if(!fixedFlag$sample84)
+					lengthCV$a$82_16 = 2;
+			}
+		}
+		if(!fixedFlag$sample84)
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_16);
+		p = b[y][i];
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -1277,19 +1353,9 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$var96 = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -1340,45 +1406,6 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbabilityValue$sample100();
 	}
 
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample81)
-			y = DistributionSampling.sampleCategorical(RNG$, c, 2);
-		
-		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$82_15 = -1;
-		
-		// calculate array length.
-		// 
-		// Looking for a path between Put 34 and consumer double[] 78.
-		{
-			if((1 == y)) {
-				if(!fixedFlag$sample84)
-					lengthCV$a$82_15 = 3;
-			}
-		}
-		
-		// Looking for a path between Put 16 and consumer double[] 78.
-		{
-			if((0 == y)) {
-				if(!fixedFlag$sample84)
-					lengthCV$a$82_15 = 2;
-			}
-		}
-		if(!fixedFlag$sample84)
-			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_15);
-		if(!(fixedFlag$sample81 && fixedFlag$sample84))
-			p = b[y][i];
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
-	}
-
 	// Method to propagate observed values back into the model.
 	@Override
 	public final void propagateObservedValues() {
@@ -1396,8 +1423,7 @@ class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		if((fixedFlag$sample81 && fixedFlag$sample84))
-			p = b[y][i];
+		p = b[y][i];
 	}
 
 	@Override

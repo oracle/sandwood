@@ -112,12 +112,12 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	private final void logProbabilityValue$sample39() {
 		if(!fixedProbFlag$sample39) {
-			int lengthCV$a$37_11 = -1;
+			int lengthCV$a$37_12 = -1;
 			if((0 == y))
-				lengthCV$a$37_11 = 2;
+				lengthCV$a$37_12 = 2;
 			if((1 == y))
-				lengthCV$a$37_11 = 3;
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_11);
+				lengthCV$a$37_12 = 3;
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_12);
 			logProbability$var36 = cv$distributionAccumulator;
 			logProbability$d = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -155,12 +155,12 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	private final void sample39() {
 		double cv$originalProbability;
-		int lengthCV$a$37_9 = -1;
+		int lengthCV$a$37_10 = -1;
 		if((0 == y))
-			lengthCV$a$37_9 = 2;
+			lengthCV$a$37_10 = 2;
 		if((1 == y))
-			lengthCV$a$37_9 = 3;
-		int cv$indexToChange = (int)((double)lengthCV$a$37_9 * DistributionSampling.sampleUniform(RNG$));
+			lengthCV$a$37_10 = 3;
+		int cv$indexToChange = (int)((double)lengthCV$a$37_10 * DistributionSampling.sampleUniform(RNG$));
 		double cv$movementRatio = ((DistributionSampling.sampleBeta(RNG$, 5, 5) * 1.9999) - 1);
 		double cv$proposedDifference;
 		if((cv$movementRatio < 0))
@@ -168,25 +168,25 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		else {
 			cv$proposedDifference = (1.0 - d[cv$indexToChange]);
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1) {
-				double cv$temp = (d[cv$loopIndex] * (lengthCV$a$37_9 - 1));
+				double cv$temp = (d[cv$loopIndex] * (lengthCV$a$37_10 - 1));
 				if((cv$temp < cv$proposedDifference))
 					cv$proposedDifference = cv$temp;
 			}
-			for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$37_9; cv$loopIndex += 1) {
-				double cv$temp = (d[cv$loopIndex] * (lengthCV$a$37_9 - 1));
+			for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$37_10; cv$loopIndex += 1) {
+				double cv$temp = (d[cv$loopIndex] * (lengthCV$a$37_10 - 1));
 				if((cv$temp < cv$proposedDifference))
 					cv$proposedDifference = cv$temp;
 			}
 		}
 		cv$proposedDifference = (cv$movementRatio * cv$proposedDifference);
-		double cv$rebalanceValue = (cv$proposedDifference / (lengthCV$a$37_9 - 1));
+		double cv$rebalanceValue = (cv$proposedDifference / (lengthCV$a$37_10 - 1));
 		{
-			int lengthCV$a$37_10 = -1;
+			int lengthCV$a$37_11 = -1;
 			if((0 == y))
-				lengthCV$a$37_10 = 2;
+				lengthCV$a$37_11 = 2;
 			if((1 == y))
-				lengthCV$a$37_10 = 3;
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_10);
+				lengthCV$a$37_11 = 3;
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_11);
 			for(int var51 = 0; var51 < length$obs_measured; var51 += 1) {
 				double cv$temp$2$var38 = d[y];
 				cv$accumulatedProbabilities = (Math.log((obs[var51]?cv$temp$2$var38:(1.0 - cv$temp$2$var38))) + cv$accumulatedProbabilities);
@@ -196,14 +196,14 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
 			d[cv$loopIndex] = (d[cv$loopIndex] - cv$rebalanceValue);
 		d[cv$indexToChange] = (d[cv$indexToChange] + cv$proposedDifference);
-		for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$37_9; cv$loopIndex += 1)
+		for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$37_10; cv$loopIndex += 1)
 			d[cv$loopIndex] = (d[cv$loopIndex] - cv$rebalanceValue);
-		int lengthCV$a$37_10 = -1;
+		int lengthCV$a$37_11 = -1;
 		if((0 == y))
-			lengthCV$a$37_10 = 2;
+			lengthCV$a$37_11 = 2;
 		if((1 == y))
-			lengthCV$a$37_10 = 3;
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_10);
+			lengthCV$a$37_11 = 3;
+		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_11);
 		for(int var51 = 0; var51 < length$obs_measured; var51 += 1) {
 			double cv$temp$2$var38 = d[y];
 			cv$accumulatedProbabilities = (Math.log((obs[var51]?cv$temp$2$var38:(1.0 - cv$temp$2$var38))) + cv$accumulatedProbabilities);
@@ -212,7 +212,7 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
 				d[cv$loopIndex] = (d[cv$loopIndex] + cv$rebalanceValue);
 			d[cv$indexToChange] = (d[cv$indexToChange] - cv$proposedDifference);
-			for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$37_9; cv$loopIndex += 1)
+			for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$37_10; cv$loopIndex += 1)
 				d[cv$loopIndex] = (d[cv$loopIndex] + cv$rebalanceValue);
 		}
 	}
@@ -226,12 +226,12 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		a[0] = new double[2];
 		a[1] = new double[3];
 		if(!fixedFlag$sample39) {
-			int lengthCV$a$37_8 = -1;
+			int lengthCV$a$37_9 = -1;
 			if((0 == y))
-				lengthCV$a$37_8 = 2;
+				lengthCV$a$37_9 = 2;
 			if((1 == y))
-				lengthCV$a$37_8 = 3;
-			d = new double[lengthCV$a$37_8];
+				lengthCV$a$37_9 = 3;
+			d = new double[lengthCV$a$37_9];
 		}
 		obs = new boolean[length$obs_measured];
 	}
@@ -239,12 +239,12 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	@Override
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample39) {
-			int lengthCV$a$37_12 = -1;
+			int lengthCV$a$37_13 = -1;
 			if((0 == y))
-				lengthCV$a$37_12 = 2;
+				lengthCV$a$37_13 = 2;
 			if((1 == y))
-				lengthCV$a$37_12 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_12, d);
+				lengthCV$a$37_13 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_13, d);
 		}
 		parallelFor(RNG$, 0, length$obs_measured, 1,
 			(int forStart$var51, int forEnd$var51, int threadID$var51, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -255,7 +255,19 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		if(!fixedFlag$sample39) {
+			int lengthCV$a$37_17 = -1;
+			if((0 == y))
+				lengthCV$a$37_17 = 2;
+			if((1 == y))
+				lengthCV$a$37_17 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_17, d);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
 		if(!fixedFlag$sample39) {
 			int lengthCV$a$37_14 = -1;
 			if((0 == y))
@@ -264,17 +276,35 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				lengthCV$a$37_14 = 3;
 			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_14, d);
 		}
+		parallelFor(RNG$, 0, length$obs_measured, 1,
+			(int forStart$var51, int forEnd$var51, int threadID$var51, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var51 = forStart$var51; var51 < forEnd$var51; var51 += 1)
+						obs[var51] = DistributionSampling.sampleBernoulli(RNG$1, d[y]);
+			}
+		);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample39) {
-			int lengthCV$a$37_13 = -1;
+			int lengthCV$a$37_15 = -1;
 			if((0 == y))
-				lengthCV$a$37_13 = 2;
+				lengthCV$a$37_15 = 2;
 			if((1 == y))
-				lengthCV$a$37_13 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_13, d);
+				lengthCV$a$37_15 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_15, d);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		if(!fixedFlag$sample39) {
+			int lengthCV$a$37_16 = -1;
+			if((0 == y))
+				lengthCV$a$37_16 = 2;
+			if((1 == y))
+				lengthCV$a$37_16 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_16, d);
 		}
 	}
 
@@ -309,12 +339,7 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample39)
 			logProbabilityValue$sample39();
@@ -333,19 +358,6 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample39();
 		logProbabilityValue$sample54();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample39) {
-			int lengthCV$a$37_15 = -1;
-			if((0 == y))
-				lengthCV$a$37_15 = 2;
-			if((1 == y))
-				lengthCV$a$37_15 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_15, d);
-		}
-		logModelProbabilitiesVal();
 	}
 
 	@Override

@@ -19,5 +19,4 @@ interface LogitRegressionTest$CoreInterface extends org.sandwood.runtime.interna
 	public boolean[][] get$y();
 	public boolean[][] get$yMeasured();
 	public void set$yMeasured(boolean[][] cv$value);
-	public void logEvidenceGeneration();
 }

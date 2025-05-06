@@ -58,8 +58,4 @@ interface Conditional2c$CoreInterface extends org.sandwood.runtime.internal.mode
 
 	// Getter for value2.
 	public double[] get$value2();
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

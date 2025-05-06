@@ -40,8 +40,4 @@ interface Flip1CoinMK10$CoreInterface extends org.sandwood.runtime.internal.mode
 
 	// Getter for samples.
 	public int get$samples();
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

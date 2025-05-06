@@ -647,7 +647,37 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		for(int var28 = 0; var28 < states; var28 += 1) {
+			double[] var29 = m[var28];
+			if(!fixedFlag$sample29)
+				DistributionSampling.sampleDirichlet(RNG$, v, states, var29);
+		}
+		for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
+			b[i$var46] = a[(i$var46 - 1)];
+			if(!fixedFlag$sample55)
+				a[i$var46] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var46]], states);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
+		for(int var28 = 0; var28 < states; var28 += 1) {
+			double[] var29 = m[var28];
+			if(!fixedFlag$sample29)
+				DistributionSampling.sampleDirichlet(RNG$, v, states, var29);
+		}
+		for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
+			b[i$var46] = a[(i$var46 - 1)];
+			if(!fixedFlag$sample55)
+				a[i$var46] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var46]], states);
+		}
+		for(int j = 0; j < n; j += 1)
+			flips[j] = DistributionSampling.sampleBernoulli(RNG$, (1 / a[(j + 1)]));
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		for(int var28 = 0; var28 < states; var28 += 1) {
 			double[] var29 = m[var28];
 			if(!fixedFlag$sample29)
@@ -662,15 +692,14 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		for(int var28 = 0; var28 < states; var28 += 1) {
 			double[] var29 = m[var28];
 			if(!fixedFlag$sample29)
 				DistributionSampling.sampleDirichlet(RNG$, v, states, var29);
 		}
 		for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
-			if(!fixedFlag$sample55)
-				b[i$var46] = a[(i$var46 - 1)];
+			b[i$var46] = a[(i$var46 - 1)];
 			if(!fixedFlag$sample55)
 				a[i$var46] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var46]], states);
 		}
@@ -733,12 +762,7 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample29)
 			logProbabilityValue$sample29();
@@ -764,22 +788,6 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void logProbabilityGeneration() {
-		for(int var28 = 0; var28 < states; var28 += 1) {
-			double[] var29 = m[var28];
-			if(!fixedFlag$sample29)
-				DistributionSampling.sampleDirichlet(RNG$, v, states, var29);
-		}
-		for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
-			if(!fixedFlag$sample55)
-				b[i$var46] = a[(i$var46 - 1)];
-			if(!fixedFlag$sample55)
-				a[i$var46] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var46]], states);
-		}
-		logModelProbabilitiesVal();
-	}
-
-	@Override
 	public final void propagateObservedValues() {
 		boolean[] cv$source1 = flipsMeasured;
 		boolean[] cv$target1 = flips;
@@ -790,10 +798,8 @@ class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	@Override
 	public final void setIntermediates() {
-		for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
-			if(fixedFlag$sample55)
-				b[i$var46] = a[(i$var46 - 1)];
-		}
+		for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
+			b[i$var46] = a[(i$var46 - 1)];
 	}
 
 	@Override

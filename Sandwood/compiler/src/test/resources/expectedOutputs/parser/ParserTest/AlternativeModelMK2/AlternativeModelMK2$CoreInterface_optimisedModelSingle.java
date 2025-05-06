@@ -37,8 +37,4 @@ interface AlternativeModelMK2$CoreInterface extends org.sandwood.runtime.interna
 
 	// Getter for positiveCount.
 	public int get$positiveCount();
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

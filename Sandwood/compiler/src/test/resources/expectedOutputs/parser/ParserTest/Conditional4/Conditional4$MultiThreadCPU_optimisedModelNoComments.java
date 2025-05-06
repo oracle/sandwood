@@ -260,26 +260,39 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(guard)
 			bias[0] = 0.5;
 		else {
-			if(!fixedFlag$sample21) {
+			if(!fixedFlag$sample21)
 				var19 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+			if((!fixedFlag$sample4 || !fixedFlag$sample21))
 				bias[0] = var19;
-			}
 		}
 		value = DistributionSampling.sampleBeta(RNG$, bias[0], 1.0);
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 		if(guard)
 			bias[0] = 0.5;
 		else {
-			if(!fixedFlag$sample21) {
+			if(!fixedFlag$sample21)
 				var19 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
-				bias[0] = var19;
-			}
+			bias[0] = var19;
 		}
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample4)
+			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+		if(guard)
+			bias[0] = 0.5;
+		else {
+			if(!fixedFlag$sample21)
+				var19 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+			bias[0] = var19;
+		}
+		value = DistributionSampling.sampleBeta(RNG$, bias[0], 1.0);
 	}
 
 	@Override
@@ -289,10 +302,23 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(guard)
 			bias[0] = 0.5;
 		else {
-			if(!fixedFlag$sample21) {
+			if(!fixedFlag$sample21)
 				var19 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+			if((!fixedFlag$sample4 || !fixedFlag$sample21))
 				bias[0] = var19;
-			}
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		if(!fixedFlag$sample4)
+			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+		if(guard)
+			bias[0] = 0.5;
+		else {
+			if(!fixedFlag$sample21)
+				var19 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+			bias[0] = var19;
 		}
 	}
 
@@ -332,12 +358,7 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample4)
 			logProbabilityValue$sample4();
@@ -363,21 +384,6 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample4)
-			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard)
-			bias[0] = 0.5;
-		else {
-			if(!fixedFlag$sample21) {
-				var19 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
-				bias[0] = var19;
-			}
-		}
-		logModelProbabilitiesVal();
-	}
-
-	@Override
 	public final void propagateObservedValues() {
 		value = observedValue;
 	}
@@ -386,10 +392,8 @@ class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void setIntermediates() {
 		if(guard)
 			bias[0] = 0.5;
-		else {
-			if(fixedFlag$sample21)
-				bias[0] = var19;
-		}
+		else
+			bias[0] = var19;
 	}
 
 	@Override

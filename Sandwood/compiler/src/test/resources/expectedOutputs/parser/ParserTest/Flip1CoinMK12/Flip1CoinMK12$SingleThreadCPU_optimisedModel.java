@@ -944,9 +944,66 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		if(guard1) {
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(!fixedFlag$sample16) {
+				var14 = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+				bias = var14;
+			}
+		} else {
+			if((guard2 <= 2)) {
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!fixedFlag$sample28) {
+					var26 = (DistributionSampling.sampleBeta(RNG$, 1.0, 1.0) / 2);
+					bias = var26;
+				}
+			} else {
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!fixedFlag$sample35) {
+					var33 = (DistributionSampling.sampleBeta(RNG$, 1.0, 1.0) / 3);
+					bias = var33;
+				}
+			}
+		}
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		if(guard1) {
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(!fixedFlag$sample16) {
+				var14 = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+				bias = var14;
+			}
+		} else {
+			if((guard2 <= 2)) {
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!fixedFlag$sample28) {
+					var26 = (DistributionSampling.sampleBeta(RNG$, 1.0, 1.0) / 2);
+					bias = var26;
+				}
+			} else {
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!fixedFlag$sample35) {
+					var33 = (DistributionSampling.sampleBeta(RNG$, 1.0, 1.0) / 3);
+					bias = var33;
+				}
+			}
+		}
+		for(int var47 = 0; var47 < samples; var47 += 1)
+			flips[var47] = DistributionSampling.sampleBernoulli(RNG$, bias);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		if(guard1) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(!fixedFlag$sample16) {
@@ -971,9 +1028,10 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(guard1) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(!fixedFlag$sample16) {
@@ -1053,19 +1111,9 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			logProbability$var48 = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -1118,39 +1166,6 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbabilityValue$sample28();
 		logProbabilityValue$sample35();
 		logProbabilityValue$sample52();
-	}
-
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		if(guard1) {
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample16) {
-				var14 = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-				bias = var14;
-			}
-		} else {
-			if((guard2 <= 2)) {
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!fixedFlag$sample28) {
-					var26 = (DistributionSampling.sampleBeta(RNG$, 1.0, 1.0) / 2);
-					bias = var26;
-				}
-			} else {
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!fixedFlag$sample35) {
-					var33 = (DistributionSampling.sampleBeta(RNG$, 1.0, 1.0) / 3);
-					bias = var33;
-				}
-			}
-		}
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
 	}
 
 	// Method to propagate observed values back into the model.

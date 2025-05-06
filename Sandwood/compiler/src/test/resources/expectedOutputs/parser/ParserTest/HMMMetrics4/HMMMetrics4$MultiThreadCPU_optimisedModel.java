@@ -3484,9 +3484,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// 
 			// Substituted "cv$temp$0$initialStateDistribution" with its value "initialStateDistribution".
 			// 
-			// cv$temp$1$$var3222's comment
+			// cv$temp$1$$var3234's comment
 			// 
-			// $var3222's comment
+			// $var3234's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(initialStateDistribution[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
@@ -3508,9 +3508,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				if(((0 <= var32) && (var32 < noStates))) {
 					// Substituted "index$sample$3_2" with its value "sample$var45".
 					// 
-					// cv$temp$3$$var3235's comment
+					// cv$temp$3$$var3247's comment
 					// 
-					// $var3235's comment
+					// $var3247's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$2$var72's comment
@@ -3784,9 +3784,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$22$$var3448's comment
+					// cv$temp$22$$var3460's comment
 					// 
-					// $var3448's comment
+					// $var3460's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$21$var72's comment
@@ -3996,9 +3996,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$1$$var3534's comment
+						// cv$temp$1$$var3546's comment
 						// 
-						// $var3534's comment
+						// $var3546's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$0$var72's comment
@@ -4262,9 +4262,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							// 
 							// Value of the variable at this index
 							// 
-							// cv$temp$3$$var3535's comment
+							// cv$temp$3$$var3547's comment
 							// 
-							// $var3535's comment
+							// $var3547's comment
 							// Constructing a random variable input for use later.
 							// 
 							// cv$temp$2$var72's comment
@@ -4558,9 +4558,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$7$$var3537's comment
+						// cv$temp$7$$var3549's comment
 						// 
-						// $var3537's comment
+						// $var3549's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$6$var72's comment
@@ -4870,9 +4870,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$77$$var4229's comment
+					// cv$temp$77$$var4241's comment
 					// 
-					// $var4229's comment
+					// $var4241's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$76$var72's comment
@@ -5437,9 +5437,10 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample20)
 			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
 		
@@ -5637,10 +5638,296 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	}
 
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample33)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var32]);
+				}
+			);
+
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noSamples, 1,
+			(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
+						if(!fixedFlag$sample57)
+							st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution, noStates);
+						
+						// Constraints moved from conditionals in inner loops/scopes/etc.
+						if(!fixedFlag$sample76) {
+							int[] var67 = st[sample$var45];
+							for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
+								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
+						}
+					}
+			}
+		);
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample134)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, noServers, 1,
+				(int forStart$var119, int forEnd$var119, int threadID$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int var119 = forStart$var119; var119 < forEnd$var119; var119 += 1) {
+							double[] var120 = current_metric_mean[var119];
+							
+							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+							parallelFor(RNG$1, 0, noStates, 1,
+								(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
+									
+										// Inner loop for running batches of iterations, each batch has its own random number
+										// generator.
+										for(int var129 = forStart$var129; var129 < forEnd$var129; var129 += 1)
+											var120[var129] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
+								}
+							);
+						}
+				}
+			);
+
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample162)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, noServers, 1,
+				(int forStart$var146, int forEnd$var146, int threadID$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int var146 = forStart$var146; var146 < forEnd$var146; var146 += 1) {
+							double[] var147 = current_metric_var[var146];
+							
+							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+							parallelFor(RNG$1, 0, noStates, 1,
+								(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
+									
+										// Inner loop for running batches of iterations, each batch has its own random number
+										// generator.
+										for(int var156 = forStart$var156; var156 < forEnd$var156; var156 += 1)
+											var147[var156] = DistributionSampling.sampleInverseGamma(RNG$2, 1.0, 1.0);
+								}
+							);
+						}
+				}
+			);
+
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample190)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, noServers, 1,
+				(int forStart$var173, int forEnd$var173, int threadID$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int var173 = forStart$var173; var173 < forEnd$var173; var173 += 1) {
+							double[] var174 = current_metric_valid_bias[var173];
+							
+							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+							parallelFor(RNG$1, 0, noStates, 1,
+								(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
+									
+										// Inner loop for running batches of iterations, each batch has its own random number
+										// generator.
+										for(int var183 = forStart$var183; var183 < forEnd$var183; var183 += 1)
+											var174[var183] = DistributionSampling.sampleBeta(RNG$2, 1.0, 1.0);
+								}
+							);
+						}
+				}
+			);
+
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noSamples, 1,
+			(int forStart$index$sample$var196, int forEnd$index$sample$var196, int threadID$index$sample$var196, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int index$sample$var196 = forStart$index$sample$var196; index$sample$var196 < forEnd$index$sample$var196; index$sample$var196 += 1) {
+						int sample$var196 = index$sample$var196;
+						int threadID$sample$var196 = threadID$index$sample$var196;
+						double[][] var211 = metric_g[sample$var196];
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, noServers, 1,
+							(int forStart$index$server, int forEnd$index$server, int threadID$index$server, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int index$server = forStart$index$server; index$server < forEnd$index$server; index$server += 1) {
+										int server = index$server;
+										int threadID$server = threadID$index$server;
+										boolean[] metric_valid_inner = metric_valid_g[sample$var196][server];
+										double[] metric_inner = var211[server];
+										
+										//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+										parallelFor(RNG$2, 0, length$metric[sample$var196][0], 1,
+											(int forStart$timeStep$var226, int forEnd$timeStep$var226, int threadID$timeStep$var226, org.sandwood.random.internal.Rng RNG$3) -> { 
+												
+													// Inner loop for running batches of iterations, each batch has its own random number
+													// generator.
+													for(int timeStep$var226 = forStart$timeStep$var226; timeStep$var226 < forEnd$timeStep$var226; timeStep$var226 += 1) {
+														metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
+														if(metric_valid_inner[timeStep$var226]) {
+															var245[sample$var196][server][timeStep$var226] = ((Math.sqrt(current_metric_var[server][st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$3)) + current_metric_mean[server][st[sample$var196][timeStep$var226]]);
+															metric_inner[timeStep$var226] = var245[sample$var196][server][timeStep$var226];
+														}
+													}
+											}
+										);
+									}
+							}
+						);
+					}
+			}
+		);
+	}
+
 	// Method to execute the model code conventionally, excluding the elements that generate
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample33)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var32]);
+				}
+			);
+
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noSamples, 1,
+			(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
+						if(!fixedFlag$sample57)
+							st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution, noStates);
+						
+						// Constraints moved from conditionals in inner loops/scopes/etc.
+						if(!fixedFlag$sample76) {
+							int[] var67 = st[sample$var45];
+							for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
+								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
+						}
+					}
+			}
+		);
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample134)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, noServers, 1,
+				(int forStart$var119, int forEnd$var119, int threadID$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int var119 = forStart$var119; var119 < forEnd$var119; var119 += 1) {
+							double[] var120 = current_metric_mean[var119];
+							
+							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+							parallelFor(RNG$1, 0, noStates, 1,
+								(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
+									
+										// Inner loop for running batches of iterations, each batch has its own random number
+										// generator.
+										for(int var129 = forStart$var129; var129 < forEnd$var129; var129 += 1)
+											var120[var129] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
+								}
+							);
+						}
+				}
+			);
+
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample162)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, noServers, 1,
+				(int forStart$var146, int forEnd$var146, int threadID$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int var146 = forStart$var146; var146 < forEnd$var146; var146 += 1) {
+							double[] var147 = current_metric_var[var146];
+							
+							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+							parallelFor(RNG$1, 0, noStates, 1,
+								(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
+									
+										// Inner loop for running batches of iterations, each batch has its own random number
+										// generator.
+										for(int var156 = forStart$var156; var156 < forEnd$var156; var156 += 1)
+											var147[var156] = DistributionSampling.sampleInverseGamma(RNG$2, 1.0, 1.0);
+								}
+							);
+						}
+				}
+			);
+
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample190)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, noServers, 1,
+				(int forStart$var173, int forEnd$var173, int threadID$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int var173 = forStart$var173; var173 < forEnd$var173; var173 += 1) {
+							double[] var174 = current_metric_valid_bias[var173];
+							
+							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+							parallelFor(RNG$1, 0, noStates, 1,
+								(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
+									
+										// Inner loop for running batches of iterations, each batch has its own random number
+										// generator.
+										for(int var183 = forStart$var183; var183 < forEnd$var183; var183 += 1)
+											var174[var183] = DistributionSampling.sampleBeta(RNG$2, 1.0, 1.0);
+								}
+							);
+						}
+				}
+			);
+
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample20)
 			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
 		
@@ -6100,19 +6387,9 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		}
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -6180,132 +6457,6 @@ class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		logProbabilityValue$sample190();
 		logProbabilityValue$sample241();
 		logProbabilityValue$sample256();
-	}
-
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample33)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noStates, 1,
-				(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var32]);
-				}
-			);
-
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noSamples, 1,
-			(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
-						if(!fixedFlag$sample57)
-							st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution, noStates);
-						
-						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!fixedFlag$sample76) {
-							int[] var67 = st[sample$var45];
-							for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
-								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
-						}
-					}
-			}
-		);
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample134)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
-				(int forStart$var119, int forEnd$var119, int threadID$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int var119 = forStart$var119; var119 < forEnd$var119; var119 += 1) {
-							double[] var120 = current_metric_mean[var119];
-							
-							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
-								(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
-									
-										// Inner loop for running batches of iterations, each batch has its own random number
-										// generator.
-										for(int var129 = forStart$var129; var129 < forEnd$var129; var129 += 1)
-											var120[var129] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
-								}
-							);
-						}
-				}
-			);
-
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample162)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
-				(int forStart$var146, int forEnd$var146, int threadID$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int var146 = forStart$var146; var146 < forEnd$var146; var146 += 1) {
-							double[] var147 = current_metric_var[var146];
-							
-							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
-								(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
-									
-										// Inner loop for running batches of iterations, each batch has its own random number
-										// generator.
-										for(int var156 = forStart$var156; var156 < forEnd$var156; var156 += 1)
-											var147[var156] = DistributionSampling.sampleInverseGamma(RNG$2, 1.0, 1.0);
-								}
-							);
-						}
-				}
-			);
-
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample190)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
-				(int forStart$var173, int forEnd$var173, int threadID$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int var173 = forStart$var173; var173 < forEnd$var173; var173 += 1) {
-							double[] var174 = current_metric_valid_bias[var173];
-							
-							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
-								(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
-									
-										// Inner loop for running batches of iterations, each batch has its own random number
-										// generator.
-										for(int var183 = forStart$var183; var183 < forEnd$var183; var183 += 1)
-											var174[var183] = DistributionSampling.sampleBeta(RNG$2, 1.0, 1.0);
-								}
-							);
-						}
-				}
-			);
-
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
 	}
 
 	// Method to propagate observed values back into the model.

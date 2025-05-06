@@ -34,5 +34,4 @@ interface DistributionTest2b$CoreInterface extends org.sandwood.runtime.internal
 	public void set$value(boolean[] cv$value);
 	public double[] get$weightings();
 	public void set$weightings(double[] cv$value);
-	public void logEvidenceGeneration();
 }

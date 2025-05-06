@@ -1229,9 +1229,84 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
+			if(!fixedFlag$sample24)
+				ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		}
+		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1)
+			exped[i$var36] = Math.exp(ut[i$var36]);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$7 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
+			// Set the left hand term of the reduction function to the return variable value.
+			double i$var47 = reduceVar$sum$7;
+			
+			// Set the right hand term to a value from the array exped
+			double j = exped[cv$reduction44Index];
+			
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			reduceVar$sum$7 = (i$var47 + j);
+		}
+		sum = reduceVar$sum$7;
+		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
+			prob[i$var61] = (exped[i$var61] / sum);
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
+			if(!fixedFlag$sample24)
+				ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		}
+		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1)
+			exped[i$var36] = Math.exp(ut[i$var36]);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$4 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
+			// Set the left hand term of the reduction function to the return variable value.
+			double i$var47 = reduceVar$sum$4;
+			
+			// Set the right hand term to a value from the array exped
+			double j = exped[cv$reduction44Index];
+			
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			reduceVar$sum$4 = (i$var47 + j);
+		}
+		sum = reduceVar$sum$4;
+		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
+			prob[i$var61] = (exped[i$var61] / sum);
+		for(int var76 = 0; var76 < noObs; var76 += 1)
+			choices[var76] = DistributionSampling.sampleCategorical(RNG$, prob, noProducts);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
 			if(!fixedFlag$sample24)
 				ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
@@ -1270,44 +1345,40 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
 			if(!fixedFlag$sample24)
 				ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
-		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
-			if(!fixedFlag$sample24)
-				exped[i$var36] = Math.exp(ut[i$var36]);
-		}
+		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1)
+			exped[i$var36] = Math.exp(ut[i$var36]);
 		
 		// Reduction of array exped
 		// 
 		// A generated name to prevent name collisions if the reduction is implemented more
 		// than once in inference and probability code. Initialize the variable to the unit
 		// value
-		double reduceVar$sum$4 = 0.0;
+		double reduceVar$sum$6 = 0.0;
 		
 		// For each index in the array to be reduced
 		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
-			double i$var47 = reduceVar$sum$4;
+			double i$var47 = reduceVar$sum$6;
 			
 			// Set the right hand term to a value from the array exped
 			double j = exped[cv$reduction44Index];
 			
 			// Execute the reduction function, saving the result into the return value.
-			if(!fixedFlag$sample24)
-				// Copy the result of the reduction into the variable returned by the reduction.
-				reduceVar$sum$4 = (i$var47 + j);
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			reduceVar$sum$6 = (i$var47 + j);
 		}
-		if(!fixedFlag$sample24)
-			sum = reduceVar$sum$4;
-		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
-			if(!fixedFlag$sample24)
-				prob[i$var61] = (exped[i$var61] / sum);
-		}
+		sum = reduceVar$sum$6;
+		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
+			prob[i$var61] = (exped[i$var61] / sum);
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -1364,19 +1435,9 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			logProbability$var77 = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -1423,53 +1484,6 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		logProbabilityValue$sample78();
 	}
 
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
-			if(!fixedFlag$sample24)
-				ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		}
-		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
-			if(!fixedFlag$sample24)
-				exped[i$var36] = Math.exp(ut[i$var36]);
-		}
-		
-		// Reduction of array exped
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
-		double reduceVar$sum$6 = 0.0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
-			// Set the left hand term of the reduction function to the return variable value.
-			double i$var47 = reduceVar$sum$6;
-			
-			// Set the right hand term to a value from the array exped
-			double j = exped[cv$reduction44Index];
-			
-			// Execute the reduction function, saving the result into the return value.
-			if(!fixedFlag$sample24)
-				// Copy the result of the reduction into the variable returned by the reduction.
-				reduceVar$sum$6 = (i$var47 + j);
-		}
-		if(!fixedFlag$sample24)
-			sum = reduceVar$sum$6;
-		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
-			if(!fixedFlag$sample24)
-				prob[i$var61] = (exped[i$var61] / sum);
-		}
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
-	}
-
 	// Method to propagate observed values back into the model.
 	@Override
 	public final void propagateObservedValues() {
@@ -1487,37 +1501,32 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
-			if(fixedFlag$sample24)
-				exped[i$var36] = Math.exp(ut[i$var36]);
-		}
+		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1)
+			exped[i$var36] = Math.exp(ut[i$var36]);
 		
 		// Reduction of array exped
 		// 
 		// A generated name to prevent name collisions if the reduction is implemented more
 		// than once in inference and probability code. Initialize the variable to the unit
 		// value
-		double reduceVar$sum$7 = 0.0;
+		double reduceVar$sum$8 = 0.0;
 		
 		// For each index in the array to be reduced
 		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
-			double i$var47 = reduceVar$sum$7;
+			double i$var47 = reduceVar$sum$8;
 			
 			// Set the right hand term to a value from the array exped
 			double j = exped[cv$reduction44Index];
 			
 			// Execute the reduction function, saving the result into the return value.
-			if(fixedFlag$sample24)
-				// Copy the result of the reduction into the variable returned by the reduction.
-				reduceVar$sum$7 = (i$var47 + j);
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			reduceVar$sum$8 = (i$var47 + j);
 		}
-		if(fixedFlag$sample24)
-			sum = reduceVar$sum$7;
-		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
-			if(fixedFlag$sample24)
-				prob[i$var61] = (exped[i$var61] / sum);
-		}
+		sum = reduceVar$sum$8;
+		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
+			prob[i$var61] = (exped[i$var61] / sum);
 	}
 
 	@Override

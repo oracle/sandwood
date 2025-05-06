@@ -3225,7 +3225,7 @@ class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample30) {
 			for(int var29 = 0; var29 < noStates; var29 += 1)
 				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var29]);
@@ -3307,7 +3307,92 @@ class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample30) {
+			for(int var29 = 0; var29 < noStates; var29 += 1)
+				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var29]);
+		}
+		if(!fixedFlag$sample36)
+			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!fixedFlag$sample39)
+			st[0] = DistributionSampling.sampleCategorical(RNG$, initialStateDistribution, noStates);
+		if(!fixedFlag$sample57) {
+			for(int i$var50 = 1; i$var50 < samples; i$var50 += 1)
+				st[i$var50] = DistributionSampling.sampleCategorical(RNG$, m[st[(i$var50 - 1)]], noStates);
+		}
+		if(!fixedFlag$sample77) {
+			for(int var75 = 0; var75 < noStates; var75 += 1)
+				cpuMean[var75] = ((DistributionSampling.sampleGaussian(RNG$) * 2.932575659723036) + 16.0);
+		}
+		if(!fixedFlag$sample95) {
+			for(int var93 = 0; var93 < noStates; var93 += 1)
+				memMean[var93] = (DistributionSampling.sampleGaussian(RNG$) + 94.0);
+		}
+		if(!fixedFlag$sample113) {
+			for(int var111 = 0; var111 < noStates; var111 += 1)
+				pageFaultsMean[var111] = ((DistributionSampling.sampleGaussian(RNG$) * 579.2667779184303) + 814.0);
+		}
+		if(!fixedFlag$sample130) {
+			for(int var128 = 0; var128 < noStates; var128 += 1)
+				cpuVar[var128] = DistributionSampling.sampleInverseGamma(RNG$, 5.0, 0.5);
+		}
+		if(!fixedFlag$sample147) {
+			for(int var145 = 0; var145 < noStates; var145 += 1)
+				memVar[var145] = DistributionSampling.sampleInverseGamma(RNG$, 5.0, 0.5);
+		}
+		if(!fixedFlag$sample164) {
+			for(int var162 = 0; var162 < noStates; var162 += 1)
+				pageFaultsVar[var162] = DistributionSampling.sampleInverseGamma(RNG$, 5.0, 0.5);
+		}
+		for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
+			cpu[i$var174] = ((Math.sqrt(cpuVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$)) + cpuMean[st[i$var174]]);
+			mem[i$var174] = ((Math.sqrt(memVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$)) + memMean[st[i$var174]]);
+			pageFaults[i$var174] = ((Math.sqrt(pageFaultsVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$)) + pageFaultsMean[st[i$var174]]);
+		}
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample30) {
+			for(int var29 = 0; var29 < noStates; var29 += 1)
+				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var29]);
+		}
+		if(!fixedFlag$sample36)
+			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!fixedFlag$sample39)
+			st[0] = DistributionSampling.sampleCategorical(RNG$, initialStateDistribution, noStates);
+		if(!fixedFlag$sample57) {
+			for(int i$var50 = 1; i$var50 < samples; i$var50 += 1)
+				st[i$var50] = DistributionSampling.sampleCategorical(RNG$, m[st[(i$var50 - 1)]], noStates);
+		}
+		if(!fixedFlag$sample77) {
+			for(int var75 = 0; var75 < noStates; var75 += 1)
+				cpuMean[var75] = ((DistributionSampling.sampleGaussian(RNG$) * 2.932575659723036) + 16.0);
+		}
+		if(!fixedFlag$sample95) {
+			for(int var93 = 0; var93 < noStates; var93 += 1)
+				memMean[var93] = (DistributionSampling.sampleGaussian(RNG$) + 94.0);
+		}
+		if(!fixedFlag$sample113) {
+			for(int var111 = 0; var111 < noStates; var111 += 1)
+				pageFaultsMean[var111] = ((DistributionSampling.sampleGaussian(RNG$) * 579.2667779184303) + 814.0);
+		}
+		if(!fixedFlag$sample130) {
+			for(int var128 = 0; var128 < noStates; var128 += 1)
+				cpuVar[var128] = DistributionSampling.sampleInverseGamma(RNG$, 5.0, 0.5);
+		}
+		if(!fixedFlag$sample147) {
+			for(int var145 = 0; var145 < noStates; var145 += 1)
+				memVar[var145] = DistributionSampling.sampleInverseGamma(RNG$, 5.0, 0.5);
+		}
+		if(!fixedFlag$sample164) {
+			for(int var162 = 0; var162 < noStates; var162 += 1)
+				pageFaultsVar[var162] = DistributionSampling.sampleInverseGamma(RNG$, 5.0, 0.5);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample30) {
 			for(int var29 = 0; var29 < noStates; var29 += 1)
 				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var29]);
@@ -3501,12 +3586,7 @@ class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample30)
 			logProbabilityValue$sample30();
@@ -3563,47 +3643,6 @@ class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		logProbabilityValue$sample180();
 		logProbabilityValue$sample185();
 		logProbabilityValue$sample190();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample30) {
-			for(int var29 = 0; var29 < noStates; var29 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var29]);
-		}
-		if(!fixedFlag$sample36)
-			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
-		if(!fixedFlag$sample39)
-			st[0] = DistributionSampling.sampleCategorical(RNG$, initialStateDistribution, noStates);
-		if(!fixedFlag$sample57) {
-			for(int i$var50 = 1; i$var50 < samples; i$var50 += 1)
-				st[i$var50] = DistributionSampling.sampleCategorical(RNG$, m[st[(i$var50 - 1)]], noStates);
-		}
-		if(!fixedFlag$sample77) {
-			for(int var75 = 0; var75 < noStates; var75 += 1)
-				cpuMean[var75] = ((DistributionSampling.sampleGaussian(RNG$) * 2.932575659723036) + 16.0);
-		}
-		if(!fixedFlag$sample95) {
-			for(int var93 = 0; var93 < noStates; var93 += 1)
-				memMean[var93] = (DistributionSampling.sampleGaussian(RNG$) + 94.0);
-		}
-		if(!fixedFlag$sample113) {
-			for(int var111 = 0; var111 < noStates; var111 += 1)
-				pageFaultsMean[var111] = ((DistributionSampling.sampleGaussian(RNG$) * 579.2667779184303) + 814.0);
-		}
-		if(!fixedFlag$sample130) {
-			for(int var128 = 0; var128 < noStates; var128 += 1)
-				cpuVar[var128] = DistributionSampling.sampleInverseGamma(RNG$, 5.0, 0.5);
-		}
-		if(!fixedFlag$sample147) {
-			for(int var145 = 0; var145 < noStates; var145 += 1)
-				memVar[var145] = DistributionSampling.sampleInverseGamma(RNG$, 5.0, 0.5);
-		}
-		if(!fixedFlag$sample164) {
-			for(int var162 = 0; var162 < noStates; var162 += 1)
-				pageFaultsVar[var162] = DistributionSampling.sampleInverseGamma(RNG$, 5.0, 0.5);
-		}
-		logModelProbabilitiesVal();
 	}
 
 	@Override

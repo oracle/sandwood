@@ -722,7 +722,7 @@ class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample9)
 			priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(RNG$)) + 10000.0);
 		if(!fixedFlag$sample15)
@@ -732,7 +732,32 @@ class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample9)
+			priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(RNG$)) + 10000.0);
+		if(!fixedFlag$sample15)
+			mean1 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
+		if(!fixedFlag$sample21)
+			mean2 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
+		for(int i = 0; i < n; i += 1) {
+			amounts1[i] = ((Math.sqrt(priorSigma2) * DistributionSampling.sampleGaussian(RNG$)) + mean1);
+			var39[((i - 0) / 1)] = ((Math.sqrt(priorSigma2) * DistributionSampling.sampleGaussian(RNG$)) + mean2);
+			amounts2[i] = (amounts1[i] + var39[((i - 0) / 1)]);
+		}
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample9)
+			priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(RNG$)) + 10000.0);
+		if(!fixedFlag$sample15)
+			mean1 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
+		if(!fixedFlag$sample21)
+			mean2 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample9)
 			priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(RNG$)) + 10000.0);
 		if(!fixedFlag$sample15)
@@ -796,12 +821,7 @@ class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample9)
 			logProbabilityValue$sample9();
@@ -831,17 +851,6 @@ class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		logProbabilityValue$sample21();
 		logProbabilityValue$sample35();
 		logProbabilityValue$sample39();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample9)
-			priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(RNG$)) + 10000.0);
-		if(!fixedFlag$sample15)
-			mean1 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
-		if(!fixedFlag$sample21)
-			mean2 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
-		logModelProbabilitiesVal();
 	}
 
 	@Override

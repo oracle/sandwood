@@ -459,7 +459,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample42)
 			parallelFor(RNG$, 0, noTopics, 1,
 				(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -495,7 +495,81 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample42)
+			parallelFor(RNG$, 0, noTopics, 1,
+				(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, beta, vocabSize, phi[var41]);
+				}
+			);
+
+		if(!fixedFlag$sample58)
+			parallelFor(RNG$, 0, length$documents.length, 1,
+				(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, alpha, noTopics, theta[var56]);
+				}
+			);
+
+		parallelFor(RNG$, 0, length$documents.length, 1,
+			(int forStart$index$i$var71, int forEnd$index$i$var71, int threadID$index$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$i$var71 = forStart$index$i$var71; index$i$var71 < forEnd$index$i$var71; index$i$var71 += 1) {
+						int i$var71 = index$i$var71;
+						int threadID$i$var71 = threadID$index$i$var71;
+						int[] t = w[i$var71];
+						parallelFor(RNG$1, 0, length$documents[i$var71], 1,
+							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int j = forStart$j; j < forEnd$j; j += 1) {
+										if(!fixedFlag$sample90)
+											z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var71], noTopics);
+										t[j] = DistributionSampling.sampleCategorical(RNG$2, phi[z[i$var71][j]], vocabSize);
+									}
+							}
+						);
+					}
+			}
+		);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample42)
+			parallelFor(RNG$, 0, noTopics, 1,
+				(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, beta, vocabSize, phi[var41]);
+				}
+			);
+
+		if(!fixedFlag$sample58)
+			parallelFor(RNG$, 0, length$documents.length, 1,
+				(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, alpha, noTopics, theta[var56]);
+				}
+			);
+
+		if(!fixedFlag$sample90)
+			parallelFor(RNG$, 0, length$documents.length, 1,
+				(int forStart$index$i$var71, int forEnd$index$i$var71, int threadID$index$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int index$i$var71 = forStart$index$i$var71; index$i$var71 < forEnd$index$i$var71; index$i$var71 += 1) {
+							int i$var71 = index$i$var71;
+							int threadID$i$var71 = threadID$index$i$var71;
+							parallelFor(RNG$1, 0, length$documents[i$var71], 1,
+								(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int j = forStart$j; j < forEnd$j; j += 1)
+											z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var71], noTopics);
+								}
+							);
+						}
+				}
+			);
+
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample42)
 			parallelFor(RNG$, 0, noTopics, 1,
 				(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -654,12 +728,7 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample42)
 			logProbabilityValue$sample42();
@@ -686,43 +755,6 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		logProbabilityValue$sample58();
 		logProbabilityValue$sample90();
 		logProbabilityValue$sample93();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample42)
-			parallelFor(RNG$, 0, noTopics, 1,
-				(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, beta, vocabSize, phi[var41]);
-				}
-			);
-
-		if(!fixedFlag$sample58)
-			parallelFor(RNG$, 0, length$documents.length, 1,
-				(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, alpha, noTopics, theta[var56]);
-				}
-			);
-
-		if(!fixedFlag$sample90)
-			parallelFor(RNG$, 0, length$documents.length, 1,
-				(int forStart$index$i$var71, int forEnd$index$i$var71, int threadID$index$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int index$i$var71 = forStart$index$i$var71; index$i$var71 < forEnd$index$i$var71; index$i$var71 += 1) {
-							int i$var71 = index$i$var71;
-							int threadID$i$var71 = threadID$index$i$var71;
-							parallelFor(RNG$1, 0, length$documents[i$var71], 1,
-								(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int j = forStart$j; j < forEnd$j; j += 1)
-											z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var71], noTopics);
-								}
-							);
-						}
-				}
-			);
-
-		logModelProbabilitiesVal();
 	}
 
 	@Override

@@ -21,5 +21,4 @@ interface Deterministic$CoreInterface extends org.sandwood.runtime.internal.mode
 	public void set$n(int cv$value);
 	public int get$states();
 	public double[] get$v();
-	public void logEvidenceGeneration();
 }

@@ -472,7 +472,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, alpha, 5, phi);
 		if(!fixedFlag$sample34)
@@ -502,7 +502,68 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, alpha, 5, phi);
+		if(!fixedFlag$sample34)
+			parallelFor(RNG$, 0, 5, 1,
+				(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1)
+							mu[var33] = (DistributionSampling.sampleGaussian(RNG$1) * 4.47213595499958);
+				}
+			);
+
+		if(!fixedFlag$sample52)
+			parallelFor(RNG$, 0, 5, 1,
+				(int forStart$var51, int forEnd$var51, int threadID$var51, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var51 = forStart$var51; var51 < forEnd$var51; var51 += 1)
+							sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$1, 1.0, 1.0);
+				}
+			);
+
+		parallelFor(RNG$, 0, length$xMeasured, 1,
+			(int forStart$i$var66, int forEnd$i$var66, int threadID$i$var66, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int i$var66 = forStart$i$var66; i$var66 < forEnd$i$var66; i$var66 += 1) {
+						if(!fixedFlag$sample68)
+							z[i$var66] = DistributionSampling.sampleCategorical(RNG$1, phi, 5);
+						x[i$var66] = ((Math.sqrt(sigma[z[i$var66]]) * DistributionSampling.sampleGaussian(RNG$1)) + mu[z[i$var66]]);
+					}
+			}
+		);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, alpha, 5, phi);
+		if(!fixedFlag$sample34)
+			parallelFor(RNG$, 0, 5, 1,
+				(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1)
+							mu[var33] = (DistributionSampling.sampleGaussian(RNG$1) * 4.47213595499958);
+				}
+			);
+
+		if(!fixedFlag$sample52)
+			parallelFor(RNG$, 0, 5, 1,
+				(int forStart$var51, int forEnd$var51, int threadID$var51, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var51 = forStart$var51; var51 < forEnd$var51; var51 += 1)
+							sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$1, 1.0, 1.0);
+				}
+			);
+
+		if(!fixedFlag$sample68)
+			parallelFor(RNG$, 0, length$xMeasured, 1,
+				(int forStart$i$var66, int forEnd$i$var66, int threadID$i$var66, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int i$var66 = forStart$i$var66; i$var66 < forEnd$i$var66; i$var66 += 1)
+							z[i$var66] = DistributionSampling.sampleCategorical(RNG$1, phi, 5);
+				}
+			);
+
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, alpha, 5, phi);
 		if(!fixedFlag$sample34)
@@ -632,12 +693,7 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample17)
 			logProbabilityValue$sample17();
@@ -668,37 +724,6 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		logProbabilityValue$sample52();
 		logProbabilityValue$sample68();
 		logProbabilityValue$sample72();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, alpha, 5, phi);
-		if(!fixedFlag$sample34)
-			parallelFor(RNG$, 0, 5, 1,
-				(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1)
-							mu[var33] = (DistributionSampling.sampleGaussian(RNG$1) * 4.47213595499958);
-				}
-			);
-
-		if(!fixedFlag$sample52)
-			parallelFor(RNG$, 0, 5, 1,
-				(int forStart$var51, int forEnd$var51, int threadID$var51, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var51 = forStart$var51; var51 < forEnd$var51; var51 += 1)
-							sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$1, 1.0, 1.0);
-				}
-			);
-
-		if(!fixedFlag$sample68)
-			parallelFor(RNG$, 0, length$xMeasured, 1,
-				(int forStart$i$var66, int forEnd$i$var66, int threadID$i$var66, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int i$var66 = forStart$i$var66; i$var66 < forEnd$i$var66; i$var66 += 1)
-							z[i$var66] = DistributionSampling.sampleCategorical(RNG$1, phi, 5);
-				}
-			);
-
-		logModelProbabilitiesVal();
 	}
 
 	@Override

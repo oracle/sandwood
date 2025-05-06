@@ -491,30 +491,9 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			else {
-				// Variable declaration of reduceVar$var33$16 moved.
+				// Variable declaration of reduceVar$var33$17 moved.
 				// Declaration comment was:
-				// Variable declaration of reduceVar$var33$16 moved.
-				// Declaration comment was:
-				// Reduction of array c
-				// 
-				// A generated name to prevent name collisions if the reduction is implemented more
-				// than once in inference and probability code. Initialize the variable to the unit
-				// value
-				// 
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// j's comment
-				// Set the right hand term to a value from the array c
-				// 
-				// Substituted "cv$reduction409Index" with its value "1".
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// Variable declaration of reduceVar$var33$16 moved.
+				// Variable declaration of reduceVar$var33$17 moved.
 				// Declaration comment was:
 				// Reduction of array c
 				// 
@@ -532,7 +511,28 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set the right hand term to a value from the array c
 				// 
 				// Substituted "cv$reduction409Index" with its value "1".
-				double reduceVar$var33$16 = ((b / 2) + c[1]);
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// Variable declaration of reduceVar$var33$17 moved.
+				// Declaration comment was:
+				// Reduction of array c
+				// 
+				// A generated name to prevent name collisions if the reduction is implemented more
+				// than once in inference and probability code. Initialize the variable to the unit
+				// value
+				// 
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// j's comment
+				// Set the right hand term to a value from the array c
+				// 
+				// Substituted "cv$reduction409Index" with its value "1".
+				double reduceVar$var33$17 = ((b / 2) + c[1]);
 				
 				// Processing sample task 50 of consumer random variable bernoulli.
 				for(int var46 = 0; var46 < samples; var46 += 1)
@@ -550,7 +550,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// inputs.
 					// 
 					// Substituted "cv$temp$3$bias" with its value "traceTempVariable$bias$7_4".
-					cv$accumulatedProbabilities = (Math.log((flips[var46]?reduceVar$var33$16:(1.0 - reduceVar$var33$16))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((flips[var46]?reduceVar$var33$17:(1.0 - reduceVar$var33$17))) + cv$accumulatedProbabilities);
 			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
@@ -629,30 +629,9 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		else {
-			// Variable declaration of reduceVar$var33$16 moved.
+			// Variable declaration of reduceVar$var33$17 moved.
 			// Declaration comment was:
-			// Variable declaration of reduceVar$var33$16 moved.
-			// Declaration comment was:
-			// Reduction of array c
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			// 
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// j's comment
-			// Set the right hand term to a value from the array c
-			// 
-			// Substituted "cv$reduction409Index" with its value "1".
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// Variable declaration of reduceVar$var33$16 moved.
+			// Variable declaration of reduceVar$var33$17 moved.
 			// Declaration comment was:
 			// Reduction of array c
 			// 
@@ -670,7 +649,28 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Set the right hand term to a value from the array c
 			// 
 			// Substituted "cv$reduction409Index" with its value "1".
-			double reduceVar$var33$16 = ((cv$proposedValue / 2) + c[1]);
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// Variable declaration of reduceVar$var33$17 moved.
+			// Declaration comment was:
+			// Reduction of array c
+			// 
+			// A generated name to prevent name collisions if the reduction is implemented more
+			// than once in inference and probability code. Initialize the variable to the unit
+			// value
+			// 
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array c
+			// 
+			// Substituted "cv$reduction409Index" with its value "1".
+			double reduceVar$var33$17 = ((cv$proposedValue / 2) + c[1]);
 			
 			// Processing sample task 50 of consumer random variable bernoulli.
 			for(int var46 = 0; var46 < samples; var46 += 1)
@@ -688,7 +688,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// inputs.
 				// 
 				// Substituted "cv$temp$3$bias" with its value "traceTempVariable$bias$7_4".
-				cv$accumulatedProbabilities = (Math.log((flips[var46]?reduceVar$var33$16:(1.0 - reduceVar$var33$16))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((flips[var46]?reduceVar$var33$17:(1.0 - reduceVar$var33$17))) + cv$accumulatedProbabilities);
 		}
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
@@ -817,37 +817,89 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample8) {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		if(!fixedFlag$sample8)
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(guard1)
+		if(guard1) {
+			if(!fixedFlag$sample8)
 				bias = b;
-			else {
-				c[0] = (b / 2);
-				c[1] = (b / 2);
-				
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// i$var30's comment
-				// Set the left hand term of the reduction function to the return variable value.
-				// 
-				// j's comment
-				// Set the right hand term to a value from the array c
-				// 
-				// Substituted "cv$reduction30Index" with its value "1".
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// j's comment
-				// Set the right hand term to a value from the array c
-				// 
-				// Substituted "cv$reduction30Index" with its value "0".
-				bias = (c[0] + c[1]);
-			}
+		} else {
+			c[0] = (b / 2);
+			c[1] = (b / 2);
+			
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// i$var30's comment
+			// Set the left hand term of the reduction function to the return variable value.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array c
+			// 
+			// Substituted "cv$reduction30Index" with its value "1".
+			// 
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array c
+			// 
+			// Substituted "cv$reduction30Index" with its value "0".
+			bias = (c[0] + c[1]);
 		}
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample8)
+			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(guard1) {
+			if(!fixedFlag$sample8)
+				bias = b;
+		} else {
+			c[0] = (b / 2);
+			c[1] = (b / 2);
+			
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// i$var30's comment
+			// Set the left hand term of the reduction function to the return variable value.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array c
+			// 
+			// Substituted "cv$reduction30Index" with its value "1".
+			// 
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array c
+			// 
+			// Substituted "cv$reduction30Index" with its value "0".
+			bias = (c[0] + c[1]);
+		}
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$var46, int forEnd$var46, int threadID$var46, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var46 = forStart$var46; var46 < forEnd$var46; var46 += 1)
+						flips[var46] = DistributionSampling.sampleBernoulli(RNG$1, bias);
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -881,6 +933,44 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Substituted "cv$reduction30Index" with its value "0".
 				bias = (c[0] + c[1]);
 			}
+		}
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		if(!fixedFlag$sample8)
+			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(guard1) {
+			if(!fixedFlag$sample8)
+				bias = b;
+		} else {
+			c[0] = (b / 2);
+			c[1] = (b / 2);
+			
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// i$var30's comment
+			// Set the left hand term of the reduction function to the return variable value.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array c
+			// 
+			// Substituted "cv$reduction30Index" with its value "1".
+			// 
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array c
+			// 
+			// Substituted "cv$reduction30Index" with its value "0".
+			bias = (c[0] + c[1]);
 		}
 	}
 
@@ -924,19 +1014,9 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$var47 = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -983,46 +1063,6 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbabilityValue$sample50();
 	}
 
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample8) {
-			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(guard1)
-				bias = b;
-			else {
-				c[0] = (b / 2);
-				c[1] = (b / 2);
-				
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// i$var30's comment
-				// Set the left hand term of the reduction function to the return variable value.
-				// 
-				// j's comment
-				// Set the right hand term to a value from the array c
-				// 
-				// Substituted "cv$reduction30Index" with its value "1".
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// j's comment
-				// Set the right hand term to a value from the array c
-				// 
-				// Substituted "cv$reduction30Index" with its value "0".
-				bias = (c[0] + c[1]);
-			}
-		}
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
-	}
-
 	// Method to propagate observed values back into the model.
 	@Override
 	public final void propagateObservedValues() {
@@ -1037,31 +1077,34 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		if(fixedFlag$sample8) {
-			if(guard1)
+		if(guard1) {
+			if(fixedFlag$sample8)
 				bias = b;
-			else {
-				c[0] = (b / 2);
-				c[1] = (b / 2);
-				
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// i$var30's comment
-				// Set the left hand term of the reduction function to the return variable value.
-				// 
-				// j's comment
-				// Set the right hand term to a value from the array c
-				// 
-				// Substituted "cv$reduction30Index" with its value "1".
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// j's comment
-				// Set the right hand term to a value from the array c
-				// 
-				// Substituted "cv$reduction30Index" with its value "0".
-				bias = (c[0] + c[1]);
-			}
+		} else {
+			c[0] = (b / 2);
+			c[1] = (b / 2);
+			
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// i$var30's comment
+			// Set the left hand term of the reduction function to the return variable value.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array c
+			// 
+			// Substituted "cv$reduction30Index" with its value "1".
+			// 
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array c
+			// 
+			// Substituted "cv$reduction30Index" with its value "0".
+			bias = (c[0] + c[1]);
 		}
 	}
 

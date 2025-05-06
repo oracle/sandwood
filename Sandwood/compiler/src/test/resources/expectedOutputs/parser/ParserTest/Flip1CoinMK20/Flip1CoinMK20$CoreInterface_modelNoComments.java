@@ -16,5 +16,4 @@ interface Flip1CoinMK20$CoreInterface extends org.sandwood.runtime.internal.mode
 	public int get$obs2();
 	public void set$obs2(int cv$value);
 	public int get$total();
-	public void logEvidenceGeneration();
 }

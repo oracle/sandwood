@@ -679,9 +679,70 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$71_7 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 17 and consumer double[] 67.
+		{
+			if((0 == y)) {
+				if(!fixedFlag$sample73)
+					lengthCV$a$71_7 = 2;
+			}
+		}
+		
+		// Looking for a path between Put 35 and consumer double[] 67.
+		{
+			if((1 == y)) {
+				if(!fixedFlag$sample73)
+					lengthCV$a$71_7 = 3;
+			}
+		}
+		if(!fixedFlag$sample73)
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_7);
+		p = b[y][i];
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$71_4 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 17 and consumer double[] 67.
+		{
+			if((0 == y)) {
+				if(!fixedFlag$sample73)
+					lengthCV$a$71_4 = 2;
+			}
+		}
+		
+		// Looking for a path between Put 35 and consumer double[] 67.
+		{
+			if((1 == y)) {
+				if(!fixedFlag$sample73)
+					lengthCV$a$71_4 = 3;
+			}
+		}
+		if(!fixedFlag$sample73)
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_4);
+		p = b[y][i];
+		for(int var84 = 0; var84 < length$obs_measured; var84 += 1)
+			obs[var84] = DistributionSampling.sampleBernoulli(RNG$, p);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$a$71_5 = -1;
 		
@@ -709,11 +770,12 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$71_4 = -1;
+		int lengthCV$a$71_6 = -1;
 		
 		// calculate array length.
 		// 
@@ -721,7 +783,7 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		{
 			if((0 == y)) {
 				if(!fixedFlag$sample73)
-					lengthCV$a$71_4 = 2;
+					lengthCV$a$71_6 = 2;
 			}
 		}
 		
@@ -729,13 +791,12 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		{
 			if((1 == y)) {
 				if(!fixedFlag$sample73)
-					lengthCV$a$71_4 = 3;
+					lengthCV$a$71_6 = 3;
 			}
 		}
 		if(!fixedFlag$sample73)
-			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_4);
-		if(!fixedFlag$sample73)
-			p = b[y][i];
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_6);
+		p = b[y][i];
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -795,19 +856,9 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$var85 = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -854,42 +905,6 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbabilityValue$sample89();
 	}
 
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$71_6 = -1;
-		
-		// calculate array length.
-		// 
-		// Looking for a path between Put 17 and consumer double[] 67.
-		{
-			if((0 == y)) {
-				if(!fixedFlag$sample73)
-					lengthCV$a$71_6 = 2;
-			}
-		}
-		
-		// Looking for a path between Put 35 and consumer double[] 67.
-		{
-			if((1 == y)) {
-				if(!fixedFlag$sample73)
-					lengthCV$a$71_6 = 3;
-			}
-		}
-		if(!fixedFlag$sample73)
-			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_6);
-		if(!fixedFlag$sample73)
-			p = b[y][i];
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
-	}
-
 	// Method to propagate observed values back into the model.
 	@Override
 	public final void propagateObservedValues() {
@@ -907,8 +922,7 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		if(fixedFlag$sample73)
-			p = b[y][i];
+		p = b[y][i];
 	}
 
 	@Override

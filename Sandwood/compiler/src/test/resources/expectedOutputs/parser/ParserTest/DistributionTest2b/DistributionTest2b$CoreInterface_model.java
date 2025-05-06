@@ -100,8 +100,4 @@ interface DistributionTest2b$CoreInterface extends org.sandwood.runtime.internal
 
 	// Setter for weightings.
 	public void set$weightings(double[] cv$value);
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

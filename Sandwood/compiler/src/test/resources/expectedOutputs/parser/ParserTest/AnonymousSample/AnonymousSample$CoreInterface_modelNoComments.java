@@ -27,5 +27,4 @@ interface AnonymousSample$CoreInterface extends org.sandwood.runtime.internal.mo
 	public void set$obsAmounts2(double[] cv$value);
 	public double get$priorSigma2();
 	public void set$priorSigma2(double cv$value);
-	public void logEvidenceGeneration();
 }

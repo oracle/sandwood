@@ -2104,7 +2104,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample19)
 			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
 		if(!fixedFlag$sample32)
@@ -2197,7 +2197,124 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample19)
+			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!fixedFlag$sample32)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var31, int forEnd$var31, int threadID$var31, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var31 = forStart$var31; var31 < forEnd$var31; var31 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var31]);
+				}
+			);
+
+		if(!fixedFlag$sample52)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var50, int forEnd$var50, int threadID$var50, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var50 = forStart$var50; var50 < forEnd$var50; var50 += 1)
+							metric_mean[var50] = (DistributionSampling.sampleUniform(RNG$1) * 100.0);
+				}
+			);
+
+		if(!fixedFlag$sample68)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var66, int forEnd$var66, int threadID$var66, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var66 = forStart$var66; var66 < forEnd$var66; var66 += 1)
+							metric_var[var66] = DistributionSampling.sampleInverseGamma(RNG$1, 1.0, 1.0);
+				}
+			);
+
+		if(!fixedFlag$sample84)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var82, int forEnd$var82, int threadID$var82, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var82 = forStart$var82; var82 < forEnd$var82; var82 += 1)
+							metric_valid_bias[var82] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				}
+			);
+
+		parallelFor(RNG$, 0, noSamples, 1,
+			(int forStart$index$sample, int forEnd$index$sample, int threadID$index$sample, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$sample = forStart$index$sample; index$sample < forEnd$index$sample; index$sample += 1) {
+						int sample = index$sample;
+						int threadID$sample = threadID$index$sample;
+						if(!fixedFlag$sample104)
+							st[sample][0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution, noStates);
+						if(!fixedFlag$sample123) {
+							int[] var114 = st[sample];
+							for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1)
+								var114[timeStep$var113] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample][(timeStep$var113 - 1)]], noStates);
+						}
+						boolean[] metric_valid_1d = metric_valid_g[sample];
+						double[] metric_1d = metric_g[sample];
+						parallelFor(RNG$1, 0, length$metric[sample], 1,
+							(int forStart$timeStep$var136, int forEnd$timeStep$var136, int threadID$timeStep$var136, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int timeStep$var136 = forStart$timeStep$var136; timeStep$var136 < forEnd$timeStep$var136; timeStep$var136 += 1) {
+										metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$2, metric_valid_bias[st[sample][timeStep$var136]]);
+										if(metric_valid_1d[timeStep$var136]) {
+											var151[sample][timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$2)) + metric_mean[st[sample][timeStep$var136]]);
+											metric_1d[timeStep$var136] = var151[sample][timeStep$var136];
+										}
+									}
+							}
+						);
+					}
+			}
+		);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample19)
+			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!fixedFlag$sample32)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var31, int forEnd$var31, int threadID$var31, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var31 = forStart$var31; var31 < forEnd$var31; var31 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var31]);
+				}
+			);
+
+		if(!fixedFlag$sample52)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var50, int forEnd$var50, int threadID$var50, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var50 = forStart$var50; var50 < forEnd$var50; var50 += 1)
+							metric_mean[var50] = (DistributionSampling.sampleUniform(RNG$1) * 100.0);
+				}
+			);
+
+		if(!fixedFlag$sample68)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var66, int forEnd$var66, int threadID$var66, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var66 = forStart$var66; var66 < forEnd$var66; var66 += 1)
+							metric_var[var66] = DistributionSampling.sampleInverseGamma(RNG$1, 1.0, 1.0);
+				}
+			);
+
+		if(!fixedFlag$sample84)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var82, int forEnd$var82, int threadID$var82, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var82 = forStart$var82; var82 < forEnd$var82; var82 += 1)
+							metric_valid_bias[var82] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				}
+			);
+
+		parallelFor(RNG$, 0, noSamples, 1,
+			(int forStart$sample, int forEnd$sample, int threadID$sample, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int sample = forStart$sample; sample < forEnd$sample; sample += 1) {
+						if(!fixedFlag$sample104)
+							st[sample][0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution, noStates);
+						if(!fixedFlag$sample123) {
+							int[] var114 = st[sample];
+							for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1)
+								var114[timeStep$var113] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample][(timeStep$var113 - 1)]], noStates);
+						}
+					}
+			}
+		);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample19)
 			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
 		if(!fixedFlag$sample32)
@@ -2424,12 +2541,7 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample19)
 			logProbabilityValue$sample19();
@@ -2471,58 +2583,6 @@ class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		logProbabilityValue$sample123();
 		logProbabilityValue$sample145();
 		logProbabilityValue$sample157();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample19)
-			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
-		if(!fixedFlag$sample32)
-			parallelFor(RNG$, 0, noStates, 1,
-				(int forStart$var31, int forEnd$var31, int threadID$var31, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var31 = forStart$var31; var31 < forEnd$var31; var31 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var31]);
-				}
-			);
-
-		if(!fixedFlag$sample52)
-			parallelFor(RNG$, 0, noStates, 1,
-				(int forStart$var50, int forEnd$var50, int threadID$var50, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var50 = forStart$var50; var50 < forEnd$var50; var50 += 1)
-							metric_mean[var50] = (DistributionSampling.sampleUniform(RNG$1) * 100.0);
-				}
-			);
-
-		if(!fixedFlag$sample68)
-			parallelFor(RNG$, 0, noStates, 1,
-				(int forStart$var66, int forEnd$var66, int threadID$var66, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var66 = forStart$var66; var66 < forEnd$var66; var66 += 1)
-							metric_var[var66] = DistributionSampling.sampleInverseGamma(RNG$1, 1.0, 1.0);
-				}
-			);
-
-		if(!fixedFlag$sample84)
-			parallelFor(RNG$, 0, noStates, 1,
-				(int forStart$var82, int forEnd$var82, int threadID$var82, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var82 = forStart$var82; var82 < forEnd$var82; var82 += 1)
-							metric_valid_bias[var82] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
-				}
-			);
-
-		parallelFor(RNG$, 0, noSamples, 1,
-			(int forStart$sample, int forEnd$sample, int threadID$sample, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int sample = forStart$sample; sample < forEnd$sample; sample += 1) {
-						if(!fixedFlag$sample104)
-							st[sample][0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution, noStates);
-						if(!fixedFlag$sample123) {
-							int[] var114 = st[sample];
-							for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1)
-								var114[timeStep$var113] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample][(timeStep$var113 - 1)]], noStates);
-						}
-					}
-			}
-		);
-		logModelProbabilitiesVal();
 	}
 
 	@Override

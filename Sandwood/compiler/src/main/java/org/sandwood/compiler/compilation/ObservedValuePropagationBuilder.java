@@ -19,7 +19,9 @@ import java.util.Set;
 
 import org.sandwood.compiler.compilation.CompilationContext.AuxFunctionType;
 import org.sandwood.compiler.compilation.CompilationContext.CompilationPhase;
+import org.sandwood.compiler.compilation.ForwardExecutionBuilder.Distributions;
 import org.sandwood.compiler.compilation.ForwardExecutionBuilder.GuardStatus;
+import org.sandwood.compiler.compilation.ForwardExecutionBuilder.PrimingStatus;
 import org.sandwood.compiler.compilation.util.TreeUtils;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
@@ -225,7 +227,8 @@ public class ObservedValuePropagationBuilder {
         else {
             while(!p.isEmpty()) {
                 Variable<?> v = p.poll();
-                ForwardExecutionBuilder.constructForwardMethod(v, GuardStatus.NONE, true, compilationCtx);
+                    ForwardExecutionBuilder.constructForwardMethod(v, GuardStatus.NONE, Distributions.USE_DISTRIBUTIONS,
+                            PrimingStatus.PRIMING, compilationCtx);
             }
 
             t1 = IRTree.treeScope(compilationCtx.getOutermostScopeTree(),
@@ -340,7 +343,8 @@ public class ObservedValuePropagationBuilder {
 
         compilationCtx.pushScope();
         while(!toFix.isEmpty())
-            ForwardExecutionBuilder.constructForwardMethod(toFix.poll(), GuardStatus.NONE, false, compilationCtx);
+            ForwardExecutionBuilder.constructForwardMethod(toFix.poll(), GuardStatus.NONE,
+                    Distributions.NO_DISTRIBUTIONS, PrimingStatus.PRIMING, compilationCtx);
 
         t3 = IRTree.treeScope(compilationCtx.getOutermostScopeTree(),
                 "Set any intermediates with fixed parent values.");

@@ -455,7 +455,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, alpha, 5, phi);
 		if(!fixedFlag$sample34) {
@@ -473,7 +473,44 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, alpha, 5, phi);
+		if(!fixedFlag$sample34) {
+			for(int var33 = 0; var33 < 5; var33 += 1)
+				mu[var33] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
+		}
+		if(!fixedFlag$sample52) {
+			for(int var51 = 0; var51 < 5; var51 += 1)
+				sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+		}
+		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
+			if(!fixedFlag$sample68)
+				z[i$var66] = DistributionSampling.sampleCategorical(RNG$, phi, 5);
+			x[i$var66] = ((Math.sqrt(sigma[z[i$var66]]) * DistributionSampling.sampleGaussian(RNG$)) + mu[z[i$var66]]);
+		}
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, alpha, 5, phi);
+		if(!fixedFlag$sample34) {
+			for(int var33 = 0; var33 < 5; var33 += 1)
+				mu[var33] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
+		}
+		if(!fixedFlag$sample52) {
+			for(int var51 = 0; var51 < 5; var51 += 1)
+				sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+		}
+		if(!fixedFlag$sample68) {
+			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
+				z[i$var66] = DistributionSampling.sampleCategorical(RNG$, phi, 5);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, alpha, 5, phi);
 		if(!fixedFlag$sample34) {
@@ -563,12 +600,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample17)
 			logProbabilityValue$sample17();
@@ -599,25 +631,6 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		logProbabilityValue$sample52();
 		logProbabilityValue$sample68();
 		logProbabilityValue$sample72();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, alpha, 5, phi);
-		if(!fixedFlag$sample34) {
-			for(int var33 = 0; var33 < 5; var33 += 1)
-				mu[var33] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
-		}
-		if(!fixedFlag$sample52) {
-			for(int var51 = 0; var51 < 5; var51 += 1)
-				sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
-		}
-		if(!fixedFlag$sample68) {
-			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-				z[i$var66] = DistributionSampling.sampleCategorical(RNG$, phi, 5);
-		}
-		logModelProbabilitiesVal();
 	}
 
 	@Override

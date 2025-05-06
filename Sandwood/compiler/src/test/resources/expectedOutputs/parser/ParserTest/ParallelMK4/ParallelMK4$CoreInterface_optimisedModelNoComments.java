@@ -14,5 +14,4 @@ interface ParallelMK4$CoreInterface extends org.sandwood.runtime.internal.model.
 	public double get$logProbability$indirection2();
 	public int[] get$observed();
 	public void set$observed(int[] cv$value);
-	public void logEvidenceGeneration();
 }

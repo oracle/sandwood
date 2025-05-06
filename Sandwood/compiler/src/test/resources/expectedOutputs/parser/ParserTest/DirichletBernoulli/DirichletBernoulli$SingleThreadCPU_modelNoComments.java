@@ -469,13 +469,29 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, v, 2, prior);
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, prior);
+		for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1)
+			output[i$var37] = DistributionSampling.sampleBernoulli(RNG$, prior[0]);
+		for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1)
+			output[i$var50] = DistributionSampling.sampleBernoulli(RNG$, prior[1]);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, prior);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, v, 2, prior);
 	}
@@ -515,12 +531,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample17)
 			logProbabilityValue$sample17();
@@ -542,13 +553,6 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		logProbabilityValue$sample17();
 		logProbabilityValue$sample38();
 		logProbabilityValue$sample51();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, v, 2, prior);
-		logModelProbabilitiesVal();
 	}
 
 	@Override

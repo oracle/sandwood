@@ -987,7 +987,7 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		for(int var27 = 0; var27 < states; var27 += 1) {
 			double[] var28 = m[var27];
 			if(!fixedFlag$sample28)
@@ -1014,7 +1014,70 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		for(int var27 = 0; var27 < states; var27 += 1) {
+			double[] var28 = m[var27];
+			if(!fixedFlag$sample28)
+				DistributionSampling.sampleDirichlet(RNG$, v, states, var28);
+		}
+		for(int var43 = 0; var43 < states; var43 += 1) {
+			if(!fixedFlag$sample45)
+				bias[var43] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		}
+		int[][] var74 = st[0];
+		int[] var76 = var74[0];
+		if(!fixedFlag$sample84)
+			var76[0] = DistributionSampling.sampleCategorical(RNG$, m[0], states);
+		for(int i1 = 1; i1 < samples; i1 += 1) {
+			int[][] var116 = st[i1];
+			for(int j1 = 0; j1 < samples; j1 += 1) {
+				for(int k1 = 0; k1 < samples; k1 += 1) {
+					int[] var117 = var116[j1];
+					if(!fixedFlag$sample124)
+						var117[k1] = DistributionSampling.sampleCategorical(RNG$, m[0], states);
+				}
+			}
+		}
+		for(int l = 0; l < samples; l += 1) {
+			boolean[][] var179 = flips[l];
+			for(int p = 0; p < samples; p += 1) {
+				for(int n = 0; n < samples; n += 1) {
+					boolean[] var180 = var179[n];
+					var180[p] = DistributionSampling.sampleBernoulli(RNG$, bias[st[p][l][n]]);
+				}
+			}
+		}
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		for(int var27 = 0; var27 < states; var27 += 1) {
+			double[] var28 = m[var27];
+			if(!fixedFlag$sample28)
+				DistributionSampling.sampleDirichlet(RNG$, v, states, var28);
+		}
+		for(int var43 = 0; var43 < states; var43 += 1) {
+			if(!fixedFlag$sample45)
+				bias[var43] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		}
+		int[][] var74 = st[0];
+		int[] var76 = var74[0];
+		if(!fixedFlag$sample84)
+			var76[0] = DistributionSampling.sampleCategorical(RNG$, m[0], states);
+		for(int i1 = 1; i1 < samples; i1 += 1) {
+			int[][] var116 = st[i1];
+			for(int j1 = 0; j1 < samples; j1 += 1) {
+				for(int k1 = 0; k1 < samples; k1 += 1) {
+					int[] var117 = var116[j1];
+					if(!fixedFlag$sample124)
+						var117[k1] = DistributionSampling.sampleCategorical(RNG$, m[0], states);
+				}
+			}
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		for(int var27 = 0; var27 < states; var27 += 1) {
 			double[] var28 = m[var27];
 			if(!fixedFlag$sample28)
@@ -1139,12 +1202,7 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample28)
 			logProbabilityValue$sample28();
@@ -1175,34 +1233,6 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbabilityValue$sample84();
 		logProbabilityValue$sample124();
 		logProbabilityValue$sample191();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		for(int var27 = 0; var27 < states; var27 += 1) {
-			double[] var28 = m[var27];
-			if(!fixedFlag$sample28)
-				DistributionSampling.sampleDirichlet(RNG$, v, states, var28);
-		}
-		for(int var43 = 0; var43 < states; var43 += 1) {
-			if(!fixedFlag$sample45)
-				bias[var43] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		}
-		int[][] var74 = st[0];
-		int[] var76 = var74[0];
-		if(!fixedFlag$sample84)
-			var76[0] = DistributionSampling.sampleCategorical(RNG$, m[0], states);
-		for(int i1 = 1; i1 < samples; i1 += 1) {
-			int[][] var116 = st[i1];
-			for(int j1 = 0; j1 < samples; j1 += 1) {
-				for(int k1 = 0; k1 < samples; k1 += 1) {
-					int[] var117 = var116[j1];
-					if(!fixedFlag$sample124)
-						var117[k1] = DistributionSampling.sampleCategorical(RNG$, m[0], states);
-				}
-			}
-		}
-		logModelProbabilitiesVal();
 	}
 
 	@Override

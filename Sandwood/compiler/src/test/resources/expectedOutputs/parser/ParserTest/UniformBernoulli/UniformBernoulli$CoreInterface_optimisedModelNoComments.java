@@ -15,5 +15,4 @@ interface UniformBernoulli$CoreInterface extends org.sandwood.runtime.internal.m
 	public boolean[] get$output();
 	public double get$prior();
 	public void set$prior(double cv$value);
-	public void logEvidenceGeneration();
 }

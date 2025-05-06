@@ -16,5 +16,4 @@ interface NullModelMK3$CoreInterface extends org.sandwood.runtime.internal.model
 	public int get$observedSampleCount();
 	public void set$observedSampleCount(int cv$value);
 	public int get$positiveCount();
-	public void logEvidenceGeneration();
 }

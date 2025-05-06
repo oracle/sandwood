@@ -125,12 +125,12 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	private final void logProbabilityValue$sample73() {
 		if(!fixedProbFlag$sample73) {
-			int lengthCV$a$71_9 = -1;
+			int lengthCV$a$71_10 = -1;
 			if((0 == y))
-				lengthCV$a$71_9 = 2;
+				lengthCV$a$71_10 = 2;
 			if((1 == y))
-				lengthCV$a$71_9 = 3;
-			double cv$distributionAccumulator = (((0.0 <= i) && (i < lengthCV$a$71_9))?Math.log(a[y][i]):Double.NEGATIVE_INFINITY);
+				lengthCV$a$71_10 = 3;
+			double cv$distributionAccumulator = (((0.0 <= i) && (i < lengthCV$a$71_10))?Math.log(a[y][i]):Double.NEGATIVE_INFINITY);
 			logProbability$var68 = cv$distributionAccumulator;
 			logProbability$i = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -165,21 +165,21 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	private final void sample73() {
-		int lengthCV$a$71_7 = -1;
+		int lengthCV$a$71_8 = -1;
 		if((0 == y))
-			lengthCV$a$71_7 = 2;
+			lengthCV$a$71_8 = 2;
 		if((1 == y))
-			lengthCV$a$71_7 = 3;
-		int cv$numNumStates = Math.max(0, lengthCV$a$71_7);
+			lengthCV$a$71_8 = 3;
+		int cv$numNumStates = Math.max(0, lengthCV$a$71_8);
 		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
 			i = cv$valuePos;
 			p = b[y][cv$valuePos];
-			int lengthCV$a$71_8 = -1;
+			int lengthCV$a$71_9 = -1;
 			if((0 == y))
-				lengthCV$a$71_8 = 2;
+				lengthCV$a$71_9 = 2;
 			if((1 == y))
-				lengthCV$a$71_8 = 3;
-			double cv$accumulatedProbabilities = ((cv$valuePos < lengthCV$a$71_8)?Math.log(a[y][cv$valuePos]):Double.NEGATIVE_INFINITY);
+				lengthCV$a$71_9 = 3;
+			double cv$accumulatedProbabilities = ((cv$valuePos < lengthCV$a$71_9)?Math.log(a[y][cv$valuePos]):Double.NEGATIVE_INFINITY);
 			for(int var84 = 0; var84 < length$obs_measured; var84 += 1)
 				cv$accumulatedProbabilities = (Math.log((obs[var84]?p:(1.0 - p))) + cv$accumulatedProbabilities);
 			cv$var69$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
@@ -232,12 +232,12 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	@Override
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample73) {
-			int lengthCV$a$71_10 = -1;
+			int lengthCV$a$71_11 = -1;
 			if((0 == y))
-				lengthCV$a$71_10 = 2;
+				lengthCV$a$71_11 = 2;
 			if((1 == y))
-				lengthCV$a$71_10 = 3;
-			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_10);
+				lengthCV$a$71_11 = 3;
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_11);
 			p = b[y][i];
 		}
 		parallelFor(RNG$, 0, length$obs_measured, 1,
@@ -249,7 +249,20 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		if(!fixedFlag$sample73) {
+			int lengthCV$a$71_15 = -1;
+			if((0 == y))
+				lengthCV$a$71_15 = 2;
+			if((1 == y))
+				lengthCV$a$71_15 = 3;
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_15);
+		}
+		p = b[y][i];
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
 		if(!fixedFlag$sample73) {
 			int lengthCV$a$71_12 = -1;
 			if((0 == y))
@@ -257,21 +270,40 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			if((1 == y))
 				lengthCV$a$71_12 = 3;
 			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_12);
-			p = b[y][i];
 		}
+		p = b[y][i];
+		parallelFor(RNG$, 0, length$obs_measured, 1,
+			(int forStart$var84, int forEnd$var84, int threadID$var84, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var84 = forStart$var84; var84 < forEnd$var84; var84 += 1)
+						obs[var84] = DistributionSampling.sampleBernoulli(RNG$1, p);
+			}
+		);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample73) {
-			int lengthCV$a$71_11 = -1;
+			int lengthCV$a$71_13 = -1;
 			if((0 == y))
-				lengthCV$a$71_11 = 2;
+				lengthCV$a$71_13 = 2;
 			if((1 == y))
-				lengthCV$a$71_11 = 3;
-			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_11);
+				lengthCV$a$71_13 = 3;
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_13);
 			p = b[y][i];
 		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		if(!fixedFlag$sample73) {
+			int lengthCV$a$71_14 = -1;
+			if((0 == y))
+				lengthCV$a$71_14 = 2;
+			if((1 == y))
+				lengthCV$a$71_14 = 3;
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_14);
+		}
+		p = b[y][i];
 	}
 
 	@Override
@@ -312,12 +344,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample73)
 			logProbabilityValue$sample73();
@@ -339,20 +366,6 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample73) {
-			int lengthCV$a$71_13 = -1;
-			if((0 == y))
-				lengthCV$a$71_13 = 2;
-			if((1 == y))
-				lengthCV$a$71_13 = 3;
-			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_13);
-			p = b[y][i];
-		}
-		logModelProbabilitiesVal();
-	}
-
-	@Override
 	public final void propagateObservedValues() {
 		int cv$length1 = obs.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
@@ -361,8 +374,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 
 	@Override
 	public final void setIntermediates() {
-		if(fixedFlag$sample73)
-			p = b[y][i];
+		p = b[y][i];
 	}
 
 	@Override

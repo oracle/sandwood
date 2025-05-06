@@ -242,7 +242,7 @@ class Flip2CoinsMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample20)
 			parallelFor(RNG$, 0, coins, 1,
 				(int forStart$var19, int forEnd$var19, int threadID$var19, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -254,7 +254,44 @@ class Flip2CoinsMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample20)
+			parallelFor(RNG$, 0, coins, 1,
+				(int forStart$var19, int forEnd$var19, int threadID$var19, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var19 = forStart$var19; var19 < forEnd$var19; var19 += 1)
+							bias[var19] = DistributionSampling.sampleBeta(RNG$1, a, b);
+				}
+			);
+
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int i = forStart$i; i < forEnd$i; i += 1) {
+						boolean[] sample = flips[i];
+						parallelFor(RNG$1, 0, coins, 1,
+							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int j = forStart$j; j < forEnd$j; j += 1)
+										sample[j] = DistributionSampling.sampleBernoulli(RNG$2, bias[j]);
+							}
+						);
+					}
+			}
+		);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample20)
+			parallelFor(RNG$, 0, coins, 1,
+				(int forStart$var19, int forEnd$var19, int threadID$var19, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var19 = forStart$var19; var19 < forEnd$var19; var19 += 1)
+							bias[var19] = DistributionSampling.sampleBeta(RNG$1, a, b);
+				}
+			);
+
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample20)
 			parallelFor(RNG$, 0, coins, 1,
 				(int forStart$var19, int forEnd$var19, int threadID$var19, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -313,12 +350,7 @@ class Flip2CoinsMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample20)
 			logProbabilityValue$sample20();
@@ -337,19 +369,6 @@ class Flip2CoinsMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample20();
 		logProbabilityValue$sample45();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample20)
-			parallelFor(RNG$, 0, coins, 1,
-				(int forStart$var19, int forEnd$var19, int threadID$var19, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var19 = forStart$var19; var19 < forEnd$var19; var19 += 1)
-							bias[var19] = DistributionSampling.sampleBeta(RNG$1, a, b);
-				}
-			);
-
-		logModelProbabilitiesVal();
 	}
 
 	@Override

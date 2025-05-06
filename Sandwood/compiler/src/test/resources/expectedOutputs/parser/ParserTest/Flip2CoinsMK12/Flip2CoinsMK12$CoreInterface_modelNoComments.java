@@ -19,5 +19,4 @@ interface Flip2CoinsMK12$CoreInterface extends org.sandwood.runtime.internal.mod
 	public double get$logProbability$beta();
 	public double get$logProbability$bias();
 	public double get$logProbability$flips();
-	public void logEvidenceGeneration();
 }

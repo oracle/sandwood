@@ -825,9 +825,10 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample29)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -841,14 +842,46 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				}
 			);
 
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample55) {
-			for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
-				b[i$var46] = a[(i$var46 - 1)];
+		for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
+			b[i$var46] = a[(i$var46 - 1)];
+			if(!fixedFlag$sample55)
 				a[i$var46] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var46]], 5);
-			}
 		}
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample29)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, 5, 1,
+				(int forStart$var28, int forEnd$var28, int threadID$var28, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int var28 = forStart$var28; var28 < forEnd$var28; var28 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, 5, m[var28]);
+				}
+			);
+
+		for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
+			b[i$var46] = a[(i$var46 - 1)];
+			if(!fixedFlag$sample55)
+				a[i$var46] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var46]], 5);
+		}
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, n, 1,
+			(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j = forStart$j; j < forEnd$j; j += 1)
+						flips[j] = DistributionSampling.sampleBernoulli(RNG$1, (1 / a[(j + 1)]));
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -875,6 +908,31 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				b[i$var46] = a[(i$var46 - 1)];
 				a[i$var46] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var46]], 5);
 			}
+		}
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample29)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, 5, 1,
+				(int forStart$var28, int forEnd$var28, int threadID$var28, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int var28 = forStart$var28; var28 < forEnd$var28; var28 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, 5, m[var28]);
+				}
+			);
+
+		for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
+			b[i$var46] = a[(i$var46 - 1)];
+			if(!fixedFlag$sample55)
+				a[i$var46] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var46]], 5);
 		}
 	}
 
@@ -978,19 +1036,9 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -1041,39 +1089,6 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbabilityValue$sample75();
 	}
 
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample29)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, 5, 1,
-				(int forStart$var28, int forEnd$var28, int threadID$var28, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int var28 = forStart$var28; var28 < forEnd$var28; var28 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, 5, m[var28]);
-				}
-			);
-
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample55) {
-			for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
-				b[i$var46] = a[(i$var46 - 1)];
-				a[i$var46] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var46]], 5);
-			}
-		}
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
-	}
-
 	// Method to propagate observed values back into the model.
 	@Override
 	public final void propagateObservedValues() {
@@ -1091,11 +1106,8 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(fixedFlag$sample55) {
-			for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
-				b[i$var46] = a[(i$var46 - 1)];
-		}
+		for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
+			b[i$var46] = a[(i$var46 - 1)];
 	}
 
 	@Override

@@ -561,7 +561,58 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		if(!fixedFlag$sample26) {
+			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
+				ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
+		}
+		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
+			exped[j$var38] = Math.exp(ut[j$var38]);
+		double reduceVar$sum$8 = 0.0;
+		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+			reduceVar$sum$8 = (reduceVar$sum$8 + exped[cv$reduction46Index]);
+		sum = reduceVar$sum$8;
+		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+			expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$8));
+		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+				weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+			double reduceVar$denom$14 = 0.0;
+			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+				reduceVar$denom$14 = (reduceVar$denom$14 + weekly_ut[t$var112][cv$reduction136Index]);
+			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+				weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$14);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample26) {
+			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
+				ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
+		}
+		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
+			exped[j$var38] = Math.exp(ut[j$var38]);
+		double reduceVar$sum$5 = 0.0;
+		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+			reduceVar$sum$5 = (reduceVar$sum$5 + exped[cv$reduction46Index]);
+		sum = reduceVar$sum$5;
+		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+			expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$5));
+		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+				weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+			double reduceVar$denom$11 = 0.0;
+			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+				reduceVar$denom$11 = (reduceVar$denom$11 + weekly_ut[t$var112][cv$reduction136Index]);
+			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+				weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$11);
+			DistributionSampling.sampleMultinomial(RNG$, weekly_rates[t$var112], noProducts, sales_sum[t$var112], Sales[t$var112]);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample26) {
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
 				ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
@@ -586,27 +637,27 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample26) {
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
 				ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
-			for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-				exped[j$var38] = Math.exp(ut[j$var38]);
-			double reduceVar$sum$5 = 0.0;
-			for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
-				reduceVar$sum$5 = (reduceVar$sum$5 + exped[cv$reduction46Index]);
-			sum = reduceVar$sum$5;
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-				expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$5));
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
-					weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-				double reduceVar$denom$11 = 0.0;
-				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
-					reduceVar$denom$11 = (reduceVar$denom$11 + weekly_ut[t$var112][cv$reduction136Index]);
-				for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-					weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$11);
-			}
+		}
+		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
+			exped[j$var38] = Math.exp(ut[j$var38]);
+		double reduceVar$sum$7 = 0.0;
+		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+			reduceVar$sum$7 = (reduceVar$sum$7 + exped[cv$reduction46Index]);
+		sum = reduceVar$sum$7;
+		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+			expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$7));
+		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+				weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+			double reduceVar$denom$13 = 0.0;
+			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+				reduceVar$denom$13 = (reduceVar$denom$13 + weekly_ut[t$var112][cv$reduction136Index]);
+			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+				weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$13);
 		}
 	}
 
@@ -660,12 +711,7 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample26)
 			logProbabilityValue$sample26();
@@ -687,32 +733,6 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample26) {
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-				ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
-			for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-				exped[j$var38] = Math.exp(ut[j$var38]);
-			double reduceVar$sum$7 = 0.0;
-			for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
-				reduceVar$sum$7 = (reduceVar$sum$7 + exped[cv$reduction46Index]);
-			sum = reduceVar$sum$7;
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-				expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$7));
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
-					weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-				double reduceVar$denom$13 = 0.0;
-				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
-					reduceVar$denom$13 = (reduceVar$denom$13 + weekly_ut[t$var112][cv$reduction136Index]);
-				for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-					weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$13);
-			}
-		}
-		logModelProbabilitiesVal();
-	}
-
-	@Override
 	public final void propagateObservedValues() {
 		int cv$length1 = Sales.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
@@ -726,24 +746,22 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 
 	@Override
 	public final void setIntermediates() {
-		if(fixedFlag$sample26) {
-			for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-				exped[j$var38] = Math.exp(ut[j$var38]);
-			double reduceVar$sum$8 = 0.0;
-			for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
-				reduceVar$sum$8 = (reduceVar$sum$8 + exped[cv$reduction46Index]);
-			sum = reduceVar$sum$8;
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-				expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$8));
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
-					weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-				double reduceVar$denom$14 = 0.0;
-				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
-					reduceVar$denom$14 = (reduceVar$denom$14 + weekly_ut[t$var112][cv$reduction136Index]);
-				for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-					weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$14);
-			}
+		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
+			exped[j$var38] = Math.exp(ut[j$var38]);
+		double reduceVar$sum$9 = 0.0;
+		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction46Index]);
+		sum = reduceVar$sum$9;
+		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+			expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$9));
+		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+				weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+			double reduceVar$denom$15 = 0.0;
+			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+				reduceVar$denom$15 = (reduceVar$denom$15 + weekly_ut[t$var112][cv$reduction136Index]);
+			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+				weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$15);
 		}
 	}
 

@@ -1569,9 +1569,77 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		for(int var27 = 0; var27 < states; var27 += 1) {
+			double[] var28 = m[var27];
+			if(!fixedFlag$sample28)
+				DistributionSampling.sampleDirichlet(RNG$, v, states, var28);
+		}
+		for(int var43 = 0; var43 < states; var43 += 1) {
+			if(!fixedFlag$sample45)
+				bias[var43] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		}
+		int[][] var74 = st[0];
+		int[] var76 = var74[0];
+		if(!fixedFlag$sample84)
+			var76[0] = DistributionSampling.sampleCategorical(RNG$, m[0], states);
+		for(int i1 = 1; i1 < samples; i1 += 1) {
+			int[][] var116 = st[i1];
+			for(int j1 = 0; j1 < samples; j1 += 1) {
+				for(int k1 = 0; k1 < samples; k1 += 1) {
+					int[] var117 = var116[j1];
+					if(!fixedFlag$sample124)
+						var117[k1] = DistributionSampling.sampleCategorical(RNG$, m[0], states);
+				}
+			}
+		}
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		for(int var27 = 0; var27 < states; var27 += 1) {
+			double[] var28 = m[var27];
+			if(!fixedFlag$sample28)
+				DistributionSampling.sampleDirichlet(RNG$, v, states, var28);
+		}
+		for(int var43 = 0; var43 < states; var43 += 1) {
+			if(!fixedFlag$sample45)
+				bias[var43] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		}
+		int[][] var74 = st[0];
+		int[] var76 = var74[0];
+		if(!fixedFlag$sample84)
+			var76[0] = DistributionSampling.sampleCategorical(RNG$, m[0], states);
+		for(int i1 = 1; i1 < samples; i1 += 1) {
+			int[][] var116 = st[i1];
+			for(int j1 = 0; j1 < samples; j1 += 1) {
+				for(int k1 = 0; k1 < samples; k1 += 1) {
+					int[] var117 = var116[j1];
+					if(!fixedFlag$sample124)
+						var117[k1] = DistributionSampling.sampleCategorical(RNG$, m[0], states);
+				}
+			}
+		}
+		for(int l = 0; l < samples; l += 1) {
+			boolean[][] var179 = flips[l];
+			for(int p = 0; p < samples; p += 1) {
+				for(int n = 0; n < samples; n += 1) {
+					boolean[] var180 = var179[n];
+					var180[p] = DistributionSampling.sampleBernoulli(RNG$, bias[st[p][l][n]]);
+				}
+			}
+		}
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		for(int var27 = 0; var27 < states; var27 += 1) {
 			double[] var28 = m[var27];
 			if(!fixedFlag$sample28)
@@ -1598,9 +1666,10 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		for(int var27 = 0; var27 < states; var27 += 1) {
 			double[] var28 = m[var27];
 			if(!fixedFlag$sample28)
@@ -1717,19 +1786,9 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$var186 = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -1786,41 +1845,6 @@ class HMMTestPart4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbabilityValue$sample84();
 		logProbabilityValue$sample124();
 		logProbabilityValue$sample191();
-	}
-
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		for(int var27 = 0; var27 < states; var27 += 1) {
-			double[] var28 = m[var27];
-			if(!fixedFlag$sample28)
-				DistributionSampling.sampleDirichlet(RNG$, v, states, var28);
-		}
-		for(int var43 = 0; var43 < states; var43 += 1) {
-			if(!fixedFlag$sample45)
-				bias[var43] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		}
-		int[][] var74 = st[0];
-		int[] var76 = var74[0];
-		if(!fixedFlag$sample84)
-			var76[0] = DistributionSampling.sampleCategorical(RNG$, m[0], states);
-		for(int i1 = 1; i1 < samples; i1 += 1) {
-			int[][] var116 = st[i1];
-			for(int j1 = 0; j1 < samples; j1 += 1) {
-				for(int k1 = 0; k1 < samples; k1 += 1) {
-					int[] var117 = var116[j1];
-					if(!fixedFlag$sample124)
-						var117[k1] = DistributionSampling.sampleCategorical(RNG$, m[0], states);
-				}
-			}
-		}
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
 	}
 
 	// Method to propagate observed values back into the model.

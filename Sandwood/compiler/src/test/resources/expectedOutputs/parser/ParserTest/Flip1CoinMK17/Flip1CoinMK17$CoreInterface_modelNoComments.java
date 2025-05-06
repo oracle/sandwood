@@ -11,5 +11,4 @@ interface Flip1CoinMK17$CoreInterface extends org.sandwood.runtime.internal.mode
 	public double get$logProbability$bernoulli();
 	public double get$logProbability$bias();
 	public double get$logProbability$flip();
-	public void logEvidenceGeneration();
 }

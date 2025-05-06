@@ -43,8 +43,4 @@ interface UniformBernoulli$CoreInterface extends org.sandwood.runtime.internal.m
 
 	// Setter for prior.
 	public void set$prior(double cv$value);
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

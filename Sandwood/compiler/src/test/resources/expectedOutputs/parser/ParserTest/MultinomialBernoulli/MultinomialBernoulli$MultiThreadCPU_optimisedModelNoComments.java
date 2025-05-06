@@ -376,7 +376,7 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
 		if(!fixedFlag$sample20)
@@ -384,7 +384,41 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
+		if(!fixedFlag$sample20)
+			DistributionSampling.sampleMultinomial(RNG$, p, 3, 10, prior);
+		parallelFor(RNG$, 0, length, 3,
+			(int forStart$i$var47, int forEnd$i$var47, int threadID$i$var47, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int i$var47 = forStart$i$var47; i$var47 < forEnd$i$var47; i$var47 += 3)
+						output[i$var47] = DistributionSampling.sampleBernoulli(RNG$1, (prior[0] / 10));
+			}
+		);
+		parallelFor(RNG$, 1, length, 3,
+			(int forStart$i$var59, int forEnd$i$var59, int threadID$i$var59, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int i$var59 = forStart$i$var59; i$var59 < forEnd$i$var59; i$var59 += 3)
+						output[i$var59] = DistributionSampling.sampleBernoulli(RNG$1, (prior[1] / 10));
+			}
+		);
+		parallelFor(RNG$, 2, length, 3,
+			(int forStart$i$var71, int forEnd$i$var71, int threadID$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int i$var71 = forStart$i$var71; i$var71 < forEnd$i$var71; i$var71 += 3)
+						output[i$var71] = DistributionSampling.sampleBernoulli(RNG$1, (prior[2] / 10));
+			}
+		);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
+		if(!fixedFlag$sample20)
+			DistributionSampling.sampleMultinomial(RNG$, p, 3, 10, prior);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
 		if(!fixedFlag$sample20)
@@ -437,12 +471,7 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample17)
 			logProbabilityValue$sample17();
@@ -471,15 +500,6 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 		logProbabilityValue$sample48();
 		logProbabilityValue$sample60();
 		logProbabilityValue$sample72();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleMultinomial(RNG$, p, 3, 10, prior);
-		logModelProbabilitiesVal();
 	}
 
 	@Override

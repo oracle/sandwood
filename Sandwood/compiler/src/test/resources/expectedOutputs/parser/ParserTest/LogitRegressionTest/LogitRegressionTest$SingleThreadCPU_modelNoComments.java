@@ -1225,7 +1225,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		for(int var33 = 0; var33 < k; var33 += 1) {
 			if(!fixedFlag$sample35)
 				weights[var33] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
@@ -1233,13 +1233,28 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(!fixedFlag$sample42)
 			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		for(int i = 0; i < n; i += 1) {
-			for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-				if(!fixedFlag$sample35)
-					indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
-			}
+			for(int j$var61 = 0; j$var61 < k; j$var61 += 1)
+				indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+			for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+				p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+		}
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
+		for(int var33 = 0; var33 < k; var33 += 1) {
+			if(!fixedFlag$sample35)
+				weights[var33] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		}
+		if(!fixedFlag$sample42)
+			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int i = 0; i < n; i += 1) {
+			boolean[] var89 = y[i];
+			for(int j$var61 = 0; j$var61 < k; j$var61 += 1)
+				indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
 			for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-				if(!fixedFlag$sample35)
-					p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+				p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+				var89[j$var85] = DistributionSampling.sampleBernoulli(RNG$, (p[((i - 0) / 1)][j$var85] + bias));
 			}
 		}
 	}
@@ -1261,6 +1276,22 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				if(!fixedFlag$sample35)
 					p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 			}
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		for(int var33 = 0; var33 < k; var33 += 1) {
+			if(!fixedFlag$sample35)
+				weights[var33] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		}
+		if(!fixedFlag$sample42)
+			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int i = 0; i < n; i += 1) {
+			for(int j$var61 = 0; j$var61 < k; j$var61 += 1)
+				indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+			for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+				p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 		}
 	}
 
@@ -1318,12 +1349,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample35)
 			logProbabilityValue$sample35();
@@ -1349,27 +1375,6 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void logProbabilityGeneration() {
-		for(int var33 = 0; var33 < k; var33 += 1) {
-			if(!fixedFlag$sample35)
-				weights[var33] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		}
-		if(!fixedFlag$sample42)
-			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		for(int i = 0; i < n; i += 1) {
-			for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-				if(!fixedFlag$sample35)
-					indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
-			}
-			for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-				if(!fixedFlag$sample35)
-					p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-			}
-		}
-		logModelProbabilitiesVal();
-	}
-
-	@Override
 	public final void propagateObservedValues() {
 		boolean[][] cv$source1 = yMeasured;
 		boolean[][] cv$target1 = y;
@@ -1386,14 +1391,10 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void setIntermediates() {
 		for(int i = 0; i < n; i += 1) {
-			for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-				if(fixedFlag$sample35)
-					indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
-			}
-			for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-				if(fixedFlag$sample35)
-					p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-			}
+			for(int j$var61 = 0; j$var61 < k; j$var61 += 1)
+				indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+			for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+				p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
 		}
 	}
 

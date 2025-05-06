@@ -518,7 +518,7 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample7)
 			b0 = DistributionSampling.sampleCauchy(RNG$, 0.0, 2.0);
 		if(!fixedFlag$sample11)
@@ -526,7 +526,25 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample7)
+			b0 = DistributionSampling.sampleCauchy(RNG$, 0.0, 2.0);
+		if(!fixedFlag$sample11)
+			b1 = DistributionSampling.sampleHalfCauchy(RNG$, 1.0, 5.0);
+		for(int i = 0; i < noSamples; i += 1)
+			y[i] = DistributionSampling.sampleStudentT(RNG$, (b0 + (b1 * x[i])));
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample7)
+			b0 = DistributionSampling.sampleCauchy(RNG$, 0.0, 2.0);
+		if(!fixedFlag$sample11)
+			b1 = DistributionSampling.sampleHalfCauchy(RNG$, 1.0, 5.0);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample7)
 			b0 = DistributionSampling.sampleCauchy(RNG$, 0.0, 2.0);
 		if(!fixedFlag$sample11)
@@ -573,12 +591,7 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample7)
 			logProbabilityValue$sample7();
@@ -601,15 +614,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		logProbabilityValue$sample7();
 		logProbabilityValue$sample11();
 		logProbabilityValue$sample27();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample7)
-			b0 = DistributionSampling.sampleCauchy(RNG$, 0.0, 2.0);
-		if(!fixedFlag$sample11)
-			b1 = DistributionSampling.sampleHalfCauchy(RNG$, 1.0, 5.0);
-		logModelProbabilitiesVal();
 	}
 
 	@Override

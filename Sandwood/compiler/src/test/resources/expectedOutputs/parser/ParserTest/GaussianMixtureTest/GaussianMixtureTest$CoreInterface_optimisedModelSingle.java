@@ -85,8 +85,4 @@ interface GaussianMixtureTest$CoreInterface extends org.sandwood.runtime.interna
 
 	// Setter for z.
 	public void set$z(int[] cv$value);
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

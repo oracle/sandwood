@@ -196,13 +196,31 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample6)
 			rate = DistributionSampling.sampleGamma(RNG$, a, b);
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample6)
+			rate = DistributionSampling.sampleGamma(RNG$, a, b);
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$var18, int forEnd$var18, int threadID$var18, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var18 = forStart$var18; var18 < forEnd$var18; var18 += 1)
+						decay[var18] = (DistributionSampling.sampleExponential(RNG$1) / rate);
+			}
+		);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample6)
+			rate = DistributionSampling.sampleGamma(RNG$, a, b);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample6)
 			rate = DistributionSampling.sampleGamma(RNG$, a, b);
 	}
@@ -232,12 +250,7 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample6)
 			logProbabilityValue$sample6();
@@ -256,13 +269,6 @@ class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample6();
 		logProbabilityValue$sample19();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample6)
-			rate = DistributionSampling.sampleGamma(RNG$, a, b);
-		logModelProbabilitiesVal();
 	}
 
 	@Override

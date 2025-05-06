@@ -33,5 +33,4 @@ interface DiscreteChoiceRandCoeff$CoreInterface extends org.sandwood.runtime.int
 	public void set$sigma(double cv$value);
 	public double[] get$ut();
 	public void set$ut(double[] cv$value);
-	public void logEvidenceGeneration();
 }

@@ -31,8 +31,4 @@ interface Flip1CoinMK0$CoreInterface extends org.sandwood.runtime.internal.model
 
 	// Getter for logProbability$flip.
 	public double get$logProbability$flip();
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

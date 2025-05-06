@@ -659,7 +659,58 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		if(!fixedFlag$sample21) {
+			for(int var20 = 0; var20 < noProducts; var20 += 1)
+				ut[var20] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		}
+		if(!fixedFlag$sample28)
+			b = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		if(!fixedFlag$sample34)
+			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
+		if(!fixedFlag$sample47) {
+			for(int var46 = 0; var46 < noObs; var46 += 1)
+				beta[var46] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$)) + b);
+		}
+		for(int i = 0; i < noObs; i += 1) {
+			for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
+				exped[i][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+			double reduceVar$sum$14 = 0.0;
+			for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+				reduceVar$sum$14 = (reduceVar$sum$14 + exped[i][cv$reduction82Index]);
+			for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+				prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$14);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample21) {
+			for(int var20 = 0; var20 < noProducts; var20 += 1)
+				ut[var20] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		}
+		if(!fixedFlag$sample28)
+			b = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		if(!fixedFlag$sample34)
+			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
+		if(!fixedFlag$sample47) {
+			for(int var46 = 0; var46 < noObs; var46 += 1)
+				beta[var46] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$)) + b);
+		}
+		for(int i = 0; i < noObs; i += 1) {
+			for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
+				exped[i][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+			double reduceVar$sum$11 = 0.0;
+			for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+				reduceVar$sum$11 = (reduceVar$sum$11 + exped[i][cv$reduction82Index]);
+			for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+				prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$11);
+			choices[i] = DistributionSampling.sampleCategorical(RNG$, prob[i], noProducts);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample21) {
 			for(int var20 = 0; var20 < noProducts; var20 += 1)
 				ut[var20] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
@@ -686,7 +737,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	}
 
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample21) {
 			for(int var20 = 0; var20 < noProducts; var20 += 1)
 				ut[var20] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
@@ -699,16 +750,14 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			for(int var46 = 0; var46 < noObs; var46 += 1)
 				beta[var46] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$)) + b);
 		}
-		if((!fixedFlag$sample21 || !fixedFlag$sample47)) {
-			for(int i = 0; i < noObs; i += 1) {
-				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
-					exped[i][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
-				double reduceVar$sum$11 = 0.0;
-				for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
-					reduceVar$sum$11 = (reduceVar$sum$11 + exped[i][cv$reduction82Index]);
-				for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
-					prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$11);
-			}
+		for(int i = 0; i < noObs; i += 1) {
+			for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
+				exped[i][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+			double reduceVar$sum$13 = 0.0;
+			for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+				reduceVar$sum$13 = (reduceVar$sum$13 + exped[i][cv$reduction82Index]);
+			for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+				prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$13);
 		}
 	}
 
@@ -780,12 +829,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample21)
 			logProbabilityValue$sample21();
@@ -819,34 +863,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	}
 
 	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample21) {
-			for(int var20 = 0; var20 < noProducts; var20 += 1)
-				ut[var20] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		}
-		if(!fixedFlag$sample28)
-			b = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		if(!fixedFlag$sample34)
-			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
-		if(!fixedFlag$sample47) {
-			for(int var46 = 0; var46 < noObs; var46 += 1)
-				beta[var46] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$)) + b);
-		}
-		if((!fixedFlag$sample21 || !fixedFlag$sample47)) {
-			for(int i = 0; i < noObs; i += 1) {
-				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
-					exped[i][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
-				double reduceVar$sum$13 = 0.0;
-				for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
-					reduceVar$sum$13 = (reduceVar$sum$13 + exped[i][cv$reduction82Index]);
-				for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
-					prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$13);
-			}
-		}
-		logModelProbabilitiesVal();
-	}
-
-	@Override
 	public final void propagateObservedValues() {
 		int cv$length1 = choices.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
@@ -855,16 +871,14 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 
 	@Override
 	public final void setIntermediates() {
-		if((fixedFlag$sample21 && fixedFlag$sample47)) {
-			for(int i = 0; i < noObs; i += 1) {
-				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
-					exped[i][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
-				double reduceVar$sum$14 = 0.0;
-				for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
-					reduceVar$sum$14 = (reduceVar$sum$14 + exped[i][cv$reduction82Index]);
-				for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
-					prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$14);
-			}
+		for(int i = 0; i < noObs; i += 1) {
+			for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
+				exped[i][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+			double reduceVar$sum$15 = 0.0;
+			for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+				reduceVar$sum$15 = (reduceVar$sum$15 + exped[i][cv$reduction82Index]);
+			for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+				prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$15);
 		}
 	}
 

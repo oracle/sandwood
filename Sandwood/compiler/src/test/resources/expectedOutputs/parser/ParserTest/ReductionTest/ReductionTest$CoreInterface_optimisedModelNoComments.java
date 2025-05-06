@@ -27,5 +27,4 @@ interface ReductionTest$CoreInterface extends org.sandwood.runtime.internal.mode
 	public int[] get$st();
 	public void set$st(int[] cv$value);
 	public double[] get$v();
-	public void logEvidenceGeneration();
 }

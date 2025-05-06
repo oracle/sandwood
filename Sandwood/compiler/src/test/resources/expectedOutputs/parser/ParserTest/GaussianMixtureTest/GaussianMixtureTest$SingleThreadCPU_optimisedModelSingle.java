@@ -1126,9 +1126,61 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, alpha, 5, phi);
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample34) {
+			for(int var33 = 0; var33 < 5; var33 += 1)
+				mu[var33] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample52) {
+			for(int var51 = 0; var51 < 5; var51 += 1)
+				sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample68) {
+			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
+				z[i$var66] = DistributionSampling.sampleCategorical(RNG$, phi, 5);
+		}
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, alpha, 5, phi);
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample34) {
+			for(int var33 = 0; var33 < 5; var33 += 1)
+				mu[var33] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample52) {
+			for(int var51 = 0; var51 < 5; var51 += 1)
+				sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+		}
+		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
+			if(!fixedFlag$sample68)
+				z[i$var66] = DistributionSampling.sampleCategorical(RNG$, phi, 5);
+			x[i$var66] = ((Math.sqrt(sigma[z[i$var66]]) * DistributionSampling.sampleGaussian(RNG$)) + mu[z[i$var66]]);
+		}
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, alpha, 5, phi);
 		
@@ -1152,9 +1204,10 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, alpha, 5, phi);
 		
@@ -1268,19 +1321,9 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			logProbability$var72 = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -1337,38 +1380,6 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		logProbabilityValue$sample52();
 		logProbabilityValue$sample68();
 		logProbabilityValue$sample72();
-	}
-
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, alpha, 5, phi);
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample34) {
-			for(int var33 = 0; var33 < 5; var33 += 1)
-				mu[var33] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
-		}
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample52) {
-			for(int var51 = 0; var51 < 5; var51 += 1)
-				sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
-		}
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample68) {
-			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-				z[i$var66] = DistributionSampling.sampleCategorical(RNG$, phi, 5);
-		}
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
 	}
 
 	// Method to propagate observed values back into the model.

@@ -65,8 +65,4 @@ interface LinearRegression2Fail$CoreInterface extends org.sandwood.runtime.inter
 
 	// Setter for yMeasured.
 	public void set$yMeasured(double[] cv$value);
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

@@ -883,7 +883,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample35) {
 			weights[0] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 			weights[1] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
@@ -891,15 +891,36 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 		if(!fixedFlag$sample42)
 			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		for(int i = 0; i < n; i += 1) {
+			indicator[i][0] = Math.exp((weights[0] * x[i][0]));
+			indicator[i][1] = Math.exp((weights[1] * x[i][1]));
+			indicator[i][2] = Math.exp((weights[2] * x[i][2]));
+			p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+		}
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
 		if(!fixedFlag$sample35) {
-			for(int i = 0; i < n; i += 1) {
-				indicator[i][0] = Math.exp((weights[0] * x[i][0]));
-				indicator[i][1] = Math.exp((weights[1] * x[i][1]));
-				indicator[i][2] = Math.exp((weights[2] * x[i][2]));
-				p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-			}
+			weights[0] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+			weights[1] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+			weights[2] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		}
+		if(!fixedFlag$sample42)
+			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		for(int i = 0; i < n; i += 1) {
+			boolean[] var89 = y[i];
+			indicator[i][0] = Math.exp((weights[0] * x[i][0]));
+			indicator[i][1] = Math.exp((weights[1] * x[i][1]));
+			indicator[i][2] = Math.exp((weights[2] * x[i][2]));
+			p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			var89[0] = DistributionSampling.sampleBernoulli(RNG$, (p[i][0] + bias));
+			p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			var89[1] = DistributionSampling.sampleBernoulli(RNG$, (p[i][1] + bias));
+			p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			var89[2] = DistributionSampling.sampleBernoulli(RNG$, (p[i][2] + bias));
 		}
 	}
 
@@ -921,6 +942,25 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 				p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 			}
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		if(!fixedFlag$sample35) {
+			weights[0] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+			weights[1] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+			weights[2] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		}
+		if(!fixedFlag$sample42)
+			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		for(int i = 0; i < n; i += 1) {
+			indicator[i][0] = Math.exp((weights[0] * x[i][0]));
+			indicator[i][1] = Math.exp((weights[1] * x[i][1]));
+			indicator[i][2] = Math.exp((weights[2] * x[i][2]));
+			p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 		}
 	}
 
@@ -982,12 +1022,7 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample35)
 			logProbabilityValue$sample35();
@@ -1013,28 +1048,6 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample35) {
-			weights[0] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-			weights[1] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-			weights[2] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		}
-		if(!fixedFlag$sample42)
-			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		if(!fixedFlag$sample35) {
-			for(int i = 0; i < n; i += 1) {
-				indicator[i][0] = Math.exp((weights[0] * x[i][0]));
-				indicator[i][1] = Math.exp((weights[1] * x[i][1]));
-				indicator[i][2] = Math.exp((weights[2] * x[i][2]));
-				p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-			}
-		}
-		logModelProbabilitiesVal();
-	}
-
-	@Override
 	public final void propagateObservedValues() {
 		int cv$length1 = y.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
@@ -1048,15 +1061,13 @@ class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 
 	@Override
 	public final void setIntermediates() {
-		if(fixedFlag$sample35) {
-			for(int i = 0; i < n; i += 1) {
-				indicator[i][0] = Math.exp((weights[0] * x[i][0]));
-				indicator[i][1] = Math.exp((weights[1] * x[i][1]));
-				indicator[i][2] = Math.exp((weights[2] * x[i][2]));
-				p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-			}
+		for(int i = 0; i < n; i += 1) {
+			indicator[i][0] = Math.exp((weights[0] * x[i][0]));
+			indicator[i][1] = Math.exp((weights[1] * x[i][1]));
+			indicator[i][2] = Math.exp((weights[2] * x[i][2]));
+			p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
 		}
 	}
 

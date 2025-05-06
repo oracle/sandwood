@@ -294,7 +294,7 @@ class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		for(int var17 = 0; var17 < coins; var17 += 1) {
 			if(!fixedFlag$sample18)
 				bias[var17] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
@@ -302,7 +302,28 @@ class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		for(int var17 = 0; var17 < coins; var17 += 1) {
+			if(!fixedFlag$sample18)
+				bias[var17] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		}
+		for(int j = 0; j < coins; j += 1) {
+			boolean[] var34 = flips[j];
+			for(int var43 = 0; var43 < shape[j]; var43 += 1)
+				var34[var43] = DistributionSampling.sampleBernoulli(RNG$, bias[j]);
+		}
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		for(int var17 = 0; var17 < coins; var17 += 1) {
+			if(!fixedFlag$sample18)
+				bias[var17] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		for(int var17 = 0; var17 < coins; var17 += 1) {
 			if(!fixedFlag$sample18)
 				bias[var17] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
@@ -347,12 +368,7 @@ class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample18)
 			logProbabilityValue$sample18();
@@ -371,15 +387,6 @@ class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample18();
 		logProbabilityValue$sample44();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		for(int var17 = 0; var17 < coins; var17 += 1) {
-			if(!fixedFlag$sample18)
-				bias[var17] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		}
-		logModelProbabilitiesVal();
 	}
 
 	@Override

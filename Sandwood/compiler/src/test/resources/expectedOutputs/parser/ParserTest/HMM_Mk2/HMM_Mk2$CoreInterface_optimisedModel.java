@@ -121,8 +121,4 @@ interface HMM_Mk2$CoreInterface extends org.sandwood.runtime.internal.model.Core
 
 	// Setter for weights.
 	public void set$weights(double[] cv$value);
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

@@ -1061,12 +1061,12 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 												// A generated name to prevent name collisions if the reduction is implemented more
 												// than once in inference and probability code. Initialize the variable to the unit
 												// value
-												double reduceVar$sum$9 = 0.0;
+												double reduceVar$sum$10 = 0.0;
 												
 												// For each index in the array to be reduced
 												for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
-													double k$var49 = reduceVar$sum$9;
+													double k$var49 = reduceVar$sum$10;
 													
 													// Set the right hand term to a value from the array exped
 													double l$var50 = exped[cv$reduction46Index];
@@ -1074,11 +1074,11 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Copy the result of the reduction into the variable returned by the reduction.
-													reduceVar$sum$9 = (k$var49 + l$var50);
+													reduceVar$sum$10 = (k$var49 + l$var50);
 												}
 												
 												// Write out the new sample value.
-												sum = reduceVar$sum$9;
+												sum = reduceVar$sum$10;
 											}
 										}
 									}
@@ -1343,12 +1343,12 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																				// A generated name to prevent name collisions if the reduction is implemented more
 																				// than once in inference and probability code. Initialize the variable to the unit
 																				// value
-																				double reduceVar$denom$15 = 0.0;
+																				double reduceVar$denom$16 = 0.0;
 																				
 																				// For each index in the array to be reduced
 																				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
 																					// Set the left hand term of the reduction function to the return variable value.
-																					double k$var135 = reduceVar$denom$15;
+																					double k$var135 = reduceVar$denom$16;
 																					
 																					// Set the right hand term to a value from the array weekly_ut
 																					double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
@@ -1356,9 +1356,9 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																					// Execute the reduction function, saving the result into the return value.
 																					// 
 																					// Copy the result of the reduction into the variable returned by the reduction.
-																					reduceVar$denom$15 = (k$var135 + l$var136);
+																					reduceVar$denom$16 = (k$var135 + l$var136);
 																				}
-																				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$15);
+																				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$16);
 																			}
 																		}
 																	}
@@ -1382,53 +1382,6 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 														for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
 															if((j$var123 == j$var147)) {
 																for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																	if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
-																		// The body will execute, so should not be executed again
-																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
-																		{
-																			// Reduction of array weekly_ut
-																			// 
-																			// A generated name to prevent name collisions if the reduction is implemented more
-																			// than once in inference and probability code. Initialize the variable to the unit
-																			// value
-																			double reduceVar$denom$16 = 0.0;
-																			
-																			// For each index in the array to be reduced
-																			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
-																				// Set the left hand term of the reduction function to the return variable value.
-																				double k$var135 = reduceVar$denom$16;
-																				
-																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
-																				
-																				// Execute the reduction function, saving the result into the return value.
-																				// 
-																				// Copy the result of the reduction into the variable returned by the reduction.
-																				reduceVar$denom$16 = (k$var135 + l$var136);
-																			}
-																			weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$16);
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-								if((j$var20 == j$var38)) {
-									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-										if((j$var38 == j$var63)) {
-											for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-												if((j$var63 == j$var123)) {
-													for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-														if(((0 <= j$var123) && (j$var123 < noProducts))) {
-															{
-																for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
 																	if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
 																		// The body will execute, so should not be executed again
 																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
@@ -1472,6 +1425,53 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 										if((j$var38 == j$var63)) {
 											for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
 												if((j$var63 == j$var123)) {
+													for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+														if(((0 <= j$var123) && (j$var123 < noProducts))) {
+															{
+																for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+																	if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
+																		// The body will execute, so should not be executed again
+																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
+																		{
+																			// Reduction of array weekly_ut
+																			// 
+																			// A generated name to prevent name collisions if the reduction is implemented more
+																			// than once in inference and probability code. Initialize the variable to the unit
+																			// value
+																			double reduceVar$denom$18 = 0.0;
+																			
+																			// For each index in the array to be reduced
+																			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																				// Set the left hand term of the reduction function to the return variable value.
+																				double k$var135 = reduceVar$denom$18;
+																				
+																				// Set the right hand term to a value from the array weekly_ut
+																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																				
+																				// Execute the reduction function, saving the result into the return value.
+																				// 
+																				// Copy the result of the reduction into the variable returned by the reduction.
+																				reduceVar$denom$18 = (k$var135 + l$var136);
+																			}
+																			weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$18);
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								if((j$var20 == j$var38)) {
+									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										if((j$var38 == j$var63)) {
+											for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+												if((j$var63 == j$var123)) {
 													for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
 														if((j$var123 == j$var147)) {
 															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
@@ -1484,12 +1484,12 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																		// A generated name to prevent name collisions if the reduction is implemented more
 																		// than once in inference and probability code. Initialize the variable to the unit
 																		// value
-																		double reduceVar$denom$18 = 0.0;
+																		double reduceVar$denom$19 = 0.0;
 																		
 																		// For each index in the array to be reduced
 																		for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
 																			// Set the left hand term of the reduction function to the return variable value.
-																			double k$var135 = reduceVar$denom$18;
+																			double k$var135 = reduceVar$denom$19;
 																			
 																			// Set the right hand term to a value from the array weekly_ut
 																			double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
@@ -1497,9 +1497,9 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																			// Execute the reduction function, saving the result into the return value.
 																			// 
 																			// Copy the result of the reduction into the variable returned by the reduction.
-																			reduceVar$denom$18 = (k$var135 + l$var136);
+																			reduceVar$denom$19 = (k$var135 + l$var136);
 																		}
-																		weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$18);
+																		weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$19);
 																	}
 																}
 															}
@@ -1631,40 +1631,40 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 												// A generated name to prevent name collisions if the reduction is implemented more
 												// than once in inference and probability code. Initialize the variable to the unit
 												// value
-												double reduceVar$sum$10 = 0.0;
+												double reduceVar$sum$11 = 0.0;
 												
 												// Reduce for every value except a masked value which will be skipped.
-												for(int cv$reduction2584Index = 0; cv$reduction2584Index < j$var38; cv$reduction2584Index += 1) {
+												for(int cv$reduction2600Index = 0; cv$reduction2600Index < j$var38; cv$reduction2600Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
-													double k$var49 = reduceVar$sum$10;
+													double k$var49 = reduceVar$sum$11;
 													
 													// Set the right hand term to a value from the array exped
-													double l$var50 = exped[cv$reduction2584Index];
+													double l$var50 = exped[cv$reduction2600Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Copy the result of the reduction into the variable returned by the reduction.
-													reduceVar$sum$10 = (k$var49 + l$var50);
+													reduceVar$sum$11 = (k$var49 + l$var50);
 												}
-												for(int cv$reduction2584Index = (j$var38 + 1); cv$reduction2584Index < noProducts; cv$reduction2584Index += 1) {
+												for(int cv$reduction2600Index = (j$var38 + 1); cv$reduction2600Index < noProducts; cv$reduction2600Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
-													double k$var49 = reduceVar$sum$10;
+													double k$var49 = reduceVar$sum$11;
 													
 													// Set the right hand term to a value from the array exped
-													double l$var50 = exped[cv$reduction2584Index];
+													double l$var50 = exped[cv$reduction2600Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Copy the result of the reduction into the variable returned by the reduction.
-													reduceVar$sum$10 = (k$var49 + l$var50);
+													reduceVar$sum$11 = (k$var49 + l$var50);
 												}
-												double cv$reduced46 = reduceVar$sum$10;
+												double cv$reduced46 = reduceVar$sum$11;
 												
 												// Copy the result of the reduction into the variable returned by the reduction.
-												reduceVar$sum$10 = (traceTempVariable$k$24_3 + cv$reduced46);
-												double traceTempVariable$sum$24_4 = reduceVar$sum$10;
+												reduceVar$sum$11 = (traceTempVariable$k$24_3 + cv$reduced46);
+												double traceTempVariable$sum$24_4 = reduceVar$sum$11;
 												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
 													double traceTempVariable$var124$24_6 = (exped[j$var63] / (r * traceTempVariable$sum$24_4));
 													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
@@ -1679,40 +1679,40 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																			// A generated name to prevent name collisions if the reduction is implemented more
 																			// than once in inference and probability code. Initialize the variable to the unit
 																			// value
-																			double reduceVar$denom$19 = 0.0;
+																			double reduceVar$denom$20 = 0.0;
 																			
 																			// Reduce for every value except a masked value which will be skipped.
-																			for(int cv$reduction2603Index = 0; cv$reduction2603Index < j$var123; cv$reduction2603Index += 1) {
+																			for(int cv$reduction2619Index = 0; cv$reduction2619Index < j$var123; cv$reduction2619Index += 1) {
 																				// Set the left hand term of the reduction function to the return variable value.
-																				double k$var135 = reduceVar$denom$19;
+																				double k$var135 = reduceVar$denom$20;
 																				
 																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2603Index];
+																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2619Index];
 																				
 																				// Execute the reduction function, saving the result into the return value.
 																				// 
 																				// Copy the result of the reduction into the variable returned by the reduction.
-																				reduceVar$denom$19 = (k$var135 + l$var136);
+																				reduceVar$denom$20 = (k$var135 + l$var136);
 																			}
-																			for(int cv$reduction2603Index = (j$var123 + 1); cv$reduction2603Index < noProducts; cv$reduction2603Index += 1) {
+																			for(int cv$reduction2619Index = (j$var123 + 1); cv$reduction2619Index < noProducts; cv$reduction2619Index += 1) {
 																				// Set the left hand term of the reduction function to the return variable value.
-																				double k$var135 = reduceVar$denom$19;
+																				double k$var135 = reduceVar$denom$20;
 																				
 																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2603Index];
+																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2619Index];
 																				
 																				// Execute the reduction function, saving the result into the return value.
 																				// 
 																				// Execute the reduction function, saving the result into the return value.
 																				// 
 																				// Copy the result of the reduction into the variable returned by the reduction.
-																				reduceVar$denom$19 = (k$var135 + l$var136);
+																				reduceVar$denom$20 = (k$var135 + l$var136);
 																			}
-																			double cv$reduced136 = reduceVar$denom$19;
+																			double cv$reduced136 = reduceVar$denom$20;
 																			
 																			// Copy the result of the reduction into the variable returned by the reduction.
-																			reduceVar$denom$19 = (traceTempVariable$k$24_9 + cv$reduced136);
-																			double traceTempVariable$denom$24_10 = reduceVar$denom$19;
+																			reduceVar$denom$20 = (traceTempVariable$k$24_9 + cv$reduced136);
+																			double traceTempVariable$denom$24_10 = reduceVar$denom$20;
 																			if(!guard$sample26multinomial156[((t$var112 - 0) / 1)]) {
 																				// The body will execute, so should not be executed again
 																				guard$sample26multinomial156[((t$var112 - 0) / 1)] = true;
@@ -1734,11 +1734,11 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																									{
 																										cv$temp$2$weekly_rates = weekly_rates[((t$var112 - 0) / 1)];
 																									}
-																									int cv$temp$3$$var1847;
+																									int cv$temp$3$$var1863;
 																									{
 																										// Constructing a random variable input for use later.
-																										int $var1847 = noProducts;
-																										cv$temp$3$$var1847 = $var1847;
+																										int $var1863 = noProducts;
+																										cv$temp$3$$var1863 = $var1863;
 																									}
 																									int cv$temp$4$var151;
 																									{
@@ -1746,14 +1746,14 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																									}
 																									
 																									// Record the probability of sample task 157 generating output with current configuration.
-																									if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1847, cv$temp$4$var151)) < cv$accumulatedConsumerProbabilities))
-																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1847, cv$temp$4$var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																									if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1863, cv$temp$4$var151)) < cv$accumulatedConsumerProbabilities))
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1863, cv$temp$4$var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																									else {
 																										// If the second value is -infinity.
 																										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																											cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1847, cv$temp$4$var151));
+																											cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1863, cv$temp$4$var151));
 																										else
-																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1847, cv$temp$4$var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1847, cv$temp$4$var151)));
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1863, cv$temp$4$var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1863, cv$temp$4$var151)));
 																									}
 																									
 																									// Recorded the probability of reaching sample task 157 with the current configuration.
@@ -1804,40 +1804,40 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 												// A generated name to prevent name collisions if the reduction is implemented more
 												// than once in inference and probability code. Initialize the variable to the unit
 												// value
-												double reduceVar$sum$11 = 0.0;
+												double reduceVar$sum$12 = 0.0;
 												
 												// Reduce for every value except a masked value which will be skipped.
-												for(int cv$reduction2632Index = 0; cv$reduction2632Index < j$var38; cv$reduction2632Index += 1) {
+												for(int cv$reduction2648Index = 0; cv$reduction2648Index < j$var38; cv$reduction2648Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
-													double k$var49 = reduceVar$sum$11;
+													double k$var49 = reduceVar$sum$12;
 													
 													// Set the right hand term to a value from the array exped
-													double l$var50 = exped[cv$reduction2632Index];
+													double l$var50 = exped[cv$reduction2648Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Copy the result of the reduction into the variable returned by the reduction.
-													reduceVar$sum$11 = (k$var49 + l$var50);
+													reduceVar$sum$12 = (k$var49 + l$var50);
 												}
-												for(int cv$reduction2632Index = (j$var38 + 1); cv$reduction2632Index < noProducts; cv$reduction2632Index += 1) {
+												for(int cv$reduction2648Index = (j$var38 + 1); cv$reduction2648Index < noProducts; cv$reduction2648Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
-													double k$var49 = reduceVar$sum$11;
+													double k$var49 = reduceVar$sum$12;
 													
 													// Set the right hand term to a value from the array exped
-													double l$var50 = exped[cv$reduction2632Index];
+													double l$var50 = exped[cv$reduction2648Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Copy the result of the reduction into the variable returned by the reduction.
-													reduceVar$sum$11 = (k$var49 + l$var50);
+													reduceVar$sum$12 = (k$var49 + l$var50);
 												}
-												double cv$reduced46 = reduceVar$sum$11;
+												double cv$reduced46 = reduceVar$sum$12;
 												
 												// Copy the result of the reduction into the variable returned by the reduction.
-												reduceVar$sum$11 = (traceTempVariable$k$25_3 + cv$reduced46);
-												double traceTempVariable$sum$25_4 = reduceVar$sum$11;
+												reduceVar$sum$12 = (traceTempVariable$k$25_3 + cv$reduced46);
+												double traceTempVariable$sum$25_4 = reduceVar$sum$12;
 												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
 													double traceTempVariable$var124$25_6 = (exped[j$var63] / (r * traceTempVariable$sum$25_4));
 													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
@@ -1867,11 +1867,11 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																								{
 																									cv$temp$5$weekly_rates = weekly_rates[((t$var112 - 0) / 1)];
 																								}
-																								int cv$temp$6$$var1850;
+																								int cv$temp$6$$var1866;
 																								{
 																									// Constructing a random variable input for use later.
-																									int $var1850 = noProducts;
-																									cv$temp$6$$var1850 = $var1850;
+																									int $var1866 = noProducts;
+																									cv$temp$6$$var1866 = $var1866;
 																								}
 																								int cv$temp$7$var151;
 																								{
@@ -1879,14 +1879,14 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																								}
 																								
 																								// Record the probability of sample task 157 generating output with current configuration.
-																								if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1850, cv$temp$7$var151)) < cv$accumulatedConsumerProbabilities))
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1850, cv$temp$7$var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																								if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1866, cv$temp$7$var151)) < cv$accumulatedConsumerProbabilities))
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1866, cv$temp$7$var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																								else {
 																									// If the second value is -infinity.
 																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																										cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1850, cv$temp$7$var151));
+																										cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1866, cv$temp$7$var151));
 																									else
-																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1850, cv$temp$7$var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1850, cv$temp$7$var151)));
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1866, cv$temp$7$var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1866, cv$temp$7$var151)));
 																								}
 																								
 																								// Recorded the probability of reaching sample task 157 with the current configuration.
@@ -1943,40 +1943,40 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																	// A generated name to prevent name collisions if the reduction is implemented more
 																	// than once in inference and probability code. Initialize the variable to the unit
 																	// value
-																	double reduceVar$denom$20 = 0.0;
+																	double reduceVar$denom$21 = 0.0;
 																	
 																	// Reduce for every value except a masked value which will be skipped.
-																	for(int cv$reduction2678Index = 0; cv$reduction2678Index < j$var123; cv$reduction2678Index += 1) {
+																	for(int cv$reduction2694Index = 0; cv$reduction2694Index < j$var123; cv$reduction2694Index += 1) {
 																		// Set the left hand term of the reduction function to the return variable value.
-																		double k$var135 = reduceVar$denom$20;
+																		double k$var135 = reduceVar$denom$21;
 																		
 																		// Set the right hand term to a value from the array weekly_ut
-																		double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2678Index];
+																		double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2694Index];
 																		
 																		// Execute the reduction function, saving the result into the return value.
 																		// 
 																		// Copy the result of the reduction into the variable returned by the reduction.
-																		reduceVar$denom$20 = (k$var135 + l$var136);
+																		reduceVar$denom$21 = (k$var135 + l$var136);
 																	}
-																	for(int cv$reduction2678Index = (j$var123 + 1); cv$reduction2678Index < noProducts; cv$reduction2678Index += 1) {
+																	for(int cv$reduction2694Index = (j$var123 + 1); cv$reduction2694Index < noProducts; cv$reduction2694Index += 1) {
 																		// Set the left hand term of the reduction function to the return variable value.
-																		double k$var135 = reduceVar$denom$20;
+																		double k$var135 = reduceVar$denom$21;
 																		
 																		// Set the right hand term to a value from the array weekly_ut
-																		double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2678Index];
+																		double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2694Index];
 																		
 																		// Execute the reduction function, saving the result into the return value.
 																		// 
 																		// Execute the reduction function, saving the result into the return value.
 																		// 
 																		// Copy the result of the reduction into the variable returned by the reduction.
-																		reduceVar$denom$20 = (k$var135 + l$var136);
+																		reduceVar$denom$21 = (k$var135 + l$var136);
 																	}
-																	double cv$reduced136 = reduceVar$denom$20;
+																	double cv$reduced136 = reduceVar$denom$21;
 																	
 																	// Copy the result of the reduction into the variable returned by the reduction.
-																	reduceVar$denom$20 = (traceTempVariable$k$26_8 + cv$reduced136);
-																	double traceTempVariable$denom$26_9 = reduceVar$denom$20;
+																	reduceVar$denom$21 = (traceTempVariable$k$26_8 + cv$reduced136);
+																	double traceTempVariable$denom$26_9 = reduceVar$denom$21;
 																	if(!guard$sample26multinomial156[((t$var112 - 0) / 1)]) {
 																		// The body will execute, so should not be executed again
 																		guard$sample26multinomial156[((t$var112 - 0) / 1)] = true;
@@ -1998,11 +1998,11 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																							{
 																								cv$temp$8$weekly_rates = weekly_rates[((t$var112 - 0) / 1)];
 																							}
-																							int cv$temp$9$$var1853;
+																							int cv$temp$9$$var1869;
 																							{
 																								// Constructing a random variable input for use later.
-																								int $var1853 = noProducts;
-																								cv$temp$9$$var1853 = $var1853;
+																								int $var1869 = noProducts;
+																								cv$temp$9$$var1869 = $var1869;
 																							}
 																							int cv$temp$10$var151;
 																							{
@@ -2010,14 +2010,14 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																							}
 																							
 																							// Record the probability of sample task 157 generating output with current configuration.
-																							if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1853, cv$temp$10$var151)) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1853, cv$temp$10$var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1869, cv$temp$10$var151)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1869, cv$temp$10$var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																							else {
 																								// If the second value is -infinity.
 																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1853, cv$temp$10$var151));
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1869, cv$temp$10$var151));
 																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1853, cv$temp$10$var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1853, cv$temp$10$var151)));
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1869, cv$temp$10$var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1869, cv$temp$10$var151)));
 																							}
 																							
 																							// Recorded the probability of reaching sample task 157 with the current configuration.
@@ -2088,11 +2088,11 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																						{
 																							cv$temp$11$weekly_rates = weekly_rates[((t$var112 - 0) / 1)];
 																						}
-																						int cv$temp$12$$var1856;
+																						int cv$temp$12$$var1872;
 																						{
 																							// Constructing a random variable input for use later.
-																							int $var1856 = noProducts;
-																							cv$temp$12$$var1856 = $var1856;
+																							int $var1872 = noProducts;
+																							cv$temp$12$$var1872 = $var1872;
 																						}
 																						int cv$temp$13$var151;
 																						{
@@ -2100,14 +2100,14 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																						}
 																						
 																						// Record the probability of sample task 157 generating output with current configuration.
-																						if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1856, cv$temp$13$var151)) < cv$accumulatedConsumerProbabilities))
-																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1856, cv$temp$13$var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																						if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1872, cv$temp$13$var151)) < cv$accumulatedConsumerProbabilities))
+																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1872, cv$temp$13$var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																						else {
 																							// If the second value is -infinity.
 																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1856, cv$temp$13$var151));
+																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1872, cv$temp$13$var151));
 																							else
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1856, cv$temp$13$var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1856, cv$temp$13$var151)));
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1872, cv$temp$13$var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1872, cv$temp$13$var151)));
 																						}
 																						
 																						// Recorded the probability of reaching sample task 157 with the current configuration.
@@ -2216,12 +2216,12 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 										// A generated name to prevent name collisions if the reduction is implemented more
 										// than once in inference and probability code. Initialize the variable to the unit
 										// value
-										double reduceVar$sum$12 = 0.0;
+										double reduceVar$sum$13 = 0.0;
 										
 										// For each index in the array to be reduced
 										for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
 											// Set the left hand term of the reduction function to the return variable value.
-											double k$var49 = reduceVar$sum$12;
+											double k$var49 = reduceVar$sum$13;
 											
 											// Set the right hand term to a value from the array exped
 											double l$var50 = exped[cv$reduction46Index];
@@ -2229,11 +2229,11 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 											// Execute the reduction function, saving the result into the return value.
 											// 
 											// Copy the result of the reduction into the variable returned by the reduction.
-											reduceVar$sum$12 = (k$var49 + l$var50);
+											reduceVar$sum$13 = (k$var49 + l$var50);
 										}
 										
 										// Write out the new sample value.
-										sum = reduceVar$sum$12;
+										sum = reduceVar$sum$13;
 									}
 								}
 							}
@@ -2498,12 +2498,12 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																		// A generated name to prevent name collisions if the reduction is implemented more
 																		// than once in inference and probability code. Initialize the variable to the unit
 																		// value
-																		double reduceVar$denom$21 = 0.0;
+																		double reduceVar$denom$22 = 0.0;
 																		
 																		// For each index in the array to be reduced
 																		for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
 																			// Set the left hand term of the reduction function to the return variable value.
-																			double k$var135 = reduceVar$denom$21;
+																			double k$var135 = reduceVar$denom$22;
 																			
 																			// Set the right hand term to a value from the array weekly_ut
 																			double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
@@ -2511,9 +2511,9 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																			// Execute the reduction function, saving the result into the return value.
 																			// 
 																			// Copy the result of the reduction into the variable returned by the reduction.
-																			reduceVar$denom$21 = (k$var135 + l$var136);
+																			reduceVar$denom$22 = (k$var135 + l$var136);
 																		}
-																		weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$21);
+																		weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$22);
 																	}
 																}
 															}
@@ -2537,53 +2537,6 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 												for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
 													if((j$var123 == j$var147)) {
 														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-															if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
-																// The body will execute, so should not be executed again
-																guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
-																{
-																	// Reduction of array weekly_ut
-																	// 
-																	// A generated name to prevent name collisions if the reduction is implemented more
-																	// than once in inference and probability code. Initialize the variable to the unit
-																	// value
-																	double reduceVar$denom$22 = 0.0;
-																	
-																	// For each index in the array to be reduced
-																	for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
-																		// Set the left hand term of the reduction function to the return variable value.
-																		double k$var135 = reduceVar$denom$22;
-																		
-																		// Set the right hand term to a value from the array weekly_ut
-																		double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
-																		
-																		// Execute the reduction function, saving the result into the return value.
-																		// 
-																		// Copy the result of the reduction into the variable returned by the reduction.
-																		reduceVar$denom$22 = (k$var135 + l$var136);
-																	}
-																	weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$22);
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								if((j$var38 == j$var63)) {
-									for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-										if((j$var63 == j$var123)) {
-											for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-												if(((0 <= j$var123) && (j$var123 < noProducts))) {
-													{
-														for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
 															if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
 																// The body will execute, so should not be executed again
 																guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
@@ -2627,6 +2580,53 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 								if((j$var38 == j$var63)) {
 									for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
 										if((j$var63 == j$var123)) {
+											for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+												if(((0 <= j$var123) && (j$var123 < noProducts))) {
+													{
+														for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+															if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
+																// The body will execute, so should not be executed again
+																guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
+																{
+																	// Reduction of array weekly_ut
+																	// 
+																	// A generated name to prevent name collisions if the reduction is implemented more
+																	// than once in inference and probability code. Initialize the variable to the unit
+																	// value
+																	double reduceVar$denom$24 = 0.0;
+																	
+																	// For each index in the array to be reduced
+																	for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																		// Set the left hand term of the reduction function to the return variable value.
+																		double k$var135 = reduceVar$denom$24;
+																		
+																		// Set the right hand term to a value from the array weekly_ut
+																		double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																		
+																		// Execute the reduction function, saving the result into the return value.
+																		// 
+																		// Copy the result of the reduction into the variable returned by the reduction.
+																		reduceVar$denom$24 = (k$var135 + l$var136);
+																	}
+																	weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$24);
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+						if((j$var20 == j$var38)) {
+							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+								if((j$var38 == j$var63)) {
+									for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+										if((j$var63 == j$var123)) {
 											for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
 												if((j$var123 == j$var147)) {
 													for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
@@ -2639,12 +2639,12 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																// A generated name to prevent name collisions if the reduction is implemented more
 																// than once in inference and probability code. Initialize the variable to the unit
 																// value
-																double reduceVar$denom$24 = 0.0;
+																double reduceVar$denom$25 = 0.0;
 																
 																// For each index in the array to be reduced
 																for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
 																	// Set the left hand term of the reduction function to the return variable value.
-																	double k$var135 = reduceVar$denom$24;
+																	double k$var135 = reduceVar$denom$25;
 																	
 																	// Set the right hand term to a value from the array weekly_ut
 																	double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
@@ -2652,9 +2652,9 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																	// Execute the reduction function, saving the result into the return value.
 																	// 
 																	// Copy the result of the reduction into the variable returned by the reduction.
-																	reduceVar$denom$24 = (k$var135 + l$var136);
+																	reduceVar$denom$25 = (k$var135 + l$var136);
 																}
-																weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$24);
+																weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$25);
 															}
 														}
 													}
@@ -2826,268 +2826,6 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		// A generated name to prevent name collisions if the reduction is implemented more
 		// than once in inference and probability code. Initialize the variable to the unit
 		// value
-		double reduceVar$sum$13 = 0.0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
-			// Set the left hand term of the reduction function to the return variable value.
-			double k$var49 = reduceVar$sum$13;
-			
-			// Set the right hand term to a value from the array exped
-			double l$var50 = exped[cv$reduction46Index];
-			
-			// Execute the reduction function, saving the result into the return value.
-			if(!fixedFlag$sample26)
-				// Copy the result of the reduction into the variable returned by the reduction.
-				reduceVar$sum$13 = (k$var49 + l$var50);
-		}
-		if(!fixedFlag$sample26)
-			sum = reduceVar$sum$13;
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noProducts, 1,
-			(int forStart$j$var63, int forEnd$j$var63, int threadID$j$var63, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int j$var63 = forStart$j$var63; j$var63 < forEnd$j$var63; j$var63 += 1) {
-						if(!fixedFlag$sample26)
-							expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-					}
-			}
-		);
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, T, 1,
-			(int forStart$index$t$var112, int forEnd$index$t$var112, int threadID$index$t$var112, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int index$t$var112 = forStart$index$t$var112; index$t$var112 < forEnd$index$t$var112; index$t$var112 += 1) {
-						int t$var112 = index$t$var112;
-						int threadID$t$var112 = threadID$index$t$var112;
-						
-						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noProducts, 1,
-							(int forStart$j$var123, int forEnd$j$var123, int threadID$j$var123, org.sandwood.random.internal.Rng RNG$2) -> { 
-								
-									// Inner loop for running batches of iterations, each batch has its own random number
-									// generator.
-									for(int j$var123 = forStart$j$var123; j$var123 < forEnd$j$var123; j$var123 += 1) {
-										if(!fixedFlag$sample26)
-											weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-									}
-							}
-						);
-						
-						// Reduction of array weekly_ut
-						// 
-						// A generated name to prevent name collisions if the reduction is implemented more
-						// than once in inference and probability code. Initialize the variable to the unit
-						// value
-						double reduceVar$denom$25 = 0.0;
-						
-						// For each index in the array to be reduced
-						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
-							// Set the left hand term of the reduction function to the return variable value.
-							double k$var135 = reduceVar$denom$25;
-							
-							// Set the right hand term to a value from the array weekly_ut
-							double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
-							
-							// Execute the reduction function, saving the result into the return value.
-							if(!fixedFlag$sample26)
-								// Copy the result of the reduction into the variable returned by the reduction.
-								reduceVar$denom$25 = (k$var135 + l$var136);
-						}
-						
-						// Alternative name for reduceVar$denom$25 to make it effectively final.
-						double reduceVar$denom$25$1 = reduceVar$denom$25;
-						
-						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noProducts, 1,
-							(int forStart$j$var147, int forEnd$j$var147, int threadID$j$var147, org.sandwood.random.internal.Rng RNG$2) -> { 
-								
-									// Inner loop for running batches of iterations, each batch has its own random number
-									// generator.
-									for(int j$var147 = forStart$j$var147; j$var147 < forEnd$j$var147; j$var147 += 1) {
-										if(!fixedFlag$sample26)
-											weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$25$1);
-									}
-							}
-						);
-						int[] weekly_sales = Sales[t$var112];
-						DistributionSampling.sampleMultinomial(RNG$1, weekly_rates[((t$var112 - 0) / 1)], noProducts, sales_sum[t$var112], weekly_sales);
-					}
-			}
-		);
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
-	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 1, noProducts, 1,
-			(int forStart$j$var20, int forEnd$j$var20, int threadID$j$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int j$var20 = forStart$j$var20; j$var20 < forEnd$j$var20; j$var20 += 1) {
-						if(!fixedFlag$sample26)
-							ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
-					}
-			}
-		);
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noProducts, 1,
-			(int forStart$j$var38, int forEnd$j$var38, int threadID$j$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int j$var38 = forStart$j$var38; j$var38 < forEnd$j$var38; j$var38 += 1) {
-						if(!fixedFlag$sample26)
-							exped[j$var38] = Math.exp(ut[j$var38]);
-					}
-			}
-		);
-		
-		// Reduction of array exped
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
-		double reduceVar$sum$15 = 0.0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
-			// Set the left hand term of the reduction function to the return variable value.
-			double k$var49 = reduceVar$sum$15;
-			
-			// Set the right hand term to a value from the array exped
-			double l$var50 = exped[cv$reduction46Index];
-			
-			// Execute the reduction function, saving the result into the return value.
-			if(!fixedFlag$sample26)
-				// Copy the result of the reduction into the variable returned by the reduction.
-				reduceVar$sum$15 = (k$var49 + l$var50);
-		}
-		if(!fixedFlag$sample26)
-			sum = reduceVar$sum$15;
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noProducts, 1,
-			(int forStart$j$var63, int forEnd$j$var63, int threadID$j$var63, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int j$var63 = forStart$j$var63; j$var63 < forEnd$j$var63; j$var63 += 1) {
-						if(!fixedFlag$sample26)
-							expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-					}
-			}
-		);
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, T, 1,
-			(int forStart$index$t$var112, int forEnd$index$t$var112, int threadID$index$t$var112, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int index$t$var112 = forStart$index$t$var112; index$t$var112 < forEnd$index$t$var112; index$t$var112 += 1) {
-						int t$var112 = index$t$var112;
-						int threadID$t$var112 = threadID$index$t$var112;
-						
-						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noProducts, 1,
-							(int forStart$j$var123, int forEnd$j$var123, int threadID$j$var123, org.sandwood.random.internal.Rng RNG$2) -> { 
-								
-									// Inner loop for running batches of iterations, each batch has its own random number
-									// generator.
-									for(int j$var123 = forStart$j$var123; j$var123 < forEnd$j$var123; j$var123 += 1) {
-										if(!fixedFlag$sample26)
-											weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-									}
-							}
-						);
-						
-						// Reduction of array weekly_ut
-						// 
-						// A generated name to prevent name collisions if the reduction is implemented more
-						// than once in inference and probability code. Initialize the variable to the unit
-						// value
-						double reduceVar$denom$27 = 0.0;
-						
-						// For each index in the array to be reduced
-						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
-							// Set the left hand term of the reduction function to the return variable value.
-							double k$var135 = reduceVar$denom$27;
-							
-							// Set the right hand term to a value from the array weekly_ut
-							double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
-							
-							// Execute the reduction function, saving the result into the return value.
-							if(!fixedFlag$sample26)
-								// Copy the result of the reduction into the variable returned by the reduction.
-								reduceVar$denom$27 = (k$var135 + l$var136);
-						}
-						
-						// Alternative name for reduceVar$denom$27 to make it effectively final.
-						double reduceVar$denom$27$1 = reduceVar$denom$27;
-						
-						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noProducts, 1,
-							(int forStart$j$var147, int forEnd$j$var147, int threadID$j$var147, org.sandwood.random.internal.Rng RNG$2) -> { 
-								
-									// Inner loop for running batches of iterations, each batch has its own random number
-									// generator.
-									for(int j$var147 = forStart$j$var147; j$var147 < forEnd$j$var147; j$var147 += 1) {
-										if(!fixedFlag$sample26)
-											weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$27$1);
-									}
-							}
-						);
-					}
-			}
-		);
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
-	@Override
-	public final void forwardGenerationValuesNoOutputs() {
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 1, noProducts, 1,
-			(int forStart$j$var20, int forEnd$j$var20, int threadID$j$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int j$var20 = forStart$j$var20; j$var20 < forEnd$j$var20; j$var20 += 1) {
-						if(!fixedFlag$sample26)
-							ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
-					}
-			}
-		);
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noProducts, 1,
-			(int forStart$j$var38, int forEnd$j$var38, int threadID$j$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int j$var38 = forStart$j$var38; j$var38 < forEnd$j$var38; j$var38 += 1) {
-						if(!fixedFlag$sample26)
-							exped[j$var38] = Math.exp(ut[j$var38]);
-					}
-			}
-		);
-		
-		// Reduction of array exped
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
 		double reduceVar$sum$14 = 0.0;
 		
 		// For each index in the array to be reduced
@@ -3178,163 +2916,262 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 									}
 							}
 						);
+						int[] weekly_sales = Sales[t$var112];
+						DistributionSampling.sampleMultinomial(RNG$1, weekly_rates[((t$var112 - 0) / 1)], noProducts, sales_sum[t$var112], weekly_sales);
 					}
 			}
 		);
 	}
 
-	// Method to execute one round of Gibbs sampling.
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void gibbsRound() {
-		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-				if(!fixedFlag$sample26)
-					sample26(j$var20);
-			}
-		}
-		// Infer the samples in reverse chronological order.
-		else {
-			for(int j$var20 = (noProducts - ((((noProducts - 1) - 1) % 1) + 1)); j$var20 >= ((1 - 1) + 1); j$var20 -= 1) {
-				if(!fixedFlag$sample26)
-					sample26(j$var20);
-			}
-		}
-		
-		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-	}
-
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		ut[0] = 0.0;
-		
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, T, 1,
-			(int forStart$t$var78, int forEnd$t$var78, int threadID$t$var78, org.sandwood.random.internal.Rng RNG$1) -> { 
+		parallelFor(RNG$, 1, noProducts, 1,
+			(int forStart$j$var20, int forEnd$j$var20, int threadID$j$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
-					for(int t$var78 = forStart$t$var78; t$var78 < forEnd$t$var78; t$var78 += 1) {
-						// Reduction of array week_sales
+					for(int j$var20 = forStart$j$var20; j$var20 < forEnd$j$var20; j$var20 += 1) {
+						if(!fixedFlag$sample26)
+							ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
+					}
+			}
+		);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$j$var38, int forEnd$j$var38, int threadID$j$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var38 = forStart$j$var38; j$var38 < forEnd$j$var38; j$var38 += 1)
+						exped[j$var38] = Math.exp(ut[j$var38]);
+			}
+		);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$18 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+			// Set the left hand term of the reduction function to the return variable value.
+			double k$var49 = reduceVar$sum$18;
+			
+			// Set the right hand term to a value from the array exped
+			double l$var50 = exped[cv$reduction46Index];
+			
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			reduceVar$sum$18 = (k$var49 + l$var50);
+		}
+		sum = reduceVar$sum$18;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$j$var63, int forEnd$j$var63, int threadID$j$var63, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var63 = forStart$j$var63; j$var63 < forEnd$j$var63; j$var63 += 1)
+						expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+			}
+		);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, T, 1,
+			(int forStart$index$t$var112, int forEnd$index$t$var112, int threadID$index$t$var112, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int index$t$var112 = forStart$index$t$var112; index$t$var112 < forEnd$index$t$var112; index$t$var112 += 1) {
+						int t$var112 = index$t$var112;
+						int threadID$t$var112 = threadID$index$t$var112;
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, noProducts, 1,
+							(int forStart$j$var123, int forEnd$j$var123, int threadID$j$var123, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var123 = forStart$j$var123; j$var123 < forEnd$j$var123; j$var123 += 1)
+										weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+							}
+						);
+						
+						// Reduction of array weekly_ut
 						// 
 						// A generated name to prevent name collisions if the reduction is implemented more
 						// than once in inference and probability code. Initialize the variable to the unit
 						// value
-						int reduceVar$var88$1 = 0;
+						double reduceVar$denom$30 = 0.0;
 						
 						// For each index in the array to be reduced
-						for(int cv$reduction84Index = 0; cv$reduction84Index < ObsSales[t$var78].length; cv$reduction84Index += 1) {
+						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
 							// Set the left hand term of the reduction function to the return variable value.
-							int k$var85 = reduceVar$var88$1;
+							double k$var135 = reduceVar$denom$30;
 							
-							// Set the right hand term to a value from the array week_sales
-							int l$var86 = ObsSales[t$var78][cv$reduction84Index];
+							// Set the right hand term to a value from the array weekly_ut
+							double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 							
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
-							reduceVar$var88$1 = (k$var85 + l$var86);
+							reduceVar$denom$30 = (k$var135 + l$var136);
 						}
-						sales_sum[t$var78] = reduceVar$var88$1;
+						
+						// Alternative name for reduceVar$denom$30 to make it effectively final.
+						double reduceVar$denom$30$1 = reduceVar$denom$30;
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, noProducts, 1,
+							(int forStart$j$var147, int forEnd$j$var147, int threadID$j$var147, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var147 = forStart$j$var147; j$var147 < forEnd$j$var147; j$var147 += 1)
+										weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$30$1);
+							}
+						);
 					}
 			}
 		);
 	}
 
-	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
-	// the current probabilities to be calculated by calculating the probability of each
-	// sample task, and its effect on the rest of the model.
-	private final void initializeLogProbabilityFields() {
-		// Set the probabilities of the random variable, and the model as a whole to ready
-		// them to be reconstructed by the probability calls for each sample. Sample probabilities
-		// are only reset for samples that are not fixed at a value that has already been
-		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$var25 = Double.NaN;
-		logProbability$ut = 0.0;
-		logProbability$exped = 0.0;
-		logProbability$sum = 0.0;
-		logProbability$expedNorm = 0.0;
-		logProbability$weekly_ut = 0.0;
-		logProbability$weekly_rates = 0.0;
-		if(!fixedProbFlag$sample26) {
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-				logProbability$sample26[((j$var20 - 1) / 1)] = Double.NaN;
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 1, noProducts, 1,
+			(int forStart$j$var20, int forEnd$j$var20, int threadID$j$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var20 = forStart$j$var20; j$var20 < forEnd$j$var20; j$var20 += 1) {
+						if(!fixedFlag$sample26)
+							ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
+					}
+			}
+		);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$j$var38, int forEnd$j$var38, int threadID$j$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var38 = forStart$j$var38; j$var38 < forEnd$j$var38; j$var38 += 1)
+						exped[j$var38] = Math.exp(ut[j$var38]);
+			}
+		);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$15 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+			// Set the left hand term of the reduction function to the return variable value.
+			double k$var49 = reduceVar$sum$15;
+			
+			// Set the right hand term to a value from the array exped
+			double l$var50 = exped[cv$reduction46Index];
+			
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			reduceVar$sum$15 = (k$var49 + l$var50);
 		}
-		logProbability$var152 = Double.NaN;
-		logProbability$Sales = 0.0;
-		if(!fixedProbFlag$sample157)
-			logProbability$weekly_sales = Double.NaN;
-	}
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
+		sum = reduceVar$sum$15;
 		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
-	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
-		// Reset all the non-fixed probabilities ready to calculate the new values.
-		initializeLogProbabilityFields();
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$j$var63, int forEnd$j$var63, int threadID$j$var63, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var63 = forStart$j$var63; j$var63 < forEnd$j$var63; j$var63 += 1)
+						expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+			}
+		);
 		
-		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample26)
-			logProbabilityValue$sample26();
-		logProbabilityValue$sample157();
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, T, 1,
+			(int forStart$index$t$var112, int forEnd$index$t$var112, int threadID$index$t$var112, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int index$t$var112 = forStart$index$t$var112; index$t$var112 < forEnd$index$t$var112; index$t$var112 += 1) {
+						int t$var112 = index$t$var112;
+						int threadID$t$var112 = threadID$index$t$var112;
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, noProducts, 1,
+							(int forStart$j$var123, int forEnd$j$var123, int threadID$j$var123, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var123 = forStart$j$var123; j$var123 < forEnd$j$var123; j$var123 += 1)
+										weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+							}
+						);
+						
+						// Reduction of array weekly_ut
+						// 
+						// A generated name to prevent name collisions if the reduction is implemented more
+						// than once in inference and probability code. Initialize the variable to the unit
+						// value
+						double reduceVar$denom$27 = 0.0;
+						
+						// For each index in the array to be reduced
+						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+							// Set the left hand term of the reduction function to the return variable value.
+							double k$var135 = reduceVar$denom$27;
+							
+							// Set the right hand term to a value from the array weekly_ut
+							double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+							
+							// Execute the reduction function, saving the result into the return value.
+							// 
+							// Copy the result of the reduction into the variable returned by the reduction.
+							reduceVar$denom$27 = (k$var135 + l$var136);
+						}
+						
+						// Alternative name for reduceVar$denom$27 to make it effectively final.
+						double reduceVar$denom$27$1 = reduceVar$denom$27;
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, noProducts, 1,
+							(int forStart$j$var147, int forEnd$j$var147, int threadID$j$var147, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var147 = forStart$j$var147; j$var147 < forEnd$j$var147; j$var147 += 1)
+										weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$27$1);
+							}
+						);
+						int[] weekly_sales = Sales[t$var112];
+						DistributionSampling.sampleMultinomial(RNG$1, weekly_rates[((t$var112 - 0) / 1)], noProducts, sales_sum[t$var112], weekly_sales);
+					}
+			}
+		);
 	}
 
-	// Method to calculate the probabilities of all the samples in the model including
-	// those generating fixed data. In the process probabilities for all the random variables
-	// and for the model as a whole will be calculated. This model uses distributions
-	// when possible.
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
 	@Override
-	public final void logModelProbabilitiesDist() {
-		// Reset all the non-fixed probabilities ready to calculate the new values.
-		initializeLogProbabilityFields();
-		
-		// Calculate the probabilities for each sample task in the model, generating probabilities
-		// for the random variables and whole model in the process using distributions where
-		// appropriate.
-		// 
-		// Calculate the probabilities for each sample task in the model, generating probabilities
-		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample26();
-		logProbabilityValue$sample157();
-	}
-
-	// Method to calculate the probabilities of all the samples in the model including
-	// those generating fixed data. In the process probabilities for all the random variables
-	// and for the model as a whole will be calculated. This model only uses values.
-	@Override
-	public final void logModelProbabilitiesVal() {
-		// Reset all the non-fixed probabilities ready to calculate the new values.
-		initializeLogProbabilityFields();
-		
-		// Calculate the probabilities for each sample task in the model, generating probabilities
-		// for the random variables and whole model in the process using distributions where
-		// appropriate.
-		// 
-		// Calculate the probabilities for each sample task in the model, generating probabilities
-		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample26();
-		logProbabilityValue$sample157();
-	}
-
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
+	public final void forwardGenerationValuesNoOutputs() {
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 		parallelFor(RNG$, 1, noProducts, 1,
 			(int forStart$j$var20, int forEnd$j$var20, int threadID$j$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -3459,11 +3296,265 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 					}
 			}
 		);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 1, noProducts, 1,
+			(int forStart$j$var20, int forEnd$j$var20, int threadID$j$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var20 = forStart$j$var20; j$var20 < forEnd$j$var20; j$var20 += 1) {
+						if(!fixedFlag$sample26)
+							ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
+					}
+			}
+		);
 		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$j$var38, int forEnd$j$var38, int threadID$j$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var38 = forStart$j$var38; j$var38 < forEnd$j$var38; j$var38 += 1)
+						exped[j$var38] = Math.exp(ut[j$var38]);
+			}
+		);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$17 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+			// Set the left hand term of the reduction function to the return variable value.
+			double k$var49 = reduceVar$sum$17;
+			
+			// Set the right hand term to a value from the array exped
+			double l$var50 = exped[cv$reduction46Index];
+			
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			reduceVar$sum$17 = (k$var49 + l$var50);
+		}
+		sum = reduceVar$sum$17;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$j$var63, int forEnd$j$var63, int threadID$j$var63, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var63 = forStart$j$var63; j$var63 < forEnd$j$var63; j$var63 += 1)
+						expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+			}
+		);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, T, 1,
+			(int forStart$index$t$var112, int forEnd$index$t$var112, int threadID$index$t$var112, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int index$t$var112 = forStart$index$t$var112; index$t$var112 < forEnd$index$t$var112; index$t$var112 += 1) {
+						int t$var112 = index$t$var112;
+						int threadID$t$var112 = threadID$index$t$var112;
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, noProducts, 1,
+							(int forStart$j$var123, int forEnd$j$var123, int threadID$j$var123, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var123 = forStart$j$var123; j$var123 < forEnd$j$var123; j$var123 += 1)
+										weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+							}
+						);
+						
+						// Reduction of array weekly_ut
+						// 
+						// A generated name to prevent name collisions if the reduction is implemented more
+						// than once in inference and probability code. Initialize the variable to the unit
+						// value
+						double reduceVar$denom$29 = 0.0;
+						
+						// For each index in the array to be reduced
+						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+							// Set the left hand term of the reduction function to the return variable value.
+							double k$var135 = reduceVar$denom$29;
+							
+							// Set the right hand term to a value from the array weekly_ut
+							double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+							
+							// Execute the reduction function, saving the result into the return value.
+							// 
+							// Copy the result of the reduction into the variable returned by the reduction.
+							reduceVar$denom$29 = (k$var135 + l$var136);
+						}
+						
+						// Alternative name for reduceVar$denom$29 to make it effectively final.
+						double reduceVar$denom$29$1 = reduceVar$denom$29;
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, noProducts, 1,
+							(int forStart$j$var147, int forEnd$j$var147, int threadID$j$var147, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var147 = forStart$j$var147; j$var147 < forEnd$j$var147; j$var147 += 1)
+										weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$29$1);
+							}
+						);
+					}
+			}
+		);
+	}
+
+	// Method to execute one round of Gibbs sampling.
+	@Override
+	public final void gibbsRound() {
+		// Infer the samples in chronological order.
+		if(system$gibbsForward) {
+			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
+				if(!fixedFlag$sample26)
+					sample26(j$var20);
+			}
+		}
+		// Infer the samples in reverse chronological order.
+		else {
+			for(int j$var20 = (noProducts - ((((noProducts - 1) - 1) % 1) + 1)); j$var20 >= ((1 - 1) + 1); j$var20 -= 1) {
+				if(!fixedFlag$sample26)
+					sample26(j$var20);
+			}
+		}
+		
+		// Reverse the direction of execution for the next iteration
+		system$gibbsForward = !system$gibbsForward;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeConstants() {
+		ut[0] = 0.0;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, T, 1,
+			(int forStart$t$var78, int forEnd$t$var78, int threadID$t$var78, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int t$var78 = forStart$t$var78; t$var78 < forEnd$t$var78; t$var78 += 1) {
+						// Reduction of array week_sales
+						// 
+						// A generated name to prevent name collisions if the reduction is implemented more
+						// than once in inference and probability code. Initialize the variable to the unit
+						// value
+						int reduceVar$var88$1 = 0;
+						
+						// For each index in the array to be reduced
+						for(int cv$reduction84Index = 0; cv$reduction84Index < ObsSales[t$var78].length; cv$reduction84Index += 1) {
+							// Set the left hand term of the reduction function to the return variable value.
+							int k$var85 = reduceVar$var88$1;
+							
+							// Set the right hand term to a value from the array week_sales
+							int l$var86 = ObsSales[t$var78][cv$reduction84Index];
+							
+							// Execute the reduction function, saving the result into the return value.
+							// 
+							// Copy the result of the reduction into the variable returned by the reduction.
+							reduceVar$var88$1 = (k$var85 + l$var86);
+						}
+						sales_sum[t$var78] = reduceVar$var88$1;
+					}
+			}
+		);
+	}
+
+	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
+	// the current probabilities to be calculated by calculating the probability of each
+	// sample task, and its effect on the rest of the model.
+	private final void initializeLogProbabilityFields() {
+		// Set the probabilities of the random variable, and the model as a whole to ready
+		// them to be reconstructed by the probability calls for each sample. Sample probabilities
+		// are only reset for samples that are not fixed at a value that has already been
+		// calculated.
+		logProbability$$model = 0.0;
+		logProbability$$evidence = 0.0;
+		logProbability$var25 = Double.NaN;
+		logProbability$ut = 0.0;
+		logProbability$exped = 0.0;
+		logProbability$sum = 0.0;
+		logProbability$expedNorm = 0.0;
+		logProbability$weekly_ut = 0.0;
+		logProbability$weekly_rates = 0.0;
+		if(!fixedProbFlag$sample26) {
+			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
+				logProbability$sample26[((j$var20 - 1) / 1)] = Double.NaN;
+		}
+		logProbability$var152 = Double.NaN;
+		logProbability$Sales = 0.0;
+		if(!fixedProbFlag$sample157)
+			logProbability$weekly_sales = Double.NaN;
+	}
+
+	// Construct the evidence probabilities.
+	@Override
+	public final void logEvidenceProbabilities() {
+		// Reset all the non-fixed probabilities ready to calculate the new values.
+		initializeLogProbabilityFields();
+		
+		// Call each method in turn to generate the new probability values.
+		if(fixedFlag$sample26)
+			logProbabilityValue$sample26();
+		logProbabilityValue$sample157();
+	}
+
+	// Method to calculate the probabilities of all the samples in the model including
+	// those generating fixed data. In the process probabilities for all the random variables
+	// and for the model as a whole will be calculated. This model uses distributions
+	// when possible.
+	@Override
+	public final void logModelProbabilitiesDist() {
+		// Reset all the non-fixed probabilities ready to calculate the new values.
+		initializeLogProbabilityFields();
+		
+		// Calculate the probabilities for each sample task in the model, generating probabilities
+		// for the random variables and whole model in the process using distributions where
+		// appropriate.
+		// 
+		// Calculate the probabilities for each sample task in the model, generating probabilities
+		// for the random variables and whole model in the process using values only.
+		logProbabilityValue$sample26();
+		logProbabilityValue$sample157();
+	}
+
+	// Method to calculate the probabilities of all the samples in the model including
+	// those generating fixed data. In the process probabilities for all the random variables
+	// and for the model as a whole will be calculated. This model only uses values.
+	@Override
+	public final void logModelProbabilitiesVal() {
+		// Reset all the non-fixed probabilities ready to calculate the new values.
+		initializeLogProbabilityFields();
+		
+		// Calculate the probabilities for each sample task in the model, generating probabilities
+		// for the random variables and whole model in the process using distributions where
+		// appropriate.
+		// 
+		// Calculate the probabilities for each sample task in the model, generating probabilities
+		// for the random variables and whole model in the process using values only.
+		logProbabilityValue$sample26();
+		logProbabilityValue$sample157();
 	}
 
 	// Method to propagate observed values back into the model.
@@ -3494,10 +3585,8 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
-					for(int j$var38 = forStart$j$var38; j$var38 < forEnd$j$var38; j$var38 += 1) {
-						if(fixedFlag$sample26)
-							exped[j$var38] = Math.exp(ut[j$var38]);
-					}
+					for(int j$var38 = forStart$j$var38; j$var38 < forEnd$j$var38; j$var38 += 1)
+						exped[j$var38] = Math.exp(ut[j$var38]);
 			}
 		);
 		
@@ -3506,23 +3595,22 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		// A generated name to prevent name collisions if the reduction is implemented more
 		// than once in inference and probability code. Initialize the variable to the unit
 		// value
-		double reduceVar$sum$17 = 0.0;
+		double reduceVar$sum$19 = 0.0;
 		
 		// For each index in the array to be reduced
 		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
-			double k$var49 = reduceVar$sum$17;
+			double k$var49 = reduceVar$sum$19;
 			
 			// Set the right hand term to a value from the array exped
 			double l$var50 = exped[cv$reduction46Index];
 			
 			// Execute the reduction function, saving the result into the return value.
-			if(fixedFlag$sample26)
-				// Copy the result of the reduction into the variable returned by the reduction.
-				reduceVar$sum$17 = (k$var49 + l$var50);
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			reduceVar$sum$19 = (k$var49 + l$var50);
 		}
-		if(fixedFlag$sample26)
-			sum = reduceVar$sum$17;
+		sum = reduceVar$sum$19;
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 		parallelFor(RNG$, 0, noProducts, 1,
@@ -3530,10 +3618,8 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
-					for(int j$var63 = forStart$j$var63; j$var63 < forEnd$j$var63; j$var63 += 1) {
-						if(fixedFlag$sample26)
-							expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-					}
+					for(int j$var63 = forStart$j$var63; j$var63 < forEnd$j$var63; j$var63 += 1)
+						expedNorm[j$var63] = (exped[j$var63] / (r * sum));
 			}
 		);
 		
@@ -3553,10 +3639,8 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
-									for(int j$var123 = forStart$j$var123; j$var123 < forEnd$j$var123; j$var123 += 1) {
-										if(fixedFlag$sample26)
-											weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-									}
+									for(int j$var123 = forStart$j$var123; j$var123 < forEnd$j$var123; j$var123 += 1)
+										weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
 							}
 						);
 						
@@ -3565,24 +3649,24 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 						// A generated name to prevent name collisions if the reduction is implemented more
 						// than once in inference and probability code. Initialize the variable to the unit
 						// value
-						double reduceVar$denom$29 = 0.0;
+						double reduceVar$denom$31 = 0.0;
 						
 						// For each index in the array to be reduced
 						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
 							// Set the left hand term of the reduction function to the return variable value.
-							double k$var135 = reduceVar$denom$29;
+							double k$var135 = reduceVar$denom$31;
 							
 							// Set the right hand term to a value from the array weekly_ut
 							double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 							
 							// Execute the reduction function, saving the result into the return value.
-							if(fixedFlag$sample26)
-								// Copy the result of the reduction into the variable returned by the reduction.
-								reduceVar$denom$29 = (k$var135 + l$var136);
+							// 
+							// Copy the result of the reduction into the variable returned by the reduction.
+							reduceVar$denom$31 = (k$var135 + l$var136);
 						}
 						
-						// Alternative name for reduceVar$denom$29 to make it effectively final.
-						double reduceVar$denom$29$1 = reduceVar$denom$29;
+						// Alternative name for reduceVar$denom$31 to make it effectively final.
+						double reduceVar$denom$31$1 = reduceVar$denom$31;
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 						parallelFor(RNG$1, 0, noProducts, 1,
@@ -3590,10 +3674,8 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
-									for(int j$var147 = forStart$j$var147; j$var147 < forEnd$j$var147; j$var147 += 1) {
-										if(fixedFlag$sample26)
-											weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$29$1);
-									}
+									for(int j$var147 = forStart$j$var147; j$var147 < forEnd$j$var147; j$var147 += 1)
+										weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$31$1);
 							}
 						);
 					}

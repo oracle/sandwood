@@ -245,7 +245,35 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		if(!fixedFlag$sample73) {
+			int lengthCV$a$71_7 = -1;
+			if((0 == y))
+				lengthCV$a$71_7 = 2;
+			if((1 == y))
+				lengthCV$a$71_7 = 3;
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_7);
+		}
+		p = b[y][i];
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample73) {
+			int lengthCV$a$71_4 = -1;
+			if((0 == y))
+				lengthCV$a$71_4 = 2;
+			if((1 == y))
+				lengthCV$a$71_4 = 3;
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_4);
+		}
+		p = b[y][i];
+		for(int var84 = 0; var84 < length$obs_measured; var84 += 1)
+			obs[var84] = DistributionSampling.sampleBernoulli(RNG$, p);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample73) {
 			int lengthCV$a$71_5 = -1;
 			if((0 == y))
@@ -258,16 +286,16 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample73) {
-			int lengthCV$a$71_4 = -1;
+			int lengthCV$a$71_6 = -1;
 			if((0 == y))
-				lengthCV$a$71_4 = 2;
+				lengthCV$a$71_6 = 2;
 			if((1 == y))
-				lengthCV$a$71_4 = 3;
-			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_4);
-			p = b[y][i];
+				lengthCV$a$71_6 = 3;
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_6);
 		}
+		p = b[y][i];
 	}
 
 	@Override
@@ -308,12 +336,7 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample73)
 			logProbabilityValue$sample73();
@@ -335,20 +358,6 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample73) {
-			int lengthCV$a$71_6 = -1;
-			if((0 == y))
-				lengthCV$a$71_6 = 2;
-			if((1 == y))
-				lengthCV$a$71_6 = 3;
-			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_6);
-			p = b[y][i];
-		}
-		logModelProbabilitiesVal();
-	}
-
-	@Override
 	public final void propagateObservedValues() {
 		int cv$length1 = obs.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
@@ -357,8 +366,7 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	@Override
 	public final void setIntermediates() {
-		if(fixedFlag$sample73)
-			p = b[y][i];
+		p = b[y][i];
 	}
 
 	@Override

@@ -43,8 +43,4 @@ interface Flip1CoinArrayCopyPassMK2$CoreInterface extends org.sandwood.runtime.i
 
 	// Setter for samples.
 	public void set$samples(int cv$value);
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

@@ -82,8 +82,4 @@ interface LDATest$CoreInterface extends org.sandwood.runtime.internal.model.Core
 
 	// Setter for z.
 	public void set$z(int[][] cv$value);
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

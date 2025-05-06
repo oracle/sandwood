@@ -169,24 +169,24 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						double[] var35 = a[y];
 						
 						// Allocate a local variable to hold the length of the array.
-						int lengthCV$a$37_11 = -1;
+						int lengthCV$a$37_12 = -1;
 						
 						// calculate array length.
 						// 
 						// Looking for a path between Put 17 and consumer double[] 35.
 						{
 							if((0 == y))
-								lengthCV$a$37_11 = 2;
+								lengthCV$a$37_12 = 2;
 						}
 						
 						// Looking for a path between Put 35 and consumer double[] 35.
 						{
 							if((1 == y))
-								lengthCV$a$37_11 = 3;
+								lengthCV$a$37_12 = 3;
 						}
 						
 						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, var35, lengthCV$a$37_11));
+						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, var35, lengthCV$a$37_12));
 						
 						// Add the probability of this sample task to the distribution accumulator.
 						if((cv$weightedProbability < cv$distributionAccumulator))
@@ -383,22 +383,22 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$proposedProbability = 0.0;
 			
 			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$37_9 = -1;
+			int lengthCV$a$37_10 = -1;
 			
 			// calculate array length.
 			// 
 			// Looking for a path between Put 17 and consumer double[] 35.
 			{
 				if((0 == y))
-					lengthCV$a$37_9 = 2;
+					lengthCV$a$37_10 = 2;
 			}
 			
 			// Looking for a path between Put 35 and consumer double[] 35.
 			{
 				if((1 == y))
-					lengthCV$a$37_9 = 3;
+					lengthCV$a$37_10 = 3;
 			}
-			int cv$arrayLength = lengthCV$a$37_9;
+			int cv$arrayLength = lengthCV$a$37_10;
 			
 			// Pick a value in the array to adjust.
 			int cv$indexToChange = (int)(0.0 + ((cv$arrayLength - 0.0) * DistributionSampling.sampleUniform(RNG$)));
@@ -495,22 +495,22 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					int cv$temp$1$$var177;
 					{
 						// Allocate a local variable to hold the length of the array.
-						int lengthCV$a$37_10 = -1;
+						int lengthCV$a$37_11 = -1;
 						
 						// calculate array length.
 						// 
 						// Looking for a path between Put 17 and consumer double[] 35.
 						{
 							if((0 == y))
-								lengthCV$a$37_10 = 2;
+								lengthCV$a$37_11 = 2;
 						}
 						
 						// Looking for a path between Put 35 and consumer double[] 35.
 						{
 							if((1 == y))
-								lengthCV$a$37_10 = 3;
+								lengthCV$a$37_11 = 3;
 						}
-						cv$temp$1$$var177 = lengthCV$a$37_10;
+						cv$temp$1$$var177 = lengthCV$a$37_11;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
@@ -650,22 +650,22 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Constructor for d
 			{
 				// Allocate a local variable to hold the length of the array.
-				int lengthCV$a$37_8 = -1;
+				int lengthCV$a$37_9 = -1;
 				
 				// calculate array length.
 				// 
 				// Looking for a path between Put 17 and consumer double[] 35.
 				{
 					if((0 == y))
-						lengthCV$a$37_8 = 2;
+						lengthCV$a$37_9 = 2;
 				}
 				
 				// Looking for a path between Put 35 and consumer double[] 35.
 				{
 					if((1 == y))
-						lengthCV$a$37_8 = 3;
+						lengthCV$a$37_9 = 3;
 				}
-				d = new double[lengthCV$a$37_8];
+				d = new double[lengthCV$a$37_9];
 			}
 		}
 		
@@ -678,73 +678,6 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$37_12 = -1;
-		
-		// calculate array length.
-		// 
-		// Looking for a path between Put 17 and consumer double[] 35.
-		{
-			if((0 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_12 = 2;
-			}
-		}
-		
-		// Looking for a path between Put 35 and consumer double[] 35.
-		{
-			if((1 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_12 = 3;
-			}
-		}
-		if(!fixedFlag$sample39)
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_12, d);
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$obs_measured, 1,
-			(int forStart$var51, int forEnd$var51, int threadID$var51, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int var51 = forStart$var51; var51 < forEnd$var51; var51 += 1)
-						obs[var51] = DistributionSampling.sampleBernoulli(RNG$1, d[y]);
-			}
-		);
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
-	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
-		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$37_14 = -1;
-		
-		// calculate array length.
-		// 
-		// Looking for a path between Put 17 and consumer double[] 35.
-		{
-			if((0 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_14 = 2;
-			}
-		}
-		
-		// Looking for a path between Put 35 and consumer double[] 35.
-		{
-			if((1 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_14 = 3;
-			}
-		}
-		if(!fixedFlag$sample39)
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_14, d);
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
-	@Override
-	public final void forwardGenerationValuesNoOutputs() {
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$a$37_13 = -1;
 		
@@ -767,6 +700,142 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 		if(!fixedFlag$sample39)
 			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_13, d);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, length$obs_measured, 1,
+			(int forStart$var51, int forEnd$var51, int threadID$var51, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var51 = forStart$var51; var51 < forEnd$var51; var51 += 1)
+						obs[var51] = DistributionSampling.sampleBernoulli(RNG$1, d[y]);
+			}
+		);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
+	@Override
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_17 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 17 and consumer double[] 35.
+		{
+			if((0 == y)) {
+				if(!fixedFlag$sample39)
+					lengthCV$a$37_17 = 2;
+			}
+		}
+		
+		// Looking for a path between Put 35 and consumer double[] 35.
+		{
+			if((1 == y)) {
+				if(!fixedFlag$sample39)
+					lengthCV$a$37_17 = 3;
+			}
+		}
+		if(!fixedFlag$sample39)
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_17, d);
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_14 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 17 and consumer double[] 35.
+		{
+			if((0 == y)) {
+				if(!fixedFlag$sample39)
+					lengthCV$a$37_14 = 2;
+			}
+		}
+		
+		// Looking for a path between Put 35 and consumer double[] 35.
+		{
+			if((1 == y)) {
+				if(!fixedFlag$sample39)
+					lengthCV$a$37_14 = 3;
+			}
+		}
+		if(!fixedFlag$sample39)
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_14, d);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, length$obs_measured, 1,
+			(int forStart$var51, int forEnd$var51, int threadID$var51, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var51 = forStart$var51; var51 < forEnd$var51; var51 += 1)
+						obs[var51] = DistributionSampling.sampleBernoulli(RNG$1, d[y]);
+			}
+		);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_15 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 17 and consumer double[] 35.
+		{
+			if((0 == y)) {
+				if(!fixedFlag$sample39)
+					lengthCV$a$37_15 = 2;
+			}
+		}
+		
+		// Looking for a path between Put 35 and consumer double[] 35.
+		{
+			if((1 == y)) {
+				if(!fixedFlag$sample39)
+					lengthCV$a$37_15 = 3;
+			}
+		}
+		if(!fixedFlag$sample39)
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_15, d);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_16 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 17 and consumer double[] 35.
+		{
+			if((0 == y)) {
+				if(!fixedFlag$sample39)
+					lengthCV$a$37_16 = 2;
+			}
+		}
+		
+		// Looking for a path between Put 35 and consumer double[] 35.
+		{
+			if((1 == y)) {
+				if(!fixedFlag$sample39)
+					lengthCV$a$37_16 = 3;
+			}
+		}
+		if(!fixedFlag$sample39)
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_16, d);
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -819,19 +888,9 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$var52 = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -876,40 +935,6 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample39();
 		logProbabilityValue$sample54();
-	}
-
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$37_15 = -1;
-		
-		// calculate array length.
-		// 
-		// Looking for a path between Put 17 and consumer double[] 35.
-		{
-			if((0 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_15 = 2;
-			}
-		}
-		
-		// Looking for a path between Put 35 and consumer double[] 35.
-		{
-			if((1 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_15 = 3;
-			}
-		}
-		if(!fixedFlag$sample39)
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_15, d);
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
 	}
 
 	// Method to propagate observed values back into the model.

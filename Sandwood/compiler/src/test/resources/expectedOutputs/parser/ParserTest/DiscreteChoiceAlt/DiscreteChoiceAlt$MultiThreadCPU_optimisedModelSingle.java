@@ -471,9 +471,9 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// Substituted "cv$temp$2$prob" with its value "prob".
 				// 
-				// cv$temp$3$$var503's comment
+				// cv$temp$3$$var505's comment
 				// 
-				// $var503's comment
+				// $var505's comment
 				// Constructing a random variable input for use later.
 				cv$accumulatedProbabilities = ((((0.0 <= choices[var76]) && (choices[var76] < noProducts))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
@@ -507,7 +507,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// A generated name to prevent name collisions if the reduction is implemented more
 		// than once in inference and probability code. Initialize the variable to the unit
 		// value
-		double reduceVar$sum$8 = 0.0;
+		double reduceVar$sum$9 = 0.0;
 		
 		// For each index in the array to be reduced
 		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
@@ -517,10 +517,10 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// 
 			// j's comment
 			// Set the right hand term to a value from the array exped
-			reduceVar$sum$8 = (reduceVar$sum$8 + exped[cv$reduction44Index]);
+			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction44Index]);
 		
 		// Write out the new sample value.
-		sum = reduceVar$sum$8;
+		sum = reduceVar$sum$9;
 		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
 			// Set the flags to false
 			// 
@@ -547,7 +547,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				
 				// sum's comment
 				// Write out the new sample value.
-				prob[i$var61] = (exped[i$var61] / reduceVar$sum$8);
+				prob[i$var61] = (exped[i$var61] / reduceVar$sum$9);
 			}
 		}
 		
@@ -567,7 +567,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// 
 			// sum's comment
 			// Write out the new sample value.
-			prob[i$var18] = (exped[i$var18] / reduceVar$sum$8);
+			prob[i$var18] = (exped[i$var18] / reduceVar$sum$9);
 		}
 		
 		// An accumulator to allow the value for each distribution to be constructed before
@@ -593,9 +593,9 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// 
 			// Substituted "cv$temp$2$prob" with its value "prob".
 			// 
-			// cv$temp$3$$var503's comment
+			// cv$temp$3$$var505's comment
 			// 
-			// $var503's comment
+			// $var505's comment
 			// Constructing a random variable input for use later.
 			cv$accumulatedProbabilities = ((((0.0 <= choices[var76]) && (choices[var76] < noProducts))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		
@@ -637,7 +637,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$sum$10 = 0.0;
+			double reduceVar$sum$11 = 0.0;
 			
 			// For each index in the array to be reduced
 			for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
@@ -647,10 +647,10 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$10 = (reduceVar$sum$10 + exped[cv$reduction44Index]);
+				reduceVar$sum$11 = (reduceVar$sum$11 + exped[cv$reduction44Index]);
 			
 			// Write out the new sample value.
-			sum = reduceVar$sum$10;
+			sum = reduceVar$sum$11;
 			for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
 				// Set the flags to false
 				// 
@@ -677,7 +677,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					
 					// sum's comment
 					// Write out the new sample value.
-					prob[i$var61] = (exped[i$var61] / reduceVar$sum$10);
+					prob[i$var61] = (exped[i$var61] / reduceVar$sum$11);
 				}
 			}
 			
@@ -697,7 +697,7 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// sum's comment
 				// Write out the new sample value.
-				prob[i$var18] = (exped[i$var18] / reduceVar$sum$10);
+				prob[i$var18] = (exped[i$var18] / reduceVar$sum$11);
 			}
 		}
 	}
@@ -774,139 +774,6 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$sum$11 = 0.0;
-			
-			// For each index in the array to be reduced
-			for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// j's comment
-				// Set the right hand term to a value from the array exped
-				reduceVar$sum$11 = (reduceVar$sum$11 + exped[cv$reduction44Index]);
-			sum = reduceVar$sum$11;
-			
-			// Alternative name for reduceVar$sum$11 to make it effectively final.
-			double reduceVar$sum$11$1 = reduceVar$sum$11;
-			
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var61, int forEnd$i$var61, int threadID$i$var61, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i$var61 = forStart$i$var61; i$var61 < forEnd$i$var61; i$var61 += 1)
-							// Substituted "sum" with its value "reduceVar$sum$11".
-							prob[i$var61] = (exped[i$var61] / reduceVar$sum$11$1);
-				}
-			);
-		}
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noObs, 1,
-			(int forStart$var76, int forEnd$var76, int threadID$var76, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int var76 = forStart$var76; var76 < forEnd$var76; var76 += 1)
-						choices[var76] = DistributionSampling.sampleCategorical(RNG$1, prob, noProducts);
-			}
-		);
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
-	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample24) {
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 1, noProducts, 1,
-				(int forStart$i$var18, int forEnd$i$var18, int threadID$i$var18, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i$var18 = forStart$i$var18; i$var18 < forEnd$i$var18; i$var18 += 1)
-							ut[i$var18] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
-				}
-			);
-			
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var36, int forEnd$i$var36, int threadID$i$var36, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i$var36 = forStart$i$var36; i$var36 < forEnd$i$var36; i$var36 += 1)
-							exped[i$var36] = Math.exp(ut[i$var36]);
-				}
-			);
-			
-			// Reduction of array exped
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			double reduceVar$sum$13 = 0.0;
-			
-			// For each index in the array to be reduced
-			for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// j's comment
-				// Set the right hand term to a value from the array exped
-				reduceVar$sum$13 = (reduceVar$sum$13 + exped[cv$reduction44Index]);
-			sum = reduceVar$sum$13;
-			
-			// Alternative name for reduceVar$sum$13 to make it effectively final.
-			double reduceVar$sum$13$1 = reduceVar$sum$13;
-			
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var61, int forEnd$i$var61, int threadID$i$var61, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i$var61 = forStart$i$var61; i$var61 < forEnd$i$var61; i$var61 += 1)
-							// Substituted "sum" with its value "reduceVar$sum$13".
-							prob[i$var61] = (exped[i$var61] / reduceVar$sum$13$1);
-				}
-			);
-		}
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
-	@Override
-	public final void forwardGenerationValuesNoOutputs() {
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample24) {
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 1, noProducts, 1,
-				(int forStart$i$var18, int forEnd$i$var18, int threadID$i$var18, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i$var18 = forStart$i$var18; i$var18 < forEnd$i$var18; i$var18 += 1)
-							ut[i$var18] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
-				}
-			);
-			
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var36, int forEnd$i$var36, int threadID$i$var36, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i$var36 = forStart$i$var36; i$var36 < forEnd$i$var36; i$var36 += 1)
-							exped[i$var36] = Math.exp(ut[i$var36]);
-				}
-			);
-			
-			// Reduction of array exped
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
 			double reduceVar$sum$12 = 0.0;
 			
 			// For each index in the array to be reduced
@@ -933,125 +800,161 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				}
 			);
 		}
-	}
-
-	// Method to execute one round of Gibbs sampling.
-	@Override
-	public final void gibbsRound() {
-		// Infer the samples in chronological order.
-		if(!fixedFlag$sample24) {
-			// Infer the samples in chronological order.
-			if(system$gibbsForward) {
-				for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1)
-					sample24(i$var18);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noObs, 1,
+			(int forStart$var76, int forEnd$var76, int threadID$var76, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var76 = forStart$var76; var76 < forEnd$var76; var76 += 1)
+						choices[var76] = DistributionSampling.sampleCategorical(RNG$1, prob, noProducts);
 			}
-			// Infer the samples in reverse chronological order.
-			else {
-				for(int i$var18 = (noProducts - 1); i$var18 >= 1; i$var18 -= 1)
-					sample24(i$var18);
+		);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
+	@Override
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample24)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 1, noProducts, 1,
+				(int forStart$i$var18, int forEnd$i$var18, int threadID$i$var18, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int i$var18 = forStart$i$var18; i$var18 < forEnd$i$var18; i$var18 += 1)
+							ut[i$var18] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+				}
+			);
+
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$i$var36, int forEnd$i$var36, int threadID$i$var36, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var36 = forStart$i$var36; i$var36 < forEnd$i$var36; i$var36 += 1)
+						exped[i$var36] = Math.exp(ut[i$var36]);
 			}
-		}
+		);
 		
-		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-	}
-
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		ut[0] = 0.0;
-	}
-
-	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
-	// the current probabilities to be calculated by calculating the probability of each
-	// sample task, and its effect on the rest of the model.
-	private final void initializeLogProbabilityFields() {
-		// Set the probabilities of the random variable, and the model as a whole to ready
-		// them to be reconstructed by the probability calls for each sample. Sample probabilities
-		// are only reset for samples that are not fixed at a value that has already been
-		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$var23 = Double.NaN;
-		logProbability$ut = 0.0;
-		logProbability$exped = 0.0;
-		logProbability$sum = 0.0;
-		logProbability$prob = 0.0;
-		if(!fixedProbFlag$sample24) {
-			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1)
-				logProbability$sample24[(i$var18 - 1)] = Double.NaN;
-		}
-		logProbability$var65 = Double.NaN;
-		logProbability$choices = 0.0;
-		if(!fixedProbFlag$sample78)
-			logProbability$var77 = Double.NaN;
-	}
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
-	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
-		// Reset all the non-fixed probabilities ready to calculate the new values.
-		initializeLogProbabilityFields();
-		
-		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample24)
-			logProbabilityValue$sample24();
-		logProbabilityValue$sample78();
-	}
-
-	// Method to calculate the probabilities of all the samples in the model including
-	// those generating fixed data. In the process probabilities for all the random variables
-	// and for the model as a whole will be calculated. This model uses distributions
-	// when possible.
-	@Override
-	public final void logModelProbabilitiesDist() {
-		// Reset all the non-fixed probabilities ready to calculate the new values.
-		initializeLogProbabilityFields();
-		
-		// Calculate the probabilities for each sample task in the model, generating probabilities
-		// for the random variables and whole model in the process using distributions where
-		// appropriate.
+		// Reduction of array exped
 		// 
-		// Calculate the probabilities for each sample task in the model, generating probabilities
-		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample24();
-		logProbabilityValue$sample78();
-	}
-
-	// Method to calculate the probabilities of all the samples in the model including
-	// those generating fixed data. In the process probabilities for all the random variables
-	// and for the model as a whole will be calculated. This model only uses values.
-	@Override
-	public final void logModelProbabilitiesVal() {
-		// Reset all the non-fixed probabilities ready to calculate the new values.
-		initializeLogProbabilityFields();
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$16 = 0.0;
 		
-		// Calculate the probabilities for each sample task in the model, generating probabilities
-		// for the random variables and whole model in the process using distributions where
-		// appropriate.
-		// 
-		// Calculate the probabilities for each sample task in the model, generating probabilities
-		// for the random variables and whole model in the process using values only.
-		logProbabilityValue$sample24();
-		logProbabilityValue$sample78();
+		// For each index in the array to be reduced
+		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array exped
+			reduceVar$sum$16 = (reduceVar$sum$16 + exped[cv$reduction44Index]);
+		sum = reduceVar$sum$16;
+		
+		// Alternative name for reduceVar$sum$16 to make it effectively final.
+		double reduceVar$sum$16$1 = reduceVar$sum$16;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$i$var61, int forEnd$i$var61, int threadID$i$var61, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var61 = forStart$i$var61; i$var61 < forEnd$i$var61; i$var61 += 1)
+						// Substituted "sum" with its value "reduceVar$sum$16".
+						prob[i$var61] = (exped[i$var61] / reduceVar$sum$16$1);
+			}
+		);
 	}
 
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
 	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
+	public final void forwardGenerationPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample24)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 1, noProducts, 1,
+				(int forStart$i$var18, int forEnd$i$var18, int threadID$i$var18, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int i$var18 = forStart$i$var18; i$var18 < forEnd$i$var18; i$var18 += 1)
+							ut[i$var18] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+				}
+			);
+
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$i$var36, int forEnd$i$var36, int threadID$i$var36, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var36 = forStart$i$var36; i$var36 < forEnd$i$var36; i$var36 += 1)
+						exped[i$var36] = Math.exp(ut[i$var36]);
+			}
+		);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$13 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array exped
+			reduceVar$sum$13 = (reduceVar$sum$13 + exped[cv$reduction44Index]);
+		sum = reduceVar$sum$13;
+		
+		// Alternative name for reduceVar$sum$13 to make it effectively final.
+		double reduceVar$sum$13$1 = reduceVar$sum$13;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$i$var61, int forEnd$i$var61, int threadID$i$var61, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var61 = forStart$i$var61; i$var61 < forEnd$i$var61; i$var61 += 1)
+						// Substituted "sum" with its value "reduceVar$sum$13".
+						prob[i$var61] = (exped[i$var61] / reduceVar$sum$13$1);
+			}
+		);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noObs, 1,
+			(int forStart$var76, int forEnd$var76, int threadID$var76, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var76 = forStart$var76; var76 < forEnd$var76; var76 += 1)
+						choices[var76] = DistributionSampling.sampleCategorical(RNG$1, prob, noProducts);
+			}
+		);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample24) {
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -1107,11 +1010,172 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				}
 			);
 		}
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample24)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 1, noProducts, 1,
+				(int forStart$i$var18, int forEnd$i$var18, int threadID$i$var18, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int i$var18 = forStart$i$var18; i$var18 < forEnd$i$var18; i$var18 += 1)
+							ut[i$var18] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+				}
+			);
+
 		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$i$var36, int forEnd$i$var36, int threadID$i$var36, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var36 = forStart$i$var36; i$var36 < forEnd$i$var36; i$var36 += 1)
+						exped[i$var36] = Math.exp(ut[i$var36]);
+			}
+		);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$15 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array exped
+			reduceVar$sum$15 = (reduceVar$sum$15 + exped[cv$reduction44Index]);
+		sum = reduceVar$sum$15;
+		
+		// Alternative name for reduceVar$sum$15 to make it effectively final.
+		double reduceVar$sum$15$1 = reduceVar$sum$15;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$i$var61, int forEnd$i$var61, int threadID$i$var61, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var61 = forStart$i$var61; i$var61 < forEnd$i$var61; i$var61 += 1)
+						// Substituted "sum" with its value "reduceVar$sum$15".
+						prob[i$var61] = (exped[i$var61] / reduceVar$sum$15$1);
+			}
+		);
+	}
+
+	// Method to execute one round of Gibbs sampling.
+	@Override
+	public final void gibbsRound() {
+		// Infer the samples in chronological order.
+		if(!fixedFlag$sample24) {
+			// Infer the samples in chronological order.
+			if(system$gibbsForward) {
+				for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1)
+					sample24(i$var18);
+			}
+			// Infer the samples in reverse chronological order.
+			else {
+				for(int i$var18 = (noProducts - 1); i$var18 >= 1; i$var18 -= 1)
+					sample24(i$var18);
+			}
+		}
+		
+		// Reverse the direction of execution for the next iteration
+		system$gibbsForward = !system$gibbsForward;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeConstants() {
+		ut[0] = 0.0;
+	}
+
+	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
+	// the current probabilities to be calculated by calculating the probability of each
+	// sample task, and its effect on the rest of the model.
+	private final void initializeLogProbabilityFields() {
+		// Set the probabilities of the random variable, and the model as a whole to ready
+		// them to be reconstructed by the probability calls for each sample. Sample probabilities
+		// are only reset for samples that are not fixed at a value that has already been
+		// calculated.
+		logProbability$$model = 0.0;
+		logProbability$$evidence = 0.0;
+		logProbability$var23 = Double.NaN;
+		logProbability$ut = 0.0;
+		logProbability$exped = 0.0;
+		logProbability$sum = 0.0;
+		logProbability$prob = 0.0;
+		if(!fixedProbFlag$sample24) {
+			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1)
+				logProbability$sample24[(i$var18 - 1)] = Double.NaN;
+		}
+		logProbability$var65 = Double.NaN;
+		logProbability$choices = 0.0;
+		if(!fixedProbFlag$sample78)
+			logProbability$var77 = Double.NaN;
+	}
+
+	// Construct the evidence probabilities.
+	@Override
+	public final void logEvidenceProbabilities() {
+		// Reset all the non-fixed probabilities ready to calculate the new values.
+		initializeLogProbabilityFields();
+		
+		// Call each method in turn to generate the new probability values.
+		if(fixedFlag$sample24)
+			logProbabilityValue$sample24();
+		logProbabilityValue$sample78();
+	}
+
+	// Method to calculate the probabilities of all the samples in the model including
+	// those generating fixed data. In the process probabilities for all the random variables
+	// and for the model as a whole will be calculated. This model uses distributions
+	// when possible.
+	@Override
+	public final void logModelProbabilitiesDist() {
+		// Reset all the non-fixed probabilities ready to calculate the new values.
+		initializeLogProbabilityFields();
+		
+		// Calculate the probabilities for each sample task in the model, generating probabilities
+		// for the random variables and whole model in the process using distributions where
+		// appropriate.
+		// 
+		// Calculate the probabilities for each sample task in the model, generating probabilities
+		// for the random variables and whole model in the process using values only.
+		logProbabilityValue$sample24();
+		logProbabilityValue$sample78();
+	}
+
+	// Method to calculate the probabilities of all the samples in the model including
+	// those generating fixed data. In the process probabilities for all the random variables
+	// and for the model as a whole will be calculated. This model only uses values.
+	@Override
+	public final void logModelProbabilitiesVal() {
+		// Reset all the non-fixed probabilities ready to calculate the new values.
+		initializeLogProbabilityFields();
+		
+		// Calculate the probabilities for each sample task in the model, generating probabilities
+		// for the random variables and whole model in the process using distributions where
+		// appropriate.
+		// 
+		// Calculate the probabilities for each sample task in the model, generating probabilities
+		// for the random variables and whole model in the process using values only.
+		logProbabilityValue$sample24();
+		logProbabilityValue$sample78();
 	}
 
 	// Method to propagate observed values back into the model.
@@ -1131,50 +1195,49 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(fixedFlag$sample24) {
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var36, int forEnd$i$var36, int threadID$i$var36, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i$var36 = forStart$i$var36; i$var36 < forEnd$i$var36; i$var36 += 1)
-							exped[i$var36] = Math.exp(ut[i$var36]);
-				}
-			);
-			
-			// Reduction of array exped
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$i$var36, int forEnd$i$var36, int threadID$i$var36, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var36 = forStart$i$var36; i$var36 < forEnd$i$var36; i$var36 += 1)
+						exped[i$var36] = Math.exp(ut[i$var36]);
+			}
+		);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$17 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
+			// Execute the reduction function, saving the result into the return value.
 			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			double reduceVar$sum$15 = 0.0;
-			
-			// For each index in the array to be reduced
-			for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// j's comment
-				// Set the right hand term to a value from the array exped
-				reduceVar$sum$15 = (reduceVar$sum$15 + exped[cv$reduction44Index]);
-			sum = reduceVar$sum$15;
-			
-			// Alternative name for reduceVar$sum$15 to make it effectively final.
-			double reduceVar$sum$15$1 = reduceVar$sum$15;
-			
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var61, int forEnd$i$var61, int threadID$i$var61, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i$var61 = forStart$i$var61; i$var61 < forEnd$i$var61; i$var61 += 1)
-							// Substituted "sum" with its value "reduceVar$sum$15".
-							prob[i$var61] = (exped[i$var61] / reduceVar$sum$15$1);
-				}
-			);
-		}
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array exped
+			reduceVar$sum$17 = (reduceVar$sum$17 + exped[cv$reduction44Index]);
+		sum = reduceVar$sum$17;
+		
+		// Alternative name for reduceVar$sum$17 to make it effectively final.
+		double reduceVar$sum$17$1 = reduceVar$sum$17;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$i$var61, int forEnd$i$var61, int threadID$i$var61, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var61 = forStart$i$var61; i$var61 < forEnd$i$var61; i$var61 += 1)
+						// Substituted "sum" with its value "reduceVar$sum$17".
+						prob[i$var61] = (exped[i$var61] / reduceVar$sum$17$1);
+			}
+		);
 	}
 
 	@Override

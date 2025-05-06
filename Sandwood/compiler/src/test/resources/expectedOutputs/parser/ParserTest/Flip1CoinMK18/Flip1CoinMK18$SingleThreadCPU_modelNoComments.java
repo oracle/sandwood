@@ -1126,33 +1126,49 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample11)
 			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		if(!fixedFlag$sample17)
 			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		double[][] var21 = bias[0];
 		double[] var23 = var21[0];
-		if(!fixedFlag$sample17)
-			var23[0] = t;
-		if(!fixedFlag$sample17)
-			var23[1] = (1 - t);
+		var23[0] = t;
+		var23[1] = (1 - t);
 		double[] var36 = var21[1];
-		if(!fixedFlag$sample17)
-			var36[0] = (1 - q);
-		if(!fixedFlag$sample17)
-			var36[1] = t;
+		var36[0] = (1 - q);
+		var36[1] = t;
 		double[][] var52 = bias[1];
 		double[] var54 = var52[0];
-		if(!fixedFlag$sample11)
-			var54[0] = t;
-		if(!fixedFlag$sample11)
-			var54[1] = (1 - q);
+		var54[0] = t;
+		var54[1] = (1 - q);
 		double[] var67 = var52[1];
+		var67[0] = (1 - q);
+		var67[1] = q;
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
 		if(!fixedFlag$sample11)
-			var67[0] = (1 - q);
-		if(!fixedFlag$sample11)
-			var67[1] = q;
+			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample17)
+			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		double[][] var21 = bias[0];
+		double[] var23 = var21[0];
+		var23[0] = t;
+		var23[1] = (1 - t);
+		double[] var36 = var21[1];
+		var36[0] = (1 - q);
+		var36[1] = t;
+		double[][] var52 = bias[1];
+		double[] var54 = var52[0];
+		var54[0] = t;
+		var54[1] = (1 - q);
+		double[] var67 = var52[1];
+		var67[0] = (1 - q);
+		var67[1] = q;
+		for(int var96 = 0; var96 < samples; var96 += 1)
+			flips[var96] = DistributionSampling.sampleBernoulli(RNG$, bias[a][b][c]);
 	}
 
 	@Override
@@ -1183,6 +1199,28 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			var67[0] = (1 - q);
 		if(!fixedFlag$sample11)
 			var67[1] = q;
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		if(!fixedFlag$sample11)
+			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!fixedFlag$sample17)
+			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		double[][] var21 = bias[0];
+		double[] var23 = var21[0];
+		var23[0] = t;
+		var23[1] = (1 - t);
+		double[] var36 = var21[1];
+		var36[0] = (1 - q);
+		var36[1] = t;
+		double[][] var52 = bias[1];
+		double[] var54 = var52[0];
+		var54[0] = t;
+		var54[1] = (1 - q);
+		double[] var67 = var52[1];
+		var67[0] = (1 - q);
+		var67[1] = q;
 	}
 
 	@Override
@@ -1221,12 +1259,7 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample11)
 			logProbabilityValue$sample11();
@@ -1252,37 +1285,6 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample11)
-			q = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample17)
-			t = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		double[][] var21 = bias[0];
-		double[] var23 = var21[0];
-		if(!fixedFlag$sample17)
-			var23[0] = t;
-		if(!fixedFlag$sample17)
-			var23[1] = (1 - t);
-		double[] var36 = var21[1];
-		if(!fixedFlag$sample17)
-			var36[0] = (1 - q);
-		if(!fixedFlag$sample17)
-			var36[1] = t;
-		double[][] var52 = bias[1];
-		double[] var54 = var52[0];
-		if(!fixedFlag$sample11)
-			var54[0] = t;
-		if(!fixedFlag$sample11)
-			var54[1] = (1 - q);
-		double[] var67 = var52[1];
-		if(!fixedFlag$sample11)
-			var67[0] = (1 - q);
-		if(!fixedFlag$sample11)
-			var67[1] = q;
-		logModelProbabilitiesVal();
-	}
-
-	@Override
 	public final void propagateObservedValues() {
 		boolean[] cv$source1 = flipsMeasured;
 		boolean[] cv$target1 = flips;
@@ -1295,26 +1297,18 @@ class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	public final void setIntermediates() {
 		double[][] var21 = bias[0];
 		double[] var23 = var21[0];
-		if(fixedFlag$sample17)
-			var23[0] = t;
-		if(fixedFlag$sample17)
-			var23[1] = (1 - t);
+		var23[0] = t;
+		var23[1] = (1 - t);
 		double[] var36 = var21[1];
-		if(fixedFlag$sample17)
-			var36[0] = (1 - q);
-		if(fixedFlag$sample17)
-			var36[1] = t;
+		var36[0] = (1 - q);
+		var36[1] = t;
 		double[][] var52 = bias[1];
 		double[] var54 = var52[0];
-		if(fixedFlag$sample11)
-			var54[0] = t;
-		if(fixedFlag$sample11)
-			var54[1] = (1 - q);
+		var54[0] = t;
+		var54[1] = (1 - q);
 		double[] var67 = var52[1];
-		if(fixedFlag$sample11)
-			var67[0] = (1 - q);
-		if(fixedFlag$sample11)
-			var67[1] = q;
+		var67[0] = (1 - q);
+		var67[1] = q;
 	}
 
 	@Override

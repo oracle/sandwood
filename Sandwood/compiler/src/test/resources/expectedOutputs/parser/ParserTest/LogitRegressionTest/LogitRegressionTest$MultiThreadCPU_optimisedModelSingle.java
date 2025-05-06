@@ -2915,9 +2915,10 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample35)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -2934,43 +2935,99 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedFlag$sample42)
 			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, n, 1,
+			(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
+						int i = index$i;
+						int threadID$i = threadID$index$i;
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, 3, 1,
+							(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
+										indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+							}
+						);
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, 3, 1,
+							(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1)
+										p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							}
+						);
+					}
+			}
+		);
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample35)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, n, 1,
-				(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+			parallelFor(RNG$, 0, 3, 1,
+				(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
-						for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
-							int i = index$i;
-							int threadID$i = threadID$index$i;
-							
-							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
-									
-										// Inner loop for running batches of iterations, each batch has its own random number
-										// generator.
-										for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
-											indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
-								}
-							);
-							
-							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
-									
-										// Inner loop for running batches of iterations, each batch has its own random number
-										// generator.
-										for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1)
-											p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-								}
-							);
-						}
+						for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1)
+							weights[var33] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 
+		if(!fixedFlag$sample42)
+			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, n, 1,
+			(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
+						int i = index$i;
+						int threadID$i = threadID$index$i;
+						boolean[] var89 = y[i];
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, 3, 1,
+							(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
+										indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+							}
+						);
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, 3, 1,
+							(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1) {
+										p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+										var89[j$var85] = DistributionSampling.sampleBernoulli(RNG$2, (p[i][j$var85] + bias));
+									}
+							}
+						);
+					}
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -3030,6 +3087,63 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				}
 			);
 
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample35)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, 3, 1,
+				(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1)
+							weights[var33] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+				}
+			);
+
+		if(!fixedFlag$sample42)
+			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, n, 1,
+			(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
+						int i = index$i;
+						int threadID$i = threadID$index$i;
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, 3, 1,
+							(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
+										indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+							}
+						);
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, 3, 1,
+							(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1)
+										p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							}
+						);
+					}
+			}
+		);
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -3099,19 +3213,9 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			logProbability$var93 = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -3162,71 +3266,6 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		logProbabilityValue$sample94();
 	}
 
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample35)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, 3, 1,
-				(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1)
-							weights[var33] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
-				}
-			);
-
-		if(!fixedFlag$sample42)
-			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample35)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, n, 1,
-				(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
-							int i = index$i;
-							int threadID$i = threadID$index$i;
-							
-							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
-									
-										// Inner loop for running batches of iterations, each batch has its own random number
-										// generator.
-										for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
-											indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
-								}
-							);
-							
-							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
-									
-										// Inner loop for running batches of iterations, each batch has its own random number
-										// generator.
-										for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1)
-											p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-								}
-							);
-						}
-				}
-			);
-
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
-	}
-
 	// Method to propagate observed values back into the model.
 	@Override
 	public final void propagateObservedValues() {
@@ -3249,43 +3288,40 @@ class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(fixedFlag$sample35)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, n, 1,
-				(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
-							int i = index$i;
-							int threadID$i = threadID$index$i;
-							
-							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
-									
-										// Inner loop for running batches of iterations, each batch has its own random number
-										// generator.
-										for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
-											indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
-								}
-							);
-							
-							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, 3, 1,
-								(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
-									
-										// Inner loop for running batches of iterations, each batch has its own random number
-										// generator.
-										for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1)
-											p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-								}
-							);
-						}
-				}
-			);
-
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, n, 1,
+			(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
+						int i = index$i;
+						int threadID$i = threadID$index$i;
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, 3, 1,
+							(int forStart$j$var61, int forEnd$j$var61, int threadID$j$var61, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var61 = forStart$j$var61; j$var61 < forEnd$j$var61; j$var61 += 1)
+										indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+							}
+						);
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, 3, 1,
+							(int forStart$j$var85, int forEnd$j$var85, int threadID$j$var85, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var85 = forStart$j$var85; j$var85 < forEnd$j$var85; j$var85 += 1)
+										p[i][j$var85] = (indicator[i][j$var85] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							}
+						);
+					}
+			}
+		);
 	}
 
 	@Override

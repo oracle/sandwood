@@ -574,7 +574,7 @@ class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample28)
 			parallelFor(RNG$, 0, 2, 1,
 				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -619,7 +619,120 @@ class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample28)
+			parallelFor(RNG$, 0, 2, 1,
+				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, 2, m[var27]);
+				}
+			);
+
+		if(!fixedFlag$sample45)
+			parallelFor(RNG$, 0, 2, 1,
+				(int forStart$var43, int forEnd$var43, int threadID$var43, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var43 = forStart$var43; var43 < forEnd$var43; var43 += 1)
+							bias[var43] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				}
+			);
+
+		if(!fixedFlag$sample82)
+			st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		if(!fixedFlag$sample122)
+			parallelFor(RNG$, 1, samples, 1,
+				(int forStart$i$var95, int forEnd$i$var95, int threadID$i$var95, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int i$var95 = forStart$i$var95; i$var95 < forEnd$i$var95; i$var95 += 1) {
+							int[][] var114 = st[i$var95];
+							parallelFor(RNG$1, 0, samples, 1,
+								(int forStart$index$j$var104, int forEnd$index$j$var104, int threadID$index$j$var104, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int index$j$var104 = forStart$index$j$var104; index$j$var104 < forEnd$index$j$var104; index$j$var104 += 1) {
+											int j$var104 = index$j$var104;
+											int threadID$j$var104 = threadID$index$j$var104;
+											parallelFor(RNG$2, 0, samples, 1,
+												(int forStart$k, int forEnd$k, int threadID$k, org.sandwood.random.internal.Rng RNG$3) -> { 
+													for(int k = forStart$k; k < forEnd$k; k += 1)
+															var114[j$var104][k] = DistributionSampling.sampleCategorical(RNG$3, m[0], 2);
+												}
+											);
+										}
+								}
+							);
+						}
+				}
+			);
+
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$index$l, int forEnd$index$l, int threadID$index$l, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$l = forStart$index$l; index$l < forEnd$index$l; index$l += 1) {
+						int l = index$l;
+						int threadID$l = threadID$index$l;
+						boolean[][] var177 = flips[l];
+						parallelFor(RNG$1, 0, samples, 1,
+							(int forStart$index$p, int forEnd$index$p, int threadID$index$p, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int index$p = forStart$index$p; index$p < forEnd$index$p; index$p += 1) {
+										int p = index$p;
+										int threadID$p = threadID$index$p;
+										parallelFor(RNG$2, 0, samples, 1,
+											(int forStart$n, int forEnd$n, int threadID$n, org.sandwood.random.internal.Rng RNG$3) -> { 
+												for(int n = forStart$n; n < forEnd$n; n += 1)
+														var177[n][p] = DistributionSampling.sampleBernoulli(RNG$3, bias[st[p][l][n]]);
+											}
+										);
+									}
+							}
+						);
+					}
+			}
+		);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample28)
+			parallelFor(RNG$, 0, 2, 1,
+				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, 2, m[var27]);
+				}
+			);
+
+		if(!fixedFlag$sample45)
+			parallelFor(RNG$, 0, 2, 1,
+				(int forStart$var43, int forEnd$var43, int threadID$var43, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var43 = forStart$var43; var43 < forEnd$var43; var43 += 1)
+							bias[var43] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				}
+			);
+
+		if(!fixedFlag$sample82)
+			st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		if(!fixedFlag$sample122)
+			parallelFor(RNG$, 1, samples, 1,
+				(int forStart$i$var95, int forEnd$i$var95, int threadID$i$var95, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int i$var95 = forStart$i$var95; i$var95 < forEnd$i$var95; i$var95 += 1) {
+							int[][] var114 = st[i$var95];
+							parallelFor(RNG$1, 0, samples, 1,
+								(int forStart$index$j$var104, int forEnd$index$j$var104, int threadID$index$j$var104, org.sandwood.random.internal.Rng RNG$2) -> { 
+									for(int index$j$var104 = forStart$index$j$var104; index$j$var104 < forEnd$index$j$var104; index$j$var104 += 1) {
+											int j$var104 = index$j$var104;
+											int threadID$j$var104 = threadID$index$j$var104;
+											parallelFor(RNG$2, 0, samples, 1,
+												(int forStart$k, int forEnd$k, int threadID$k, org.sandwood.random.internal.Rng RNG$3) -> { 
+													for(int k = forStart$k; k < forEnd$k; k += 1)
+															var114[j$var104][k] = DistributionSampling.sampleCategorical(RNG$3, m[0], 2);
+												}
+											);
+										}
+								}
+							);
+						}
+				}
+			);
+
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample28)
 			parallelFor(RNG$, 0, 2, 1,
 				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -813,12 +926,7 @@ class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample28)
 			logProbabilityValue$sample28();
@@ -849,52 +957,6 @@ class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbabilityValue$sample82();
 		logProbabilityValue$sample122();
 		logProbabilityValue$sample189();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample28)
-			parallelFor(RNG$, 0, 2, 1,
-				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, 2, m[var27]);
-				}
-			);
-
-		if(!fixedFlag$sample45)
-			parallelFor(RNG$, 0, 2, 1,
-				(int forStart$var43, int forEnd$var43, int threadID$var43, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var43 = forStart$var43; var43 < forEnd$var43; var43 += 1)
-							bias[var43] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
-				}
-			);
-
-		if(!fixedFlag$sample82)
-			st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
-		if(!fixedFlag$sample122)
-			parallelFor(RNG$, 1, samples, 1,
-				(int forStart$i$var95, int forEnd$i$var95, int threadID$i$var95, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int i$var95 = forStart$i$var95; i$var95 < forEnd$i$var95; i$var95 += 1) {
-							int[][] var114 = st[i$var95];
-							parallelFor(RNG$1, 0, samples, 1,
-								(int forStart$index$j$var104, int forEnd$index$j$var104, int threadID$index$j$var104, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int index$j$var104 = forStart$index$j$var104; index$j$var104 < forEnd$index$j$var104; index$j$var104 += 1) {
-											int j$var104 = index$j$var104;
-											int threadID$j$var104 = threadID$index$j$var104;
-											parallelFor(RNG$2, 0, samples, 1,
-												(int forStart$k, int forEnd$k, int threadID$k, org.sandwood.random.internal.Rng RNG$3) -> { 
-													for(int k = forStart$k; k < forEnd$k; k += 1)
-															var114[j$var104][k] = DistributionSampling.sampleCategorical(RNG$3, m[0], 2);
-												}
-											);
-										}
-								}
-							);
-						}
-				}
-			);
-
-		logModelProbabilitiesVal();
 	}
 
 	@Override

@@ -27,5 +27,4 @@ interface Flip1CoinMK12$CoreInterface extends org.sandwood.runtime.internal.mode
 	public void set$var26(double cv$value);
 	public double get$var33();
 	public void set$var33(double cv$value);
-	public void logEvidenceGeneration();
 }

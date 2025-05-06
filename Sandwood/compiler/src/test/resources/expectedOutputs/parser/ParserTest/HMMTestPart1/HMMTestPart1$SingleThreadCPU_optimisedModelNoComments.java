@@ -320,7 +320,7 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample28) {
 			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
 			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
@@ -334,7 +334,36 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample28) {
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
+		}
+		if(!fixedFlag$sample45) {
+			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+			bias[1] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		}
+		if(!fixedFlag$sample50)
+			st = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		flip = DistributionSampling.sampleBernoulli(RNG$, bias[st]);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample28) {
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
+			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
+		}
+		if(!fixedFlag$sample45) {
+			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+			bias[1] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		}
+		if(!fixedFlag$sample50)
+			st = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample28) {
 			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
 			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
@@ -401,12 +430,7 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample28)
 			logProbabilityValue$sample28();
@@ -433,21 +457,6 @@ class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbabilityValue$sample45();
 		logProbabilityValue$sample50();
 		logProbabilityValue$sample53();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample28) {
-			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
-			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
-		}
-		if(!fixedFlag$sample45) {
-			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			bias[1] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		}
-		if(!fixedFlag$sample50)
-			st = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
-		logModelProbabilitiesVal();
 	}
 
 	@Override

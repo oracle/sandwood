@@ -68,8 +68,4 @@ interface ClassName$CoreInterface extends org.sandwood.runtime.internal.model.Co
 
 	// Getter for samples2.
 	public int get$samples2();
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

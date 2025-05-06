@@ -18,5 +18,4 @@ interface Conditional2d$CoreInterface extends org.sandwood.runtime.internal.mode
 	public void set$u(double cv$value);
 	public double get$value();
 	public double[] get$value2();
-	public void logEvidenceGeneration();
 }

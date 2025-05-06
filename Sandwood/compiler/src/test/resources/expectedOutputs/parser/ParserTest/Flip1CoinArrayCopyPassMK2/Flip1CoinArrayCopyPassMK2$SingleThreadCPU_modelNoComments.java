@@ -317,12 +317,20 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		if(!fixedFlag$sample10)
+			bias[0] = DistributionSampling.sampleBeta(RNG$, a, b);
+		for(int i = 0; i < samples; i += 1)
+			bias[(i + 1)] = bias[0];
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
 		if(!fixedFlag$sample10)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, a, b);
 		for(int i = 0; i < samples; i += 1) {
-			if(!fixedFlag$sample10)
-				bias[(i + 1)] = bias[0];
+			bias[(i + 1)] = bias[0];
+			flips[i] = DistributionSampling.sampleBernoulli(RNG$, bias[i]);
 		}
 	}
 
@@ -334,6 +342,14 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 			if(!fixedFlag$sample10)
 				bias[(i + 1)] = bias[0];
 		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		if(!fixedFlag$sample10)
+			bias[0] = DistributionSampling.sampleBeta(RNG$, a, b);
+		for(int i = 0; i < samples; i += 1)
+			bias[(i + 1)] = bias[0];
 	}
 
 	@Override
@@ -371,12 +387,7 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample10)
 			logProbabilityValue$sample10();
@@ -398,17 +409,6 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample10)
-			bias[0] = DistributionSampling.sampleBeta(RNG$, a, b);
-		for(int i = 0; i < samples; i += 1) {
-			if(!fixedFlag$sample10)
-				bias[(i + 1)] = bias[0];
-		}
-		logModelProbabilitiesVal();
-	}
-
-	@Override
 	public final void propagateObservedValues() {
 		boolean[] cv$source1 = flipsMeasured;
 		boolean[] cv$target1 = flips;
@@ -419,10 +419,8 @@ class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runtime.int
 
 	@Override
 	public final void setIntermediates() {
-		for(int i = 0; i < samples; i += 1) {
-			if(fixedFlag$sample10)
-				bias[(i + 1)] = bias[0];
-		}
+		for(int i = 0; i < samples; i += 1)
+			bias[(i + 1)] = bias[0];
 	}
 
 	@Override

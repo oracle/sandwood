@@ -2873,9 +2873,138 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
+			if(!fixedFlag$sample26)
+				ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		}
+		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
+			exped[j$var38] = Math.exp(ut[j$var38]);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$8 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+			// Set the left hand term of the reduction function to the return variable value.
+			double k$var49 = reduceVar$sum$8;
+			
+			// Set the right hand term to a value from the array exped
+			double l$var50 = exped[cv$reduction46Index];
+			
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			reduceVar$sum$8 = (k$var49 + l$var50);
+		}
+		sum = reduceVar$sum$8;
+		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+			expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+				weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+			
+			// Reduction of array weekly_ut
+			// 
+			// A generated name to prevent name collisions if the reduction is implemented more
+			// than once in inference and probability code. Initialize the variable to the unit
+			// value
+			double reduceVar$denom$14 = 0.0;
+			
+			// For each index in the array to be reduced
+			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+				// Set the left hand term of the reduction function to the return variable value.
+				double k$var135 = reduceVar$denom$14;
+				
+				// Set the right hand term to a value from the array weekly_ut
+				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+				
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				reduceVar$denom$14 = (k$var135 + l$var136);
+			}
+			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$14);
+		}
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
+			if(!fixedFlag$sample26)
+				ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		}
+		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
+			exped[j$var38] = Math.exp(ut[j$var38]);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$5 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+			// Set the left hand term of the reduction function to the return variable value.
+			double k$var49 = reduceVar$sum$5;
+			
+			// Set the right hand term to a value from the array exped
+			double l$var50 = exped[cv$reduction46Index];
+			
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			reduceVar$sum$5 = (k$var49 + l$var50);
+		}
+		sum = reduceVar$sum$5;
+		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+			expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+				weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+			
+			// Reduction of array weekly_ut
+			// 
+			// A generated name to prevent name collisions if the reduction is implemented more
+			// than once in inference and probability code. Initialize the variable to the unit
+			// value
+			double reduceVar$denom$11 = 0.0;
+			
+			// For each index in the array to be reduced
+			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+				// Set the left hand term of the reduction function to the return variable value.
+				double k$var135 = reduceVar$denom$11;
+				
+				// Set the right hand term to a value from the array weekly_ut
+				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+				
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				reduceVar$denom$11 = (k$var135 + l$var136);
+			}
+			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$11);
+			int[] weekly_sales = Sales[t$var112];
+			DistributionSampling.sampleMultinomial(RNG$, weekly_rates[((t$var112 - 0) / 1)], noProducts, sales_sum[t$var112], weekly_sales);
+		}
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
 			if(!fixedFlag$sample26)
 				ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
@@ -2945,74 +3074,66 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
 			if(!fixedFlag$sample26)
 				ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		}
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-			if(!fixedFlag$sample26)
-				exped[j$var38] = Math.exp(ut[j$var38]);
-		}
+		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
+			exped[j$var38] = Math.exp(ut[j$var38]);
 		
 		// Reduction of array exped
 		// 
 		// A generated name to prevent name collisions if the reduction is implemented more
 		// than once in inference and probability code. Initialize the variable to the unit
 		// value
-		double reduceVar$sum$5 = 0.0;
+		double reduceVar$sum$7 = 0.0;
 		
 		// For each index in the array to be reduced
 		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
-			double k$var49 = reduceVar$sum$5;
+			double k$var49 = reduceVar$sum$7;
 			
 			// Set the right hand term to a value from the array exped
 			double l$var50 = exped[cv$reduction46Index];
 			
 			// Execute the reduction function, saving the result into the return value.
-			if(!fixedFlag$sample26)
-				// Copy the result of the reduction into the variable returned by the reduction.
-				reduceVar$sum$5 = (k$var49 + l$var50);
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			reduceVar$sum$7 = (k$var49 + l$var50);
 		}
-		if(!fixedFlag$sample26)
-			sum = reduceVar$sum$5;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-			if(!fixedFlag$sample26)
-				expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-		}
+		sum = reduceVar$sum$7;
+		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+			expedNorm[j$var63] = (exped[j$var63] / (r * sum));
 		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-				if(!fixedFlag$sample26)
-					weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-			}
+			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+				weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
 			
 			// Reduction of array weekly_ut
 			// 
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$denom$11 = 0.0;
+			double reduceVar$denom$13 = 0.0;
 			
 			// For each index in the array to be reduced
 			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
-				double k$var135 = reduceVar$denom$11;
+				double k$var135 = reduceVar$denom$13;
 				
 				// Set the right hand term to a value from the array weekly_ut
 				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 				
 				// Execute the reduction function, saving the result into the return value.
-				if(!fixedFlag$sample26)
-					// Copy the result of the reduction into the variable returned by the reduction.
-					reduceVar$denom$11 = (k$var135 + l$var136);
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				reduceVar$denom$13 = (k$var135 + l$var136);
 			}
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-				if(!fixedFlag$sample26)
-					weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$11);
-			}
+			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$13);
 		}
 	}
 
@@ -3099,19 +3220,9 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -3158,84 +3269,6 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 		logProbabilityValue$sample157();
 	}
 
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-			if(!fixedFlag$sample26)
-				ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		}
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-			if(!fixedFlag$sample26)
-				exped[j$var38] = Math.exp(ut[j$var38]);
-		}
-		
-		// Reduction of array exped
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
-		double reduceVar$sum$7 = 0.0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
-			// Set the left hand term of the reduction function to the return variable value.
-			double k$var49 = reduceVar$sum$7;
-			
-			// Set the right hand term to a value from the array exped
-			double l$var50 = exped[cv$reduction46Index];
-			
-			// Execute the reduction function, saving the result into the return value.
-			if(!fixedFlag$sample26)
-				// Copy the result of the reduction into the variable returned by the reduction.
-				reduceVar$sum$7 = (k$var49 + l$var50);
-		}
-		if(!fixedFlag$sample26)
-			sum = reduceVar$sum$7;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-			if(!fixedFlag$sample26)
-				expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-				if(!fixedFlag$sample26)
-					weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-			}
-			
-			// Reduction of array weekly_ut
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			double reduceVar$denom$13 = 0.0;
-			
-			// For each index in the array to be reduced
-			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
-				// Set the left hand term of the reduction function to the return variable value.
-				double k$var135 = reduceVar$denom$13;
-				
-				// Set the right hand term to a value from the array weekly_ut
-				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
-				
-				// Execute the reduction function, saving the result into the return value.
-				if(!fixedFlag$sample26)
-					// Copy the result of the reduction into the variable returned by the reduction.
-					reduceVar$denom$13 = (k$var135 + l$var136);
-			}
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-				if(!fixedFlag$sample26)
-					weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$13);
-			}
-		}
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
-	}
-
 	// Method to propagate observed values back into the model.
 	@Override
 	public final void propagateObservedValues() {
@@ -3258,67 +3291,58 @@ class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-			if(fixedFlag$sample26)
-				exped[j$var38] = Math.exp(ut[j$var38]);
-		}
+		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
+			exped[j$var38] = Math.exp(ut[j$var38]);
 		
 		// Reduction of array exped
 		// 
 		// A generated name to prevent name collisions if the reduction is implemented more
 		// than once in inference and probability code. Initialize the variable to the unit
 		// value
-		double reduceVar$sum$8 = 0.0;
+		double reduceVar$sum$9 = 0.0;
 		
 		// For each index in the array to be reduced
 		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
-			double k$var49 = reduceVar$sum$8;
+			double k$var49 = reduceVar$sum$9;
 			
 			// Set the right hand term to a value from the array exped
 			double l$var50 = exped[cv$reduction46Index];
 			
 			// Execute the reduction function, saving the result into the return value.
-			if(fixedFlag$sample26)
-				// Copy the result of the reduction into the variable returned by the reduction.
-				reduceVar$sum$8 = (k$var49 + l$var50);
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			reduceVar$sum$9 = (k$var49 + l$var50);
 		}
-		if(fixedFlag$sample26)
-			sum = reduceVar$sum$8;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-			if(fixedFlag$sample26)
-				expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-		}
+		sum = reduceVar$sum$9;
+		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+			expedNorm[j$var63] = (exped[j$var63] / (r * sum));
 		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-				if(fixedFlag$sample26)
-					weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-			}
+			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+				weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
 			
 			// Reduction of array weekly_ut
 			// 
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$denom$14 = 0.0;
+			double reduceVar$denom$15 = 0.0;
 			
 			// For each index in the array to be reduced
 			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
-				double k$var135 = reduceVar$denom$14;
+				double k$var135 = reduceVar$denom$15;
 				
 				// Set the right hand term to a value from the array weekly_ut
 				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 				
 				// Execute the reduction function, saving the result into the return value.
-				if(fixedFlag$sample26)
-					// Copy the result of the reduction into the variable returned by the reduction.
-					reduceVar$denom$14 = (k$var135 + l$var136);
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				reduceVar$denom$15 = (k$var135 + l$var136);
 			}
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-				if(fixedFlag$sample26)
-					weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$14);
-			}
+			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$15);
 		}
 	}
 

@@ -386,13 +386,13 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 										if(guard1)
 											bias = cv$currentValue;
 										else {
-											double reduceVar$var33$13 = 0.0;
+											double reduceVar$var33$14 = 0.0;
 											for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
-												double i$var30 = reduceVar$var33$13;
+												double i$var30 = reduceVar$var33$14;
 												double j = c[cv$reduction30Index];
-												reduceVar$var33$13 = (i$var30 + j);
+												reduceVar$var33$14 = (i$var30 + j);
 											}
-											bias = reduceVar$var33$13;
+											bias = reduceVar$var33$14;
 										}
 									}
 								}
@@ -407,13 +407,13 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 													if(guard1)
 														bias = cv$currentValue;
 													else {
-														double reduceVar$var33$14 = 0.0;
+														double reduceVar$var33$15 = 0.0;
 														for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
-															double i$var30 = reduceVar$var33$14;
+															double i$var30 = reduceVar$var33$15;
 															double j = c[cv$reduction30Index];
-															reduceVar$var33$14 = (i$var30 + j);
+															reduceVar$var33$15 = (i$var30 + j);
 														}
-														bias = reduceVar$var33$14;
+														bias = reduceVar$var33$15;
 													}
 												}
 											}
@@ -431,13 +431,13 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 													if(guard1)
 														bias = cv$currentValue;
 													else {
-														double reduceVar$var33$15 = 0.0;
+														double reduceVar$var33$16 = 0.0;
 														for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
-															double i$var30 = reduceVar$var33$15;
+															double i$var30 = reduceVar$var33$16;
 															double j = c[cv$reduction30Index];
-															reduceVar$var33$15 = (i$var30 + j);
+															reduceVar$var33$16 = (i$var30 + j);
 														}
-														bias = reduceVar$var33$15;
+														bias = reduceVar$var33$16;
 													}
 												}
 											}
@@ -511,20 +511,20 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 								if(((0 <= 0) && (0 < 2))) {
 									{
 										if((0 < 2)) {
-											double reduceVar$var33$16 = 0.0;
+											double reduceVar$var33$17 = 0.0;
 											for(int cv$reduction409Index = 0; cv$reduction409Index < 0; cv$reduction409Index += 1) {
-												double i$var30 = reduceVar$var33$16;
+												double i$var30 = reduceVar$var33$17;
 												double j = c[cv$reduction409Index];
-												reduceVar$var33$16 = (i$var30 + j);
+												reduceVar$var33$17 = (i$var30 + j);
 											}
 											for(int cv$reduction409Index = (0 + 1); cv$reduction409Index < 2; cv$reduction409Index += 1) {
-												double i$var30 = reduceVar$var33$16;
+												double i$var30 = reduceVar$var33$17;
 												double j = c[cv$reduction409Index];
-												reduceVar$var33$16 = (i$var30 + j);
+												reduceVar$var33$17 = (i$var30 + j);
 											}
-											double cv$reduced30 = reduceVar$var33$16;
-											reduceVar$var33$16 = (traceTempVariable$i$7_2 + cv$reduced30);
-											double traceTempVariable$var33$7_3 = reduceVar$var33$16;
+											double cv$reduced30 = reduceVar$var33$17;
+											reduceVar$var33$17 = (traceTempVariable$i$7_2 + cv$reduced30);
+											double traceTempVariable$var33$7_3 = reduceVar$var33$17;
 											if(!guard1) {
 												double traceTempVariable$bias$7_4 = traceTempVariable$var33$7_3;
 												if(!guard$sample8bernoulli38) {
@@ -577,20 +577,20 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 								if(((0 <= 1) && (1 < 2))) {
 									{
 										if((0 < 2)) {
-											double reduceVar$var33$17 = 0.0;
+											double reduceVar$var33$18 = 0.0;
 											for(int cv$reduction430Index = 0; cv$reduction430Index < 1; cv$reduction430Index += 1) {
-												double i$var30 = reduceVar$var33$17;
+												double i$var30 = reduceVar$var33$18;
 												double j = c[cv$reduction430Index];
-												reduceVar$var33$17 = (i$var30 + j);
+												reduceVar$var33$18 = (i$var30 + j);
 											}
 											for(int cv$reduction430Index = (1 + 1); cv$reduction430Index < 2; cv$reduction430Index += 1) {
-												double i$var30 = reduceVar$var33$17;
+												double i$var30 = reduceVar$var33$18;
 												double j = c[cv$reduction430Index];
-												reduceVar$var33$17 = (i$var30 + j);
+												reduceVar$var33$18 = (i$var30 + j);
 											}
-											double cv$reduced30 = reduceVar$var33$17;
-											reduceVar$var33$17 = (traceTempVariable$i$8_2 + cv$reduced30);
-											double traceTempVariable$var33$8_3 = reduceVar$var33$17;
+											double cv$reduced30 = reduceVar$var33$18;
+											reduceVar$var33$18 = (traceTempVariable$i$8_2 + cv$reduced30);
+											double traceTempVariable$var33$8_3 = reduceVar$var33$18;
 											if(!guard1) {
 												double traceTempVariable$bias$8_4 = traceTempVariable$var33$8_3;
 												if(!guard$sample8bernoulli38) {
@@ -679,13 +679,13 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 								if(guard1)
 									bias = b;
 								else {
-									double reduceVar$var33$18 = 0.0;
+									double reduceVar$var33$19 = 0.0;
 									for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
-										double i$var30 = reduceVar$var33$18;
+										double i$var30 = reduceVar$var33$19;
 										double j = c[cv$reduction30Index];
-										reduceVar$var33$18 = (i$var30 + j);
+										reduceVar$var33$19 = (i$var30 + j);
 									}
-									bias = reduceVar$var33$18;
+									bias = reduceVar$var33$19;
 								}
 							}
 						}
@@ -700,13 +700,13 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 											if(guard1)
 												bias = b;
 											else {
-												double reduceVar$var33$19 = 0.0;
+												double reduceVar$var33$20 = 0.0;
 												for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
-													double i$var30 = reduceVar$var33$19;
+													double i$var30 = reduceVar$var33$20;
 													double j = c[cv$reduction30Index];
-													reduceVar$var33$19 = (i$var30 + j);
+													reduceVar$var33$20 = (i$var30 + j);
 												}
-												bias = reduceVar$var33$19;
+												bias = reduceVar$var33$20;
 											}
 										}
 									}
@@ -724,13 +724,13 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 											if(guard1)
 												bias = b;
 											else {
-												double reduceVar$var33$20 = 0.0;
+												double reduceVar$var33$21 = 0.0;
 												for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
-													double i$var30 = reduceVar$var33$20;
+													double i$var30 = reduceVar$var33$21;
 													double j = c[cv$reduction30Index];
-													reduceVar$var33$20 = (i$var30 + j);
+													reduceVar$var33$21 = (i$var30 + j);
 												}
-												bias = reduceVar$var33$20;
+												bias = reduceVar$var33$21;
 											}
 										}
 									}
@@ -769,15 +769,15 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				c[0] = (b / 2);
 			if(!fixedFlag$sample8)
 				c[1] = (b / 2);
-			double reduceVar$var33$21 = 0.0;
+			double reduceVar$var33$22 = 0.0;
 			for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
-				double i$var30 = reduceVar$var33$21;
+				double i$var30 = reduceVar$var33$22;
 				double j = c[cv$reduction30Index];
 				if(!fixedFlag$sample8)
-					reduceVar$var33$21 = (i$var30 + j);
+					reduceVar$var33$22 = (i$var30 + j);
 			}
 			if(!fixedFlag$sample8)
-				bias = reduceVar$var33$21;
+				bias = reduceVar$var33$22;
 		}
 		parallelFor(RNG$, 0, samples, 1,
 			(int forStart$var46, int forEnd$var46, int threadID$var46, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -788,27 +788,49 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample8)
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		if(guard1) {
 			if(!fixedFlag$sample8)
 				bias = b;
 		} else {
+			c[0] = (b / 2);
+			c[1] = (b / 2);
+			double reduceVar$var33$26 = 0.0;
+			for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
+				double i$var30 = reduceVar$var33$26;
+				double j = c[cv$reduction30Index];
+				reduceVar$var33$26 = (i$var30 + j);
+			}
+			bias = reduceVar$var33$26;
+		}
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample8)
+			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(guard1) {
 			if(!fixedFlag$sample8)
-				c[0] = (b / 2);
-			if(!fixedFlag$sample8)
-				c[1] = (b / 2);
+				bias = b;
+		} else {
+			c[0] = (b / 2);
+			c[1] = (b / 2);
 			double reduceVar$var33$23 = 0.0;
 			for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
 				double i$var30 = reduceVar$var33$23;
 				double j = c[cv$reduction30Index];
-				if(!fixedFlag$sample8)
-					reduceVar$var33$23 = (i$var30 + j);
+				reduceVar$var33$23 = (i$var30 + j);
 			}
-			if(!fixedFlag$sample8)
-				bias = reduceVar$var33$23;
+			bias = reduceVar$var33$23;
 		}
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$var46, int forEnd$var46, int threadID$var46, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var46 = forStart$var46; var46 < forEnd$var46; var46 += 1)
+						flips[var46] = DistributionSampling.sampleBernoulli(RNG$1, bias);
+			}
+		);
 	}
 
 	@Override
@@ -823,15 +845,35 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				c[0] = (b / 2);
 			if(!fixedFlag$sample8)
 				c[1] = (b / 2);
-			double reduceVar$var33$22 = 0.0;
+			double reduceVar$var33$24 = 0.0;
 			for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
-				double i$var30 = reduceVar$var33$22;
+				double i$var30 = reduceVar$var33$24;
 				double j = c[cv$reduction30Index];
 				if(!fixedFlag$sample8)
-					reduceVar$var33$22 = (i$var30 + j);
+					reduceVar$var33$24 = (i$var30 + j);
 			}
 			if(!fixedFlag$sample8)
-				bias = reduceVar$var33$22;
+				bias = reduceVar$var33$24;
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		if(!fixedFlag$sample8)
+			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(guard1) {
+			if(!fixedFlag$sample8)
+				bias = b;
+		} else {
+			c[0] = (b / 2);
+			c[1] = (b / 2);
+			double reduceVar$var33$25 = 0.0;
+			for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
+				double i$var30 = reduceVar$var33$25;
+				double j = c[cv$reduction30Index];
+				reduceVar$var33$25 = (i$var30 + j);
+			}
+			bias = reduceVar$var33$25;
 		}
 	}
 
@@ -868,12 +910,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample8)
 			logProbabilityValue$sample8();
@@ -895,31 +932,6 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample8)
-			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(guard1) {
-			if(!fixedFlag$sample8)
-				bias = b;
-		} else {
-			if(!fixedFlag$sample8)
-				c[0] = (b / 2);
-			if(!fixedFlag$sample8)
-				c[1] = (b / 2);
-			double reduceVar$var33$24 = 0.0;
-			for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
-				double i$var30 = reduceVar$var33$24;
-				double j = c[cv$reduction30Index];
-				if(!fixedFlag$sample8)
-					reduceVar$var33$24 = (i$var30 + j);
-			}
-			if(!fixedFlag$sample8)
-				bias = reduceVar$var33$24;
-		}
-		logModelProbabilitiesVal();
-	}
-
-	@Override
 	public final void propagateObservedValues() {
 		for(int i$var58 = (samples - ((((samples - 1) - 0) % 1) + 1)); i$var58 >= ((0 - 1) + 1); i$var58 -= 1)
 			flips[i$var58] = flipsMeasured[i$var58];
@@ -931,19 +943,15 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			if(fixedFlag$sample8)
 				bias = b;
 		} else {
-			if(fixedFlag$sample8)
-				c[0] = (b / 2);
-			if(fixedFlag$sample8)
-				c[1] = (b / 2);
-			double reduceVar$var33$25 = 0.0;
+			c[0] = (b / 2);
+			c[1] = (b / 2);
+			double reduceVar$var33$27 = 0.0;
 			for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
-				double i$var30 = reduceVar$var33$25;
+				double i$var30 = reduceVar$var33$27;
 				double j = c[cv$reduction30Index];
-				if(fixedFlag$sample8)
-					reduceVar$var33$25 = (i$var30 + j);
+				reduceVar$var33$27 = (i$var30 + j);
 			}
-			if(fixedFlag$sample8)
-				bias = reduceVar$var33$25;
+			bias = reduceVar$var33$27;
 		}
 	}
 

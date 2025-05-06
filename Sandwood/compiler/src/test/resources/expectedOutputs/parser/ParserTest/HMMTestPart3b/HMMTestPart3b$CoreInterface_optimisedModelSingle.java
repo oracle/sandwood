@@ -79,8 +79,4 @@ interface HMMTestPart3b$CoreInterface extends org.sandwood.runtime.internal.mode
 
 	// Getter for v.
 	public double[] get$v();
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

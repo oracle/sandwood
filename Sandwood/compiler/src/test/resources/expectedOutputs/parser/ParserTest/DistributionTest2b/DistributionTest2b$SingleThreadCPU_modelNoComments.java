@@ -1745,7 +1745,7 @@ class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		double[] cv$distribution$sample5 = distribution$sample5;
 		for(int index$c = 0; index$c < weightings.length; index$c += 1) {
 			double cv$value = (((0.0 <= index$c) && (index$c < weightings.length))?weightings[index$c]:0.0);
@@ -1773,7 +1773,40 @@ class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample5)
+			v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		if(!fixedFlag$sample9)
+			v2[0] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		for(int i = 1; i < size; i += 1) {
+			if(!fixedFlag$sample23)
+				v2[i] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		}
+		for(int j = 0; j < size; j += 1) {
+			if(!fixedFlag$sample36)
+				v3[((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+			v[j] = DistributionSampling.sampleBernoulli(RNG$, ((1.0 * v1) / (v2[j] + v3[((j - 0) / 1)])));
+		}
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample5)
+			v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		if(!fixedFlag$sample9)
+			v2[0] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		for(int i = 1; i < size; i += 1) {
+			if(!fixedFlag$sample23)
+				v2[i] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		}
+		for(int j = 0; j < size; j += 1) {
+			if(!fixedFlag$sample36)
+				v3[((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample5)
 			v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
 		if(!fixedFlag$sample9)
@@ -1853,12 +1886,7 @@ class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample36)
 			logProbabilityValue$sample36();
@@ -1883,23 +1911,6 @@ class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		logProbabilityValue$sample23();
 		logProbabilityValue$sample36();
 		logProbabilityValue$sample43();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample5)
-			v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
-		if(!fixedFlag$sample9)
-			v2[0] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
-		for(int i = 1; i < size; i += 1) {
-			if(!fixedFlag$sample23)
-				v2[i] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
-		}
-		for(int j = 0; j < size; j += 1) {
-			if(!fixedFlag$sample36)
-				v3[((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
-		}
-		logModelProbabilitiesVal();
 	}
 
 	@Override
