@@ -70,8 +70,4 @@ interface Flip1CoinMK19$CoreInterface extends org.sandwood.runtime.internal.mode
 
 	// Setter for t.
 	public void set$t(double cv$value);
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

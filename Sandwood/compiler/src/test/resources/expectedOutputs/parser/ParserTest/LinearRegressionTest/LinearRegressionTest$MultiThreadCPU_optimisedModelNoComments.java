@@ -247,10 +247,10 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		if(!fixedProbFlag$sample74) {
 			double cv$accumulator = 0.0;
 			for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-				double reduceVar$var70$8 = 0.0;
+				double reduceVar$var70$9 = 0.0;
 				for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1)
-					reduceVar$var70$8 = (reduceVar$var70$8 + phi[i$var45][cv$reduction65Index]);
-				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((y[i$var45] - (reduceVar$var70$8 + bias)) / Math.sqrt(tau))) - (Math.log(tau) * 0.5));
+					reduceVar$var70$9 = (reduceVar$var70$9 + phi[i$var45][cv$reduction65Index]);
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((y[i$var45] - (reduceVar$var70$9 + bias)) / Math.sqrt(tau))) - (Math.log(tau) * 0.5));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$var72[i$var45] = cv$distributionAccumulator;
 				logProbability$sample74[i$var45] = cv$distributionAccumulator;
@@ -279,13 +279,13 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		double cv$sigmaValue = 1.0;
 		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
 			double cv$denominator = x[i$var45][var23];
-			double reduceVar$var70$5 = 0.0;
-			for(int cv$reduction389Index = 0; cv$reduction389Index < var23; cv$reduction389Index += 1)
-				reduceVar$var70$5 = (reduceVar$var70$5 + phi[i$var45][cv$reduction389Index]);
-			for(int cv$reduction389Index = (var23 + 1); cv$reduction389Index < k; cv$reduction389Index += 1)
-				reduceVar$var70$5 = (reduceVar$var70$5 + phi[i$var45][cv$reduction389Index]);
+			double reduceVar$var70$6 = 0.0;
+			for(int cv$reduction395Index = 0; cv$reduction395Index < var23; cv$reduction395Index += 1)
+				reduceVar$var70$6 = (reduceVar$var70$6 + phi[i$var45][cv$reduction395Index]);
+			for(int cv$reduction395Index = (var23 + 1); cv$reduction395Index < k; cv$reduction395Index += 1)
+				reduceVar$var70$6 = (reduceVar$var70$6 + phi[i$var45][cv$reduction395Index]);
 			cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-			cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - (reduceVar$var70$5 + bias))));
+			cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - (reduceVar$var70$6 + bias))));
 			if(cv$sigmaNotFound) {
 				cv$sigmaValue = tau;
 				cv$sigmaNotFound = false;
@@ -302,11 +302,11 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		boolean cv$sigmaNotFound = true;
 		double cv$sigmaValue = 1.0;
 		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-			double reduceVar$var70$6 = 0.0;
+			double reduceVar$var70$7 = 0.0;
 			for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1)
-				reduceVar$var70$6 = (reduceVar$var70$6 + phi[i$var45][cv$reduction65Index]);
+				reduceVar$var70$7 = (reduceVar$var70$7 + phi[i$var45][cv$reduction65Index]);
 			cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
-			cv$sum = ((cv$sum + y[i$var45]) - reduceVar$var70$6);
+			cv$sum = ((cv$sum + y[i$var45]) - reduceVar$var70$7);
 			if(cv$sigmaNotFound) {
 				cv$sigmaValue = tau;
 				cv$sigmaNotFound = false;
@@ -319,10 +319,10 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		double cv$sum = 0.0;
 		int cv$count = 0;
 		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-			double reduceVar$var70$7 = 0.0;
+			double reduceVar$var70$8 = 0.0;
 			for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1)
-				reduceVar$var70$7 = (reduceVar$var70$7 + phi[i$var45][cv$reduction65Index]);
-			double cv$var72$diff = ((reduceVar$var70$7 + bias) - y[i$var45]);
+				reduceVar$var70$8 = (reduceVar$var70$8 + phi[i$var45][cv$reduction65Index]);
+			double cv$var72$diff = ((reduceVar$var70$8 + bias) - y[i$var45]);
 			cv$sum = (cv$sum + (cv$var72$diff * cv$var72$diff));
 			cv$count = (cv$count + 1);
 		}
@@ -372,17 +372,17 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 								}
 							);
 
-						double reduceVar$var70$9 = 0.0;
+						double reduceVar$var70$10 = 0.0;
 						for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1)
-							reduceVar$var70$9 = (reduceVar$var70$9 + phi[i$var45][cv$reduction65Index]);
-						y[i$var45] = (((Math.sqrt(tau) * DistributionSampling.sampleGaussian(RNG$1)) + reduceVar$var70$9) + bias);
+							reduceVar$var70$10 = (reduceVar$var70$10 + phi[i$var45][cv$reduction65Index]);
+						y[i$var45] = (((Math.sqrt(tau) * DistributionSampling.sampleGaussian(RNG$1)) + reduceVar$var70$10) + bias);
 					}
 			}
 		);
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample24)
 			parallelFor(RNG$, 0, k, 1,
 				(int forStart$var23, int forEnd$var23, int threadID$var23, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -395,22 +395,54 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 		if(!fixedFlag$sample35)
 			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
+		parallelFor(RNG$, 0, n, 1,
+			(int forStart$index$i$var45, int forEnd$index$i$var45, int threadID$index$i$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$i$var45 = forStart$index$i$var45; index$i$var45 < forEnd$index$i$var45; index$i$var45 += 1) {
+						int i$var45 = index$i$var45;
+						int threadID$i$var45 = threadID$index$i$var45;
+						parallelFor(RNG$1, 0, k, 1,
+							(int forStart$j$var55, int forEnd$j$var55, int threadID$j$var55, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int j$var55 = forStart$j$var55; j$var55 < forEnd$j$var55; j$var55 += 1)
+										phi[i$var45][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+							}
+						);
+					}
+			}
+		);
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
 		if(!fixedFlag$sample24)
-			parallelFor(RNG$, 0, n, 1,
-				(int forStart$index$i$var45, int forEnd$index$i$var45, int threadID$index$i$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int index$i$var45 = forStart$index$i$var45; index$i$var45 < forEnd$index$i$var45; index$i$var45 += 1) {
-							int i$var45 = index$i$var45;
-							int threadID$i$var45 = threadID$index$i$var45;
-							parallelFor(RNG$1, 0, k, 1,
-								(int forStart$j$var55, int forEnd$j$var55, int threadID$j$var55, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int j$var55 = forStart$j$var55; j$var55 < forEnd$j$var55; j$var55 += 1)
-											phi[i$var45][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
-								}
-							);
-						}
+			parallelFor(RNG$, 0, k, 1,
+				(int forStart$var23, int forEnd$var23, int threadID$var23, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var23 = forStart$var23; var23 < forEnd$var23; var23 += 1)
+							weights[var23] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
 				}
 			);
 
+		if(!fixedFlag$sample31)
+			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		if(!fixedFlag$sample35)
+			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
+		parallelFor(RNG$, 0, n, 1,
+			(int forStart$index$i$var45, int forEnd$index$i$var45, int threadID$index$i$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$i$var45 = forStart$index$i$var45; index$i$var45 < forEnd$index$i$var45; index$i$var45 += 1) {
+						int i$var45 = index$i$var45;
+						int threadID$i$var45 = threadID$index$i$var45;
+						parallelFor(RNG$1, 0, k, 1,
+							(int forStart$j$var55, int forEnd$j$var55, int threadID$j$var55, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int j$var55 = forStart$j$var55; j$var55 < forEnd$j$var55; j$var55 += 1)
+										phi[i$var45][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+							}
+						);
+						double reduceVar$var70$11 = 0.0;
+						for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1)
+							reduceVar$var70$11 = (reduceVar$var70$11 + phi[i$var45][cv$reduction65Index]);
+						y[i$var45] = (((Math.sqrt(tau) * DistributionSampling.sampleGaussian(RNG$1)) + reduceVar$var70$11) + bias);
+					}
+			}
+		);
 	}
 
 	@Override
@@ -443,6 +475,36 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 				}
 			);
 
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		if(!fixedFlag$sample24)
+			parallelFor(RNG$, 0, k, 1,
+				(int forStart$var23, int forEnd$var23, int threadID$var23, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var23 = forStart$var23; var23 < forEnd$var23; var23 += 1)
+							weights[var23] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+				}
+			);
+
+		if(!fixedFlag$sample31)
+			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		if(!fixedFlag$sample35)
+			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
+		parallelFor(RNG$, 0, n, 1,
+			(int forStart$index$i$var45, int forEnd$index$i$var45, int threadID$index$i$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$i$var45 = forStart$index$i$var45; index$i$var45 < forEnd$index$i$var45; index$i$var45 += 1) {
+						int i$var45 = index$i$var45;
+						int threadID$i$var45 = threadID$index$i$var45;
+						parallelFor(RNG$1, 0, k, 1,
+							(int forStart$j$var55, int forEnd$j$var55, int threadID$j$var55, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int j$var55 = forStart$j$var55; j$var55 < forEnd$j$var55; j$var55 += 1)
+										phi[i$var45][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+							}
+						);
+					}
+			}
+		);
 	}
 
 	@Override
@@ -501,12 +563,7 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample24)
 			logProbabilityValue$sample24();
@@ -536,39 +593,6 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample24)
-			parallelFor(RNG$, 0, k, 1,
-				(int forStart$var23, int forEnd$var23, int threadID$var23, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var23 = forStart$var23; var23 < forEnd$var23; var23 += 1)
-							weights[var23] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
-				}
-			);
-
-		if(!fixedFlag$sample31)
-			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		if(!fixedFlag$sample35)
-			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
-		if(!fixedFlag$sample24)
-			parallelFor(RNG$, 0, n, 1,
-				(int forStart$index$i$var45, int forEnd$index$i$var45, int threadID$index$i$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int index$i$var45 = forStart$index$i$var45; index$i$var45 < forEnd$index$i$var45; index$i$var45 += 1) {
-							int i$var45 = index$i$var45;
-							int threadID$i$var45 = threadID$index$i$var45;
-							parallelFor(RNG$1, 0, k, 1,
-								(int forStart$j$var55, int forEnd$j$var55, int threadID$j$var55, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int j$var55 = forStart$j$var55; j$var55 < forEnd$j$var55; j$var55 += 1)
-											phi[i$var45][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
-								}
-							);
-						}
-				}
-			);
-
-		logModelProbabilitiesVal();
-	}
-
-	@Override
 	public final void propagateObservedValues() {
 		int cv$length1 = y.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
@@ -577,22 +601,20 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 
 	@Override
 	public final void setIntermediates() {
-		if(fixedFlag$sample24)
-			parallelFor(RNG$, 0, n, 1,
-				(int forStart$index$i$var45, int forEnd$index$i$var45, int threadID$index$i$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int index$i$var45 = forStart$index$i$var45; index$i$var45 < forEnd$index$i$var45; index$i$var45 += 1) {
-							int i$var45 = index$i$var45;
-							int threadID$i$var45 = threadID$index$i$var45;
-							parallelFor(RNG$1, 0, k, 1,
-								(int forStart$j$var55, int forEnd$j$var55, int threadID$j$var55, org.sandwood.random.internal.Rng RNG$2) -> { 
-									for(int j$var55 = forStart$j$var55; j$var55 < forEnd$j$var55; j$var55 += 1)
-											phi[i$var45][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
-								}
-							);
-						}
-				}
-			);
-
+		parallelFor(RNG$, 0, n, 1,
+			(int forStart$index$i$var45, int forEnd$index$i$var45, int threadID$index$i$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$i$var45 = forStart$index$i$var45; index$i$var45 < forEnd$index$i$var45; index$i$var45 += 1) {
+						int i$var45 = index$i$var45;
+						int threadID$i$var45 = threadID$index$i$var45;
+						parallelFor(RNG$1, 0, k, 1,
+							(int forStart$j$var55, int forEnd$j$var55, int threadID$j$var55, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int j$var55 = forStart$j$var55; j$var55 < forEnd$j$var55; j$var55 += 1)
+										phi[i$var45][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+							}
+						);
+					}
+			}
+		);
 	}
 
 	@Override

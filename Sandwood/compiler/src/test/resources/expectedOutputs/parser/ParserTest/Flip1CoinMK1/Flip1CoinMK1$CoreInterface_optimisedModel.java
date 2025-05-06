@@ -43,8 +43,4 @@ interface Flip1CoinMK1$CoreInterface extends org.sandwood.runtime.internal.model
 
 	// Setter for samples.
 	public void set$samples(int cv$value);
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

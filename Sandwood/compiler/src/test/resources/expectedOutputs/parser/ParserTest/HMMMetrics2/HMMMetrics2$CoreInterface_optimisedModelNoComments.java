@@ -51,5 +51,4 @@ interface HMMMetrics2$CoreInterface extends org.sandwood.runtime.internal.model.
 	public int[][] get$st();
 	public void set$st(int[][] cv$value);
 	public double[] get$v();
-	public void logEvidenceGeneration();
 }

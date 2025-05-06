@@ -84,20 +84,35 @@ public class ForwardExecutionBuilder {
         FREE;
     }
 
+    public enum PrimingStatus {
+        // Fixed intermediate variables need setting
+        PRIMING,
+        // Fixed intermediate variables will not be set.
+        NOT_PRIMING
+    }
+
+    public enum Distributions {
+        // Distributions should be used
+        USE_DISTRIBUTIONS,
+        // Distributions should not be used
+        NO_DISTRIBUTIONS
+    }
+
     public static void constructForwardMethod(Variable<?> intermediate, GuardStatus guardStatus,
-            boolean useDistributions, CompilationContext compilationCtx) {
+            Distributions useDistributions, PrimingStatus primingStatus, CompilationContext compilationCtx) {
         Set<TraceHandle> obsTraces = Collections.emptySet();
-        constructForwardMethod(intermediate, obsTraces, guardStatus, useDistributions, compilationCtx);
+        constructForwardMethod(intermediate, obsTraces, guardStatus, useDistributions, primingStatus, compilationCtx);
     }
 
     // TODO make sure this is only called on intermediates or samples. Once this is done calls
     // to isIntermediate can be removed as they will always be true.
     public static void constructForwardMethod(Variable<?> intermediate, Set<TraceHandle> obsTraces,
-            GuardStatus guardStatus, boolean useDistributions, CompilationContext compilationCtx) {
+            GuardStatus guardStatus, Distributions useDistributions, PrimingStatus primingStatus,
+            CompilationContext compilationCtx) {
         if(intermediate instanceof RandomVariable) {
             RandomVariable<?, ?> rv = (RandomVariable<?, ?>) intermediate;
 
-            if(rv.distributionSampled() && useDistributions) {
+            if(rv.distributionSampled() && useDistributions == Distributions.USE_DISTRIBUTIONS) {
                 // If we are using restrictions in this code construct a guard for the code
                 // generating this intermediate.
                 IRTreeReturn<BooleanVariable> guard = null;
@@ -116,18 +131,19 @@ public class ForwardExecutionBuilder {
                 compilationCtx.clearCodeGuard();
             }
         } else {
-            if(!(intermediate.isDistribution() && useDistributions)) {
+            if(!(intermediate.isDistribution() && useDistributions == Distributions.USE_DISTRIBUTIONS)) {
                 // A special case for if assignments.
                 if(intermediate.getParent().getType() == DFType.IF_ASSIGNMENT)
-                    forwardIfAssignment(intermediate, obsTraces, guardStatus, compilationCtx);
+                    forwardIfAssignment(intermediate, obsTraces, guardStatus, primingStatus, compilationCtx);
                 else
-                    constructVariableForward(intermediate, obsTraces, guardStatus, compilationCtx);
+                    constructVariableForward(intermediate, obsTraces, guardStatus, primingStatus, compilationCtx);
             }
         }
     }
 
     private static <A extends Variable<A>> void forwardIfAssignment(Variable<A> intermediate,
-            Set<TraceHandle> obsTraces, GuardStatus guardStatus, CompilationContext compilationCtx) {
+            Set<TraceHandle> obsTraces, GuardStatus guardStatus, PrimingStatus primingStatus,
+            CompilationContext compilationCtx) {
         /*
          * This indirection is done to allow for the case where the intermediate variable is allocated inside a for
          * loop. When this happens an array is created to allow each instantiation of the intermediate variable to be
@@ -148,8 +164,8 @@ public class ForwardExecutionBuilder {
             } else {
                 // If we are using restrictions in this code construct a guard for the code
                 // generating this intermediate.
-                IRTreeReturn<BooleanVariable> guard = constructGuard(guardStatus, compilationCtx, v,
-                        s.getScopeCondition());
+                IRTreeReturn<BooleanVariable> guard = (primingStatus == PrimingStatus.PRIMING && !v.isSample()) ? null
+                        : constructGuard(guardStatus, compilationCtx, v, s.getScopeCondition());
 
                 if(obsTraces.isEmpty()) {
                     compilationCtx.setCodeGuard(guard);
@@ -177,7 +193,8 @@ public class ForwardExecutionBuilder {
     }
 
     private static <A extends Variable<A>> void constructVariableForward(Variable<A> intermediate,
-            Set<TraceHandle> obsTraces, GuardStatus guardStatus, CompilationContext compilationCtx) {
+            Set<TraceHandle> obsTraces, GuardStatus guardStatus, PrimingStatus primingStatus,
+            CompilationContext compilationCtx) {
         // Otherwise just generate regular code.
         // NOTE Get parent is required to avoid tests that stop code generation at
         // intermediate
@@ -194,7 +211,13 @@ public class ForwardExecutionBuilder {
 
             // If we are using restrictions in this code construct a guard for the code
             // generating this intermediate.
-            IRTreeReturn<BooleanVariable> guard = constructGuard(guardStatus, compilationCtx, v);
+            IRTreeReturn<BooleanVariable> guard;
+            if(intermediate.isSample()) {
+                guard = constructGuard(guardStatus, compilationCtx, v);
+            } else if(primingStatus == PrimingStatus.PRIMING || v.isDeterministic())
+                guard = null;
+            else
+                guard = constructGuard(guardStatus, compilationCtx, v, p.scope().getScopeCondition());
 
             if(obsTraces.isEmpty()) {
                 compilationCtx.setCodeGuard(guard);
@@ -504,7 +527,9 @@ public class ForwardExecutionBuilder {
 
                 PriorityQueue<SampleTask<?, ?>> p = new PriorityQueue<>();
                 for(SampleTask<?, ?> s:sTasks) {
-                    if(!s.getOutput().isFixed())
+                    if(!s.getOutput().isFixed()) // TODO add in a test to see if this fixed value can be fixed when
+                                                 // doing forward execution. If it can be add a guard, look at
+                                                 // Vulcano2012 for an example.
                         p.add(s);
                 }
 

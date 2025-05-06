@@ -22,5 +22,4 @@ interface Flip1CoinMK5$CoreInterface extends org.sandwood.runtime.internal.model
 	public double get$logProbability$flips2();
 	public int get$samples1();
 	public int get$samples2();
-	public void logEvidenceGeneration();
 }

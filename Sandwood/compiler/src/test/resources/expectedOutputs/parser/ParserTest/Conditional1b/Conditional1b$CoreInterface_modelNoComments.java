@@ -16,5 +16,4 @@ interface Conditional1b$CoreInterface extends org.sandwood.runtime.internal.mode
 	public double get$u();
 	public void set$u(double cv$value);
 	public double get$value();
-	public void logEvidenceGeneration();
 }

@@ -27,5 +27,4 @@ interface HMMTestFromStan$CoreInterface extends org.sandwood.runtime.internal.mo
 	public void set$st(int[] cv$value);
 	public int get$states();
 	public double[] get$v();
-	public void logEvidenceGeneration();
 }

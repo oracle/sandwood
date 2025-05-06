@@ -45,5 +45,4 @@ interface HMM_Mk2Dist$CoreInterface extends org.sandwood.runtime.internal.model.
 	public double[] get$v2();
 	public double[] get$weights();
 	public void set$weights(double[] cv$value);
-	public void logEvidenceGeneration();
 }

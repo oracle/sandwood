@@ -73,8 +73,4 @@ interface Vulcano2012basic$CoreInterface extends org.sandwood.runtime.internal.m
 
 	// Setter for ut.
 	public void set$ut(double[] cv$value);
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

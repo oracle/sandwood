@@ -179,10 +179,24 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {}
+	public final void forwardGenerationDistributionsNoOutputsPrime() {}
+
+	@Override
+	public final void forwardGenerationPrime() {
+		guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+		a = DistributionSampling.sampleUniform(RNG$);
+		b = DistributionSampling.sampleUniform(RNG$);
+		if(guard)
+			value = a;
+		else
+			value = b;
+	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {}
 
 	@Override
 	public final void gibbsRound() {
@@ -210,12 +224,7 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample5();
 		logProbabilityValue$sample9();
@@ -236,11 +245,6 @@ class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbabilityValue$sample5();
 		logProbabilityValue$sample9();
 		logProbabilityValue$sample13();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		logModelProbabilitiesVal();
 	}
 
 	@Override

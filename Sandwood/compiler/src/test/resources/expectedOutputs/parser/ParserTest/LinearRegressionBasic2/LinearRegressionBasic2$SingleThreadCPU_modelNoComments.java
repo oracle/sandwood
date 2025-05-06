@@ -492,7 +492,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample7)
 			b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		if(!fixedFlag$sample11)
@@ -502,7 +502,29 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample7)
+			b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		if(!fixedFlag$sample11)
+			b1 = ((Math.sqrt(5.0) * DistributionSampling.sampleGaussian(RNG$)) + 1.0);
+		if(!fixedFlag$sample16)
+			variance = (1 / DistributionSampling.sampleGamma(RNG$, 1.0, 1.0));
+		for(int i = 0; i < noSamples; i += 1)
+			y[i] = ((Math.sqrt(variance) * DistributionSampling.sampleGaussian(RNG$)) + (b0 + (b1 * x[i])));
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample7)
+			b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		if(!fixedFlag$sample11)
+			b1 = ((Math.sqrt(5.0) * DistributionSampling.sampleGaussian(RNG$)) + 1.0);
+		if(!fixedFlag$sample16)
+			variance = (1 / DistributionSampling.sampleGamma(RNG$, 1.0, 1.0));
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample7)
 			b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		if(!fixedFlag$sample11)
@@ -559,12 +581,7 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample7)
 			logProbabilityValue$sample7();
@@ -591,17 +608,6 @@ class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.intern
 		logProbabilityValue$sample11();
 		logProbabilityValue$sample16();
 		logProbabilityValue$sample33();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample7)
-			b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample11)
-			b1 = ((Math.sqrt(5.0) * DistributionSampling.sampleGaussian(RNG$)) + 1.0);
-		if(!fixedFlag$sample16)
-			variance = (1 / DistributionSampling.sampleGamma(RNG$, 1.0, 1.0));
-		logModelProbabilitiesVal();
 	}
 
 	@Override

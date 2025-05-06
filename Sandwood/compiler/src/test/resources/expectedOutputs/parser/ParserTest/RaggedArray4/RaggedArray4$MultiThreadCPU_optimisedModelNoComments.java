@@ -161,12 +161,12 @@ class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	private final void logProbabilityValue$sample50() {
 		if(!fixedProbFlag$sample50) {
-			int lengthCV$a$48_15 = -1;
+			int lengthCV$a$48_17 = -1;
 			if((1 == y))
-				lengthCV$a$48_15 = 3;
+				lengthCV$a$48_17 = 3;
 			if((0 == y))
-				lengthCV$a$48_15 = 2;
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_15);
+				lengthCV$a$48_17 = 2;
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_17);
 			logProbability$var47 = cv$distributionAccumulator;
 			logProbability$d = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -186,12 +186,12 @@ class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$sampleAccumulator = 0.0;
 			for(int var61 = 0; var61 < length$obs_measured; var61 += 1) {
 				int cv$sampleValue = obs[var61];
-				int lengthCV$a$48_16 = -1;
+				int lengthCV$a$48_18 = -1;
 				if((1 == y))
-					lengthCV$a$48_16 = 3;
+					lengthCV$a$48_18 = 3;
 				if((0 == y))
-					lengthCV$a$48_16 = 2;
-				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$48_16))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+					lengthCV$a$48_18 = 2;
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$48_18))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
 			logProbability$var49 = cv$sampleAccumulator;
 			logProbability$var62 = cv$sampleAccumulator;
@@ -234,21 +234,21 @@ class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	private final void sample50() {
-		int lengthCV$a$48_13 = -1;
+		int lengthCV$a$48_15 = -1;
 		if((1 == y))
-			lengthCV$a$48_13 = 3;
+			lengthCV$a$48_15 = 3;
 		if((0 == y))
-			lengthCV$a$48_13 = 2;
-		for(int cv$loopIndex = 0; cv$loopIndex < lengthCV$a$48_13; cv$loopIndex += 1)
+			lengthCV$a$48_15 = 2;
+		for(int cv$loopIndex = 0; cv$loopIndex < lengthCV$a$48_15; cv$loopIndex += 1)
 			cv$var48$countGlobal[cv$loopIndex] = 0.0;
 		for(int var61 = 0; var61 < length$obs_measured; var61 += 1)
 			cv$var48$countGlobal[obs[var61]] = (cv$var48$countGlobal[obs[var61]] + 1.0);
-		int lengthCV$a$48_14 = -1;
+		int lengthCV$a$48_16 = -1;
 		if((1 == y))
-			lengthCV$a$48_14 = 3;
+			lengthCV$a$48_16 = 3;
 		if((0 == y))
-			lengthCV$a$48_14 = 2;
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$var48$countGlobal, d, lengthCV$a$48_14);
+			lengthCV$a$48_16 = 2;
+		Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$var48$countGlobal, d, lengthCV$a$48_16);
 	}
 
 	@Override
@@ -264,12 +264,12 @@ class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		a[1] = new double[3];
 		b = new double[2];
 		if(!fixedFlag$sample50) {
-			int lengthCV$a$48_11 = -1;
+			int lengthCV$a$48_13 = -1;
 			if((1 == y))
-				lengthCV$a$48_11 = 3;
+				lengthCV$a$48_13 = 3;
 			if((0 == y))
-				lengthCV$a$48_11 = 2;
-			d = new double[lengthCV$a$48_11];
+				lengthCV$a$48_13 = 2;
+			d = new double[lengthCV$a$48_13];
 		}
 		obs = new int[length$obs_measured];
 		allocateScratch();
@@ -280,39 +280,65 @@ class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedFlag$sample47)
 			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
 		if(!fixedFlag$sample50) {
-			int lengthCV$a$48_17 = -1;
+			int lengthCV$a$48_19 = -1;
 			if((1 == y))
-				lengthCV$a$48_17 = 3;
+				lengthCV$a$48_19 = 3;
 			if((0 == y))
-				lengthCV$a$48_17 = 2;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_17, d);
+				lengthCV$a$48_19 = 2;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_19, d);
 		}
-		int lengthCV$a$48_18 = -1;
+		int lengthCV$a$48_20 = -1;
 		if((1 == y))
-			lengthCV$a$48_18 = 3;
+			lengthCV$a$48_20 = 3;
 		if((0 == y))
-			lengthCV$a$48_18 = 2;
-		int lengthCV$a$48_18$1 = lengthCV$a$48_18;
+			lengthCV$a$48_20 = 2;
+		int lengthCV$a$48_20$1 = lengthCV$a$48_20;
 		parallelFor(RNG$, 0, length$obs_measured, 1,
 			(int forStart$var61, int forEnd$var61, int threadID$var61, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var61 = forStart$var61; var61 < forEnd$var61; var61 += 1)
-						obs[var61] = DistributionSampling.sampleCategorical(RNG$1, d, lengthCV$a$48_18$1);
+						obs[var61] = DistributionSampling.sampleCategorical(RNG$1, d, lengthCV$a$48_20$1);
 			}
 		);
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample47)
 			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
 		if(!fixedFlag$sample50) {
-			int lengthCV$a$48_20 = -1;
+			int lengthCV$a$48_25 = -1;
 			if((1 == y))
-				lengthCV$a$48_20 = 3;
+				lengthCV$a$48_25 = 3;
 			if((0 == y))
-				lengthCV$a$48_20 = 2;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_20, d);
+				lengthCV$a$48_25 = 2;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_25, d);
 		}
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample47)
+			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
+		if(!fixedFlag$sample50) {
+			int lengthCV$a$48_21 = -1;
+			if((1 == y))
+				lengthCV$a$48_21 = 3;
+			if((0 == y))
+				lengthCV$a$48_21 = 2;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_21, d);
+		}
+		int lengthCV$a$48_22 = -1;
+		if((1 == y))
+			lengthCV$a$48_22 = 3;
+		if((0 == y))
+			lengthCV$a$48_22 = 2;
+		int lengthCV$a$48_22$1 = lengthCV$a$48_22;
+		parallelFor(RNG$, 0, length$obs_measured, 1,
+			(int forStart$var61, int forEnd$var61, int threadID$var61, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var61 = forStart$var61; var61 < forEnd$var61; var61 += 1)
+						obs[var61] = DistributionSampling.sampleCategorical(RNG$1, d, lengthCV$a$48_22$1);
+			}
+		);
 	}
 
 	@Override
@@ -320,12 +346,26 @@ class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedFlag$sample47)
 			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
 		if(!fixedFlag$sample50) {
-			int lengthCV$a$48_19 = -1;
+			int lengthCV$a$48_23 = -1;
 			if((1 == y))
-				lengthCV$a$48_19 = 3;
+				lengthCV$a$48_23 = 3;
 			if((0 == y))
-				lengthCV$a$48_19 = 2;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_19, d);
+				lengthCV$a$48_23 = 2;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_23, d);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		if(!fixedFlag$sample47)
+			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
+		if(!fixedFlag$sample50) {
+			int lengthCV$a$48_24 = -1;
+			if((1 == y))
+				lengthCV$a$48_24 = 3;
+			if((0 == y))
+				lengthCV$a$48_24 = 2;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_24, d);
 		}
 	}
 
@@ -374,12 +414,7 @@ class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample47)
 			logProbabilityValue$sample47();
@@ -402,21 +437,6 @@ class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbabilityValue$sample47();
 		logProbabilityValue$sample50();
 		logProbabilityValue$sample64();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample47)
-			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
-		if(!fixedFlag$sample50) {
-			int lengthCV$a$48_21 = -1;
-			if((1 == y))
-				lengthCV$a$48_21 = 3;
-			if((0 == y))
-				lengthCV$a$48_21 = 2;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_21, d);
-		}
-		logModelProbabilitiesVal();
 	}
 
 	@Override

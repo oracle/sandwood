@@ -157,15 +157,15 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedProbFlag$sample39) {
 			// Generating probabilities for sample task
 			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$37_13 = -1;
+			int lengthCV$a$37_15 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
-				lengthCV$a$37_13 = 2;
+				lengthCV$a$37_15 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((1 == y))
-				lengthCV$a$37_13 = 3;
+				lengthCV$a$37_15 = 3;
 			
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -190,7 +190,7 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_13);
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_15);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -273,15 +273,15 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				int cv$sampleValue = obs[var50];
 				
 				// Allocate a local variable to hold the length of the array.
-				int lengthCV$a$37_14 = -1;
+				int lengthCV$a$37_16 = -1;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((0 == y))
-					lengthCV$a$37_14 = 2;
+					lengthCV$a$37_16 = 2;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((1 == y))
-					lengthCV$a$37_14 = 3;
+					lengthCV$a$37_16 = 3;
 				
 				// Record that the sample was reached.
 				cv$sampleReached = true;
@@ -299,7 +299,7 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$37_14))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$37_16))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -368,20 +368,20 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// to Categorical conjugate prior.
 	private final void sample39() {
 		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$37_11 = -1;
+		int lengthCV$a$37_13 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((0 == y))
-			lengthCV$a$37_11 = 2;
+			lengthCV$a$37_13 = 2;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((1 == y))
-			lengthCV$a$37_11 = 3;
+			lengthCV$a$37_13 = 3;
 		
 		// Initialize the array values to 0.
 		// 
 		// Get the length of the array
-		for(int cv$loopIndex = 0; cv$loopIndex < lengthCV$a$37_11; cv$loopIndex += 1)
+		for(int cv$loopIndex = 0; cv$loopIndex < lengthCV$a$37_13; cv$loopIndex += 1)
 			// A local reference to the scratch space.
 			cv$var37$countGlobal[cv$loopIndex] = 0.0;
 		
@@ -396,22 +396,22 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			cv$var37$countGlobal[obs[var50]] = (cv$var37$countGlobal[obs[var50]] + 1.0);
 		
 		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$37_12 = -1;
+		int lengthCV$a$37_14 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((0 == y))
-			lengthCV$a$37_12 = 2;
+			lengthCV$a$37_14 = 2;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((1 == y))
-			lengthCV$a$37_12 = 3;
+			lengthCV$a$37_14 = 3;
 		
 		// Calculate the new sample value
 		// 
 		// Calculate a new sample value and write it into cv$targetLocal.
 		// 
 		// A reference local to the function for the sample variable.
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$var37$countGlobal, d, lengthCV$a$37_12);
+		Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$var37$countGlobal, d, lengthCV$a$37_14);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -441,16 +441,16 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(!fixedFlag$sample39) {
 			// Constructor for d
 			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$37_10 = -1;
+			int lengthCV$a$37_12 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
-				lengthCV$a$37_10 = 2;
+				lengthCV$a$37_12 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((1 == y))
-				lengthCV$a$37_10 = 3;
-			d = new double[lengthCV$a$37_10];
+				lengthCV$a$37_12 = 3;
+			d = new double[lengthCV$a$37_12];
 		}
 		
 		// Constructor for obs
@@ -466,71 +466,6 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample39) {
 			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$37_15 = -1;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == y))
-				lengthCV$a$37_15 = 2;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$37_15 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_15, d);
-		}
-		
-		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$37_16 = -1;
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((0 == y))
-			lengthCV$a$37_16 = 2;
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == y))
-			lengthCV$a$37_16 = 3;
-		
-		// Alternative name for lengthCV$a$37_16 to make it effectively final.
-		int lengthCV$a$37_16$1 = lengthCV$a$37_16;
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$obs_measured, 1,
-			(int forStart$var50, int forEnd$var50, int threadID$var50, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int var50 = forStart$var50; var50 < forEnd$var50; var50 += 1)
-						obs[var50] = DistributionSampling.sampleCategorical(RNG$1, d, lengthCV$a$37_16$1);
-			}
-		);
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
-	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample39) {
-			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$37_18 = -1;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == y))
-				lengthCV$a$37_18 = 2;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$37_18 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_18, d);
-		}
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
-	@Override
-	public final void forwardGenerationValuesNoOutputs() {
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample39) {
-			// Allocate a local variable to hold the length of the array.
 			int lengthCV$a$37_17 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -541,6 +476,138 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			if((1 == y))
 				lengthCV$a$37_17 = 3;
 			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_17, d);
+		}
+		
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_18 = -1;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((0 == y))
+			lengthCV$a$37_18 = 2;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((1 == y))
+			lengthCV$a$37_18 = 3;
+		
+		// Alternative name for lengthCV$a$37_18 to make it effectively final.
+		int lengthCV$a$37_18$1 = lengthCV$a$37_18;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, length$obs_measured, 1,
+			(int forStart$var50, int forEnd$var50, int threadID$var50, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var50 = forStart$var50; var50 < forEnd$var50; var50 += 1)
+						obs[var50] = DistributionSampling.sampleCategorical(RNG$1, d, lengthCV$a$37_18$1);
+			}
+		);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
+	@Override
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample39) {
+			// Allocate a local variable to hold the length of the array.
+			int lengthCV$a$37_23 = -1;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((0 == y))
+				lengthCV$a$37_23 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$37_23 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_23, d);
+		}
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample39) {
+			// Allocate a local variable to hold the length of the array.
+			int lengthCV$a$37_19 = -1;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((0 == y))
+				lengthCV$a$37_19 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$37_19 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_19, d);
+		}
+		
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_20 = -1;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((0 == y))
+			lengthCV$a$37_20 = 2;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((1 == y))
+			lengthCV$a$37_20 = 3;
+		
+		// Alternative name for lengthCV$a$37_20 to make it effectively final.
+		int lengthCV$a$37_20$1 = lengthCV$a$37_20;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, length$obs_measured, 1,
+			(int forStart$var50, int forEnd$var50, int threadID$var50, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var50 = forStart$var50; var50 < forEnd$var50; var50 += 1)
+						obs[var50] = DistributionSampling.sampleCategorical(RNG$1, d, lengthCV$a$37_20$1);
+			}
+		);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample39) {
+			// Allocate a local variable to hold the length of the array.
+			int lengthCV$a$37_21 = -1;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((0 == y))
+				lengthCV$a$37_21 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$37_21 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_21, d);
+		}
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample39) {
+			// Allocate a local variable to hold the length of the array.
+			int lengthCV$a$37_22 = -1;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((0 == y))
+				lengthCV$a$37_22 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$37_22 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_22, d);
 		}
 	}
 
@@ -587,19 +654,9 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			logProbability$var51 = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -644,32 +701,6 @@ class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample39();
 		logProbabilityValue$sample53();
-	}
-
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample39) {
-			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$37_19 = -1;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == y))
-				lengthCV$a$37_19 = 2;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$37_19 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_19, d);
-		}
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
 	}
 
 	// Method to propagate observed values back into the model.

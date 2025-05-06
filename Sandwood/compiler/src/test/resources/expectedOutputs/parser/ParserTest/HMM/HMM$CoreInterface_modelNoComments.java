@@ -28,5 +28,4 @@ interface HMM$CoreInterface extends org.sandwood.runtime.internal.model.CoreMode
 	public int get$states();
 	public void set$states(int cv$value);
 	public double[] get$v();
-	public void logEvidenceGeneration();
 }

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -21,21 +21,25 @@ public interface CoreModel extends CurrentProbability, AutoCloseable {
 
     void initializeSeed(long seed);
 
-    void logProbabilityGeneration();
-
     void gibbsRound();
 
     void logModelProbabilitiesVal();
 
     void logModelProbabilitiesDist();
 
+    void logEvidenceProbabilities();
+
     double get$logProbability$$evidence();
 
     void forwardGeneration();
 
+    void forwardGenerationPrime();
+
     void forwardGenerationValuesNoOutputs();
 
-    void forwardGenerationDistributionsNoOutputs();
+    void forwardGenerationValuesNoOutputsPrime();
+
+    void forwardGenerationDistributionsNoOutputsPrime();
 
     void initializeConstants();
 

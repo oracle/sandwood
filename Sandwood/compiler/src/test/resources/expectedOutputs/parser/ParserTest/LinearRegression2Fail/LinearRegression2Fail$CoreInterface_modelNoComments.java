@@ -21,5 +21,4 @@ interface LinearRegression2Fail$CoreInterface extends org.sandwood.runtime.inter
 	public double[] get$y();
 	public double[] get$yMeasured();
 	public void set$yMeasured(double[] cv$value);
-	public void logEvidenceGeneration();
 }

@@ -1267,9 +1267,86 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		if(!fixedFlag$sample8)
+			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(guard1) {
+			if(!fixedFlag$sample8)
+				bias = b;
+		} else {
+			c[0] = (b / 2);
+			c[1] = (b / 2);
+			
+			// Reduction of array c
+			// 
+			// A generated name to prevent name collisions if the reduction is implemented more
+			// than once in inference and probability code. Initialize the variable to the unit
+			// value
+			double reduceVar$var33$12 = 0.0;
+			
+			// For each index in the array to be reduced
+			for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
+				// Set the left hand term of the reduction function to the return variable value.
+				double i$var30 = reduceVar$var33$12;
+				
+				// Set the right hand term to a value from the array c
+				double j = c[cv$reduction30Index];
+				
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				reduceVar$var33$12 = (i$var30 + j);
+			}
+			bias = reduceVar$var33$12;
+		}
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample8)
+			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(guard1) {
+			if(!fixedFlag$sample8)
+				bias = b;
+		} else {
+			c[0] = (b / 2);
+			c[1] = (b / 2);
+			
+			// Reduction of array c
+			// 
+			// A generated name to prevent name collisions if the reduction is implemented more
+			// than once in inference and probability code. Initialize the variable to the unit
+			// value
+			double reduceVar$var33$9 = 0.0;
+			
+			// For each index in the array to be reduced
+			for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
+				// Set the left hand term of the reduction function to the return variable value.
+				double i$var30 = reduceVar$var33$9;
+				
+				// Set the right hand term to a value from the array c
+				double j = c[cv$reduction30Index];
+				
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				reduceVar$var33$9 = (i$var30 + j);
+			}
+			bias = reduceVar$var33$9;
+		}
+		for(int var46 = 0; var46 < samples; var46 += 1)
+			flips[var46] = DistributionSampling.sampleBernoulli(RNG$, bias);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample8)
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		if(guard1) {
@@ -1307,42 +1384,40 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample8)
 			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 		if(guard1) {
 			if(!fixedFlag$sample8)
 				bias = b;
 		} else {
-			if(!fixedFlag$sample8)
-				c[0] = (b / 2);
-			if(!fixedFlag$sample8)
-				c[1] = (b / 2);
+			c[0] = (b / 2);
+			c[1] = (b / 2);
 			
 			// Reduction of array c
 			// 
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$var33$9 = 0.0;
+			double reduceVar$var33$11 = 0.0;
 			
 			// For each index in the array to be reduced
 			for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
-				double i$var30 = reduceVar$var33$9;
+				double i$var30 = reduceVar$var33$11;
 				
 				// Set the right hand term to a value from the array c
 				double j = c[cv$reduction30Index];
 				
 				// Execute the reduction function, saving the result into the return value.
-				if(!fixedFlag$sample8)
-					// Copy the result of the reduction into the variable returned by the reduction.
-					reduceVar$var33$9 = (i$var30 + j);
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				reduceVar$var33$11 = (i$var30 + j);
 			}
-			if(!fixedFlag$sample8)
-				bias = reduceVar$var33$9;
+			bias = reduceVar$var33$11;
 		}
 	}
 
@@ -1393,19 +1468,9 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			logProbability$var47 = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -1452,52 +1517,6 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbabilityValue$sample50();
 	}
 
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample8)
-			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(guard1) {
-			if(!fixedFlag$sample8)
-				bias = b;
-		} else {
-			if(!fixedFlag$sample8)
-				c[0] = (b / 2);
-			if(!fixedFlag$sample8)
-				c[1] = (b / 2);
-			
-			// Reduction of array c
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			double reduceVar$var33$11 = 0.0;
-			
-			// For each index in the array to be reduced
-			for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
-				// Set the left hand term of the reduction function to the return variable value.
-				double i$var30 = reduceVar$var33$11;
-				
-				// Set the right hand term to a value from the array c
-				double j = c[cv$reduction30Index];
-				
-				// Execute the reduction function, saving the result into the return value.
-				if(!fixedFlag$sample8)
-					// Copy the result of the reduction into the variable returned by the reduction.
-					reduceVar$var33$11 = (i$var30 + j);
-			}
-			if(!fixedFlag$sample8)
-				bias = reduceVar$var33$11;
-		}
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
-	}
-
 	// Method to propagate observed values back into the model.
 	@Override
 	public final void propagateObservedValues() {
@@ -1515,33 +1534,30 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			if(fixedFlag$sample8)
 				bias = b;
 		} else {
-			if(fixedFlag$sample8)
-				c[0] = (b / 2);
-			if(fixedFlag$sample8)
-				c[1] = (b / 2);
+			c[0] = (b / 2);
+			c[1] = (b / 2);
 			
 			// Reduction of array c
 			// 
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$var33$12 = 0.0;
+			double reduceVar$var33$13 = 0.0;
 			
 			// For each index in the array to be reduced
 			for(int cv$reduction30Index = 0; cv$reduction30Index < 2; cv$reduction30Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
-				double i$var30 = reduceVar$var33$12;
+				double i$var30 = reduceVar$var33$13;
 				
 				// Set the right hand term to a value from the array c
 				double j = c[cv$reduction30Index];
 				
 				// Execute the reduction function, saving the result into the return value.
-				if(fixedFlag$sample8)
-					// Copy the result of the reduction into the variable returned by the reduction.
-					reduceVar$var33$12 = (i$var30 + j);
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				reduceVar$var33$13 = (i$var30 + j);
 			}
-			if(fixedFlag$sample8)
-				bias = reduceVar$var33$12;
+			bias = reduceVar$var33$13;
 		}
 	}
 

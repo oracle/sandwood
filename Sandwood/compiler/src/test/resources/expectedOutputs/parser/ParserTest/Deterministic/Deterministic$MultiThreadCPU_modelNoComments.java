@@ -661,7 +661,49 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		parallelFor(RNG$, 0, states, 1,
+			(int forStart$var28, int forEnd$var28, int threadID$var28, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var28 = forStart$var28; var28 < forEnd$var28; var28 += 1) {
+						double[] var29 = m[var28];
+						if(!fixedFlag$sample29)
+							DistributionSampling.sampleDirichlet(RNG$1, v, states, var29);
+					}
+			}
+		);
+		for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
+			b[i$var46] = a[(i$var46 - 1)];
+			if(!fixedFlag$sample55)
+				a[i$var46] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var46]], states);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
+		parallelFor(RNG$, 0, states, 1,
+			(int forStart$var28, int forEnd$var28, int threadID$var28, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var28 = forStart$var28; var28 < forEnd$var28; var28 += 1) {
+						double[] var29 = m[var28];
+						if(!fixedFlag$sample29)
+							DistributionSampling.sampleDirichlet(RNG$1, v, states, var29);
+					}
+			}
+		);
+		for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
+			b[i$var46] = a[(i$var46 - 1)];
+			if(!fixedFlag$sample55)
+				a[i$var46] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var46]], states);
+		}
+		parallelFor(RNG$, 0, n, 1,
+			(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int j = forStart$j; j < forEnd$j; j += 1)
+						flips[j] = DistributionSampling.sampleBernoulli(RNG$1, (1 / a[(j + 1)]));
+			}
+		);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		parallelFor(RNG$, 0, states, 1,
 			(int forStart$var28, int forEnd$var28, int threadID$var28, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var28 = forStart$var28; var28 < forEnd$var28; var28 += 1) {
@@ -680,7 +722,7 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		parallelFor(RNG$, 0, states, 1,
 			(int forStart$var28, int forEnd$var28, int threadID$var28, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var28 = forStart$var28; var28 < forEnd$var28; var28 += 1) {
@@ -691,8 +733,7 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			}
 		);
 		for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
-			if(!fixedFlag$sample55)
-				b[i$var46] = a[(i$var46 - 1)];
+			b[i$var46] = a[(i$var46 - 1)];
 			if(!fixedFlag$sample55)
 				a[i$var46] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var46]], states);
 		}
@@ -767,12 +808,7 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample29)
 			logProbabilityValue$sample29();
@@ -798,26 +834,6 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void logProbabilityGeneration() {
-		parallelFor(RNG$, 0, states, 1,
-			(int forStart$var28, int forEnd$var28, int threadID$var28, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int var28 = forStart$var28; var28 < forEnd$var28; var28 += 1) {
-						double[] var29 = m[var28];
-						if(!fixedFlag$sample29)
-							DistributionSampling.sampleDirichlet(RNG$1, v, states, var29);
-					}
-			}
-		);
-		for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
-			if(!fixedFlag$sample55)
-				b[i$var46] = a[(i$var46 - 1)];
-			if(!fixedFlag$sample55)
-				a[i$var46] = DistributionSampling.sampleCategorical(RNG$, m[b[i$var46]], states);
-		}
-		logModelProbabilitiesVal();
-	}
-
-	@Override
 	public final void propagateObservedValues() {
 		boolean[] cv$source1 = flipsMeasured;
 		boolean[] cv$target1 = flips;
@@ -828,10 +844,8 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public final void setIntermediates() {
-		for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
-			if(fixedFlag$sample55)
-				b[i$var46] = a[(i$var46 - 1)];
-		}
+		for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
+			b[i$var46] = a[(i$var46 - 1)];
 	}
 
 	@Override

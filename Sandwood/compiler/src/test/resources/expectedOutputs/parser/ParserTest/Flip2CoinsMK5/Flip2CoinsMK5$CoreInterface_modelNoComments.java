@@ -14,5 +14,4 @@ interface Flip2CoinsMK5$CoreInterface extends org.sandwood.runtime.internal.mode
 	public double get$logProbability$flips();
 	public int[] get$shape();
 	public void set$shape(int[] cv$value);
-	public void logEvidenceGeneration();
 }

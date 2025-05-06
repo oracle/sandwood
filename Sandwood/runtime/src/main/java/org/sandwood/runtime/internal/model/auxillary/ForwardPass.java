@@ -43,7 +43,14 @@ public class ForwardPass {
 
         for(ComputedVariableInternal c:toSample)
             c.initializeSamples(iterations);
-        for(int i = 0; i < iterations; i++) {
+
+        // Run the first iteration copying through any fixed values to the intermediates.
+        core.forwardGenerationPrime();
+        for(ComputedVariableInternal c:toSample) {
+            c.ingestSample();
+        }
+
+        for(int i = 1; i < iterations; i++) {
             core.forwardGeneration();
             for(ComputedVariableInternal c:toSample) {
                 c.ingestSample();

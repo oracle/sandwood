@@ -718,7 +718,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		for(int var29 = 0; var29 < noCats; var29 += 1) {
 			double[] var30 = m[var29];
 			if(!fixedFlag$sample30)
@@ -735,7 +735,50 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		for(int var29 = 0; var29 < noCats; var29 += 1) {
+			double[] var30 = m[var29];
+			if(!fixedFlag$sample30)
+				DistributionSampling.sampleDirichlet(RNG$, v, noStates, var30);
+		}
+		for(int var45 = 0; var45 < noFlips; var45 += 1) {
+			if(!fixedFlag$sample47)
+				bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		}
+		for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1) {
+			if(!fixedFlag$sample62)
+				st[i$var58] = DistributionSampling.sampleCategorical(RNG$, m[i$var58], noStates);
+		}
+		for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
+			int reduceVar$var82$4 = 0;
+			for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1) {
+				int i$var79 = reduceVar$var82$4;
+				int j$var80 = st[cv$reduction78Index];
+				reduceVar$var82$4 = (i$var79 + j$var80);
+			}
+			flips[j$var73] = DistributionSampling.sampleBernoulli(RNG$, bias[reduceVar$var82$4]);
+		}
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		for(int var29 = 0; var29 < noCats; var29 += 1) {
+			double[] var30 = m[var29];
+			if(!fixedFlag$sample30)
+				DistributionSampling.sampleDirichlet(RNG$, v, noStates, var30);
+		}
+		for(int var45 = 0; var45 < noFlips; var45 += 1) {
+			if(!fixedFlag$sample47)
+				bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		}
+		for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1) {
+			if(!fixedFlag$sample62)
+				st[i$var58] = DistributionSampling.sampleCategorical(RNG$, m[i$var58], noStates);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		for(int var29 = 0; var29 < noCats; var29 += 1) {
 			double[] var30 = m[var29];
 			if(!fixedFlag$sample30)
@@ -819,12 +862,7 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample30)
 			logProbabilityValue$sample30();
@@ -851,24 +889,6 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbabilityValue$sample47();
 		logProbabilityValue$sample62();
 		logProbabilityValue$sample87();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		for(int var29 = 0; var29 < noCats; var29 += 1) {
-			double[] var30 = m[var29];
-			if(!fixedFlag$sample30)
-				DistributionSampling.sampleDirichlet(RNG$, v, noStates, var30);
-		}
-		for(int var45 = 0; var45 < noFlips; var45 += 1) {
-			if(!fixedFlag$sample47)
-				bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		}
-		for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1) {
-			if(!fixedFlag$sample62)
-				st[i$var58] = DistributionSampling.sampleCategorical(RNG$, m[i$var58], noStates);
-		}
-		logModelProbabilitiesVal();
 	}
 
 	@Override

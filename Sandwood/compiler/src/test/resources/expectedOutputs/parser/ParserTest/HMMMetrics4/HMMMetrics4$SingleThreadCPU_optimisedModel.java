@@ -5274,9 +5274,10 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample20)
 			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
 		
@@ -5406,10 +5407,129 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 	}
 
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample33) {
+			for(int var32 = 0; var32 < noStates; var32 += 1)
+				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var32]);
+		}
+		for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+			if(!fixedFlag$sample57)
+				st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$, initialStateDistribution, noStates);
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(!fixedFlag$sample76) {
+				int[] var67 = st[sample$var45];
+				for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
+					var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
+			}
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample134) {
+			for(int var119 = 0; var119 < noServers; var119 += 1) {
+				double[] var120 = current_metric_mean[var119];
+				for(int var129 = 0; var129 < noStates; var129 += 1)
+					var120[var129] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$));
+			}
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample162) {
+			for(int var146 = 0; var146 < noServers; var146 += 1) {
+				double[] var147 = current_metric_var[var146];
+				for(int var156 = 0; var156 < noStates; var156 += 1)
+					var147[var156] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+			}
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample190) {
+			for(int var173 = 0; var173 < noServers; var173 += 1) {
+				double[] var174 = current_metric_valid_bias[var173];
+				for(int var183 = 0; var183 < noStates; var183 += 1)
+					var174[var183] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+			}
+		}
+		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+			double[][] var211 = metric_g[sample$var196];
+			for(int server = 0; server < noServers; server += 1) {
+				boolean[] metric_valid_inner = metric_valid_g[sample$var196][server];
+				double[] metric_inner = var211[server];
+				for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+					metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
+					if(metric_valid_inner[timeStep$var226]) {
+						var245[sample$var196][server][timeStep$var226] = ((Math.sqrt(current_metric_var[server][st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$)) + current_metric_mean[server][st[sample$var196][timeStep$var226]]);
+						metric_inner[timeStep$var226] = var245[sample$var196][server][timeStep$var226];
+					}
+				}
+			}
+		}
+	}
+
 	// Method to execute the model code conventionally, excluding the elements that generate
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample33) {
+			for(int var32 = 0; var32 < noStates; var32 += 1)
+				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var32]);
+		}
+		for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+			if(!fixedFlag$sample57)
+				st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$, initialStateDistribution, noStates);
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(!fixedFlag$sample76) {
+				int[] var67 = st[sample$var45];
+				for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
+					var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
+			}
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample134) {
+			for(int var119 = 0; var119 < noServers; var119 += 1) {
+				double[] var120 = current_metric_mean[var119];
+				for(int var129 = 0; var129 < noStates; var129 += 1)
+					var120[var129] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$));
+			}
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample162) {
+			for(int var146 = 0; var146 < noServers; var146 += 1) {
+				double[] var147 = current_metric_var[var146];
+				for(int var156 = 0; var156 < noStates; var156 += 1)
+					var147[var156] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+			}
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample190) {
+			for(int var173 = 0; var173 < noServers; var173 += 1) {
+				double[] var174 = current_metric_valid_bias[var173];
+				for(int var183 = 0; var183 < noStates; var183 += 1)
+					var174[var183] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+			}
+		}
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample20)
 			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
 		
@@ -5644,19 +5764,9 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		}
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -5724,64 +5834,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbabilityValue$sample190();
 		logProbabilityValue$sample241();
 		logProbabilityValue$sample256();
-	}
-
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample33) {
-			for(int var32 = 0; var32 < noStates; var32 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var32]);
-		}
-		for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-			if(!fixedFlag$sample57)
-				st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$, initialStateDistribution, noStates);
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample76) {
-				int[] var67 = st[sample$var45];
-				for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
-					var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
-			}
-		}
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample134) {
-			for(int var119 = 0; var119 < noServers; var119 += 1) {
-				double[] var120 = current_metric_mean[var119];
-				for(int var129 = 0; var129 < noStates; var129 += 1)
-					var120[var129] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$));
-			}
-		}
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample162) {
-			for(int var146 = 0; var146 < noServers; var146 += 1) {
-				double[] var147 = current_metric_var[var146];
-				for(int var156 = 0; var156 < noStates; var156 += 1)
-					var147[var156] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
-			}
-		}
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample190) {
-			for(int var173 = 0; var173 < noServers; var173 += 1) {
-				double[] var174 = current_metric_valid_bias[var173];
-				for(int var183 = 0; var183 < noStates; var183 += 1)
-					var174[var183] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			}
-		}
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
 	}
 
 	// Method to propagate observed values back into the model.

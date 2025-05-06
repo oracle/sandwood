@@ -28,5 +28,4 @@ interface LDATest$CoreInterface extends org.sandwood.runtime.internal.model.Core
 	public int[][] get$w();
 	public int[][] get$z();
 	public void set$z(int[][] cv$value);
-	public void logEvidenceGeneration();
 }

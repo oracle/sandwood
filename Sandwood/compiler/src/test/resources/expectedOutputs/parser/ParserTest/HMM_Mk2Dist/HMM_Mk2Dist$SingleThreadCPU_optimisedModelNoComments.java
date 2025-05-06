@@ -1185,7 +1185,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample42) {
 			for(int var41 = 0; var41 < noStates; var41 += 1)
 				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var41]);
@@ -1255,7 +1255,66 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample42) {
+			for(int var41 = 0; var41 < noStates; var41 += 1)
+				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var41]);
+		}
+		if(!fixedFlag$sample57) {
+			for(int var55 = 0; var55 < noStates; var55 += 1)
+				DistributionSampling.sampleDirichlet(RNG$, v2, noEvents, bias[var55]);
+		}
+		if(!fixedFlag$sample78)
+			DistributionSampling.sampleDirichlet(RNG$, v, noStates, weights);
+		if(!fixedFlag$sample80)
+			initialState = DistributionSampling.sampleCategorical(RNG$, weights, noStates);
+		if(!fixedFlag$sample95) {
+			for(int i$var87 = 0; i$var87 < samples; i$var87 += 1)
+				st[i$var87][0] = DistributionSampling.sampleCategorical(RNG$, m[initialState], noStates);
+		}
+		if(!fixedFlag$sample126) {
+			for(int i$var104 = 0; i$var104 < samples; i$var104 += 1) {
+				int[] var116 = st[i$var104];
+				for(int j$var115 = 1; j$var115 < length$eventsMeasured[i$var104]; j$var115 += 1)
+					var116[j$var115] = DistributionSampling.sampleCategorical(RNG$, m[st[i$var104][(j$var115 - 1)]], noStates);
+			}
+		}
+		for(int i$var136 = 0; i$var136 < samples; i$var136 += 1) {
+			int[] var150 = events[i$var136];
+			for(int j$var149 = 1; j$var149 < length$eventsMeasured[i$var136]; j$var149 += 1)
+				var150[j$var149] = (DistributionSampling.sampleCategorical(RNG$, bias[st[i$var136][j$var149]], noEvents) + 1);
+		}
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample42) {
+			for(int var41 = 0; var41 < noStates; var41 += 1)
+				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var41]);
+		}
+		if(!fixedFlag$sample57) {
+			for(int var55 = 0; var55 < noStates; var55 += 1)
+				DistributionSampling.sampleDirichlet(RNG$, v2, noEvents, bias[var55]);
+		}
+		if(!fixedFlag$sample78)
+			DistributionSampling.sampleDirichlet(RNG$, v, noStates, weights);
+		if(!fixedFlag$sample80)
+			initialState = DistributionSampling.sampleCategorical(RNG$, weights, noStates);
+		if(!fixedFlag$sample95) {
+			for(int i$var87 = 0; i$var87 < samples; i$var87 += 1)
+				st[i$var87][0] = DistributionSampling.sampleCategorical(RNG$, m[initialState], noStates);
+		}
+		if(!fixedFlag$sample126) {
+			for(int i$var104 = 0; i$var104 < samples; i$var104 += 1) {
+				int[] var116 = st[i$var104];
+				for(int j$var115 = 1; j$var115 < length$eventsMeasured[i$var104]; j$var115 += 1)
+					var116[j$var115] = DistributionSampling.sampleCategorical(RNG$, m[st[i$var104][(j$var115 - 1)]], noStates);
+			}
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample42) {
 			for(int var41 = 0; var41 < noStates; var41 += 1)
 				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var41]);
@@ -1390,12 +1449,7 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample42)
 			logProbabilityValue$sample42();
@@ -1430,34 +1484,6 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbabilityValue$sample95();
 		logProbabilityValue$sample126();
 		logProbabilityValue$sample159();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample42) {
-			for(int var41 = 0; var41 < noStates; var41 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var41]);
-		}
-		if(!fixedFlag$sample57) {
-			for(int var55 = 0; var55 < noStates; var55 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, v2, noEvents, bias[var55]);
-		}
-		if(!fixedFlag$sample78)
-			DistributionSampling.sampleDirichlet(RNG$, v, noStates, weights);
-		if(!fixedFlag$sample80)
-			initialState = DistributionSampling.sampleCategorical(RNG$, weights, noStates);
-		if(!fixedFlag$sample95) {
-			for(int i$var87 = 0; i$var87 < samples; i$var87 += 1)
-				st[i$var87][0] = DistributionSampling.sampleCategorical(RNG$, m[initialState], noStates);
-		}
-		if(!fixedFlag$sample126) {
-			for(int i$var104 = 0; i$var104 < samples; i$var104 += 1) {
-				int[] var116 = st[i$var104];
-				for(int j$var115 = 1; j$var115 < length$eventsMeasured[i$var104]; j$var115 += 1)
-					var116[j$var115] = DistributionSampling.sampleCategorical(RNG$, m[st[i$var104][(j$var115 - 1)]], noStates);
-			}
-		}
-		logModelProbabilitiesVal();
 	}
 
 	@Override

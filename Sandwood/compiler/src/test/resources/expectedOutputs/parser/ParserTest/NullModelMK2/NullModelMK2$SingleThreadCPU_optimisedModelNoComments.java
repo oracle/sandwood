@@ -173,13 +173,26 @@ class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample10)
 			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample10)
+			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
+		positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample10)
+			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample10)
 			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
 	}
@@ -208,12 +221,7 @@ class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample10)
 			logProbabilityValue$sample10();
@@ -232,13 +240,6 @@ class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample10();
 		logProbabilityValue$sample12();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample10)
-			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
-		logModelProbabilitiesVal();
 	}
 
 	@Override

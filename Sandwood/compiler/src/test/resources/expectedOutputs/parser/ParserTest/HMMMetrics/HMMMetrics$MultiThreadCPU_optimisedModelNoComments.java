@@ -3262,7 +3262,7 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample30)
 			parallelFor(RNG$, 0, noStates, 1,
 				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -3372,7 +3372,152 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample30)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var29]);
+				}
+			);
+
+		if(!fixedFlag$sample36)
+			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!fixedFlag$sample39)
+			st[0] = DistributionSampling.sampleCategorical(RNG$, initialStateDistribution, noStates);
+		if(!fixedFlag$sample57) {
+			for(int i$var50 = 1; i$var50 < samples; i$var50 += 1)
+				st[i$var50] = DistributionSampling.sampleCategorical(RNG$, m[st[(i$var50 - 1)]], noStates);
+		}
+		if(!fixedFlag$sample77)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var75, int forEnd$var75, int threadID$var75, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var75 = forStart$var75; var75 < forEnd$var75; var75 += 1)
+							cpuMean[var75] = ((DistributionSampling.sampleGaussian(RNG$1) * 2.932575659723036) + 16.0);
+				}
+			);
+
+		if(!fixedFlag$sample95)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var93, int forEnd$var93, int threadID$var93, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var93 = forStart$var93; var93 < forEnd$var93; var93 += 1)
+							memMean[var93] = (DistributionSampling.sampleGaussian(RNG$1) + 94.0);
+				}
+			);
+
+		if(!fixedFlag$sample113)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var111, int forEnd$var111, int threadID$var111, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var111 = forStart$var111; var111 < forEnd$var111; var111 += 1)
+							pageFaultsMean[var111] = ((DistributionSampling.sampleGaussian(RNG$1) * 579.2667779184303) + 814.0);
+				}
+			);
+
+		if(!fixedFlag$sample130)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var128, int forEnd$var128, int threadID$var128, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var128 = forStart$var128; var128 < forEnd$var128; var128 += 1)
+							cpuVar[var128] = DistributionSampling.sampleInverseGamma(RNG$1, 5.0, 0.5);
+				}
+			);
+
+		if(!fixedFlag$sample147)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var145, int forEnd$var145, int threadID$var145, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var145 = forStart$var145; var145 < forEnd$var145; var145 += 1)
+							memVar[var145] = DistributionSampling.sampleInverseGamma(RNG$1, 5.0, 0.5);
+				}
+			);
+
+		if(!fixedFlag$sample164)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var162, int forEnd$var162, int threadID$var162, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var162 = forStart$var162; var162 < forEnd$var162; var162 += 1)
+							pageFaultsVar[var162] = DistributionSampling.sampleInverseGamma(RNG$1, 5.0, 0.5);
+				}
+			);
+
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$i$var174, int forEnd$i$var174, int threadID$i$var174, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int i$var174 = forStart$i$var174; i$var174 < forEnd$i$var174; i$var174 += 1) {
+						cpu[i$var174] = ((Math.sqrt(cpuVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$1)) + cpuMean[st[i$var174]]);
+						mem[i$var174] = ((Math.sqrt(memVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$1)) + memMean[st[i$var174]]);
+						pageFaults[i$var174] = ((Math.sqrt(pageFaultsVar[st[i$var174]]) * DistributionSampling.sampleGaussian(RNG$1)) + pageFaultsMean[st[i$var174]]);
+					}
+			}
+		);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample30)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var29]);
+				}
+			);
+
+		if(!fixedFlag$sample36)
+			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!fixedFlag$sample39)
+			st[0] = DistributionSampling.sampleCategorical(RNG$, initialStateDistribution, noStates);
+		if(!fixedFlag$sample57) {
+			for(int i$var50 = 1; i$var50 < samples; i$var50 += 1)
+				st[i$var50] = DistributionSampling.sampleCategorical(RNG$, m[st[(i$var50 - 1)]], noStates);
+		}
+		if(!fixedFlag$sample77)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var75, int forEnd$var75, int threadID$var75, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var75 = forStart$var75; var75 < forEnd$var75; var75 += 1)
+							cpuMean[var75] = ((DistributionSampling.sampleGaussian(RNG$1) * 2.932575659723036) + 16.0);
+				}
+			);
+
+		if(!fixedFlag$sample95)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var93, int forEnd$var93, int threadID$var93, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var93 = forStart$var93; var93 < forEnd$var93; var93 += 1)
+							memMean[var93] = (DistributionSampling.sampleGaussian(RNG$1) + 94.0);
+				}
+			);
+
+		if(!fixedFlag$sample113)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var111, int forEnd$var111, int threadID$var111, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var111 = forStart$var111; var111 < forEnd$var111; var111 += 1)
+							pageFaultsMean[var111] = ((DistributionSampling.sampleGaussian(RNG$1) * 579.2667779184303) + 814.0);
+				}
+			);
+
+		if(!fixedFlag$sample130)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var128, int forEnd$var128, int threadID$var128, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var128 = forStart$var128; var128 < forEnd$var128; var128 += 1)
+							cpuVar[var128] = DistributionSampling.sampleInverseGamma(RNG$1, 5.0, 0.5);
+				}
+			);
+
+		if(!fixedFlag$sample147)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var145, int forEnd$var145, int threadID$var145, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var145 = forStart$var145; var145 < forEnd$var145; var145 += 1)
+							memVar[var145] = DistributionSampling.sampleInverseGamma(RNG$1, 5.0, 0.5);
+				}
+			);
+
+		if(!fixedFlag$sample164)
+			parallelFor(RNG$, 0, noStates, 1,
+				(int forStart$var162, int forEnd$var162, int threadID$var162, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var162 = forStart$var162; var162 < forEnd$var162; var162 += 1)
+							pageFaultsVar[var162] = DistributionSampling.sampleInverseGamma(RNG$1, 5.0, 0.5);
+				}
+			);
+
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample30)
 			parallelFor(RNG$, 0, noStates, 1,
 				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -3654,12 +3799,7 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample30)
 			logProbabilityValue$sample30();
@@ -3716,75 +3856,6 @@ class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.model.Core
 		logProbabilityValue$sample180();
 		logProbabilityValue$sample185();
 		logProbabilityValue$sample190();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample30)
-			parallelFor(RNG$, 0, noStates, 1,
-				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var29]);
-				}
-			);
-
-		if(!fixedFlag$sample36)
-			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
-		if(!fixedFlag$sample39)
-			st[0] = DistributionSampling.sampleCategorical(RNG$, initialStateDistribution, noStates);
-		if(!fixedFlag$sample57) {
-			for(int i$var50 = 1; i$var50 < samples; i$var50 += 1)
-				st[i$var50] = DistributionSampling.sampleCategorical(RNG$, m[st[(i$var50 - 1)]], noStates);
-		}
-		if(!fixedFlag$sample77)
-			parallelFor(RNG$, 0, noStates, 1,
-				(int forStart$var75, int forEnd$var75, int threadID$var75, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var75 = forStart$var75; var75 < forEnd$var75; var75 += 1)
-							cpuMean[var75] = ((DistributionSampling.sampleGaussian(RNG$1) * 2.932575659723036) + 16.0);
-				}
-			);
-
-		if(!fixedFlag$sample95)
-			parallelFor(RNG$, 0, noStates, 1,
-				(int forStart$var93, int forEnd$var93, int threadID$var93, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var93 = forStart$var93; var93 < forEnd$var93; var93 += 1)
-							memMean[var93] = (DistributionSampling.sampleGaussian(RNG$1) + 94.0);
-				}
-			);
-
-		if(!fixedFlag$sample113)
-			parallelFor(RNG$, 0, noStates, 1,
-				(int forStart$var111, int forEnd$var111, int threadID$var111, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var111 = forStart$var111; var111 < forEnd$var111; var111 += 1)
-							pageFaultsMean[var111] = ((DistributionSampling.sampleGaussian(RNG$1) * 579.2667779184303) + 814.0);
-				}
-			);
-
-		if(!fixedFlag$sample130)
-			parallelFor(RNG$, 0, noStates, 1,
-				(int forStart$var128, int forEnd$var128, int threadID$var128, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var128 = forStart$var128; var128 < forEnd$var128; var128 += 1)
-							cpuVar[var128] = DistributionSampling.sampleInverseGamma(RNG$1, 5.0, 0.5);
-				}
-			);
-
-		if(!fixedFlag$sample147)
-			parallelFor(RNG$, 0, noStates, 1,
-				(int forStart$var145, int forEnd$var145, int threadID$var145, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var145 = forStart$var145; var145 < forEnd$var145; var145 += 1)
-							memVar[var145] = DistributionSampling.sampleInverseGamma(RNG$1, 5.0, 0.5);
-				}
-			);
-
-		if(!fixedFlag$sample164)
-			parallelFor(RNG$, 0, noStates, 1,
-				(int forStart$var162, int forEnd$var162, int threadID$var162, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var162 = forStart$var162; var162 < forEnd$var162; var162 += 1)
-							pageFaultsVar[var162] = DistributionSampling.sampleInverseGamma(RNG$1, 5.0, 0.5);
-				}
-			);
-
-		logModelProbabilitiesVal();
 	}
 
 	@Override

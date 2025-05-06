@@ -29,5 +29,4 @@ interface GaussianMixtureTest$CoreInterface extends org.sandwood.runtime.interna
 	public void set$xMeasured(double[] cv$value);
 	public int[] get$z();
 	public void set$z(int[] cv$value);
-	public void logEvidenceGeneration();
 }

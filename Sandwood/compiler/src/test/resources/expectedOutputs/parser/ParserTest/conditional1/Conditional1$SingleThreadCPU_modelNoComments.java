@@ -372,7 +372,7 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 		if(!guard) {
@@ -389,7 +389,38 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample4)
+			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+		if(guard)
+			value = 1.0;
+		else {
+			if(!fixedFlag$sample16)
+				var14 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			if(!(fixedFlag$sample4 && fixedFlag$sample16))
+				value = var14;
+		}
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample4)
+			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+		if(!guard) {
+			if(!fixedFlag$sample16) {
+				boolean observationGuard$var14 = false;
+				{
+					if(!guard)
+						observationGuard$var14 = true;
+				}
+				if(!observationGuard$var14)
+					var14 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			}
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 		if(!guard) {
@@ -434,12 +465,7 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample4)
 			logProbabilityValue$sample4();
@@ -458,11 +484,6 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample4();
 		logProbabilityValue$sample16();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		logModelProbabilitiesVal();
 	}
 
 	@Override

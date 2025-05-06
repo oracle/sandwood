@@ -79,8 +79,4 @@ interface AnonymousSample$CoreInterface extends org.sandwood.runtime.internal.mo
 
 	// Setter for priorSigma2.
 	public void set$priorSigma2(double cv$value);
-
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	public void logEvidenceGeneration();
 }

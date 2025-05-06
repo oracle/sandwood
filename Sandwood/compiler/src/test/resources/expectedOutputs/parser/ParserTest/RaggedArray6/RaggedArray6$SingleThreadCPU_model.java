@@ -1135,9 +1135,74 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		if(!fixedFlag$sample47)
+			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
+		
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$48_9 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 34 and consumer double[] 46.
+		{
+			if((1 == y)) {
+				if(!fixedFlag$sample50)
+					lengthCV$a$48_9 = 3;
+			}
+		}
+		
+		// Looking for a path between Put 16 and consumer double[] 46.
+		{
+			if((0 == y)) {
+				if(!fixedFlag$sample50)
+					lengthCV$a$48_9 = 2;
+			}
+		}
+		if(!fixedFlag$sample50)
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_9, d);
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample47)
+			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
+		
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$48_6 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 34 and consumer double[] 46.
+		{
+			if((1 == y)) {
+				if(!fixedFlag$sample50)
+					lengthCV$a$48_6 = 3;
+			}
+		}
+		
+		// Looking for a path between Put 16 and consumer double[] 46.
+		{
+			if((0 == y)) {
+				if(!fixedFlag$sample50)
+					lengthCV$a$48_6 = 2;
+			}
+		}
+		if(!fixedFlag$sample50)
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_6, d);
+		for(int var62 = 0; var62 < length$obs_measured; var62 += 1)
+			obs[var62] = DistributionSampling.sampleBernoulli(RNG$, d[y]);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample47)
 			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
 		
@@ -1166,14 +1231,15 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample47)
 			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
 		
 		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$48_6 = -1;
+		int lengthCV$a$48_8 = -1;
 		
 		// calculate array length.
 		// 
@@ -1181,7 +1247,7 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		{
 			if((1 == y)) {
 				if(!fixedFlag$sample50)
-					lengthCV$a$48_6 = 3;
+					lengthCV$a$48_8 = 3;
 			}
 		}
 		
@@ -1189,11 +1255,11 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		{
 			if((0 == y)) {
 				if(!fixedFlag$sample50)
-					lengthCV$a$48_6 = 2;
+					lengthCV$a$48_8 = 2;
 			}
 		}
 		if(!fixedFlag$sample50)
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_6, d);
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_8, d);
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -1255,19 +1321,9 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$var63 = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -1316,43 +1372,6 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbabilityValue$sample47();
 		logProbabilityValue$sample50();
 		logProbabilityValue$sample65();
-	}
-
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample47)
-			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
-		
-		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$48_8 = -1;
-		
-		// calculate array length.
-		// 
-		// Looking for a path between Put 34 and consumer double[] 46.
-		{
-			if((1 == y)) {
-				if(!fixedFlag$sample50)
-					lengthCV$a$48_8 = 3;
-			}
-		}
-		
-		// Looking for a path between Put 16 and consumer double[] 46.
-		{
-			if((0 == y)) {
-				if(!fixedFlag$sample50)
-					lengthCV$a$48_8 = 2;
-			}
-		}
-		if(!fixedFlag$sample50)
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_8, d);
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
 	}
 
 	// Method to propagate observed values back into the model.

@@ -243,13 +243,33 @@ class Conditional2c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample4)
+			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+		if(!fixedFlag$sample10)
+			u = DistributionSampling.sampleUniform(RNG$);
+		v = (u + 1);
+		if(guard)
+			value[0] = 1.0;
+		else
+			value[0] = v;
+		value2[0] = value[0];
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample4)
+			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 	}
@@ -279,12 +299,7 @@ class Conditional2c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample4)
 			logProbabilityValue$sample4();
@@ -303,11 +318,6 @@ class Conditional2c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample4();
 		logProbabilityValue$sample10();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		logModelProbabilitiesVal();
 	}
 
 	@Override
