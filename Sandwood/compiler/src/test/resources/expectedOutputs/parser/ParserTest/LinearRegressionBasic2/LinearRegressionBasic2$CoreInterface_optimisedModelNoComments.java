@@ -23,5 +23,4 @@ interface LinearRegressionBasic2$CoreInterface extends org.sandwood.runtime.inte
 	public double[] get$y();
 	public double[] get$yMeasured();
 	public void set$yMeasured(double[] cv$value);
-	public void logEvidenceGeneration();
 }

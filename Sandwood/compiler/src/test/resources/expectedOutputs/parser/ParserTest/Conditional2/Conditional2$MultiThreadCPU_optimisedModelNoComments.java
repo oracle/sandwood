@@ -221,23 +221,43 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(guard)
 			value[0] = 1.0;
 		else {
-			if(!fixedFlag$sample21) {
+			if(!fixedFlag$sample21)
 				var19 = DistributionSampling.sampleUniform(RNG$);
+			if((!fixedFlag$sample4 || !fixedFlag$sample21))
 				value[0] = var19;
-			}
 		}
 		if((!fixedFlag$sample4 || !fixedFlag$sample21))
 			value2[0] = value[0];
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample4)
+			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+		if(guard)
+			value[0] = 1.0;
+		else {
+			if(!fixedFlag$sample21)
+				var19 = DistributionSampling.sampleUniform(RNG$);
+			value[0] = var19;
+		}
+		value2[0] = value[0];
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample4)
+			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 	}
@@ -267,12 +287,7 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample4)
 			logProbabilityValue$sample4();
@@ -291,11 +306,6 @@ class Conditional2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample4();
 		logProbabilityValue$sample21();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		logModelProbabilitiesVal();
 	}
 
 	@Override

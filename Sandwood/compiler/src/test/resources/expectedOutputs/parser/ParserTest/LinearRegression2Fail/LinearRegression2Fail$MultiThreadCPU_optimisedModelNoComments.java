@@ -314,7 +314,7 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample7)
 			b0 = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
 		if(!fixedFlag$sample11)
@@ -324,7 +324,33 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample7)
+			b0 = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
+		if(!fixedFlag$sample11)
+			b1 = ((DistributionSampling.sampleGaussian(RNG$) * 2.23606797749979) + 1.0);
+		if(!fixedFlag$sample15)
+			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+		parallelFor(RNG$, 0, noSamples, 1,
+			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int i = forStart$i; i < forEnd$i; i += 1)
+						y[i] = (((Math.sqrt(variance) * DistributionSampling.sampleGaussian(RNG$1)) + b0) + (b1 * x[i]));
+			}
+		);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample7)
+			b0 = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
+		if(!fixedFlag$sample11)
+			b1 = ((DistributionSampling.sampleGaussian(RNG$) * 2.23606797749979) + 1.0);
+		if(!fixedFlag$sample15)
+			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample7)
 			b0 = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
 		if(!fixedFlag$sample11)
@@ -380,12 +406,7 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample7)
 			logProbabilityValue$sample7();
@@ -412,17 +433,6 @@ class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.internal
 		logProbabilityValue$sample11();
 		logProbabilityValue$sample15();
 		logProbabilityValue$sample31();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample7)
-			b0 = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
-		if(!fixedFlag$sample11)
-			b1 = ((DistributionSampling.sampleGaussian(RNG$) * 2.23606797749979) + 1.0);
-		if(!fixedFlag$sample15)
-			variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
-		logModelProbabilitiesVal();
 	}
 
 	@Override

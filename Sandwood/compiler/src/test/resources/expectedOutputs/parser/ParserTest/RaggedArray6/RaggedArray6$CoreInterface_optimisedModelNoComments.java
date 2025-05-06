@@ -19,5 +19,4 @@ interface RaggedArray6$CoreInterface extends org.sandwood.runtime.internal.model
 	public void set$obs_measured(boolean[] cv$value);
 	public int get$y();
 	public void set$y(int cv$value);
-	public void logEvidenceGeneration();
 }

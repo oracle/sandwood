@@ -558,7 +558,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample28)
 			parallelFor(RNG$, 0, nCoins, 1,
 				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -586,7 +586,69 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample28)
+			parallelFor(RNG$, 0, nCoins, 1,
+				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, nCoins, m[var27]);
+				}
+			);
+
+		if(!fixedFlag$sample32)
+			DistributionSampling.sampleDirichlet(RNG$, v, nCoins, initialCoin);
+		if(!fixedFlag$sample47)
+			parallelFor(RNG$, 0, nCoins, 1,
+				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
+							bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				}
+			);
+
+		if(!fixedFlag$sample53)
+			st[0] = DistributionSampling.sampleCategorical(RNG$, initialCoin, nCoins);
+		if(!fixedFlag$sample71) {
+			for(int i = 1; i < nFlips; i += 1)
+				st[i] = DistributionSampling.sampleCategorical(RNG$, m[st[(i - 1)]], nCoins);
+		}
+		parallelFor(RNG$, 0, nFlips, 1,
+			(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int j = forStart$j; j < forEnd$j; j += 1)
+						flips[j] = DistributionSampling.sampleBernoulli(RNG$1, bias[st[j]]);
+			}
+		);
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample28)
+			parallelFor(RNG$, 0, nCoins, 1,
+				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, nCoins, m[var27]);
+				}
+			);
+
+		if(!fixedFlag$sample32)
+			DistributionSampling.sampleDirichlet(RNG$, v, nCoins, initialCoin);
+		if(!fixedFlag$sample47)
+			parallelFor(RNG$, 0, nCoins, 1,
+				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
+							bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				}
+			);
+
+		if(!fixedFlag$sample53)
+			st[0] = DistributionSampling.sampleCategorical(RNG$, initialCoin, nCoins);
+		if(!fixedFlag$sample71) {
+			for(int i = 1; i < nFlips; i += 1)
+				st[i] = DistributionSampling.sampleCategorical(RNG$, m[st[(i - 1)]], nCoins);
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample28)
 			parallelFor(RNG$, 0, nCoins, 1,
 				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -714,12 +776,7 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample28)
 			logProbabilityValue$sample28();
@@ -754,35 +811,6 @@ class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		logProbabilityValue$sample53();
 		logProbabilityValue$sample71();
 		logProbabilityValue$sample87();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		if(!fixedFlag$sample28)
-			parallelFor(RNG$, 0, nCoins, 1,
-				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, nCoins, m[var27]);
-				}
-			);
-
-		if(!fixedFlag$sample32)
-			DistributionSampling.sampleDirichlet(RNG$, v, nCoins, initialCoin);
-		if(!fixedFlag$sample47)
-			parallelFor(RNG$, 0, nCoins, 1,
-				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
-					for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
-							bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
-				}
-			);
-
-		if(!fixedFlag$sample53)
-			st[0] = DistributionSampling.sampleCategorical(RNG$, initialCoin, nCoins);
-		if(!fixedFlag$sample71) {
-			for(int i = 1; i < nFlips; i += 1)
-				st[i] = DistributionSampling.sampleCategorical(RNG$, m[st[(i - 1)]], nCoins);
-		}
-		logModelProbabilitiesVal();
 	}
 
 	@Override

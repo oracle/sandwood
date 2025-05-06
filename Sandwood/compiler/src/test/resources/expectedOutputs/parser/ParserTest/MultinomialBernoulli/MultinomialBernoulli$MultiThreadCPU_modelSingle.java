@@ -1201,9 +1201,63 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
+		if(!fixedFlag$sample20)
+			DistributionSampling.sampleMultinomial(RNG$, p, 3, n, prior);
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
+		if(!fixedFlag$sample20)
+			DistributionSampling.sampleMultinomial(RNG$, p, 3, n, prior);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, length, 3,
+			(int forStart$i$var47, int forEnd$i$var47, int threadID$i$var47, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var47 = forStart$i$var47; i$var47 < forEnd$i$var47; i$var47 += 3)
+						output[i$var47] = DistributionSampling.sampleBernoulli(RNG$1, (prior[0] / n));
+			}
+		);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 1, length, 3,
+			(int forStart$i$var59, int forEnd$i$var59, int threadID$i$var59, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var59 = forStart$i$var59; i$var59 < forEnd$i$var59; i$var59 += 3)
+						output[i$var59] = DistributionSampling.sampleBernoulli(RNG$1, (prior[1] / n));
+			}
+		);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 2, length, 3,
+			(int forStart$i$var71, int forEnd$i$var71, int threadID$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var71 = forStart$i$var71; i$var71 < forEnd$i$var71; i$var71 += 3)
+						output[i$var71] = DistributionSampling.sampleBernoulli(RNG$1, (prior[2] / n));
+			}
+		);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
 		if(!fixedFlag$sample20)
@@ -1211,9 +1265,10 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample17)
 			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
 		if(!fixedFlag$sample20)
@@ -1281,19 +1336,9 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			logProbability$var72 = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -1348,22 +1393,6 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 		logProbabilityValue$sample48();
 		logProbabilityValue$sample60();
 		logProbabilityValue$sample72();
-	}
-
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleMultinomial(RNG$, p, 3, n, prior);
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
 	}
 
 	// Method to propagate observed values back into the model.

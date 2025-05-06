@@ -402,7 +402,7 @@ public abstract class Model implements HasProbability, AutoCloseable {
             propagateObservations();
 
             if(!distributionsPrimed) {
-                core.forwardGenerationDistributionsNoOutputs();
+                core.forwardGenerationDistributionsNoOutputsPrime();
                 distributionsPrimed = true;
                 lastForward = false;
             }
@@ -421,11 +421,14 @@ public abstract class Model implements HasProbability, AutoCloseable {
                     + missingInferProbabilities());
         allocate();
         propagateObservations();
+        if(!lastForward)
+            core.forwardGenerationValuesNoOutputsPrime();
 
         logModelProbability = ProbabilityCalculation.generateLogProbabilities(iterations, core, probabilityVariables);
         probabilityComputed = true;
         lastForward = true;
         distributionsPrimed = false;
+        intermediatesPrimed = true;
     }
 
     /**
@@ -446,12 +449,15 @@ public abstract class Model implements HasProbability, AutoCloseable {
                     + missingInferProbabilities());
         allocate();
         propagateObservations();
+        if(!lastForward)
+            core.forwardGenerationValuesNoOutputsPrime();
 
         logModelProbability = ProbabilityCalculation.generateLogProbabilities(variance, initialIterations,
                 maxIterations, core, probabilityVariables);
         probabilityComputed = true;
         lastForward = true;
         distributionsPrimed = false;
+        intermediatesPrimed = true;
     }
 
     /**
@@ -469,12 +475,15 @@ public abstract class Model implements HasProbability, AutoCloseable {
                     + missingInferProbabilities());
         allocate();
         propagateObservations();
+        if(!lastForward)
+            core.forwardGenerationValuesNoOutputsPrime();
 
         logModelProbability = ProbabilityCalculation.generateLogProbabilities(variance, initialIterations,
                 Integer.MAX_VALUE, core, probabilityVariables);
         probabilityComputed = true;
         lastForward = true;
         distributionsPrimed = false;
+        intermediatesPrimed = true;
     }
 
     /**

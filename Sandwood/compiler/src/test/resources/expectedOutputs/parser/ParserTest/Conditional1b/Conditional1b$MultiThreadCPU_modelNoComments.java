@@ -367,13 +367,33 @@ class Conditional1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample4)
+			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+		if(!fixedFlag$sample8)
+			u = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+		if(guard)
+			value = 1.0;
+		else {
+			if(!(fixedFlag$sample4 && fixedFlag$sample8))
+				value = u;
+		}
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample4)
+			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 	}
@@ -407,12 +427,7 @@ class Conditional1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample4)
 			logProbabilityValue$sample4();
@@ -431,11 +446,6 @@ class Conditional1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		initializeLogProbabilityFields();
 		logProbabilityValue$sample4();
 		logProbabilityValue$sample8();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		logModelProbabilitiesVal();
 	}
 
 	@Override

@@ -611,7 +611,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// A generated name to prevent name collisions if the reduction is implemented more
 				// than once in inference and probability code. Initialize the variable to the unit
 				// value
-				int reduceVar$var82$6 = 0;
+				int reduceVar$var82$7 = 0;
 				
 				// For each index in the array to be reduced
 				for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
@@ -621,8 +621,8 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// 
 					// j$var80's comment
 					// Set the right hand term to a value from the array st
-					reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction78Index]);
-				double var83 = bias[reduceVar$var82$6];
+					reduceVar$var82$7 = (reduceVar$var82$7 + st[cv$reduction78Index]);
+				double var83 = bias[reduceVar$var82$7];
 				
 				// Record that the sample was reached.
 				cv$sampleReached = true;
@@ -759,7 +759,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// A generated name to prevent name collisions if the reduction is implemented more
 		// than once in inference and probability code. Initialize the variable to the unit
 		// value
-		int reduceVar$var82$4 = 0;
+		int reduceVar$var82$5 = 0;
 		
 		// For each index in the array to be reduced
 		for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
@@ -769,8 +769,8 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// j$var80's comment
 			// Set the right hand term to a value from the array st
-			reduceVar$var82$4 = (reduceVar$var82$4 + st[cv$reduction78Index]);
-		if((var45 == reduceVar$var82$4)) {
+			reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction78Index]);
+		if((var45 == reduceVar$var82$5)) {
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
 				// Processing sample task 87 of consumer random variable null.
 				// 
@@ -824,7 +824,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			int reduceVar$var82$5 = 0;
+			int reduceVar$var82$6 = 0;
 			
 			// Reduce for every value except a masked value which will be skipped.
 			for(int cv$reduction383Index = 0; cv$reduction383Index < i$var58; cv$reduction383Index += 1)
@@ -834,7 +834,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// j$var80's comment
 				// Set the right hand term to a value from the array st
-				reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction383Index]);
+				reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction383Index]);
 			for(int cv$reduction383Index = (i$var58 + 1); cv$reduction383Index < noCats; cv$reduction383Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
@@ -844,20 +844,20 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// j$var80's comment
 				// Set the right hand term to a value from the array st
-				reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction383Index]);
+				reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction383Index]);
 			
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
 			// Processing random variable 84.
 			// 
 			// Value of the variable at this index
-			reduceVar$var82$5 = (cv$valuePos + reduceVar$var82$5);
+			reduceVar$var82$6 = (cv$valuePos + reduceVar$var82$6);
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
 				// Processing sample task 87 of consumer random variable null.
 				// Variable declaration of cv$temp$2$var83 moved.
 				// 
 				// Constructing a random variable input for use later.
-				double cv$temp$2$var83 = bias[reduceVar$var82$5];
+				double cv$temp$2$var83 = bias[reduceVar$var82$6];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -1068,7 +1068,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						// A generated name to prevent name collisions if the reduction is implemented more
 						// than once in inference and probability code. Initialize the variable to the unit
 						// value
-						int reduceVar$var82$7 = 0;
+						int reduceVar$var82$8 = 0;
 						
 						// For each index in the array to be reduced
 						for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
@@ -1078,17 +1078,140 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							// 
 							// j$var80's comment
 							// Set the right hand term to a value from the array st
-							reduceVar$var82$7 = (reduceVar$var82$7 + st[cv$reduction78Index]);
-						flips[j$var73] = DistributionSampling.sampleBernoulli(RNG$1, bias[reduceVar$var82$7]);
+							reduceVar$var82$8 = (reduceVar$var82$8 + st[cv$reduction78Index]);
+						flips[j$var73] = DistributionSampling.sampleBernoulli(RNG$1, bias[reduceVar$var82$8]);
 					}
 			}
 		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample30)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, noCats, 1,
+				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var29]);
+				}
+			);
+
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample47)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, noFlips, 1,
+				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
+							bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				}
+			);
+
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample62)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, noCats, 1,
+				(int forStart$i$var58, int forEnd$i$var58, int threadID$i$var58, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int i$var58 = forStart$i$var58; i$var58 < forEnd$i$var58; i$var58 += 1)
+							st[i$var58] = DistributionSampling.sampleCategorical(RNG$1, m[i$var58], noStates);
+				}
+			);
+
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample30)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, noCats, 1,
+				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1)
+							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var29]);
+				}
+			);
+
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample47)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, noFlips, 1,
+				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
+							bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+				}
+			);
+
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample62)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, noCats, 1,
+				(int forStart$i$var58, int forEnd$i$var58, int threadID$i$var58, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int i$var58 = forStart$i$var58; i$var58 < forEnd$i$var58; i$var58 += 1)
+							st[i$var58] = DistributionSampling.sampleCategorical(RNG$1, m[i$var58], noStates);
+				}
+			);
+
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noFlips, 1,
+			(int forStart$j$var73, int forEnd$j$var73, int threadID$j$var73, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var73 = forStart$j$var73; j$var73 < forEnd$j$var73; j$var73 += 1) {
+						// Reduction of array st
+						// 
+						// A generated name to prevent name collisions if the reduction is implemented more
+						// than once in inference and probability code. Initialize the variable to the unit
+						// value
+						int reduceVar$var82$9 = 0;
+						
+						// For each index in the array to be reduced
+						for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
+							// Execute the reduction function, saving the result into the return value.
+							// 
+							// Copy the result of the reduction into the variable returned by the reduction.
+							// 
+							// j$var80's comment
+							// Set the right hand term to a value from the array st
+							reduceVar$var82$9 = (reduceVar$var82$9 + st[cv$reduction78Index]);
+						flips[j$var73] = DistributionSampling.sampleBernoulli(RNG$1, bias[reduceVar$var82$9]);
+					}
+			}
+		);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample30)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -1133,9 +1256,10 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample30)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -1306,19 +1430,9 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			logProbability$var85 = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
-	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
-
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -1371,59 +1485,6 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbabilityValue$sample47();
 		logProbabilityValue$sample62();
 		logProbabilityValue$sample87();
-	}
-
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample30)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noCats, 1,
-				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var29]);
-				}
-			);
-
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample47)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noFlips, 1,
-				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
-							bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
-				}
-			);
-
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample62)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noCats, 1,
-				(int forStart$i$var58, int forEnd$i$var58, int threadID$i$var58, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i$var58 = forStart$i$var58; i$var58 < forEnd$i$var58; i$var58 += 1)
-							st[i$var58] = DistributionSampling.sampleCategorical(RNG$1, m[i$var58], noStates);
-				}
-			);
-
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
 	}
 
 	// Method to propagate observed values back into the model.

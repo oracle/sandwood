@@ -18,5 +18,4 @@ interface Flip2CoinsMK3$CoreInterface extends org.sandwood.runtime.internal.mode
 	public double[] get$logProbability$bernoulli();
 	public double get$logProbability$bias();
 	public double get$logProbability$flips();
-	public void logEvidenceGeneration();
 }

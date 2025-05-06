@@ -705,7 +705,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	}
 
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		for(int var41 = 0; var41 < noTopics; var41 += 1) {
 			double[] var42 = phi[var41];
 			if(!fixedFlag$sample42)
@@ -725,7 +725,49 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	}
 
 	@Override
+	public final void forwardGenerationPrime() {
+		for(int var41 = 0; var41 < noTopics; var41 += 1) {
+			double[] var42 = phi[var41];
+			if(!fixedFlag$sample42)
+				DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, var42);
+		}
+		for(int var56 = 0; var56 < length$documents.length; var56 += 1) {
+			double[] var57 = theta[var56];
+			if(!fixedFlag$sample58)
+				DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, var57);
+		}
+		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
+			int[] t = w[i$var71];
+			for(int j = 0; j < length$documents[i$var71]; j += 1) {
+				if(!fixedFlag$sample90)
+					z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
+				t[j] = DistributionSampling.sampleCategorical(RNG$, phi[z[((i$var71 - 0) / 1)][((j - 0) / 1)]], vocabSize);
+			}
+		}
+	}
+
+	@Override
 	public final void forwardGenerationValuesNoOutputs() {
+		for(int var41 = 0; var41 < noTopics; var41 += 1) {
+			double[] var42 = phi[var41];
+			if(!fixedFlag$sample42)
+				DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, var42);
+		}
+		for(int var56 = 0; var56 < length$documents.length; var56 += 1) {
+			double[] var57 = theta[var56];
+			if(!fixedFlag$sample58)
+				DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, var57);
+		}
+		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < length$documents[i$var71]; j += 1) {
+				if(!fixedFlag$sample90)
+					z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
+			}
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		for(int var41 = 0; var41 < noTopics; var41 += 1) {
 			double[] var42 = phi[var41];
 			if(!fixedFlag$sample42)
@@ -824,12 +866,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	}
 
 	@Override
-	public final void logEvidenceGeneration() {
-		forwardGenerationValuesNoOutputs();
-		logEvidenceProbabilities();
-	}
-
-	private final void logEvidenceProbabilities() {
+	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
 		if(fixedFlag$sample42)
 			logProbabilityValue$sample42();
@@ -856,27 +893,6 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		logProbabilityValue$sample58();
 		logProbabilityValue$sample90();
 		logProbabilityValue$sample93();
-	}
-
-	@Override
-	public final void logProbabilityGeneration() {
-		for(int var41 = 0; var41 < noTopics; var41 += 1) {
-			double[] var42 = phi[var41];
-			if(!fixedFlag$sample42)
-				DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, var42);
-		}
-		for(int var56 = 0; var56 < length$documents.length; var56 += 1) {
-			double[] var57 = theta[var56];
-			if(!fixedFlag$sample58)
-				DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, var57);
-		}
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1) {
-				if(!fixedFlag$sample90)
-					z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
-			}
-		}
-		logModelProbabilitiesVal();
 	}
 
 	@Override
