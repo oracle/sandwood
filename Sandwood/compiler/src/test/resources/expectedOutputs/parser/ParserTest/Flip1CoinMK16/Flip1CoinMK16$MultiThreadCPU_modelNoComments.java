@@ -6,9 +6,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK16$CoreInterface {
 	private double bias;
-	private boolean fixedFlag$sample14 = false;
-	private boolean fixedProbFlag$sample14 = false;
-	private boolean fixedProbFlag$sample16 = false;
 	private boolean flip;
 	private boolean flipMeasured;
 	private double guard;
@@ -34,20 +31,6 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$bias(double cv$value) {
 		bias = cv$value;
-		fixedProbFlag$sample14 = false;
-		fixedProbFlag$sample16 = false;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample14() {
-		return fixedFlag$sample14;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample14(boolean cv$value) {
-		fixedFlag$sample14 = cv$value;
-		fixedProbFlag$sample14 = (fixedFlag$sample14 && fixedProbFlag$sample14);
-		fixedProbFlag$sample16 = (fixedFlag$sample14 && fixedProbFlag$sample16);
 	}
 
 	@Override
@@ -101,121 +84,84 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	private final void logProbabilityValue$sample14() {
-		if(!fixedProbFlag$sample14) {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			if(Double.isNaN(guard)) {
-				double cv$sampleAccumulator = 0.0;
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
+		double cv$accumulator = 0.0;
+		boolean cv$sampleReached = false;
+		if(Double.isNaN(guard)) {
+			double cv$sampleAccumulator = 0.0;
+			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			double cv$probabilityReached = 0.0;
+			{
+				double cv$sampleValue = bias;
 				{
-					double cv$sampleValue = bias;
 					{
-						{
-							double var9 = 1.0;
-							double var10 = 1.0;
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var9, var10));
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
+						double var9 = 1.0;
+						double var10 = 1.0;
+						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var9, var10));
+						if((cv$weightedProbability < cv$distributionAccumulator))
+							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+						else {
+							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+								cv$distributionAccumulator = cv$weightedProbability;
+							else
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 						}
+						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleReached = true;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var11 = cv$sampleAccumulator;
-				logProbability$sample14 = cv$sampleProbability;
 			}
-			logProbability$bias = (logProbability$bias + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample14)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample14 = fixedFlag$sample14;
-		} else {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			if(Double.isNaN(guard)) {
-				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample14;
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				cv$sampleReached = true;
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var11 = cv$rvAccumulator;
-			}
-			logProbability$bias = (logProbability$bias + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample14)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if((cv$probabilityReached == 0.0))
+				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			else
+				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+			double cv$sampleProbability = cv$distributionAccumulator;
+			cv$sampleReached = true;
+			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$var11 = cv$sampleAccumulator;
+			logProbability$sample14 = cv$sampleProbability;
 		}
+		logProbability$bias = (logProbability$bias + cv$accumulator);
+		logProbability$$model = (logProbability$$model + cv$accumulator);
 	}
 
 	private final void logProbabilityValue$sample16() {
-		if(!fixedProbFlag$sample16) {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			if(Double.isNaN(guard)) {
-				double cv$sampleAccumulator = 0.0;
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
+		double cv$accumulator = 0.0;
+		boolean cv$sampleReached = false;
+		if(Double.isNaN(guard)) {
+			double cv$sampleAccumulator = 0.0;
+			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			double cv$probabilityReached = 0.0;
+			{
+				boolean cv$sampleValue = flip;
 				{
-					boolean cv$sampleValue = flip;
 					{
-						{
-							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?bias:(1.0 - bias))));
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
+						double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?bias:(1.0 - bias))));
+						if((cv$weightedProbability < cv$distributionAccumulator))
+							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+						else {
+							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+								cv$distributionAccumulator = cv$weightedProbability;
+							else
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 						}
+						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleReached = true;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$bernoulli = cv$sampleAccumulator;
-				logProbability$sample16 = cv$sampleProbability;
 			}
-			logProbability$flip = (logProbability$flip + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample16 = fixedFlag$sample14;
-		} else {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			if(Double.isNaN(guard)) {
-				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample16;
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				cv$sampleReached = true;
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$bernoulli = cv$rvAccumulator;
-			}
-			logProbability$flip = (logProbability$flip + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if((cv$probabilityReached == 0.0))
+				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			else
+				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+			double cv$sampleProbability = cv$distributionAccumulator;
+			cv$sampleReached = true;
+			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$bernoulli = cv$sampleAccumulator;
+			logProbability$sample16 = cv$sampleProbability;
 		}
+		logProbability$flip = (logProbability$flip + cv$accumulator);
+		logProbability$$model = (logProbability$$model + cv$accumulator);
+		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 	}
 
 	private final void sample14() {
@@ -254,57 +200,45 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void forwardGeneration() {
 		if(Double.isNaN(guard)) {
-			if(!fixedFlag$sample14)
-				bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			flip = DistributionSampling.sampleBernoulli(RNG$, bias);
 		}
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(Double.isNaN(guard)) {
-			if(!fixedFlag$sample14)
-				bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		}
+		if(Double.isNaN(guard))
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 	}
 
 	@Override
 	public final void forwardGenerationPrime() {
 		if(Double.isNaN(guard)) {
-			if(!fixedFlag$sample14)
-				bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			flip = DistributionSampling.sampleBernoulli(RNG$, bias);
 		}
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(Double.isNaN(guard)) {
-			if(!fixedFlag$sample14)
-				bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		}
+		if(Double.isNaN(guard))
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(Double.isNaN(guard)) {
-			if(!fixedFlag$sample14)
-				bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		}
+		if(Double.isNaN(guard))
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 	}
 
 	@Override
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
-			if(Double.isNaN(guard)) {
-				if(!fixedFlag$sample14)
-					sample14();
-			}
+			if(Double.isNaN(guard))
+				sample14();
 		} else {
-			if(Double.isNaN(guard)) {
-				if(!fixedFlag$sample14)
-					sample14();
-			}
+			if(Double.isNaN(guard))
+				sample14();
 		}
 		system$gibbsForward = !system$gibbsForward;
 	}
@@ -317,19 +251,15 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$evidence = 0.0;
 		logProbability$var11 = Double.NaN;
 		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample14)
-			logProbability$sample14 = Double.NaN;
+		logProbability$sample14 = Double.NaN;
 		logProbability$bernoulli = Double.NaN;
 		logProbability$flip = 0.0;
-		if(!fixedProbFlag$sample16)
-			logProbability$sample16 = Double.NaN;
+		logProbability$sample16 = Double.NaN;
 	}
 
 	@Override
 	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample14)
-			logProbabilityValue$sample14();
 		logProbabilityValue$sample16();
 	}
 

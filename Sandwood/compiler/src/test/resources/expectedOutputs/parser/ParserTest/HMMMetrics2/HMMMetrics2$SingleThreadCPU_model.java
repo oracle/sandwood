@@ -16,6 +16,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[][][] distribution$sample123;
 	private boolean fixedFlag$sample104 = false;
 	private boolean fixedFlag$sample123 = false;
+	private boolean fixedFlag$sample157 = false;
 	private boolean fixedFlag$sample19 = false;
 	private boolean fixedFlag$sample32 = false;
 	private boolean fixedFlag$sample52 = false;
@@ -162,6 +163,18 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Should the probability of sample 157 be set to fixed. This will only every change
 		// the flag to false.
 		fixedProbFlag$sample157 = (fixedFlag$sample123 && fixedProbFlag$sample157);
+	}
+
+	// Getter for fixedFlag$sample157.
+	@Override
+	public final boolean get$fixedFlag$sample157() {
+		return fixedFlag$sample157;
+	}
+
+	// Setter for fixedFlag$sample157.
+	@Override
+	public final void set$fixedFlag$sample157(boolean cv$value) {
+		fixedFlag$sample157 = cv$value;
 	}
 
 	// Getter for fixedFlag$sample19.
@@ -9778,7 +9791,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
 				metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$, metric_valid_bias[st[sample][timeStep$var136]]);
 				if(metric_valid_1d[timeStep$var136]) {
-					var151[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$)) + metric_mean[st[sample][timeStep$var136]]);
+					if(!fixedFlag$sample157)
+						var151[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$)) + metric_mean[st[sample][timeStep$var136]]);
 					metric_1d[timeStep$var136] = var151[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)];
 				}
 			}
@@ -9987,7 +10001,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
 				metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$, metric_valid_bias[st[sample][timeStep$var136]]);
 				if(metric_valid_1d[timeStep$var136]) {
-					var151[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$)) + metric_mean[st[sample][timeStep$var136]]);
+					if(!fixedFlag$sample157)
+						var151[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$)) + metric_mean[st[sample][timeStep$var136]]);
 					metric_1d[timeStep$var136] = var151[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)];
 				}
 			}
@@ -10287,29 +10302,35 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Method to propagate observed values back into the model.
 	@Override
 	public final void propogateObservedValues() {
+		// Reset any fixed flags on observed values
+		fixedFlag$sample157 = false;
+		
+		// Propagating values back from observations into the models intermediate variables.
 		{
-			// Deep copy between arrays
-			boolean[][] cv$source1 = metric_valid;
-			boolean[][] cv$target1 = metric_valid_g;
-			int cv$length1 = cv$target1.length;
-			for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
-				boolean[] cv$source2 = cv$source1[cv$index1];
-				boolean[] cv$target2 = cv$target1[cv$index1];
-				int cv$length2 = cv$target2.length;
-				for(int cv$index2 = 0; cv$index2 < cv$length2; cv$index2 += 1)
-					cv$target2[cv$index2] = cv$source2[cv$index2];
+			{
+				// Deep copy between arrays
+				boolean[][] cv$source1 = metric_valid;
+				boolean[][] cv$target1 = metric_valid_g;
+				int cv$length1 = cv$target1.length;
+				for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
+					boolean[] cv$source2 = cv$source1[cv$index1];
+					boolean[] cv$target2 = cv$target1[cv$index1];
+					int cv$length2 = cv$target2.length;
+					for(int cv$index2 = 0; cv$index2 < cv$length2; cv$index2 += 1)
+						cv$target2[cv$index2] = cv$source2[cv$index2];
+				}
 			}
-		}
-		for(int sample = (noSamples - ((((noSamples - 1) - 0) % 1) + 1)); sample >= ((0 - 1) + 1); sample -= 1) {
-			for(int timeStep$var136 = (length$metric[sample] - ((((length$metric[sample] - 1) - 0) % 1) + 1)); timeStep$var136 >= ((0 - 1) + 1); timeStep$var136 -= 1) {
-				metric_g[sample][timeStep$var136] = metric[sample][timeStep$var136];
-				if(metric_valid_g[sample][timeStep$var136]) {
-					{
-						// Looking for a path between Put 158 and consumer double 154.
+			for(int sample = (noSamples - ((((noSamples - 1) - 0) % 1) + 1)); sample >= ((0 - 1) + 1); sample -= 1) {
+				for(int timeStep$var136 = (length$metric[sample] - ((((length$metric[sample] - 1) - 0) % 1) + 1)); timeStep$var136 >= ((0 - 1) + 1); timeStep$var136 -= 1) {
+					metric_g[sample][timeStep$var136] = metric[sample][timeStep$var136];
+					if(metric_valid_g[sample][timeStep$var136]) {
 						{
-							for(int index$timeStep$2_1 = (length$metric[sample] - ((((length$metric[sample] - 1) - 0) % 1) + 1)); index$timeStep$2_1 >= ((0 - 1) + 1); index$timeStep$2_1 -= 1) {
-								if((timeStep$var136 == index$timeStep$2_1))
-									var151[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = metric_g[sample][timeStep$var136];
+							// Looking for a path between Put 158 and consumer double 154.
+							{
+								for(int index$timeStep$2_1 = (length$metric[sample] - ((((length$metric[sample] - 1) - 0) % 1) + 1)); index$timeStep$2_1 >= ((0 - 1) + 1); index$timeStep$2_1 -= 1) {
+									if((timeStep$var136 == index$timeStep$2_1))
+										var151[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = metric_g[sample][timeStep$var136];
+								}
 							}
 						}
 					}

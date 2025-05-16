@@ -123,7 +123,7 @@ public class ForwardExecutionBuilder {
                     SampleTask<?, ?> sTask = (SampleTask<?, ?>) task;
                     sTasks.add(sTask);
                 }
-                guard = constructGuard(sTasks, guardStatus);
+                guard = constructGuard(sTasks, guardStatus, compilationCtx);
                 compilationCtx.setCodeGuard(guard);
 
                 constructForwardRVDistribution((DistributableRandomVariable<?, ?>) rv, compilationCtx);
@@ -517,22 +517,26 @@ public class ForwardExecutionBuilder {
         Set<SampleTask<?, ?>> sampleTasks = new HashSet<>();
         for(Variable<?> v:vs)
             sampleTasks.addAll(getSourceSampleTasks(v, compilationCtx));
-        return constructGuard(sampleTasks, guardStatus);
+        return constructGuard(sampleTasks, guardStatus, compilationCtx);
     }
 
-    private static IRTreeReturn<BooleanVariable> constructGuard(Set<SampleTask<?, ?>> sTasks, GuardStatus guardStatus) {
+    private static IRTreeReturn<BooleanVariable> constructGuard(Set<SampleTask<?, ?>> sTasks, GuardStatus guardStatus,
+            CompilationContext compilationCtx) {
         return switch(guardStatus) {
             case FIXED, FREE -> {
-                IRTreeReturn<BooleanVariable> guard = null;
-
+                
                 PriorityQueue<SampleTask<?, ?>> p = new PriorityQueue<>();
+                Set<SampleTask<?, ?>> fixable = compilationCtx.traces.getFixableTasks();
                 for(SampleTask<?, ?> s:sTasks) {
-                    if(!s.getOutput().isFixed()) // TODO add in a test to see if this fixed value can be fixed when
-                                                 // doing forward execution. If it can be add a guard, look at
-                                                 // Vulcano2012 for an example.
+                    if(fixable.contains(s))
                         p.add(s);
+                    else if(guardStatus == GuardStatus.FREE)
+                        yield null;
+                    else
+                        yield constant(false);
                 }
 
+                IRTreeReturn<BooleanVariable> guard = null;
                 if(!p.isEmpty()) {
                     VariableDescription<BooleanVariable> flagName = VariableNames.fixedFlagName(p.poll());
                     guard = load(flagName);

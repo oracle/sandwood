@@ -23,12 +23,6 @@ interface GaussianMixtureTest$CoreInterface extends org.sandwood.runtime.interna
 	// Setter for fixedFlag$sample52.
 	public void set$fixedFlag$sample52(boolean cv$value);
 
-	// Getter for fixedFlag$sample68.
-	public boolean get$fixedFlag$sample68();
-
-	// Setter for fixedFlag$sample68.
-	public void set$fixedFlag$sample68(boolean cv$value);
-
 	// Getter for k.
 	public int get$k();
 

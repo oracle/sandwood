@@ -587,28 +587,33 @@ public class ScopeConstructor {
 
                 // If we have not met this sample task before.
                 if(flagValue == null) {
-                    // Construct a conditional so that distributions are only explored if the values are not fixed.
-                    IRTreeReturn<BooleanVariable> ifGuard = load(VariableNames.fixedFlagName(disSampleTask));
-                    IfScope ifScope = new IfScope(d.innerScope, ifGuard);
+                    if(compilationCtx.traces.getFixableTasks().contains(disSampleTask)) {
+                        // Construct a conditional so that distributions are only explored if the values are not fixed.
+                        IRTreeReturn<BooleanVariable> ifGuard = load(VariableNames.fixedFlagName(disSampleTask));
+                        IfScope ifScope = new IfScope(d.innerScope, ifGuard);
 
-                    // Create a distribution based on this scope with the flag set to true
-                    ScopeDescription fixedGuardDistribution = d.addFixedFlagScope(ifScope, disSampleTask, true,
-                            compilationCtx);
-                    // Construct a distribution that ensure that the trace is satisfied, but no values are changed as
-                    // this distribution is fixed.
-                    ScopeDescription fixedTrace = TraceArrayRestrictions.constructRestriction(trace,
-                            Collections.emptyMap(),
-                            constructScopeSubstitutions(endScopes, fixedGuardDistribution, position),
-                            fixedGuardDistribution, id.get().next(), PASS_VALUES, position, compilationCtx);
-                    toReturn.add(fixedTrace);
+                        // Create a distribution based on this scope with the flag set to true
+                        ScopeDescription fixedGuardDistribution = d.addFixedFlagScope(ifScope, disSampleTask, true,
+                                compilationCtx);
+                        // Construct a distribution that ensure that the trace is satisfied, but no values are changed
+                        // as this distribution is fixed.
+                        ScopeDescription fixedTrace = TraceArrayRestrictions.constructRestriction(trace,
+                                Collections.emptyMap(),
+                                constructScopeSubstitutions(endScopes, fixedGuardDistribution, position),
+                                fixedGuardDistribution, id.get().next(), PASS_VALUES, position, compilationCtx);
+                        toReturn.add(fixedTrace);
 
-                    // Construct a distribution with the flag set to false.
-                    ScopeDescription elseGuardDistribution = d.addFixedFlagScope(ifScope.elseScope, disSampleTask,
-                            false, compilationCtx);
-                    // Construct a distribution here the output of the sample task is explored and add it to the list of
-                    // distributions.
-                    toReturn.add(
-                            constructNonFixedValues(trace, endScopes, elseGuardDistribution, disSampleTask, position));
+                        // Construct a distribution with the flag set to false.
+                        ScopeDescription elseGuardDistribution = d.addFixedFlagScope(ifScope.elseScope, disSampleTask,
+                                false, compilationCtx);
+                        // Construct a distribution here the output of the sample task is explored and add it to the
+                        // list of distributions.
+                        toReturn.add(constructNonFixedValues(trace, endScopes, elseGuardDistribution, disSampleTask,
+                                position));
+                    } else {
+                        // We know the value is not fixed.
+                        toReturn.add(constructNonFixedValues(trace, endScopes, d, disSampleTask, position));
+                    }
                 } else
                 // If the sample value is fixed.
                 if(flagValue)

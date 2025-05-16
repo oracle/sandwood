@@ -39,7 +39,12 @@ public interface ComputedVariable extends HasProbability, Variable {
         /**
          * This value is always the same in inference code as it is observed.
          */
-        OBSERVED
+        OBSERVED,
+        /**
+         * This value is always the same in inference code as it is observed, and its value can be fixed to the value it
+         * had when inferring values when performing forward execution of the model.
+         */
+        OBSERVED_FIXABLE
     }
 
     /**

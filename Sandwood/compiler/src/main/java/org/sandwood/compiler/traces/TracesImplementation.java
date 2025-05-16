@@ -81,6 +81,10 @@ public class TracesImplementation extends Traces {
     private final Set<Variable<?>> allVariables = new HashSet<>();
     // Set of all sample tasks
     private final Set<SampleTask<?, ?>> allSampleTasks = new HashSet<>();
+    // A set containing all the intermediate variables that will have a fix value method.
+    private final Set<Variable<?>> fixableIntermediates = new HashSet<>();
+    // Set containing all the fix-able sample tasks.
+    private final Set<SampleTask<?, ?>> fixableTasks = new HashSet<>();
     // Map of top names to variables for top level variables. For Variables such as
     // arrays that might appear multiple times it is the instance variable that is
     // held.
@@ -237,6 +241,14 @@ public class TracesImplementation extends Traces {
         // Now the determinisitic variables are know propagate the variables whose value is determined by observations
         propagateObservations(compDesc);
 
+        for(TraceSinkPair p:dagInfo.randomVarTraces())
+            addFixableVars(p.handle);
+        for(TraceSinkPair p:dagInfo.observedVarTraces())
+            // Replace this call with a call to addFixableVars if fixed methods are required for all observed samples.
+            addFixableObservedVars(p.handle);
+        for(TraceSinkPair p:dagInfo.terminalVarTraces())
+            addFixableVars(p.handle);
+
         // Truncate any traces that go via a variable that is fixed by an observation that was not fixing the source of
         // the trace.
         dagInfo.filterTraces();
@@ -260,11 +272,42 @@ public class TracesImplementation extends Traces {
 
         constructDependencies(dagInfo);
 
+        constructFixableSampleTasks();
+
         constructArrayLengthTraces(dagInfo);
 
         constructInputSets();
 
         setUniqueNames();
+    }
+
+    private void constructFixableSampleTasks() {
+        Set<Variable<?>> vs = new HashSet<>();
+        for(Variable<?> v:fixableIntermediates) {
+            vs.add(v.instanceHandle());
+            Set<SampleTask<?, ?>> s = intermediateSampleTaskDependencies.get(v);
+            if(s != null)
+                fixableTasks.addAll(s);
+        }
+
+        // The instance handles to the fix-able intermediates.
+        fixableIntermediates.addAll(vs);
+    }
+
+    private void addFixableVars(TraceHandle handle) {
+        for(DataflowTaskArgDesc d:handle) {
+            Variable<?> v = d.task.getOutput();
+            if(!v.isDeterministic() && !v.isPrivate())
+                fixableIntermediates.add(v);
+        }
+    }
+
+    private void addFixableObservedVars(TraceHandle handle) {
+        for(DataflowTaskArgDesc d:handle) {
+            Variable<?> v = d.task.getOutput();
+            if(!v.isDeterministic() && !v.isFixed() && !v.isPrivate())
+                fixableIntermediates.add(v);
+        }
     }
 
     private class ObservationTracking {
@@ -2341,5 +2384,15 @@ public class TracesImplementation extends Traces {
     @Override
     public Set<Variable<?>> getEvidenceVariables() {
         return evidenceVariables;
+    }
+
+    @Override
+    public Set<Variable<?>> getFixableIntermediates() {
+        return fixableIntermediates;
+    }
+
+    @Override
+    public Set<SampleTask<?, ?>> getFixableTasks() {
+        return fixableTasks;
     }
 }

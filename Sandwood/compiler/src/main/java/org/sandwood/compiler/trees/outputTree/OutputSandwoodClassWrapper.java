@@ -192,6 +192,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         sb.append("import org.sandwood.runtime.model.variables.*;\n");
         sb.append("import org.sandwood.runtime.internal.model.variables.*;\n");
         sb.append("import org.sandwood.common.exceptions.SandwoodException;\n");
+        sb.append("import org.sandwood.runtime.exceptions.SandwoodRuntimeException;\n");
         sb.append("\n");
         sb.append("import java.util.Map;\n");
         sb.append("import java.util.HashMap;\n");
@@ -365,26 +366,38 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
             }
         }
 
-        sb.append("\n        //ComputedVariables\n");
+        boolean valuesToCopy = false;
         for(VariableName name:computedVariables) {
             if(fieldDescs.get(name).fieldType.setter) {
-                sb.append("        if($" + name + ".isSet())\n");
-                sb.append("            newCore" + setMethod(name) + "(oldCore" + getMethod(name) + "());\n");
+                valuesToCopy = true;
+                break;
             }
         }
 
-        sb.append("\n        //Set fixed flags\n");
+        if(valuesToCopy) {
+            sb.append("\n        //ComputedVariables\n");
+            for(VariableName name:computedVariables) {
+                if(fieldDescs.get(name).fieldType.setter) {
+                    sb.append("        if($" + name + ".isSet())\n");
+                    sb.append("            newCore" + setMethod(name) + "(oldCore" + getMethod(name) + "());\n");
+                }
+            }
+        }
+
         Set<VariableDescription<BooleanVariable>> flags = new HashSet<>();
         for(VariableName name:computedVariables) {
             FieldDesc<?> f = fieldDescs.get(name);
-            if(f.fieldType.isSample && f.fieldType.observed == Observed.FREE)
+            if(f.fieldType.isSample && !f.fieldType.isPrivate)
                 flags.addAll(getFlags(traces, name));
         }
 
-        PriorityQueue<VariableDescription<BooleanVariable>> p = new PriorityQueue<>(flags);
-        while(!p.isEmpty()) {
-            VariableDescription<BooleanVariable> flag = p.poll();
-            sb.append("        newCore" + setMethod(flag.name) + "(oldCore" + getMethod(flag.name) + "());\n");
+        if(!flags.isEmpty()) {
+            sb.append("\n        //Set fixed flags\n");
+            PriorityQueue<VariableDescription<BooleanVariable>> p = new PriorityQueue<>(flags);
+            while(!p.isEmpty()) {
+                VariableDescription<BooleanVariable> flag = p.poll();
+                sb.append("        newCore" + setMethod(flag.name) + "(oldCore" + getMethod(flag.name) + "());\n");
+            }
         }
 
         sb.append("    }\n");
@@ -1124,7 +1137,8 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
                     + getMethod(probFieldName.name) + "(); }\n");
         else
             sb.append(
-                    "        public double getCurrentLogProbability() { throw new SandwoodException(\"Log probabilities are not available for this value.\"); }\n");
+                    "        public double getCurrentLogProbability() { throw new SandwoodException(\"Log probabilities"
+                            + " are not available for this value.\"); }\n");
 
         if(generic) {
             sb.append("\n        @Override\n");
@@ -1141,9 +1155,12 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         // Construct set and query methods.
         sb.append("        @Override\n");
         sb.append("        public void setFixed(boolean fixed) {\n");
-        if(flags.isEmpty()) {
-            sb.append(
-                    "            throw new SandwoodException(\"Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.\");\n");
+        if(ft.isPrivate) {
+            sb.append("            throw new SandwoodRuntimeException(\"This method should never be called on a private"
+                    + " variable.\");\n");
+        } else if(flags.isEmpty()) {
+            sb.append("            throw new SandwoodException(\"An observed variables can only have the"
+                    + " value fixed to the observed value if the value is consumed by another random variable.\");\n");
         } else {
             sb.append("            synchronized(model) {\n");
             for(VariableDescription<BooleanVariable> flag:flags)
@@ -1154,11 +1171,16 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
         sb.append("        @Override\n");
         sb.append("        public Immutability isFixed() {\n");
-        if(flags.isEmpty()) {
+        if(ft.isPrivate) {
+            sb.append(
+                    "            throw new SandwoodRuntimeException(\"This method should never be called on a private variable.\");\n");
+        } else if(flags.isEmpty()) {
             if(ft.observed == Observed.FREE)
                 sb.append("            return Immutability.DETERMINISTIC;\n");
             else
                 sb.append("            return Immutability.OBSERVED;\n");
+        } else if(ft.observed == Observed.OBSERVED) {
+            sb.append("            return Immutability.OBSERVED_FIXABLE;\n");
         } else if(flags.size() == 1) {
             VariableDescription<BooleanVariable> flag = flags.iterator().next();
             // construct the outputs.
@@ -1228,7 +1250,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
     private List<VariableDescription<BooleanVariable>> getFlags(Traces traces, VariableName uniqueName) {
         Variable<?> v = traces.getVariable(uniqueName);
-        if(v.isFixed()) {
+        if(!traces.getFixableIntermediates().contains(v)) {
             return Collections.emptyList();
         } else {
             Set<SampleTask<?, ?>> s = new HashSet<>(traces.getSourceSampleTasks(v));

@@ -8,11 +8,13 @@
 
 package org.sandwood.compiler.compilation;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -33,11 +35,14 @@ import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.rvConstructor.RandomVariableConstructorTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.IfElseAssignmentTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
+import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.exceptions.SandwoodModelException;
+import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.Trace;
 import org.sandwood.compiler.traces.TraceHandle;
 import org.sandwood.compiler.traces.guards.BackTraceInfo;
@@ -194,6 +199,18 @@ public class ObservedValuePropagationBuilder {
     }
 
     public static void constructPropagateObservedValues(CompilationContext compilationCtx) {
+        // Reset any fixed flags
+        IRTreeVoid t0;
+        {
+            List<IRTreeVoid> l = new ArrayList<>();
+            for(SampleTask<?, ?> s:compilationCtx.traces.getFixableTasks()) {
+                if(s.getOutput().isFixed()) {
+                    VariableDescription<BooleanVariable> fixedName = VariableNames.fixedFlagName(s);
+                    l.add(IRTree.store(fixedName, IRTree.constant(false), Tree.NoComment));
+                }
+            }
+            t0 = IRTree.sequential(l, "Reset any fixed flags on observed values");
+        }
 
         // Set any observed variables required as input to the observation task.
         IRTreeVoid t1 = initialiseConstants(compilationCtx);
@@ -207,7 +224,7 @@ public class ObservedValuePropagationBuilder {
         // Set any intermediates that are fixed as their parents are fixed.
         IRTreeVoid t3 = forwardPropagateObservedVariables(setIntermediates, compilationCtx);
 
-        IRTreeVoid funcBody = IRTree.sequential(Tree.NoComment, t1, t2, t3);
+        IRTreeVoid funcBody = IRTree.sequential(Tree.NoComment, t0, t1, t2, t3);
         compilationCtx.addFunction(AuxFunctionType.OBSERVATION_PROPAGATION, Visibility.PUBLIC, new ArgDesc[0], funcBody,
                 true, "Method to propagate observed values back into the model.");
     }

@@ -285,11 +285,9 @@ public class APICompile {
         }
 
         // Fixed sample flags
-        for(SampleTask<?, ?> s:compilationCtx.traces.getAllSampleTasks()) {
-            if(!s.getOutput().isFixed()) {
-                VariableDescription<BooleanVariable> flagName = VariableNames.fixedFlagName(s);
-                compilationCtx.addFlagClassField(flagName, constant(false));
-            }
+        for(SampleTask<?, ?> s:compilationCtx.traces.getFixableTasks()) {
+            VariableDescription<BooleanVariable> flagName = VariableNames.fixedFlagName(s);
+            compilationCtx.addFlagClassField(flagName, constant(false));
         }
 
         // Inputs
@@ -659,8 +657,10 @@ public class APICompile {
 
         IRTreeReturn<?>[] argsArray = args.toArray(new IRTreeReturn<?>[args.size()]);
         IRTreeVoid functionCall = functionCall(f.name, Tree.NoComment, argsArray);
-        IRTreeReturn<BooleanVariable> valueFixed = negateBoolean(load(VariableNames.fixedFlagName(sampleTask)));
-        functionCall = ifElse(valueFixed, functionCall, Tree.NoComment);
+        if(compilationCtx.traces.getFixableTasks().contains(sampleTask)) {
+            IRTreeReturn<BooleanVariable> valueFixed = negateBoolean(load(VariableNames.fixedFlagName(sampleTask)));
+            functionCall = ifElse(valueFixed, functionCall, Tree.NoComment);
+        }
 
         // Add the function to the tree of values to execute.
         compilationCtx.addTreeToScope(scope, functionCall);
@@ -809,23 +809,22 @@ public class APICompile {
 
         // List of function calls needed to generate probabilities in the model for the
         // evidence pass.
-        IRTreeVoid[] probabilityCalls = new IRTreeVoid[p.size() + 1];
-        probabilityCalls[0] = functionCall(AuxFunctionType.INITIALIZE_LOG_PROBABILITY_FIELDS.functionName,
-                "Reset all the non-fixed probabilities ready to calculate the new values.");
+        List<IRTreeVoid> probabilityCalls = new ArrayList<>();
+        probabilityCalls.add(functionCall(AuxFunctionType.INITIALIZE_LOG_PROBABILITY_FIELDS.functionName,
+                "Reset all the non-fixed probabilities ready to calculate the new values."));
 
-        int i = 1;
         while(!p.isEmpty()) {
             SampleTask<?, ?> sampleTask = p.poll();
             IRFunction<?> f = evidenceFunctions.get(sampleTask);
             if(observedSamples.contains(sampleTask))
-                probabilityCalls[i++] = functionCall(f.name, Tree.NoComment);
-            else
-                probabilityCalls[i++] = ifElse(load(VariableNames.fixedFlagName(sampleTask)),
-                        functionCall(f.name, Tree.NoComment), Tree.NoComment);
+                probabilityCalls.add(functionCall(f.name, Tree.NoComment));
+            else if(compilationCtx.traces.getFixableTasks().contains(sampleTask))
+                probabilityCalls.add(ifElse(load(VariableNames.fixedFlagName(sampleTask)),
+                        functionCall(f.name, Tree.NoComment), Tree.NoComment));
         }
 
-        if(i > 1)
-            probabilityCalls[1].prefixComment("Call each method in turn to generate the new probability values.");
+        if(probabilityCalls.size() > 1)
+            probabilityCalls.get(1).prefixComment("Call each method in turn to generate the new probability values.");
 
         // Construct a method to generate the probabilities.
         compilationCtx.addFunction(AuxFunctionType.LOG_EVIDENCE_PROBABILITIES, Visibility.PUBLIC, new ArgDesc[0],
