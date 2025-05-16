@@ -13,12 +13,9 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private boolean fixedFlag$sample17 = false;
 	private boolean fixedFlag$sample34 = false;
 	private boolean fixedFlag$sample52 = false;
-	private boolean fixedFlag$sample68 = false;
 	private boolean fixedProbFlag$sample17 = false;
 	private boolean fixedProbFlag$sample34 = false;
 	private boolean fixedProbFlag$sample52 = false;
-	private boolean fixedProbFlag$sample68 = false;
-	private boolean fixedProbFlag$sample72 = false;
 	private int k;
 	private int length$xMeasured;
 	private double logProbability$$evidence;
@@ -70,10 +67,6 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// Should the probability of sample 17 be set to fixed. This will only every change
 		// the flag to false.
 		fixedProbFlag$sample17 = (fixedFlag$sample17 && fixedProbFlag$sample17);
-		
-		// Should the probability of sample 68 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample68 = (fixedFlag$sample17 && fixedProbFlag$sample68);
 	}
 
 	// Getter for fixedFlag$sample34.
@@ -92,10 +85,6 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// Should the probability of sample 34 be set to fixed. This will only every change
 		// the flag to false.
 		fixedProbFlag$sample34 = (fixedFlag$sample34 && fixedProbFlag$sample34);
-		
-		// Should the probability of sample 72 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample72 = (fixedFlag$sample34 && fixedProbFlag$sample72);
 	}
 
 	// Getter for fixedFlag$sample52.
@@ -114,32 +103,6 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// Should the probability of sample 52 be set to fixed. This will only every change
 		// the flag to false.
 		fixedProbFlag$sample52 = (fixedFlag$sample52 && fixedProbFlag$sample52);
-		
-		// Should the probability of sample 72 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample72 = (fixedFlag$sample52 && fixedProbFlag$sample72);
-	}
-
-	// Getter for fixedFlag$sample68.
-	@Override
-	public final boolean get$fixedFlag$sample68() {
-		return fixedFlag$sample68;
-	}
-
-	// Setter for fixedFlag$sample68.
-	@Override
-	public final void set$fixedFlag$sample68(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample68 including if probabilities
-		// need to be updated.
-		fixedFlag$sample68 = cv$value;
-		
-		// Should the probability of sample 68 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample68 = (fixedFlag$sample68 && fixedProbFlag$sample68);
-		
-		// Should the probability of sample 72 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample72 = (fixedFlag$sample68 && fixedProbFlag$sample72);
 	}
 
 	// Getter for k.
@@ -218,9 +181,6 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Unset the fixed probability flag for sample 34 as it depends on mu.
 		fixedProbFlag$sample34 = false;
-		
-		// Unset the fixed probability flag for sample 72 as it depends on mu.
-		fixedProbFlag$sample72 = false;
 	}
 
 	// Getter for phi.
@@ -239,9 +199,6 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Unset the fixed probability flag for sample 17 as it depends on phi.
 		fixedProbFlag$sample17 = false;
-		
-		// Unset the fixed probability flag for sample 68 as it depends on phi.
-		fixedProbFlag$sample68 = false;
 	}
 
 	// Getter for sigma.
@@ -260,9 +217,6 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Unset the fixed probability flag for sample 52 as it depends on sigma.
 		fixedProbFlag$sample52 = false;
-		
-		// Unset the fixed probability flag for sample 72 as it depends on sigma.
-		fixedProbFlag$sample72 = false;
 	}
 
 	// Getter for x.
@@ -636,226 +590,154 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// Calculate the probability of the samples represented by sample68 using sampled
 	// values.
 	private final void logProbabilityValue$sample68() {
-		// Determine if we need to calculate the values for sample task 68 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample68) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
+		// Generating probabilities for sample task
+		// Accumulator for probabilities of instances of the random variable
+		double cv$accumulator = 0.0;
+		
+		// Accumulator for sample probabilities for a specific instance of the random variable.
+		double cv$sampleAccumulator = 0.0;
+		
+		// A guard to check if the sample value is ever reached.
+		boolean cv$sampleReached = false;
+		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
+			// An accumulator for log probabilities.
+			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
-				// An accumulator for log probabilities.
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				
-				// An accumulator for the distributed probability space covered.
-				double cv$probabilityReached = 0.0;
+			// An accumulator for the distributed probability space covered.
+			double cv$probabilityReached = 0.0;
+			{
+				// The sample value to calculate the probability of generating
+				int cv$sampleValue = z[((i$var66 - 0) / 1)];
 				{
-					// The sample value to calculate the probability of generating
-					int cv$sampleValue = z[((i$var66 - 0) / 1)];
 					{
-						{
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < k))?Math.log(phi[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
+						// Store the value of the function call, so the function call is only made once.
+						double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < k))?Math.log(phi[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+						
+						// Add the probability of this sample task to the distribution accumulator.
+						if((cv$weightedProbability < cv$distributionAccumulator))
+							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+						else {
+							// If the second value is -infinity.
+							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+								cv$distributionAccumulator = cv$weightedProbability;
+							else
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 						}
+						
+						// Add the probability of this distribution configuration to the accumulator.
+						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
-				if((cv$probabilityReached == 0.0))
-					// Return negative infinity if no distribution probability space is reached.
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					// Scale the probability relative to the observed distribution space.
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
+			if((cv$probabilityReached == 0.0))
+				// Return negative infinity if no distribution probability space is reached.
+				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			else
+				// Scale the probability relative to the observed distribution space.
+				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+			double cv$sampleProbability = cv$distributionAccumulator;
 			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var67 = cv$sampleAccumulator;
+			// Record that the sample was reached.
+			cv$sampleReached = true;
 			
-			// Only update the sample if it was reached, otherwise the NaN will be
-			// erroneously over written.
-			if(cv$sampleReached)
-				// Store the random variable instance probability
-				logProbability$z = cv$accumulator;
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample68)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample68 = (fixedFlag$sample68 && fixedFlag$sample17);
+			// Add the probability of this sample task to the sample task accumulator.
+			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 		}
-		// Using cached values.
-		else {
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$z;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var67 = cv$rvAccumulator;
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample68)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+		
+		// Add the probability of this instance of the random variable to the probability
+		// of all instances of the random variable.
+		cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+		if(cv$sampleReached)
+			logProbability$var67 = cv$sampleAccumulator;
+		
+		// Only update the sample if it was reached, otherwise the NaN will be
+		// erroneously over written.
+		if(cv$sampleReached)
+			// Store the random variable instance probability
+			logProbability$z = cv$accumulator;
+		
+		// Add probability to model
+		logProbability$$model = (logProbability$$model + cv$accumulator);
 	}
 
 	// Calculate the probability of the samples represented by sample72 using sampled
 	// values.
 	private final void logProbabilityValue$sample72() {
-		// Determine if we need to calculate the values for sample task 72 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample72) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
+		// Generating probabilities for sample task
+		// Accumulator for probabilities of instances of the random variable
+		double cv$accumulator = 0.0;
+		
+		// Accumulator for sample probabilities for a specific instance of the random variable.
+		double cv$sampleAccumulator = 0.0;
+		
+		// A guard to check if the sample value is ever reached.
+		boolean cv$sampleReached = false;
+		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
+			// An accumulator for log probabilities.
+			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
-				// An accumulator for log probabilities.
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				
-				// An accumulator for the distributed probability space covered.
-				double cv$probabilityReached = 0.0;
+			// An accumulator for the distributed probability space covered.
+			double cv$probabilityReached = 0.0;
+			{
+				// The sample value to calculate the probability of generating
+				double cv$sampleValue = x[i$var66];
 				{
-					// The sample value to calculate the probability of generating
-					double cv$sampleValue = x[i$var66];
 					{
-						{
-							double var69 = mu[z[((i$var66 - 0) / 1)]];
-							double var70 = sigma[z[((i$var66 - 0) / 1)]];
-							
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
+						double var69 = mu[z[((i$var66 - 0) / 1)]];
+						double var70 = sigma[z[((i$var66 - 0) / 1)]];
+						
+						// Store the value of the function call, so the function call is only made once.
+						double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))));
+						
+						// Add the probability of this sample task to the distribution accumulator.
+						if((cv$weightedProbability < cv$distributionAccumulator))
+							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+						else {
+							// If the second value is -infinity.
+							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+								cv$distributionAccumulator = cv$weightedProbability;
+							else
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 						}
+						
+						// Add the probability of this distribution configuration to the accumulator.
+						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
-				if((cv$probabilityReached == 0.0))
-					// Return negative infinity if no distribution probability space is reached.
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					// Scale the probability relative to the observed distribution space.
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
+			if((cv$probabilityReached == 0.0))
+				// Return negative infinity if no distribution probability space is reached.
+				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			else
+				// Scale the probability relative to the observed distribution space.
+				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+			double cv$sampleProbability = cv$distributionAccumulator;
 			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var71 = cv$sampleAccumulator;
+			// Record that the sample was reached.
+			cv$sampleReached = true;
 			
-			// Only update the sample if it was reached, otherwise the NaN will be
-			// erroneously over written.
-			if(cv$sampleReached)
-				// Store the random variable instance probability
-				logProbability$var72 = cv$accumulator;
-			
-			// Update the variable probability
-			logProbability$x = (logProbability$x + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample72 = ((fixedFlag$sample34 && fixedFlag$sample52) && fixedFlag$sample68);
+			// Add the probability of this sample task to the sample task accumulator.
+			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 		}
-		// Using cached values.
-		else {
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var72;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var71 = cv$rvAccumulator;
-			
-			// Update the variable probability
-			logProbability$x = (logProbability$x + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+		
+		// Add the probability of this instance of the random variable to the probability
+		// of all instances of the random variable.
+		cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+		if(cv$sampleReached)
+			logProbability$var71 = cv$sampleAccumulator;
+		
+		// Only update the sample if it was reached, otherwise the NaN will be
+		// erroneously over written.
+		if(cv$sampleReached)
+			// Store the random variable instance probability
+			logProbability$var72 = cv$accumulator;
+		
+		// Update the variable probability
+		logProbability$x = (logProbability$x + cv$accumulator);
+		
+		// Add probability to model
+		logProbability$$model = (logProbability$$model + cv$accumulator);
+		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -1345,12 +1227,9 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			x = new double[length$xMeasured];
 		}
 		
-		// If z has not been set already allocate space.
-		if(!fixedFlag$sample68) {
-			// Constructor for z
-			{
-				z = new int[((((length$xMeasured - 1) - 0) / 1) + 1)];
-			}
+		// Constructor for z
+		{
+			z = new int[((((length$xMeasured - 1) - 0) / 1) + 1)];
 		}
 		
 		// Allocate scratch space
@@ -1371,8 +1250,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 		}
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
-			if(!fixedFlag$sample68)
-				z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, phi, k);
+			z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, phi, k);
 			x[i$var66] = ((Math.sqrt(sigma[z[((i$var66 - 0) / 1)]]) * DistributionSampling.sampleGaussian(RNG$)) + mu[z[((i$var66 - 0) / 1)]]);
 		}
 	}
@@ -1392,10 +1270,8 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			if(!fixedFlag$sample52)
 				sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 		}
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
-			if(!fixedFlag$sample68)
-				z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, phi, k);
-		}
+		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
+			z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, phi, k);
 	}
 
 	// Method to execute the model code conventionally with priming of fixed intermediate
@@ -1413,8 +1289,7 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 		}
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
-			if(!fixedFlag$sample68)
-				z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, phi, k);
+			z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, phi, k);
 			x[i$var66] = ((Math.sqrt(sigma[z[((i$var66 - 0) / 1)]]) * DistributionSampling.sampleGaussian(RNG$)) + mu[z[((i$var66 - 0) / 1)]]);
 		}
 	}
@@ -1433,10 +1308,8 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			if(!fixedFlag$sample52)
 				sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 		}
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
-			if(!fixedFlag$sample68)
-				z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, phi, k);
-		}
+		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
+			z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, phi, k);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -1454,10 +1327,8 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			if(!fixedFlag$sample52)
 				sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 		}
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
-			if(!fixedFlag$sample68)
-				z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, phi, k);
-		}
+		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
+			z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, phi, k);
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -1475,17 +1346,13 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				if(!fixedFlag$sample52)
 					sample52(var51);
 			}
-			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
-				if(!fixedFlag$sample68)
-					sample68(i$var66);
-			}
+			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
+				sample68(i$var66);
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			for(int i$var66 = (length$xMeasured - ((((length$xMeasured - 1) - 0) % 1) + 1)); i$var66 >= ((0 - 1) + 1); i$var66 -= 1) {
-				if(!fixedFlag$sample68)
-					sample68(i$var66);
-			}
+			for(int i$var66 = (length$xMeasured - ((((length$xMeasured - 1) - 0) % 1) + 1)); i$var66 >= ((0 - 1) + 1); i$var66 -= 1)
+				sample68(i$var66);
 			for(int var51 = (k - ((((k - 1) - 0) % 1) + 1)); var51 >= ((0 - 1) + 1); var51 -= 1) {
 				if(!fixedFlag$sample52)
 					sample52(var51);
@@ -1533,12 +1400,10 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(!fixedProbFlag$sample52)
 			logProbability$var52 = Double.NaN;
 		logProbability$var67 = Double.NaN;
-		if(!fixedProbFlag$sample68)
-			logProbability$z = Double.NaN;
+		logProbability$z = Double.NaN;
 		logProbability$var71 = Double.NaN;
 		logProbability$x = 0.0;
-		if(!fixedProbFlag$sample72)
-			logProbability$var72 = Double.NaN;
+		logProbability$var72 = Double.NaN;
 	}
 
 	// Construct the evidence probabilities.
@@ -1554,8 +1419,6 @@ class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			logProbabilityValue$sample34();
 		if(fixedFlag$sample52)
 			logProbabilityValue$sample52();
-		if(fixedFlag$sample68)
-			logProbabilityValue$sample68();
 		logProbabilityValue$sample72();
 	}
 

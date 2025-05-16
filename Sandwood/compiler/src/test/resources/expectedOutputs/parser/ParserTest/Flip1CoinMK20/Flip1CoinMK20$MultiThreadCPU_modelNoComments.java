@@ -8,6 +8,8 @@ class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double bias;
 	private int count1;
 	private int count2;
+	private boolean fixedFlag$sample11 = false;
+	private boolean fixedFlag$sample12 = false;
 	private boolean fixedFlag$sample8 = false;
 	private boolean fixedProbFlag$sample11 = false;
 	private boolean fixedProbFlag$sample12 = false;
@@ -49,6 +51,26 @@ class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final int get$count2() {
 		return count2;
+	}
+
+	@Override
+	public final boolean get$fixedFlag$sample11() {
+		return fixedFlag$sample11;
+	}
+
+	@Override
+	public final void set$fixedFlag$sample11(boolean cv$value) {
+		fixedFlag$sample11 = cv$value;
+	}
+
+	@Override
+	public final boolean get$fixedFlag$sample12() {
+		return fixedFlag$sample12;
+	}
+
+	@Override
+	public final void set$fixedFlag$sample12(boolean cv$value) {
+		fixedFlag$sample12 = cv$value;
 	}
 
 	@Override
@@ -314,9 +336,12 @@ class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample8)
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		count1 = DistributionSampling.sampleBinomial(RNG$, bias, 100);
-		count2 = DistributionSampling.sampleBinomial(RNG$, bias, 100);
-		total = (count1 + count2);
+		if(!fixedFlag$sample11)
+			count1 = DistributionSampling.sampleBinomial(RNG$, bias, 100);
+		if(!fixedFlag$sample12)
+			count2 = DistributionSampling.sampleBinomial(RNG$, bias, 100);
+		if(!(fixedFlag$sample11 && fixedFlag$sample12))
+			total = (count1 + count2);
 	}
 
 	@Override
@@ -329,8 +354,10 @@ class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGenerationPrime() {
 		if(!fixedFlag$sample8)
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		count1 = DistributionSampling.sampleBinomial(RNG$, bias, 100);
-		count2 = DistributionSampling.sampleBinomial(RNG$, bias, 100);
+		if(!fixedFlag$sample11)
+			count1 = DistributionSampling.sampleBinomial(RNG$, bias, 100);
+		if(!fixedFlag$sample12)
+			count2 = DistributionSampling.sampleBinomial(RNG$, bias, 100);
 		total = (count1 + count2);
 	}
 
@@ -401,6 +428,8 @@ class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public final void propagateObservedValues() {
+		fixedFlag$sample11 = false;
+		fixedFlag$sample12 = false;
 		{
 			count1 = obs1;
 			count2 = obs2;

@@ -6,9 +6,6 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK16$CoreInterface {
 	private double bias;
-	private boolean fixedFlag$sample14 = false;
-	private boolean fixedProbFlag$sample14 = false;
-	private boolean fixedProbFlag$sample16 = false;
 	private boolean flip;
 	private boolean flipMeasured;
 	private double guard;
@@ -34,20 +31,6 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$bias(double cv$value) {
 		bias = cv$value;
-		fixedProbFlag$sample14 = false;
-		fixedProbFlag$sample16 = false;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample14() {
-		return fixedFlag$sample14;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample14(boolean cv$value) {
-		fixedFlag$sample14 = cv$value;
-		fixedProbFlag$sample14 = (cv$value && fixedProbFlag$sample14);
-		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
 	}
 
 	@Override
@@ -101,55 +84,28 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	private final void logProbabilityValue$sample14() {
-		if(!fixedProbFlag$sample14) {
-			double cv$accumulator = 0.0;
-			if(Double.isNaN(guard)) {
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(bias, 1.0, 1.0);
-				cv$accumulator = cv$distributionAccumulator;
-				logProbability$var11 = cv$distributionAccumulator;
-				logProbability$sample14 = cv$distributionAccumulator;
-			}
-			logProbability$bias = (logProbability$bias + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample14)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample14 = fixedFlag$sample14;
-		} else {
-			double cv$accumulator = 0.0;
-			if(Double.isNaN(guard)) {
-				cv$accumulator = logProbability$sample14;
-				logProbability$var11 = logProbability$sample14;
-			}
-			logProbability$bias = (logProbability$bias + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample14)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		double cv$accumulator = 0.0;
+		if(Double.isNaN(guard)) {
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(bias, 1.0, 1.0);
+			cv$accumulator = cv$distributionAccumulator;
+			logProbability$var11 = cv$distributionAccumulator;
+			logProbability$sample14 = cv$distributionAccumulator;
 		}
+		logProbability$bias = (logProbability$bias + cv$accumulator);
+		logProbability$$model = (logProbability$$model + cv$accumulator);
 	}
 
 	private final void logProbabilityValue$sample16() {
-		if(!fixedProbFlag$sample16) {
-			double cv$accumulator = 0.0;
-			if(Double.isNaN(guard)) {
-				double cv$distributionAccumulator = Math.log((flip?bias:(1.0 - bias)));
-				cv$accumulator = cv$distributionAccumulator;
-				logProbability$bernoulli = cv$distributionAccumulator;
-				logProbability$sample16 = cv$distributionAccumulator;
-			}
-			logProbability$flip = (logProbability$flip + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample16 = fixedFlag$sample14;
-		} else {
-			double cv$accumulator = 0.0;
-			if(Double.isNaN(guard)) {
-				cv$accumulator = logProbability$sample16;
-				logProbability$bernoulli = logProbability$sample16;
-			}
-			logProbability$flip = (logProbability$flip + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		double cv$accumulator = 0.0;
+		if(Double.isNaN(guard)) {
+			double cv$distributionAccumulator = Math.log((flip?bias:(1.0 - bias)));
+			cv$accumulator = cv$distributionAccumulator;
+			logProbability$bernoulli = cv$distributionAccumulator;
+			logProbability$sample16 = cv$distributionAccumulator;
 		}
+		logProbability$flip = (logProbability$flip + cv$accumulator);
+		logProbability$$model = (logProbability$$model + cv$accumulator);
+		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 	}
 
 	private final void sample14() {
@@ -168,42 +124,40 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void forwardGeneration() {
 		if(Double.isNaN(guard)) {
-			if(!fixedFlag$sample14)
-				bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			flip = DistributionSampling.sampleBernoulli(RNG$, bias);
 		}
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if((Double.isNaN(guard) && !fixedFlag$sample14))
+		if(Double.isNaN(guard))
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 	}
 
 	@Override
 	public final void forwardGenerationPrime() {
 		if(Double.isNaN(guard)) {
-			if(!fixedFlag$sample14)
-				bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			flip = DistributionSampling.sampleBernoulli(RNG$, bias);
 		}
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if((Double.isNaN(guard) && !fixedFlag$sample14))
+		if(Double.isNaN(guard))
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if((Double.isNaN(guard) && !fixedFlag$sample14))
+		if(Double.isNaN(guard))
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 	}
 
 	@Override
 	public final void gibbsRound() {
-		if((Double.isNaN(guard) && !fixedFlag$sample14))
+		if(Double.isNaN(guard))
 			sample14();
 		system$gibbsForward = !system$gibbsForward;
 	}
@@ -216,19 +170,15 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$evidence = 0.0;
 		logProbability$var11 = Double.NaN;
 		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample14)
-			logProbability$sample14 = Double.NaN;
+		logProbability$sample14 = Double.NaN;
 		logProbability$bernoulli = Double.NaN;
 		logProbability$flip = 0.0;
-		if(!fixedProbFlag$sample16)
-			logProbability$sample16 = Double.NaN;
+		logProbability$sample16 = Double.NaN;
 	}
 
 	@Override
 	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample14)
-			logProbabilityValue$sample14();
 		logProbabilityValue$sample16();
 	}
 

@@ -7,9 +7,7 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	
 	// Declare the variables for the model.
 	private double[] cv$var4$stateProbabilityGlobal;
-	private boolean fixedFlag$sample16 = false;
 	private boolean fixedFlag$sample4 = false;
-	private boolean fixedProbFlag$sample16 = false;
 	private boolean fixedProbFlag$sample4 = false;
 	private boolean guard;
 	private double logProbability$$evidence;
@@ -27,26 +25,6 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 
 	public Conditional1$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
-	}
-
-	// Getter for fixedFlag$sample16.
-	@Override
-	public final boolean get$fixedFlag$sample16() {
-		return fixedFlag$sample16;
-	}
-
-	// Setter for fixedFlag$sample16.
-	@Override
-	public final void set$fixedFlag$sample16(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample16 including if probabilities
-		// need to be updated.
-		fixedFlag$sample16 = cv$value;
-		
-		// Should the probability of sample 16 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample16" with its value "cv$value".
-		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
 	}
 
 	// Getter for fixedFlag$sample4.
@@ -67,12 +45,6 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// 
 		// Substituted "fixedFlag$sample4" with its value "cv$value".
 		fixedProbFlag$sample4 = (cv$value && fixedProbFlag$sample4);
-		
-		// Should the probability of sample 16 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample4" with its value "cv$value".
-		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
 	}
 
 	// Getter for guard.
@@ -90,9 +62,6 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		
 		// Unset the fixed probability flag for sample 4 as it depends on guard.
 		fixedProbFlag$sample4 = false;
-		
-		// Unset the fixed probability flag for sample 16 as it depends on guard.
-		fixedProbFlag$sample16 = false;
 	}
 
 	// Getter for logProbability$$evidence.
@@ -152,122 +121,82 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Setter for var14.
 	@Override
 	public final void set$var14(double cv$value) {
-		// Set flags for all the side effects of var14 including if probabilities need to
-		// be updated.
 		var14 = cv$value;
-		
-		// Unset the fixed probability flag for sample 16 as it depends on var14.
-		fixedProbFlag$sample16 = false;
 	}
 
 	// Calculate the probability of the samples represented by sample16 using sampled
 	// values.
 	private final void logProbabilityValue$sample16() {
-		// Determine if we need to calculate the values for sample task 16 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample16) {
-			// Generating probabilities for sample task
+		// Generating probabilities for sample task
+		// Accumulator for sample probabilities for a specific instance of the random variable.
+		double cv$sampleAccumulator = 0.0;
+		
+		// A guard to check if the sample value is ever reached.
+		boolean cv$sampleReached = false;
+		if(!guard) {
+			// Variable declaration of cv$distributionAccumulator moved.
+			// Declaration comment was:
+			// Variable declaration of cv$distributionAccumulator moved.
+			// Declaration comment was:
+			// An accumulator for log probabilities.
+			// 
+			// Store the value of the function call, so the function call is only made once.
+			// 
+			// The sample value to calculate the probability of generating
+			// 
+			// Scale the probability relative to the observed distribution space.
+			// 
+			// Add the probability of this distribution configuration to the accumulator.
+			// 
+			// An accumulator for the distributed probability space covered.
+			// 
+			// Variable declaration of cv$distributionAccumulator moved.
+			// Declaration comment was:
+			// An accumulator for log probabilities.
+			// 
+			// Store the value of the function call, so the function call is only made once.
+			// 
+			// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = (((0.0 <= var14) && (var14 < 1.0))?0.0:Double.NEGATIVE_INFINITY);
+			
+			// Record that the sample was reached.
+			cv$sampleReached = true;
+			
+			// Add the probability of this sample task to the sample task accumulator.
+			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
+			cv$sampleAccumulator = cv$distributionAccumulator;
 			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if(!guard) {
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// An accumulator for log probabilities.
-				// 
-				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
-				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				// 
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// An accumulator for log probabilities.
-				// 
-				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = (((0.0 <= var14) && (var14 < 1.0))?0.0:Double.NEGATIVE_INFINITY);
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				cv$sampleAccumulator = cv$distributionAccumulator;
-				
-				// Store the sample task probability
-				logProbability$sample16 = cv$distributionAccumulator;
-				
-				// Update the variable probability
-				logProbability$value = (logProbability$value + cv$distributionAccumulator);
-			}
-			if(cv$sampleReached)
-				logProbability$var13 = cv$sampleAccumulator;
+			// Store the sample task probability
+			logProbability$sample16 = cv$distributionAccumulator;
 			
 			// Update the variable probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var14 = (logProbability$var14 + cv$sampleAccumulator);
-			
-			// Add probability to model
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedFlag$sample4);
+			logProbability$value = (logProbability$value + cv$distributionAccumulator);
 		}
-		// Using cached values.
-		else {
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$rvAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if(!guard) {
-				cv$rvAccumulator = logProbability$sample16;
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
-				// Update the variable probability
-				logProbability$value = (logProbability$value + logProbability$sample16);
-			}
-			if(cv$sampleReached)
-				logProbability$var13 = cv$rvAccumulator;
-			
-			// Update the variable probability
-			logProbability$var14 = (logProbability$var14 + cv$rvAccumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
-		}
+		if(cv$sampleReached)
+			logProbability$var13 = cv$sampleAccumulator;
+		
+		// Update the variable probability
+		// 
+		// Add the probability of this instance of the random variable to the probability
+		// of all instances of the random variable.
+		// 
+		// Accumulator for probabilities of instances of the random variable
+		logProbability$var14 = (logProbability$var14 + cv$sampleAccumulator);
+		
+		// Add probability to model
+		// 
+		// Add the probability of this instance of the random variable to the probability
+		// of all instances of the random variable.
+		// 
+		// Accumulator for probabilities of instances of the random variable
+		logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+		
+		// Add the probability of this instance of the random variable to the probability
+		// of all instances of the random variable.
+		// 
+		// Accumulator for probabilities of instances of the random variable
+		logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
 	}
 
 	// Calculate the probability of the samples represented by sample4 using sampled values.
@@ -555,10 +484,8 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			if(!fixedFlag$sample4)
 				value = 1.0;
 		} else {
-			if(!fixedFlag$sample16)
-				var14 = DistributionSampling.sampleUniform(RNG$);
-			if((!fixedFlag$sample4 || !fixedFlag$sample16))
-				value = var14;
+			var14 = DistributionSampling.sampleUniform(RNG$);
+			value = var14;
 		}
 	}
 
@@ -580,10 +507,8 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		if(guard)
 			value = 1.0;
 		else {
-			if(!fixedFlag$sample16)
-				var14 = DistributionSampling.sampleUniform(RNG$);
-			if((!fixedFlag$sample4 || !fixedFlag$sample16))
-				value = var14;
+			var14 = DistributionSampling.sampleUniform(RNG$);
+			value = var14;
 		}
 	}
 
@@ -636,8 +561,7 @@ class Conditional1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		logProbability$var13 = Double.NaN;
 		logProbability$var14 = 0.0;
 		logProbability$value = 0.0;
-		if(!fixedProbFlag$sample16)
-			logProbability$sample16 = Double.NaN;
+		logProbability$sample16 = Double.NaN;
 	}
 
 	// Construct the evidence probabilities.

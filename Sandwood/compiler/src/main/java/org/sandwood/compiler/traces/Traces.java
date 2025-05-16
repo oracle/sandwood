@@ -411,6 +411,20 @@ public abstract class Traces {
     public abstract Set<Variable<?>> getRequiredIntermediates(Variable<?> v);
 
     /**
+     * Method to return a set containing all the fix-able intermediate variables.
+     * 
+     * @return
+     */
+    public abstract Set<Variable<?>> getFixableIntermediates();
+
+    /**
+     * Mathod returning all the sample tasks that can be fixed.
+     * 
+     * @return
+     */
+    public abstract Set<SampleTask<?, ?>> getFixableTasks();
+
+    /**
      * Method to get all the sample tasks that a variable depends on without a trace going via a random variable or
      * observed variable.
      * 
