@@ -7,9 +7,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	
 	// Declare the variables for the model.
 	private double[] cv$var4$stateProbabilityGlobal;
-	private boolean fixedFlag$sample21 = false;
 	private boolean fixedFlag$sample4 = false;
-	private boolean fixedProbFlag$sample21 = false;
 	private boolean fixedProbFlag$sample4 = false;
 	private boolean guard;
 	private double logProbability$$evidence;
@@ -31,24 +29,6 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		super(target);
 	}
 
-	// Getter for fixedFlag$sample21.
-	@Override
-	public final boolean get$fixedFlag$sample21() {
-		return fixedFlag$sample21;
-	}
-
-	// Setter for fixedFlag$sample21.
-	@Override
-	public final void set$fixedFlag$sample21(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample21 including if probabilities
-		// need to be updated.
-		fixedFlag$sample21 = cv$value;
-		
-		// Should the probability of sample 21 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample21 = (fixedFlag$sample21 && fixedProbFlag$sample21);
-	}
-
 	// Getter for fixedFlag$sample4.
 	@Override
 	public final boolean get$fixedFlag$sample4() {
@@ -65,10 +45,6 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Should the probability of sample 4 be set to fixed. This will only every change
 		// the flag to false.
 		fixedProbFlag$sample4 = (fixedFlag$sample4 && fixedProbFlag$sample4);
-		
-		// Should the probability of sample 21 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample21 = (fixedFlag$sample4 && fixedProbFlag$sample21);
 	}
 
 	// Getter for guard.
@@ -86,9 +62,6 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Unset the fixed probability flag for sample 4 as it depends on guard.
 		fixedProbFlag$sample4 = false;
-		
-		// Unset the fixed probability flag for sample 21 as it depends on guard.
-		fixedProbFlag$sample21 = false;
 	}
 
 	// Getter for logProbability$$evidence.
@@ -161,186 +134,115 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for var19.
 	@Override
 	public final void set$var19(double cv$value) {
-		// Set flags for all the side effects of var19 including if probabilities need to
-		// be updated.
 		var19 = cv$value;
-		
-		// Unset the fixed probability flag for sample 21 as it depends on var19.
-		fixedProbFlag$sample21 = false;
 	}
 
 	// Calculate the probability of the samples represented by sample21 using sampled
 	// values.
 	private final void logProbabilityValue$sample21() {
-		// Determine if we need to calculate the values for sample task 21 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample21) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
+		// Generating probabilities for sample task
+		// Accumulator for probabilities of instances of the random variable
+		double cv$accumulator = 0.0;
+		
+		// A guard to check if the sample value is ever reached.
+		boolean cv$sampleReached = false;
+		if(!guard) {
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
 			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if(!guard) {
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				double cv$sampleAccumulator = 0.0;
-				
-				// An accumulator for log probabilities.
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				
-				// An accumulator for the distributed probability space covered.
-				double cv$probabilityReached = 0.0;
+			// An accumulator for log probabilities.
+			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			
+			// An accumulator for the distributed probability space covered.
+			double cv$probabilityReached = 0.0;
+			{
+				// The sample value to calculate the probability of generating
+				double cv$sampleValue = var19;
 				{
-					// The sample value to calculate the probability of generating
-					double cv$sampleValue = var19;
 					{
-						{
-							double var16 = 0.0;
-							double var17 = 1.0;
-							
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (((var16 <= cv$sampleValue) && (cv$sampleValue < var17))?(-Math.log((var17 - var16))):Double.NEGATIVE_INFINITY));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
+						double var16 = 0.0;
+						double var17 = 1.0;
+						
+						// Store the value of the function call, so the function call is only made once.
+						double cv$weightedProbability = (Math.log(1.0) + (((var16 <= cv$sampleValue) && (cv$sampleValue < var17))?(-Math.log((var17 - var16))):Double.NEGATIVE_INFINITY));
+						
+						// Add the probability of this sample task to the distribution accumulator.
+						if((cv$weightedProbability < cv$distributionAccumulator))
+							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+						else {
+							// If the second value is -infinity.
+							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+								cv$distributionAccumulator = cv$weightedProbability;
+							else
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 						}
+						
+						// Add the probability of this distribution configuration to the accumulator.
+						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
-				if((cv$probabilityReached == 0.0))
-					// Return negative infinity if no distribution probability space is reached.
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					// Scale the probability relative to the observed distribution space.
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var18 = cv$sampleAccumulator;
-				
-				// Store the sample task probability
-				logProbability$sample21 = cv$sampleProbability;
 			}
+			if((cv$probabilityReached == 0.0))
+				// Return negative infinity if no distribution probability space is reached.
+				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			else
+				// Scale the probability relative to the observed distribution space.
+				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+			double cv$sampleProbability = cv$distributionAccumulator;
 			
-			// Guard to ensure that value is only updated once for this probability.
-			boolean cv$guard$value = false;
+			// Record that the sample was reached.
+			cv$sampleReached = true;
 			
-			// Guard to ensure that value2 is only updated once for this probability.
-			boolean cv$guard$value2 = false;
+			// Add the probability of this sample task to the sample task accumulator.
+			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			
-			// Update the variable probability
-			logProbability$var19 = (logProbability$var19 + cv$accumulator);
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$var18 = cv$sampleAccumulator;
 			
-			// Add probability to constructed variables from the combined probability
-			{
+			// Store the sample task probability
+			logProbability$sample21 = cv$sampleProbability;
+		}
+		
+		// Guard to ensure that value is only updated once for this probability.
+		boolean cv$guard$value = false;
+		
+		// Guard to ensure that value2 is only updated once for this probability.
+		boolean cv$guard$value2 = false;
+		
+		// Update the variable probability
+		logProbability$var19 = (logProbability$var19 + cv$accumulator);
+		
+		// Add probability to constructed variables from the combined probability
+		{
+			// If the probability of the variable has not already been updated
+			if(!cv$guard$value) {
+				// Set the guard so the update is only applied once.
+				cv$guard$value = true;
+				
+				// Update the variable probability
+				logProbability$value = (logProbability$value + cv$accumulator);
+			}
+		}
+		
+		// Looking for a path between Sample 21 and consumer double[] 27.
+		{
+			if((0 == 0)) {
 				// If the probability of the variable has not already been updated
-				if(!cv$guard$value) {
+				if(!cv$guard$value2) {
 					// Set the guard so the update is only applied once.
-					cv$guard$value = true;
+					cv$guard$value2 = true;
 					
 					// Update the variable probability
-					logProbability$value = (logProbability$value + cv$accumulator);
+					logProbability$value2 = (logProbability$value2 + cv$accumulator);
 				}
 			}
-			
-			// Looking for a path between Sample 21 and consumer double[] 27.
-			{
-				if((0 == 0)) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$value2) {
-						// Set the guard so the update is only applied once.
-						cv$guard$value2 = true;
-						
-						// Update the variable probability
-						logProbability$value2 = (logProbability$value2 + cv$accumulator);
-					}
-				}
-			}
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample21 = (fixedFlag$sample21 && fixedFlag$sample4);
 		}
-		// Using cached values.
-		else {
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if(!guard) {
-				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample21;
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var18 = cv$rvAccumulator;
-			}
-			
-			// Guard to ensure that value is only updated once for this probability.
-			boolean cv$guard$value = false;
-			
-			// Guard to ensure that value2 is only updated once for this probability.
-			boolean cv$guard$value2 = false;
-			
-			// Update the variable probability
-			logProbability$var19 = (logProbability$var19 + cv$accumulator);
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				// If the probability of the variable has not already been updated
-				if(!cv$guard$value) {
-					// Set the guard so the update is only applied once.
-					cv$guard$value = true;
-					
-					// Update the variable probability
-					logProbability$value = (logProbability$value + cv$accumulator);
-				}
-			}
-			
-			// Looking for a path between Sample 21 and consumer double[] 27.
-			{
-				if((0 == 0)) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$value2) {
-						// Set the guard so the update is only applied once.
-						cv$guard$value2 = true;
-						
-						// Update the variable probability
-						logProbability$value2 = (logProbability$value2 + cv$accumulator);
-					}
-				}
-			}
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+		
+		// Add probability to model
+		logProbability$$model = (logProbability$$model + cv$accumulator);
+		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 	}
 
 	// Calculate the probability of the samples represented by sample4 using sampled values.
@@ -692,13 +594,10 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(guard)
 			value[0] = 1.0;
 		else {
-			if(!fixedFlag$sample21)
-				var19 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
-			if(!(fixedFlag$sample4 && fixedFlag$sample21))
-				value[0] = var19;
+			var19 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			value[0] = var19;
 		}
-		if(!(fixedFlag$sample4 && fixedFlag$sample21))
-			value2[0] = value[0];
+		value2[0] = value[0];
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -709,16 +608,14 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 		if(!guard) {
-			if(!fixedFlag$sample21) {
-				// Track if it is possible to reach an observed variable
-				boolean observationGuard$var19 = false;
-				{
-					// Observation reached
-					observationGuard$var19 = true;
-				}
-				if(!observationGuard$var19)
-					var19 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			// Track if it is possible to reach an observed variable
+			boolean observationGuard$var19 = false;
+			{
+				// Observation reached
+				observationGuard$var19 = true;
 			}
+			if(!observationGuard$var19)
+				var19 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 		}
 	}
 
@@ -731,8 +628,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(guard)
 			value[0] = 1.0;
 		else {
-			if(!fixedFlag$sample21)
-				var19 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			var19 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 			value[0] = var19;
 		}
 		value2[0] = value[0];
@@ -745,16 +641,14 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 		if(!guard) {
-			if(!fixedFlag$sample21) {
-				// Track if it is possible to reach an observed variable
-				boolean observationGuard$var19 = false;
-				{
-					// Observation reached
-					observationGuard$var19 = true;
-				}
-				if(!observationGuard$var19)
-					var19 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			// Track if it is possible to reach an observed variable
+			boolean observationGuard$var19 = false;
+			{
+				// Observation reached
+				observationGuard$var19 = true;
 			}
+			if(!observationGuard$var19)
+				var19 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 		}
 	}
 
@@ -766,16 +660,14 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 		if(!guard) {
-			if(!fixedFlag$sample21) {
-				// Track if it is possible to reach an observed variable
-				boolean observationGuard$var19 = false;
-				{
-					// Observation reached
-					observationGuard$var19 = true;
-				}
-				if(!observationGuard$var19)
-					var19 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+			// Track if it is possible to reach an observed variable
+			boolean observationGuard$var19 = false;
+			{
+				// Observation reached
+				observationGuard$var19 = true;
 			}
+			if(!observationGuard$var19)
+				var19 = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 		}
 	}
 
@@ -819,8 +711,7 @@ class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$var19 = 0.0;
 		logProbability$value = 0.0;
 		logProbability$value2 = 0.0;
-		if(!fixedProbFlag$sample21)
-			logProbability$sample21 = Double.NaN;
+		logProbability$sample21 = Double.NaN;
 	}
 
 	// Construct the evidence probabilities.

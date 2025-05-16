@@ -15,11 +15,8 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	private int[][] documents;
 	private boolean fixedFlag$sample42 = false;
 	private boolean fixedFlag$sample58 = false;
-	private boolean fixedFlag$sample90 = false;
 	private boolean fixedProbFlag$sample42 = false;
 	private boolean fixedProbFlag$sample58 = false;
-	private boolean fixedProbFlag$sample90 = false;
-	private boolean fixedProbFlag$sample93 = false;
 	private int[] length$documents;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
@@ -90,12 +87,6 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		// 
 		// Substituted "fixedFlag$sample42" with its value "cv$value".
 		fixedProbFlag$sample42 = (cv$value && fixedProbFlag$sample42);
-		
-		// Should the probability of sample 93 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample42" with its value "cv$value".
-		fixedProbFlag$sample93 = (cv$value && fixedProbFlag$sample93);
 	}
 
 	// Getter for fixedFlag$sample58.
@@ -116,38 +107,6 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		// 
 		// Substituted "fixedFlag$sample58" with its value "cv$value".
 		fixedProbFlag$sample58 = (cv$value && fixedProbFlag$sample58);
-		
-		// Should the probability of sample 90 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample58" with its value "cv$value".
-		fixedProbFlag$sample90 = (cv$value && fixedProbFlag$sample90);
-	}
-
-	// Getter for fixedFlag$sample90.
-	@Override
-	public final boolean get$fixedFlag$sample90() {
-		return fixedFlag$sample90;
-	}
-
-	// Setter for fixedFlag$sample90.
-	@Override
-	public final void set$fixedFlag$sample90(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample90 including if probabilities
-		// need to be updated.
-		fixedFlag$sample90 = cv$value;
-		
-		// Should the probability of sample 90 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample90" with its value "cv$value".
-		fixedProbFlag$sample90 = (cv$value && fixedProbFlag$sample90);
-		
-		// Should the probability of sample 93 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample90" with its value "cv$value".
-		fixedProbFlag$sample93 = (cv$value && fixedProbFlag$sample93);
 	}
 
 	// Getter for length$documents.
@@ -227,9 +186,6 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		
 		// Unset the fixed probability flag for sample 42 as it depends on phi.
 		fixedProbFlag$sample42 = false;
-		
-		// Unset the fixed probability flag for sample 93 as it depends on phi.
-		fixedProbFlag$sample93 = false;
 	}
 
 	// Getter for theta.
@@ -248,9 +204,6 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		
 		// Unset the fixed probability flag for sample 58 as it depends on theta.
 		fixedProbFlag$sample58 = false;
-		
-		// Unset the fixed probability flag for sample 90 as it depends on theta.
-		fixedProbFlag$sample90 = false;
 	}
 
 	// Getter for vocabSize.
@@ -455,183 +408,116 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	// Calculate the probability of the samples represented by sample90 using sampled
 	// values.
 	private final void logProbabilityValue$sample90() {
-		// Determine if we need to calculate the values for sample task 90 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample90) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-				for(int j = 0; j < length$documents[i$var71]; j += 1) {
-					// The sample value to calculate the probability of generating
-					int cv$sampleValue = z[i$var71][j];
-					
-					// Variable declaration of cv$distributionAccumulator moved.
-					// Declaration comment was:
-					// Variable declaration of cv$distributionAccumulator moved.
-					// Declaration comment was:
-					// An accumulator for log probabilities.
-					// 
-					// Store the value of the function call, so the function call is only made once.
-					// 
-					// Scale the probability relative to the observed distribution space.
-					// 
-					// Add the probability of this distribution configuration to the accumulator.
-					// 
-					// An accumulator for the distributed probability space covered.
-					// 
-					// Variable declaration of cv$distributionAccumulator moved.
-					// Declaration comment was:
-					// An accumulator for log probabilities.
-					// 
-					// Store the value of the function call, so the function call is only made once.
-					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < noTopics))?Math.log(theta[i$var71][cv$sampleValue]):Double.NEGATIVE_INFINITY);
-					
-					// Add the probability of this instance of the random variable to the probability
-					// of all instances of the random variable.
-					// 
-					// Add the probability of this sample task to the sample task accumulator.
-					// 
-					// Accumulator for sample probabilities for a specific instance of the random variable.
-					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-					
-					// Add the probability of this sample task to the sample task accumulator.
-					// 
-					// Accumulator for sample probabilities for a specific instance of the random variable.
-					logProbability$var87[i$var71][j] = cv$distributionAccumulator;
-					
-					// Store the sample task probability
-					logProbability$sample90[i$var71][j] = cv$distributionAccumulator;
-				}
+		// Generating probabilities for sample task
+		// Accumulator for probabilities of instances of the random variable
+		double cv$accumulator = 0.0;
+		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < length$documents[i$var71]; j += 1) {
+				// The sample value to calculate the probability of generating
+				int cv$sampleValue = z[i$var71][j];
+				
+				// Variable declaration of cv$distributionAccumulator moved.
+				// Declaration comment was:
+				// Variable declaration of cv$distributionAccumulator moved.
+				// Declaration comment was:
+				// An accumulator for log probabilities.
+				// 
+				// Store the value of the function call, so the function call is only made once.
+				// 
+				// Scale the probability relative to the observed distribution space.
+				// 
+				// Add the probability of this distribution configuration to the accumulator.
+				// 
+				// An accumulator for the distributed probability space covered.
+				// 
+				// Variable declaration of cv$distributionAccumulator moved.
+				// Declaration comment was:
+				// An accumulator for log probabilities.
+				// 
+				// Store the value of the function call, so the function call is only made once.
+				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < noTopics))?Math.log(theta[i$var71][cv$sampleValue]):Double.NEGATIVE_INFINITY);
+				
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Accumulator for sample probabilities for a specific instance of the random variable.
+				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Accumulator for sample probabilities for a specific instance of the random variable.
+				logProbability$var87[i$var71][j] = cv$distributionAccumulator;
+				
+				// Store the sample task probability
+				logProbability$sample90[i$var71][j] = cv$distributionAccumulator;
 			}
-			
-			// Update the variable probability
-			logProbability$z = (logProbability$z + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample90)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample90 = (fixedFlag$sample90 && fixedFlag$sample58);
 		}
-		// Using cached values.
-		else {
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-				for(int j = 0; j < length$documents[i$var71]; j += 1) {
-					// Variable declaration of cv$rvAccumulator moved.
-					double cv$rvAccumulator = logProbability$sample90[i$var71][j];
-					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var87[i$var71][j] = cv$rvAccumulator;
-				}
-			}
-			
-			// Update the variable probability
-			logProbability$z = (logProbability$z + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample90)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+		
+		// Update the variable probability
+		logProbability$z = (logProbability$z + cv$accumulator);
+		
+		// Add probability to model
+		logProbability$$model = (logProbability$$model + cv$accumulator);
 	}
 
 	// Calculate the probability of the samples represented by sample93 using sampled
 	// values.
 	private final void logProbabilityValue$sample93() {
-		// Determine if we need to calculate the values for sample task 93 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample93) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-				for(int j = 0; j < length$documents[i$var71]; j += 1) {
-					// The sample value to calculate the probability of generating
-					int cv$sampleValue = w[i$var71][j];
-					
-					// Variable declaration of cv$distributionAccumulator moved.
-					// Declaration comment was:
-					// Variable declaration of cv$distributionAccumulator moved.
-					// Declaration comment was:
-					// An accumulator for log probabilities.
-					// 
-					// Store the value of the function call, so the function call is only made once.
-					// 
-					// Scale the probability relative to the observed distribution space.
-					// 
-					// Add the probability of this distribution configuration to the accumulator.
-					// 
-					// An accumulator for the distributed probability space covered.
-					// 
-					// Variable declaration of cv$distributionAccumulator moved.
-					// Declaration comment was:
-					// An accumulator for log probabilities.
-					// 
-					// Store the value of the function call, so the function call is only made once.
-					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < vocabSize))?Math.log(phi[z[i$var71][j]][cv$sampleValue]):Double.NEGATIVE_INFINITY);
-					
-					// Add the probability of this instance of the random variable to the probability
-					// of all instances of the random variable.
-					// 
-					// Add the probability of this sample task to the sample task accumulator.
-					// 
-					// Accumulator for sample probabilities for a specific instance of the random variable.
-					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-					
-					// Add the probability of this sample task to the sample task accumulator.
-					// 
-					// Accumulator for sample probabilities for a specific instance of the random variable.
-					logProbability$var90[i$var71][j] = cv$distributionAccumulator;
-					
-					// Store the sample task probability
-					logProbability$sample93[i$var71][j] = cv$distributionAccumulator;
-				}
+		// Generating probabilities for sample task
+		// Accumulator for probabilities of instances of the random variable
+		double cv$accumulator = 0.0;
+		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < length$documents[i$var71]; j += 1) {
+				// The sample value to calculate the probability of generating
+				int cv$sampleValue = w[i$var71][j];
+				
+				// Variable declaration of cv$distributionAccumulator moved.
+				// Declaration comment was:
+				// Variable declaration of cv$distributionAccumulator moved.
+				// Declaration comment was:
+				// An accumulator for log probabilities.
+				// 
+				// Store the value of the function call, so the function call is only made once.
+				// 
+				// Scale the probability relative to the observed distribution space.
+				// 
+				// Add the probability of this distribution configuration to the accumulator.
+				// 
+				// An accumulator for the distributed probability space covered.
+				// 
+				// Variable declaration of cv$distributionAccumulator moved.
+				// Declaration comment was:
+				// An accumulator for log probabilities.
+				// 
+				// Store the value of the function call, so the function call is only made once.
+				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < vocabSize))?Math.log(phi[z[i$var71][j]][cv$sampleValue]):Double.NEGATIVE_INFINITY);
+				
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Accumulator for sample probabilities for a specific instance of the random variable.
+				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Accumulator for sample probabilities for a specific instance of the random variable.
+				logProbability$var90[i$var71][j] = cv$distributionAccumulator;
+				
+				// Store the sample task probability
+				logProbability$sample93[i$var71][j] = cv$distributionAccumulator;
 			}
-			
-			// Update the variable probability
-			logProbability$w = (logProbability$w + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample93 = (fixedFlag$sample42 && fixedFlag$sample90);
 		}
-		// Using cached values.
-		else {
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-				for(int j = 0; j < length$documents[i$var71]; j += 1) {
-					// Variable declaration of cv$rvAccumulator moved.
-					double cv$rvAccumulator = logProbability$sample93[i$var71][j];
-					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var90[i$var71][j] = cv$rvAccumulator;
-				}
-			}
-			
-			// Update the variable probability
-			logProbability$w = (logProbability$w + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+		
+		// Update the variable probability
+		logProbability$w = (logProbability$w + cv$accumulator);
+		
+		// Add probability to model
+		logProbability$$model = (logProbability$$model + cv$accumulator);
+		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -862,13 +748,10 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
 			w[i$var71] = new int[length$documents[i$var71]];
 		
-		// If z has not been set already allocate space.
-		if(!fixedFlag$sample90) {
-			// Constructor for z
-			z = new int[length$documents.length][];
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-				z[i$var71] = new int[length$documents[i$var71]];
-		}
+		// Constructor for z
+		z = new int[length$documents.length][];
+		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
+			z[i$var71] = new int[length$documents[i$var71]];
 		
 		// Constructor for logProbability$var87
 		logProbability$var87 = new double[length$documents.length][];
@@ -911,8 +794,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 			int[] t = w[i$var71];
 			for(int j = 0; j < length$documents[i$var71]; j += 1) {
-				if(!fixedFlag$sample90)
-					z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
+				z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
 				t[j] = DistributionSampling.sampleCategorical(RNG$, phi[z[i$var71][j]], vocabSize);
 			}
 		}
@@ -934,13 +816,9 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
 				DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, theta[var56]);
 		}
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample90) {
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-				for(int j = 0; j < length$documents[i$var71]; j += 1)
-					z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
-			}
+		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < length$documents[i$var71]; j += 1)
+				z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
 		}
 	}
 
@@ -962,8 +840,7 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 			int[] t = w[i$var71];
 			for(int j = 0; j < length$documents[i$var71]; j += 1) {
-				if(!fixedFlag$sample90)
-					z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
+				z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
 				t[j] = DistributionSampling.sampleCategorical(RNG$, phi[z[i$var71][j]], vocabSize);
 			}
 		}
@@ -984,13 +861,9 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
 				DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, theta[var56]);
 		}
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample90) {
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-				for(int j = 0; j < length$documents[i$var71]; j += 1)
-					z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
-			}
+		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < length$documents[i$var71]; j += 1)
+				z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
 		}
 	}
 
@@ -1010,13 +883,9 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
 				DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, theta[var56]);
 		}
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample90) {
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-				for(int j = 0; j < length$documents[i$var71]; j += 1)
-					z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
-			}
+		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < length$documents[i$var71]; j += 1)
+				z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
 		}
 	}
 
@@ -1036,23 +905,16 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				for(int var56 = 0; var56 < length$documents.length; var56 += 1)
 					sample58(var56);
 			}
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample90) {
-				for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-					for(int j = 0; j < length$documents[i$var71]; j += 1)
-						sample90(i$var71, j);
-				}
+			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
+				for(int j = 0; j < length$documents[i$var71]; j += 1)
+					sample90(i$var71, j);
 			}
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample90) {
-				for(int i$var71 = (length$documents.length - 1); i$var71 >= 0; i$var71 -= 1) {
-					for(int j = (length$documents[i$var71] - 1); j >= 0; j -= 1)
-						sample90(i$var71, j);
-				}
+			for(int i$var71 = (length$documents.length - 1); i$var71 >= 0; i$var71 -= 1) {
+				for(int j = (length$documents[i$var71] - 1); j >= 0; j -= 1)
+					sample90(i$var71, j);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1105,22 +967,18 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 				logProbability$var87[i$var71][j] = Double.NaN;
 		}
 		logProbability$z = 0.0;
-		if(!fixedProbFlag$sample90) {
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-				for(int j = 0; j < length$documents[i$var71]; j += 1)
-					logProbability$sample90[i$var71][j] = Double.NaN;
-			}
+		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < length$documents[i$var71]; j += 1)
+				logProbability$sample90[i$var71][j] = Double.NaN;
 		}
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 			for(int j = 0; j < length$documents[i$var71]; j += 1)
 				logProbability$var90[i$var71][j] = Double.NaN;
 		}
 		logProbability$w = 0.0;
-		if(!fixedProbFlag$sample93) {
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-				for(int j = 0; j < length$documents[i$var71]; j += 1)
-					logProbability$sample93[i$var71][j] = Double.NaN;
-			}
+		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < length$documents[i$var71]; j += 1)
+				logProbability$sample93[i$var71][j] = Double.NaN;
 		}
 	}
 
@@ -1135,8 +993,6 @@ class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			logProbabilityValue$sample42();
 		if(fixedFlag$sample58)
 			logProbabilityValue$sample58();
-		if(fixedFlag$sample90)
-			logProbabilityValue$sample90();
 		logProbabilityValue$sample93();
 	}
 

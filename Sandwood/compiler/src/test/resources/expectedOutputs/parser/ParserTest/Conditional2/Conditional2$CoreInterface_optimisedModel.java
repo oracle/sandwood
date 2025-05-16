@@ -2,12 +2,6 @@ package org.sandwood.compiler.tests.parser;
 
 interface Conditional2$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 
-	// Getter for fixedFlag$sample21.
-	public boolean get$fixedFlag$sample21();
-
-	// Setter for fixedFlag$sample21.
-	public void set$fixedFlag$sample21(boolean cv$value);
-
 	// Getter for fixedFlag$sample4.
 	public boolean get$fixedFlag$sample4();
 

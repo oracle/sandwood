@@ -8,9 +8,6 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	
 	// Declare the variables for the model.
 	private double bias;
-	private boolean fixedFlag$sample14 = false;
-	private boolean fixedProbFlag$sample14 = false;
-	private boolean fixedProbFlag$sample16 = false;
 	private boolean flip;
 	private boolean flipMeasured;
 	private double guard;
@@ -37,37 +34,7 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Setter for bias.
 	@Override
 	public final void set$bias(double cv$value) {
-		// Set flags for all the side effects of bias including if probabilities need to be
-		// updated.
 		bias = cv$value;
-		
-		// Unset the fixed probability flag for sample 14 as it depends on bias.
-		fixedProbFlag$sample14 = false;
-		
-		// Unset the fixed probability flag for sample 16 as it depends on bias.
-		fixedProbFlag$sample16 = false;
-	}
-
-	// Getter for fixedFlag$sample14.
-	@Override
-	public final boolean get$fixedFlag$sample14() {
-		return fixedFlag$sample14;
-	}
-
-	// Setter for fixedFlag$sample14.
-	@Override
-	public final void set$fixedFlag$sample14(boolean cv$value) {
-		// Set flags for all the side effects of fixedFlag$sample14 including if probabilities
-		// need to be updated.
-		fixedFlag$sample14 = cv$value;
-		
-		// Should the probability of sample 14 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample14 = (fixedFlag$sample14 && fixedProbFlag$sample14);
-		
-		// Should the probability of sample 16 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample16 = (fixedFlag$sample14 && fixedProbFlag$sample16);
 	}
 
 	// Getter for flip.
@@ -133,226 +100,149 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Calculate the probability of the samples represented by sample14 using sampled
 	// values.
 	private final void logProbabilityValue$sample14() {
-		// Determine if we need to calculate the values for sample task 14 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample14) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
+		// Generating probabilities for sample task
+		// Accumulator for probabilities of instances of the random variable
+		double cv$accumulator = 0.0;
+		
+		// A guard to check if the sample value is ever reached.
+		boolean cv$sampleReached = false;
+		if(Double.isNaN(guard)) {
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
 			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if(Double.isNaN(guard)) {
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				double cv$sampleAccumulator = 0.0;
-				
-				// An accumulator for log probabilities.
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				
-				// An accumulator for the distributed probability space covered.
-				double cv$probabilityReached = 0.0;
+			// An accumulator for log probabilities.
+			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			
+			// An accumulator for the distributed probability space covered.
+			double cv$probabilityReached = 0.0;
+			{
+				// The sample value to calculate the probability of generating
+				double cv$sampleValue = bias;
 				{
-					// The sample value to calculate the probability of generating
-					double cv$sampleValue = bias;
 					{
-						{
-							double var9 = 1.0;
-							double var10 = 1.0;
-							
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var9, var10));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
+						double var9 = 1.0;
+						double var10 = 1.0;
+						
+						// Store the value of the function call, so the function call is only made once.
+						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var9, var10));
+						
+						// Add the probability of this sample task to the distribution accumulator.
+						if((cv$weightedProbability < cv$distributionAccumulator))
+							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+						else {
+							// If the second value is -infinity.
+							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+								cv$distributionAccumulator = cv$weightedProbability;
+							else
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 						}
+						
+						// Add the probability of this distribution configuration to the accumulator.
+						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
-				if((cv$probabilityReached == 0.0))
-					// Return negative infinity if no distribution probability space is reached.
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					// Scale the probability relative to the observed distribution space.
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var11 = cv$sampleAccumulator;
-				
-				// Store the sample task probability
-				logProbability$sample14 = cv$sampleProbability;
 			}
+			if((cv$probabilityReached == 0.0))
+				// Return negative infinity if no distribution probability space is reached.
+				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			else
+				// Scale the probability relative to the observed distribution space.
+				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+			double cv$sampleProbability = cv$distributionAccumulator;
 			
-			// Update the variable probability
-			logProbability$bias = (logProbability$bias + cv$accumulator);
+			// Record that the sample was reached.
+			cv$sampleReached = true;
 			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			// Add the probability of this sample task to the sample task accumulator.
+			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample14)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$var11 = cv$sampleAccumulator;
 			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample14 = fixedFlag$sample14;
+			// Store the sample task probability
+			logProbability$sample14 = cv$sampleProbability;
 		}
-		// Using cached values.
-		else {
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if(Double.isNaN(guard)) {
-				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample14;
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var11 = cv$rvAccumulator;
-			}
-			
-			// Update the variable probability
-			logProbability$bias = (logProbability$bias + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample14)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+		
+		// Update the variable probability
+		logProbability$bias = (logProbability$bias + cv$accumulator);
+		
+		// Add probability to model
+		logProbability$$model = (logProbability$$model + cv$accumulator);
 	}
 
 	// Calculate the probability of the samples represented by sample16 using sampled
 	// values.
 	private final void logProbabilityValue$sample16() {
-		// Determine if we need to calculate the values for sample task 16 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample16) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
+		// Generating probabilities for sample task
+		// Accumulator for probabilities of instances of the random variable
+		double cv$accumulator = 0.0;
+		
+		// A guard to check if the sample value is ever reached.
+		boolean cv$sampleReached = false;
+		if(Double.isNaN(guard)) {
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
 			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if(Double.isNaN(guard)) {
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				double cv$sampleAccumulator = 0.0;
-				
-				// An accumulator for log probabilities.
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				
-				// An accumulator for the distributed probability space covered.
-				double cv$probabilityReached = 0.0;
+			// An accumulator for log probabilities.
+			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			
+			// An accumulator for the distributed probability space covered.
+			double cv$probabilityReached = 0.0;
+			{
+				// The sample value to calculate the probability of generating
+				boolean cv$sampleValue = flip;
 				{
-					// The sample value to calculate the probability of generating
-					boolean cv$sampleValue = flip;
 					{
-						{
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?bias:(1.0 - bias))));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
+						// Store the value of the function call, so the function call is only made once.
+						double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?bias:(1.0 - bias))));
+						
+						// Add the probability of this sample task to the distribution accumulator.
+						if((cv$weightedProbability < cv$distributionAccumulator))
+							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+						else {
+							// If the second value is -infinity.
+							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+								cv$distributionAccumulator = cv$weightedProbability;
+							else
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
 						}
+						
+						// Add the probability of this distribution configuration to the accumulator.
+						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
-				if((cv$probabilityReached == 0.0))
-					// Return negative infinity if no distribution probability space is reached.
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					// Scale the probability relative to the observed distribution space.
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$bernoulli = cv$sampleAccumulator;
-				
-				// Store the sample task probability
-				logProbability$sample16 = cv$sampleProbability;
 			}
+			if((cv$probabilityReached == 0.0))
+				// Return negative infinity if no distribution probability space is reached.
+				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			else
+				// Scale the probability relative to the observed distribution space.
+				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+			double cv$sampleProbability = cv$distributionAccumulator;
 			
-			// Update the variable probability
-			logProbability$flip = (logProbability$flip + cv$accumulator);
+			// Record that the sample was reached.
+			cv$sampleReached = true;
 			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			// Add the probability of this sample task to the sample task accumulator.
+			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample16 = fixedFlag$sample14;
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$bernoulli = cv$sampleAccumulator;
+			
+			// Store the sample task probability
+			logProbability$sample16 = cv$sampleProbability;
 		}
-		// Using cached values.
-		else {
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if(Double.isNaN(guard)) {
-				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample16;
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$bernoulli = cv$rvAccumulator;
-			}
-			
-			// Update the variable probability
-			logProbability$flip = (logProbability$flip + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+		
+		// Update the variable probability
+		logProbability$flip = (logProbability$flip + cv$accumulator);
+		
+		// Add probability to model
+		logProbability$$model = (logProbability$$model + cv$accumulator);
+		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -410,8 +300,7 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void forwardGeneration() {
 		if(Double.isNaN(guard)) {
-			if(!fixedFlag$sample14)
-				bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			flip = DistributionSampling.sampleBernoulli(RNG$, bias);
 		}
 	}
@@ -421,10 +310,8 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(Double.isNaN(guard)) {
-			if(!fixedFlag$sample14)
-				bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		}
+		if(Double.isNaN(guard))
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 	}
 
 	// Method to execute the model code conventionally with priming of fixed intermediate
@@ -432,8 +319,7 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void forwardGenerationPrime() {
 		if(Double.isNaN(guard)) {
-			if(!fixedFlag$sample14)
-				bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 			flip = DistributionSampling.sampleBernoulli(RNG$, bias);
 		}
 	}
@@ -442,10 +328,8 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(Double.isNaN(guard)) {
-			if(!fixedFlag$sample14)
-				bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		}
+		if(Double.isNaN(guard))
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -453,10 +337,8 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(Double.isNaN(guard)) {
-			if(!fixedFlag$sample14)
-				bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		}
+		if(Double.isNaN(guard))
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -464,17 +346,13 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
-			if(Double.isNaN(guard)) {
-				if(!fixedFlag$sample14)
-					sample14();
-			}
+			if(Double.isNaN(guard))
+				sample14();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(Double.isNaN(guard)) {
-				if(!fixedFlag$sample14)
-					sample14();
-			}
+			if(Double.isNaN(guard))
+				sample14();
 		}
 		
 		// Reverse the direction of execution for the next iteration
@@ -498,12 +376,10 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$evidence = 0.0;
 		logProbability$var11 = Double.NaN;
 		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample14)
-			logProbability$sample14 = Double.NaN;
+		logProbability$sample14 = Double.NaN;
 		logProbability$bernoulli = Double.NaN;
 		logProbability$flip = 0.0;
-		if(!fixedProbFlag$sample16)
-			logProbability$sample16 = Double.NaN;
+		logProbability$sample16 = Double.NaN;
 	}
 
 	// Construct the evidence probabilities.
@@ -513,8 +389,6 @@ class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample14)
-			logProbabilityValue$sample14();
 		logProbabilityValue$sample16();
 	}
 

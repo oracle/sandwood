@@ -5,9 +5,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Conditional1$CoreInterface {
 	private double[] cv$var4$stateProbabilityGlobal;
-	private boolean fixedFlag$sample16 = false;
 	private boolean fixedFlag$sample4 = false;
-	private boolean fixedProbFlag$sample16 = false;
 	private boolean fixedProbFlag$sample4 = false;
 	private boolean guard;
 	private double logProbability$$evidence;
@@ -28,17 +26,6 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final boolean get$fixedFlag$sample16() {
-		return fixedFlag$sample16;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample16(boolean cv$value) {
-		fixedFlag$sample16 = cv$value;
-		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
-	}
-
-	@Override
 	public final boolean get$fixedFlag$sample4() {
 		return fixedFlag$sample4;
 	}
@@ -47,7 +34,6 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$fixedFlag$sample4(boolean cv$value) {
 		fixedFlag$sample4 = cv$value;
 		fixedProbFlag$sample4 = (cv$value && fixedProbFlag$sample4);
-		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
 	}
 
 	@Override
@@ -59,7 +45,6 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void set$guard(boolean cv$value) {
 		guard = cv$value;
 		fixedProbFlag$sample4 = false;
-		fixedProbFlag$sample16 = false;
 	}
 
 	@Override
@@ -110,34 +95,20 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final void set$var14(double cv$value) {
 		var14 = cv$value;
-		fixedProbFlag$sample16 = false;
 	}
 
 	private final void logProbabilityValue$sample16() {
-		if(!fixedProbFlag$sample16) {
-			double cv$accumulator = 0.0;
-			if(!guard) {
-				double cv$distributionAccumulator = (((0.0 <= var14) && (var14 < 1.0))?0.0:Double.NEGATIVE_INFINITY);
-				cv$accumulator = cv$distributionAccumulator;
-				logProbability$var13 = cv$distributionAccumulator;
-				logProbability$sample16 = cv$distributionAccumulator;
-				logProbability$value = (logProbability$value + cv$distributionAccumulator);
-			}
-			logProbability$var14 = (logProbability$var14 + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedFlag$sample4);
-		} else {
-			double cv$accumulator = 0.0;
-			if(!guard) {
-				cv$accumulator = logProbability$sample16;
-				logProbability$var13 = logProbability$sample16;
-				logProbability$value = (logProbability$value + logProbability$sample16);
-			}
-			logProbability$var14 = (logProbability$var14 + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		double cv$accumulator = 0.0;
+		if(!guard) {
+			double cv$distributionAccumulator = (((0.0 <= var14) && (var14 < 1.0))?0.0:Double.NEGATIVE_INFINITY);
+			cv$accumulator = cv$distributionAccumulator;
+			logProbability$var13 = cv$distributionAccumulator;
+			logProbability$sample16 = cv$distributionAccumulator;
+			logProbability$value = (logProbability$value + cv$distributionAccumulator);
 		}
+		logProbability$var14 = (logProbability$var14 + cv$accumulator);
+		logProbability$$model = (logProbability$$model + cv$accumulator);
+		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 	}
 
 	private final void logProbabilityValue$sample4() {
@@ -206,10 +177,8 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			if(!fixedFlag$sample4)
 				value = 1.0;
 		} else {
-			if(!fixedFlag$sample16)
-				var14 = DistributionSampling.sampleUniform(RNG$);
-			if((!fixedFlag$sample4 || !fixedFlag$sample16))
-				value = var14;
+			var14 = DistributionSampling.sampleUniform(RNG$);
+			value = var14;
 		}
 	}
 
@@ -226,10 +195,8 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(guard)
 			value = 1.0;
 		else {
-			if(!fixedFlag$sample16)
-				var14 = DistributionSampling.sampleUniform(RNG$);
-			if((!fixedFlag$sample4 || !fixedFlag$sample16))
-				value = var14;
+			var14 = DistributionSampling.sampleUniform(RNG$);
+			value = var14;
 		}
 	}
 
@@ -264,8 +231,7 @@ class Conditional1$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$var13 = Double.NaN;
 		logProbability$var14 = 0.0;
 		logProbability$value = 0.0;
-		if(!fixedProbFlag$sample16)
-			logProbability$sample16 = Double.NaN;
+		logProbability$sample16 = Double.NaN;
 	}
 
 	@Override

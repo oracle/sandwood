@@ -11,6 +11,7 @@ class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private double[] exped;
 	private double[] expedNorm;
 	private boolean fixedFlag$sample26 = false;
+	private boolean fixedFlag$sample82 = false;
 	private boolean fixedProbFlag$sample149 = false;
 	private boolean fixedProbFlag$sample26 = false;
 	private boolean fixedProbFlag$sample82 = false;
@@ -102,6 +103,16 @@ class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		fixedFlag$sample26 = cv$value;
 		fixedProbFlag$sample26 = (cv$value && fixedProbFlag$sample26);
 		fixedProbFlag$sample149 = (cv$value && fixedProbFlag$sample149);
+	}
+
+	@Override
+	public final boolean get$fixedFlag$sample82() {
+		return fixedFlag$sample82;
+	}
+
+	@Override
+	public final void set$fixedFlag$sample82(boolean cv$value) {
+		fixedFlag$sample82 = cv$value;
 	}
 
 	@Override
@@ -598,12 +609,14 @@ class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				}
 			);
 		}
-		parallelFor(RNG$, 0, T, 1,
-			(int forStart$t$var78, int forEnd$t$var78, int threadID$t$var78, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int t$var78 = forStart$t$var78; t$var78 < forEnd$t$var78; t$var78 += 1)
-						sales_sum[t$var78] = DistributionSampling.samplePoisson(RNG$1, 0.5);
-			}
-		);
+		if(!fixedFlag$sample82)
+			parallelFor(RNG$, 0, T, 1,
+				(int forStart$t$var78, int forEnd$t$var78, int threadID$t$var78, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int t$var78 = forStart$t$var78; t$var78 < forEnd$t$var78; t$var78 += 1)
+							sales_sum[t$var78] = DistributionSampling.samplePoisson(RNG$1, 0.5);
+				}
+			);
+
 		parallelFor(RNG$, 0, T, 1,
 			(int forStart$index$t$var105, int forEnd$index$t$var105, int threadID$index$t$var105, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int index$t$var105 = forStart$index$t$var105; index$t$var105 < forEnd$index$t$var105; index$t$var105 += 1) {
@@ -713,12 +726,14 @@ class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$15$1));
 			}
 		);
-		parallelFor(RNG$, 0, T, 1,
-			(int forStart$t$var78, int forEnd$t$var78, int threadID$t$var78, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int t$var78 = forStart$t$var78; t$var78 < forEnd$t$var78; t$var78 += 1)
-						sales_sum[t$var78] = DistributionSampling.samplePoisson(RNG$1, 0.5);
-			}
-		);
+		if(!fixedFlag$sample82)
+			parallelFor(RNG$, 0, T, 1,
+				(int forStart$t$var78, int forEnd$t$var78, int threadID$t$var78, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int t$var78 = forStart$t$var78; t$var78 < forEnd$t$var78; t$var78 += 1)
+							sales_sum[t$var78] = DistributionSampling.samplePoisson(RNG$1, 0.5);
+				}
+			);
+
 		parallelFor(RNG$, 0, T, 1,
 			(int forStart$index$t$var105, int forEnd$index$t$var105, int threadID$index$t$var105, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int index$t$var105 = forStart$index$t$var105; index$t$var105 < forEnd$index$t$var105; index$t$var105 += 1) {
@@ -929,6 +944,7 @@ class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 	@Override
 	public final void propagateObservedValues() {
+		fixedFlag$sample82 = false;
 		int cv$length1 = Sales.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 			int[] cv$source2 = ObsSales[cv$index1];

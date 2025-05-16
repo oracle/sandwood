@@ -5,6 +5,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.common.exceptions.SandwoodException;
+import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -77,7 +78,7 @@ public class Flip1CoinMK12 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
+            throw new SandwoodException("An observed variables can only have the value fixed to the observed value if the value is consumed by another random variable.");
         }
 
         @Override
@@ -106,17 +107,12 @@ public class Flip1CoinMK12 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample16(fixed);
-            }
+            throw new SandwoodRuntimeException("This method should never be called on a private variable.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample16())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            throw new SandwoodRuntimeException("This method should never be called on a private variable.");
         }
     };
 
@@ -135,17 +131,12 @@ public class Flip1CoinMK12 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample28(fixed);
-            }
+            throw new SandwoodRuntimeException("This method should never be called on a private variable.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample28())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            throw new SandwoodRuntimeException("This method should never be called on a private variable.");
         }
     };
 
@@ -164,17 +155,12 @@ public class Flip1CoinMK12 extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample35(fixed);
-            }
+            throw new SandwoodRuntimeException("This method should never be called on a private variable.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample35())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            throw new SandwoodRuntimeException("This method should never be called on a private variable.");
         }
     };
 
@@ -353,11 +339,6 @@ public class Flip1CoinMK12 extends Model {
             newCore.set$var26(oldCore.get$var26());
         if($var33.isSet())
             newCore.set$var33(oldCore.get$var33());
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample16(oldCore.get$fixedFlag$sample16());
-        newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28());
-        newCore.set$fixedFlag$sample35(oldCore.get$fixedFlag$sample35());
     }
 
     /**

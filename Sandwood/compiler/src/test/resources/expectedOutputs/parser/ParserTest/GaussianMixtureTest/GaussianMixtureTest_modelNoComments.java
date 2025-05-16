@@ -5,6 +5,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.common.exceptions.SandwoodException;
+import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -136,7 +137,7 @@ public class GaussianMixtureTest extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
+            throw new SandwoodException("An observed variables can only have the value fixed to the observed value if the value is consumed by another random variable.");
         }
 
         @Override
@@ -165,17 +166,12 @@ public class GaussianMixtureTest extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample68(fixed);
-            }
+            throw new SandwoodException("An observed variables can only have the value fixed to the observed value if the value is consumed by another random variable.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample68())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.DETERMINISTIC;
         }
     };
 
@@ -303,7 +299,6 @@ public class GaussianMixtureTest extends Model {
         newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17());
         newCore.set$fixedFlag$sample34(oldCore.get$fixedFlag$sample34());
         newCore.set$fixedFlag$sample52(oldCore.get$fixedFlag$sample52());
-        newCore.set$fixedFlag$sample68(oldCore.get$fixedFlag$sample68());
     }
 
     /**

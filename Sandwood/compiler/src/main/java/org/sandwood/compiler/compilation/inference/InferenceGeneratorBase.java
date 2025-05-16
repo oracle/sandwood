@@ -10,8 +10,13 @@ package org.sandwood.compiler.compilation.inference;
 
 import static org.sandwood.compiler.traces.guards.ScopeConstructor.Values.IGNORE_VALUES;
 import static org.sandwood.compiler.traces.guards.ScopeConstructor.Values.PASS_VALUES;
+import static org.sandwood.compiler.trees.irTree.IRTree.addDD;
+import static org.sandwood.compiler.trees.irTree.IRTree.constant;
+import static org.sandwood.compiler.trees.irTree.IRTree.initializeVariable;
 import static org.sandwood.compiler.trees.irTree.IRTree.load;
 import static org.sandwood.compiler.trees.irTree.IRTree.negateBoolean;
+import static org.sandwood.compiler.trees.irTree.IRTree.store;
+import static org.sandwood.compiler.trees.irTree.IRTree.subtractII;
 import static org.sandwood.compiler.trees.irTree.IRTree.voidFunction;
 
 import java.util.ArrayList;
@@ -63,7 +68,6 @@ import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.ArgDesc;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.Visibility;
-import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
 import org.sandwood.compiler.trees.irTree.IRVoidFunction;
@@ -215,7 +219,11 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                     if(s.isDistribution()) {
                         // We know that the "sample" value is not fixed because we are calculating it.
                         if(s != sample) {
-                            IRTreeReturn<BooleanVariable> ifGuard = load(VariableNames.fixedFlagName(s));
+                            IRTreeReturn<BooleanVariable> ifGuard;
+                            if(compilationCtx.traces.getFixableTasks().contains(s))
+                                ifGuard = load(VariableNames.fixedFlagName(s));
+                            else
+                                ifGuard = constant(false);
                             IfElseScopeConstructors ifsc = b.addCondition(ifGuard);
                             processSample(s, consumingRV, ifsc.ifScopeConstructor, groupedTraces.get(s), funcData,
                                     compilationCtx);
@@ -277,7 +285,11 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                                 if(s.isDistribution()) {
                                     // We know that the "sample" value is not fixed because we are calculating it.
                                     if(s != sample) {
-                                        IRTreeReturn<BooleanVariable> ifGuard = load(VariableNames.fixedFlagName(s));
+                                        IRTreeReturn<BooleanVariable> ifGuard;
+                                        if(compilationCtx.traces.getFixableTasks().contains(s))
+                                            ifGuard = load(VariableNames.fixedFlagName(s));
+                                        else
+                                            ifGuard = constant(false);
                                         IfElseScopeConstructors ifsc = consumerSC.addCondition(ifGuard);
                                         processSample(s, consumingRV, ifsc.ifScopeConstructor, groupedTraces.get(s),
                                                 funcData, compilationCtx);
@@ -395,8 +407,11 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                             // fixed, otherwise we have to test.
                             processDistributionSample(ds, consumingRV, b, funcData, compilationCtx);
                         else {
-                            IRTreeReturn<BooleanVariable> ifGuard = negateBoolean(
-                                    load(VariableNames.fixedFlagName(ds)));
+                            IRTreeReturn<BooleanVariable> ifGuard;
+                            if(compilationCtx.traces.getFixableTasks().contains(ds))
+                                ifGuard = negateBoolean(load(VariableNames.fixedFlagName(ds)));
+                            else
+                                ifGuard = constant(true);
                             IfElseScopeConstructors ifsc = b.addCondition(ifGuard);
                             processDistributionSample(ds, consumingRV, ifsc.ifScopeConstructor, funcData,
                                     compilationCtx);
@@ -473,7 +488,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
 
     @SuppressWarnings("unused")
     protected IRTreeReturn<BooleanVariable> inferenceSampleGuard(FuncData funcData, CompilationContext compilationCtx) {
-        return IRTree.constant(true);
+        return constant(true);
     }
 
     /**
@@ -497,8 +512,8 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         // Otherwise create a flag to record if the observed variables are reachable
         VariableDescription<BooleanVariable> observationGuard = VariableNames.calcVarName("varObserved",
                 VariableType.BooleanVariable, true);
-        compilationCtx.addTreeToScope(targetScope, IRTree.initializeVariable(observationGuard, IRTree.constant(false),
-                "A guard to record if the variable is observed"));
+        compilationCtx.addTreeToScope(targetScope,
+                initializeVariable(observationGuard, constant(false), "A guard to record if the variable is observed"));
 
         // Attempt to reach each of the observed variables
         ScopeConstructor a = ScopeConstructor.construct(s, targetScope, "Look for a valid path to an observed variable",
@@ -507,12 +522,12 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
             for(TraceHandle t:ts) {
                 ScopeConstructor b = a.addConstraint(t);
                 b.addTree((TreeBuilderInfo info) -> compilationCtx.addTreeToScope(GlobalScope.scope,
-                        IRTree.store(observationGuard, IRTree.constant(true), "Record that this sample is observed")));
+                        store(observationGuard, constant(true), "Record that this sample is observed")));
             }
         }
 
         // Construct a new target scope that will only execute if none of the observed variables are reachable.
-        targetScope = new IfScope(targetScope, IRTree.negateBoolean(IRTree.load(observationGuard)));
+        targetScope = new IfScope(targetScope, negateBoolean(load(observationGuard)));
         return targetScope;
     }
 
@@ -560,7 +575,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                 IRTreeReturn<IntVariable> start = f.getStart().getForwardIR(compilationCtx);
                 IRTreeReturn<IntVariable> end = f.getEnd().getForwardIR(compilationCtx);
                 if(f.incrementing)
-                    args.add(new ArgDesc<>(indexName, start, IRTree.subtractII(end, IRTree.constant(1))));
+                    args.add(new ArgDesc<>(indexName, start, subtractII(end, constant(1))));
                 else
                     args.add(new ArgDesc<>(indexName, end, start));
 
@@ -663,12 +678,12 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         VariableDescription<DoubleVariable> reachedSourceName = VariableNames.scopeVarName("reachedSourceProbability",
                 VariableType.DoubleVariable);
         dConsumerAllArgs.addTree((TreeBuilderInfo info) -> compilationCtx.addTreeToScope(GlobalScope.scope,
-                IRTree.initializeVariable(reachedSourceName, IRTree.constant(0.0),
+                initializeVariable(reachedSourceName, constant(0.0),
                         "Declare and zero an accumulator for tracking the reached source probability space.")));
 
         ScopeConstructor dSourceAllArgs = dConsumerAllArgs.resetProbabilities().applyDistributedArguments(0);
         dSourceAllArgs.addTree((TreeBuilderInfo info) -> compilationCtx.addTreeToScope(GlobalScope.scope,
-                IRTree.store(reachedSourceName, IRTree.addDD(IRTree.load(reachedSourceName), info.probability),
+                store(reachedSourceName, addDD(load(reachedSourceName), info.probability),
                         "Add the probability of this argument configuration.")));
 
         int constraintCount = c.getConstraintCount();
@@ -683,7 +698,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
              */
             getConsumerRVInputIR(info, consumer, funcData, compilationCtx);
             info.changeSubstitutions(constraintCount - 1, compilationCtx);
-            getDistributionSampleIR(s, IRTree.load(reachedSourceName), funcData, info, compilationCtx);
+            getDistributionSampleIR(s, load(reachedSourceName), funcData, info, compilationCtx);
         });
 
         c.addTree((TreeBuilderInfo info) -> getPerDistributedSampleEndIR(funcData, s, info, compilationCtx));

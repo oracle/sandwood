@@ -26,12 +26,6 @@ interface DistributionTest2b$CoreInterface extends org.sandwood.runtime.internal
 	// Setter for fixedFlag$sample23.
 	public void set$fixedFlag$sample23(boolean cv$value);
 
-	// Getter for fixedFlag$sample36.
-	public boolean get$fixedFlag$sample36();
-
-	// Setter for fixedFlag$sample36.
-	public void set$fixedFlag$sample36(boolean cv$value);
-
 	// Getter for fixedFlag$sample5.
 	public boolean get$fixedFlag$sample5();
 

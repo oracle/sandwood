@@ -5,6 +5,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.common.exceptions.SandwoodException;
+import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -117,7 +118,7 @@ public class LDATest extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
+            throw new SandwoodException("An observed variables can only have the value fixed to the observed value if the value is consumed by another random variable.");
         }
 
         @Override
@@ -151,17 +152,12 @@ public class LDATest extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            synchronized(model) {
-                system$c.set$fixedFlag$sample90(fixed);
-            }
+            throw new SandwoodException("An observed variables can only have the value fixed to the observed value if the value is consumed by another random variable.");
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample90())
-                return Immutability.FIXED;
-            else
-                return Immutability.FREE;
+            return Immutability.DETERMINISTIC;
         }
     };
 
@@ -344,7 +340,6 @@ public class LDATest extends Model {
         //Set fixed flags
         newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42());
         newCore.set$fixedFlag$sample58(oldCore.get$fixedFlag$sample58());
-        newCore.set$fixedFlag$sample90(oldCore.get$fixedFlag$sample90());
     }
 
     /**

@@ -343,6 +343,10 @@ public class ProbabilityFunction {
 
         final Map<ProducingDataflowTask<?>, Set<TraceHandle>> conditionalTraces;
 
+        final Set<SampleTask<?, ?>> inputSamples = new HashSet<>();
+
+        final Set<SampleTask<?, ?>> fixable;
+        final boolean fixableProb;
         final VariableDescription<BooleanVariable> fixedFlagName;
         final VariableDescription<BooleanVariable> fixedProbFlagName;
 
@@ -368,6 +372,32 @@ public class ProbabilityFunction {
             this.compilationCtx = compilationCtx;
 
             singleSample = !compilationCtx.calculateIndividualProbabilities();
+
+            // Get all the input sample tasks
+            for(Variable<?> v:randomVariable.getParent().getInputs()) {
+                for(SampleTask<?, ?> s:compilationCtx.traces.getSourceSampleTasks(v)) {
+                    if(!s.getOutput().isFixed())
+                        inputSamples.add(s);
+                }
+            }
+
+            for(SampleTask<?, ?> s:compilationCtx.traces.getSourceSampleTasks(sampleTaskScope.getScopeCondition())) {
+                if(!s.getOutput().isFixed())
+                    inputSamples.add(s);
+            }
+
+            // Test if we should set a fixed flag.
+            // First check all sample tasks can be fixed
+            fixable = compilationCtx.traces.getFixableTasks();
+            boolean fixableProb = fixable.contains(sampleTask) || sampleTask.getOutput().isFixed();
+
+            for(SampleTask<?, ?> s:inputSamples) {
+                if(!fixable.contains(s) && !s.getOutput().isFixed()) {
+                    fixableProb = false;
+                    break;
+                }
+            }
+            this.fixableProb = fixableProb;
 
             // Find traces to any distributions that will need to be covered.
             if(useDistributions) {
@@ -558,11 +588,17 @@ public class ProbabilityFunction {
                 funcData.compilationCtx);
 
         // Construct a flag to determine if this probability is already calculated.
-        funcData.compilationCtx.addConstructedClassField(funcData.fixedProbFlagName, constant(false));
+        if(funcData.fixableProb) {
+            funcData.compilationCtx.addConstructedClassField(funcData.fixedProbFlagName, constant(false));
 
-        // Set the initialisation
-        IRTreeReturn<BooleanVariable> guard = negateBoolean(load(funcData.fixedProbFlagName));
-        funcData.toInitialize.add(new WrappedTree<IRTree, IRTreeVoid>(ifElse(guard, sampleAllocation, Tree.NoComment)));
+            // Set the initialisation
+            IRTreeReturn<BooleanVariable> guard = negateBoolean(load(funcData.fixedProbFlagName));
+            funcData.toInitialize
+                    .add(new WrappedTree<IRTree, IRTreeVoid>(ifElse(guard, sampleAllocation, Tree.NoComment)));
+        } else {
+            // Set the initialisation
+            funcData.toInitialize.add(new WrappedTree<IRTree, IRTreeVoid>(sampleAllocation));
+        }
 
         getInverseIR(funcData);
 
@@ -573,128 +609,131 @@ public class ProbabilityFunction {
         subtrees.add(funcData.compilationCtx.getOutermostScopeTree());
 
         // Test if we should set a fixed flag.
-        IRTreeReturn<BooleanVariable> fixed;
-        if(funcData.sampleVariable.isFixed()) {
-            fixed = IRTree.constant(true);
-        } else {
-            fixed = load(funcData.fixedFlagName);
-            // Add side effect to clear the flag if a dependency given the ability to changed
-            IRTreeVoid restFixed = store(funcData.fixedProbFlagName,
-                    and(load(funcData.fixedFlagName), load(funcData.fixedProbFlagName)),
-                    "Should the probability of sample " + funcData.sampleTask.id()
-                            + " be set to fixed. This will only every change the flag to false.");
-            funcData.compilationCtx.addSetSideEffect(funcData.fixedFlagName, restFixed);
-
-            // Add side effect to clear the flag if a dependency is changed.
-            VariableDescription<?> sampleName = funcData.sampleVariable.getUniqueVarDesc();
-            restFixed = store(funcData.fixedProbFlagName, constant(false),
-                    "Unset the fixed probability flag for sample " + funcData.sampleTask.id() + " as it depends on "
-                            + sampleName.name + ".");
-            funcData.compilationCtx.addSetSideEffect(sampleName, restFixed);
-        }
-
-        // Gather all the sample tasks that are used as inputs.
-        Set<SampleTask<?, ?>> inputSamples = new HashSet<>();
-        for(Variable<?> v:funcData.randomVariable.getParent().getInputs()) {
-            for(SampleTask<?, ?> s:funcData.compilationCtx.traces.getSourceSampleTasks(v)) {
-                if(!s.getOutput().isFixed())
-                    inputSamples.add(s);
-            }
-        }
-
-        for(SampleTask<?, ?> s:funcData.compilationCtx.traces
-                .getSourceSampleTasks(funcData.sampleTaskScope.getScopeCondition())) {
-            if(!s.getOutput().isFixed())
-                inputSamples.add(s);
-        }
-        
-        // Construct an expression to determine if the flag should be set.
-        if(!inputSamples.isEmpty()) {
-            // Priority queue for fixed ordering of assignments.
-            PriorityQueue<SampleTask<?, ?>> p = new PriorityQueue<>(inputSamples);
-            while(!p.isEmpty()) {
-                SampleTask<?, ?> s = p.poll();
-                VariableDescription<BooleanVariable> sampleFixedName = VariableNames.fixedFlagName(s);
-                fixed = IRTree.and(fixed, load(sampleFixedName));
-
+        IRTreeVoid generateValues;
+        // TODO restructure the guards here.
+        if(funcData.fixableProb) {
+            IRTreeReturn<BooleanVariable> fixed;
+            if(funcData.sampleVariable.isFixed()) {
+                fixed = IRTree.constant(true);
+            } else {
+                fixed = load(funcData.fixedFlagName);
                 // Add side effect to clear the flag if a dependency given the ability to changed
                 IRTreeVoid restFixed = store(funcData.fixedProbFlagName,
-                        and(load(sampleFixedName), load(funcData.fixedProbFlagName)),
+                        and(load(funcData.fixedFlagName), load(funcData.fixedProbFlagName)),
                         "Should the probability of sample " + funcData.sampleTask.id()
                                 + " be set to fixed. This will only every change the flag to false.");
-                funcData.compilationCtx.addSetSideEffect(sampleFixedName, restFixed);
+                funcData.compilationCtx.addSetSideEffect(funcData.fixedFlagName, restFixed);
 
                 // Add side effect to clear the flag if a dependency is changed.
-                SampleTraceDesc sampleDesc = funcData.compilationCtx.traces.getSampleTrace(s);
-                VariableDescription<?> sampleName = sampleDesc.sampleVariable.getUniqueVarDesc();
+                VariableDescription<?> sampleName = funcData.sampleVariable.getUniqueVarDesc();
                 restFixed = store(funcData.fixedProbFlagName, constant(false),
                         "Unset the fixed probability flag for sample " + funcData.sampleTask.id() + " as it depends on "
                                 + sampleName.name + ".");
                 funcData.compilationCtx.addSetSideEffect(sampleName, restFixed);
             }
-        }
-        subtrees.add(store(funcData.fixedProbFlagName, fixed,
-                "Now the probability is calculated store if it can be cached or if it needs to be recalculated next time."));
 
-        // Join all the subtrees with a sequential block
-        IRTreeVoid generateValues = sequential(subtrees, "Generating probabilities for sample task");
-        if(funcData.sampleTask.isDistribution() && funcData.useDistributions)
-            generateValues = ifElse(load(funcData.fixedFlagName), generateValues,
-                    "Update the probability if the distribution is fixed to a specific value."
-                            + " If it is not the value is implicitly log(1.0) so has no effect.");
+            // Construct an expression to determine if the flag should be set.
+            if(!funcData.inputSamples.isEmpty()) {
+                // Priority queue for fixed ordering of assignments.
+                PriorityQueue<SampleTask<?, ?>> p = new PriorityQueue<>(funcData.inputSamples);
+                while(!p.isEmpty()) {
+                    SampleTask<?, ?> s = p.poll();
+                    if(funcData.fixable.contains(s)) {
+                        VariableDescription<BooleanVariable> sampleFixedName = VariableNames.fixedFlagName(s);
+                        fixed = IRTree.and(fixed, load(sampleFixedName));
 
-        // Populate the behaviour if we just need to copy the pre-calculated results
-        // back out.
-        funcData.compilationCtx.pushScope();
+                        // Add side effect to clear the flag if a dependency given the ability to changed
+                        IRTreeVoid restFixed = store(funcData.fixedProbFlagName,
+                                and(load(sampleFixedName), load(funcData.fixedProbFlagName)),
+                                "Should the probability of sample " + funcData.sampleTask.id()
+                                        + " be set to fixed. This will only every change the flag to false.");
+                        funcData.compilationCtx.addSetSideEffect(sampleFixedName, restFixed);
 
-        // Initialize variables
-        funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
-                initializeVariable(accumulatorName, constant(0.0), Tree.NoComment));
+                        // Add side effect to clear the flag if a dependency is changed.
+                        SampleTraceDesc sampleDesc = funcData.compilationCtx.traces.getSampleTrace(s);
+                        VariableDescription<?> sampleName = sampleDesc.sampleVariable.getUniqueVarDesc();
+                        restFixed = store(funcData.fixedProbFlagName, constant(false),
+                                "Unset the fixed probability flag for sample " + funcData.sampleTask.id()
+                                        + " as it depends on " + sampleName.name + ".");
+                        funcData.compilationCtx.addSetSideEffect(sampleName, restFixed);
+                    }
+                }
+            }
 
-        funcData.compilationCtx.addTreeToScope(funcData.randomStoreScope,
-                initializeVariable(rvProbabilityName, constant(0.0), Tree.NoComment));
+            subtrees.add(store(funcData.fixedProbFlagName, fixed,
+                    "Now the probability is calculated store if it can be cached or if it needs to be recalculated next time."));
 
-        if(funcData.sampleSkipable) {
-            funcData.compilationCtx.enterScope(funcData.sampleTaskScope);
-            funcData.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(guardName,
-                    IRTree.constant(false), "A guard to check if the sample value is ever reached."));
-            funcData.compilationCtx.leaveScope(funcData.sampleTaskScope);
-        }
+            // Join all the subtrees with a sequential block
+            generateValues = sequential(subtrees, "Generating probabilities for sample task");
+            if(funcData.sampleTask.isDistribution() && funcData.useDistributions) {
+                generateValues = ifElse(load(funcData.fixedFlagName), generateValues,
+                        "Update the probability if the distribution is fixed to a specific value."
+                                + " If it is not the value is implicitly log(1.0) so has no effect.");
+            }
+            // Populate the behaviour if we just need to copy the pre-calculated results
+            // back out.
+            funcData.compilationCtx.pushScope();
 
-        if(funcData.storeArgTrees.isEmpty()) // We are not in a loop.
+            // Initialize variables
+            funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
+                    initializeVariable(accumulatorName, constant(0.0), Tree.NoComment));
+
+            funcData.compilationCtx.addTreeToScope(funcData.randomStoreScope,
+                    initializeVariable(rvProbabilityName, constant(0.0), Tree.NoComment));
+
+            if(funcData.sampleSkipable) {
+                funcData.compilationCtx.enterScope(funcData.sampleTaskScope);
+                funcData.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(guardName,
+                        IRTree.constant(false), "A guard to check if the sample value is ever reached."));
+                funcData.compilationCtx.leaveScope(funcData.sampleTaskScope);
+            }
+
+            if(funcData.storeArgTrees.isEmpty()) // We are not in a loop.
+                funcData.compilationCtx.addTreeToScope(funcData.sampleStoreScope,
+                        initializeVariable(sampleValueName, load(funcData.storedName), Tree.NoComment));
+            else
+                funcData.compilationCtx.addTreeToScope(funcData.sampleStoreScope, initializeVariable(sampleValueName,
+                        TreeUtils.getIndirectValue(funcData.storedName, funcData.storeArgTrees), Tree.NoComment));
+
+            // Accumulate values
             funcData.compilationCtx.addTreeToScope(funcData.sampleStoreScope,
-                    initializeVariable(sampleValueName, load(funcData.storedName), Tree.NoComment));
-        else
-            funcData.compilationCtx.addTreeToScope(funcData.sampleStoreScope, initializeVariable(sampleValueName,
-                    TreeUtils.getIndirectValue(funcData.storedName, funcData.storeArgTrees), Tree.NoComment));
+                    store(rvProbabilityName, addDD(load(rvProbabilityName), load(sampleValueName)), Tree.NoComment));
+            if(funcData.sampleSkipable)
+                funcData.compilationCtx.addTreeToScope(funcData.sampleTaskScope,
+                        store(guardName, constant(true), "Record that the sample was reached."));
+            funcData.compilationCtx.addTreeToScope(funcData.randomStoreScope,
+                    store(accumulatorName, addDD(load(accumulatorName), load(rvProbabilityName)), Tree.NoComment));
 
-        // Accumulate values
-        funcData.compilationCtx.addTreeToScope(funcData.sampleStoreScope,
-                store(rvProbabilityName, addDD(load(rvProbabilityName), load(sampleValueName)), Tree.NoComment));
-        if(funcData.sampleSkipable)
-            funcData.compilationCtx.addTreeToScope(funcData.sampleTaskScope,
-                    store(guardName, constant(true), "Record that the sample was reached."));
-        funcData.compilationCtx.addTreeToScope(funcData.randomStoreScope,
-                store(accumulatorName, addDD(load(accumulatorName), load(rvProbabilityName)), Tree.NoComment));
+            // Update the values for the random variables
+            updateRVProbabilities(funcData, load(rvProbabilityName));
+            // If we are tracking individual values, embed in the correct set of for loops.
 
-        // Update the values for the random variables
-        updateRVProbabilities(funcData, load(rvProbabilityName));
-        // If we are tracking individual values, embed in the correct set of for loops.
+            // Update the values for the variables
+            updateVarProbabilities(funcData, load(accumulatorName), load(sampleValueName));
 
-        // Update the values for the variables
-        updateVarProbabilities(funcData, load(accumulatorName), load(sampleValueName));
+            IRTreeVoid repopulateValues = funcData.compilationCtx.getOutermostScopeTree();
+            repopulateValues.prefixComment(
+                    "Updating random variable and model probabilities using cached probabilities for this sample");
+            funcData.compilationCtx.popScope();
 
-        IRTreeVoid repopulateValues = funcData.compilationCtx.getOutermostScopeTree();
-        repopulateValues.prefixComment(
-                "Updating random variable and model probabilities using cached probabilities for this sample");
-        funcData.compilationCtx.popScope();
-
-        // Merge the values in a conditional
-        IRTreeReturn<BooleanVariable> mergeGuard = negateBoolean(load(funcData.fixedProbFlagName));
-        IRTreeVoid mergeResult = ifElse(
-                mergeGuard, generateValues, "Determine if we need to calculate the values for sample task "
-                        + funcData.sampleTask.id() + " or if we should just use cached values.",
-                repopulateValues, "Using cached values.");
+            // Merge the values in a conditional
+            IRTreeReturn<BooleanVariable> mergeGuard = negateBoolean(load(funcData.fixedProbFlagName));
+            generateValues = ifElse(
+                    mergeGuard, generateValues, "Determine if we need to calculate the values for sample task "
+                            + funcData.sampleTask.id() + " or if we should just use cached values.",
+                    repopulateValues, "Using cached values.");
+        } else {
+            // Join all the subtrees with a sequential block
+            generateValues = sequential(subtrees, "Generating probabilities for sample task");
+            if(funcData.sampleTask.isDistribution() && funcData.useDistributions) {
+                if(funcData.fixable.contains(funcData.sampleTask)) {
+                    generateValues = ifElse(load(funcData.fixedFlagName), generateValues,
+                            "Update the probability if the distribution is fixed to a specific value."
+                                    + " If it is not the value is implicitly log(1.0) so has no effect.");
+                } else
+                    generateValues = IRTree.nop();
+            }
+        }
 
         // And place the subtree in a void function.
         FunctionName functionName = FunctionName.createFunctionName(
@@ -706,7 +745,7 @@ public class ProbabilityFunction {
                 ? SampleFunctionClass.LOG_PROBABILITY_DISTRIBUTIONS
                 : SampleFunctionClass.LOG_PROBABILITY_VALUE;
         funcData.compilationCtx.addFunction(functionClass, funcData.sampleTask,
-                voidFunction(Visibility.PRIVATE, functionName, new ArgDesc<?>[0], mergeResult, comment));
+                voidFunction(Visibility.PRIVATE, functionName, new ArgDesc<?>[0], generateValues, comment));
     }
 
     private static void getInverseIR(FunctionData<?> funcData) {
@@ -979,8 +1018,8 @@ public class ProbabilityFunction {
             // Set sample value
             Variable<?> sampleVariable = funcData.dependentVariables.getSampleVariable();
             if(sampleVariable != null) {
-                funcData.compilationCtx.addTreeToScope(GlobalScope.scope, setValueProbability(accumulatedProbability,
-                        sampleVariable, null, funcData.useDistributions, funcData.compilationCtx));
+                funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
+                        setValueProbability(accumulatedProbability, sampleVariable, null, funcData));
             }
 
             // Reset the priority queue.
@@ -997,9 +1036,9 @@ public class ProbabilityFunction {
 
                     // Add variables that require per variable values
                     ScopeConstructor perVarScopes = sPerSample.addConstraints(traces, NO_GUARDS);
-                    perVarScopes.addTree((TreeBuilderInfo info) -> funcData.compilationCtx
-                            .addTreeToScope(GlobalScope.scope, setValueProbability(sampleProbability, v, guardName,
-                                    funcData.useDistributions, funcData.compilationCtx)));
+                    perVarScopes
+                            .addTree((TreeBuilderInfo info) -> funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
+                                    setValueProbability(sampleProbability, v, guardName, funcData)));
                 }
             }
 
@@ -1016,9 +1055,9 @@ public class ProbabilityFunction {
 
                     // Add variables that require per variable values
                     ScopeConstructor perVarScopes = sAccumulator.addConstraints(traces, NO_GUARDS);
-                    perVarScopes.addTree((TreeBuilderInfo info) -> funcData.compilationCtx
-                            .addTreeToScope(GlobalScope.scope, setValueProbability(accumulatedProbability, v, guardName,
-                                    funcData.useDistributions, funcData.compilationCtx)));
+                    perVarScopes
+                            .addTree((TreeBuilderInfo info) -> funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
+                                    setValueProbability(accumulatedProbability, v, guardName, funcData)));
 
                 }
             }
@@ -1039,17 +1078,19 @@ public class ProbabilityFunction {
             IRTreeVoid t = store(evidenceProbName, mergedValue, Tree.NoComment);
 
             if(!funcData.compilationCtx.traces.isObserved(funcData.sampleTask)) {
-                IRTreeReturn<BooleanVariable> guard = load(funcData.fixedFlagName);
-                t = IRTree.ifElse(guard, t,
-                        "If this value is fixed, add it to the probability of this model producing the fixed values");
+                if(funcData.fixable.contains(funcData.sampleTask)) {
+                    IRTreeReturn<BooleanVariable> guard = load(funcData.fixedFlagName);
+                    t = IRTree.ifElse(guard, t,
+                            "If this value is fixed, add it to the probability of this model producing the fixed values");
+                } else
+                    t = IRTree.nop();
             }
             funcData.compilationCtx.addTreeToScope(GlobalScope.scope, t);
         }
     }
 
     private static IRTreeVoid setValueProbability(IRTreeReturn<DoubleVariable> sampleProbability, Variable<?> v,
-            VariableDescription<BooleanVariable> guardName, boolean useDistributions,
-            CompilationContext compilationCtx) {
+            VariableDescription<BooleanVariable> guardName, FunctionData<?> funcData) {
         VariableDescription<DoubleVariable> varName = VariableNames.logProbabilityName(v.getUniqueVarDesc());
         IRTreeReturn<DoubleVariable> outputValue = load(varName);
         IRTreeReturn<DoubleVariable> mergedValue = addDD(outputValue, sampleProbability);
@@ -1067,14 +1108,17 @@ public class ProbabilityFunction {
 
         // If we are using distributions test if all the inputs are fixed before
         // updating the probability.
-        if(useDistributions && v.isDistribution()) {
-            IRTreeReturn<BooleanVariable> fixedGuard = constant(true);
-            for(SampleTask<?, ?> sTask:compilationCtx.traces.getSourceSampleTasks(v)) {
-                if(!sTask.getOutput().isFixed())
-                    fixedGuard = and(fixedGuard, load(VariableNames.fixedFlagName(sTask)));
-            }
-            guardedTree = ifElse(fixedGuard, guardedTree,
-                    "Make sure all the inputs have been fixed so the variable is not a distribution.");
+        if(funcData.useDistributions && v.isDistribution()) {
+            if(funcData.fixableProb) {
+                IRTreeReturn<BooleanVariable> fixedGuard = constant(true);
+                for(SampleTask<?, ?> sTask:funcData.compilationCtx.traces.getSourceSampleTasks(v)) {
+                    if(!sTask.getOutput().isFixed())
+                        fixedGuard = and(fixedGuard, load(VariableNames.fixedFlagName(sTask)));
+                }
+                guardedTree = ifElse(fixedGuard, guardedTree,
+                        "Make sure all the inputs have been fixed so the variable is not a distribution.");
+            } else
+                guardedTree = IRTree.nop();
         }
 
         return guardedTree;
