@@ -16,6 +16,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[][][] distribution$sample123;
 	private boolean fixedFlag$sample104 = false;
 	private boolean fixedFlag$sample123 = false;
+	private boolean fixedFlag$sample157 = false;
 	private boolean fixedFlag$sample19 = false;
 	private boolean fixedFlag$sample32 = false;
 	private boolean fixedFlag$sample52 = false;
@@ -175,6 +176,18 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// 
 		// Substituted "fixedFlag$sample123" with its value "cv$value".
 		fixedProbFlag$sample157 = (cv$value && fixedProbFlag$sample157);
+	}
+
+	// Getter for fixedFlag$sample157.
+	@Override
+	public final boolean get$fixedFlag$sample157() {
+		return fixedFlag$sample157;
+	}
+
+	// Setter for fixedFlag$sample157.
+	@Override
+	public final void set$fixedFlag$sample157(boolean cv$value) {
+		fixedFlag$sample157 = cv$value;
 	}
 
 	// Getter for fixedFlag$sample19.
@@ -5302,7 +5315,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
 				metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$, metric_valid_bias[st[sample][timeStep$var136]]);
 				if(metric_valid_1d[timeStep$var136]) {
-					var151[sample][timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$)) + metric_mean[st[sample][timeStep$var136]]);
+					if(!fixedFlag$sample157)
+						var151[sample][timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$)) + metric_mean[st[sample][timeStep$var136]]);
 					metric_1d[timeStep$var136] = var151[sample][timeStep$var136];
 				}
 			}
@@ -5479,7 +5493,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
 				metric_valid_1d[timeStep$var136] = DistributionSampling.sampleBernoulli(RNG$, metric_valid_bias[st[sample][timeStep$var136]]);
 				if(metric_valid_1d[timeStep$var136]) {
-					var151[sample][timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$)) + metric_mean[st[sample][timeStep$var136]]);
+					if(!fixedFlag$sample157)
+						var151[sample][timeStep$var136] = ((Math.sqrt(metric_var[st[sample][timeStep$var136]]) * DistributionSampling.sampleGaussian(RNG$)) + metric_mean[st[sample][timeStep$var136]]);
 					metric_1d[timeStep$var136] = var151[sample][timeStep$var136];
 				}
 			}
@@ -5789,7 +5804,8 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// Method to propagate observed values back into the model.
 	@Override
 	public final void propogateObservedValues() {
-		// Propagating values back from observations into the models intermediate variables.
+		// Reset any fixed flags on observed values
+		fixedFlag$sample157 = false;
 		int cv$length1 = metric_valid_g.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 			boolean[] cv$source2 = metric_valid[cv$index1];

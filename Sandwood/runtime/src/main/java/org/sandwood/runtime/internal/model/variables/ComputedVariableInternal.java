@@ -146,7 +146,7 @@ public abstract class ComputedVariableInternal
     @Override
     public final RetentionPolicy getRetentionPolicy() {
         synchronized(model) {
-            if(isFixed() == Immutability.FIXED)
+            if(!isPrivate && isFixed() == Immutability.FIXED)
                 return RetentionPolicy.NA;
             else
                 return p;

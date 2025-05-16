@@ -13,6 +13,7 @@ class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private double[] exped;
 	private double[] expedNorm;
 	private boolean fixedFlag$sample26 = false;
+	private boolean fixedFlag$sample82 = false;
 	private boolean fixedProbFlag$sample149 = false;
 	private boolean fixedProbFlag$sample26 = false;
 	private boolean fixedProbFlag$sample82 = false;
@@ -125,6 +126,18 @@ class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		// Should the probability of sample 149 be set to fixed. This will only every change
 		// the flag to false.
 		fixedProbFlag$sample149 = (fixedFlag$sample26 && fixedProbFlag$sample149);
+	}
+
+	// Getter for fixedFlag$sample82.
+	@Override
+	public final boolean get$fixedFlag$sample82() {
+		return fixedFlag$sample82;
+	}
+
+	// Setter for fixedFlag$sample82.
+	@Override
+	public final void set$fixedFlag$sample82(boolean cv$value) {
+		fixedFlag$sample82 = cv$value;
 	}
 
 	// Getter for logProbability$$evidence.
@@ -3018,8 +3031,10 @@ class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			if(!fixedFlag$sample26)
 				expedNorm[j$var63] = (exped[j$var63] / (r * sum));
 		}
-		for(int t$var78 = 0; t$var78 < T; t$var78 += 1)
-			sales_sum[t$var78] = DistributionSampling.samplePoisson(RNG$, 0.5);
+		for(int t$var78 = 0; t$var78 < T; t$var78 += 1) {
+			if(!fixedFlag$sample82)
+				sales_sum[t$var78] = DistributionSampling.samplePoisson(RNG$, 0.5);
+		}
 		for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
 			for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
 				if(!fixedFlag$sample26)
@@ -3153,8 +3168,10 @@ class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		sum = reduceVar$sum$5;
 		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
 			expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-		for(int t$var78 = 0; t$var78 < T; t$var78 += 1)
-			sales_sum[t$var78] = DistributionSampling.samplePoisson(RNG$, 0.5);
+		for(int t$var78 = 0; t$var78 < T; t$var78 += 1) {
+			if(!fixedFlag$sample82)
+				sales_sum[t$var78] = DistributionSampling.samplePoisson(RNG$, 0.5);
+		}
 		for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
 			for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1)
 				weekly_ut[((t$var105 - 0) / 1)][j$var116] = (expedNorm[j$var116] * Avail[t$var105][j$var116]);
@@ -3444,28 +3461,34 @@ class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// Method to propagate observed values back into the model.
 	@Override
 	public final void propagateObservedValues() {
+		// Reset any fixed flags on observed values
+		fixedFlag$sample82 = false;
+		
+		// Propagating values back from observations into the models intermediate variables.
 		{
-			// Deep copy between arrays
-			int[][] cv$source1 = ObsSales;
-			int[][] cv$target1 = Sales;
-			int cv$length1 = cv$target1.length;
-			for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
-				int[] cv$source2 = cv$source1[cv$index1];
-				int[] cv$target2 = cv$target1[cv$index1];
-				int cv$length2 = cv$target2.length;
-				for(int cv$index2 = 0; cv$index2 < cv$length2; cv$index2 += 1)
-					cv$target2[cv$index2] = cv$source2[cv$index2];
+			{
+				// Deep copy between arrays
+				int[][] cv$source1 = ObsSales;
+				int[][] cv$target1 = Sales;
+				int cv$length1 = cv$target1.length;
+				for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
+					int[] cv$source2 = cv$source1[cv$index1];
+					int[] cv$target2 = cv$target1[cv$index1];
+					int cv$length2 = cv$target2.length;
+					for(int cv$index2 = 0; cv$index2 < cv$length2; cv$index2 += 1)
+						cv$target2[cv$index2] = cv$source2[cv$index2];
+				}
 			}
-		}
-		for(int t$var105 = (T - ((((T - 1) - 0) % 1) + 1)); t$var105 >= ((0 - 1) + 1); t$var105 -= 1) {
-			int[] weekly_sales;
-			weekly_sales = Sales[t$var105];
-			int cv$multinomialSum148 = 0;
-			
-			// Sum the number of samples in the multinomial output.
-			for(int cv$multinomialIndex148 = 0; cv$multinomialIndex148 < weekly_sales.length; cv$multinomialIndex148 += 1)
-				cv$multinomialSum148 = (weekly_sales[cv$multinomialIndex148] + cv$multinomialSum148);
-			sales_sum[t$var105] = cv$multinomialSum148;
+			for(int t$var105 = (T - ((((T - 1) - 0) % 1) + 1)); t$var105 >= ((0 - 1) + 1); t$var105 -= 1) {
+				int[] weekly_sales;
+				weekly_sales = Sales[t$var105];
+				int cv$multinomialSum148 = 0;
+				
+				// Sum the number of samples in the multinomial output.
+				for(int cv$multinomialIndex148 = 0; cv$multinomialIndex148 < weekly_sales.length; cv$multinomialIndex148 += 1)
+					cv$multinomialSum148 = (weekly_sales[cv$multinomialIndex148] + cv$multinomialSum148);
+				sales_sum[t$var105] = cv$multinomialSum148;
+			}
 		}
 	}
 
