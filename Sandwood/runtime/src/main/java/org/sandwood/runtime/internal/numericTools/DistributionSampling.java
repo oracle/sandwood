@@ -271,6 +271,15 @@ public class DistributionSampling {
             if(sum >= val)
                 return i;
         }
+
+        // Catch cases where rounding means the sum does not quite come to 1.
+        if(sum > 0.999999999) {
+            for(int i = numCategories - 1; i >= 0; i--) {
+                if(categoryProbs[i] > 0)
+                    return i;
+            }
+        }
+
         throw new SandwoodModelStateException("Sum of categorical probabilities is less than " + val);
     }
 
