@@ -271,8 +271,28 @@ public class DistributionSampling {
             if(sum >= val)
                 return i;
         }
+
+        // Catch cases where rounding means the sum does not quite come to 1.
+        if(sum > roundingBound) {
+            /*
+             * If this occurs work backwards through the possible elements returning the first value with none zero
+             * probability
+             */
+            for(int i = numCategories - 1; i >= 0; i--) {
+                if(categoryProbs[i] > 0)
+                    return i;
+            }
+        }
+
         throw new SandwoodModelStateException("Sum of categorical probabilities is less than " + val);
     }
+
+    /**
+     * A value which if exceeded when summing all the probabilities for a categorical random variable, but the sampled
+     * random value which is known to be less than 1 is not reached, it is deemed that this is because of rounding
+     * errors in floating point arithmetic, not an error in the provided inputs.
+     */
+    private static final double roundingBound = 0.999999999;
 
     /**
      * Method to add the Categorical distribution described by to an array holding the cumulative distributions so far.
