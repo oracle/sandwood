@@ -456,6 +456,7 @@ public abstract class Model implements HasProbability, AutoCloseable {
         probabilityComputed = true;
         lastForward = true;
         distributionsPrimed = false;
+        intermediatesPrimed = true;
     }
 
     /**
