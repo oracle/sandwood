@@ -109,6 +109,7 @@ public abstract class ReductionScopeBase<A extends Variable<A>> extends Id imple
         return VariableNames.calcVarName("reduction" + id() + "Index", VariableType.IntVariable, false);
     }
 
+    // Use the first value in the array as the empty value so that all the values in the array can be processed.
     public Variable<A> reduceEmptyValue(ReductionInput<A> ri, CompilationContext compilationCtx) {
         IRTreeReturn<IntVariable> mask = ri.start.getForwardIR(compilationCtx);
         Variable<A> emptyValue = ri.array.get(ri.start);
