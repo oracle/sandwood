@@ -22,3 +22,4 @@ bin/
 *.log
 *.bck
 .DS_Store
+*.sandwood.skip

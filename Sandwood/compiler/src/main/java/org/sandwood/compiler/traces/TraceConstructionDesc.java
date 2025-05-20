@@ -23,6 +23,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.GetTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
+import org.sandwood.compiler.dataflowGraph.variables.VariableType.ArrayType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 
@@ -37,6 +38,7 @@ public class TraceConstructionDesc {
     public boolean firstPut = true;
     public final Set<Variable<?>> seenVar;
     private final Map<ArrayVariable<?>, Map<Integer, Set<IntVariable>>> restrictedIndexes;
+    public final Stack<ArrayType<?>> lengthTypes = new Stack<>();
 
     public TraceConstructionDesc(Variable<?> sink, TraceCallback c) {
         this.sink = sink;
@@ -44,6 +46,7 @@ public class TraceConstructionDesc {
         this.c = c;
         restrictedIndexes = new HashMap<>();
         seenVar = new HashSet<>();
+        lengthTypes.push(null);
     }
 
     public void addRestrictedIndexes(PutTask<?> task) {
