@@ -43,6 +43,7 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVari
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.exceptions.MissingFeatureException;
+import org.sandwood.compiler.exceptions.SandwoodModelException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.Trace;
 import org.sandwood.compiler.traces.TraceHandle;
@@ -160,6 +161,11 @@ public class TraceArrayRestrictions {
         final Set<Scope> existingScopes;
 
         /**
+         * Set of all the reduction inputs that consume an array that have been seen so far.
+         */
+        final Set<ReductionInput<?>> reductionInputs;
+
+        /**
          * A set to record all put tasks that substitutions should be saved at.
          */
         final Set<PutTask<?>> storeSubstitutions = new HashSet<>();
@@ -184,12 +190,13 @@ public class TraceArrayRestrictions {
          */
 
         public RestrictionsData(TraceHandle trace, Map<Scope, IntVariable> existingStartScopes,
-                Map<Scope, IntVariable> existingEndScopes, Set<Scope> existingScopes, int globalID,
-                Values arrayValues) {
+                Map<Scope, IntVariable> existingEndScopes, Set<Scope> existingScopes,
+                Set<ReductionInput<?>> reductionInputs, int globalID, Values arrayValues) {
             this.trace = trace;
             this.existingStartScopes = Collections.unmodifiableMap(existingStartScopes);
             this.existingEndScopes = Collections.unmodifiableMap(existingEndScopes);
             this.existingScopes = new HashSet<>(existingScopes);
+            this.reductionInputs = new HashSet<>(reductionInputs);
             this.globalID = globalID;
             passValues = arrayValues == Values.PASS_VALUES;
         }
@@ -234,7 +241,7 @@ public class TraceArrayRestrictions {
             ScopeDescription target, int globalID, Values arrayValues, int position,
             CompilationContext compilationCtx) {
         RestrictionsData data = new RestrictionsData(trace, existingStartScopes, existingEndScopes,
-                target.existingScopes, globalID, arrayValues);
+                target.existingScopes, target.reductionInputs, globalID, arrayValues);
 
         constructOpPairs(data);
 
@@ -261,10 +268,10 @@ public class TraceArrayRestrictions {
     private static void getSubstitutionPoints(RestrictionsData data, TraceHandle h) {
         Trace sourceTrace = h.getTrace();
         Trace constraintTrace = data.trace.getTrace();
-        // Remove the first element as it will always be recorded at the end, so does
-        // not
-        // need to be recorded here.
-        // Break if the traces have diverged.
+        /*
+         * Remove the first element as it will always be recorded at the end, so does not need to be recorded here.
+         * Break if the traces have diverged.
+         */
         DataflowTaskArgDesc d = constraintTrace.pop();
         if(!d.equals(sourceTrace.pop()))
             return;
@@ -915,9 +922,22 @@ public class TraceArrayRestrictions {
                     innerScope = new BlockScope(innerScope, Tree.NoComment);
 
                     // Process the reduction
-                    if(data.passValues)
-                        innerScope = processReductionInput(ri, index, innerScope, data, varSubstitutions,
-                                compilationCtx);
+                    if(data.passValues) {
+                        // if the value is being passed via the array, process the reductions with the put index as a
+                        // mask
+                        if(d.argPos == 3) {
+                            if(data.reductionInputs.contains(ri))
+                                throw new SandwoodModelException(
+                                        "Multiple values are required to be passed through the same reduced array when "
+                                                + "performing operations on the model. This is not supported.",
+                                        ri);
+                            data.reductionInputs.add(ri);
+                            innerScope = processReductionInput(ri, index, innerScope, data, varSubstitutions,
+                                    compilationCtx);
+                        } else
+                            // Otherwise just process the reduction.
+                            innerScope = processReductionInput(ri, innerScope, data, varSubstitutions, compilationCtx);
+                    }
 
                     ScopeChanges s = data.scopeData.get(ri);
                     removeSubstitutions(s, scopeSubstitutions, compilationCtx);
@@ -993,7 +1013,7 @@ public class TraceArrayRestrictions {
             target.removeSubstitutions(position - 1, compilationCtx);
 
         Substitutions s = constructSubstituions(originalSubstitutions, varSubstitutions, scopeSubstitutions);
-        target = target.insertScope(innerScope, data.existingScopes, compilationCtx);
+        target = target.insertScope(innerScope, data.existingScopes, data.reductionInputs, compilationCtx);
         target = target.addSubstitutions(position, s);
 
         return target;
@@ -1035,6 +1055,36 @@ public class TraceArrayRestrictions {
         constructVarSubstitution(returnVar, rs.getEnclosingScope(), innerScope, data, varSubstitutions, compilationCtx);
 
         compilationCtx.removeScopeSubstitute(rs);
+        compilationCtx.removeSubstitute(rs.j);
+        return innerScope;
+    }
+
+    private static <A extends Variable<A>> Scope processReductionInput(ReductionInput<A> ri, Scope innerScope,
+            RestrictionsData data, Map<Variable<?>, VariablePair<?>> varSubstitutions,
+            CompilationContext compilationCtx) {
+
+        Variable<A> output = ri.getOutput();
+        if(output.getType().isArray())
+            throw new MissingFeatureException("Arrays cannot currently be substituted through reductions. This "
+                    + "error is being caused because the compiler is trying to declare local variables to avoid altering "
+                    + "the model state at this part of the code, but can only do this for scalar values.");
+
+        ReductionScope<A> rs = ri.scope();
+
+        // Construct the value from the rest of the array.
+        compilationCtx.addScopeSubstitute(rs.getEnclosingScope(), innerScope);
+        Variable<A> maskedResult = rs.reduceEmptyValue(ri, compilationCtx);
+        compilationCtx.removeScopeSubstitute(rs.getEnclosingScope());
+        innerScope = maskedResult.scope();
+
+        compilationCtx.addScopeSubstitute(rs, innerScope);
+        compilationCtx.addSubstitute(rs.i, rs.emptyValue);
+        compilationCtx.addSubstitute(rs.j, maskedResult);
+        Variable<?> returnVar = rs.returnVar;
+        constructVarSubstitution(returnVar, rs.getEnclosingScope(), innerScope, data, varSubstitutions, compilationCtx);
+
+        compilationCtx.removeScopeSubstitute(rs);
+        compilationCtx.removeSubstitute(rs.i);
         compilationCtx.removeSubstitute(rs.j);
         return innerScope;
     }
