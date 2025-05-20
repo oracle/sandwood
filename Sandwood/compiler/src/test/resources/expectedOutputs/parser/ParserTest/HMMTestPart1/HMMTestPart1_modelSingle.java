@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -18,7 +19,7 @@ public class HMMTestPart1 extends Model {
 
     private HMMTestPart1$CoreInterface system$c = new HMMTestPart1$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true, true, false) {
+    private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$bias(); }
 
@@ -52,7 +53,7 @@ public class HMMTestPart1 extends Model {
      */
     public final ComputedDoubleArray bias = $bias;
 
-    private final ComputedBooleanInternal $flip = new ComputedBooleanInternal(this, "flip", false, true, false) {
+    private final ComputedBooleanInternal $flip = new ComputedBooleanInternal(this, "flip", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public boolean getValue() { return system$c.get$flip(); }
 
@@ -83,7 +84,7 @@ public class HMMTestPart1 extends Model {
      */
     public final ComputedBoolean flip = $flip;
 
-    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$m(); }
 
@@ -122,7 +123,7 @@ public class HMMTestPart1 extends Model {
      */
     public final ComputedObjectArray<double[]> m = $m;
 
-    private final ComputedIntegerInternal $st = new ComputedIntegerInternal(this, "st", true, true, false) {
+    private final ComputedIntegerInternal $st = new ComputedIntegerInternal(this, "st", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int getValue() { return system$c.get$st(); }
 

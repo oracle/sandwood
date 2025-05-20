@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -18,7 +19,7 @@ public class Conditional2 extends Model {
 
     private Conditional2$CoreInterface system$c = new Conditional2$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", true, true, false) {
+    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public boolean getValue() { return system$c.get$guard(); }
 
@@ -52,7 +53,7 @@ public class Conditional2 extends Model {
      */
     public final ComputedBoolean guard = $guard;
 
-    private final ComputedDoubleArrayInternal $value = new ComputedDoubleArrayInternal(this, "value", false, true, false) {
+    private final ComputedDoubleArrayInternal $value = new ComputedDoubleArrayInternal(this, "value", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$value(); }
 
@@ -83,7 +84,7 @@ public class Conditional2 extends Model {
      */
     public final ComputedDoubleArray value = $value;
 
-    private final ComputedDoubleArrayInternal $value2 = new ComputedDoubleArrayInternal(this, "value2", false, false, false) {
+    private final ComputedDoubleArrayInternal $value2 = new ComputedDoubleArrayInternal(this, "value2", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$value2(); }
 
@@ -114,7 +115,7 @@ public class Conditional2 extends Model {
      */
     public final ComputedDoubleArray value2 = $value2;
 
-    private final ComputedDoubleInternal $var19 = new ComputedDoubleInternal(this, "var19", true, true, true) {
+    private final ComputedDoubleInternal $var19 = new ComputedDoubleInternal(this, "var19", true, true, true, ProbabilityType.SKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$var19(); }
 
@@ -161,7 +162,7 @@ public class Conditional2 extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private final RandomVariableInternal $bernoulli = new RandomVariableInternal(this, "bernoulli") {
+    private final RandomVariableInternal $bernoulli = new RandomVariableInternal(this, "bernoulli", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
             return system$c.get$logProbability$bernoulli();

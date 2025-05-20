@@ -16,6 +16,7 @@ import org.sandwood.runtime.internal.json.JsonDecoder;
 import org.sandwood.runtime.internal.json.JsonEncoder;
 import org.sandwood.runtime.internal.model.util.Allocator;
 import org.sandwood.runtime.internal.model.util.BaseType;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.RetentionPolicy;
 import org.sandwood.runtime.model.variables.ComputedObjectArray;
@@ -30,8 +31,8 @@ public abstract class ComputedObjectArrayInternal<A> extends ComputedVariableInt
     private final BaseType baseType;
 
     public ComputedObjectArrayInternal(Model model, String name, boolean isSettable, boolean isSample,
-            boolean isPrivate, BaseType baseType, int arrayDimension) {
-        super(model, name, isSettable, isSample, isPrivate);
+            boolean isPrivate, ProbabilityType probType, BaseType baseType, int arrayDimension) {
+        super(model, name, isSettable, isSample, isPrivate, probType);
         this.baseType = baseType;
         this.arrayDimension = arrayDimension;
     }

@@ -92,8 +92,11 @@ public class GibbsCalculation {
         core.logModelProbabilitiesDist();
 
         double probability = 0;
-        for(CurrentProbability c:currentProbabilities)
-            probability += c.getCurrentLogProbability();
+        for(CurrentProbability c:currentProbabilities) {
+            double p = c.getCurrentLogProbability();
+            if(!Double.isNaN(p))
+                probability += p;
+        }
         // System.out.print("," + probability);
         if(lastProbability <= probability) {
             for(ComputedVariableInternal c:map)
@@ -118,8 +121,11 @@ public class GibbsCalculation {
             c.ingestSample();
 
         double probability = 0;
-        for(CurrentProbability c:currentProbabilities)
-            probability += c.getCurrentLogProbability();
+        for(CurrentProbability c:currentProbabilities) {
+            double p = c.getCurrentLogProbability();
+            if(!Double.isNaN(p))
+                probability += p;
+        }
         if(lastProbability < probability) {
             for(ComputedVariableInternal c:map)
                 c.ingestMap();
