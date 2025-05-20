@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -18,7 +19,7 @@ public class DistributionTest5 extends Model {
 
     private DistributionTest5$CoreInterface system$c = new DistributionTest5$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedBooleanArrayInternal $v = new ComputedBooleanArrayInternal(this, "v", false, true, false) {
+    private final ComputedBooleanArrayInternal $v = new ComputedBooleanArrayInternal(this, "v", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public boolean[] getValue() { return system$c.get$v(); }
 
@@ -49,7 +50,7 @@ public class DistributionTest5 extends Model {
      */
     public final ComputedBooleanArray v = $v;
 
-    private final ComputedIntegerInternal $v1 = new ComputedIntegerInternal(this, "v1", true, true, false) {
+    private final ComputedIntegerInternal $v1 = new ComputedIntegerInternal(this, "v1", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int getValue() { return system$c.get$v1(); }
 
@@ -83,7 +84,7 @@ public class DistributionTest5 extends Model {
      */
     public final ComputedInteger v1 = $v1;
 
-    private final ComputedIntegerArrayInternal $v2 = new ComputedIntegerArrayInternal(this, "v2", true, true, false) {
+    private final ComputedIntegerArrayInternal $v2 = new ComputedIntegerArrayInternal(this, "v2", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int[] getValue() { return system$c.get$v2(); }
 
@@ -122,7 +123,7 @@ public class DistributionTest5 extends Model {
      */
     public final ComputedIntegerArray v2 = $v2;
 
-    private final ComputedIntegerArrayInternal $v3 = new ComputedIntegerArrayInternal(this, "v3", false, false, false) {
+    private final ComputedIntegerArrayInternal $v3 = new ComputedIntegerArrayInternal(this, "v3", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int[] getValue() { return system$c.get$v3(); }
 

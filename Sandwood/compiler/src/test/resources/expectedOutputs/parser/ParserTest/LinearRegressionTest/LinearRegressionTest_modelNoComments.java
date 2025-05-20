@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -18,7 +19,7 @@ public class LinearRegressionTest extends Model {
 
     private LinearRegressionTest$CoreInterface system$c = new LinearRegressionTest$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false) {
+    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$bias(); }
 
@@ -52,7 +53,7 @@ public class LinearRegressionTest extends Model {
      */
     public final ComputedDouble bias = $bias;
 
-    private final ComputedDoubleInternal $tau = new ComputedDoubleInternal(this, "tau", true, true, false) {
+    private final ComputedDoubleInternal $tau = new ComputedDoubleInternal(this, "tau", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$tau(); }
 
@@ -86,7 +87,7 @@ public class LinearRegressionTest extends Model {
      */
     public final ComputedDouble tau = $tau;
 
-    private final ComputedDoubleArrayInternal $weights = new ComputedDoubleArrayInternal(this, "weights", true, true, false) {
+    private final ComputedDoubleArrayInternal $weights = new ComputedDoubleArrayInternal(this, "weights", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$weights(); }
 
@@ -120,7 +121,7 @@ public class LinearRegressionTest extends Model {
      */
     public final ComputedDoubleArray weights = $weights;
 
-    private final ComputedDoubleArrayInternal $y = new ComputedDoubleArrayInternal(this, "y", false, true, false) {
+    private final ComputedDoubleArrayInternal $y = new ComputedDoubleArrayInternal(this, "y", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$y(); }
 

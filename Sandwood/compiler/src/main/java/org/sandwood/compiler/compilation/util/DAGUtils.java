@@ -17,6 +17,7 @@ import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
+import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.exceptions.CompilerException;
 
 public class DAGUtils {
@@ -43,6 +44,22 @@ public class DAGUtils {
      */
     public static boolean skippableTask(DataflowTask<?> task) {
         Scope s = task.scope();
+        return skipableScope(s);
+    }
+
+    /**
+     * A method to determine if a variable can be skipped due to the structure of the control flow during the execution
+     * of the model. This will not evaluate a loop guard to determine if a loop will always execute.
+     * 
+     * @param variable The variable to test.
+     * @return Returns true if it is possible to not execute the variable during normal control flow.
+     */
+    public static boolean skipableVariable(Variable<?> variable) {
+        Scope s = variable.scope();
+        return skipableScope(s);
+    }
+
+    private static boolean skipableScope(Scope s) {
         boolean constraint = false;
         while(!constraint && s != GlobalScope.scope) {
             switch(s.getScopeType()) {

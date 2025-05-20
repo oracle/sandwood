@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -18,7 +19,7 @@ public class Vulcano2012basic extends Model {
 
     private Vulcano2012basic$CoreInterface system$c = new Vulcano2012basic$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedObjectArrayInternal<int[]> $Sales = new ComputedObjectArrayInternal<int[]>(this, "Sales", false, true, false, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
+    private final ComputedObjectArrayInternal<int[]> $Sales = new ComputedObjectArrayInternal<int[]>(this, "Sales", false, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
         public int[][] getValue() { return system$c.get$Sales(); }
 
@@ -54,7 +55,7 @@ public class Vulcano2012basic extends Model {
      */
     public final ComputedObjectArray<int[]> Sales = $Sales;
 
-    private final ComputedDoubleArrayInternal $exped = new ComputedDoubleArrayInternal(this, "exped", false, false, false) {
+    private final ComputedDoubleArrayInternal $exped = new ComputedDoubleArrayInternal(this, "exped", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$exped(); }
 
@@ -90,7 +91,7 @@ public class Vulcano2012basic extends Model {
      */
     public final ComputedDoubleArray exped = $exped;
 
-    private final ComputedDoubleArrayInternal $expedNorm = new ComputedDoubleArrayInternal(this, "expedNorm", false, false, false) {
+    private final ComputedDoubleArrayInternal $expedNorm = new ComputedDoubleArrayInternal(this, "expedNorm", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$expedNorm(); }
 
@@ -126,7 +127,7 @@ public class Vulcano2012basic extends Model {
      */
     public final ComputedDoubleArray expedNorm = $expedNorm;
 
-    private final ComputedDoubleInternal $sum = new ComputedDoubleInternal(this, "sum", false, false, false) {
+    private final ComputedDoubleInternal $sum = new ComputedDoubleInternal(this, "sum", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$sum(); }
 
@@ -162,7 +163,7 @@ public class Vulcano2012basic extends Model {
      */
     public final ComputedDouble sum = $sum;
 
-    private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true, true, false) {
+    private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$ut(); }
 

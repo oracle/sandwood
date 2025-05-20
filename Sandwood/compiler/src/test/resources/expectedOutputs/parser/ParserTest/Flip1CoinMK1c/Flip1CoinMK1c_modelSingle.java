@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -18,7 +19,7 @@ public class Flip1CoinMK1c extends Model {
 
     private Flip1CoinMK1c$CoreInterface system$c = new Flip1CoinMK1c$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false) {
+    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public boolean[] getValue() { return system$c.get$flips(); }
 
@@ -49,7 +50,7 @@ public class Flip1CoinMK1c extends Model {
      */
     public final ComputedBooleanArray flips = $flips;
 
-    private final ComputedDoubleInternal $var6 = new ComputedDoubleInternal(this, "var6", true, true, true) {
+    private final ComputedDoubleInternal $var6 = new ComputedDoubleInternal(this, "var6", true, true, true, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$var6(); }
 
@@ -143,7 +144,7 @@ public class Flip1CoinMK1c extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private final RandomVariableInternal $bernoulli = new RandomVariableInternal(this, "bernoulli") {
+    private final RandomVariableInternal $bernoulli = new RandomVariableInternal(this, "bernoulli", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
             return system$c.get$logProbability$bernoulli();

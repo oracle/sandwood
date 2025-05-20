@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -17,7 +18,7 @@ public class InjectionAttackTest extends Model {
 
     private InjectionAttackTest$CoreInterface system$c = new InjectionAttackTest$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false) {
+    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$bias(); }
 
@@ -49,7 +50,7 @@ public class InjectionAttackTest extends Model {
 /** a bias to see how like values are to be collected. " + new java.util.Random().nextDouble() + "*/
     public final ComputedDouble bias = $bias;
 
-    private final ComputedIntegerInternal $positiveCount = new ComputedIntegerInternal(this, "positiveCount", false, true, false) {
+    private final ComputedIntegerInternal $positiveCount = new ComputedIntegerInternal(this, "positiveCount", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int getValue() { return system$c.get$positiveCount(); }
 
@@ -118,7 +119,7 @@ public class InjectionAttackTest extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private final RandomVariableInternal $binomial = new RandomVariableInternal(this, "binomial") {
+    private final RandomVariableInternal $binomial = new RandomVariableInternal(this, "binomial", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
             return system$c.get$logProbability$binomial();

@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -17,7 +18,7 @@ public class Deterministic extends Model {
 
     private Deterministic$CoreInterface system$c = new Deterministic$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedIntegerArrayInternal $a = new ComputedIntegerArrayInternal(this, "a", true, true, false) {
+    private final ComputedIntegerArrayInternal $a = new ComputedIntegerArrayInternal(this, "a", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int[] getValue() { return system$c.get$a(); }
 
@@ -51,7 +52,7 @@ public class Deterministic extends Model {
      */
     public final ComputedIntegerArray a = $a;
 
-    private final ComputedIntegerArrayInternal $b = new ComputedIntegerArrayInternal(this, "b", false, false, false) {
+    private final ComputedIntegerArrayInternal $b = new ComputedIntegerArrayInternal(this, "b", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int[] getValue() { return system$c.get$b(); }
 
@@ -87,7 +88,7 @@ public class Deterministic extends Model {
      */
     public final ComputedIntegerArray b = $b;
 
-    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false) {
+    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public boolean[] getValue() { return system$c.get$flips(); }
 
@@ -118,7 +119,7 @@ public class Deterministic extends Model {
      */
     public final ComputedBooleanArray flips = $flips;
 
-    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$m(); }
 

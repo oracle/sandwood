@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -18,7 +19,7 @@ public class RaggedArray5 extends Model {
 
     private RaggedArray5$CoreInterface system$c = new RaggedArray5$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $d = new ComputedDoubleArrayInternal(this, "d", true, true, false) {
+    private final ComputedDoubleArrayInternal $d = new ComputedDoubleArrayInternal(this, "d", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$d(); }
 
@@ -52,7 +53,7 @@ public class RaggedArray5 extends Model {
      */
     public final ComputedDoubleArray d = $d;
 
-    private final ComputedBooleanArrayInternal $obs = new ComputedBooleanArrayInternal(this, "obs", false, true, false) {
+    private final ComputedBooleanArrayInternal $obs = new ComputedBooleanArrayInternal(this, "obs", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public boolean[] getValue() { return system$c.get$obs(); }
 

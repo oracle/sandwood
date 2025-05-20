@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -18,7 +19,7 @@ public class DistributionTest3 extends Model {
 
     private DistributionTest3$CoreInterface system$c = new DistributionTest3$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedBooleanInternal $v = new ComputedBooleanInternal(this, "v", false, true, false) {
+    private final ComputedBooleanInternal $v = new ComputedBooleanInternal(this, "v", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public boolean getValue() { return system$c.get$v(); }
 
@@ -49,7 +50,7 @@ public class DistributionTest3 extends Model {
      */
     public final ComputedBoolean v = $v;
 
-    private final ComputedIntegerInternal $v1 = new ComputedIntegerInternal(this, "v1", true, true, false) {
+    private final ComputedIntegerInternal $v1 = new ComputedIntegerInternal(this, "v1", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int getValue() { return system$c.get$v1(); }
 
@@ -83,7 +84,7 @@ public class DistributionTest3 extends Model {
      */
     public final ComputedInteger v1 = $v1;
 
-    private final ComputedIntegerInternal $v2 = new ComputedIntegerInternal(this, "v2", true, true, false) {
+    private final ComputedIntegerInternal $v2 = new ComputedIntegerInternal(this, "v2", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int getValue() { return system$c.get$v2(); }
 

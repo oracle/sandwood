@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -18,7 +19,7 @@ public class GaussianMixtureTest extends Model {
 
     private GaussianMixtureTest$CoreInterface system$c = new GaussianMixtureTest$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $mu = new ComputedDoubleArrayInternal(this, "mu", true, true, false) {
+    private final ComputedDoubleArrayInternal $mu = new ComputedDoubleArrayInternal(this, "mu", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$mu(); }
 
@@ -52,7 +53,7 @@ public class GaussianMixtureTest extends Model {
      */
     public final ComputedDoubleArray mu = $mu;
 
-    private final ComputedDoubleArrayInternal $phi = new ComputedDoubleArrayInternal(this, "phi", true, true, false) {
+    private final ComputedDoubleArrayInternal $phi = new ComputedDoubleArrayInternal(this, "phi", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$phi(); }
 
@@ -86,7 +87,7 @@ public class GaussianMixtureTest extends Model {
      */
     public final ComputedDoubleArray phi = $phi;
 
-    private final ComputedDoubleArrayInternal $sigma = new ComputedDoubleArrayInternal(this, "sigma", true, true, false) {
+    private final ComputedDoubleArrayInternal $sigma = new ComputedDoubleArrayInternal(this, "sigma", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$sigma(); }
 
@@ -120,7 +121,7 @@ public class GaussianMixtureTest extends Model {
      */
     public final ComputedDoubleArray sigma = $sigma;
 
-    private final ComputedDoubleArrayInternal $x = new ComputedDoubleArrayInternal(this, "x", false, true, false) {
+    private final ComputedDoubleArrayInternal $x = new ComputedDoubleArrayInternal(this, "x", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$x(); }
 
@@ -151,7 +152,7 @@ public class GaussianMixtureTest extends Model {
      */
     public final ComputedDoubleArray x = $x;
 
-    private final ComputedIntegerArrayInternal $z = new ComputedIntegerArrayInternal(this, "z", true, true, false) {
+    private final ComputedIntegerArrayInternal $z = new ComputedIntegerArrayInternal(this, "z", true, true, false, ProbabilityType.SKIPPABLE) {
         @Override
         public int[] getValue() { return system$c.get$z(); }
 

@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -18,7 +19,7 @@ public class MultinomialBernoulli extends Model {
 
     private MultinomialBernoulli$CoreInterface system$c = new MultinomialBernoulli$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedBooleanArrayInternal $output = new ComputedBooleanArrayInternal(this, "output", false, true, false) {
+    private final ComputedBooleanArrayInternal $output = new ComputedBooleanArrayInternal(this, "output", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public boolean[] getValue() { return system$c.get$output(); }
 
@@ -49,7 +50,7 @@ public class MultinomialBernoulli extends Model {
      */
     public final ComputedBooleanArray output = $output;
 
-    private final ComputedDoubleArrayInternal $p = new ComputedDoubleArrayInternal(this, "p", true, true, false) {
+    private final ComputedDoubleArrayInternal $p = new ComputedDoubleArrayInternal(this, "p", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$p(); }
 
@@ -83,7 +84,7 @@ public class MultinomialBernoulli extends Model {
      */
     public final ComputedDoubleArray p = $p;
 
-    private final ComputedIntegerArrayInternal $prior = new ComputedIntegerArrayInternal(this, "prior", true, true, false) {
+    private final ComputedIntegerArrayInternal $prior = new ComputedIntegerArrayInternal(this, "prior", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int[] getValue() { return system$c.get$prior(); }
 
@@ -153,7 +154,7 @@ public class MultinomialBernoulli extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private final RandomVariableInternal $b1 = new RandomVariableInternal(this, "b1") {
+    private final RandomVariableInternal $b1 = new RandomVariableInternal(this, "b1", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
             return system$c.get$logProbability$b1();
@@ -165,7 +166,7 @@ public class MultinomialBernoulli extends Model {
      */
     public final RandomVariable b1 = $b1;
 
-    private final RandomVariableInternal $b2 = new RandomVariableInternal(this, "b2") {
+    private final RandomVariableInternal $b2 = new RandomVariableInternal(this, "b2", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
             return system$c.get$logProbability$b2();
@@ -177,7 +178,7 @@ public class MultinomialBernoulli extends Model {
      */
     public final RandomVariable b2 = $b2;
 
-    private final RandomVariableInternal $b3 = new RandomVariableInternal(this, "b3") {
+    private final RandomVariableInternal $b3 = new RandomVariableInternal(this, "b3", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
             return system$c.get$logProbability$b3();

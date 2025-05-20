@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -18,7 +19,7 @@ public class HMMMetrics2 extends Model {
 
     private HMMMetrics2$CoreInterface system$c = new HMMMetrics2$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $initialStateDistribution = new ComputedDoubleArrayInternal(this, "initialStateDistribution", true, true, false) {
+    private final ComputedDoubleArrayInternal $initialStateDistribution = new ComputedDoubleArrayInternal(this, "initialStateDistribution", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$initialStateDistribution(); }
 
@@ -52,7 +53,7 @@ public class HMMMetrics2 extends Model {
      */
     public final ComputedDoubleArray initialStateDistribution = $initialStateDistribution;
 
-    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$m(); }
 
@@ -91,7 +92,7 @@ public class HMMMetrics2 extends Model {
      */
     public final ComputedObjectArray<double[]> m = $m;
 
-    private final ComputedObjectArrayInternal<double[]> $metric_g = new ComputedObjectArrayInternal<double[]>(this, "metric_g", false, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $metric_g = new ComputedObjectArrayInternal<double[]>(this, "metric_g", false, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$metric_g(); }
 
@@ -127,7 +128,7 @@ public class HMMMetrics2 extends Model {
      */
     public final ComputedObjectArray<double[]> metric_g = $metric_g;
 
-    private final ComputedDoubleArrayInternal $metric_mean = new ComputedDoubleArrayInternal(this, "metric_mean", true, true, false) {
+    private final ComputedDoubleArrayInternal $metric_mean = new ComputedDoubleArrayInternal(this, "metric_mean", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$metric_mean(); }
 
@@ -161,7 +162,7 @@ public class HMMMetrics2 extends Model {
      */
     public final ComputedDoubleArray metric_mean = $metric_mean;
 
-    private final ComputedDoubleArrayInternal $metric_valid_bias = new ComputedDoubleArrayInternal(this, "metric_valid_bias", true, true, false) {
+    private final ComputedDoubleArrayInternal $metric_valid_bias = new ComputedDoubleArrayInternal(this, "metric_valid_bias", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$metric_valid_bias(); }
 
@@ -195,7 +196,7 @@ public class HMMMetrics2 extends Model {
      */
     public final ComputedDoubleArray metric_valid_bias = $metric_valid_bias;
 
-    private final ComputedObjectArrayInternal<boolean[]> $metric_valid_g = new ComputedObjectArrayInternal<boolean[]>(this, "metric_valid_g", false, true, false, org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 2) {
+    private final ComputedObjectArrayInternal<boolean[]> $metric_valid_g = new ComputedObjectArrayInternal<boolean[]>(this, "metric_valid_g", false, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 2) {
         @Override
         public boolean[][] getValue() { return system$c.get$metric_valid_g(); }
 
@@ -231,7 +232,7 @@ public class HMMMetrics2 extends Model {
      */
     public final ComputedObjectArray<boolean[]> metric_valid_g = $metric_valid_g;
 
-    private final ComputedDoubleArrayInternal $metric_var = new ComputedDoubleArrayInternal(this, "metric_var", true, true, false) {
+    private final ComputedDoubleArrayInternal $metric_var = new ComputedDoubleArrayInternal(this, "metric_var", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$metric_var(); }
 
@@ -265,7 +266,7 @@ public class HMMMetrics2 extends Model {
      */
     public final ComputedDoubleArray metric_var = $metric_var;
 
-    private final ComputedObjectArrayInternal<int[]> $st = new ComputedObjectArrayInternal<int[]>(this, "st", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
+    private final ComputedObjectArrayInternal<int[]> $st = new ComputedObjectArrayInternal<int[]>(this, "st", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
         public int[][] getValue() { return system$c.get$st(); }
 

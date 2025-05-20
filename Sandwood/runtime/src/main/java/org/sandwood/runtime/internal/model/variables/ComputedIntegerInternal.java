@@ -13,6 +13,7 @@ import java.io.IOException;
 import org.sandwood.runtime.exceptions.SandwoodJsonException;
 import org.sandwood.runtime.internal.json.JsonDecoder;
 import org.sandwood.runtime.internal.json.JsonEncoder;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.RetentionPolicy;
 import org.sandwood.runtime.model.variables.ComputedInteger;
@@ -21,8 +22,9 @@ public abstract class ComputedIntegerInternal extends ComputedVariableInternal i
     private int[] samples;
     private int map;
 
-    public ComputedIntegerInternal(Model model, String name, boolean isSettable, boolean isSample, boolean isPrivate) {
-        super(model, name, isSettable, isSample, isPrivate);
+    public ComputedIntegerInternal(Model model, String name, boolean isSettable, boolean isSample, boolean isPrivate,
+            ProbabilityType probType) {
+        super(model, name, isSettable, isSample, isPrivate, probType);
     }
 
     @Override

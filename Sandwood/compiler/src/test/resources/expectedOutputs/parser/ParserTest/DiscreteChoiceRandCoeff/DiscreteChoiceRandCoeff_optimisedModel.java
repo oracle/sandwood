@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -18,7 +19,7 @@ public class DiscreteChoiceRandCoeff extends Model {
 
     private DiscreteChoiceRandCoeff$CoreInterface system$c = new DiscreteChoiceRandCoeff$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleInternal $b = new ComputedDoubleInternal(this, "b", true, true, false) {
+    private final ComputedDoubleInternal $b = new ComputedDoubleInternal(this, "b", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$b(); }
 
@@ -52,7 +53,7 @@ public class DiscreteChoiceRandCoeff extends Model {
      */
     public final ComputedDouble b = $b;
 
-    private final ComputedDoubleArrayInternal $beta = new ComputedDoubleArrayInternal(this, "beta", true, true, false) {
+    private final ComputedDoubleArrayInternal $beta = new ComputedDoubleArrayInternal(this, "beta", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$beta(); }
 
@@ -86,7 +87,7 @@ public class DiscreteChoiceRandCoeff extends Model {
      */
     public final ComputedDoubleArray beta = $beta;
 
-    private final ComputedIntegerArrayInternal $choices = new ComputedIntegerArrayInternal(this, "choices", false, true, false) {
+    private final ComputedIntegerArrayInternal $choices = new ComputedIntegerArrayInternal(this, "choices", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int[] getValue() { return system$c.get$choices(); }
 
@@ -117,7 +118,7 @@ public class DiscreteChoiceRandCoeff extends Model {
      */
     public final ComputedIntegerArray choices = $choices;
 
-    private final ComputedObjectArrayInternal<double[]> $prob = new ComputedObjectArrayInternal<double[]>(this, "prob", false, false, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $prob = new ComputedObjectArrayInternal<double[]>(this, "prob", false, false, false, ProbabilityType.SKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$prob(); }
 
@@ -163,7 +164,7 @@ public class DiscreteChoiceRandCoeff extends Model {
      */
     public final ComputedObjectArray<double[]> prob = $prob;
 
-    private final ComputedDoubleInternal $sigma = new ComputedDoubleInternal(this, "sigma", true, true, false) {
+    private final ComputedDoubleInternal $sigma = new ComputedDoubleInternal(this, "sigma", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$sigma(); }
 
@@ -197,7 +198,7 @@ public class DiscreteChoiceRandCoeff extends Model {
      */
     public final ComputedDouble sigma = $sigma;
 
-    private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true, true, false) {
+    private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$ut(); }
 
