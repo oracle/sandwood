@@ -49,7 +49,7 @@ public abstract class ReductionScopeBase<A extends Variable<A>> extends Id imple
         returnVar = rs.returnVar;
         scopeCondition = rs.getScopeCondition();
     }
-    
+
     public ReductionScopeBase(IntVariable start, IntVariable end, ArrayVariable<A> array, Variable<A> emptyValue) {
         this.start = start;
         this.end = end;
@@ -109,6 +109,7 @@ public abstract class ReductionScopeBase<A extends Variable<A>> extends Id imple
         return VariableNames.calcVarName("reduction" + id() + "Index", VariableType.IntVariable, false);
     }
 
+    // Use the first value in the array as the empty value so that all the values in the array can be processed.
     public Variable<A> reduceEmptyValue(ReductionInput<A> ri, CompilationContext compilationCtx) {
         IRTreeReturn<IntVariable> mask = ri.start.getForwardIR(compilationCtx);
         Variable<A> emptyValue = ri.array.get(ri.start);
@@ -129,7 +130,8 @@ public abstract class ReductionScopeBase<A extends Variable<A>> extends Id imple
         // Construct outer scopes
         IfScope ifScope = new IfScope(outerScope,
                 ri.start.lessThan(ri.array.length()).and(ri.end.greaterThan(ri.start)));
-        ReductionScopeCopied<A> newReductionScope = new ReductionScopeCopied<>(ifScope, mask, emptyValue, reductionScope);
+        ReductionScopeCopied<A> newReductionScope = new ReductionScopeCopied<>(ifScope, mask, emptyValue,
+                reductionScope);
 
         // Set the substitution, and evaluate the function minus the masked value.
         compilationCtx.addScopeSubstitute(reductionScope, newReductionScope);
