@@ -1,0 +1,33 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * 
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+ 
+package org.sandwood.compiler.tests.parser;
+
+public model ReductionTest1(int T, int n_ac, int[][] ObsArr, double[][] TimeFeat) {
+    int time_dim = TimeFeat[0].length; //length of the feature vector
+
+
+    double[][] time_coeff = new double[n_ac][time_dim];
+    double[][] sum_t = new double[T][n_ac];
+    double[][][] time_impact = new double[T][n_ac][time_dim];
+    int[][] arr = new int[T][n_ac];
+    
+    for (int i : [0..n_ac))
+        time_coeff[i] = gaussian(0,1).sample(time_dim);
+
+    for (int t : (0..T)) {
+        for (int i : [0..n_ac)){
+            for (int j : [0..time_dim))
+                time_impact[t][i][j] = TimeFeat[t][j]*time_coeff[i][j];
+            //calculate sum
+            sum_t[t][i] = reduce(time_impact[t][i], 0, (x, y) -> { return x + y; });
+            arr[t][i] = poisson(sum_t[t][i]).sample();
+        }
+    }
+    arr.observe(ObsArr);
+}

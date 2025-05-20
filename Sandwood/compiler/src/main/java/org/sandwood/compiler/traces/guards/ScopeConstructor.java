@@ -342,8 +342,8 @@ public class ScopeConstructor {
         // Construct the initial Distribution description.
         List<ScopeDescription> ds = new ArrayList<>();
         CommentScope commentScope = new CommentScope(targetScope, comment);
-        ScopeDescription d = new ScopeDescription(commentScope, task, controlScopes, distributionTraces,
-                compilationCtx);
+        ScopeDescription d = new ScopeDescription(commentScope, task, controlScopes, new HashSet<>(),
+                distributionTraces, compilationCtx);
         // If the task is a distributed sample task add the task to set of know samples.
         if(task.isDistribution() && task.getType() == DFType.SAMPLE) {
             DistributionSampleTask<A, ?> sampleTask = (DistributionSampleTask<A, ?>) task;
@@ -1172,7 +1172,7 @@ public class ScopeConstructor {
 
         d.removeSubstitutions(compilationCtx);
 
-        d = d.insertScope(innerScope, existingScopes, compilationCtx);
+        d = d.insertScope(innerScope, existingScopes, d.reductionInputs, compilationCtx);
         Substitutions s = constructSubstitutions(d.getSubstitutions(position), substitutions);
         d = d.addSubstitutions(position, tasks.get(position), s);
 

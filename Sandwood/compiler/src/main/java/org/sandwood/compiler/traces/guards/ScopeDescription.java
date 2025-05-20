@@ -26,6 +26,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
+import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ReductionInput;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
@@ -179,6 +180,11 @@ class ScopeDescription {
     public final Set<Scope> existingScopes;
 
     /**
+     * A set of all the arrays that have been reduced with values passed as only one of these can appear for each
+     */
+    public final Set<ReductionInput<?>> reductionInputs;
+
+    /**
      * The comment if any that goes with this set of distributions.
      */
     public final String comment(int position) {
@@ -209,10 +215,12 @@ class ScopeDescription {
      * @param compilationCtx     The compilation context for this compilation process.
      */
     public ScopeDescription(Scope innerScope, DataflowTask<?> task, Set<Scope> existingScopes,
-            Set<Set<TraceHandle>> distributionTraces, CompilationContext compilationCtx) {
+            Set<ReductionInput<?>> reductionInputs, Set<Set<TraceHandle>> distributionTraces,
+            CompilationContext compilationCtx) {
         this.innerScope = innerScope;
         probability = IRTree.constant(1.0);
         this.existingScopes = Collections.unmodifiableSet(existingScopes);
+        this.reductionInputs = Collections.unmodifiableSet(reductionInputs);
         knownFlags = new HashMap<>();
         List<ConstraintData> cd = new ArrayList<>();
         sampleDescriptions = new HashMap<>(compilationCtx.peekExploredDistSamples());
@@ -222,21 +230,21 @@ class ScopeDescription {
     }
 
     public ScopeDescription insertScope(Scope innerScope, Set<Scope> existingScopes,
-            CompilationContext compilationCtx) {
+            Set<ReductionInput<?>> reductionInputs, CompilationContext compilationCtx) {
         return new ScopeDescription(innerScope, probability, Collections.unmodifiableSet(existingScopes),
-                constraintData, sampleDescriptions, compilationCtx, this);
+                reductionInputs, constraintData, sampleDescriptions, compilationCtx, this);
     }
 
     public ScopeDescription insertScope(Scope innerScope, CompilationContext compilationCtx) {
-        return new ScopeDescription(innerScope, probability, existingScopes, constraintData, sampleDescriptions,
-                compilationCtx, this);
+        return new ScopeDescription(innerScope, probability, existingScopes, reductionInputs, constraintData,
+                sampleDescriptions, compilationCtx, this);
     }
 
     public ScopeDescription setProbability(IRTreeReturn<DoubleVariable> probability) {
         // The exceptions cannot be thrown.
         try {
-            return new ScopeDescription(innerScope, probability, existingScopes, constraintData, sampleDescriptions,
-                    null, this);
+            return new ScopeDescription(innerScope, probability, existingScopes, reductionInputs, constraintData,
+                    sampleDescriptions, null, this);
         } catch(CompilerException e) {
             e.printStackTrace();
         }
@@ -289,7 +297,7 @@ class ScopeDescription {
         l.add(sampleDesc);
         sampleDescriptions.put(sampleTask, Collections.unmodifiableList(l));
 
-        return new ScopeDescription(scope, probability, existingScopes, newConstraintData,
+        return new ScopeDescription(scope, probability, existingScopes, reductionInputs, newConstraintData,
                 Collections.unmodifiableMap(sampleDescriptions), compilationCtx, this);
     }
 
@@ -301,12 +309,13 @@ class ScopeDescription {
      * @param d           The distribution to base this distribution on.
      */
     private ScopeDescription(Scope innerScope, IRTreeReturn<DoubleVariable> probability, Set<Scope> existingScopes,
-            List<ConstraintData> constraintData,
+            Set<ReductionInput<?>> reductionInputs, List<ConstraintData> constraintData,
             Map<DistributionSampleTask<?, ?>, List<DistSampleDesc<?>>> sampleDescriptions,
             CompilationContext compilationCtx, ScopeDescription d) {
         this.innerScope = innerScope;
         this.probability = probability;
         this.existingScopes = existingScopes;
+        this.reductionInputs = reductionInputs;
         this.sampleDescriptions = sampleDescriptions;
 
         this.constraintData = constraintData;
@@ -345,6 +354,7 @@ class ScopeDescription {
         this.innerScope = innerScope;
         probability = d.probability;
         existingScopes = d.existingScopes;
+        reductionInputs = d.reductionInputs;
         sampleDescriptions = d.sampleDescriptions;
 
         constraintData = d.constraintData;
@@ -365,6 +375,7 @@ class ScopeDescription {
         innerScope = d.innerScope;
         probability = d.probability;
         existingScopes = d.existingScopes;
+        reductionInputs = d.reductionInputs;
         sampleDescriptions = d.sampleDescriptions;
 
         constraintData = addSubstitution(d.constraintData, position,
@@ -381,6 +392,7 @@ class ScopeDescription {
         innerScope = d.innerScope;
         probability = d.probability;
         existingScopes = d.existingScopes;
+        reductionInputs = d.reductionInputs;
         sampleDescriptions = d.sampleDescriptions;
         knownFlags = d.knownFlags;
         constraintData = new ArrayList<>();
@@ -406,6 +418,7 @@ class ScopeDescription {
         innerScope = d.innerScope;
         probability = d.probability;
         existingScopes = d.existingScopes;
+        reductionInputs = d.reductionInputs;
         sampleDescriptions = d.sampleDescriptions;
         knownFlags = d.knownFlags;
 
@@ -418,6 +431,7 @@ class ScopeDescription {
         innerScope = d.innerScope;
         probability = d.probability;
         existingScopes = d.existingScopes;
+        reductionInputs = d.reductionInputs;
         sampleDescriptions = d.sampleDescriptions;
         knownFlags = d.knownFlags;
 
@@ -452,6 +466,7 @@ class ScopeDescription {
         innerScope = d.innerScope;
         probability = d.probability;
         existingScopes = d.existingScopes;
+        reductionInputs = d.reductionInputs;
         sampleDescriptions = d.sampleDescriptions;
         knownFlags = d.knownFlags;
         constraintData = new ArrayList<>();
@@ -493,7 +508,7 @@ class ScopeDescription {
             newDescs = new ArrayList<>();
         newDescs.add(sampleDesc);
         sampleDescriptions.put(sampleTask, Collections.unmodifiableList(newDescs));
-        return new ScopeDescription(innerScope, probability, existingScopes, constraintData,
+        return new ScopeDescription(innerScope, probability, existingScopes, reductionInputs, constraintData,
                 Collections.unmodifiableMap(sampleDescriptions), compilationCtx, this);
     }
 
