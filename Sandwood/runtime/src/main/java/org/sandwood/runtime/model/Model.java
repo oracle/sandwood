@@ -565,7 +565,9 @@ public abstract class Model implements HasProbability, AutoCloseable {
 
     private void ingestPropagatedValues() {
         for(ComputedVariableInternal c:computedVariables.values()) {
-            if(c.getRetentionPolicy() != RetentionPolicy.NONE && c.isFixed() == Immutability.OBSERVED) {
+            Immutability i = c.isFixed();
+            if(c.getRetentionPolicy() != RetentionPolicy.NONE
+                    && (i == Immutability.OBSERVED || i == Immutability.OBSERVED_FIXABLE)) {
                 c.ingestMap();
                 c.computeComplete();
             }

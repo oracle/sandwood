@@ -28,7 +28,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$var42;
 	private double logProbability$var57;
 	private double logProbability$w;
-	private double logProbability$z;
 	private int noTopics;
 	private double[][] phi;
 	private boolean system$gibbsForward = true;
@@ -143,12 +142,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	@Override
 	public final double get$logProbability$w() {
 		return logProbability$w;
-	}
-
-	// Getter for logProbability$z.
-	@Override
-	public final double get$logProbability$z() {
-		return logProbability$z;
 	}
 
 	// Getter for noTopics.
@@ -519,9 +512,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				logProbability$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)] = cv$sampleProbability;
 			}
 		}
-		
-		// Update the variable probability
-		logProbability$z = (logProbability$z + cv$accumulator);
 		
 		// Add probability to model
 		logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1457,7 +1447,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$theta = 0.0;
 		if(!fixedProbFlag$sample58)
 			logProbability$var57 = Double.NaN;
-		logProbability$z = 0.0;
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 			for(int j = 0; j < length$documents[i$var71]; j += 1)
 				logProbability$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)] = Double.NaN;

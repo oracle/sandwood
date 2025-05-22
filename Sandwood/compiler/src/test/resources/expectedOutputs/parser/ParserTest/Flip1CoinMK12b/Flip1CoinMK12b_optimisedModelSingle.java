@@ -113,7 +113,7 @@ public final class Flip1CoinMK12b extends Model {
 
         @Override
         public Immutability isFixed() {
-            throw new SandwoodRuntimeException("This method should never be called on a private variable.");
+                return Immutability.FREE;
         }
     };
 
@@ -137,7 +137,7 @@ public final class Flip1CoinMK12b extends Model {
 
         @Override
         public Immutability isFixed() {
-            throw new SandwoodRuntimeException("This method should never be called on a private variable.");
+                return Immutability.FREE;
         }
     };
 
@@ -161,7 +161,7 @@ public final class Flip1CoinMK12b extends Model {
 
         @Override
         public Immutability isFixed() {
-            throw new SandwoodRuntimeException("This method should never be called on a private variable.");
+                return Immutability.FREE;
         }
     };
 

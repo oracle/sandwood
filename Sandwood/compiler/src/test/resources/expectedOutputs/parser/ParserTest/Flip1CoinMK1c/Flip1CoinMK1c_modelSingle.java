@@ -70,7 +70,7 @@ public final class Flip1CoinMK1c extends Model {
 
         @Override
         public Immutability isFixed() {
-            throw new SandwoodRuntimeException("This method should never be called on a private variable.");
+                return Immutability.FREE;
         }
     };
 

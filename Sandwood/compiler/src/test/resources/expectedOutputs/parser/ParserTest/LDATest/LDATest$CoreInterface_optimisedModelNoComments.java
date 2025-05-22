@@ -14,7 +14,6 @@ interface LDATest$CoreInterface extends org.sandwood.runtime.internal.model.Core
 	public double get$logProbability$phi();
 	public double get$logProbability$theta();
 	public double get$logProbability$w();
-	public double get$logProbability$z();
 	public int get$noTopics();
 	public void set$noTopics(int cv$value);
 	public double[][] get$phi();

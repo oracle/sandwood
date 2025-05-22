@@ -190,12 +190,6 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 		return logProbability$v2;
 	}
 
-	// Getter for logProbability$v3.
-	@Override
-	public final double get$logProbability$v3() {
-		return logProbability$v3;
-	}
-
 	// Getter for size.
 	@Override
 	public final int get$size() {

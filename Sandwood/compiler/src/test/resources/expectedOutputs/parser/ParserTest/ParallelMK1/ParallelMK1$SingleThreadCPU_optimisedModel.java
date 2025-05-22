@@ -109,12 +109,6 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		return logProbability$indirection;
 	}
 
-	// Getter for logProbability$sample.
-	@Override
-	public final double get$logProbability$sample() {
-		return logProbability$sample;
-	}
-
 	// Getter for observed.
 	@Override
 	public final double[] get$observed() {

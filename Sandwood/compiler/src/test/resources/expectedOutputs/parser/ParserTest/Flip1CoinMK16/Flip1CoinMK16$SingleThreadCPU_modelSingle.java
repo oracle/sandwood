@@ -34,12 +34,6 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 		bias = cv$value;
 	}
 
-	// Getter for flip.
-	@Override
-	public final boolean get$flip() {
-		return flip;
-	}
-
 	// Getter for flipMeasured.
 	@Override
 	public final boolean get$flipMeasured() {
@@ -80,18 +74,6 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final double get$logProbability$bernoulli() {
 		return logProbability$bernoulli;
-	}
-
-	// Getter for logProbability$bias.
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	// Getter for logProbability$flip.
-	@Override
-	public final double get$logProbability$flip() {
-		return logProbability$flip;
 	}
 
 	// Calculate the probability of the samples represented by sample14 using sampled

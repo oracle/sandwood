@@ -19,7 +19,6 @@ interface DistributionTest2b$CoreInterface extends org.sandwood.runtime.internal
 	public double get$logProbability$v();
 	public double get$logProbability$v1();
 	public double get$logProbability$v2();
-	public double get$logProbability$v3();
 	public int get$size();
 	public boolean[] get$v();
 	public int get$v1();

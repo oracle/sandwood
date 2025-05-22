@@ -143,7 +143,7 @@ public final class Conditional4 extends Model {
 
         @Override
         public Immutability isFixed() {
-            throw new SandwoodRuntimeException("This method should never be called on a private variable.");
+                return Immutability.FREE;
         }
     };
 

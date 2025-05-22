@@ -581,7 +581,6 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     @Override
     public void setSample() {
         isSample = true;
-        visibility = VisibilityMod.PUBLIC;
     }
 
     /**
@@ -725,7 +724,7 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     public boolean isPrivate() {
         if(this == instanceHandle())
             return getAlias() == null || visibility == VisibilityMod.PRIVATE
-                    || (enclosingScope != GlobalScope.scope && visibility != VisibilityMod.PUBLIC && !isSample());
+                    || (enclosingScope != GlobalScope.scope && visibility != VisibilityMod.PUBLIC);
         else
             return instanceHandle().isPrivate();
     }
