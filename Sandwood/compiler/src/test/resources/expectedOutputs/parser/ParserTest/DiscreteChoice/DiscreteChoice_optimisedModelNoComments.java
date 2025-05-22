@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model DiscreteChoice This is the class that
   * all user interactions with the model should occur through.
   */
-public class DiscreteChoice extends Model {
+public final class DiscreteChoice extends Model {
 
     private DiscreteChoice$CoreInterface system$c = new DiscreteChoice$SingleThreadCPU(ExecutionTarget.singleThread);
 

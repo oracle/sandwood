@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model HMMMetrics4 This is the class that
   * all user interactions with the model should occur through.
   */
-public class HMMMetrics4 extends Model {
+public final class HMMMetrics4 extends Model {
 
     private HMMMetrics4$CoreInterface system$c = new HMMMetrics4$SingleThreadCPU(ExecutionTarget.singleThread);
 

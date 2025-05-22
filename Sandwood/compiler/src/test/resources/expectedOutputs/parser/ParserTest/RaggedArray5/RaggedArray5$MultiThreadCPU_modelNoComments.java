@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements RaggedArray5$CoreInterface {
+final class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements RaggedArray5$CoreInterface {
 	private double[][] a;
 	private double[] d;
 	private boolean fixedFlag$sample39 = false;

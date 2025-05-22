@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model PoissonDecayMK1 This is the class that
   * all user interactions with the model should occur through.
   */
-public class PoissonDecayMK1 extends Model {
+public final class PoissonDecayMK1 extends Model {
 
     private PoissonDecayMK1$CoreInterface system$c = new PoissonDecayMK1$SingleThreadCPU(ExecutionTarget.singleThread);
 

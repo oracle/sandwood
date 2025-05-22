@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model LinearRegressionTest This is the class that
   * all user interactions with the model should occur through.
   */
-public class LinearRegressionTest extends Model {
+public final class LinearRegressionTest extends Model {
 
     private LinearRegressionTest$CoreInterface system$c = new LinearRegressionTest$SingleThreadCPU(ExecutionTarget.singleThread);
 

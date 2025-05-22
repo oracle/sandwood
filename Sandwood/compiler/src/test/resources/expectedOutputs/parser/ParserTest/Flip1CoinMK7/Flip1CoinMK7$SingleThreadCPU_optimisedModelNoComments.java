@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip1CoinMK7$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK7$CoreInterface {
+final class Flip1CoinMK7$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK7$CoreInterface {
 	private double bias;
 	private boolean fixedFlag$sample7 = false;
 	private boolean fixedProbFlag$sample20 = false;

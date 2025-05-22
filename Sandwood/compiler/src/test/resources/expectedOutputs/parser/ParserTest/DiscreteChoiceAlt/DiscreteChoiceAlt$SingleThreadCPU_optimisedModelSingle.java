@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DiscreteChoiceAlt$CoreInterface {
+final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DiscreteChoiceAlt$CoreInterface {
 	
 	// Declare the variables for the model.
 	private int[] ObsChoices;

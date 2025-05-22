@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model DiscreteChoiceRandCoeff This is the class that
   * all user interactions with the model should occur through.
   */
-public class DiscreteChoiceRandCoeff extends Model {
+public final class DiscreteChoiceRandCoeff extends Model {
 
     private DiscreteChoiceRandCoeff$CoreInterface system$c = new DiscreteChoiceRandCoeff$SingleThreadCPU(ExecutionTarget.singleThread);
 

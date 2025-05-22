@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model Flip1CoinArrayCopyPass This is the class that
   * all user interactions with the model should occur through.
   */
-public class Flip1CoinArrayCopyPass extends Model {
+public final class Flip1CoinArrayCopyPass extends Model {
 
     private Flip1CoinArrayCopyPass$CoreInterface system$c = new Flip1CoinArrayCopyPass$SingleThreadCPU(ExecutionTarget.singleThread);
 

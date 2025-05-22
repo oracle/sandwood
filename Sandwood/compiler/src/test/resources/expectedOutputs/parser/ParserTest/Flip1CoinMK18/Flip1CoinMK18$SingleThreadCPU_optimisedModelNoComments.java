@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK18$CoreInterface {
+final class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK18$CoreInterface {
 	private int a;
 	private int b;
 	private double[][][] bias;

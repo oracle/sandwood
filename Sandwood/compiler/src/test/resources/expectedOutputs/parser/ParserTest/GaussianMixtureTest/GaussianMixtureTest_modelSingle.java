@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model GaussianMixtureTest This is the class that
   * all user interactions with the model should occur through.
   */
-public class GaussianMixtureTest extends Model {
+public final class GaussianMixtureTest extends Model {
 
     private GaussianMixtureTest$CoreInterface system$c = new GaussianMixtureTest$SingleThreadCPU(ExecutionTarget.singleThread);
 

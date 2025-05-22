@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinArrayCopyPassMK2$CoreInterface {
+final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinArrayCopyPassMK2$CoreInterface {
 	private double[] bias;
 	private boolean fixedFlag$sample10 = false;
 	private boolean fixedProbFlag$sample10 = false;

@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model ParallelMK4 This is the class that
   * all user interactions with the model should occur through.
   */
-public class ParallelMK4 extends Model {
+public final class ParallelMK4 extends Model {
 
     private ParallelMK4$CoreInterface system$c = new ParallelMK4$SingleThreadCPU(ExecutionTarget.singleThread);
 

@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model LogitRegressionTest This is the class that
   * all user interactions with the model should occur through.
   */
-public class LogitRegressionTest extends Model {
+public final class LogitRegressionTest extends Model {
 
     private LogitRegressionTest$CoreInterface system$c = new LogitRegressionTest$SingleThreadCPU(ExecutionTarget.singleThread);
 

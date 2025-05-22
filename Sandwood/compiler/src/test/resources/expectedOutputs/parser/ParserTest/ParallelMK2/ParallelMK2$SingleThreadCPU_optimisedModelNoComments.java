@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ParallelMK2$CoreInterface {
+final class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ParallelMK2$CoreInterface {
 	private boolean fixedFlag$sample26 = false;
 	private boolean fixedProbFlag$sample26 = false;
 	private boolean fixedProbFlag$sample32 = false;

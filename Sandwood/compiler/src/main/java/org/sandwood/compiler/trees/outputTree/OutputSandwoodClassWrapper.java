@@ -207,7 +207,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
                     + "  * all user interactions with the model should occur through.\n" + "  */\n");
 
         ClassName interfaceName = className.interfaceName();
-        sb.append("public class " + className + " extends Model {\n\n");
+        sb.append("public final class " + className + " extends Model {\n\n");
 
         sb.append("    private " + interfaceName + " " + coreName + " = new "
                 + className.backendName(ExecutionType.SingleThreadCPU) + "(ExecutionTarget.singleThread);\n\n");

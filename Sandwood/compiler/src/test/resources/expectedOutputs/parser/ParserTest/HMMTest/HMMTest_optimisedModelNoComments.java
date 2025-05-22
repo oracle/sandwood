@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model HMMTest This is the class that
   * all user interactions with the model should occur through.
   */
-public class HMMTest extends Model {
+public final class HMMTest extends Model {
 
     private HMMTest$CoreInterface system$c = new HMMTest$SingleThreadCPU(ExecutionTarget.singleThread);
 

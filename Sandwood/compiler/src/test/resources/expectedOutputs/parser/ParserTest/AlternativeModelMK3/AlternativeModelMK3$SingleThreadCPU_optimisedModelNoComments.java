@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class AlternativeModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements AlternativeModelMK3$CoreInterface {
+final class AlternativeModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements AlternativeModelMK3$CoreInterface {
 	private double bias;
 	private boolean fixedFlag$sample6 = false;
 	private boolean fixedProbFlag$sample6 = false;

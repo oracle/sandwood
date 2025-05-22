@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model HMM_Mk2Dist This is the class that
   * all user interactions with the model should occur through.
   */
-public class HMM_Mk2Dist extends Model {
+public final class HMM_Mk2Dist extends Model {
 
     private HMM_Mk2Dist$CoreInterface system$c = new HMM_Mk2Dist$SingleThreadCPU(ExecutionTarget.singleThread);
 

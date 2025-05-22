@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -71,7 +71,7 @@ public class OutputSandwoodClassGenerated extends OutputSandwoodClass {
 
         StringBuilder bodySB = new StringBuilder();
 
-        bodySB.append("class " + name);
+        bodySB.append("final class " + name);
 
         if(extendedClass != null)
             bodySB.append(" extends " + extendedClass);

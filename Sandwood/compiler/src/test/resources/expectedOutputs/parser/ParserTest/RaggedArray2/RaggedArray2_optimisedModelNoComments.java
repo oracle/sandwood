@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model RaggedArray2 This is the class that
   * all user interactions with the model should occur through.
   */
-public class RaggedArray2 extends Model {
+public final class RaggedArray2 extends Model {
 
     private RaggedArray2$CoreInterface system$c = new RaggedArray2$SingleThreadCPU(ExecutionTarget.singleThread);
 

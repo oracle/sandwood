@@ -2,7 +2,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements LinearRegression2Fail$CoreInterface {
+final class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements LinearRegression2Fail$CoreInterface {
 	private double b0;
 	private double b1;
 	private boolean fixedFlag$sample11 = false;

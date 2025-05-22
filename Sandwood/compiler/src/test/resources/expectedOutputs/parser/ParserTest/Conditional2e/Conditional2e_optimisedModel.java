@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model Conditional2e This is the class that
   * all user interactions with the model should occur through.
   */
-public class Conditional2e extends Model {
+public final class Conditional2e extends Model {
 
     private Conditional2e$CoreInterface system$c = new Conditional2e$SingleThreadCPU(ExecutionTarget.singleThread);
 

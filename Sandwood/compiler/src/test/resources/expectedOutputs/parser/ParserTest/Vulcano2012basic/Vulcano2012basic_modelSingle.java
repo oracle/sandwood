@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model Vulcano2012basic This is the class that
   * all user interactions with the model should occur through.
   */
-public class Vulcano2012basic extends Model {
+public final class Vulcano2012basic extends Model {
 
     private Vulcano2012basic$CoreInterface system$c = new Vulcano2012basic$SingleThreadCPU(ExecutionTarget.singleThread);
 

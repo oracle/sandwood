@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DistributionTest2$CoreInterface {
+final class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DistributionTest2$CoreInterface {
 	private double[] cv$var23$stateProbabilityGlobal;
 	private double[] cv$var5$stateProbabilityGlobal;
 	private double[] cv$var9$stateProbabilityGlobal;

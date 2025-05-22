@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model AnonymousSample This is the class that
   * all user interactions with the model should occur through.
   */
-public class AnonymousSample extends Model {
+public final class AnonymousSample extends Model {
 
     private AnonymousSample$CoreInterface system$c = new AnonymousSample$SingleThreadCPU(ExecutionTarget.singleThread);
 
