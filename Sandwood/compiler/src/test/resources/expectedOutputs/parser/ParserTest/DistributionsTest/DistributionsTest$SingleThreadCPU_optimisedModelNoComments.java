@@ -16,9 +16,6 @@ final class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.inter
 	private double logProbability$b0;
 	private double logProbability$b1;
 	private double[] logProbability$sample27;
-	private double logProbability$var10;
-	private double[] logProbability$var26;
-	private double logProbability$var6;
 	private double logProbability$y;
 	private int noSamples;
 	private boolean system$gibbsForward = true;
@@ -136,14 +133,12 @@ final class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample11() {
 		if(!fixedProbFlag$sample11) {
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityHalfCauchy(b1, 1.0, 5.0);
-			logProbability$var10 = cv$distributionAccumulator;
 			logProbability$b1 = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample11)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample11 = fixedFlag$sample11;
 		} else {
-			logProbability$var10 = logProbability$b1;
 			logProbability$$model = (logProbability$$model + logProbability$b1);
 			if(fixedFlag$sample11)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$b1);
@@ -156,7 +151,6 @@ final class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.inter
 			for(int i = 0; i < noSamples; i += 1) {
 				double cv$distributionAccumulator = DistributionSampling.logProbabilityStudentT(y[i], (b0 + (b1 * x[i])));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var26[i] = cv$distributionAccumulator;
 				logProbability$sample27[i] = cv$distributionAccumulator;
 			}
 			logProbability$y = (logProbability$y + cv$accumulator);
@@ -165,11 +159,8 @@ final class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.inter
 			fixedProbFlag$sample27 = (fixedFlag$sample7 && fixedFlag$sample11);
 		} else {
 			double cv$accumulator = 0.0;
-			for(int i = 0; i < noSamples; i += 1) {
-				double cv$rvAccumulator = logProbability$sample27[i];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var26[i] = cv$rvAccumulator;
-			}
+			for(int i = 0; i < noSamples; i += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample27[i]);
 			logProbability$y = (logProbability$y + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -179,14 +170,12 @@ final class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample7() {
 		if(!fixedProbFlag$sample7) {
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityCauchy(b0, 0.0, 2.0);
-			logProbability$var6 = cv$distributionAccumulator;
 			logProbability$b0 = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample7)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample7 = fixedFlag$sample7;
 		} else {
-			logProbability$var6 = logProbability$b0;
 			logProbability$$model = (logProbability$$model + logProbability$b0);
 			if(fixedFlag$sample7)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$b0);
@@ -241,7 +230,6 @@ final class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.inter
 	@Override
 	public final void allocator() {
 		y = new double[x.length];
-		logProbability$var26 = new double[x.length];
 		logProbability$sample27 = new double[x.length];
 	}
 
@@ -313,14 +301,10 @@ final class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var6 = 0.0;
 		if(!fixedProbFlag$sample7)
 			logProbability$b0 = Double.NaN;
-		logProbability$var10 = 0.0;
 		if(!fixedProbFlag$sample11)
 			logProbability$b1 = Double.NaN;
-		for(int i = 0; i < noSamples; i += 1)
-			logProbability$var26[i] = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample27) {
 			for(int i = 0; i < noSamples; i += 1)

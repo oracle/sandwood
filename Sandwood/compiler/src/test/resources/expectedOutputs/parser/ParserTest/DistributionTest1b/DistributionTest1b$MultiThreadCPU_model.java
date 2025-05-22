@@ -25,8 +25,6 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 	private double logProbability$v1;
 	private double logProbability$v2;
 	private double logProbability$v3;
-	private double logProbability$var12;
-	private double logProbability$var3;
 	private boolean system$gibbsForward = true;
 	private boolean v;
 	private int v1;
@@ -421,7 +419,6 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var12 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$v = cv$sampleProbability;
@@ -443,7 +440,6 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 			double cv$sampleValue = logProbability$v;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var12 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -510,7 +506,6 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var3 = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$v1 = cv$sampleProbability;
@@ -537,7 +532,6 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 			double cv$sampleValue = logProbability$v1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var3 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -705,7 +699,6 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var12 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$v = cv$sampleProbability;
@@ -727,7 +720,6 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 			double cv$sampleValue = logProbability$v;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var12 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -790,7 +782,6 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var3 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$v1 = cv$sampleProbability;
@@ -816,7 +807,6 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 			double cv$sampleValue = logProbability$v1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var3 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1894,7 +1884,6 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var3 = 0.0;
 		if(!fixedProbFlag$sample4)
 			logProbability$v1 = Double.NaN;
 		logProbability$c = 0.0;
@@ -1902,7 +1891,6 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 			logProbability$v2 = Double.NaN;
 		if(!fixedProbFlag$sample7)
 			logProbability$v3 = Double.NaN;
-		logProbability$var12 = 0.0;
 		if(!fixedProbFlag$sample13)
 			logProbability$v = Double.NaN;
 	}

@@ -18,8 +18,6 @@ final class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private double logProbability$generated;
 	private double logProbability$indirection;
 	private double logProbability$sample;
-	private double logProbability$var25;
-	private double logProbability$var31;
 	private double logProbability$var32;
 	private double[] observed;
 	private double[] sample;
@@ -177,10 +175,9 @@ final class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < 1.0))?0.0:Double.NEGATIVE_INFINITY));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var25 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -188,7 +185,6 @@ final class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$sample = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -223,14 +219,6 @@ final class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < length$observed))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var25 = logProbability$sample;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -285,10 +273,9 @@ final class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(var30)))) - (Math.log(var30) * 0.5));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var31 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -296,7 +283,6 @@ final class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var32 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -328,14 +314,6 @@ final class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < length$observed))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var31 = logProbability$var32;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -701,11 +679,9 @@ final class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var25 = Double.NaN;
 		logProbability$indirection = 0.0;
 		if(!fixedProbFlag$sample26)
 			logProbability$sample = Double.NaN;
-		logProbability$var31 = Double.NaN;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample32)
 			logProbability$var32 = Double.NaN;

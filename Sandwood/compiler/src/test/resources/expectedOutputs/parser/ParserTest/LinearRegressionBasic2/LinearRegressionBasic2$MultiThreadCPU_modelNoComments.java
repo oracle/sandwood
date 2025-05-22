@@ -19,11 +19,7 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 	private double logProbability$b0;
 	private double logProbability$b1;
 	private double[] logProbability$sample33;
-	private double logProbability$var10;
-	private double logProbability$var15;
 	private double logProbability$var16;
-	private double[] logProbability$var32;
-	private double logProbability$var6;
 	private double logProbability$variance;
 	private double logProbability$y;
 	private int noSamples;
@@ -201,7 +197,6 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var10 = cv$sampleAccumulator;
 			logProbability$b1 = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample11)
@@ -213,7 +208,6 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 			double cv$sampleValue = logProbability$b1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var10 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample11)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -252,7 +246,6 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var15 = cv$sampleAccumulator;
 			logProbability$var16 = cv$sampleProbability;
 			logProbability$variance = (logProbability$variance + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -265,7 +258,6 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 			double cv$sampleValue = logProbability$var16;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var15 = cv$rvAccumulator;
 			logProbability$variance = (logProbability$variance + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample16)
@@ -307,7 +299,6 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var32[((i - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample33[((i - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$y = (logProbability$y + cv$accumulator);
@@ -323,7 +314,6 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var32[((i - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$y = (logProbability$y + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -363,7 +353,6 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var6 = cv$sampleAccumulator;
 			logProbability$b0 = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample7)
@@ -375,7 +364,6 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 			double cv$sampleValue = logProbability$b0;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var6 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample7)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -472,9 +460,6 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 			y = new double[x.length];
 		}
 		{
-			logProbability$var32 = new double[((((x.length - 1) - 0) / 1) + 1)];
-		}
-		{
 			logProbability$sample33 = new double[((((x.length - 1) - 0) / 1) + 1)];
 		}
 	}
@@ -569,18 +554,13 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var6 = 0.0;
 		if(!fixedProbFlag$sample7)
 			logProbability$b0 = Double.NaN;
-		logProbability$var10 = 0.0;
 		if(!fixedProbFlag$sample11)
 			logProbability$b1 = Double.NaN;
-		logProbability$var15 = 0.0;
 		logProbability$variance = 0.0;
 		if(!fixedProbFlag$sample16)
 			logProbability$var16 = Double.NaN;
-		for(int i = 0; i < noSamples; i += 1)
-			logProbability$var32[((i - 0) / 1)] = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample33) {
 			for(int i = 0; i < noSamples; i += 1)

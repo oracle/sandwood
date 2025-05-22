@@ -18,7 +18,6 @@ final class Flip1CoinMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	private double logProbability$bias;
 	private double logProbability$flips;
 	private double[] logProbability$sample23;
-	private double logProbability$var5;
 	private int samples;
 	private boolean system$gibbsForward = true;
 
@@ -134,14 +133,12 @@ final class Flip1CoinMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	private final void logProbabilityValue$sample6() {
 		if(!fixedProbFlag$sample6) {
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(bias, 1.0, 1.0);
-			logProbability$var5 = cv$distributionAccumulator;
 			logProbability$bias = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample6)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample6 = fixedFlag$sample6;
 		} else {
-			logProbability$var5 = logProbability$bias;
 			logProbability$$model = (logProbability$$model + logProbability$bias);
 			if(fixedFlag$sample6)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
@@ -226,7 +223,6 @@ final class Flip1CoinMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var5 = 0.0;
 		if(!fixedProbFlag$sample6)
 			logProbability$bias = Double.NaN;
 		for(int i$var21 = 0; i$var21 < samples; i$var21 += 1)

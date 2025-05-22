@@ -287,8 +287,6 @@ public class ProbabilityFunction {
 
         private Set<Variable<?>> getVariables() {
             Set<Variable<?>> s = new HashSet<>();
-            if(sampleVariable != null)
-                s.add(sampleVariable);
             s.addAll(perSampleVariables.keySet());
             s.addAll(accumulatorVariables.keySet());
             return s;
@@ -550,31 +548,44 @@ public class ProbabilityFunction {
         // Allocate space for the results. Using scopes here is ok because
         // random is allocated inside these scopes, so can only exist in this number of
         // dimensions.
-        funcData.toInitialize.add(new WrappedTree<>(TreeUtils.constructVariable(funcData.randomProbName,
-                constant(funcData.randomSkippable ? Double.NaN : 0.0), funcData.randomScopes,
-                funcData.randomVariable.isPrivate() ? FieldType.PRIVATE_PROBABILITY : FieldType.PUBLIC_PROBABILITY,
-                funcData.compilationCtx)));
+        if(!funcData.randomVariable.isPrivate()) {
+            funcData.toInitialize.add(new WrappedTree<>(TreeUtils.constructVariable(funcData.randomProbName,
+                    constant(funcData.randomSkippable ? Double.NaN : 0.0), funcData.randomScopes,
+                    FieldType.PUBLIC_PROBABILITY, funcData.compilationCtx)));
+        }
 
         List<ScopeDesc> outputScopes = new ArrayList<>();
         outputScopes.add(new ScopeDesc(GlobalScope.scope, null, false));
-        for(Variable<?> intermediate:funcData.dependentVariables) {
-            // TODO decide how many dimensions we want to return results in, for every
-            // observation, for all observations, or somewhere in between.
-            // TODO if we do add more dimensions we will need a different allocation
-            // strategy as
-            // scopes only allocate for the scope the current variable is in, and
-            // intermediate
-            // variables could be constructed in multiple places.
-            // TODO consider removing this as it will all cancel through if the only scope
-            // we are going to use is global.
-            // Get the name of the output variable.
+        /*
+         * TODO decide how many dimensions we want to return results in, for every observation, for all observations, or
+         * somewhere in between.
+         * 
+         * TODO if we do add more dimensions we will need a different allocation strategy as scopes only allocate for
+         * the scope the current variable is in, and intermediate variables could be constructed in multiple places.
+         * 
+         * TODO consider removing this as it will all cancel through if the only scope we are going to use is global.
+         * Get the name of the output variable.
+         */
 
+        // Declare a variable for probability of the sample variable if the sampleVariable is available, and is either
+        // public, or required to set probabilities if the probability is fixed
+        Variable<?> sampleVar = funcData.dependentVariables.sampleVariable;
+        if(sampleVar != null && (!sampleVar.isPrivate() || funcData.fixableProb)) {
             VariableDescription<DoubleVariable> outputName = VariableNames
-                    .logProbabilityName(intermediate.getUniqueVarDesc());
+                    .logProbabilityName(sampleVar.getUniqueVarDesc());
             IRTreeVoid initializeIntermediate = TreeUtils.constructVariable(outputName, constant(0.0), outputScopes,
-                    intermediate.isPrivate() ? FieldType.PRIVATE_PROBABILITY : FieldType.PUBLIC_PROBABILITY,
-                    intermediate.getComment(), funcData.compilationCtx);
+                    sampleVar.isPrivate() ? FieldType.PRIVATE_PROBABILITY : FieldType.PUBLIC_PROBABILITY,
+                    sampleVar.getComment(), funcData.compilationCtx);
             funcData.toInitialize.add(new WrappedTree<>(initializeIntermediate));
+        }
+        for(Variable<?> intermediate:funcData.dependentVariables) {
+            if(!intermediate.isPrivate()) {
+                VariableDescription<DoubleVariable> outputName = VariableNames
+                        .logProbabilityName(intermediate.getUniqueVarDesc());
+                IRTreeVoid initializeIntermediate = TreeUtils.constructVariable(outputName, constant(0.0), outputScopes,
+                        FieldType.PUBLIC_PROBABILITY, intermediate.getComment(), funcData.compilationCtx);
+                funcData.toInitialize.add(new WrappedTree<>(initializeIntermediate));
+            }
         }
 
         /*
@@ -705,7 +716,8 @@ public class ProbabilityFunction {
                     store(accumulatorName, addDD(load(accumulatorName), load(rvProbabilityName)), Tree.NoComment));
 
             // Update the values for the random variables
-            updateRVProbabilities(funcData, load(rvProbabilityName));
+            if(!funcData.randomVariable.isPrivate())
+                updateRVProbabilities(funcData, load(rvProbabilityName));
 
             // Update the values for the variables
             updateVarProbabilities(funcData, load(accumulatorName), load(sampleValueName));
@@ -791,7 +803,8 @@ public class ProbabilityFunction {
                 "Add the probability of this instance of the random variable to the probability of all instances of the random variable."));
 
         // Update the RV probability
-        updateRVProbabilities(funcData, sampleAccumulatorValue);
+        if(!funcData.randomVariable.isPrivate())
+            updateRVProbabilities(funcData, sampleAccumulatorValue);
 
         // Update the stored probability for the random variable.
         IRTreeVoid updateSample;
@@ -983,8 +996,11 @@ public class ProbabilityFunction {
             Map<Variable<?>, VariableDescription<BooleanVariable>> guards = new HashMap<>();
 
             // Initialize guards
-
-            PriorityQueue<Variable<?>> p = new PriorityQueue<>(funcData.dependentVariables.perSampleVariables.keySet());
+            PriorityQueue<Variable<?>> p = new PriorityQueue<>();
+            for(Variable<?> v:funcData.dependentVariables.perSampleVariables.keySet()) {
+                if(!v.isPrivate())
+                    p.add(v);
+            }
             while(!p.isEmpty()) {
                 Variable<?> v = p.poll();
                 Variable<?> instance = v.instanceHandle();
@@ -999,7 +1015,10 @@ public class ProbabilityFunction {
                 }
             }
 
-            p.addAll(funcData.dependentVariables.accumulatorVariables.keySet());
+            for(Variable<?> v:funcData.dependentVariables.accumulatorVariables.keySet()) {
+                if(!v.isPrivate())
+                    p.add(v);
+            }
             while(!p.isEmpty()) {
                 Variable<?> v = p.poll();
                 Variable<?> instance = v.instanceHandle();
@@ -1016,18 +1035,22 @@ public class ProbabilityFunction {
 
             // Set sample value
             Variable<?> sampleVariable = funcData.dependentVariables.getSampleVariable();
-            if(sampleVariable != null) {
+            if(sampleVariable != null && (!sampleVariable.isPrivate() || funcData.fixableProb)) {
                 funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
                         setValueProbability(accumulatedProbability, sampleVariable, null, funcData));
             }
 
             // Reset the priority queue.
-            if(!funcData.dependentVariables.perSampleVariables.isEmpty()) {
+            for(Variable<?> v:funcData.dependentVariables.perSampleVariables.keySet()) {
+                if(!v.isPrivate())
+                    p.add(v);
+            }
+
+            if(!p.isEmpty()) {
                 ScopeConstructor sPerSample = ScopeConstructor.construct(funcData.sampleTask,
                         "Add probability to constructed variables that have guards, so need per sample probabilities from the combined probability",
                         funcData.compilationCtx);
 
-                p.addAll(funcData.dependentVariables.perSampleVariables.keySet());
                 while(!p.isEmpty()) {
                     Variable<?> v = p.poll();
                     Set<TraceHandle> traces = funcData.dependentVariables.perSampleVariables.get(v);
@@ -1041,12 +1064,16 @@ public class ProbabilityFunction {
                 }
             }
 
-            if(!funcData.dependentVariables.accumulatorVariables.isEmpty()) {
+            for(Variable<?> v:funcData.dependentVariables.accumulatorVariables.keySet()) {
+                if(!v.isPrivate())
+                    p.add(v);
+            }
+
+            if(!p.isEmpty()) {
                 ScopeConstructor sAccumulator = ScopeConstructor.construct(funcData.sampleTask, GlobalScope.scope,
                         "Add probability to constructed variables from the combined probability",
                         funcData.compilationCtx);
 
-                p.addAll(funcData.dependentVariables.accumulatorVariables.keySet());
                 while(!p.isEmpty()) {
                     Variable<?> v = p.poll();
                     Set<TraceHandle> traces = funcData.dependentVariables.accumulatorVariables.get(v);

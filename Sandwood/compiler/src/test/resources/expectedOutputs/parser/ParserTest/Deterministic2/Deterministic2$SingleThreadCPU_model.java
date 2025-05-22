@@ -28,10 +28,7 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 	private double logProbability$m;
 	private double[] logProbability$sample55;
 	private double[] logProbability$sample75;
-	private double logProbability$var17;
 	private double logProbability$var29;
-	private double[] logProbability$var53;
-	private double[] logProbability$var73;
 	private double[][] m;
 	private int n;
 	private int states;
@@ -420,7 +417,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 					// Add the probability of this instance of the random variable to the probability
 					// of all instances of the random variable.
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var53[((i$var46 - 1) / 1)] = cv$sampleAccumulator;
 					
 					// Store the sample task probability
 					logProbability$sample55[((i$var46 - 1) / 1)] = cv$sampleProbability;
@@ -488,7 +484,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var53[((i$var46 - 1) / 1)] = cv$rvAccumulator;
 				
 				// Guard to ensure that b is only updated once for this probability.
 				boolean cv$guard$b = false;
@@ -666,7 +661,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var73[((j - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample75[((j - 0) / 1)] = cv$sampleProbability;
@@ -699,7 +693,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var73[((j - 0) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -774,7 +767,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var17 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var29 = cv$sampleAccumulator;
@@ -809,7 +801,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 			double cv$sampleValue = logProbability$var29;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var17 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$m = (logProbability$m + cv$accumulator);
@@ -891,7 +882,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var53[((i$var46 - 1) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample55[((i$var46 - 1) / 1)] = cv$sampleProbability;
@@ -953,7 +943,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var53[((i$var46 - 1) / 1)] = cv$rvAccumulator;
 				
 				// Guard to ensure that b is only updated once for this probability.
 				boolean cv$guard$b = false;
@@ -1058,7 +1047,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var73[((j - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample75[((j - 0) / 1)] = cv$sampleProbability;
@@ -1091,7 +1079,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var73[((j - 0) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -2131,19 +2118,9 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 				distribution$sample55[((i$var46 - 1) / 1)] = new double[5];
 		}
 		
-		// Constructor for logProbability$var53
-		{
-			logProbability$var53 = new double[((((n - 1) - 1) / 1) + 1)];
-		}
-		
 		// Constructor for logProbability$sample55
 		{
 			logProbability$sample55 = new double[((((n - 1) - 1) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$var73
-		{
-			logProbability$var73 = new double[((((n - 1) - 0) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$sample75
@@ -2389,20 +2366,15 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var17 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample29)
 			logProbability$var29 = Double.NaN;
-		for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
-			logProbability$var53[((i$var46 - 1) / 1)] = Double.NaN;
-		logProbability$b = 0.0;
 		logProbability$a = 0.0;
+		logProbability$b = 0.0;
 		if(!fixedProbFlag$sample55) {
 			for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
 				logProbability$sample55[((i$var46 - 1) / 1)] = Double.NaN;
 		}
-		for(int j = 0; j < n; j += 1)
-			logProbability$var73[((j - 0) / 1)] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample75) {
 			for(int j = 0; j < n; j += 1)

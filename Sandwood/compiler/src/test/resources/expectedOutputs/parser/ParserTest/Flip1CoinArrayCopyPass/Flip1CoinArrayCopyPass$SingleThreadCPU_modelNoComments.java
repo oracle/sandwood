@@ -20,7 +20,6 @@ final class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.
 	private double logProbability$flips;
 	private double[] logProbability$sample26;
 	private double logProbability$var10;
-	private double logProbability$var9;
 	private int samples;
 	private boolean system$gibbsForward = true;
 
@@ -142,7 +141,6 @@ final class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var9 = cv$sampleAccumulator;
 			logProbability$var10 = cv$sampleProbability;
 			logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -155,7 +153,6 @@ final class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.
 			double cv$sampleValue = logProbability$var10;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var9 = cv$rvAccumulator;
 			logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample10)
@@ -365,7 +362,6 @@ final class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var9 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample10)
 			logProbability$var10 = Double.NaN;

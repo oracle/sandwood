@@ -28,11 +28,8 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 	private double logProbability$sample16;
 	private double logProbability$sample28;
 	private double logProbability$sample35;
-	private double logProbability$var13;
 	private double logProbability$var14;
-	private double logProbability$var23;
 	private double logProbability$var26;
-	private double logProbability$var30;
 	private double logProbability$var33;
 	private double logProbability$var48;
 	private int samples;
@@ -289,9 +286,6 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
 			if(guard1) {
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
@@ -318,9 +312,6 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 				// The sample value to calculate the probability of generating
 				double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(var14, 1.0, 1.0);
 				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
@@ -332,8 +323,6 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Update the variable probability
 				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			}
-			if(cv$sampleReached)
-				logProbability$var13 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -369,20 +358,12 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$rvAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
 			if(guard1) {
 				cv$rvAccumulator = logProbability$sample16;
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
 				
 				// Update the variable probability
 				logProbability$bias = (logProbability$bias + logProbability$sample16);
 			}
-			if(cv$sampleReached)
-				logProbability$var13 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$var14 = (logProbability$var14 + cv$rvAccumulator);
@@ -406,9 +387,6 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
 			if((!guard1 && (guard2 <= 2))) {
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
@@ -435,9 +413,6 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 				// The sample value to calculate the probability of generating
 				double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta((var26 * 2), 1.0, 1.0);
 				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
@@ -449,8 +424,6 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Update the variable probability
 				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			}
-			if(cv$sampleReached)
-				logProbability$var23 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -486,20 +459,12 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$rvAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
 			if((!guard1 && (guard2 <= 2))) {
 				cv$rvAccumulator = logProbability$sample28;
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
 				
 				// Update the variable probability
 				logProbability$bias = (logProbability$bias + logProbability$sample28);
 			}
-			if(cv$sampleReached)
-				logProbability$var23 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$var26 = (logProbability$var26 + cv$rvAccumulator);
@@ -523,9 +488,6 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
 			if((!guard1 && !(guard2 <= 2))) {
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
@@ -552,9 +514,6 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 				// The sample value to calculate the probability of generating
 				double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta((var33 * 3), 1.0, 1.0);
 				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
@@ -566,8 +525,6 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Update the variable probability
 				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			}
-			if(cv$sampleReached)
-				logProbability$var30 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -603,20 +560,12 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$rvAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
 			if((!guard1 && !(guard2 <= 2))) {
 				cv$rvAccumulator = logProbability$sample35;
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
 				
 				// Update the variable probability
 				logProbability$bias = (logProbability$bias + logProbability$sample35);
 			}
-			if(cv$sampleReached)
-				logProbability$var30 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$var33 = (logProbability$var33 + cv$rvAccumulator);
@@ -1174,16 +1123,13 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var13 = Double.NaN;
 		logProbability$var14 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample16)
 			logProbability$sample16 = Double.NaN;
-		logProbability$var23 = Double.NaN;
 		logProbability$var26 = 0.0;
 		if(!fixedProbFlag$sample28)
 			logProbability$sample28 = Double.NaN;
-		logProbability$var30 = Double.NaN;
 		logProbability$var33 = 0.0;
 		if(!fixedProbFlag$sample35)
 			logProbability$sample35 = Double.NaN;

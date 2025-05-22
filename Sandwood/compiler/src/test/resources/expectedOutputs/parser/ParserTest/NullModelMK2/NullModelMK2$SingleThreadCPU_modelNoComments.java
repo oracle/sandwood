@@ -14,7 +14,6 @@ final class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$bias;
 	private double logProbability$binomial;
 	private double logProbability$positiveCount;
-	private double logProbability$var9;
 	private double min;
 	private int observedPositiveCount;
 	private int observedSampleCount;
@@ -145,7 +144,6 @@ final class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var9 = cv$sampleAccumulator;
 			logProbability$bias = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample10)
@@ -157,7 +155,6 @@ final class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$sampleValue = logProbability$bias;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var9 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample10)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -369,7 +366,6 @@ final class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var9 = 0.0;
 		if(!fixedProbFlag$sample10)
 			logProbability$bias = Double.NaN;
 		logProbability$binomial = 0.0;

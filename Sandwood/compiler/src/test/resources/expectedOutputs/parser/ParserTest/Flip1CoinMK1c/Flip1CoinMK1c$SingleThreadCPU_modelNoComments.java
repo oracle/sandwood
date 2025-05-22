@@ -15,7 +15,6 @@ final class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$bernoulli;
 	private double logProbability$flips;
 	private double logProbability$var19;
-	private double logProbability$var5;
 	private double logProbability$var6;
 	private int samples;
 	private boolean system$gibbsForward = true;
@@ -174,7 +173,6 @@ final class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.
 		double cv$sampleProbability = cv$distributionAccumulator;
 		cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 		cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-		logProbability$var5 = cv$sampleAccumulator;
 		logProbability$var6 = cv$sampleProbability;
 		logProbability$$model = (logProbability$$model + cv$accumulator);
 	}
@@ -254,7 +252,6 @@ final class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var5 = 0.0;
 		logProbability$var6 = Double.NaN;
 		logProbability$bernoulli = Double.NaN;
 		logProbability$flips = 0.0;

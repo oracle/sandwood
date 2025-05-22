@@ -14,8 +14,6 @@ final class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$$model;
 	private double logProbability$d;
 	private double logProbability$obs;
-	private double logProbability$var36;
-	private double logProbability$var39;
 	private double logProbability$var52;
 	private boolean[] obs;
 	private boolean[] obs_measured;
@@ -118,14 +116,12 @@ final class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			if((1 == y))
 				lengthCV$a$37_3 = 3;
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_3);
-			logProbability$var36 = cv$distributionAccumulator;
 			logProbability$d = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample39)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample39 = fixedFlag$sample39;
 		} else {
-			logProbability$var36 = logProbability$d;
 			logProbability$$model = (logProbability$$model + logProbability$d);
 			if(fixedFlag$sample39)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$d);
@@ -139,14 +135,12 @@ final class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				double var38 = d[y];
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((obs[var51]?var38:(1.0 - var38))));
 			}
-			logProbability$var39 = cv$sampleAccumulator;
 			logProbability$var52 = cv$sampleAccumulator;
 			logProbability$obs = (logProbability$obs + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
 			fixedProbFlag$sample54 = fixedFlag$sample39;
 		} else {
-			logProbability$var39 = logProbability$var52;
 			logProbability$obs = (logProbability$obs + logProbability$var52);
 			logProbability$$model = (logProbability$$model + logProbability$var52);
 			logProbability$$evidence = (logProbability$$evidence + logProbability$var52);
@@ -321,10 +315,8 @@ final class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var36 = 0.0;
 		if(!fixedProbFlag$sample39)
 			logProbability$d = Double.NaN;
-		logProbability$var39 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample54)
 			logProbability$var52 = Double.NaN;

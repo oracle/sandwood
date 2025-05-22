@@ -25,13 +25,8 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	private double[] logProbability$sample68;
 	private double[] logProbability$sample72;
 	private double logProbability$sigma;
-	private double logProbability$var16;
-	private double logProbability$var22;
 	private double logProbability$var34;
-	private double logProbability$var40;
 	private double logProbability$var52;
-	private double[] logProbability$var67;
-	private double[] logProbability$var71;
 	private double logProbability$x;
 	private double logProbability$z;
 	private double[] mu;
@@ -290,11 +285,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(phi, alpha, 5);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var16 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$phi = cv$distributionAccumulator;
 			
@@ -339,8 +329,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var16 = logProbability$phi;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -380,7 +368,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian((mu[var33] / 4.47213595499958))) - 1.4978661367769954);
-			logProbability$var22 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var34 = cv$sampleAccumulator;
@@ -418,8 +405,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var22 = logProbability$var34;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -464,7 +449,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityInverseGamma(sigma[var51], 1.0, 1.0));
-			logProbability$var40 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var52 = cv$sampleAccumulator;
@@ -502,8 +486,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var40 = logProbability$var52;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -561,11 +543,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var67[i$var66] = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$sample68[i$var66] = cv$distributionAccumulator;
 		}
@@ -618,11 +595,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var71[i$var66] = cv$distributionAccumulator;
 			
 			// Store the sample task probability
 			logProbability$sample72[i$var66] = cv$distributionAccumulator;
@@ -942,14 +914,8 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		// Constructor for z
 		z = new int[length$xMeasured];
 		
-		// Constructor for logProbability$var67
-		logProbability$var67 = new double[length$xMeasured];
-		
 		// Constructor for logProbability$sample68
 		logProbability$sample68 = new double[length$xMeasured];
-		
-		// Constructor for logProbability$var71
-		logProbability$var71 = new double[length$xMeasured];
 		
 		// Constructor for logProbability$sample72
 		logProbability$sample72 = new double[length$xMeasured];
@@ -1319,24 +1285,17 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
 			logProbability$phi = Double.NaN;
-		logProbability$var22 = Double.NaN;
 		logProbability$mu = 0.0;
 		if(!fixedProbFlag$sample34)
 			logProbability$var34 = Double.NaN;
-		logProbability$var40 = Double.NaN;
 		logProbability$sigma = 0.0;
 		if(!fixedProbFlag$sample52)
 			logProbability$var52 = Double.NaN;
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-			logProbability$var67[i$var66] = Double.NaN;
 		logProbability$z = 0.0;
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
 			logProbability$sample68[i$var66] = Double.NaN;
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-			logProbability$var71[i$var66] = Double.NaN;
 		logProbability$x = 0.0;
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
 			logProbability$sample72[i$var66] = Double.NaN;

@@ -20,11 +20,7 @@ final class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.ru
 	private double logProbability$$model;
 	private double logProbability$b0;
 	private double logProbability$b1;
-	private double logProbability$var10;
-	private double logProbability$var14;
-	private double logProbability$var30;
 	private double logProbability$var31;
-	private double logProbability$var6;
 	private double logProbability$variance;
 	private double logProbability$y;
 	private int noSamples;
@@ -282,11 +278,6 @@ final class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.ru
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((b1 - 1.0) / 2.23606797749979)) - 0.8047189562170501);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var10 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$b1 = cv$distributionAccumulator;
 			
@@ -331,8 +322,6 @@ final class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.ru
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var10 = logProbability$b1;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -378,11 +367,6 @@ final class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.ru
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityInverseGamma(variance, 1.0, 1.0);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var14 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$variance = cv$distributionAccumulator;
 			
@@ -427,8 +411,6 @@ final class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.ru
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var14 = logProbability$variance;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -476,10 +458,9 @@ final class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.ru
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((y[i] - (b0 + (b1 * x[i]))) / Math.sqrt(variance)))) - (Math.log(variance) * 0.5));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var30 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -487,7 +468,6 @@ final class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.ru
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var31 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -519,14 +499,6 @@ final class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.ru
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < noSamples))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var30 = logProbability$var31;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -573,11 +545,6 @@ final class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.ru
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((b0 / 1.4142135623730951)) - 0.34657359027997264);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var6 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$b0 = cv$distributionAccumulator;
 			
@@ -622,8 +589,6 @@ final class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.ru
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var6 = logProbability$b0;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -916,16 +881,12 @@ final class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.ru
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var6 = 0.0;
 		if(!fixedProbFlag$sample7)
 			logProbability$b0 = Double.NaN;
-		logProbability$var10 = 0.0;
 		if(!fixedProbFlag$sample11)
 			logProbability$b1 = Double.NaN;
-		logProbability$var14 = 0.0;
 		if(!fixedProbFlag$sample15)
 			logProbability$variance = Double.NaN;
-		logProbability$var30 = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample31)
 			logProbability$var31 = Double.NaN;

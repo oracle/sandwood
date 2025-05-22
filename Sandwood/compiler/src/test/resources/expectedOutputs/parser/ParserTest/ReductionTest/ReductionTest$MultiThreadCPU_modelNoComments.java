@@ -27,12 +27,8 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double[] logProbability$sample62;
 	private double[] logProbability$sample87;
 	private double logProbability$st;
-	private double logProbability$var18;
 	private double logProbability$var30;
-	private double logProbability$var34;
 	private double logProbability$var46;
-	private double[] logProbability$var60;
-	private double[] logProbability$var84;
 	private double[][] m;
 	private int noCats;
 	private int noFlips;
@@ -231,7 +227,6 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var18 = cv$sampleAccumulator;
 			logProbability$var30 = cv$sampleAccumulator;
 			logProbability$m = (logProbability$m + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -247,7 +242,6 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$sampleValue = logProbability$var30;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var18 = cv$rvAccumulator;
 			logProbability$m = (logProbability$m + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample30)
@@ -291,7 +285,6 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var34 = cv$sampleAccumulator;
 			logProbability$var46 = cv$sampleAccumulator;
 			logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -307,7 +300,6 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$sampleValue = logProbability$var46;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var34 = cv$rvAccumulator;
 			logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample47)
@@ -349,7 +341,6 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var60[((i$var58 - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample62[((i$var58 - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$st = (logProbability$st + cv$accumulator);
@@ -366,7 +357,6 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var60[((i$var58 - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$st = (logProbability$st + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -415,7 +405,6 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var84[((j$var73 - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample87[((j$var73 - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -431,7 +420,6 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var84[((j$var73 - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -529,12 +517,12 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 						double[] var59 = m[i$var58];
 						cv$temp$0$var59 = var59;
 					}
-					int cv$temp$1$$var278;
+					int cv$temp$1$$var268;
 					{
-						int $var278 = noStates;
-						cv$temp$1$$var278 = $var278;
+						int $var268 = noStates;
+						cv$temp$1$$var268 = $var268;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var278))?Math.log(cv$temp$0$var59[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var268))?Math.log(cv$temp$0$var59[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$i$2_1 = cv$currentValue;
@@ -542,14 +530,14 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 								{
 									if((0 < noCats)) {
 										int reduceVar$var82$6 = 0;
-										for(int cv$reduction407Index = 0; cv$reduction407Index < i$var58; cv$reduction407Index += 1) {
+										for(int cv$reduction397Index = 0; cv$reduction397Index < i$var58; cv$reduction397Index += 1) {
 											int i$var79 = reduceVar$var82$6;
-											int j$var80 = st[cv$reduction407Index];
+											int j$var80 = st[cv$reduction397Index];
 											reduceVar$var82$6 = (i$var79 + j$var80);
 										}
-										for(int cv$reduction407Index = (i$var58 + 1); cv$reduction407Index < noCats; cv$reduction407Index += 1) {
+										for(int cv$reduction397Index = (i$var58 + 1); cv$reduction397Index < noCats; cv$reduction397Index += 1) {
 											int i$var79 = reduceVar$var82$6;
-											int j$var80 = st[cv$reduction407Index];
+											int j$var80 = st[cv$reduction397Index];
 											reduceVar$var82$6 = (i$var79 + j$var80);
 										}
 										int cv$reduced78 = reduceVar$var82$6;
@@ -683,13 +671,7 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			flips = new boolean[length$flipsMeasured];
 		}
 		{
-			logProbability$var60 = new double[((((noCats - 1) - 0) / 1) + 1)];
-		}
-		{
 			logProbability$sample62 = new double[((((noCats - 1) - 0) / 1) + 1)];
-		}
-		{
-			logProbability$var84 = new double[((((length$flipsMeasured - 1) - 0) / 1) + 1)];
 		}
 		{
 			logProbability$sample87 = new double[((((length$flipsMeasured - 1) - 0) / 1) + 1)];
@@ -931,23 +913,17 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var18 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample30)
 			logProbability$var30 = Double.NaN;
-		logProbability$var34 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample47)
 			logProbability$var46 = Double.NaN;
-		for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
-			logProbability$var60[((i$var58 - 0) / 1)] = Double.NaN;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample62) {
 			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
 				logProbability$sample62[((i$var58 - 0) / 1)] = Double.NaN;
 		}
-		for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)
-			logProbability$var84[((j$var73 - 0) / 1)] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample87) {
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)

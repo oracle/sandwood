@@ -25,12 +25,7 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 	private double logProbability$priorSigma2;
 	private double[] logProbability$sample35;
 	private double[] logProbability$sample39;
-	private double logProbability$var14;
-	private double logProbability$var20;
-	private double[] logProbability$var34;
-	private double[] logProbability$var38;
 	private double logProbability$var39;
-	private double logProbability$var8;
 	private double mean1;
 	private double mean2;
 	private int n;
@@ -230,7 +225,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var14 = cv$sampleAccumulator;
 			logProbability$mean1 = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample15)
@@ -242,7 +236,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			double cv$sampleValue = logProbability$mean1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var14 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample15)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -281,7 +274,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var20 = cv$sampleAccumulator;
 			logProbability$mean2 = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample21)
@@ -293,7 +285,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			double cv$sampleValue = logProbability$mean2;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var20 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample21)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -333,7 +324,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var34[((i - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample35[((i - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$amounts1 = (logProbability$amounts1 + cv$accumulator);
@@ -349,7 +339,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var34[((i - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$amounts1 = (logProbability$amounts1 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -390,7 +379,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var38[((i - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample39[((i - 0) / 1)] = cv$sampleProbability;
 			}
 			boolean cv$guard$amounts2 = false;
@@ -413,7 +401,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var38[((i - 0) / 1)] = cv$rvAccumulator;
 			}
 			boolean cv$guard$amounts2 = false;
 			logProbability$var39 = (logProbability$var39 + cv$accumulator);
@@ -460,7 +447,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var8 = cv$sampleAccumulator;
 			logProbability$priorSigma2 = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample9)
@@ -472,7 +458,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			double cv$sampleValue = logProbability$priorSigma2;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var8 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample9)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -693,13 +678,7 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			var39 = new double[((((length$obsAmounts1 - 1) - 0) / 1) + 1)];
 		}
 		{
-			logProbability$var34 = new double[((((length$obsAmounts1 - 1) - 0) / 1) + 1)];
-		}
-		{
 			logProbability$sample35 = new double[((((length$obsAmounts1 - 1) - 0) / 1) + 1)];
-		}
-		{
-			logProbability$var38 = new double[((((length$obsAmounts1 - 1) - 0) / 1) + 1)];
 		}
 		{
 			logProbability$sample39 = new double[((((length$obsAmounts1 - 1) - 0) / 1) + 1)];
@@ -794,24 +773,17 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var8 = 0.0;
 		if(!fixedProbFlag$sample9)
 			logProbability$priorSigma2 = Double.NaN;
-		logProbability$var14 = 0.0;
 		if(!fixedProbFlag$sample15)
 			logProbability$mean1 = Double.NaN;
-		logProbability$var20 = 0.0;
 		if(!fixedProbFlag$sample21)
 			logProbability$mean2 = Double.NaN;
-		for(int i = 0; i < n; i += 1)
-			logProbability$var34[((i - 0) / 1)] = Double.NaN;
 		logProbability$amounts1 = 0.0;
 		if(!fixedProbFlag$sample35) {
 			for(int i = 0; i < n; i += 1)
 				logProbability$sample35[((i - 0) / 1)] = Double.NaN;
 		}
-		for(int i = 0; i < n; i += 1)
-			logProbability$var38[((i - 0) / 1)] = Double.NaN;
 		logProbability$var39 = 0.0;
 		logProbability$amounts2 = 0.0;
 		if(!fixedProbFlag$sample39) {

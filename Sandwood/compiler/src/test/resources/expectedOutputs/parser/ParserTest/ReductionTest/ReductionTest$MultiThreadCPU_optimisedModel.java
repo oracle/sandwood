@@ -29,12 +29,8 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double[] logProbability$sample62;
 	private double[] logProbability$sample87;
 	private double logProbability$st;
-	private double logProbability$var18;
 	private double logProbability$var30;
-	private double logProbability$var34;
 	private double logProbability$var46;
-	private double[] logProbability$var60;
-	private double[] logProbability$var84;
 	private double[][] m;
 	private int noCats;
 	private int noFlips;
@@ -310,7 +306,6 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(m[var29], v, noStates));
-			logProbability$var18 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var30 = cv$sampleAccumulator;
@@ -348,8 +343,6 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var18 = logProbability$var30;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -394,7 +387,6 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(bias[var45], 1.0, 1.0));
-			logProbability$var34 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var46 = cv$sampleAccumulator;
@@ -432,8 +424,6 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var34 = logProbability$var46;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -494,11 +484,6 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var60[i$var58] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample62[i$var58] = cv$distributionAccumulator;
 			}
@@ -523,12 +508,8 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1) {
-				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample62[i$var58];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var60[i$var58] = cv$rvAccumulator;
-			}
+			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample62[i$var58]);
 			
 			// Update the variable probability
 			logProbability$st = (logProbability$st + cv$accumulator);
@@ -604,11 +585,6 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var84[j$var73] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample87[j$var73] = cv$distributionAccumulator;
 			}
@@ -629,12 +605,8 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
-				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample87[j$var73];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var84[j$var73] = cv$rvAccumulator;
-			}
+			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample87[j$var73]);
 			
 			// Update the variable probability
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -761,15 +733,15 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			int reduceVar$var82$6 = 0;
 			
 			// Reduce for every value except a masked value which will be skipped.
-			for(int cv$reduction407Index = 0; cv$reduction407Index < i$var58; cv$reduction407Index += 1)
+			for(int cv$reduction397Index = 0; cv$reduction397Index < i$var58; cv$reduction397Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j$var80's comment
 				// Set the right hand term to a value from the array st
-				reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction407Index]);
-			for(int cv$reduction407Index = (i$var58 + 1); cv$reduction407Index < noCats; cv$reduction407Index += 1)
+				reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction397Index]);
+			for(int cv$reduction397Index = (i$var58 + 1); cv$reduction397Index < noCats; cv$reduction397Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Execute the reduction function, saving the result into the return value.
@@ -778,7 +750,7 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// 
 				// j$var80's comment
 				// Set the right hand term to a value from the array st
-				reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction407Index]);
+				reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction397Index]);
 			
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
@@ -941,14 +913,8 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Constructor for flips
 		flips = new boolean[length$flipsMeasured];
 		
-		// Constructor for logProbability$var60
-		logProbability$var60 = new double[noCats];
-		
 		// Constructor for logProbability$sample62
 		logProbability$sample62 = new double[noCats];
-		
-		// Constructor for logProbability$var84
-		logProbability$var84 = new double[length$flipsMeasured];
 		
 		// Constructor for logProbability$sample87
 		logProbability$sample87 = new double[length$flipsMeasured];
@@ -1358,23 +1324,17 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var18 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample30)
 			logProbability$var30 = Double.NaN;
-		logProbability$var34 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample47)
 			logProbability$var46 = Double.NaN;
-		for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
-			logProbability$var60[i$var58] = Double.NaN;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample62) {
 			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
 				logProbability$sample62[i$var58] = Double.NaN;
 		}
-		for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)
-			logProbability$var84[j$var73] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample87) {
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)

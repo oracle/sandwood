@@ -21,8 +21,6 @@ final class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private double logProbability$indirection2;
 	private double[] logProbability$sample103;
 	private double[][] logProbability$sample61;
-	private double[] logProbability$var100;
-	private double[][] logProbability$var58;
 	private int[] observed;
 	private boolean system$gibbsForward = true;
 
@@ -186,11 +184,6 @@ final class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var100[m] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample103[m] = cv$distributionAccumulator;
 			}
@@ -211,12 +204,8 @@ final class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int m = 0; m < length$observed; m += 1) {
-				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample103[m];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var100[m] = cv$rvAccumulator;
-			}
+			for(int m = 0; m < length$observed; m += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample103[m]);
 			
 			// Update the variable probability
 			logProbability$generated = (logProbability$generated + cv$accumulator);
@@ -270,11 +259,6 @@ final class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// Accumulator for sample probabilities for a specific instance of the random variable.
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 					
-					// Add the probability of this sample task to the sample task accumulator.
-					// 
-					// Accumulator for sample probabilities for a specific instance of the random variable.
-					logProbability$var58[i][j] = cv$distributionAccumulator;
-					
 					// Store the sample task probability
 					logProbability$sample61[i][j] = cv$distributionAccumulator;
 					
@@ -307,7 +291,6 @@ final class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				for(int j = 0; j < 10; j += 1) {
 					double cv$sampleValue = logProbability$sample61[i][j];
 					cv$accumulator = (cv$accumulator + cv$sampleValue);
-					logProbability$var58[i][j] = cv$sampleValue;
 					
 					// Update the variable probability
 					logProbability$indirection2 = (logProbability$indirection2 + cv$sampleValue);
@@ -453,18 +436,10 @@ final class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		for(int var31 = 0; var31 < length$observed; var31 += 1)
 			indirection2[var31] = new double[10];
 		
-		// Constructor for logProbability$var58
-		logProbability$var58 = new double[length$observed][];
-		for(int i = 0; i < length$observed; i += 1)
-			logProbability$var58[i] = new double[10];
-		
 		// Constructor for logProbability$sample61
 		logProbability$sample61 = new double[length$observed][];
 		for(int i = 0; i < length$observed; i += 1)
 			logProbability$sample61[i] = new double[10];
-		
-		// Constructor for logProbability$var100
-		logProbability$var100 = new double[length$observed];
 		
 		// Constructor for logProbability$sample103
 		logProbability$sample103 = new double[length$observed];
@@ -827,10 +802,6 @@ final class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int i = 0; i < length$observed; i += 1) {
-			for(int j = 0; j < 10; j += 1)
-				logProbability$var58[i][j] = Double.NaN;
-		}
 		logProbability$indirection1 = 0.0;
 		logProbability$indirection2 = 0.0;
 		if(!fixedProbFlag$sample61) {
@@ -839,8 +810,6 @@ final class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					logProbability$sample61[i][j] = Double.NaN;
 			}
 		}
-		for(int m = 0; m < length$observed; m += 1)
-			logProbability$var100[m] = Double.NaN;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample103) {
 			for(int m = 0; m < length$observed; m += 1)

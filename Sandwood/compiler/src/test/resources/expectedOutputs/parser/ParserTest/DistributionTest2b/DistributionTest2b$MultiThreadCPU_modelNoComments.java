@@ -28,9 +28,6 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 	private double logProbability$v1;
 	private double logProbability$v2;
 	private double logProbability$v3;
-	private double[] logProbability$var22;
-	private double[] logProbability$var42;
-	private double logProbability$var8;
 	private double logProbability$var9;
 	private int size;
 	private boolean system$gibbsForward = true;
@@ -251,7 +248,6 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 					cv$sampleReached = true;
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var22[((i - 1) / 1)] = cv$sampleAccumulator;
 					logProbability$sample23[((i - 1) / 1)] = cv$sampleProbability;
 				}
 				if(fixedFlag$sample23)
@@ -270,7 +266,6 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var22[((i - 1) / 1)] = cv$rvAccumulator;
 			}
 			if(fixedFlag$sample23)
 				logProbability$v2 = (logProbability$v2 + cv$accumulator);
@@ -480,7 +475,6 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 			cv$sampleReached = true;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var42[((j - 0) / 1)] = cv$sampleAccumulator;
 			logProbability$sample43[((j - 0) / 1)] = cv$sampleProbability;
 		}
 		logProbability$v = (logProbability$v + cv$accumulator);
@@ -570,7 +564,6 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 				double cv$sampleProbability = cv$distributionAccumulator;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var8 = cv$sampleAccumulator;
 				logProbability$var9 = cv$sampleProbability;
 				if(fixedFlag$sample9)
 					logProbability$v2 = (logProbability$v2 + cv$accumulator);
@@ -585,7 +578,6 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 			double cv$sampleValue = logProbability$var9;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var8 = cv$rvAccumulator;
 			if(fixedFlag$sample9)
 				logProbability$v2 = (logProbability$v2 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -628,7 +620,6 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var22[((i - 1) / 1)] = cv$sampleAccumulator;
 				logProbability$sample23[((i - 1) / 1)] = cv$sampleProbability;
 			}
 			logProbability$v2 = (logProbability$v2 + cv$accumulator);
@@ -645,7 +636,6 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var22[((i - 1) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$v2 = (logProbability$v2 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -725,7 +715,6 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 			cv$sampleReached = true;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var42[((j - 0) / 1)] = cv$sampleAccumulator;
 			logProbability$sample43[((j - 0) / 1)] = cv$sampleProbability;
 		}
 		logProbability$v = (logProbability$v + cv$accumulator);
@@ -812,7 +801,6 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var8 = cv$sampleAccumulator;
 			logProbability$var9 = cv$sampleProbability;
 			logProbability$v2 = (logProbability$v2 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -825,7 +813,6 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 			double cv$sampleValue = logProbability$var9;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var8 = cv$rvAccumulator;
 			logProbability$v2 = (logProbability$v2 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample9)
@@ -854,11 +841,11 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var610;
+					int cv$temp$1$$var590;
 					{
-						cv$temp$1$$var610 = weightings.length;
+						cv$temp$1$$var590 = weightings.length;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var610))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var590))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$var39$3_1 = cv$currentValue;
@@ -989,11 +976,11 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var645;
+					int cv$temp$1$$var625;
 					{
-						cv$temp$1$$var645 = weightings.length;
+						cv$temp$1$$var625 = weightings.length;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var645))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var625))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							{
@@ -1295,11 +1282,11 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var533;
+					int cv$temp$1$$var513;
 					{
-						cv$temp$1$$var533 = weightings.length;
+						cv$temp$1$$var513 = weightings.length;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var533))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var513))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							for(int j = 0; j < size; j += 1) {
@@ -1484,11 +1471,11 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var577;
+					int cv$temp$1$$var557;
 					{
-						cv$temp$1$$var577 = weightings.length;
+						cv$temp$1$$var557 = weightings.length;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var577))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var557))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$var39$1_1 = cv$currentValue;
@@ -1645,13 +1632,7 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 			distribution$sample9 = new double[weightings.length];
 		}
 		{
-			logProbability$var22 = new double[((((length$value - 1) - 1) / 1) + 1)];
-		}
-		{
 			logProbability$sample23 = new double[((((length$value - 1) - 1) / 1) + 1)];
-		}
-		{
-			logProbability$var42 = new double[((((length$value - 1) - 0) / 1) + 1)];
 		}
 		{
 			logProbability$sample43 = new double[((((length$value - 1) - 0) / 1) + 1)];
@@ -1811,19 +1792,14 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 		logProbability$c = 0.0;
 		if(!fixedProbFlag$sample5)
 			logProbability$v1 = Double.NaN;
-		logProbability$var8 = 0.0;
 		logProbability$v2 = 0.0;
 		if(!fixedProbFlag$sample9)
 			logProbability$var9 = Double.NaN;
-		for(int i = 1; i < size; i += 1)
-			logProbability$var22[((i - 1) / 1)] = Double.NaN;
 		if(!fixedProbFlag$sample23) {
 			for(int i = 1; i < size; i += 1)
 				logProbability$sample23[((i - 1) / 1)] = Double.NaN;
 		}
 		logProbability$v3 = Double.NaN;
-		for(int j = 0; j < size; j += 1)
-			logProbability$var42[((j - 0) / 1)] = Double.NaN;
 		logProbability$v = 0.0;
 		for(int j = 0; j < size; j += 1)
 			logProbability$sample43[((j - 0) / 1)] = Double.NaN;

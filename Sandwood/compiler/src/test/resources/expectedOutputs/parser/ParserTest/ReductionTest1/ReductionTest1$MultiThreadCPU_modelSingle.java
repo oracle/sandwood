@@ -21,9 +21,7 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$sum_t;
 	private double logProbability$time_coeff;
 	private double logProbability$time_impact;
-	private double logProbability$var157;
 	private double logProbability$var158;
-	private double logProbability$var85;
 	private int n_ac;
 	private double[][] sum_t;
 	private boolean system$gibbsForward = true;
@@ -327,8 +325,6 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var85 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$time_coeff = (logProbability$time_coeff + cv$accumulator);
@@ -429,8 +425,6 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 				}
 			}
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var85 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$time_coeff = (logProbability$time_coeff + cv$accumulator);
@@ -512,8 +506,6 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var157 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -549,8 +541,6 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 			double cv$sampleValue = logProbability$var158;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var157 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$arr = (logProbability$arr + cv$accumulator);
@@ -1551,7 +1541,6 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var85 = Double.NaN;
 		logProbability$time_coeff = 0.0;
 		logProbability$time_impact = 0.0;
 		logProbability$sum_t = 0.0;
@@ -1561,7 +1550,6 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 					logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = Double.NaN;
 			}
 		}
-		logProbability$var157 = Double.NaN;
 		logProbability$arr = 0.0;
 		if(!fixedProbFlag$sample165)
 			logProbability$var158 = Double.NaN;

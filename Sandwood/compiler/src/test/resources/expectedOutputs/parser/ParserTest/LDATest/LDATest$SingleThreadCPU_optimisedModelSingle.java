@@ -22,12 +22,8 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$$model;
 	private double logProbability$phi;
 	private double logProbability$theta;
-	private double logProbability$var30;
 	private double logProbability$var42;
-	private double logProbability$var44;
 	private double logProbability$var57;
-	private double logProbability$var87;
-	private double logProbability$var90;
 	private double logProbability$var91;
 	private double logProbability$w;
 	private double logProbability$z;
@@ -270,13 +266,11 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(phi[var41], beta, vocabSize));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var30 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				logProbability$var42 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -311,14 +305,6 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < noTopics))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var30 = logProbability$var42;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -371,13 +357,11 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(theta[var56], alpha, noTopics));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var44 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				logProbability$var57 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -412,14 +396,6 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < length$documents.length))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var44 = logProbability$var57;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -472,10 +448,9 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			}
 		}
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(cv$sampleReached) {
-			logProbability$var87 = cv$sampleAccumulator;
-			
+		// Only update the sample if it was reached, otherwise the NaN will be
+		// erroneously over written.
+		if(cv$sampleReached)
 			// Store the random variable instance probability
 			// 
 			// Add the probability of this instance of the random variable to the probability
@@ -483,7 +458,6 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// 
 			// Accumulator for probabilities of instances of the random variable
 			logProbability$z = cv$sampleAccumulator;
-		}
 		
 		// Add probability to model
 		// 
@@ -528,10 +502,9 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			}
 		}
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(cv$sampleReached) {
-			logProbability$var90 = cv$sampleAccumulator;
-			
+		// Only update the sample if it was reached, otherwise the NaN will be
+		// erroneously over written.
+		if(cv$sampleReached)
 			// Store the random variable instance probability
 			// 
 			// Add the probability of this instance of the random variable to the probability
@@ -539,7 +512,6 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// 
 			// Accumulator for probabilities of instances of the random variable
 			logProbability$var91 = cv$sampleAccumulator;
-		}
 		
 		// Update the variable probability
 		// 
@@ -978,17 +950,13 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var30 = Double.NaN;
 		logProbability$phi = 0.0;
 		if(!fixedProbFlag$sample42)
 			logProbability$var42 = Double.NaN;
-		logProbability$var44 = Double.NaN;
 		logProbability$theta = 0.0;
 		if(!fixedProbFlag$sample58)
 			logProbability$var57 = Double.NaN;
-		logProbability$var87 = Double.NaN;
 		logProbability$z = Double.NaN;
-		logProbability$var90 = Double.NaN;
 		logProbability$w = 0.0;
 		logProbability$var91 = Double.NaN;
 	}

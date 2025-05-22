@@ -17,13 +17,8 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$bias;
-	private double logProbability$indicator;
-	private double logProbability$p;
 	private double[] logProbability$sample35;
 	private double[][] logProbability$sample94;
-	private double logProbability$var22;
-	private double logProbability$var40;
-	private double[][] logProbability$var92;
 	private double logProbability$weights;
 	private double logProbability$y;
 	private int n;
@@ -181,81 +176,8 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				logProbability$sample35[((var33 - 0) / 1)] = cv$sampleProbability;
-				boolean cv$guard$indicator = false;
-				boolean cv$guard$p = false;
-				{
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							for(int i = 0; i < n; i += 1) {
-								if(!cv$guard$indicator) {
-									cv$guard$indicator = true;
-									logProbability$indicator = (logProbability$indicator + cv$sampleProbability);
-								}
-							}
-						}
-					}
-				}
-				{
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							if((j$var61 == 0)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-										if(!cv$guard$p) {
-											cv$guard$p = true;
-											logProbability$p = (logProbability$p + cv$sampleProbability);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							if((j$var61 == 1)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-										if(!cv$guard$p) {
-											cv$guard$p = true;
-											logProbability$p = (logProbability$p + cv$sampleProbability);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							if((j$var61 == 2)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-										if(!cv$guard$p) {
-											cv$guard$p = true;
-											logProbability$p = (logProbability$p + cv$sampleProbability);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-								if((j$var61 == j$var85)) {
-									for(int i = 0; i < n; i += 1) {
-										if(!cv$guard$p) {
-											cv$guard$p = true;
-											logProbability$p = (logProbability$p + cv$sampleProbability);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var22 = cv$sampleAccumulator;
 			logProbability$weights = (logProbability$weights + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample35)
@@ -269,81 +191,8 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 				double cv$sampleValue = logProbability$sample35[((var33 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
-				boolean cv$guard$indicator = false;
-				boolean cv$guard$p = false;
-				{
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							for(int i = 0; i < n; i += 1) {
-								if(!cv$guard$indicator) {
-									cv$guard$indicator = true;
-									logProbability$indicator = (logProbability$indicator + cv$sampleValue);
-								}
-							}
-						}
-					}
-				}
-				{
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							if((j$var61 == 0)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-										if(!cv$guard$p) {
-											cv$guard$p = true;
-											logProbability$p = (logProbability$p + cv$sampleValue);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							if((j$var61 == 1)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-										if(!cv$guard$p) {
-											cv$guard$p = true;
-											logProbability$p = (logProbability$p + cv$sampleValue);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							if((j$var61 == 2)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-										if(!cv$guard$p) {
-											cv$guard$p = true;
-											logProbability$p = (logProbability$p + cv$sampleValue);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-								if((j$var61 == j$var85)) {
-									for(int i = 0; i < n; i += 1) {
-										if(!cv$guard$p) {
-											cv$guard$p = true;
-											logProbability$p = (logProbability$p + cv$sampleValue);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
 			}
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var22 = cv$rvAccumulator;
 			logProbability$weights = (logProbability$weights + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample35)
@@ -383,7 +232,6 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var40 = cv$sampleAccumulator;
 			logProbability$bias = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample42)
@@ -395,7 +243,6 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 			double cv$sampleValue = logProbability$bias;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var40 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample42)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -437,7 +284,6 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 					cv$sampleReached = true;
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var92[((i - 0) / 1)][((j$var85 - 0) / 1)] = cv$sampleAccumulator;
 					logProbability$sample94[((i - 0) / 1)][((j$var85 - 0) / 1)] = cv$sampleProbability;
 				}
 			}
@@ -455,7 +301,6 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var92[((i - 0) / 1)][((j$var85 - 0) / 1)] = cv$rvAccumulator;
 				}
 			}
 			logProbability$y = (logProbability$y + cv$accumulator);
@@ -1190,11 +1035,6 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 			logProbability$sample35 = new double[((((3 - 1) - 0) / 1) + 1)];
 		}
 		{
-			logProbability$var92 = new double[((((x.length - 1) - 0) / 1) + 1)][];
-			for(int i = 0; i < x.length; i += 1)
-				logProbability$var92[((i - 0) / 1)] = new double[((((3 - 1) - 0) / 1) + 1)];
-		}
-		{
 			logProbability$sample94 = new double[((((x.length - 1) - 0) / 1) + 1)][];
 			for(int i = 0; i < x.length; i += 1)
 				logProbability$sample94[((i - 0) / 1)] = new double[((((3 - 1) - 0) / 1) + 1)];
@@ -1324,21 +1164,13 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var22 = Double.NaN;
 		logProbability$weights = 0.0;
-		logProbability$indicator = 0.0;
-		logProbability$p = 0.0;
 		if(!fixedProbFlag$sample35) {
 			for(int var33 = 0; var33 < k; var33 += 1)
 				logProbability$sample35[((var33 - 0) / 1)] = Double.NaN;
 		}
-		logProbability$var40 = 0.0;
 		if(!fixedProbFlag$sample42)
 			logProbability$bias = Double.NaN;
-		for(int i = 0; i < n; i += 1) {
-			for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
-				logProbability$var92[((i - 0) / 1)][((j$var85 - 0) / 1)] = Double.NaN;
-		}
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample94) {
 			for(int i = 0; i < n; i += 1) {

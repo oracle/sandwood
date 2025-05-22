@@ -21,11 +21,7 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 	private double logProbability$b0;
 	private double logProbability$b1;
 	private double[] logProbability$sample33;
-	private double logProbability$var10;
-	private double logProbability$var15;
 	private double logProbability$var16;
-	private double[] logProbability$var32;
-	private double logProbability$var6;
 	private double logProbability$variance;
 	private double logProbability$y;
 	private int noSamples;
@@ -298,7 +294,6 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var10 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$b1 = cv$sampleProbability;
@@ -324,7 +319,6 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 			double cv$sampleValue = logProbability$b1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var10 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -395,7 +389,6 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var15 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$var16 = cv$sampleProbability;
@@ -424,7 +417,6 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 			double cv$sampleValue = logProbability$var16;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var15 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$variance = (logProbability$variance + cv$accumulator);
@@ -503,7 +495,6 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var32[((i - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample33[((i - 0) / 1)] = cv$sampleProbability;
@@ -536,7 +527,6 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var32[((i - 0) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -606,7 +596,6 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var6 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$b0 = cv$sampleProbability;
@@ -632,7 +621,6 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 			double cv$sampleValue = logProbability$b0;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var6 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -814,11 +802,6 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 			y = new double[x.length];
 		}
 		
-		// Constructor for logProbability$var32
-		{
-			logProbability$var32 = new double[((((x.length - 1) - 0) / 1) + 1)];
-		}
-		
 		// Constructor for logProbability$sample33
 		{
 			logProbability$sample33 = new double[((((x.length - 1) - 0) / 1) + 1)];
@@ -933,18 +916,13 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var6 = 0.0;
 		if(!fixedProbFlag$sample7)
 			logProbability$b0 = Double.NaN;
-		logProbability$var10 = 0.0;
 		if(!fixedProbFlag$sample11)
 			logProbability$b1 = Double.NaN;
-		logProbability$var15 = 0.0;
 		logProbability$variance = 0.0;
 		if(!fixedProbFlag$sample16)
 			logProbability$var16 = Double.NaN;
-		for(int i = 0; i < noSamples; i += 1)
-			logProbability$var32[((i - 0) / 1)] = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample33) {
 			for(int i = 0; i < noSamples; i += 1)

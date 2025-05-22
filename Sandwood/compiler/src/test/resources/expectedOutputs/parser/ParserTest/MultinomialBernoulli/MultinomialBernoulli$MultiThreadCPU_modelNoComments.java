@@ -24,8 +24,6 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 	private double logProbability$output;
 	private double logProbability$p;
 	private double logProbability$prior;
-	private double logProbability$var16;
-	private double logProbability$var19;
 	private double logProbability$var48;
 	private double logProbability$var60;
 	private double logProbability$var72;
@@ -202,7 +200,6 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var16 = cv$sampleAccumulator;
 			logProbability$p = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample17)
@@ -214,7 +211,6 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 			double cv$sampleValue = logProbability$p;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var16 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample17)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -251,7 +247,6 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var19 = cv$sampleAccumulator;
 			logProbability$prior = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample20)
@@ -263,7 +258,6 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 			double cv$sampleValue = logProbability$prior;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var19 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample20)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -792,10 +786,8 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
 			logProbability$p = Double.NaN;
-		logProbability$var19 = 0.0;
 		if(!fixedProbFlag$sample20)
 			logProbability$prior = Double.NaN;
 		logProbability$b1 = Double.NaN;

@@ -25,10 +25,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$m;
 	private double[] logProbability$sample55;
 	private double[] logProbability$sample75;
-	private double logProbability$var17;
 	private double logProbability$var29;
-	private double[] logProbability$var53;
-	private double[] logProbability$var73;
 	private double[][] m;
 	private int n;
 	private boolean system$gibbsForward = true;
@@ -161,7 +158,6 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$sampleAccumulator = 0.0;
 			for(int var28 = 0; var28 < 5; var28 += 1)
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(m[var28], v, 5));
-			logProbability$var17 = cv$sampleAccumulator;
 			logProbability$var29 = cv$sampleAccumulator;
 			logProbability$m = (logProbability$m + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
@@ -169,7 +165,6 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
 			fixedProbFlag$sample29 = fixedFlag$sample29;
 		} else {
-			logProbability$var17 = logProbability$var29;
 			logProbability$m = (logProbability$m + logProbability$var29);
 			logProbability$$model = (logProbability$$model + logProbability$var29);
 			if(fixedFlag$sample29)
@@ -184,7 +179,6 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				int cv$sampleValue = a[i$var46];
 				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 5))?Math.log(m[b[i$var46]][cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var53[(i$var46 - 1)] = cv$distributionAccumulator;
 				logProbability$sample55[(i$var46 - 1)] = cv$distributionAccumulator;
 				if((i$var46 < (n - 1)))
 					logProbability$b = (logProbability$b + cv$distributionAccumulator);
@@ -199,7 +193,6 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
 				double cv$sampleValue = logProbability$sample55[(i$var46 - 1)];
 				cv$accumulator = (cv$accumulator + cv$sampleValue);
-				logProbability$var53[(i$var46 - 1)] = cv$sampleValue;
 				if((i$var46 < (n - 1)))
 					logProbability$b = (logProbability$b + cv$sampleValue);
 			}
@@ -217,7 +210,6 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				double var72 = (double)(1 / a[(j + 1)]);
 				double cv$distributionAccumulator = Math.log((flips[j]?var72:(1.0 - var72)));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var73[j] = cv$distributionAccumulator;
 				logProbability$sample75[j] = cv$distributionAccumulator;
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -226,11 +218,8 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			fixedProbFlag$sample75 = fixedFlag$sample55;
 		} else {
 			double cv$accumulator = 0.0;
-			for(int j = 0; j < n; j += 1) {
-				double cv$rvAccumulator = logProbability$sample75[j];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var73[j] = cv$rvAccumulator;
-			}
+			for(int j = 0; j < n; j += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample75[j]);
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -326,9 +315,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			a = new int[n];
 		b = new int[n];
 		flips = new boolean[n];
-		logProbability$var53 = new double[(n - 1)];
 		logProbability$sample55 = new double[(n - 1)];
-		logProbability$var73 = new double[n];
 		logProbability$sample75 = new double[n];
 		allocateScratch();
 	}
@@ -478,20 +465,15 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var17 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample29)
 			logProbability$var29 = Double.NaN;
-		for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
-			logProbability$var53[(i$var46 - 1)] = Double.NaN;
-		logProbability$b = 0.0;
 		logProbability$a = 0.0;
+		logProbability$b = 0.0;
 		if(!fixedProbFlag$sample55) {
 			for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
 				logProbability$sample55[(i$var46 - 1)] = Double.NaN;
 		}
-		for(int j = 0; j < n; j += 1)
-			logProbability$var73[j] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample75) {
 			for(int j = 0; j < n; j += 1)

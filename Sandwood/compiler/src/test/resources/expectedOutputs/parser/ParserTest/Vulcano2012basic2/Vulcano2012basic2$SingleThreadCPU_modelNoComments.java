@@ -30,11 +30,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 	private double[] logProbability$sample82;
 	private double logProbability$sum;
 	private double logProbability$ut;
-	private double[] logProbability$var145;
-	private double[] logProbability$var25;
-	private double[] logProbability$var80;
-	private double logProbability$weekly_rates;
-	private double logProbability$weekly_ut;
 	private int noProducts;
 	private double r;
 	private int[] sales_sum;
@@ -231,7 +226,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var145[((t$var105 - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample149[((t$var105 - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$Sales = (logProbability$Sales + cv$accumulator);
@@ -247,7 +241,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var145[((t$var105 - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$Sales = (logProbability$Sales + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -290,13 +283,10 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var25[((j$var20 - 1) / 1)] = cv$sampleAccumulator;
 				logProbability$sample26[((j$var20 - 1) / 1)] = cv$sampleProbability;
 				boolean cv$guard$exped = false;
 				boolean cv$guard$sum = false;
 				boolean cv$guard$expedNorm = false;
-				boolean cv$guard$weekly_ut = false;
-				boolean cv$guard$weekly_rates = false;
 				{
 					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
 						if((j$var20 == j$var38)) {
@@ -349,144 +339,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 						}
 					}
 				}
-				{
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							if(((0 <= j$var38) && (j$var38 < noProducts))) {
-								{
-									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-										for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-											if((j$var63 == j$var116)) {
-												for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-													if(!cv$guard$weekly_ut) {
-														cv$guard$weekly_ut = true;
-														logProbability$weekly_ut = (logProbability$weekly_ut + cv$sampleProbability);
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								if((j$var38 == j$var63)) {
-									for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-										if((j$var63 == j$var116)) {
-											for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-												if(!cv$guard$weekly_ut) {
-													cv$guard$weekly_ut = true;
-													logProbability$weekly_ut = (logProbability$weekly_ut + cv$sampleProbability);
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				{
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							if(((0 <= j$var38) && (j$var38 < noProducts))) {
-								{
-									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-										for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-											if((j$var63 == j$var116)) {
-												for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-													if(((0 <= j$var116) && (j$var116 < noProducts))) {
-														{
-															for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-																if(!cv$guard$weekly_rates) {
-																	cv$guard$weekly_rates = true;
-																	logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleProbability);
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							if(((0 <= j$var38) && (j$var38 < noProducts))) {
-								{
-									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-										for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-											if((j$var63 == j$var116)) {
-												for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-													if((j$var116 == j$var140)) {
-														for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-															if(!cv$guard$weekly_rates) {
-																cv$guard$weekly_rates = true;
-																logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleProbability);
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								if((j$var38 == j$var63)) {
-									for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-										if((j$var63 == j$var116)) {
-											for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-												if(((0 <= j$var116) && (j$var116 < noProducts))) {
-													{
-														for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-															if(!cv$guard$weekly_rates) {
-																cv$guard$weekly_rates = true;
-																logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleProbability);
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								if((j$var38 == j$var63)) {
-									for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-										if((j$var63 == j$var116)) {
-											for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-												if((j$var116 == j$var140)) {
-													for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-														if(!cv$guard$weekly_rates) {
-															cv$guard$weekly_rates = true;
-															logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleProbability);
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
 			}
 			logProbability$ut = (logProbability$ut + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -502,12 +354,9 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var25[((j$var20 - 1) / 1)] = cv$rvAccumulator;
 				boolean cv$guard$exped = false;
 				boolean cv$guard$sum = false;
 				boolean cv$guard$expedNorm = false;
-				boolean cv$guard$weekly_ut = false;
-				boolean cv$guard$weekly_rates = false;
 				{
 					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
 						if((j$var20 == j$var38)) {
@@ -560,144 +409,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 						}
 					}
 				}
-				{
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							if(((0 <= j$var38) && (j$var38 < noProducts))) {
-								{
-									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-										for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-											if((j$var63 == j$var116)) {
-												for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-													if(!cv$guard$weekly_ut) {
-														cv$guard$weekly_ut = true;
-														logProbability$weekly_ut = (logProbability$weekly_ut + cv$sampleValue);
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								if((j$var38 == j$var63)) {
-									for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-										if((j$var63 == j$var116)) {
-											for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-												if(!cv$guard$weekly_ut) {
-													cv$guard$weekly_ut = true;
-													logProbability$weekly_ut = (logProbability$weekly_ut + cv$sampleValue);
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				{
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							if(((0 <= j$var38) && (j$var38 < noProducts))) {
-								{
-									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-										for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-											if((j$var63 == j$var116)) {
-												for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-													if(((0 <= j$var116) && (j$var116 < noProducts))) {
-														{
-															for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-																if(!cv$guard$weekly_rates) {
-																	cv$guard$weekly_rates = true;
-																	logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleValue);
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							if(((0 <= j$var38) && (j$var38 < noProducts))) {
-								{
-									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-										for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-											if((j$var63 == j$var116)) {
-												for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-													if((j$var116 == j$var140)) {
-														for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-															if(!cv$guard$weekly_rates) {
-																cv$guard$weekly_rates = true;
-																logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleValue);
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								if((j$var38 == j$var63)) {
-									for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-										if((j$var63 == j$var116)) {
-											for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-												if(((0 <= j$var116) && (j$var116 < noProducts))) {
-													{
-														for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-															if(!cv$guard$weekly_rates) {
-																cv$guard$weekly_rates = true;
-																logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleValue);
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								if((j$var38 == j$var63)) {
-									for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-										if((j$var63 == j$var116)) {
-											for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-												if((j$var116 == j$var140)) {
-													for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-														if(!cv$guard$weekly_rates) {
-															cv$guard$weekly_rates = true;
-															logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleValue);
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
 			}
 			logProbability$ut = (logProbability$ut + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -740,7 +451,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var80[((t$var78 - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample82[((t$var78 - 0) / 1)] = cv$sampleProbability;
 				boolean cv$guard$Sales = false;
 				{
@@ -767,7 +477,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var80[((t$var78 - 0) / 1)] = cv$rvAccumulator;
 				boolean cv$guard$Sales = false;
 				{
 					for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
@@ -2075,19 +1784,10 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 				weekly_ut[((t$var105 - 0) / 1)] = new double[noProducts];
 		}
 		{
-			logProbability$var25 = new double[((((noProducts - 1) - 1) / 1) + 1)];
-		}
-		{
 			logProbability$sample26 = new double[((((noProducts - 1) - 1) / 1) + 1)];
 		}
 		{
-			logProbability$var80 = new double[((((T - 1) - 0) / 1) + 1)];
-		}
-		{
 			logProbability$sample82 = new double[((((T - 1) - 0) / 1) + 1)];
-		}
-		{
-			logProbability$var145 = new double[((((T - 1) - 0) / 1) + 1)];
 		}
 		{
 			logProbability$sample149 = new double[((((T - 1) - 0) / 1) + 1)];
@@ -2308,28 +2008,20 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-			logProbability$var25[((j$var20 - 1) / 1)] = Double.NaN;
 		logProbability$ut = 0.0;
 		logProbability$exped = 0.0;
 		logProbability$sum = 0.0;
 		logProbability$expedNorm = 0.0;
-		logProbability$weekly_ut = 0.0;
-		logProbability$weekly_rates = 0.0;
 		if(!fixedProbFlag$sample26) {
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
 				logProbability$sample26[((j$var20 - 1) / 1)] = Double.NaN;
 		}
-		for(int t$var78 = 0; t$var78 < T; t$var78 += 1)
-			logProbability$var80[((t$var78 - 0) / 1)] = Double.NaN;
 		logProbability$sales_sum = 0.0;
 		logProbability$Sales = 0.0;
 		if(!fixedProbFlag$sample82) {
 			for(int t$var78 = 0; t$var78 < T; t$var78 += 1)
 				logProbability$sample82[((t$var78 - 0) / 1)] = Double.NaN;
 		}
-		for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-			logProbability$var145[((t$var105 - 0) / 1)] = Double.NaN;
 		if(!fixedProbFlag$sample149) {
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
 				logProbability$sample149[((t$var105 - 0) / 1)] = Double.NaN;

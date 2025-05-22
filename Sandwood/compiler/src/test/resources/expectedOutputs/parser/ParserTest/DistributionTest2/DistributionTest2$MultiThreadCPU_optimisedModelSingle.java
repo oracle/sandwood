@@ -26,12 +26,8 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 	private double logProbability$v;
 	private double logProbability$v1;
 	private double logProbability$v2;
-	private double logProbability$var22;
 	private double logProbability$var23;
-	private double logProbability$var4;
-	private double logProbability$var40;
 	private double logProbability$var41;
-	private double logProbability$var8;
 	private double logProbability$var9;
 	private int size;
 	private boolean system$gibbsForward = true;
@@ -324,10 +320,9 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < weightings.length))?Math.log(weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 				}
 				
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(cv$sampleReached) {
-					logProbability$var22 = cv$sampleAccumulator;
-					
+				// Only update the sample if it was reached, otherwise the NaN will be
+				// erroneously over written.
+				if(cv$sampleReached)
 					// Store the random variable instance probability
 					// 
 					// Add the probability of this instance of the random variable to the probability
@@ -335,7 +330,6 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 					// 
 					// Accumulator for probabilities of instances of the random variable
 					logProbability$var23 = cv$sampleAccumulator;
-				}
 				
 				// Update the variable probability
 				// 
@@ -370,14 +364,6 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((1 < size))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var22 = logProbability$var23;
-			
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
 			if(fixedFlag$sample23)
 				// Update the variable probability
@@ -639,10 +625,9 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var40 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -650,7 +635,6 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var41 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -682,14 +666,6 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < size))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var40 = logProbability$var41;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -740,11 +716,6 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 				// The sample value to calculate the probability of generating
 				double cv$distributionAccumulator = (((0.0 <= v1) && (v1 < weightings.length))?Math.log(weightings[v1]):Double.NEGATIVE_INFINITY);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var4 = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$v1 = cv$distributionAccumulator;
 				
@@ -789,8 +760,6 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var4 = logProbability$v1;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -837,11 +806,6 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// Store the value of the function call, so the function call is only made once.
 				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < weightings.length))?Math.log(weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY);
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var8 = cv$distributionAccumulator;
 				
 				// Store the sample task probability
 				logProbability$var9 = cv$distributionAccumulator;
@@ -903,8 +867,6 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var8 = logProbability$var9;
-			
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
 			if(fixedFlag$sample9)
 				// Update the variable probability
@@ -960,10 +922,9 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < weightings.length))?Math.log(weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var22 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -971,7 +932,6 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var23 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -1006,14 +966,6 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((1 < size))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var22 = logProbability$var23;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -1068,10 +1020,9 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((v[j]?var39:(1.0 - var39))));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var40 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -1079,7 +1030,6 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var41 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -1111,14 +1061,6 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < size))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var40 = logProbability$var41;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -1165,11 +1107,6 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (((0.0 <= v1) && (v1 < weightings.length))?Math.log(weightings[v1]):Double.NEGATIVE_INFINITY);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var4 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$v1 = cv$distributionAccumulator;
 			
@@ -1214,8 +1151,6 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var4 = logProbability$v1;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -1258,11 +1193,6 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < weightings.length))?Math.log(weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY);
-			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var8 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
 			logProbability$var9 = cv$distributionAccumulator;
@@ -1324,8 +1254,6 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var8 = logProbability$var9;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -2251,17 +2179,13 @@ final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.intern
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var4 = 0.0;
 		if(!fixedProbFlag$sample5)
 			logProbability$v1 = Double.NaN;
-		logProbability$var8 = 0.0;
 		logProbability$v2 = 0.0;
 		if(!fixedProbFlag$sample9)
 			logProbability$var9 = Double.NaN;
-		logProbability$var22 = Double.NaN;
 		if(!fixedProbFlag$sample23)
 			logProbability$var23 = Double.NaN;
-		logProbability$var40 = Double.NaN;
 		logProbability$v = 0.0;
 		if(!fixedProbFlag$sample41)
 			logProbability$var41 = Double.NaN;

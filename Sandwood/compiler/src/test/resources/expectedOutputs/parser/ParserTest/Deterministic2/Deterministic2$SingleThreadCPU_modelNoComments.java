@@ -26,10 +26,7 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 	private double logProbability$m;
 	private double[] logProbability$sample55;
 	private double[] logProbability$sample75;
-	private double logProbability$var17;
 	private double logProbability$var29;
-	private double[] logProbability$var53;
-	private double[] logProbability$var73;
 	private double[][] m;
 	private int n;
 	private int states;
@@ -299,7 +296,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 					cv$sampleReached = true;
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var53[((i$var46 - 1) / 1)] = cv$sampleAccumulator;
 					logProbability$sample55[((i$var46 - 1) / 1)] = cv$sampleProbability;
 					boolean cv$guard$b = false;
 					int index$i$15 = i$var46;
@@ -332,7 +328,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var53[((i$var46 - 1) / 1)] = cv$rvAccumulator;
 				boolean cv$guard$b = false;
 				int index$i$17 = i$var46;
 				{
@@ -434,7 +429,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var73[((j - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample75[((j - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -450,7 +444,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var73[((j - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -492,7 +485,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var17 = cv$sampleAccumulator;
 			logProbability$var29 = cv$sampleAccumulator;
 			logProbability$m = (logProbability$m + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -508,7 +500,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 			double cv$sampleValue = logProbability$var29;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var17 = cv$rvAccumulator;
 			logProbability$m = (logProbability$m + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample29)
@@ -551,7 +542,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var53[((i$var46 - 1) / 1)] = cv$sampleAccumulator;
 				logProbability$sample55[((i$var46 - 1) / 1)] = cv$sampleProbability;
 				boolean cv$guard$b = false;
 				int index$i$3 = i$var46;
@@ -580,7 +570,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var53[((i$var46 - 1) / 1)] = cv$rvAccumulator;
 				boolean cv$guard$b = false;
 				int index$i$5 = i$var46;
 				{
@@ -635,7 +624,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var73[((j - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample75[((j - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -651,7 +639,6 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var73[((j - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1368,13 +1355,7 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 				distribution$sample55[((i$var46 - 1) / 1)] = new double[5];
 		}
 		{
-			logProbability$var53 = new double[((((n - 1) - 1) / 1) + 1)];
-		}
-		{
 			logProbability$sample55 = new double[((((n - 1) - 1) / 1) + 1)];
-		}
-		{
-			logProbability$var73 = new double[((((n - 1) - 0) / 1) + 1)];
 		}
 		{
 			logProbability$sample75 = new double[((((n - 1) - 0) / 1) + 1)];
@@ -1572,20 +1553,15 @@ final class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var17 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample29)
 			logProbability$var29 = Double.NaN;
-		for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
-			logProbability$var53[((i$var46 - 1) / 1)] = Double.NaN;
-		logProbability$b = 0.0;
 		logProbability$a = 0.0;
+		logProbability$b = 0.0;
 		if(!fixedProbFlag$sample55) {
 			for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
 				logProbability$sample55[((i$var46 - 1) / 1)] = Double.NaN;
 		}
-		for(int j = 0; j < n; j += 1)
-			logProbability$var73[((j - 0) / 1)] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample75) {
 			for(int j = 0; j < n; j += 1)

@@ -16,13 +16,8 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$bias;
-	private double logProbability$indicator;
-	private double logProbability$p;
 	private double[] logProbability$sample35;
 	private double[][] logProbability$sample94;
-	private double logProbability$var22;
-	private double logProbability$var40;
-	private double[][] logProbability$var92;
 	private double logProbability$weights;
 	private double logProbability$y;
 	private int n;
@@ -152,58 +147,22 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[0] / 3.1622776601683795)) - 1.151292546497023);
 				cv$sampleAccumulator = cv$weightedProbability;
 				logProbability$sample35[0] = cv$weightedProbability;
-				if((0 < n)) {
-					logProbability$indicator = (logProbability$indicator + cv$weightedProbability);
-					logProbability$p = (logProbability$p + cv$weightedProbability);
-				}
 			}
 			{
 				double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[1] / 3.1622776601683795)) - 1.151292546497023);
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$weightedProbability);
 				logProbability$sample35[1] = cv$weightedProbability;
-				if((0 < n)) {
-					logProbability$indicator = (logProbability$indicator + cv$weightedProbability);
-					logProbability$p = (logProbability$p + cv$weightedProbability);
-				}
 			}
 			double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[2] / 3.1622776601683795)) - 1.151292546497023);
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$weightedProbability);
 			logProbability$sample35[2] = cv$weightedProbability;
-			if((0 < n)) {
-				logProbability$indicator = (logProbability$indicator + cv$weightedProbability);
-				logProbability$p = (logProbability$p + cv$weightedProbability);
-			}
-			logProbability$var22 = cv$sampleAccumulator;
 			logProbability$weights = (logProbability$weights + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
 			if(fixedFlag$sample35)
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
 			fixedProbFlag$sample35 = fixedFlag$sample35;
 		} else {
-			double cv$rvAccumulator;
-			{
-				double cv$sampleValue = logProbability$sample35[0];
-				cv$rvAccumulator = cv$sampleValue;
-				if((0 < n)) {
-					logProbability$indicator = (logProbability$indicator + cv$sampleValue);
-					logProbability$p = (logProbability$p + cv$sampleValue);
-				}
-			}
-			{
-				double cv$sampleValue = logProbability$sample35[1];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				if((0 < n)) {
-					logProbability$indicator = (logProbability$indicator + cv$sampleValue);
-					logProbability$p = (logProbability$p + cv$sampleValue);
-				}
-			}
-			double cv$sampleValue = logProbability$sample35[2];
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			if((0 < n)) {
-				logProbability$indicator = (logProbability$indicator + cv$sampleValue);
-				logProbability$p = (logProbability$p + cv$sampleValue);
-			}
-			logProbability$var22 = cv$rvAccumulator;
+			double cv$rvAccumulator = ((logProbability$sample35[0] + logProbability$sample35[1]) + logProbability$sample35[2]);
 			logProbability$weights = (logProbability$weights + cv$rvAccumulator);
 			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
 			if(fixedFlag$sample35)
@@ -214,14 +173,12 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	private final void logProbabilityValue$sample42() {
 		if(!fixedProbFlag$sample42) {
 			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((bias / 3.1622776601683795)) - 1.151292546497023);
-			logProbability$var40 = cv$distributionAccumulator;
 			logProbability$bias = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample42)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample42 = fixedFlag$sample42;
 		} else {
-			logProbability$var40 = logProbability$bias;
 			logProbability$$model = (logProbability$$model + logProbability$bias);
 			if(fixedFlag$sample42)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
@@ -236,20 +193,17 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					double var91 = (p[i][0] + bias);
 					double cv$weightedProbability = Math.log((y[i][0]?var91:(1.0 - var91)));
 					cv$accumulator = (cv$accumulator + cv$weightedProbability);
-					logProbability$var92[i][0] = cv$weightedProbability;
 					logProbability$sample94[i][0] = cv$weightedProbability;
 				}
 				{
 					double var91 = (p[i][1] + bias);
 					double cv$weightedProbability = Math.log((y[i][1]?var91:(1.0 - var91)));
 					cv$accumulator = (cv$accumulator + cv$weightedProbability);
-					logProbability$var92[i][1] = cv$weightedProbability;
 					logProbability$sample94[i][1] = cv$weightedProbability;
 				}
 				double var91 = (p[i][2] + bias);
 				double cv$weightedProbability = Math.log((y[i][2]?var91:(1.0 - var91)));
 				cv$accumulator = (cv$accumulator + cv$weightedProbability);
-				logProbability$var92[i][2] = cv$weightedProbability;
 				logProbability$sample94[i][2] = cv$weightedProbability;
 			}
 			logProbability$y = (logProbability$y + cv$accumulator);
@@ -259,19 +213,9 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		} else {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < n; i += 1) {
-				{
-					double cv$rvAccumulator = logProbability$sample94[i][0];
-					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var92[i][0] = cv$rvAccumulator;
-				}
-				{
-					double cv$rvAccumulator = logProbability$sample94[i][1];
-					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var92[i][1] = cv$rvAccumulator;
-				}
-				double cv$rvAccumulator = logProbability$sample94[i][2];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var92[i][2] = cv$rvAccumulator;
+				cv$accumulator = (cv$accumulator + logProbability$sample94[i][0]);
+				cv$accumulator = (cv$accumulator + logProbability$sample94[i][1]);
+				cv$accumulator = (cv$accumulator + logProbability$sample94[i][2]);
 			}
 			logProbability$y = (logProbability$y + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -846,9 +790,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		for(int i = 0; i < x.length; i += 1)
 			p[i] = new double[3];
 		logProbability$sample35 = new double[3];
-		logProbability$var92 = new double[x.length][];
-		for(int i = 0; i < x.length; i += 1)
-			logProbability$var92[i] = new double[3];
 		logProbability$sample94 = new double[x.length][];
 		for(int i = 0; i < x.length; i += 1)
 			logProbability$sample94[i] = new double[3];
@@ -1066,23 +1007,14 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var22 = Double.NaN;
 		logProbability$weights = 0.0;
-		logProbability$indicator = 0.0;
-		logProbability$p = 0.0;
 		if(!fixedProbFlag$sample35) {
 			logProbability$sample35[0] = Double.NaN;
 			logProbability$sample35[1] = Double.NaN;
 			logProbability$sample35[2] = Double.NaN;
 		}
-		logProbability$var40 = 0.0;
 		if(!fixedProbFlag$sample42)
 			logProbability$bias = Double.NaN;
-		for(int i = 0; i < n; i += 1) {
-			logProbability$var92[i][0] = Double.NaN;
-			logProbability$var92[i][1] = Double.NaN;
-			logProbability$var92[i][2] = Double.NaN;
-		}
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample94) {
 			for(int i = 0; i < n; i += 1) {
