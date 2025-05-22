@@ -1175,47 +1175,51 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
         sb.append("        @Override\n");
         sb.append("        public Immutability isFixed() {\n");
-        if(ft.isPrivate) {
-            sb.append(
-                    "            throw new SandwoodRuntimeException(\"This method should never be called on a private variable.\");\n");
-        } else if(flags.isEmpty()) {
-            if(ft.observed == Observed.FREE)
-                sb.append("            return Immutability.DETERMINISTIC;\n");
-            else
+        if(ft.observed == Observed.FIXED || ft.observed == Observed.OBSERVED) {
+            if(flags.isEmpty())
                 sb.append("            return Immutability.OBSERVED;\n");
-        } else if(ft.observed == Observed.OBSERVED) {
-            sb.append("            return Immutability.OBSERVED_FIXABLE;\n");
-        } else if(flags.size() == 1) {
-            VariableDescription<BooleanVariable> flag = flags.iterator().next();
-            // construct the outputs.
-            sb.append("            if(" + coreName + getMethod(flag.name) + "())\n");
-            sb.append("                return Immutability.FIXED;\n");
-            sb.append("            else\n");
-            sb.append("                return Immutability.FREE;\n");
-        } else {
-            // Get the values of all the flags, and construct the guards
-            String andGuard = "";
-            String orGuard = "";
-            boolean first = true;
-            for(VariableDescription<BooleanVariable> flag:flags) {
-                sb.append("            boolean " + flag + " = " + coreName + getMethod(flag.name) + "();\n");
-                if(first)
-                    first = false;
-                else {
-                    andGuard += " && ";
-                    orGuard += " || ";
+            else
+                sb.append("            return Immutability.OBSERVED_FIXABLE;\n");
+        } else if(ft.observed == Observed.FREE) {
+            if(flags.isEmpty()) {
+                // Private values are always derived from a sample, so cannot be deterministic, if they don't have flags
+                // it is because there is no route from a public variable to their sample task.
+                if(ft.isPrivate)
+                    sb.append("                return Immutability.FREE;\n");
+                else
+                    sb.append("                return Immutability.DETERMINISTIC;\n");
+            } else if(flags.size() == 1) {
+                VariableDescription<BooleanVariable> flag = flags.iterator().next();
+                // construct the outputs.
+                sb.append("            if(" + coreName + getMethod(flag.name) + "())\n");
+                sb.append("                return Immutability.FIXED;\n");
+                sb.append("            else\n");
+                sb.append("                return Immutability.FREE;\n");
+            } else {
+                // Get the values of all the flags, and construct the guards
+                String andGuard = "";
+                String orGuard = "";
+                boolean first = true;
+                for(VariableDescription<BooleanVariable> flag:flags) {
+                    sb.append("            boolean " + flag + " = " + coreName + getMethod(flag.name) + "();\n");
+                    if(first)
+                        first = false;
+                    else {
+                        andGuard += " && ";
+                        orGuard += " || ";
+                    }
+                    andGuard += flag;
+                    orGuard += flag;
                 }
-                andGuard += flag;
-                orGuard += flag;
-            }
 
-            // construct the outputs.
-            sb.append("            if(" + andGuard + ")\n");
-            sb.append("                return Immutability.FIXED;\n");
-            sb.append("            else if(" + orGuard + ")\n");
-            sb.append("                return Immutability.PARTIALLY_FIXED;\n");
-            sb.append("            else\n");
-            sb.append("                return Immutability.FREE;\n");
+                // construct the outputs.
+                sb.append("            if(" + andGuard + ")\n");
+                sb.append("                return Immutability.FIXED;\n");
+                sb.append("            else if(" + orGuard + ")\n");
+                sb.append("                return Immutability.PARTIALLY_FIXED;\n");
+                sb.append("            else\n");
+                sb.append("                return Immutability.FREE;\n");
+            }
         }
         sb.append("        }\n");
 

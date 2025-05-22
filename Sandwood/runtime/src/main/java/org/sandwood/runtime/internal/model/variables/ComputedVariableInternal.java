@@ -103,6 +103,10 @@ public abstract class ComputedVariableInternal
     public final boolean isSample() {
         return isSample;
     }
+    
+    public final boolean isPrivate() {
+        return isPrivate;
+    }
 
     @Override
     public final boolean probabilityComputed() {

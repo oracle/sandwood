@@ -144,12 +144,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		return logProbability$w;
 	}
 
-	// Getter for logProbability$z.
-	@Override
-	public final double get$logProbability$z() {
-		return logProbability$z;
-	}
-
 	// Getter for noTopics.
 	@Override
 	public final int get$noTopics() {

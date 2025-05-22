@@ -14,8 +14,6 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$bernoulli;
-	private double logProbability$bias;
-	private double logProbability$flip;
 	private double logProbability$sample14;
 	private double logProbability$sample16;
 	private boolean system$gibbsForward = true;
@@ -34,12 +32,6 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final void set$bias(double cv$value) {
 		bias = cv$value;
-	}
-
-	// Getter for flip.
-	@Override
-	public final boolean get$flip() {
-		return flip;
 	}
 
 	// Getter for flipMeasured.
@@ -82,18 +74,6 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final double get$logProbability$bernoulli() {
 		return logProbability$bernoulli;
-	}
-
-	// Getter for logProbability$bias.
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	// Getter for logProbability$flip.
-	@Override
-	public final double get$logProbability$flip() {
-		return logProbability$flip;
 	}
 
 	// Calculate the probability of the samples represented by sample14 using sampled
@@ -163,9 +143,6 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			logProbability$sample14 = cv$sampleProbability;
 		}
 		
-		// Update the variable probability
-		logProbability$bias = (logProbability$bias + cv$accumulator);
-		
 		// Add probability to model
 		logProbability$$model = (logProbability$$model + cv$accumulator);
 	}
@@ -234,9 +211,6 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Store the sample task probability
 			logProbability$sample16 = cv$sampleProbability;
 		}
-		
-		// Update the variable probability
-		logProbability$flip = (logProbability$flip + cv$accumulator);
 		
 		// Add probability to model
 		logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -372,10 +346,8 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$bias = 0.0;
 		logProbability$sample14 = Double.NaN;
 		logProbability$bernoulli = Double.NaN;
-		logProbability$flip = 0.0;
 		logProbability$sample16 = Double.NaN;
 	}
 

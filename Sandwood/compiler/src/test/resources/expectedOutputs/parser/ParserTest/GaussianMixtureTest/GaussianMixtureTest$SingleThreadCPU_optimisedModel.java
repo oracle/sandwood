@@ -27,7 +27,6 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 	private double logProbability$var34;
 	private double logProbability$var52;
 	private double logProbability$x;
-	private double logProbability$z;
 	private double[] mu;
 	private double[] phi;
 	private double[] sigma;
@@ -158,12 +157,6 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 	@Override
 	public final double get$logProbability$x() {
 		return logProbability$x;
-	}
-
-	// Getter for logProbability$z.
-	@Override
-	public final double get$logProbability$z() {
-		return logProbability$z;
 	}
 
 	// Getter for mu.
@@ -545,9 +538,6 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 			// Store the sample task probability
 			logProbability$sample68[i$var66] = cv$distributionAccumulator;
 		}
-		
-		// Update the variable probability
-		logProbability$z = (logProbability$z + cv$accumulator);
 		
 		// Add probability to model
 		logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1105,7 +1095,6 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 		logProbability$sigma = 0.0;
 		if(!fixedProbFlag$sample52)
 			logProbability$var52 = Double.NaN;
-		logProbability$z = 0.0;
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
 			logProbability$sample68[i$var66] = Double.NaN;
 		logProbability$x = 0.0;

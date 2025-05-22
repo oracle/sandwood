@@ -12,8 +12,6 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$bernoulli;
-	private double logProbability$bias;
-	private double logProbability$flip;
 	private double logProbability$sample14;
 	private double logProbability$sample16;
 	private boolean system$gibbsForward = true;
@@ -30,11 +28,6 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void set$bias(double cv$value) {
 		bias = cv$value;
-	}
-
-	@Override
-	public final boolean get$flip() {
-		return flip;
 	}
 
 	@Override
@@ -72,16 +65,6 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 		return logProbability$bernoulli;
 	}
 
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	@Override
-	public final double get$logProbability$flip() {
-		return logProbability$flip;
-	}
-
 	private final void logProbabilityValue$sample14() {
 		double cv$accumulator = 0.0;
 		if(Double.isNaN(guard)) {
@@ -89,7 +72,6 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 			cv$accumulator = cv$distributionAccumulator;
 			logProbability$sample14 = cv$distributionAccumulator;
 		}
-		logProbability$bias = (logProbability$bias + cv$accumulator);
 		logProbability$$model = (logProbability$$model + cv$accumulator);
 	}
 
@@ -101,7 +83,6 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 			logProbability$bernoulli = cv$distributionAccumulator;
 			logProbability$sample16 = cv$distributionAccumulator;
 		}
-		logProbability$flip = (logProbability$flip + cv$accumulator);
 		logProbability$$model = (logProbability$$model + cv$accumulator);
 		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 	}
@@ -166,10 +147,8 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$bias = 0.0;
 		logProbability$sample14 = Double.NaN;
 		logProbability$bernoulli = Double.NaN;
-		logProbability$flip = 0.0;
 		logProbability$sample16 = Double.NaN;
 	}
 

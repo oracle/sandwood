@@ -146,11 +146,6 @@ final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.inter
 	}
 
 	@Override
-	public final double get$logProbability$v3() {
-		return logProbability$v3;
-	}
-
-	@Override
 	public final int get$size() {
 		return size;
 	}

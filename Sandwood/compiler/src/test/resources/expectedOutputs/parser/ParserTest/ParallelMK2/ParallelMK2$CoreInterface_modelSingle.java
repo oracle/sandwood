@@ -29,9 +29,6 @@ interface ParallelMK2$CoreInterface extends org.sandwood.runtime.internal.model.
 	// Getter for logProbability$indirection.
 	public double get$logProbability$indirection();
 
-	// Getter for logProbability$sample.
-	public double get$logProbability$sample();
-
 	// Getter for observed.
 	public double[] get$observed();
 

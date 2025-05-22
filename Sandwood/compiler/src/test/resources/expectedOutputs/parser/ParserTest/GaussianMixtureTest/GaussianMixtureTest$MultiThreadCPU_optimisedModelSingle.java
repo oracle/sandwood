@@ -160,12 +160,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		return logProbability$x;
 	}
 
-	// Getter for logProbability$z.
-	@Override
-	public final double get$logProbability$z() {
-		return logProbability$z;
-	}
-
 	// Getter for mu.
 	@Override
 	public final double[] get$mu() {

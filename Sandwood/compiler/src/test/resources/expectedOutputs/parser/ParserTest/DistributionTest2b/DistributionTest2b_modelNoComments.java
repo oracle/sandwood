@@ -123,7 +123,7 @@ public final class DistributionTest2b extends Model {
      */
     public final ComputedIntegerArray v2 = $v2;
 
-    private final ComputedIntegerArrayInternal $v3 = new ComputedIntegerArrayInternal(this, "v3", true, true, false, ProbabilityType.SKIPPABLE) {
+    private final ComputedIntegerArrayInternal $v3 = new ComputedIntegerArrayInternal(this, "v3", true, true, true, ProbabilityType.SKIPPABLE) {
         @Override
         public int[] getValue() { return system$c.get$v3(); }
 
@@ -134,23 +134,18 @@ public final class DistributionTest2b extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$v3(); }
+        public double getCurrentLogProbability() { throw new SandwoodException("Log probabilities are not available for this value."); }
 
         @Override
         public void setFixed(boolean fixed) {
-            throw new SandwoodException("An observed variable can only have the value fixed to the observed value if the value is consumed by another random variable.");
+            throw new SandwoodRuntimeException("This method should never be called on a private variable.");
         }
 
         @Override
         public Immutability isFixed() {
-            return Immutability.DETERMINISTIC;
+                return Immutability.FREE;
         }
     };
-
-    /**
-     * Computed variable representing v3 of type int[] from the Sandwood model 
-     */
-    public final ComputedIntegerArray v3 = $v3;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
 
@@ -217,7 +212,7 @@ public final class DistributionTest2b extends Model {
      */
     public final RandomVariable c = $c;
 
-    private HasProbabilityInternal[] $probabilityVariables = {$v, $v1, $v2, $v3, $c};
+    private HasProbabilityInternal[] $probabilityVariables = {$v, $v1, $v2, $c};
 
     //Constructors
     /**
@@ -361,14 +356,11 @@ public final class DistributionTest2b extends Model {
         public final int v1;
         /** Field holding the value of v2 after a convention execution step.*/
         public final int[] v2;
-        /** Field holding the value of v3 after a convention execution step.*/
-        public final int[] v3;
 
         InferredValueOutputs(DistributionTest2b system$model) {
             this.v = system$model.v.getSamples()[0];
             this.v1 = system$model.v1.getSamples()[0];
             this.v2 = system$model.v2.getSamples()[0];
-            this.v3 = system$model.v3.getSamples()[0];
         }
     }
 
@@ -385,8 +377,6 @@ public final class DistributionTest2b extends Model {
         public final double v1;
         /** Field holding the log probability of computed variable v2 */
         public final double v2;
-        /** Field holding the log probability of computed variable v3 */
-        public final double v3;
 
         LogProbabilities(DistributionTest2b system$model) {
             this.$logModelProbability = system$model.getLogProbability();
@@ -394,7 +384,6 @@ public final class DistributionTest2b extends Model {
             this.v = system$model.v.getLogProbability();
             this.v1 = system$model.v1.getLogProbability();
             this.v2 = system$model.v2.getLogProbability();
-            this.v3 = system$model.v3.getLogProbability();
         }
 
         /** Method to return log probability of the whole model 
@@ -415,8 +404,6 @@ public final class DistributionTest2b extends Model {
         public final double v1;
         /** Field holding the probability of computed variable v2 */
         public final double v2;
-        /** Field holding the probability of computed variable v3 */
-        public final double v3;
 
         Probabilities(DistributionTest2b system$model) {
             this.$modelProbability = system$model.getProbability();
@@ -424,7 +411,6 @@ public final class DistributionTest2b extends Model {
             this.v = system$model.v.getProbability();
             this.v1 = system$model.v1.getProbability();
             this.v2 = system$model.v2.getProbability();
-            this.v3 = system$model.v3.getProbability();
         }
 
         /** Method to return probability of the whole model 
@@ -440,13 +426,10 @@ public final class DistributionTest2b extends Model {
         public final int[] v1;
         /** Field holding the MAP or Sample value of v2 after an infer model call. */
         public final int[][] v2;
-        /** Field holding the MAP or Sample value of v3 after an infer model call. */
-        public final int[][] v3;
 
         InferredModelOutputs(DistributionTest2b system$model) {
             this.v1 = system$model.getInferredValue(system$model.$v1);
             this.v2 = system$model.getInferredValue(system$model.$v2);
-            this.v3 = system$model.getInferredValue(system$model.$v3);
         }
     }
 

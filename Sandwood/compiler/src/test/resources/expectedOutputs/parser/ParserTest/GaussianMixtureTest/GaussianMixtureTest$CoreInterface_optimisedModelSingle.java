@@ -44,9 +44,6 @@ interface GaussianMixtureTest$CoreInterface extends org.sandwood.runtime.interna
 	// Getter for logProbability$x.
 	public double get$logProbability$x();
 
-	// Getter for logProbability$z.
-	public double get$logProbability$z();
-
 	// Getter for mu.
 	public double[] get$mu();
 
