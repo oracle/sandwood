@@ -13,7 +13,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model LinearRegression2Fail This is the class that
   * all user interactions with the model should occur through.
   */
-public class LinearRegression2Fail extends Model {
+public final class LinearRegression2Fail extends Model {
 
     private LinearRegression2Fail$CoreInterface system$c = new LinearRegression2Fail$SingleThreadCPU(ExecutionTarget.singleThread);
 

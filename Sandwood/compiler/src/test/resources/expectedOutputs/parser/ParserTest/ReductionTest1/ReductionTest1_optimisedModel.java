@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model ReductionTest1 This is the class that
   * all user interactions with the model should occur through.
   */
-public class ReductionTest1 extends Model {
+public final class ReductionTest1 extends Model {
 
     private ReductionTest1$CoreInterface system$c = new ReductionTest1$SingleThreadCPU(ExecutionTarget.singleThread);
 

@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model LinearRegressionBasic This is the class that
   * all user interactions with the model should occur through.
   */
-public class LinearRegressionBasic extends Model {
+public final class LinearRegressionBasic extends Model {
 
     private LinearRegressionBasic$CoreInterface system$c = new LinearRegressionBasic$SingleThreadCPU(ExecutionTarget.singleThread);
 

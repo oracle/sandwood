@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements MultinomialBernoulli$CoreInterface {
+final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements MultinomialBernoulli$CoreInterface {
 	private double[] beta;
 	private double[] cv$var17$countGlobal;
 	private boolean fixedFlag$sample17 = false;

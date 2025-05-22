@@ -14,7 +14,7 @@ import java.util.HashMap;
 /**
  * A model for the fairness work.
  */
-public class AlternativeModelMK2 extends Model {
+public final class AlternativeModelMK2 extends Model {
 
     private AlternativeModelMK2$CoreInterface system$c = new AlternativeModelMK2$SingleThreadCPU(ExecutionTarget.singleThread);
 

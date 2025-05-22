@@ -4,7 +4,7 @@ import org.sandwood.random.internal.Rng;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DistributionTest2$CoreInterface {
+final class DistributionTest2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DistributionTest2$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double[][] cv$var23$stateProbabilityGlobal;

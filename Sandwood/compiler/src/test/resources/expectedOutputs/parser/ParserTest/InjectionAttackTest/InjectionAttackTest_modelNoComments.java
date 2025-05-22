@@ -14,7 +14,7 @@ import java.util.HashMap;
 /**
  * A model for the fairness work. " + new java.util.Random().nextDouble() + "
  */
-public class InjectionAttackTest extends Model {
+public final class InjectionAttackTest extends Model {
 
     private InjectionAttackTest$CoreInterface system$c = new InjectionAttackTest$SingleThreadCPU(ExecutionTarget.singleThread);
 

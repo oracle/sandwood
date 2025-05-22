@@ -4,7 +4,7 @@ import org.sandwood.random.internal.Rng;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip2CoinsMK8$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip2CoinsMK8$CoreInterface {
+final class Flip2CoinsMK8$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip2CoinsMK8$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double a;

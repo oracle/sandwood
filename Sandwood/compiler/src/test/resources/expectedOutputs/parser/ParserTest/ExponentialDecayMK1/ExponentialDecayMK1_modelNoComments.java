@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model ExponentialDecayMK1 This is the class that
   * all user interactions with the model should occur through.
   */
-public class ExponentialDecayMK1 extends Model {
+public final class ExponentialDecayMK1 extends Model {
 
     private ExponentialDecayMK1$CoreInterface system$c = new ExponentialDecayMK1$SingleThreadCPU(ExecutionTarget.singleThread);
 

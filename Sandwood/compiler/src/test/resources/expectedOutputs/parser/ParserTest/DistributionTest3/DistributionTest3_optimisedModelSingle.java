@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model DistributionTest3 This is the class that
   * all user interactions with the model should occur through.
   */
-public class DistributionTest3 extends Model {
+public final class DistributionTest3 extends Model {
 
     private DistributionTest3$CoreInterface system$c = new DistributionTest3$SingleThreadCPU(ExecutionTarget.singleThread);
 

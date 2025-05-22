@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model UniformBernoulli This is the class that
   * all user interactions with the model should occur through.
   */
-public class UniformBernoulli extends Model {
+public final class UniformBernoulli extends Model {
 
     private UniformBernoulli$CoreInterface system$c = new UniformBernoulli$SingleThreadCPU(ExecutionTarget.singleThread);
 

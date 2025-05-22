@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Conditional2$CoreInterface {
+final class Conditional2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Conditional2$CoreInterface {
 	private double[] cv$var4$stateProbabilityGlobal;
 	private boolean fixedFlag$sample4 = false;
 	private boolean fixedProbFlag$sample4 = false;

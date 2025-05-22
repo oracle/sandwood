@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model DiscreteChoiceAlt This is the class that
   * all user interactions with the model should occur through.
   */
-public class DiscreteChoiceAlt extends Model {
+public final class DiscreteChoiceAlt extends Model {
 
     private DiscreteChoiceAlt$CoreInterface system$c = new DiscreteChoiceAlt$SingleThreadCPU(ExecutionTarget.singleThread);
 

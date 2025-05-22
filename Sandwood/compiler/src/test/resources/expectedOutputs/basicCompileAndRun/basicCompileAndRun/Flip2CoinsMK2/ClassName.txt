@@ -13,7 +13,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model ClassName This is the class that
   * all user interactions with the model should occur through.
   */
-public class ClassName extends Model {
+public final class ClassName extends Model {
 
     private ClassName$CoreInterface system$c = new ClassName$SingleThreadCPU(ExecutionTarget.singleThread);
 

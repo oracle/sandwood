@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model LDATest This is the class that
   * all user interactions with the model should occur through.
   */
-public class LDATest extends Model {
+public final class LDATest extends Model {
 
     private LDATest$CoreInterface system$c = new LDATest$SingleThreadCPU(ExecutionTarget.singleThread);
 

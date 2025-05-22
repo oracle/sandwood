@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model Flip1CoinMK19 This is the class that
   * all user interactions with the model should occur through.
   */
-public class Flip1CoinMK19 extends Model {
+public final class Flip1CoinMK19 extends Model {
 
     private Flip1CoinMK19$CoreInterface system$c = new Flip1CoinMK19$SingleThreadCPU(ExecutionTarget.singleThread);
 

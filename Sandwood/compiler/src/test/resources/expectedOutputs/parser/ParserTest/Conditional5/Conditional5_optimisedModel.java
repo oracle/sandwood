@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model Conditional5 This is the class that
   * all user interactions with the model should occur through.
   */
-public class Conditional5 extends Model {
+public final class Conditional5 extends Model {
 
     private Conditional5$CoreInterface system$c = new Conditional5$SingleThreadCPU(ExecutionTarget.singleThread);
 

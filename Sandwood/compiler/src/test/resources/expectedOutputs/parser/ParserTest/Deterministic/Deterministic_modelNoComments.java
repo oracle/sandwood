@@ -14,7 +14,7 @@ import java.util.HashMap;
 /**
  * A model for the fairness work.
  */
-public class Deterministic extends Model {
+public final class Deterministic extends Model {
 
     private Deterministic$CoreInterface system$c = new Deterministic$SingleThreadCPU(ExecutionTarget.singleThread);
 

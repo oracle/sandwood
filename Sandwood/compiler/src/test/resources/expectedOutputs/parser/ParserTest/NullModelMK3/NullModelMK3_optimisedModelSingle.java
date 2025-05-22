@@ -15,7 +15,7 @@ import java.util.HashMap;
   * Class representing the Sandwood model NullModelMK3 This is the class that
   * all user interactions with the model should occur through.
   */
-public class NullModelMK3 extends Model {
+public final class NullModelMK3 extends Model {
 
     private NullModelMK3$CoreInterface system$c = new NullModelMK3$SingleThreadCPU(ExecutionTarget.singleThread);
 
