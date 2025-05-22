@@ -28,10 +28,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$flips;
 	private double logProbability$m;
 	private double[] logProbability$sample55;
-	private double logProbability$var17;
 	private double logProbability$var29;
-	private double logProbability$var53;
-	private double logProbability$var73;
 	private double logProbability$var74;
 	private double[][] m;
 	private int n;
@@ -456,8 +453,6 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				if(cv$sampleReached)
-					logProbability$var53 = cv$sampleAccumulator;
 				
 				// Make sure all the inputs have been fixed so the variable is not a distribution.
 				if(fixedFlag$sample55)
@@ -522,8 +517,6 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 				}
 			}
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var53 = cv$rvAccumulator;
 			
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
 			if(fixedFlag$sample55)
@@ -673,8 +666,6 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var73 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -708,8 +699,6 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 			double cv$sampleValue = logProbability$var74;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var73 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -783,8 +772,6 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var17 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -822,8 +809,6 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 			double cv$sampleValue = logProbability$var29;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var17 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$m = (logProbability$m + cv$accumulator);
@@ -937,8 +922,6 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var53 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$a = (logProbability$a + cv$accumulator);
@@ -997,8 +980,6 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 				}
 			}
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var53 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$a = (logProbability$a + cv$accumulator);
@@ -1078,8 +1059,6 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var73 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -1113,8 +1092,6 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 			double cv$sampleValue = logProbability$var74;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var73 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -2490,18 +2467,15 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var17 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample29)
 			logProbability$var29 = Double.NaN;
-		logProbability$var53 = Double.NaN;
-		logProbability$b = 0.0;
 		logProbability$a = 0.0;
+		logProbability$b = 0.0;
 		if(!fixedProbFlag$sample55) {
 			for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
 				logProbability$sample55[((i$var46 - 1) / 1)] = Double.NaN;
 		}
-		logProbability$var73 = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample75)
 			logProbability$var74 = Double.NaN;

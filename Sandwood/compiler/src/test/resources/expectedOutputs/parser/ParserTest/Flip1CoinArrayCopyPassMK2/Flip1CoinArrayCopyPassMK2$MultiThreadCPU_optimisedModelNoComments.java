@@ -18,7 +18,6 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	private double logProbability$flips;
 	private double[] logProbability$sample31;
 	private double logProbability$var10;
-	private double logProbability$var9;
 	private int samples;
 	private boolean system$gibbsForward = true;
 
@@ -113,7 +112,6 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	private final void logProbabilityValue$sample10() {
 		if(!fixedProbFlag$sample10) {
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(bias[0], 1.0, 1.0);
-			logProbability$var9 = cv$distributionAccumulator;
 			logProbability$var10 = cv$distributionAccumulator;
 			logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -121,7 +119,6 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample10 = fixedFlag$sample10;
 		} else {
-			logProbability$var9 = logProbability$var10;
 			logProbability$bias = (logProbability$bias + logProbability$var10);
 			logProbability$$model = (logProbability$$model + logProbability$var10);
 			if(fixedFlag$sample10)
@@ -268,7 +265,6 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var9 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample10)
 			logProbability$var10 = Double.NaN;

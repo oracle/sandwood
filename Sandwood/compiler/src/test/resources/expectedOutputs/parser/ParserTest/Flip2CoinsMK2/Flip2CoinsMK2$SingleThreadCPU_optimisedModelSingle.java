@@ -24,7 +24,6 @@ final class Flip2CoinsMK2$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$flips;
 	private double logProbability$var20;
 	private double logProbability$var45;
-	private double logProbability$var8;
 	private int samples;
 	private boolean system$gibbsForward = true;
 
@@ -211,13 +210,11 @@ final class Flip2CoinsMK2$SingleThreadCPU extends org.sandwood.runtime.internal.
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(bias[var19], a, b));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var8 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				logProbability$var20 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -252,14 +249,6 @@ final class Flip2CoinsMK2$SingleThreadCPU extends org.sandwood.runtime.internal.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < coins))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var8 = logProbability$var20;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -537,7 +526,6 @@ final class Flip2CoinsMK2$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var8 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample20)
 			logProbability$var20 = Double.NaN;

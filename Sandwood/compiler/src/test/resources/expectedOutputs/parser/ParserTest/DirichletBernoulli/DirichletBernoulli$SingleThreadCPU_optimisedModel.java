@@ -18,7 +18,6 @@ final class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.inte
 	private double logProbability$b2;
 	private double logProbability$output;
 	private double logProbability$prior;
-	private double logProbability$var16;
 	private double logProbability$var38;
 	private double logProbability$var51;
 	private boolean[] observed;
@@ -198,11 +197,6 @@ final class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.inte
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(prior, v, 2);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var16 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$prior = cv$distributionAccumulator;
 			
@@ -247,8 +241,6 @@ final class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.inte
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var16 = logProbability$prior;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -784,7 +776,6 @@ final class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.inte
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
 			logProbability$prior = Double.NaN;
 		logProbability$b1 = Double.NaN;

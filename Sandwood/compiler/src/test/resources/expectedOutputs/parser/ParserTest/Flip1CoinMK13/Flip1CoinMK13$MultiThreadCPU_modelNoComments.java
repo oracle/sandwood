@@ -22,7 +22,6 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$flips;
 	private double logProbability$sample9;
 	private double logProbability$var36;
-	private double logProbability$var8;
 	private int samples;
 	private boolean system$gibbsForward = true;
 
@@ -227,7 +226,6 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var8 = cv$sampleAccumulator;
 			logProbability$sample9 = cv$sampleProbability;
 			boolean cv$guard$bias = false;
 			logProbability$b = (logProbability$b + cv$accumulator);
@@ -269,7 +267,6 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$sampleValue = logProbability$sample9;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var8 = cv$rvAccumulator;
 			boolean cv$guard$bias = false;
 			logProbability$b = (logProbability$b + cv$accumulator);
 			{
@@ -723,7 +720,6 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var8 = 0.0;
 		logProbability$b = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample9)

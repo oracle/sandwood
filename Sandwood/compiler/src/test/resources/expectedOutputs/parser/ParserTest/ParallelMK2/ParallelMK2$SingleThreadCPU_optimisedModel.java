@@ -20,8 +20,6 @@ final class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private double logProbability$sample;
 	private double[] logProbability$sample26;
 	private double[] logProbability$sample32;
-	private double[] logProbability$var25;
-	private double[] logProbability$var31;
 	private double[] observed;
 	private double[] sample;
 	private boolean system$gibbsForward = true;
@@ -185,11 +183,6 @@ final class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var25[i] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample26[i] = cv$distributionAccumulator;
 			}
@@ -217,12 +210,8 @@ final class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i = 0; i < length$observed; i += 1) {
-				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample26[i];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var25[i] = cv$rvAccumulator;
-			}
+			for(int i = 0; i < length$observed; i += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample26[i]);
 			
 			// Update the variable probability
 			logProbability$sample = (logProbability$sample + cv$accumulator);
@@ -285,11 +274,6 @@ final class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var31[i] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample32[i] = cv$distributionAccumulator;
 			}
@@ -310,12 +294,8 @@ final class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i = 0; i < length$observed; i += 1) {
-				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample32[i];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var31[i] = cv$rvAccumulator;
-			}
+			for(int i = 0; i < length$observed; i += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample32[i]);
 			
 			// Update the variable probability
 			logProbability$generated = (logProbability$generated + cv$accumulator);
@@ -572,14 +552,8 @@ final class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// Constructor for sample
 			sample = new double[length$observed];
 		
-		// Constructor for logProbability$var25
-		logProbability$var25 = new double[length$observed];
-		
 		// Constructor for logProbability$sample26
 		logProbability$sample26 = new double[length$observed];
-		
-		// Constructor for logProbability$var31
-		logProbability$var31 = new double[length$observed];
 		
 		// Constructor for logProbability$sample32
 		logProbability$sample32 = new double[length$observed];
@@ -688,16 +662,12 @@ final class ParallelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int i = 0; i < length$observed; i += 1)
-			logProbability$var25[i] = Double.NaN;
 		logProbability$sample = 0.0;
 		logProbability$indirection = 0.0;
 		if(!fixedProbFlag$sample26) {
 			for(int i = 0; i < length$observed; i += 1)
 				logProbability$sample26[i] = Double.NaN;
 		}
-		for(int i = 0; i < length$observed; i += 1)
-			logProbability$var31[i] = Double.NaN;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample32) {
 			for(int i = 0; i < length$observed; i += 1)

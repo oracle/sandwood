@@ -32,15 +32,10 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double[] logProbability$sample79;
 	private double logProbability$st;
 	private double logProbability$st2;
-	private double logProbability$var117;
 	private double logProbability$var118;
-	private double logProbability$var16;
 	private double logProbability$var28;
-	private double logProbability$var32;
 	private double logProbability$var44;
-	private double logProbability$var52;
 	private double logProbability$var53;
-	private double logProbability$var77;
 	private double[][] m;
 	private int samples;
 	private int[] st;
@@ -369,10 +364,9 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[j]?var116:(1.0 - var116))));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var117 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -380,7 +374,6 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var118 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -412,14 +405,6 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < samples))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var117 = logProbability$var118;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -490,7 +475,6 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// 
 			// The sample value to calculate the probability of generating
 			double cv$sampleAccumulator = (DistributionSampling.logProbabilityDirichlet(m[0], v, 2) + DistributionSampling.logProbabilityDirichlet(m[1], v, 2));
-			logProbability$var16 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var28 = cv$sampleAccumulator;
@@ -528,8 +512,6 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var16 = logProbability$var28;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -603,7 +585,6 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// 
 			// The sample value to calculate the probability of generating
 			double cv$sampleAccumulator = (DistributionSampling.logProbabilityBeta(bias[0], 1.0, 1.0) + DistributionSampling.logProbabilityBeta(bias[1], 1.0, 1.0));
-			logProbability$var32 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var44 = cv$sampleAccumulator;
@@ -641,8 +622,6 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var32 = logProbability$var44;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -691,11 +670,6 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 2))?Math.log(m[0][cv$sampleValue]):Double.NEGATIVE_INFINITY);
-			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var52 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
 			logProbability$var53 = cv$distributionAccumulator;
@@ -804,8 +778,6 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var52 = logProbability$var53;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -858,9 +830,6 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
 			for(int i$var71 = 1; i$var71 < samples; i$var71 += 1) {
 				// The sample value to calculate the probability of generating
 				int cv$sampleValue = st[i$var71];
@@ -886,9 +855,6 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Store the value of the function call, so the function call is only made once.
 				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 2))?Math.log(m[(samples - st2[(i$var71 - 1)])][cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 				
@@ -912,8 +878,6 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 					}
 				}
 			}
-			if(cv$sampleReached)
-				logProbability$var77 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -949,15 +913,9 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$rvAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
 			for(int i$var71 = 1; i$var71 < samples; i$var71 += 1) {
 				double cv$sampleValue = logProbability$sample79[(i$var71 - 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
 				
 				// Guard to ensure that st2 is only updated once for this probability.
 				boolean cv$guard$st2 = false;
@@ -976,8 +934,6 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 					}
 				}
 			}
-			if(cv$sampleReached)
-				logProbability$var77 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$st = (logProbability$st + cv$rvAccumulator);
@@ -2049,25 +2005,20 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
 			logProbability$var28 = Double.NaN;
-		logProbability$var32 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample45)
 			logProbability$var44 = Double.NaN;
-		logProbability$var52 = 0.0;
 		logProbability$st = 0.0;
 		logProbability$st2 = 0.0;
 		if(!fixedProbFlag$sample54)
 			logProbability$var53 = Double.NaN;
-		logProbability$var77 = Double.NaN;
 		if(!fixedProbFlag$sample79) {
 			for(int i$var71 = 1; i$var71 < samples; i$var71 += 1)
 				logProbability$sample79[(i$var71 - 1)] = Double.NaN;
 		}
-		logProbability$var117 = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample119)
 			logProbability$var118 = Double.NaN;

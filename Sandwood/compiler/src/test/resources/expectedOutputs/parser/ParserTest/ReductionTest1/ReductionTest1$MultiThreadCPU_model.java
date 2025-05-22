@@ -22,8 +22,6 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$sum_t;
 	private double logProbability$time_coeff;
 	private double logProbability$time_impact;
-	private double[][] logProbability$var157;
-	private double[] logProbability$var85;
 	private int n_ac;
 	private double[][] sum_t;
 	private boolean system$gibbsForward = true;
@@ -322,7 +320,6 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var85[((i$var80 - 0) / 1)] = cv$sampleAccumulator;
 			}
 			
 			// Update the variable probability
@@ -423,7 +420,6 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 					}
 				}
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var85[((i$var80 - 0) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -504,7 +500,6 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 					// Add the probability of this instance of the random variable to the probability
 					// of all instances of the random variable.
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var157[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = cv$sampleAccumulator;
 					
 					// Store the sample task probability
 					logProbability$sample165[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = cv$sampleProbability;
@@ -539,7 +534,6 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 					// Record that the sample was reached.
 					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var157[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = cv$rvAccumulator;
 				}
 			}
 			
@@ -729,24 +723,24 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 																			double reduceVar$var151$10 = 0.0;
 																			
 																			// Reduce for every value except a masked value which will be skipped.
-																			for(int cv$reduction673Index = 0; cv$reduction673Index < j; cv$reduction673Index += 1) {
+																			for(int cv$reduction658Index = 0; cv$reduction658Index < j; cv$reduction658Index += 1) {
 																				// Set the left hand term of the reduction function to the return variable value.
 																				double x = reduceVar$var151$10;
 																				
 																				// Set the right hand term to a value from the array var141
-																				double y = time_impact[index$t$4_6][index$i$4_7][cv$reduction673Index];
+																				double y = time_impact[index$t$4_6][index$i$4_7][cv$reduction658Index];
 																				
 																				// Execute the reduction function, saving the result into the return value.
 																				// 
 																				// Copy the result of the reduction into the variable returned by the reduction.
 																				reduceVar$var151$10 = (x + y);
 																			}
-																			for(int cv$reduction673Index = (j + 1); cv$reduction673Index < time_dim; cv$reduction673Index += 1) {
+																			for(int cv$reduction658Index = (j + 1); cv$reduction658Index < time_dim; cv$reduction658Index += 1) {
 																				// Set the left hand term of the reduction function to the return variable value.
 																				double x = reduceVar$var151$10;
 																				
 																				// Set the right hand term to a value from the array var141
-																				double y = time_impact[index$t$4_6][index$i$4_7][cv$reduction673Index];
+																				double y = time_impact[index$t$4_6][index$i$4_7][cv$reduction658Index];
 																				
 																				// Execute the reduction function, saving the result into the return value.
 																				// 
@@ -1003,23 +997,11 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 				arr[var68] = new int[n_ac];
 		}
 		
-		// Constructor for logProbability$var85
-		{
-			logProbability$var85 = new double[((((n_ac - 1) - 0) / 1) + 1)];
-		}
-		
 		// Constructor for logProbability$sample101
 		{
 			logProbability$sample101 = new double[((((n_ac - 1) - 0) / 1) + 1)][];
 			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
 				logProbability$sample101[((i$var80 - 0) / 1)] = new double[((((TimeFeat[0].length - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$var157
-		{
-			logProbability$var157 = new double[((((T - 1) - (0 + 1)) / 1) + 1)][];
-			for(int t = (0 + 1); t < T; t += 1)
-				logProbability$var157[((t - (0 + 1)) / 1)] = new double[((((n_ac - 1) - 0) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$sample165
@@ -1561,8 +1543,6 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
-			logProbability$var85[((i$var80 - 0) / 1)] = Double.NaN;
 		logProbability$time_coeff = 0.0;
 		logProbability$time_impact = 0.0;
 		logProbability$sum_t = 0.0;
@@ -1571,10 +1551,6 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 				for(int var95 = 0; var95 < time_dim; var95 += 1)
 					logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = Double.NaN;
 			}
-		}
-		for(int t = (0 + 1); t < T; t += 1) {
-			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1)
-				logProbability$var157[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = Double.NaN;
 		}
 		logProbability$arr = 0.0;
 		if(!fixedProbFlag$sample165) {

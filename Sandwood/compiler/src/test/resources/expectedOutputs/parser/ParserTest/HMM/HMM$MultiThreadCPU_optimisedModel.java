@@ -31,14 +31,9 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	private double[] logProbability$sample71;
 	private double[] logProbability$sample87;
 	private double logProbability$st;
-	private double logProbability$var16;
 	private double logProbability$var28;
-	private double logProbability$var32;
 	private double logProbability$var44;
-	private double logProbability$var51;
 	private double logProbability$var52;
-	private double[] logProbability$var69;
-	private double[] logProbability$var85;
 	private double[][] m;
 	private boolean[] measured;
 	private int samples;
@@ -352,7 +347,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(m[var27], v, states));
-			logProbability$var16 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var28 = cv$sampleAccumulator;
@@ -390,8 +384,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var16 = logProbability$var28;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -436,7 +428,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(bias[var43], 1.0, 1.0));
-			logProbability$var32 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var44 = cv$sampleAccumulator;
@@ -474,8 +465,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var32 = logProbability$var44;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -524,11 +513,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < states))?Math.log(m[0][cv$sampleValue]):Double.NEGATIVE_INFINITY);
-			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var51 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
 			logProbability$var52 = cv$distributionAccumulator;
@@ -590,8 +574,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var51 = logProbability$var52;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -652,11 +634,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var69[(i - 1)] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample71[(i - 1)] = cv$distributionAccumulator;
 			}
@@ -681,12 +658,8 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i = 1; i < samples; i += 1) {
-				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample71[(i - 1)];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var69[(i - 1)] = cv$rvAccumulator;
-			}
+			for(int i = 1; i < samples; i += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample71[(i - 1)]);
 			
 			// Update the variable probability
 			logProbability$st = (logProbability$st + cv$accumulator);
@@ -746,11 +719,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var85[j] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample87[j] = cv$distributionAccumulator;
 			}
@@ -771,12 +739,8 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int j = 0; j < samples; j += 1) {
-				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample87[j];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var85[j] = cv$rvAccumulator;
-			}
+			for(int j = 0; j < samples; j += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample87[j]);
 			
 			// Update the variable probability
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -911,9 +875,9 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				// 
 				// Substituted "i" with its value "1".
 				// 
-				// cv$temp$3$$var343's comment
+				// cv$temp$3$$var333's comment
 				// 
-				// $var343's comment
+				// $var333's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var68's comment
@@ -1082,9 +1046,9 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$3$$var374's comment
+				// cv$temp$3$$var364's comment
 				// 
-				// $var374's comment
+				// $var364's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var68's comment
@@ -1269,14 +1233,8 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		// Constructor for flips
 		flips = new boolean[length$measured];
 		
-		// Constructor for logProbability$var69
-		logProbability$var69 = new double[(length$measured - 1)];
-		
 		// Constructor for logProbability$sample71
 		logProbability$sample71 = new double[(length$measured - 1)];
-		
-		// Constructor for logProbability$var85
-		logProbability$var85 = new double[length$measured];
 		
 		// Constructor for logProbability$sample87
 		logProbability$sample87 = new double[length$measured];
@@ -1624,26 +1582,19 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
 			logProbability$var28 = Double.NaN;
-		logProbability$var32 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample45)
 			logProbability$var44 = Double.NaN;
-		logProbability$var51 = 0.0;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample53)
 			logProbability$var52 = Double.NaN;
-		for(int i = 1; i < samples; i += 1)
-			logProbability$var69[(i - 1)] = Double.NaN;
 		if(!fixedProbFlag$sample71) {
 			for(int i = 1; i < samples; i += 1)
 				logProbability$sample71[(i - 1)] = Double.NaN;
 		}
-		for(int j = 0; j < samples; j += 1)
-			logProbability$var85[j] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample87) {
 			for(int j = 0; j < samples; j += 1)

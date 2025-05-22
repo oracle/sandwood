@@ -27,12 +27,7 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 	private double logProbability$priorSigma2;
 	private double[] logProbability$sample35;
 	private double[] logProbability$sample39;
-	private double logProbability$var14;
-	private double logProbability$var20;
-	private double[] logProbability$var34;
-	private double[] logProbability$var38;
 	private double logProbability$var39;
-	private double logProbability$var8;
 	private double mean1;
 	private double mean2;
 	private int n;
@@ -336,7 +331,6 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var14 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$mean1 = cv$sampleProbability;
@@ -362,7 +356,6 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 			double cv$sampleValue = logProbability$mean1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var14 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -433,7 +426,6 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var20 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$mean2 = cv$sampleProbability;
@@ -459,7 +451,6 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 			double cv$sampleValue = logProbability$mean2;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var20 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -533,7 +524,6 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var34[((i - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample35[((i - 0) / 1)] = cv$sampleProbability;
@@ -566,7 +556,6 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var34[((i - 0) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -640,7 +629,6 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var38[((i - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample39[((i - 0) / 1)] = cv$sampleProbability;
@@ -688,7 +676,6 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var38[((i - 0) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Guard to ensure that amounts2 is only updated once for this probability.
@@ -773,7 +760,6 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var8 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$priorSigma2 = cv$sampleProbability;
@@ -799,7 +785,6 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 			double cv$sampleValue = logProbability$priorSigma2;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var8 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1179,19 +1164,9 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 			var39 = new double[((((length$obsAmounts1 - 1) - 0) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$var34
-		{
-			logProbability$var34 = new double[((((length$obsAmounts1 - 1) - 0) / 1) + 1)];
-		}
-		
 		// Constructor for logProbability$sample35
 		{
 			logProbability$sample35 = new double[((((length$obsAmounts1 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$var38
-		{
-			logProbability$var38 = new double[((((length$obsAmounts1 - 1) - 0) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$sample39
@@ -1332,24 +1307,17 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var8 = 0.0;
 		if(!fixedProbFlag$sample9)
 			logProbability$priorSigma2 = Double.NaN;
-		logProbability$var14 = 0.0;
 		if(!fixedProbFlag$sample15)
 			logProbability$mean1 = Double.NaN;
-		logProbability$var20 = 0.0;
 		if(!fixedProbFlag$sample21)
 			logProbability$mean2 = Double.NaN;
-		for(int i = 0; i < n; i += 1)
-			logProbability$var34[((i - 0) / 1)] = Double.NaN;
 		logProbability$amounts1 = 0.0;
 		if(!fixedProbFlag$sample35) {
 			for(int i = 0; i < n; i += 1)
 				logProbability$sample35[((i - 0) / 1)] = Double.NaN;
 		}
-		for(int i = 0; i < n; i += 1)
-			logProbability$var38[((i - 0) / 1)] = Double.NaN;
 		logProbability$var39 = 0.0;
 		logProbability$amounts2 = 0.0;
 		if(!fixedProbFlag$sample39) {

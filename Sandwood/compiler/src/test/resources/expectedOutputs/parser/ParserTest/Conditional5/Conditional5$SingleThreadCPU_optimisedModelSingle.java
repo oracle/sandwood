@@ -21,8 +21,6 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$sample13;
 	private double logProbability$sample9;
 	private double logProbability$value;
-	private double logProbability$var12;
-	private double logProbability$var8;
 	private boolean observedGuard;
 	private double observedValue;
 	private boolean system$gibbsForward = true;
@@ -154,11 +152,6 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (((0.0 <= b) && (b < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var12 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$sample13 = cv$distributionAccumulator;
 			
@@ -221,8 +214,6 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var12 = logProbability$sample13;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -394,11 +385,6 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (((0.0 <= a) && (a < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var8 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$sample9 = cv$distributionAccumulator;
 			
@@ -461,8 +447,6 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var8 = logProbability$sample9;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -560,12 +544,10 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample5)
 			logProbability$guard = Double.NaN;
-		logProbability$var8 = 0.0;
 		logProbability$a = 0.0;
 		logProbability$value = 0.0;
 		if(!fixedProbFlag$sample9)
 			logProbability$sample9 = Double.NaN;
-		logProbability$var12 = 0.0;
 		logProbability$b = 0.0;
 		if(!fixedProbFlag$sample13)
 			logProbability$sample13 = Double.NaN;

@@ -16,7 +16,6 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$flip;
 	private double logProbability$sample14;
 	private double logProbability$sample16;
-	private double logProbability$var11;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinMK16$MultiThreadCPU(ExecutionTarget target) {
@@ -117,7 +116,6 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			cv$sampleReached = true;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var11 = cv$sampleAccumulator;
 			logProbability$sample14 = cv$sampleProbability;
 		}
 		logProbability$bias = (logProbability$bias + cv$accumulator);
@@ -249,7 +247,6 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var11 = Double.NaN;
 		logProbability$bias = 0.0;
 		logProbability$sample14 = Double.NaN;
 		logProbability$bernoulli = Double.NaN;

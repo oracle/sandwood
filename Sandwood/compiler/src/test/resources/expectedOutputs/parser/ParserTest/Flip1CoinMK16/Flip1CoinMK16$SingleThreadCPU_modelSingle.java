@@ -16,7 +16,6 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$bernoulli;
 	private double logProbability$bias;
 	private double logProbability$flip;
-	private double logProbability$var11;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinMK16$SingleThreadCPU(ExecutionTarget target) {
@@ -158,8 +157,6 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// Add the probability of this instance of the random variable to the probability
 		// of all instances of the random variable.
 		cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-		if(cv$sampleReached)
-			logProbability$var11 = cv$sampleAccumulator;
 		
 		// Only update the sample if it was reached, otherwise the NaN will be
 		// erroneously over written.
@@ -374,7 +371,6 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var11 = Double.NaN;
 		logProbability$bias = Double.NaN;
 		logProbability$bernoulli = Double.NaN;
 		logProbability$flip = Double.NaN;

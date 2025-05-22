@@ -24,12 +24,8 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[][] logProbability$sample90;
 	private double[][] logProbability$sample93;
 	private double logProbability$theta;
-	private double logProbability$var30;
 	private double logProbability$var42;
-	private double logProbability$var44;
 	private double logProbability$var57;
-	private double[][] logProbability$var87;
-	private double[][] logProbability$var90;
 	private double logProbability$w;
 	private double logProbability$z;
 	private int noTopics;
@@ -296,7 +292,6 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var30 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var42 = cv$sampleAccumulator;
@@ -331,7 +326,6 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			double cv$sampleValue = logProbability$var42;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var30 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$phi = (logProbability$phi + cv$accumulator);
@@ -409,7 +403,6 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var44 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var57 = cv$sampleAccumulator;
@@ -444,7 +437,6 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			double cv$sampleValue = logProbability$var57;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var44 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$theta = (logProbability$theta + cv$accumulator);
@@ -521,7 +513,6 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var87[((i$var71 - 0) / 1)][((j - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)] = cv$sampleProbability;
@@ -597,7 +588,6 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var90[((i$var71 - 0) / 1)][((j - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample93[((i$var71 - 0) / 1)][((j - 0) / 1)] = cv$sampleProbability;
@@ -971,25 +961,11 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				z[((i$var71 - 0) / 1)] = new int[((((length$documents[i$var71] - 1) - 0) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$var87
-		{
-			logProbability$var87 = new double[((((length$documents.length - 1) - 0) / 1) + 1)][];
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-				logProbability$var87[((i$var71 - 0) / 1)] = new double[((((length$documents[i$var71] - 1) - 0) / 1) + 1)];
-		}
-		
 		// Constructor for logProbability$sample90
 		{
 			logProbability$sample90 = new double[((((length$documents.length - 1) - 0) / 1) + 1)][];
 			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
 				logProbability$sample90[((i$var71 - 0) / 1)] = new double[((((length$documents[i$var71] - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$var90
-		{
-			logProbability$var90 = new double[((((length$documents.length - 1) - 0) / 1) + 1)][];
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-				logProbability$var90[((i$var71 - 0) / 1)] = new double[((((length$documents[i$var71] - 1) - 0) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$sample93
@@ -1168,26 +1144,16 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var30 = Double.NaN;
 		logProbability$phi = 0.0;
 		if(!fixedProbFlag$sample42)
 			logProbability$var42 = Double.NaN;
-		logProbability$var44 = Double.NaN;
 		logProbability$theta = 0.0;
 		if(!fixedProbFlag$sample58)
 			logProbability$var57 = Double.NaN;
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				logProbability$var87[((i$var71 - 0) / 1)][((j - 0) / 1)] = Double.NaN;
-		}
 		logProbability$z = 0.0;
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 			for(int j = 0; j < length$documents[i$var71]; j += 1)
 				logProbability$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)] = Double.NaN;
-		}
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				logProbability$var90[((i$var71 - 0) / 1)][((j - 0) / 1)] = Double.NaN;
 		}
 		logProbability$w = 0.0;
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {

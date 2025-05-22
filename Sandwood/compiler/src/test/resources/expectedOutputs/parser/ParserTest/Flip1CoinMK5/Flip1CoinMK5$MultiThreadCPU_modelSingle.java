@@ -27,7 +27,6 @@ final class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	private double logProbability$flips2;
 	private double logProbability$var22;
 	private double logProbability$var36;
-	private double logProbability$var8;
 	private int samples1;
 	private int samples2;
 	private boolean system$gibbsForward = true;
@@ -479,7 +478,6 @@ final class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var8 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$bias = cv$sampleProbability;
@@ -505,7 +503,6 @@ final class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$sampleValue = logProbability$bias;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var8 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -711,7 +708,6 @@ final class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var8 = 0.0;
 		if(!fixedProbFlag$sample9)
 			logProbability$bias = Double.NaN;
 		logProbability$bernoulli1 = Double.NaN;

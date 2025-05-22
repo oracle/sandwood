@@ -23,13 +23,8 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	private double[] logProbability$sample68;
 	private double[] logProbability$sample72;
 	private double logProbability$sigma;
-	private double logProbability$var16;
-	private double logProbability$var22;
 	private double logProbability$var34;
-	private double logProbability$var40;
 	private double logProbability$var52;
-	private double[] logProbability$var67;
-	private double[] logProbability$var71;
 	private double logProbability$x;
 	private double logProbability$z;
 	private double[] mu;
@@ -193,14 +188,12 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	private final void logProbabilityValue$sample17() {
 		if(!fixedProbFlag$sample17) {
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(phi, alpha, 5);
-			logProbability$var16 = cv$distributionAccumulator;
 			logProbability$phi = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample17)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample17 = fixedFlag$sample17;
 		} else {
-			logProbability$var16 = logProbability$phi;
 			logProbability$$model = (logProbability$$model + logProbability$phi);
 			if(fixedFlag$sample17)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$phi);
@@ -212,7 +205,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			double cv$sampleAccumulator = 0.0;
 			for(int var33 = 0; var33 < 5; var33 += 1)
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian((mu[var33] / 4.47213595499958))) - 1.4978661367769954);
-			logProbability$var22 = cv$sampleAccumulator;
 			logProbability$var34 = cv$sampleAccumulator;
 			logProbability$mu = (logProbability$mu + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
@@ -220,7 +212,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
 			fixedProbFlag$sample34 = fixedFlag$sample34;
 		} else {
-			logProbability$var22 = logProbability$var34;
 			logProbability$mu = (logProbability$mu + logProbability$var34);
 			logProbability$$model = (logProbability$$model + logProbability$var34);
 			if(fixedFlag$sample34)
@@ -233,7 +224,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			double cv$sampleAccumulator = 0.0;
 			for(int var51 = 0; var51 < 5; var51 += 1)
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityInverseGamma(sigma[var51], 1.0, 1.0));
-			logProbability$var40 = cv$sampleAccumulator;
 			logProbability$var52 = cv$sampleAccumulator;
 			logProbability$sigma = (logProbability$sigma + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
@@ -241,7 +231,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
 			fixedProbFlag$sample52 = fixedFlag$sample52;
 		} else {
-			logProbability$var40 = logProbability$var52;
 			logProbability$sigma = (logProbability$sigma + logProbability$var52);
 			logProbability$$model = (logProbability$$model + logProbability$var52);
 			if(fixedFlag$sample52)
@@ -255,7 +244,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			int cv$sampleValue = z[i$var66];
 			double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 5))?Math.log(phi[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 			cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-			logProbability$var67[i$var66] = cv$distributionAccumulator;
 			logProbability$sample68[i$var66] = cv$distributionAccumulator;
 		}
 		logProbability$z = (logProbability$z + cv$accumulator);
@@ -268,7 +256,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			double var70 = sigma[z[i$var66]];
 			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((x[i$var66] - mu[z[i$var66]]) / Math.sqrt(var70))) - (Math.log(var70) * 0.5));
 			cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-			logProbability$var71[i$var66] = cv$distributionAccumulator;
 			logProbability$sample72[i$var66] = cv$distributionAccumulator;
 		}
 		logProbability$x = (logProbability$x + cv$accumulator);
@@ -382,9 +369,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			sigma = new double[5];
 		x = new double[length$xMeasured];
 		z = new int[length$xMeasured];
-		logProbability$var67 = new double[length$xMeasured];
 		logProbability$sample68 = new double[length$xMeasured];
-		logProbability$var71 = new double[length$xMeasured];
 		logProbability$sample72 = new double[length$xMeasured];
 		allocateScratch();
 	}
@@ -602,24 +587,17 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
 			logProbability$phi = Double.NaN;
-		logProbability$var22 = Double.NaN;
 		logProbability$mu = 0.0;
 		if(!fixedProbFlag$sample34)
 			logProbability$var34 = Double.NaN;
-		logProbability$var40 = Double.NaN;
 		logProbability$sigma = 0.0;
 		if(!fixedProbFlag$sample52)
 			logProbability$var52 = Double.NaN;
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-			logProbability$var67[i$var66] = Double.NaN;
 		logProbability$z = 0.0;
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
 			logProbability$sample68[i$var66] = Double.NaN;
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-			logProbability$var71[i$var66] = Double.NaN;
 		logProbability$x = 0.0;
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
 			logProbability$sample72[i$var66] = Double.NaN;

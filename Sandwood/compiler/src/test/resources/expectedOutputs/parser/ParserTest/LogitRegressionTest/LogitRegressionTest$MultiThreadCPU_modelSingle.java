@@ -19,12 +19,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$bias;
-	private double logProbability$indicator;
-	private double logProbability$p;
 	private double[] logProbability$sample35;
-	private double logProbability$var22;
-	private double logProbability$var40;
-	private double logProbability$var92;
 	private double logProbability$var93;
 	private double logProbability$weights;
 	private double logProbability$y;
@@ -266,116 +261,11 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				if(cv$sampleReached)
 					// Store the sample task probability
 					logProbability$sample35[((var33 - 0) / 1)] = cv$sampleProbability;
-				
-				// Guard to ensure that indicator is only updated once for this probability.
-				boolean cv$guard$indicator = false;
-				
-				// Guard to ensure that p is only updated once for this probability.
-				boolean cv$guard$p = false;
-				
-				// Add probability to constructed variables that have guards, so need per sample probabilities
-				// from the combined probability
-				// 
-				// Looking for a path between Sample 35 and consumer double[] 67.
-				{
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							for(int i = 0; i < n; i += 1) {
-								// If the probability of the variable has not already been updated
-								if(!cv$guard$indicator) {
-									// Set the guard so the update is only applied once.
-									cv$guard$indicator = true;
-									
-									// Update the variable probability
-									logProbability$indicator = (logProbability$indicator + cv$sampleProbability);
-								}
-							}
-						}
-					}
-				}
-				
-				// Looking for a path between Sample 35 and consumer double[] 88.
-				{
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							if((j$var61 == 0)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$p) {
-											// Set the guard so the update is only applied once.
-											cv$guard$p = true;
-											
-											// Update the variable probability
-											logProbability$p = (logProbability$p + cv$sampleProbability);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							if((j$var61 == 1)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$p) {
-											// Set the guard so the update is only applied once.
-											cv$guard$p = true;
-											
-											// Update the variable probability
-											logProbability$p = (logProbability$p + cv$sampleProbability);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							if((j$var61 == 2)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$p) {
-											// Set the guard so the update is only applied once.
-											cv$guard$p = true;
-											
-											// Update the variable probability
-											logProbability$p = (logProbability$p + cv$sampleProbability);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-								if((j$var61 == j$var85)) {
-									for(int i = 0; i < n; i += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$p) {
-											// Set the guard so the update is only applied once.
-											cv$guard$p = true;
-											
-											// Update the variable probability
-											logProbability$p = (logProbability$p + cv$sampleProbability);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
 			}
 			
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var22 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$weights = (logProbability$weights + cv$accumulator);
@@ -407,113 +297,8 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				
 				// Record that the sample was reached.
 				cv$sampleReached = true;
-				
-				// Guard to ensure that indicator is only updated once for this probability.
-				boolean cv$guard$indicator = false;
-				
-				// Guard to ensure that p is only updated once for this probability.
-				boolean cv$guard$p = false;
-				
-				// Add probability to constructed variables that have guards, so need per sample probabilities
-				// from the combined probability
-				// 
-				// Looking for a path between Sample 35 and consumer double[] 67.
-				{
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							for(int i = 0; i < n; i += 1) {
-								// If the probability of the variable has not already been updated
-								if(!cv$guard$indicator) {
-									// Set the guard so the update is only applied once.
-									cv$guard$indicator = true;
-									
-									// Update the variable probability
-									logProbability$indicator = (logProbability$indicator + cv$sampleValue);
-								}
-							}
-						}
-					}
-				}
-				
-				// Looking for a path between Sample 35 and consumer double[] 88.
-				{
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							if((j$var61 == 0)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$p) {
-											// Set the guard so the update is only applied once.
-											cv$guard$p = true;
-											
-											// Update the variable probability
-											logProbability$p = (logProbability$p + cv$sampleValue);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							if((j$var61 == 1)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$p) {
-											// Set the guard so the update is only applied once.
-											cv$guard$p = true;
-											
-											// Update the variable probability
-											logProbability$p = (logProbability$p + cv$sampleValue);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							if((j$var61 == 2)) {
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$p) {
-											// Set the guard so the update is only applied once.
-											cv$guard$p = true;
-											
-											// Update the variable probability
-											logProbability$p = (logProbability$p + cv$sampleValue);
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-						if((var33 == j$var61)) {
-							for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-								if((j$var61 == j$var85)) {
-									for(int i = 0; i < n; i += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$p) {
-											// Set the guard so the update is only applied once.
-											cv$guard$p = true;
-											
-											// Update the variable probability
-											logProbability$p = (logProbability$p + cv$sampleValue);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
 			}
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var22 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$weights = (logProbability$weights + cv$accumulator);
@@ -587,7 +372,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var40 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$bias = cv$sampleProbability;
@@ -613,7 +397,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			double cv$sampleValue = logProbability$bias;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var40 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -692,8 +475,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var92 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -729,8 +510,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			double cv$sampleValue = logProbability$var93;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var92 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$y = (logProbability$y + cv$accumulator);
@@ -2094,18 +1873,13 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var22 = Double.NaN;
 		logProbability$weights = 0.0;
-		logProbability$indicator = 0.0;
-		logProbability$p = 0.0;
 		if(!fixedProbFlag$sample35) {
 			for(int var33 = 0; var33 < k; var33 += 1)
 				logProbability$sample35[((var33 - 0) / 1)] = Double.NaN;
 		}
-		logProbability$var40 = 0.0;
 		if(!fixedProbFlag$sample42)
 			logProbability$bias = Double.NaN;
-		logProbability$var92 = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample94)
 			logProbability$var93 = Double.NaN;

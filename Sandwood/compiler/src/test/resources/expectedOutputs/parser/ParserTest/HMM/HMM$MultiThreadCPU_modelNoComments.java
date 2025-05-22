@@ -29,14 +29,9 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	private double[] logProbability$sample71;
 	private double[] logProbability$sample87;
 	private double logProbability$st;
-	private double logProbability$var16;
 	private double logProbability$var28;
-	private double logProbability$var32;
 	private double logProbability$var44;
-	private double logProbability$var51;
 	private double logProbability$var52;
-	private double[] logProbability$var69;
-	private double[] logProbability$var85;
 	private double[][] m;
 	private boolean[] measured;
 	private int samples;
@@ -246,7 +241,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var16 = cv$sampleAccumulator;
 			logProbability$var28 = cv$sampleAccumulator;
 			logProbability$m = (logProbability$m + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -262,7 +256,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			double cv$sampleValue = logProbability$var28;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var16 = cv$rvAccumulator;
 			logProbability$m = (logProbability$m + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample28)
@@ -306,7 +299,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var32 = cv$sampleAccumulator;
 			logProbability$var44 = cv$sampleAccumulator;
 			logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -322,7 +314,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			double cv$sampleValue = logProbability$var44;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var32 = cv$rvAccumulator;
 			logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample45)
@@ -361,7 +352,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var51 = cv$sampleAccumulator;
 			logProbability$var52 = cv$sampleProbability;
 			logProbability$st = (logProbability$st + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -374,7 +364,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			double cv$sampleValue = logProbability$var52;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var51 = cv$rvAccumulator;
 			logProbability$st = (logProbability$st + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample53)
@@ -416,7 +405,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var69[((i - 1) / 1)] = cv$sampleAccumulator;
 				logProbability$sample71[((i - 1) / 1)] = cv$sampleProbability;
 			}
 			logProbability$st = (logProbability$st + cv$accumulator);
@@ -433,7 +421,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var69[((i - 1) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$st = (logProbability$st + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -476,7 +463,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var85[((j - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample87[((j - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -492,7 +478,6 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var85[((j - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -611,12 +596,12 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 						double[] var50 = m[0];
 						cv$temp$0$var50 = var50;
 					}
-					int cv$temp$1$$var334;
+					int cv$temp$1$$var324;
 					{
-						int $var334 = states;
-						cv$temp$1$$var334 = $var334;
+						int $var324 = states;
+						cv$temp$1$$var324 = $var324;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var334))?Math.log(cv$temp$0$var50[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var324))?Math.log(cv$temp$0$var50[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$var67$2_1 = cv$currentValue;
@@ -634,18 +619,18 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 															double[] var68 = m[traceTempVariable$var67$2_1];
 															cv$temp$2$var68 = var68;
 														}
-														int cv$temp$3$$var343;
+														int cv$temp$3$$var333;
 														{
-															int $var343 = states;
-															cv$temp$3$$var343 = $var343;
+															int $var333 = states;
+															cv$temp$3$$var333 = $var333;
 														}
-														if(((Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var343))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var343))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+														if(((Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var333))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var333))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 														else {
 															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var343))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY));
+																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var333))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY));
 															else
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var343))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var343))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY)));
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var333))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var333))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY)));
 														}
 														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 													}
@@ -782,12 +767,12 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 						double[] var68 = m[st[(i - 1)]];
 						cv$temp$0$var68 = var68;
 					}
-					int cv$temp$1$$var365;
+					int cv$temp$1$$var355;
 					{
-						int $var365 = states;
-						cv$temp$1$$var365 = $var365;
+						int $var355 = states;
+						cv$temp$1$$var355 = $var355;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var365))?Math.log(cv$temp$0$var68[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var355))?Math.log(cv$temp$0$var68[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$var67$2_1 = cv$currentValue;
@@ -805,18 +790,18 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 															double[] var68 = m[traceTempVariable$var67$2_1];
 															cv$temp$2$var68 = var68;
 														}
-														int cv$temp$3$$var374;
+														int cv$temp$3$$var364;
 														{
-															int $var374 = states;
-															cv$temp$3$$var374 = $var374;
+															int $var364 = states;
+															cv$temp$3$$var364 = $var364;
 														}
-														if(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var374))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var374))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+														if(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var364))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var364))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 														else {
 															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var374))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY));
+																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var364))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY));
 															else
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var374))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var374))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)));
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var364))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var364))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)));
 														}
 														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 													}
@@ -973,13 +958,7 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 			flips = new boolean[length$measured];
 		}
 		{
-			logProbability$var69 = new double[((((length$measured - 1) - 1) / 1) + 1)];
-		}
-		{
 			logProbability$sample71 = new double[((((length$measured - 1) - 1) / 1) + 1)];
-		}
-		{
-			logProbability$var85 = new double[((((length$measured - 1) - 0) / 1) + 1)];
 		}
 		{
 			logProbability$sample87 = new double[((((length$measured - 1) - 0) / 1) + 1)];
@@ -1200,26 +1179,19 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
 			logProbability$var28 = Double.NaN;
-		logProbability$var32 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample45)
 			logProbability$var44 = Double.NaN;
-		logProbability$var51 = 0.0;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample53)
 			logProbability$var52 = Double.NaN;
-		for(int i = 1; i < samples; i += 1)
-			logProbability$var69[((i - 1) / 1)] = Double.NaN;
 		if(!fixedProbFlag$sample71) {
 			for(int i = 1; i < samples; i += 1)
 				logProbability$sample71[((i - 1) / 1)] = Double.NaN;
 		}
-		for(int j = 0; j < samples; j += 1)
-			logProbability$var85[((j - 0) / 1)] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample87) {
 			for(int j = 0; j < samples; j += 1)

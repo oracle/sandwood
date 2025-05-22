@@ -20,12 +20,8 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 	private double logProbability$$model;
 	private double logProbability$b0;
 	private double logProbability$b1;
-	private double logProbability$var10;
-	private double logProbability$var15;
 	private double logProbability$var16;
-	private double logProbability$var32;
 	private double logProbability$var33;
-	private double logProbability$var6;
 	private double logProbability$variance;
 	private double logProbability$y;
 	private int noSamples;
@@ -283,11 +279,6 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((b1 - 1.0) / 2.23606797749979)) - 0.8047189562170501);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var10 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$b1 = cv$distributionAccumulator;
 			
@@ -332,8 +323,6 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var10 = logProbability$b1;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -378,11 +367,6 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 			// 
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityGamma((1 / variance), 1.0, 1.0);
-			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var15 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
 			logProbability$var16 = cv$distributionAccumulator;
@@ -444,8 +428,6 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var15 = logProbability$var16;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -498,10 +480,9 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((y[i] - (b0 + (b1 * x[i]))) / Math.sqrt(variance)))) - (Math.log(variance) * 0.5));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var32 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -509,7 +490,6 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var33 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -541,14 +521,6 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < noSamples))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var32 = logProbability$var33;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -595,11 +567,6 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((b0 / 1.4142135623730951)) - 0.34657359027997264);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var6 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$b0 = cv$distributionAccumulator;
 			
@@ -644,8 +611,6 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var6 = logProbability$b0;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -925,17 +890,13 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var6 = 0.0;
 		if(!fixedProbFlag$sample7)
 			logProbability$b0 = Double.NaN;
-		logProbability$var10 = 0.0;
 		if(!fixedProbFlag$sample11)
 			logProbability$b1 = Double.NaN;
-		logProbability$var15 = 0.0;
 		logProbability$variance = 0.0;
 		if(!fixedProbFlag$sample16)
 			logProbability$var16 = Double.NaN;
-		logProbability$var32 = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample33)
 			logProbability$var33 = Double.NaN;

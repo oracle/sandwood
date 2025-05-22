@@ -25,12 +25,8 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double[][] logProbability$sample90;
 	private double[][] logProbability$sample93;
 	private double logProbability$theta;
-	private double logProbability$var30;
 	private double logProbability$var42;
-	private double logProbability$var44;
 	private double logProbability$var57;
-	private double[][] logProbability$var87;
-	private double[][] logProbability$var90;
 	private double logProbability$w;
 	private double logProbability$z;
 	private int noTopics;
@@ -297,7 +293,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var30 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var42 = cv$sampleAccumulator;
@@ -332,7 +327,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$sampleValue = logProbability$var42;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var30 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$phi = (logProbability$phi + cv$accumulator);
@@ -410,7 +404,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var44 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var57 = cv$sampleAccumulator;
@@ -445,7 +438,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$sampleValue = logProbability$var57;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var44 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$theta = (logProbability$theta + cv$accumulator);
@@ -522,7 +514,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var87[((i$var71 - 0) / 1)][((j - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)] = cv$sampleProbability;
@@ -598,7 +589,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var90[((i$var71 - 0) / 1)][((j - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample93[((i$var71 - 0) / 1)][((j - 0) / 1)] = cv$sampleProbability;
@@ -749,16 +739,16 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						double[] var86 = theta[i$var71];
 						cv$temp$0$var86 = var86;
 					}
-					int cv$temp$1$$var423;
+					int cv$temp$1$$var403;
 					{
 						// Constructing a random variable input for use later.
-						int $var423 = noTopics;
-						cv$temp$1$$var423 = $var423;
+						int $var403 = noTopics;
+						cv$temp$1$$var403 = $var403;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var423))?Math.log(cv$temp$0$var86[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var403))?Math.log(cv$temp$0$var86[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 90.
 					{
@@ -782,22 +772,22 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 													double[] var89 = phi[cv$currentValue];
 													cv$temp$2$var89 = var89;
 												}
-												int cv$temp$3$$var424;
+												int cv$temp$3$$var404;
 												{
 													// Constructing a random variable input for use later.
-													int $var424 = vocabSize;
-													cv$temp$3$$var424 = $var424;
+													int $var404 = vocabSize;
+													cv$temp$3$$var404 = $var404;
 												}
 												
 												// Record the probability of sample task 93 generating output with current configuration.
-												if(((Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var424))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var424))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												if(((Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var404))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var404))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													// If the second value is -infinity.
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var424))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var404))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var424))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var424))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var404))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var404))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)));
 												}
 												
 												// Recorded the probability of reaching sample task 93 with the current configuration.
@@ -1002,25 +992,11 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				z[((i$var71 - 0) / 1)] = new int[((((length$documents[i$var71] - 1) - 0) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$var87
-		{
-			logProbability$var87 = new double[((((length$documents.length - 1) - 0) / 1) + 1)][];
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-				logProbability$var87[((i$var71 - 0) / 1)] = new double[((((length$documents[i$var71] - 1) - 0) / 1) + 1)];
-		}
-		
 		// Constructor for logProbability$sample90
 		{
 			logProbability$sample90 = new double[((((length$documents.length - 1) - 0) / 1) + 1)][];
 			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
 				logProbability$sample90[((i$var71 - 0) / 1)] = new double[((((length$documents[i$var71] - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$var90
-		{
-			logProbability$var90 = new double[((((length$documents.length - 1) - 0) / 1) + 1)][];
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-				logProbability$var90[((i$var71 - 0) / 1)] = new double[((((length$documents[i$var71] - 1) - 0) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$sample93
@@ -1475,26 +1451,16 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var30 = Double.NaN;
 		logProbability$phi = 0.0;
 		if(!fixedProbFlag$sample42)
 			logProbability$var42 = Double.NaN;
-		logProbability$var44 = Double.NaN;
 		logProbability$theta = 0.0;
 		if(!fixedProbFlag$sample58)
 			logProbability$var57 = Double.NaN;
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				logProbability$var87[((i$var71 - 0) / 1)][((j - 0) / 1)] = Double.NaN;
-		}
 		logProbability$z = 0.0;
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 			for(int j = 0; j < length$documents[i$var71]; j += 1)
 				logProbability$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)] = Double.NaN;
-		}
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				logProbability$var90[((i$var71 - 0) / 1)][((j - 0) / 1)] = Double.NaN;
 		}
 		logProbability$w = 0.0;
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {

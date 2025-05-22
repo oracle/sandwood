@@ -31,18 +31,12 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 	private double logProbability$b;
 	private double logProbability$beta;
 	private double logProbability$choices;
-	private double logProbability$exped;
 	private double logProbability$prob;
 	private double[] logProbability$sample103;
 	private double[] logProbability$sample21;
 	private double[] logProbability$sample47;
 	private double logProbability$sigma;
 	private double logProbability$ut;
-	private double[] logProbability$var101;
-	private double logProbability$var27;
-	private double logProbability$var33;
-	private double logProbability$var35;
-	private double logProbability$var9;
 	private int noObs;
 	private int noProducts;
 	private double[][] prob;
@@ -395,7 +389,6 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var101[((i - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample103[((i - 0) / 1)] = cv$sampleProbability;
@@ -428,7 +421,6 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var101[((i - 0) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -505,33 +497,12 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 				// Store the sample task probability
 				logProbability$sample21[((var20 - 0) / 1)] = cv$sampleProbability;
 				
-				// Guard to ensure that exped is only updated once for this probability.
-				boolean cv$guard$exped = false;
-				
 				// Guard to ensure that prob is only updated once for this probability.
 				boolean cv$guard$prob = false;
 				
 				// Add probability to constructed variables that have guards, so need per sample probabilities
 				// from the combined probability
 				// 
-				// Looking for a path between Sample 21 and consumer double[] 77.
-				{
-					for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-						if((var20 == j$var69)) {
-							for(int i = 0; i < noObs; i += 1) {
-								// If the probability of the variable has not already been updated
-								if(!cv$guard$exped) {
-									// Set the guard so the update is only applied once.
-									cv$guard$exped = true;
-									
-									// Update the variable probability
-									logProbability$exped = (logProbability$exped + cv$sampleProbability);
-								}
-							}
-						}
-					}
-				}
-				
 				// Looking for a path between Sample 21 and consumer double[] 100.
 				{
 					for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
@@ -578,7 +549,6 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var9 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$ut = (logProbability$ut + cv$accumulator);
@@ -611,33 +581,12 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				
-				// Guard to ensure that exped is only updated once for this probability.
-				boolean cv$guard$exped = false;
-				
 				// Guard to ensure that prob is only updated once for this probability.
 				boolean cv$guard$prob = false;
 				
 				// Add probability to constructed variables that have guards, so need per sample probabilities
 				// from the combined probability
 				// 
-				// Looking for a path between Sample 21 and consumer double[] 77.
-				{
-					for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-						if((var20 == j$var69)) {
-							for(int i = 0; i < noObs; i += 1) {
-								// If the probability of the variable has not already been updated
-								if(!cv$guard$exped) {
-									// Set the guard so the update is only applied once.
-									cv$guard$exped = true;
-									
-									// Update the variable probability
-									logProbability$exped = (logProbability$exped + cv$sampleValue);
-								}
-							}
-						}
-					}
-				}
-				
 				// Looking for a path between Sample 21 and consumer double[] 100.
 				{
 					for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
@@ -681,7 +630,6 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 				}
 			}
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var9 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$ut = (logProbability$ut + cv$accumulator);
@@ -755,7 +703,6 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var27 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$b = cv$sampleProbability;
@@ -781,7 +728,6 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 			double cv$sampleValue = logProbability$b;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var27 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -852,7 +798,6 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var33 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$sigma = cv$sampleProbability;
@@ -878,7 +823,6 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 			double cv$sampleValue = logProbability$sigma;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var33 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -952,33 +896,12 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 				// Store the sample task probability
 				logProbability$sample47[((var46 - 0) / 1)] = cv$sampleProbability;
 				
-				// Guard to ensure that exped is only updated once for this probability.
-				boolean cv$guard$exped = false;
-				
 				// Guard to ensure that prob is only updated once for this probability.
 				boolean cv$guard$prob = false;
 				
 				// Add probability to constructed variables that have guards, so need per sample probabilities
 				// from the combined probability
 				// 
-				// Looking for a path between Sample 47 and consumer double[] 77.
-				{
-					for(int i = 0; i < noObs; i += 1) {
-						if((var46 == i)) {
-							for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-								// If the probability of the variable has not already been updated
-								if(!cv$guard$exped) {
-									// Set the guard so the update is only applied once.
-									cv$guard$exped = true;
-									
-									// Update the variable probability
-									logProbability$exped = (logProbability$exped + cv$sampleProbability);
-								}
-							}
-						}
-					}
-				}
-				
 				// Looking for a path between Sample 47 and consumer double[] 100.
 				{
 					for(int i = 0; i < noObs; i += 1) {
@@ -1025,7 +948,6 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var35 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$beta = (logProbability$beta + cv$accumulator);
@@ -1058,33 +980,12 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				
-				// Guard to ensure that exped is only updated once for this probability.
-				boolean cv$guard$exped = false;
-				
 				// Guard to ensure that prob is only updated once for this probability.
 				boolean cv$guard$prob = false;
 				
 				// Add probability to constructed variables that have guards, so need per sample probabilities
 				// from the combined probability
 				// 
-				// Looking for a path between Sample 47 and consumer double[] 77.
-				{
-					for(int i = 0; i < noObs; i += 1) {
-						if((var46 == i)) {
-							for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-								// If the probability of the variable has not already been updated
-								if(!cv$guard$exped) {
-									// Set the guard so the update is only applied once.
-									cv$guard$exped = true;
-									
-									// Update the variable probability
-									logProbability$exped = (logProbability$exped + cv$sampleValue);
-								}
-							}
-						}
-					}
-				}
-				
 				// Looking for a path between Sample 47 and consumer double[] 100.
 				{
 					for(int i = 0; i < noObs; i += 1) {
@@ -1128,7 +1029,6 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 				}
 			}
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var35 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$beta = (logProbability$beta + cv$accumulator);
@@ -2531,11 +2431,6 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 			logProbability$sample47 = new double[((((noObs - 1) - 0) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$var101
-		{
-			logProbability$var101 = new double[((((noObs - 1) - 0) / 1) + 1)];
-		}
-		
 		// Constructor for logProbability$sample103
 		{
 			logProbability$sample103 = new double[((((noObs - 1) - 0) / 1) + 1)];
@@ -2834,28 +2729,21 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var9 = Double.NaN;
 		logProbability$ut = 0.0;
-		logProbability$exped = 0.0;
 		logProbability$prob = 0.0;
 		if(!fixedProbFlag$sample21) {
 			for(int var20 = 0; var20 < noProducts; var20 += 1)
 				logProbability$sample21[((var20 - 0) / 1)] = Double.NaN;
 		}
-		logProbability$var27 = 0.0;
 		if(!fixedProbFlag$sample28)
 			logProbability$b = Double.NaN;
-		logProbability$var33 = 0.0;
 		if(!fixedProbFlag$sample34)
 			logProbability$sigma = Double.NaN;
-		logProbability$var35 = Double.NaN;
 		logProbability$beta = 0.0;
 		if(!fixedProbFlag$sample47) {
 			for(int var46 = 0; var46 < noObs; var46 += 1)
 				logProbability$sample47[((var46 - 0) / 1)] = Double.NaN;
 		}
-		for(int i = 0; i < noObs; i += 1)
-			logProbability$var101[((i - 0) / 1)] = Double.NaN;
 		logProbability$choices = 0.0;
 		if(!fixedProbFlag$sample103) {
 			for(int i = 0; i < noObs; i += 1)

@@ -19,9 +19,7 @@ final class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$guard;
 	private double logProbability$sample21;
 	private double logProbability$value;
-	private double logProbability$var18;
 	private double logProbability$var19;
-	private double logProbability$var24;
 	private double observedValue;
 	private boolean system$gibbsForward = true;
 	private double value;
@@ -171,7 +169,6 @@ final class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var18 = cv$sampleAccumulator;
 				logProbability$sample21 = cv$sampleProbability;
 			}
 			boolean cv$guard$bias = false;
@@ -195,7 +192,6 @@ final class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var18 = cv$rvAccumulator;
 			}
 			boolean cv$guard$bias = false;
 			logProbability$var19 = (logProbability$var19 + cv$accumulator);
@@ -243,7 +239,6 @@ final class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var24 = cv$sampleAccumulator;
 			logProbability$value = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -254,7 +249,6 @@ final class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$sampleValue = logProbability$value;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var24 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
@@ -772,12 +766,10 @@ final class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample4)
 			logProbability$guard = Double.NaN;
-		logProbability$var18 = Double.NaN;
 		logProbability$var19 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample21)
 			logProbability$sample21 = Double.NaN;
-		logProbability$var24 = 0.0;
 		if(!fixedProbFlag$sample27)
 			logProbability$value = Double.NaN;
 	}

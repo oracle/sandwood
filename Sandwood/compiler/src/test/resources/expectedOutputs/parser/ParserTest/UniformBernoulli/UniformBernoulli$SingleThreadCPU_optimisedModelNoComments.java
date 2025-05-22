@@ -14,7 +14,6 @@ final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.intern
 	private double logProbability$output;
 	private double logProbability$prior;
 	private double logProbability$var19;
-	private double logProbability$var4;
 	private boolean[] observed;
 	private boolean[] output;
 	private double prior;
@@ -130,14 +129,12 @@ final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.intern
 	private final void logProbabilityValue$sample5() {
 		if(!fixedProbFlag$sample5) {
 			double cv$distributionAccumulator = (((0.0 <= prior) && (prior < 1.0))?0.0:Double.NEGATIVE_INFINITY);
-			logProbability$var4 = cv$distributionAccumulator;
 			logProbability$prior = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample5)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample5 = fixedFlag$sample5;
 		} else {
-			logProbability$var4 = logProbability$prior;
 			logProbability$$model = (logProbability$$model + logProbability$prior);
 			if(fixedFlag$sample5)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$prior);
@@ -220,7 +217,6 @@ final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.intern
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var4 = 0.0;
 		if(!fixedProbFlag$sample5)
 			logProbability$prior = Double.NaN;
 		logProbability$bernoulli = Double.NaN;

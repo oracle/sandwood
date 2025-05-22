@@ -16,7 +16,6 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 	private double logProbability$output;
 	private double logProbability$prior;
 	private double logProbability$var19;
-	private double logProbability$var4;
 	private boolean[] observed;
 	private boolean[] output;
 	private double prior;
@@ -271,11 +270,6 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (((0.0 <= prior) && (prior < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var4 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$prior = cv$distributionAccumulator;
 			
@@ -320,8 +314,6 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var4 = logProbability$prior;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -553,7 +545,6 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var4 = 0.0;
 		if(!fixedProbFlag$sample5)
 			logProbability$prior = Double.NaN;
 		logProbability$bernoulli = Double.NaN;

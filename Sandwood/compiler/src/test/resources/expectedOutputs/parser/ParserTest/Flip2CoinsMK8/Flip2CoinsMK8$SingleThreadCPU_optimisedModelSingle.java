@@ -21,7 +21,6 @@ final class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$bernoulli;
 	private double logProbability$bias;
 	private double logProbability$flips;
-	private double logProbability$var16;
 	private double logProbability$var17;
 	private double logProbability$var46;
 	private boolean system$gibbsForward = true;
@@ -203,10 +202,9 @@ final class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(bias[i], a, b));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var16 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -214,7 +212,6 @@ final class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var17 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -249,14 +246,6 @@ final class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < coins))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var16 = logProbability$var17;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -632,7 +621,6 @@ final class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample17)
 			logProbability$var17 = Double.NaN;

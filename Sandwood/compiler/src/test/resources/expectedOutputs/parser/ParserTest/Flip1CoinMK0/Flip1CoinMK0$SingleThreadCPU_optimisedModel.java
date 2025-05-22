@@ -18,7 +18,6 @@ final class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$bernoulli;
 	private double logProbability$bias;
 	private double logProbability$flip;
-	private double logProbability$var4;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinMK0$SingleThreadCPU(ExecutionTarget target) {
@@ -150,11 +149,6 @@ final class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(bias, 1.0, 1.0);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var4 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$bias = cv$distributionAccumulator;
 			
@@ -199,8 +193,6 @@ final class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var4 = logProbability$bias;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -408,7 +400,6 @@ final class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var4 = 0.0;
 		if(!fixedProbFlag$sample5)
 			logProbability$bias = Double.NaN;
 		logProbability$bernoulli = 0.0;

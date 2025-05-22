@@ -28,11 +28,8 @@ final class Flip1CoinMK12b$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$sample16;
 	private double logProbability$sample28;
 	private double logProbability$sample35;
-	private double logProbability$var13;
 	private double logProbability$var14;
-	private double logProbability$var23;
 	private double logProbability$var26;
-	private double logProbability$var30;
 	private double logProbability$var33;
 	private double logProbability$var48;
 	private int samples;
@@ -325,11 +322,6 @@ final class Flip1CoinMK12b$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = cv$distributionAccumulator;
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var13 = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample16 = cv$distributionAccumulator;
 				
@@ -359,7 +351,6 @@ final class Flip1CoinMK12b$MultiThreadCPU extends org.sandwood.runtime.internal.
 			double cv$accumulator = 0.0;
 			if(guard1) {
 				cv$accumulator = logProbability$sample16;
-				logProbability$var13 = logProbability$sample16;
 				
 				// Update the variable probability
 				logProbability$bias = (logProbability$bias + logProbability$sample16);
@@ -423,11 +414,6 @@ final class Flip1CoinMK12b$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = cv$distributionAccumulator;
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var23 = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample28 = cv$distributionAccumulator;
 				
@@ -457,7 +443,6 @@ final class Flip1CoinMK12b$MultiThreadCPU extends org.sandwood.runtime.internal.
 			double cv$accumulator = 0.0;
 			if((!guard1 && (guard2 <= 2))) {
 				cv$accumulator = logProbability$sample28;
-				logProbability$var23 = logProbability$sample28;
 				
 				// Update the variable probability
 				logProbability$bias = (logProbability$bias + logProbability$sample28);
@@ -521,11 +506,6 @@ final class Flip1CoinMK12b$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = cv$distributionAccumulator;
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var30 = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample35 = cv$distributionAccumulator;
 				
@@ -555,7 +535,6 @@ final class Flip1CoinMK12b$MultiThreadCPU extends org.sandwood.runtime.internal.
 			double cv$accumulator = 0.0;
 			if((!guard1 && !(guard2 <= 2))) {
 				cv$accumulator = logProbability$sample35;
-				logProbability$var30 = logProbability$sample35;
 				
 				// Update the variable probability
 				logProbability$bias = (logProbability$bias + logProbability$sample35);
@@ -1118,16 +1097,13 @@ final class Flip1CoinMK12b$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var13 = Double.NaN;
 		logProbability$var14 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample16)
 			logProbability$sample16 = Double.NaN;
-		logProbability$var23 = Double.NaN;
 		logProbability$var26 = 0.0;
 		if(!fixedProbFlag$sample28)
 			logProbability$sample28 = Double.NaN;
-		logProbability$var30 = Double.NaN;
 		logProbability$var33 = 0.0;
 		if(!fixedProbFlag$sample35)
 			logProbability$sample35 = Double.NaN;

@@ -21,9 +21,7 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$guard;
 	private double logProbability$sample16;
 	private double logProbability$value;
-	private double logProbability$var13;
 	private double logProbability$var14;
-	private double logProbability$var17;
 	private double observedValue;
 	private boolean system$gibbsForward = true;
 	private double value;
@@ -274,8 +272,6 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var13 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$var14 = (logProbability$var14 + cv$accumulator);
@@ -327,8 +323,6 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				}
 			}
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var13 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$var14 = (logProbability$var14 + cv$accumulator);
@@ -401,7 +395,6 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var17 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$value = cv$sampleProbability;
@@ -423,7 +416,6 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$sampleValue = logProbability$value;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var17 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1197,12 +1189,10 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample4)
 			logProbability$guard = Double.NaN;
-		logProbability$var13 = Double.NaN;
 		logProbability$var14 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample16)
 			logProbability$sample16 = Double.NaN;
-		logProbability$var17 = 0.0;
 		if(!fixedProbFlag$sample20)
 			logProbability$value = Double.NaN;
 	}

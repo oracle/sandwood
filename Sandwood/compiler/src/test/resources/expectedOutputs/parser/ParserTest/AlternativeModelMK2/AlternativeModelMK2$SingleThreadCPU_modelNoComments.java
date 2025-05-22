@@ -14,7 +14,6 @@ final class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.int
 	private double logProbability$bias;
 	private double logProbability$binomial;
 	private double logProbability$positiveCount;
-	private double logProbability$var5;
 	private int observedPositiveCount;
 	private int observedSampleCount;
 	private int positiveCount;
@@ -130,7 +129,6 @@ final class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.int
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var5 = cv$sampleAccumulator;
 			logProbability$bias = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample6)
@@ -142,7 +140,6 @@ final class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.int
 			double cv$sampleValue = logProbability$bias;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var5 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample6)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -278,7 +275,6 @@ final class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.int
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var5 = 0.0;
 		if(!fixedProbFlag$sample6)
 			logProbability$bias = Double.NaN;
 		logProbability$binomial = 0.0;

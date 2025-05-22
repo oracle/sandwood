@@ -23,12 +23,8 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$$model;
 	private double logProbability$phi;
 	private double logProbability$theta;
-	private double logProbability$var30;
 	private double logProbability$var42;
-	private double logProbability$var44;
 	private double logProbability$var57;
-	private double logProbability$var87;
-	private double logProbability$var90;
 	private double logProbability$var91;
 	private double logProbability$w;
 	private double logProbability$z;
@@ -296,8 +292,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var30 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -335,8 +329,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$sampleValue = logProbability$var42;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var30 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$phi = (logProbability$phi + cv$accumulator);
@@ -414,8 +406,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var44 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -453,8 +443,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$sampleValue = logProbability$var57;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var44 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$theta = (logProbability$theta + cv$accumulator);
@@ -533,8 +521,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Add the probability of this instance of the random variable to the probability
 		// of all instances of the random variable.
 		cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-		if(cv$sampleReached)
-			logProbability$var87 = cv$sampleAccumulator;
 		
 		// Only update the sample if it was reached, otherwise the NaN will be
 		// erroneously over written.
@@ -610,8 +596,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Add the probability of this instance of the random variable to the probability
 		// of all instances of the random variable.
 		cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-		if(cv$sampleReached)
-			logProbability$var90 = cv$sampleAccumulator;
 		
 		// Only update the sample if it was reached, otherwise the NaN will be
 		// erroneously over written.
@@ -1461,17 +1445,13 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var30 = Double.NaN;
 		logProbability$phi = 0.0;
 		if(!fixedProbFlag$sample42)
 			logProbability$var42 = Double.NaN;
-		logProbability$var44 = Double.NaN;
 		logProbability$theta = 0.0;
 		if(!fixedProbFlag$sample58)
 			logProbability$var57 = Double.NaN;
-		logProbability$var87 = Double.NaN;
 		logProbability$z = Double.NaN;
-		logProbability$var90 = Double.NaN;
 		logProbability$w = 0.0;
 		logProbability$var91 = Double.NaN;
 	}

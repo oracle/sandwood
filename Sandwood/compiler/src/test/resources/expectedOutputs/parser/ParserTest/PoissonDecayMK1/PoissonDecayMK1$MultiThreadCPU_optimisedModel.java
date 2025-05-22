@@ -21,7 +21,6 @@ final class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal
 	private double logProbability$poisson;
 	private double logProbability$rate;
 	private double logProbability$var19;
-	private double logProbability$var5;
 	private double rate;
 	private int samples;
 	private boolean system$gibbsForward = true;
@@ -276,11 +275,6 @@ final class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityGamma(rate, a, b);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var5 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$rate = cv$distributionAccumulator;
 			
@@ -325,8 +319,6 @@ final class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var5 = logProbability$rate;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -468,7 +460,6 @@ final class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var5 = 0.0;
 		if(!fixedProbFlag$sample6)
 			logProbability$rate = Double.NaN;
 		logProbability$poisson = Double.NaN;

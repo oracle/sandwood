@@ -22,9 +22,6 @@ final class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	private double logProbability$$model;
 	private double logProbability$d;
 	private double logProbability$obs;
-	private double logProbability$var44;
-	private double logProbability$var47;
-	private double logProbability$var49;
 	private double logProbability$var62;
 	private double logProbability$y;
 	private int[] obs;
@@ -248,7 +245,6 @@ final class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var44 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$y = cv$sampleProbability;
@@ -274,7 +270,6 @@ final class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$sampleValue = logProbability$y;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var44 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -361,7 +356,6 @@ final class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var47 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$d = cv$sampleProbability;
@@ -387,7 +381,6 @@ final class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$sampleValue = logProbability$d;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var47 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -479,8 +472,6 @@ final class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var49 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -514,8 +505,6 @@ final class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$sampleValue = logProbability$var62;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var49 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$obs = (logProbability$obs + cv$accumulator);
@@ -1142,13 +1131,10 @@ final class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var44 = 0.0;
 		if(!fixedProbFlag$sample47)
 			logProbability$y = Double.NaN;
-		logProbability$var47 = 0.0;
 		if(!fixedProbFlag$sample50)
 			logProbability$d = Double.NaN;
-		logProbability$var49 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample64)
 			logProbability$var62 = Double.NaN;

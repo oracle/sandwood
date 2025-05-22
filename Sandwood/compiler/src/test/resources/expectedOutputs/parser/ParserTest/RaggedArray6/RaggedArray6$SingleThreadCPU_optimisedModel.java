@@ -20,9 +20,6 @@ final class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$$model;
 	private double logProbability$d;
 	private double logProbability$obs;
-	private double logProbability$var44;
-	private double logProbability$var47;
-	private double logProbability$var50;
 	private double logProbability$var63;
 	private double logProbability$y;
 	private boolean[] obs;
@@ -239,11 +236,6 @@ final class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (((0.0 <= y) && (y < 2))?Math.log(b[y]):Double.NEGATIVE_INFINITY);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var44 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$y = cv$distributionAccumulator;
 			
@@ -288,8 +280,6 @@ final class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var44 = logProbability$y;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -346,11 +336,6 @@ final class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_4);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var47 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$d = cv$distributionAccumulator;
 			
@@ -395,8 +380,6 @@ final class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var47 = logProbability$d;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -439,7 +422,6 @@ final class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((obs[var62]?var49:(1.0 - var49))));
 			}
-			logProbability$var50 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var63 = cv$sampleAccumulator;
@@ -474,8 +456,6 @@ final class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var50 = logProbability$var63;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -1199,13 +1179,10 @@ final class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var44 = 0.0;
 		if(!fixedProbFlag$sample47)
 			logProbability$y = Double.NaN;
-		logProbability$var47 = 0.0;
 		if(!fixedProbFlag$sample50)
 			logProbability$d = Double.NaN;
-		logProbability$var50 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample65)
 			logProbability$var63 = Double.NaN;

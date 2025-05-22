@@ -25,13 +25,8 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 	private double logProbability$mean1;
 	private double logProbability$mean2;
 	private double logProbability$priorSigma2;
-	private double logProbability$var14;
-	private double logProbability$var20;
-	private double logProbability$var34;
 	private double logProbability$var35;
-	private double logProbability$var38;
 	private double logProbability$var39;
-	private double logProbability$var8;
 	private double mean1;
 	private double mean2;
 	private int n;
@@ -335,7 +330,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var14 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$mean1 = cv$sampleProbability;
@@ -361,7 +355,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			double cv$sampleValue = logProbability$mean1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var14 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -432,7 +425,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var20 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$mean2 = cv$sampleProbability;
@@ -458,7 +450,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			double cv$sampleValue = logProbability$mean2;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var20 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -533,8 +524,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var34 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -568,8 +557,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			double cv$sampleValue = logProbability$var35;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var34 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$amounts1 = (logProbability$amounts1 + cv$accumulator);
@@ -643,8 +630,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var38 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -690,8 +675,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			double cv$sampleValue = logProbability$var39;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var38 = cv$rvAccumulator;
 			
 			// Guard to ensure that amounts2 is only updated once for this probability.
 			boolean cv$guard$amounts2 = false;
@@ -772,7 +755,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var8 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$priorSigma2 = cv$sampleProbability;
@@ -798,7 +780,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			double cv$sampleValue = logProbability$priorSigma2;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var8 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1293,20 +1274,15 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var8 = 0.0;
 		if(!fixedProbFlag$sample9)
 			logProbability$priorSigma2 = Double.NaN;
-		logProbability$var14 = 0.0;
 		if(!fixedProbFlag$sample15)
 			logProbability$mean1 = Double.NaN;
-		logProbability$var20 = 0.0;
 		if(!fixedProbFlag$sample21)
 			logProbability$mean2 = Double.NaN;
-		logProbability$var34 = Double.NaN;
 		logProbability$amounts1 = 0.0;
 		if(!fixedProbFlag$sample35)
 			logProbability$var35 = Double.NaN;
-		logProbability$var38 = Double.NaN;
 		logProbability$amounts2 = 0.0;
 		if(!fixedProbFlag$sample39)
 			logProbability$var39 = Double.NaN;

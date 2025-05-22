@@ -16,7 +16,6 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 	private double logProbability$b2;
 	private double logProbability$output;
 	private double logProbability$prior;
-	private double logProbability$var16;
 	private double logProbability$var38;
 	private double logProbability$var51;
 	private boolean[] observed;
@@ -150,7 +149,6 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var16 = cv$sampleAccumulator;
 			logProbability$prior = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample17)
@@ -162,7 +160,6 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 			double cv$sampleValue = logProbability$prior;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var16 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample17)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -538,7 +535,6 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
 			logProbability$prior = Double.NaN;
 		logProbability$b1 = Double.NaN;

@@ -19,11 +19,9 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$b;
 	private double logProbability$bernoulli;
 	private double logProbability$bias;
-	private double logProbability$c;
 	private double logProbability$flips;
 	private double logProbability$sample8;
 	private double logProbability$var47;
-	private double logProbability$var7;
 	private int samples;
 	private boolean system$gibbsForward = true;
 
@@ -218,10 +216,8 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var7 = cv$sampleAccumulator;
 			logProbability$sample8 = cv$sampleProbability;
 			boolean cv$guard$bias = false;
-			boolean cv$guard$c = false;
 			logProbability$b = (logProbability$b + cv$accumulator);
 			{
 				if(guard1) {
@@ -255,22 +251,6 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 					}
 				}
 			}
-			{
-				if(!guard1) {
-					if(!cv$guard$c) {
-						cv$guard$c = true;
-						logProbability$c = (logProbability$c + cv$accumulator);
-					}
-				}
-			}
-			{
-				if(!guard1) {
-					if(!cv$guard$c) {
-						cv$guard$c = true;
-						logProbability$c = (logProbability$c + cv$accumulator);
-					}
-				}
-			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample8)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -281,9 +261,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 			double cv$sampleValue = logProbability$sample8;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var7 = cv$rvAccumulator;
 			boolean cv$guard$bias = false;
-			boolean cv$guard$c = false;
 			logProbability$b = (logProbability$b + cv$accumulator);
 			{
 				if(guard1) {
@@ -314,22 +292,6 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 								}
 							}
 						}
-					}
-				}
-			}
-			{
-				if(!guard1) {
-					if(!cv$guard$c) {
-						cv$guard$c = true;
-						logProbability$c = (logProbability$c + cv$accumulator);
-					}
-				}
-			}
-			{
-				if(!guard1) {
-					if(!cv$guard$c) {
-						cv$guard$c = true;
-						logProbability$c = (logProbability$c + cv$accumulator);
 					}
 				}
 			}
@@ -889,9 +851,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var7 = 0.0;
 		logProbability$b = 0.0;
-		logProbability$c = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample8)
 			logProbability$sample8 = Double.NaN;

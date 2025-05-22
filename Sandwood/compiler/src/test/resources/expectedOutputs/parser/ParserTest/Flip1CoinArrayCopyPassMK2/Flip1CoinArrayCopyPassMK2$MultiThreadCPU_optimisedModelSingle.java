@@ -20,7 +20,6 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	private double logProbability$flips;
 	private double logProbability$var10;
 	private double logProbability$var31;
-	private double logProbability$var9;
 	private int samples;
 	private boolean system$gibbsForward = true;
 
@@ -180,11 +179,6 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(bias[0], 1.0, 1.0);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var9 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$var10 = cv$distributionAccumulator;
 			
@@ -245,8 +239,6 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var9 = logProbability$var10;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -570,7 +562,6 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var9 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample10)
 			logProbability$var10 = Double.NaN;

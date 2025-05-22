@@ -30,13 +30,8 @@ final class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double[][][] logProbability$sample122;
 	private double[][][] logProbability$sample189;
 	private double logProbability$st;
-	private double[][][] logProbability$var118;
-	private double logProbability$var16;
-	private double[][][] logProbability$var183;
 	private double logProbability$var28;
-	private double logProbability$var32;
 	private double logProbability$var44;
-	private double logProbability$var78;
 	private double logProbability$var79;
 	private double[][] m;
 	private int samples;
@@ -214,7 +209,6 @@ final class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 						int cv$sampleValue = st[i$var95][j$var104][k];
 						double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 2))?Math.log(m[0][cv$sampleValue]):Double.NEGATIVE_INFINITY);
 						cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-						logProbability$var118[(i$var95 - 1)][j$var104][k] = cv$distributionAccumulator;
 						logProbability$sample122[(i$var95 - 1)][j$var104][k] = cv$distributionAccumulator;
 					}
 				}
@@ -228,11 +222,8 @@ final class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$accumulator = 0.0;
 			for(int i$var95 = 1; i$var95 < samples; i$var95 += 1) {
 				for(int j$var104 = 0; j$var104 < samples; j$var104 += 1) {
-					for(int k = 0; k < samples; k += 1) {
-						double cv$rvAccumulator = logProbability$sample122[(i$var95 - 1)][j$var104][k];
-						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-						logProbability$var118[(i$var95 - 1)][j$var104][k] = cv$rvAccumulator;
-					}
+					for(int k = 0; k < samples; k += 1)
+						cv$accumulator = (cv$accumulator + logProbability$sample122[(i$var95 - 1)][j$var104][k]);
 				}
 			}
 			logProbability$st = (logProbability$st + cv$accumulator);
@@ -251,7 +242,6 @@ final class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 						double var182 = bias[st[p][l][n]];
 						double cv$distributionAccumulator = Math.log((flips[l][n][p]?var182:(1.0 - var182)));
 						cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-						logProbability$var183[l][p][n] = cv$distributionAccumulator;
 						logProbability$sample189[l][p][n] = cv$distributionAccumulator;
 					}
 				}
@@ -264,11 +254,8 @@ final class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$accumulator = 0.0;
 			for(int l = 0; l < samples; l += 1) {
 				for(int p = 0; p < samples; p += 1) {
-					for(int n = 0; n < samples; n += 1) {
-						double cv$rvAccumulator = logProbability$sample189[l][p][n];
-						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-						logProbability$var183[l][p][n] = cv$rvAccumulator;
-					}
+					for(int n = 0; n < samples; n += 1)
+						cv$accumulator = (cv$accumulator + logProbability$sample189[l][p][n]);
 				}
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -280,7 +267,6 @@ final class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private final void logProbabilityValue$sample28() {
 		if(!fixedProbFlag$sample28) {
 			double cv$sampleAccumulator = (DistributionSampling.logProbabilityDirichlet(m[0], v, 2) + DistributionSampling.logProbabilityDirichlet(m[1], v, 2));
-			logProbability$var16 = cv$sampleAccumulator;
 			logProbability$var28 = cv$sampleAccumulator;
 			logProbability$m = (logProbability$m + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
@@ -288,7 +274,6 @@ final class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
 			fixedProbFlag$sample28 = fixedFlag$sample28;
 		} else {
-			logProbability$var16 = logProbability$var28;
 			logProbability$m = (logProbability$m + logProbability$var28);
 			logProbability$$model = (logProbability$$model + logProbability$var28);
 			if(fixedFlag$sample28)
@@ -299,7 +284,6 @@ final class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private final void logProbabilityValue$sample45() {
 		if(!fixedProbFlag$sample45) {
 			double cv$sampleAccumulator = (DistributionSampling.logProbabilityBeta(bias[0], 1.0, 1.0) + DistributionSampling.logProbabilityBeta(bias[1], 1.0, 1.0));
-			logProbability$var32 = cv$sampleAccumulator;
 			logProbability$var44 = cv$sampleAccumulator;
 			logProbability$bias = (logProbability$bias + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
@@ -307,7 +291,6 @@ final class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
 			fixedProbFlag$sample45 = fixedFlag$sample45;
 		} else {
-			logProbability$var32 = logProbability$var44;
 			logProbability$bias = (logProbability$bias + logProbability$var44);
 			logProbability$$model = (logProbability$$model + logProbability$var44);
 			if(fixedFlag$sample45)
@@ -319,7 +302,6 @@ final class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedProbFlag$sample82) {
 			int cv$sampleValue = st[0][0][0];
 			double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 2))?Math.log(m[0][cv$sampleValue]):Double.NEGATIVE_INFINITY);
-			logProbability$var78 = cv$distributionAccumulator;
 			logProbability$var79 = cv$distributionAccumulator;
 			logProbability$st = (logProbability$st + cv$distributionAccumulator);
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -327,7 +309,6 @@ final class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample82 = (fixedFlag$sample82 && fixedFlag$sample28);
 		} else {
-			logProbability$var78 = logProbability$var79;
 			logProbability$st = (logProbability$st + logProbability$var79);
 			logProbability$$model = (logProbability$$model + logProbability$var79);
 			if(fixedFlag$sample82)
@@ -474,26 +455,12 @@ final class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			for(int j$var144 = 0; j$var144 < length$flipsMeasured.length; j$var144 += 1)
 				subarray$0[j$var144] = new boolean[length$flipsMeasured.length];
 		}
-		logProbability$var118 = new double[(length$flipsMeasured.length - 1)][][];
-		for(int i$var95 = 1; i$var95 < length$flipsMeasured.length; i$var95 += 1) {
-			double[][] subarray$0 = new double[length$flipsMeasured.length][];
-			logProbability$var118[(i$var95 - 1)] = subarray$0;
-			for(int j$var104 = 0; j$var104 < length$flipsMeasured.length; j$var104 += 1)
-				subarray$0[j$var104] = new double[length$flipsMeasured.length];
-		}
 		logProbability$sample122 = new double[(length$flipsMeasured.length - 1)][][];
 		for(int i$var95 = 1; i$var95 < length$flipsMeasured.length; i$var95 += 1) {
 			double[][] subarray$0 = new double[length$flipsMeasured.length][];
 			logProbability$sample122[(i$var95 - 1)] = subarray$0;
 			for(int j$var104 = 0; j$var104 < length$flipsMeasured.length; j$var104 += 1)
 				subarray$0[j$var104] = new double[length$flipsMeasured.length];
-		}
-		logProbability$var183 = new double[length$flipsMeasured.length][][];
-		for(int l = 0; l < length$flipsMeasured.length; l += 1) {
-			double[][] subarray$0 = new double[length$flipsMeasured.length][];
-			logProbability$var183[l] = subarray$0;
-			for(int p = 0; p < length$flipsMeasured.length; p += 1)
-				subarray$0[p] = new double[length$flipsMeasured.length];
 		}
 		logProbability$sample189 = new double[length$flipsMeasured.length][][];
 		for(int l = 0; l < length$flipsMeasured.length; l += 1) {
@@ -882,36 +849,21 @@ final class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
 			logProbability$var28 = Double.NaN;
-		logProbability$var32 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample45)
 			logProbability$var44 = Double.NaN;
-		logProbability$var78 = 0.0;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample82)
 			logProbability$var79 = Double.NaN;
-		for(int i$var95 = 1; i$var95 < samples; i$var95 += 1) {
-			for(int j$var104 = 0; j$var104 < samples; j$var104 += 1) {
-				for(int k = 0; k < samples; k += 1)
-					logProbability$var118[(i$var95 - 1)][j$var104][k] = Double.NaN;
-			}
-		}
 		if(!fixedProbFlag$sample122) {
 			for(int i$var95 = 1; i$var95 < samples; i$var95 += 1) {
 				for(int j$var104 = 0; j$var104 < samples; j$var104 += 1) {
 					for(int k = 0; k < samples; k += 1)
 						logProbability$sample122[(i$var95 - 1)][j$var104][k] = Double.NaN;
 				}
-			}
-		}
-		for(int l = 0; l < samples; l += 1) {
-			for(int p = 0; p < samples; p += 1) {
-				for(int n = 0; n < samples; n += 1)
-					logProbability$var183[l][p][n] = Double.NaN;
 			}
 		}
 		logProbability$flips = 0.0;

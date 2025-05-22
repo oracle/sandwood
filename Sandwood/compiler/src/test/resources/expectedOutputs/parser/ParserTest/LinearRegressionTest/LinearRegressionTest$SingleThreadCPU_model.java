@@ -19,14 +19,9 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$bias;
-	private double logProbability$phi;
 	private double[] logProbability$sample24;
 	private double[] logProbability$sample74;
 	private double logProbability$tau;
-	private double logProbability$var12;
-	private double logProbability$var30;
-	private double logProbability$var34;
-	private double[] logProbability$var72;
 	private double logProbability$weights;
 	private double logProbability$y;
 	private int n;
@@ -313,36 +308,11 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 				
 				// Store the sample task probability
 				logProbability$sample24[((var23 - 0) / 1)] = cv$sampleProbability;
-				
-				// Guard to ensure that phi is only updated once for this probability.
-				boolean cv$guard$phi = false;
-				
-				// Add probability to constructed variables that have guards, so need per sample probabilities
-				// from the combined probability
-				// 
-				// Looking for a path between Sample 24 and consumer double[] 60.
-				{
-					for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
-						if((var23 == j$var55)) {
-							for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-								// If the probability of the variable has not already been updated
-								if(!cv$guard$phi) {
-									// Set the guard so the update is only applied once.
-									cv$guard$phi = true;
-									
-									// Update the variable probability
-									logProbability$phi = (logProbability$phi + cv$sampleProbability);
-								}
-							}
-						}
-					}
-				}
 			}
 			
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var12 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$weights = (logProbability$weights + cv$accumulator);
@@ -374,33 +344,8 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 				
 				// Record that the sample was reached.
 				cv$sampleReached = true;
-				
-				// Guard to ensure that phi is only updated once for this probability.
-				boolean cv$guard$phi = false;
-				
-				// Add probability to constructed variables that have guards, so need per sample probabilities
-				// from the combined probability
-				// 
-				// Looking for a path between Sample 24 and consumer double[] 60.
-				{
-					for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
-						if((var23 == j$var55)) {
-							for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-								// If the probability of the variable has not already been updated
-								if(!cv$guard$phi) {
-									// Set the guard so the update is only applied once.
-									cv$guard$phi = true;
-									
-									// Update the variable probability
-									logProbability$phi = (logProbability$phi + cv$sampleValue);
-								}
-							}
-						}
-					}
-				}
 			}
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var12 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$weights = (logProbability$weights + cv$accumulator);
@@ -474,7 +419,6 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var30 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$bias = cv$sampleProbability;
@@ -500,7 +444,6 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			double cv$sampleValue = logProbability$bias;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var30 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -571,7 +514,6 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var34 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$tau = cv$sampleProbability;
@@ -597,7 +539,6 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			double cv$sampleValue = logProbability$tau;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var34 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -693,7 +634,6 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var72[((i$var45 - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample74[((i$var45 - 0) / 1)] = cv$sampleProbability;
@@ -726,7 +666,6 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var72[((i$var45 - 0) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -1039,11 +978,6 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			logProbability$sample24 = new double[((((x[0].length - 1) - 0) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$var72
-		{
-			logProbability$var72 = new double[((((x.length - 1) - 0) / 1) + 1)];
-		}
-		
 		// Constructor for logProbability$sample74
 		{
 			logProbability$sample74 = new double[((((x.length - 1) - 0) / 1) + 1)];
@@ -1237,21 +1171,15 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var12 = Double.NaN;
 		logProbability$weights = 0.0;
-		logProbability$phi = 0.0;
 		if(!fixedProbFlag$sample24) {
 			for(int var23 = 0; var23 < k; var23 += 1)
 				logProbability$sample24[((var23 - 0) / 1)] = Double.NaN;
 		}
-		logProbability$var30 = 0.0;
 		if(!fixedProbFlag$sample31)
 			logProbability$bias = Double.NaN;
-		logProbability$var34 = 0.0;
 		if(!fixedProbFlag$sample35)
 			logProbability$tau = Double.NaN;
-		for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
-			logProbability$var72[((i$var45 - 0) / 1)] = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample74) {
 			for(int i$var45 = 0; i$var45 < n; i$var45 += 1)

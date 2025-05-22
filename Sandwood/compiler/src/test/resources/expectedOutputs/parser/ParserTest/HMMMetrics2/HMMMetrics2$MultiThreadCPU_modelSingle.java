@@ -47,22 +47,13 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private double logProbability$metric_valid_g;
 	private double logProbability$metric_var;
 	private double logProbability$st;
-	private double logProbability$var101;
 	private double logProbability$var102;
-	private double logProbability$var120;
 	private double logProbability$var121;
-	private double logProbability$var140;
 	private double logProbability$var141;
-	private double logProbability$var150;
 	private double logProbability$var151;
-	private double logProbability$var18;
-	private double logProbability$var20;
 	private double logProbability$var32;
-	private double logProbability$var39;
 	private double logProbability$var51;
-	private double logProbability$var55;
 	private double logProbability$var67;
-	private double logProbability$var71;
 	private double logProbability$var83;
 	private double[][] m;
 	private double[][] metric;
@@ -622,8 +613,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				if(cv$sampleReached)
-					logProbability$var101 = cv$sampleAccumulator;
 				
 				// Only update the sample if it was reached, otherwise the NaN will be
 				// erroneously over written.
@@ -664,8 +653,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$var102;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var101 = cv$rvAccumulator;
 			
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
 			if(fixedFlag$sample104)
@@ -919,8 +906,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				if(cv$sampleReached)
-					logProbability$var120 = cv$sampleAccumulator;
 				
 				// Only update the sample if it was reached, otherwise the NaN will be
 				// erroneously over written.
@@ -963,8 +948,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$var121;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var120 = cv$rvAccumulator;
 			
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
 			if(fixedFlag$sample123)
@@ -1181,8 +1164,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var140 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -1233,8 +1214,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$var141;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var140 = cv$rvAccumulator;
 			
 			// Guard to ensure that metric_valid_g is only updated once for this probability.
 			boolean cv$guard$metric_valid_g = false;
@@ -1962,8 +1941,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var150 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -2013,8 +1990,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$var151;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var150 = cv$rvAccumulator;
 			
 			// Guard to ensure that metric_g is only updated once for this probability.
 			boolean cv$guard$metric_g = false;
@@ -2103,8 +2078,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var101 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -2142,8 +2115,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$var102;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var101 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$st = (logProbability$st + cv$accumulator);
@@ -2231,8 +2202,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var120 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -2272,8 +2241,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$var121;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var120 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$st = (logProbability$st + cv$accumulator);
@@ -2355,8 +2322,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var140 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -2407,8 +2372,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$var141;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var140 = cv$rvAccumulator;
 			
 			// Guard to ensure that metric_valid_g is only updated once for this probability.
 			boolean cv$guard$metric_valid_g = false;
@@ -2504,8 +2467,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var150 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -2555,8 +2516,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$var151;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var150 = cv$rvAccumulator;
 			
 			// Guard to ensure that metric_g is only updated once for this probability.
 			boolean cv$guard$metric_g = false;
@@ -2635,7 +2594,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var18 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$initialStateDistribution = cv$sampleProbability;
@@ -2661,7 +2619,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$initialStateDistribution;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var18 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -2736,8 +2693,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var20 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -2775,8 +2730,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$var32;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var20 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$m = (logProbability$m + cv$accumulator);
@@ -2857,8 +2810,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var39 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -2896,8 +2847,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$var51;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var39 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$metric_mean = (logProbability$metric_mean + cv$accumulator);
@@ -2978,8 +2927,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var55 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -3017,8 +2964,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$var67;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var55 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$metric_var = (logProbability$metric_var + cv$accumulator);
@@ -3099,8 +3044,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var71 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -3138,8 +3081,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$var83;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var71 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$metric_valid_bias = (logProbability$metric_valid_bias + cv$accumulator);
@@ -10550,38 +10491,29 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var18 = 0.0;
 		if(!fixedProbFlag$sample19)
 			logProbability$initialStateDistribution = Double.NaN;
-		logProbability$var20 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample32)
 			logProbability$var32 = Double.NaN;
-		logProbability$var39 = Double.NaN;
 		logProbability$metric_mean = 0.0;
 		if(!fixedProbFlag$sample52)
 			logProbability$var51 = Double.NaN;
-		logProbability$var55 = Double.NaN;
 		logProbability$metric_var = 0.0;
 		if(!fixedProbFlag$sample68)
 			logProbability$var67 = Double.NaN;
-		logProbability$var71 = Double.NaN;
 		logProbability$metric_valid_bias = 0.0;
 		if(!fixedProbFlag$sample84)
 			logProbability$var83 = Double.NaN;
-		logProbability$var101 = Double.NaN;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample104)
 			logProbability$var102 = Double.NaN;
-		logProbability$var120 = Double.NaN;
 		if(!fixedProbFlag$sample123)
 			logProbability$var121 = Double.NaN;
-		logProbability$var140 = Double.NaN;
 		logProbability$metric_valid_1d = 0.0;
 		logProbability$metric_valid_g = 0.0;
 		if(!fixedProbFlag$sample145)
 			logProbability$var141 = Double.NaN;
-		logProbability$var150 = Double.NaN;
 		logProbability$metric_g = 0.0;
 		if(!fixedProbFlag$sample157)
 			logProbability$var151 = Double.NaN;

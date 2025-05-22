@@ -19,8 +19,6 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private double logProbability$generated;
 	private double logProbability$indirection;
 	private double logProbability$sample;
-	private double logProbability$var19;
-	private double logProbability$var23;
 	private double logProbability$var24;
 	private double[] observed;
 	private double[] sample;
@@ -205,8 +203,6 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var19 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -256,8 +252,6 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$sample;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var19 = cv$rvAccumulator;
 			
 			// Guard to ensure that indirection is only updated once for this probability.
 			boolean cv$guard$indirection = false;
@@ -349,8 +343,6 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var23 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -384,8 +376,6 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$sampleValue = logProbability$var24;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var23 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$generated = (logProbability$generated + cv$accumulator);
@@ -867,11 +857,9 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var19 = Double.NaN;
 		logProbability$indirection = 0.0;
 		if(!fixedProbFlag$sample20)
 			logProbability$sample = Double.NaN;
-		logProbability$var23 = Double.NaN;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample24)
 			logProbability$var24 = Double.NaN;

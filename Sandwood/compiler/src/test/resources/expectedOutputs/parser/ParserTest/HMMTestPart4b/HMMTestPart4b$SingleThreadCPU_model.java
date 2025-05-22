@@ -31,13 +31,8 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double[][][] logProbability$sample122;
 	private double[][][] logProbability$sample189;
 	private double logProbability$st;
-	private double[][][] logProbability$var118;
-	private double logProbability$var16;
-	private double[][][] logProbability$var183;
 	private double logProbability$var28;
-	private double logProbability$var32;
 	private double logProbability$var44;
-	private double logProbability$var78;
 	private double logProbability$var79;
 	private double[][] m;
 	private int samples;
@@ -362,7 +357,6 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 						// Add the probability of this instance of the random variable to the probability
 						// of all instances of the random variable.
 						cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-						logProbability$var118[((i$var95 - 1) / 1)][((j$var104 - 0) / 1)][((k - 0) / 1)] = cv$sampleAccumulator;
 						
 						// Store the sample task probability
 						logProbability$sample122[((i$var95 - 1) / 1)][((j$var104 - 0) / 1)][((k - 0) / 1)] = cv$sampleProbability;
@@ -403,7 +397,6 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 						// Record that the sample was reached.
 						cv$sampleReached = true;
 						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-						logProbability$var118[((i$var95 - 1) / 1)][((j$var104 - 0) / 1)][((k - 0) / 1)] = cv$rvAccumulator;
 					}
 				}
 			}
@@ -487,7 +480,6 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 						// Add the probability of this instance of the random variable to the probability
 						// of all instances of the random variable.
 						cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-						logProbability$var183[((l - 0) / 1)][((p - 0) / 1)][((n - 0) / 1)] = cv$sampleAccumulator;
 						
 						// Store the sample task probability
 						logProbability$sample189[((l - 0) / 1)][((p - 0) / 1)][((n - 0) / 1)] = cv$sampleProbability;
@@ -524,7 +516,6 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 						// Record that the sample was reached.
 						cv$sampleReached = true;
 						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-						logProbability$var183[((l - 0) / 1)][((p - 0) / 1)][((n - 0) / 1)] = cv$rvAccumulator;
 					}
 				}
 			}
@@ -601,7 +592,6 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var16 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var28 = cv$sampleAccumulator;
@@ -636,7 +626,6 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 			double cv$sampleValue = logProbability$var28;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var16 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$m = (logProbability$m + cv$accumulator);
@@ -717,7 +706,6 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var32 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var44 = cv$sampleAccumulator;
@@ -752,7 +740,6 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 			double cv$sampleValue = logProbability$var44;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var32 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$bias = (logProbability$bias + cv$accumulator);
@@ -825,7 +812,6 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var78 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$var79 = cv$sampleProbability;
@@ -854,7 +840,6 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 			double cv$sampleValue = logProbability$var79;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var78 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$st = (logProbability$st + cv$accumulator);
@@ -1511,17 +1496,6 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 			}
 		}
 		
-		// Constructor for logProbability$var118
-		{
-			logProbability$var118 = new double[((((length$flipsMeasured.length - 1) - 1) / 1) + 1)][][];
-			for(int i$var95 = 1; i$var95 < length$flipsMeasured.length; i$var95 += 1) {
-				double[][] subarray$0 = new double[((((length$flipsMeasured.length - 1) - 0) / 1) + 1)][];
-				logProbability$var118[((i$var95 - 1) / 1)] = subarray$0;
-				for(int j$var104 = 0; j$var104 < length$flipsMeasured.length; j$var104 += 1)
-					subarray$0[((j$var104 - 0) / 1)] = new double[((((length$flipsMeasured.length - 1) - 0) / 1) + 1)];
-			}
-		}
-		
 		// Constructor for logProbability$sample122
 		{
 			logProbability$sample122 = new double[((((length$flipsMeasured.length - 1) - 1) / 1) + 1)][][];
@@ -1530,17 +1504,6 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 				logProbability$sample122[((i$var95 - 1) / 1)] = subarray$0;
 				for(int j$var104 = 0; j$var104 < length$flipsMeasured.length; j$var104 += 1)
 					subarray$0[((j$var104 - 0) / 1)] = new double[((((length$flipsMeasured.length - 1) - 0) / 1) + 1)];
-			}
-		}
-		
-		// Constructor for logProbability$var183
-		{
-			logProbability$var183 = new double[((((length$flipsMeasured.length - 1) - 0) / 1) + 1)][][];
-			for(int l = 0; l < length$flipsMeasured.length; l += 1) {
-				double[][] subarray$0 = new double[((((length$flipsMeasured.length - 1) - 0) / 1) + 1)][];
-				logProbability$var183[((l - 0) / 1)] = subarray$0;
-				for(int p = 0; p < length$flipsMeasured.length; p += 1)
-					subarray$0[((p - 0) / 1)] = new double[((((length$flipsMeasured.length - 1) - 0) / 1) + 1)];
 			}
 		}
 		
@@ -1793,36 +1756,21 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
 			logProbability$var28 = Double.NaN;
-		logProbability$var32 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample45)
 			logProbability$var44 = Double.NaN;
-		logProbability$var78 = 0.0;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample82)
 			logProbability$var79 = Double.NaN;
-		for(int i$var95 = 1; i$var95 < samples; i$var95 += 1) {
-			for(int j$var104 = 0; j$var104 < samples; j$var104 += 1) {
-				for(int k = 0; k < samples; k += 1)
-					logProbability$var118[((i$var95 - 1) / 1)][((j$var104 - 0) / 1)][((k - 0) / 1)] = Double.NaN;
-			}
-		}
 		if(!fixedProbFlag$sample122) {
 			for(int i$var95 = 1; i$var95 < samples; i$var95 += 1) {
 				for(int j$var104 = 0; j$var104 < samples; j$var104 += 1) {
 					for(int k = 0; k < samples; k += 1)
 						logProbability$sample122[((i$var95 - 1) / 1)][((j$var104 - 0) / 1)][((k - 0) / 1)] = Double.NaN;
 				}
-			}
-		}
-		for(int l = 0; l < samples; l += 1) {
-			for(int p = 0; p < samples; p += 1) {
-				for(int n = 0; n < samples; n += 1)
-					logProbability$var183[((l - 0) / 1)][((p - 0) / 1)][((n - 0) / 1)] = Double.NaN;
 			}
 		}
 		logProbability$flips = 0.0;

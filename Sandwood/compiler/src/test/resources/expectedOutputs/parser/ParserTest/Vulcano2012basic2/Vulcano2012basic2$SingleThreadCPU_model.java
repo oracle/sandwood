@@ -32,11 +32,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 	private double[] logProbability$sample82;
 	private double logProbability$sum;
 	private double logProbability$ut;
-	private double[] logProbability$var145;
-	private double[] logProbability$var25;
-	private double[] logProbability$var80;
-	private double logProbability$weekly_rates;
-	private double logProbability$weekly_ut;
 	private int noProducts;
 	private double r;
 	private int[] sales_sum;
@@ -309,7 +304,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var145[((t$var105 - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample149[((t$var105 - 0) / 1)] = cv$sampleProbability;
@@ -342,7 +336,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var145[((t$var105 - 0) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -419,7 +412,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var25[((j$var20 - 1) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample26[((j$var20 - 1) / 1)] = cv$sampleProbability;
@@ -432,12 +424,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 				
 				// Guard to ensure that expedNorm is only updated once for this probability.
 				boolean cv$guard$expedNorm = false;
-				
-				// Guard to ensure that weekly_ut is only updated once for this probability.
-				boolean cv$guard$weekly_ut = false;
-				
-				// Guard to ensure that weekly_rates is only updated once for this probability.
-				boolean cv$guard$weekly_rates = false;
 				
 				// Add probability to constructed variables that have guards, so need per sample probabilities
 				// from the combined probability
@@ -515,172 +501,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 						}
 					}
 				}
-				
-				// Looking for a path between Sample 26 and consumer double[] 121.
-				{
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							if(((0 <= j$var38) && (j$var38 < noProducts))) {
-								{
-									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-										for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-											if((j$var63 == j$var116)) {
-												for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-													// If the probability of the variable has not already been updated
-													if(!cv$guard$weekly_ut) {
-														// Set the guard so the update is only applied once.
-														cv$guard$weekly_ut = true;
-														
-														// Update the variable probability
-														logProbability$weekly_ut = (logProbability$weekly_ut + cv$sampleProbability);
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								if((j$var38 == j$var63)) {
-									for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-										if((j$var63 == j$var116)) {
-											for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-												// If the probability of the variable has not already been updated
-												if(!cv$guard$weekly_ut) {
-													// Set the guard so the update is only applied once.
-													cv$guard$weekly_ut = true;
-													
-													// Update the variable probability
-													logProbability$weekly_ut = (logProbability$weekly_ut + cv$sampleProbability);
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				
-				// Looking for a path between Sample 26 and consumer double[] 143.
-				{
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							if(((0 <= j$var38) && (j$var38 < noProducts))) {
-								{
-									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-										for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-											if((j$var63 == j$var116)) {
-												for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-													if(((0 <= j$var116) && (j$var116 < noProducts))) {
-														{
-															for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-																// If the probability of the variable has not already been updated
-																if(!cv$guard$weekly_rates) {
-																	// Set the guard so the update is only applied once.
-																	cv$guard$weekly_rates = true;
-																	
-																	// Update the variable probability
-																	logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleProbability);
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							if(((0 <= j$var38) && (j$var38 < noProducts))) {
-								{
-									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-										for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-											if((j$var63 == j$var116)) {
-												for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-													if((j$var116 == j$var140)) {
-														for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-															// If the probability of the variable has not already been updated
-															if(!cv$guard$weekly_rates) {
-																// Set the guard so the update is only applied once.
-																cv$guard$weekly_rates = true;
-																
-																// Update the variable probability
-																logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleProbability);
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								if((j$var38 == j$var63)) {
-									for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-										if((j$var63 == j$var116)) {
-											for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-												if(((0 <= j$var116) && (j$var116 < noProducts))) {
-													{
-														for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-															// If the probability of the variable has not already been updated
-															if(!cv$guard$weekly_rates) {
-																// Set the guard so the update is only applied once.
-																cv$guard$weekly_rates = true;
-																
-																// Update the variable probability
-																logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleProbability);
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								if((j$var38 == j$var63)) {
-									for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-										if((j$var63 == j$var116)) {
-											for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-												if((j$var116 == j$var140)) {
-													for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-														// If the probability of the variable has not already been updated
-														if(!cv$guard$weekly_rates) {
-															// Set the guard so the update is only applied once.
-															cv$guard$weekly_rates = true;
-															
-															// Update the variable probability
-															logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleProbability);
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
 			}
 			
 			// Update the variable probability
@@ -714,7 +534,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var25[((j$var20 - 1) / 1)] = cv$rvAccumulator;
 				
 				// Guard to ensure that exped is only updated once for this probability.
 				boolean cv$guard$exped = false;
@@ -724,12 +543,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 				
 				// Guard to ensure that expedNorm is only updated once for this probability.
 				boolean cv$guard$expedNorm = false;
-				
-				// Guard to ensure that weekly_ut is only updated once for this probability.
-				boolean cv$guard$weekly_ut = false;
-				
-				// Guard to ensure that weekly_rates is only updated once for this probability.
-				boolean cv$guard$weekly_rates = false;
 				
 				// Add probability to constructed variables that have guards, so need per sample probabilities
 				// from the combined probability
@@ -801,172 +614,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 										
 										// Update the variable probability
 										logProbability$expedNorm = (logProbability$expedNorm + cv$sampleValue);
-									}
-								}
-							}
-						}
-					}
-				}
-				
-				// Looking for a path between Sample 26 and consumer double[] 121.
-				{
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							if(((0 <= j$var38) && (j$var38 < noProducts))) {
-								{
-									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-										for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-											if((j$var63 == j$var116)) {
-												for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-													// If the probability of the variable has not already been updated
-													if(!cv$guard$weekly_ut) {
-														// Set the guard so the update is only applied once.
-														cv$guard$weekly_ut = true;
-														
-														// Update the variable probability
-														logProbability$weekly_ut = (logProbability$weekly_ut + cv$sampleValue);
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								if((j$var38 == j$var63)) {
-									for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-										if((j$var63 == j$var116)) {
-											for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-												// If the probability of the variable has not already been updated
-												if(!cv$guard$weekly_ut) {
-													// Set the guard so the update is only applied once.
-													cv$guard$weekly_ut = true;
-													
-													// Update the variable probability
-													logProbability$weekly_ut = (logProbability$weekly_ut + cv$sampleValue);
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				
-				// Looking for a path between Sample 26 and consumer double[] 143.
-				{
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							if(((0 <= j$var38) && (j$var38 < noProducts))) {
-								{
-									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-										for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-											if((j$var63 == j$var116)) {
-												for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-													if(((0 <= j$var116) && (j$var116 < noProducts))) {
-														{
-															for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-																// If the probability of the variable has not already been updated
-																if(!cv$guard$weekly_rates) {
-																	// Set the guard so the update is only applied once.
-																	cv$guard$weekly_rates = true;
-																	
-																	// Update the variable probability
-																	logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleValue);
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							if(((0 <= j$var38) && (j$var38 < noProducts))) {
-								{
-									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-										for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-											if((j$var63 == j$var116)) {
-												for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-													if((j$var116 == j$var140)) {
-														for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-															// If the probability of the variable has not already been updated
-															if(!cv$guard$weekly_rates) {
-																// Set the guard so the update is only applied once.
-																cv$guard$weekly_rates = true;
-																
-																// Update the variable probability
-																logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleValue);
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								if((j$var38 == j$var63)) {
-									for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-										if((j$var63 == j$var116)) {
-											for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-												if(((0 <= j$var116) && (j$var116 < noProducts))) {
-													{
-														for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-															// If the probability of the variable has not already been updated
-															if(!cv$guard$weekly_rates) {
-																// Set the guard so the update is only applied once.
-																cv$guard$weekly_rates = true;
-																
-																// Update the variable probability
-																logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleValue);
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-						if((j$var20 == j$var38)) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								if((j$var38 == j$var63)) {
-									for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-										if((j$var63 == j$var116)) {
-											for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-												if((j$var116 == j$var140)) {
-													for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-														// If the probability of the variable has not already been updated
-														if(!cv$guard$weekly_rates) {
-															// Set the guard so the update is only applied once.
-															cv$guard$weekly_rates = true;
-															
-															// Update the variable probability
-															logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleValue);
-														}
-													}
-												}
-											}
-										}
 									}
 								}
 							}
@@ -1052,7 +699,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var80[((t$var78 - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample82[((t$var78 - 0) / 1)] = cv$sampleProbability;
@@ -1107,7 +753,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var80[((t$var78 - 0) / 1)] = cv$rvAccumulator;
 				
 				// Guard to ensure that Sales is only updated once for this probability.
 				boolean cv$guard$Sales = false;
@@ -2959,29 +2604,14 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 				weekly_ut[((t$var105 - 0) / 1)] = new double[noProducts];
 		}
 		
-		// Constructor for logProbability$var25
-		{
-			logProbability$var25 = new double[((((noProducts - 1) - 1) / 1) + 1)];
-		}
-		
 		// Constructor for logProbability$sample26
 		{
 			logProbability$sample26 = new double[((((noProducts - 1) - 1) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$var80
-		{
-			logProbability$var80 = new double[((((T - 1) - 0) / 1) + 1)];
-		}
-		
 		// Constructor for logProbability$sample82
 		{
 			logProbability$sample82 = new double[((((T - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$var145
-		{
-			logProbability$var145 = new double[((((T - 1) - 0) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$sample149
@@ -3378,28 +3008,20 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-			logProbability$var25[((j$var20 - 1) / 1)] = Double.NaN;
 		logProbability$ut = 0.0;
 		logProbability$exped = 0.0;
 		logProbability$sum = 0.0;
 		logProbability$expedNorm = 0.0;
-		logProbability$weekly_ut = 0.0;
-		logProbability$weekly_rates = 0.0;
 		if(!fixedProbFlag$sample26) {
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
 				logProbability$sample26[((j$var20 - 1) / 1)] = Double.NaN;
 		}
-		for(int t$var78 = 0; t$var78 < T; t$var78 += 1)
-			logProbability$var80[((t$var78 - 0) / 1)] = Double.NaN;
 		logProbability$sales_sum = 0.0;
 		logProbability$Sales = 0.0;
 		if(!fixedProbFlag$sample82) {
 			for(int t$var78 = 0; t$var78 < T; t$var78 += 1)
 				logProbability$sample82[((t$var78 - 0) / 1)] = Double.NaN;
 		}
-		for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-			logProbability$var145[((t$var105 - 0) / 1)] = Double.NaN;
 		if(!fixedProbFlag$sample149) {
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
 				logProbability$sample149[((t$var105 - 0) / 1)] = Double.NaN;

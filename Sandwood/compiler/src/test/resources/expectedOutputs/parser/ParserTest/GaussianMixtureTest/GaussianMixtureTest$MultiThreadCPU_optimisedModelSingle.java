@@ -23,13 +23,8 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	private double logProbability$mu;
 	private double logProbability$phi;
 	private double logProbability$sigma;
-	private double logProbability$var16;
-	private double logProbability$var22;
 	private double logProbability$var34;
-	private double logProbability$var40;
 	private double logProbability$var52;
-	private double logProbability$var67;
-	private double logProbability$var71;
 	private double logProbability$var72;
 	private double logProbability$x;
 	private double logProbability$z;
@@ -289,11 +284,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(phi, alpha, 5);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var16 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$phi = cv$distributionAccumulator;
 			
@@ -338,8 +328,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var16 = logProbability$phi;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -387,13 +375,11 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian((mu[var33] / 4.47213595499958))) - 1.4978661367769954);
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var22 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				logProbability$var34 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -428,8 +414,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var22 = logProbability$var34;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -482,13 +466,11 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityInverseGamma(sigma[var51], 1.0, 1.0));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var40 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				logProbability$var52 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -523,8 +505,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var40 = logProbability$var52;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -575,10 +555,9 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < 5))?Math.log(phi[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 		}
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(cv$sampleReached) {
-			logProbability$var67 = cv$sampleAccumulator;
-			
+		// Only update the sample if it was reached, otherwise the NaN will be
+		// erroneously over written.
+		if(cv$sampleReached)
 			// Store the random variable instance probability
 			// 
 			// Add the probability of this instance of the random variable to the probability
@@ -586,7 +565,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// 
 			// Accumulator for probabilities of instances of the random variable
 			logProbability$z = cv$sampleAccumulator;
-		}
 		
 		// Add probability to model
 		// 
@@ -630,10 +608,9 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((x[i$var66] - mu[z[i$var66]]) / Math.sqrt(var70)))) - (Math.log(var70) * 0.5));
 		}
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(cv$sampleReached) {
-			logProbability$var71 = cv$sampleAccumulator;
-			
+		// Only update the sample if it was reached, otherwise the NaN will be
+		// erroneously over written.
+		if(cv$sampleReached)
 			// Store the random variable instance probability
 			// 
 			// Add the probability of this instance of the random variable to the probability
@@ -641,7 +618,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// 
 			// Accumulator for probabilities of instances of the random variable
 			logProbability$var72 = cv$sampleAccumulator;
-		}
 		
 		// Update the variable probability
 		// 
@@ -1337,20 +1313,15 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
 			logProbability$phi = Double.NaN;
-		logProbability$var22 = Double.NaN;
 		logProbability$mu = 0.0;
 		if(!fixedProbFlag$sample34)
 			logProbability$var34 = Double.NaN;
-		logProbability$var40 = Double.NaN;
 		logProbability$sigma = 0.0;
 		if(!fixedProbFlag$sample52)
 			logProbability$var52 = Double.NaN;
-		logProbability$var67 = Double.NaN;
 		logProbability$z = Double.NaN;
-		logProbability$var71 = Double.NaN;
 		logProbability$x = 0.0;
 		logProbability$var72 = Double.NaN;
 	}

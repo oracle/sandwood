@@ -18,13 +18,8 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$bias;
-	private double logProbability$indicator;
-	private double logProbability$p;
 	private double[] logProbability$sample35;
 	private double[][] logProbability$sample94;
-	private double logProbability$var22;
-	private double logProbability$var40;
-	private double[][] logProbability$var92;
 	private double logProbability$weights;
 	private double logProbability$y;
 	private int n;
@@ -242,29 +237,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				// 
 				// An accumulator for the distributed probability space covered.
 				logProbability$sample35[0] = cv$weightedProbability;
-				
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 < n)) {
-					// Unrolled loop
-					// 
-					// Update the variable probability
-					// 
-					// Scale the probability relative to the observed distribution space.
-					// 
-					// Add the probability of this distribution configuration to the accumulator.
-					// 
-					// An accumulator for the distributed probability space covered.
-					logProbability$indicator = (logProbability$indicator + cv$weightedProbability);
-					
-					// Update the variable probability
-					// 
-					// Scale the probability relative to the observed distribution space.
-					// 
-					// Add the probability of this distribution configuration to the accumulator.
-					// 
-					// An accumulator for the distributed probability space covered.
-					logProbability$p = (logProbability$p + cv$weightedProbability);
-				}
 			}
 			{
 				// Store the value of the function call, so the function call is only made once.
@@ -289,29 +261,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				// 
 				// An accumulator for the distributed probability space covered.
 				logProbability$sample35[1] = cv$weightedProbability;
-				
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 < n)) {
-					// Unrolled loop
-					// 
-					// Update the variable probability
-					// 
-					// Scale the probability relative to the observed distribution space.
-					// 
-					// Add the probability of this distribution configuration to the accumulator.
-					// 
-					// An accumulator for the distributed probability space covered.
-					logProbability$indicator = (logProbability$indicator + cv$weightedProbability);
-					
-					// Update the variable probability
-					// 
-					// Scale the probability relative to the observed distribution space.
-					// 
-					// Add the probability of this distribution configuration to the accumulator.
-					// 
-					// An accumulator for the distributed probability space covered.
-					logProbability$p = (logProbability$p + cv$weightedProbability);
-				}
 			}
 			
 			// Store the value of the function call, so the function call is only made once.
@@ -336,30 +285,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// 
 			// An accumulator for the distributed probability space covered.
 			logProbability$sample35[2] = cv$weightedProbability;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 < n)) {
-				// Unrolled loop
-				// 
-				// Update the variable probability
-				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				logProbability$indicator = (logProbability$indicator + cv$weightedProbability);
-				
-				// Update the variable probability
-				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				logProbability$p = (logProbability$p + cv$weightedProbability);
-			}
-			logProbability$var22 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -394,52 +319,14 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
+			// Variable declaration of cv$rvAccumulator moved.
+			// Declaration comment was:
+			// Variable declaration of cv$rvAccumulator moved.
+			// Declaration comment was:
+			// Variable declaration of cv$rvAccumulator moved.
+			// Declaration comment was:
 			// This value is not used before it is set again, so removing the value declaration.
-			double cv$rvAccumulator;
-			{
-				double cv$sampleValue = logProbability$sample35[0];
-				cv$rvAccumulator = cv$sampleValue;
-				
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 < n)) {
-					// Unrolled loop
-					// 
-					// Update the variable probability
-					logProbability$indicator = (logProbability$indicator + cv$sampleValue);
-					
-					// Update the variable probability
-					logProbability$p = (logProbability$p + cv$sampleValue);
-				}
-			}
-			{
-				double cv$sampleValue = logProbability$sample35[1];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 < n)) {
-					// Unrolled loop
-					// 
-					// Update the variable probability
-					logProbability$indicator = (logProbability$indicator + cv$sampleValue);
-					
-					// Update the variable probability
-					logProbability$p = (logProbability$p + cv$sampleValue);
-				}
-			}
-			double cv$sampleValue = logProbability$sample35[2];
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 < n)) {
-				// Unrolled loop
-				// 
-				// Update the variable probability
-				logProbability$indicator = (logProbability$indicator + cv$sampleValue);
-				
-				// Update the variable probability
-				logProbability$p = (logProbability$p + cv$sampleValue);
-			}
-			logProbability$var22 = cv$rvAccumulator;
+			double cv$rvAccumulator = ((logProbability$sample35[0] + logProbability$sample35[1]) + logProbability$sample35[2]);
 			
 			// Update the variable probability
 			logProbability$weights = (logProbability$weights + cv$rvAccumulator);
@@ -486,11 +373,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((bias / 3.1622776601683795)) - 1.151292546497023);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var40 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$bias = cv$distributionAccumulator;
 			
@@ -535,8 +417,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var40 = logProbability$bias;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -586,19 +466,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// An accumulator for the distributed probability space covered.
 					cv$accumulator = (cv$accumulator + cv$weightedProbability);
 					
-					// Substituted "j$var85" with its value "0".
-					// 
-					// Add the probability of this sample task to the sample task accumulator.
-					// 
-					// Accumulator for sample probabilities for a specific instance of the random variable.
-					// 
-					// Scale the probability relative to the observed distribution space.
-					// 
-					// Add the probability of this distribution configuration to the accumulator.
-					// 
-					// An accumulator for the distributed probability space covered.
-					logProbability$var92[i][0] = cv$weightedProbability;
-					
 					// Store the sample task probability
 					// 
 					// Substituted "j$var85" with its value "0".
@@ -634,19 +501,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// 
 					// An accumulator for the distributed probability space covered.
 					cv$accumulator = (cv$accumulator + cv$weightedProbability);
-					
-					// Substituted "j$var85" with its value "1".
-					// 
-					// Add the probability of this sample task to the sample task accumulator.
-					// 
-					// Accumulator for sample probabilities for a specific instance of the random variable.
-					// 
-					// Scale the probability relative to the observed distribution space.
-					// 
-					// Add the probability of this distribution configuration to the accumulator.
-					// 
-					// An accumulator for the distributed probability space covered.
-					logProbability$var92[i][1] = cv$weightedProbability;
 					
 					// Store the sample task probability
 					// 
@@ -684,19 +538,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				// An accumulator for the distributed probability space covered.
 				cv$accumulator = (cv$accumulator + cv$weightedProbability);
 				
-				// Substituted "j$var85" with its value "2".
-				// 
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				logProbability$var92[i][2] = cv$weightedProbability;
-				
 				// Store the sample task probability
 				// 
 				// Substituted "j$var85" with its value "2".
@@ -727,35 +568,20 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < n; i += 1) {
 				// Unrolled loop
-				{
-					// Variable declaration of cv$rvAccumulator moved.
-					// 
-					// Substituted "j$var85" with its value "0".
-					double cv$rvAccumulator = logProbability$sample94[i][0];
-					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					
-					// Substituted "j$var85" with its value "0".
-					logProbability$var92[i][0] = cv$rvAccumulator;
-				}
-				{
-					// Variable declaration of cv$rvAccumulator moved.
-					// 
-					// Substituted "j$var85" with its value "1".
-					double cv$rvAccumulator = logProbability$sample94[i][1];
-					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					
-					// Substituted "j$var85" with its value "1".
-					logProbability$var92[i][1] = cv$rvAccumulator;
-				}
+				// Variable declaration of cv$rvAccumulator moved.
+				// 
+				// Substituted "j$var85" with its value "0".
+				cv$accumulator = (cv$accumulator + logProbability$sample94[i][0]);
+				
+				// Variable declaration of cv$rvAccumulator moved.
+				// 
+				// Substituted "j$var85" with its value "1".
+				cv$accumulator = (cv$accumulator + logProbability$sample94[i][1]);
 				
 				// Variable declaration of cv$rvAccumulator moved.
 				// 
 				// Substituted "j$var85" with its value "2".
-				double cv$rvAccumulator = logProbability$sample94[i][2];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				
-				// Substituted "j$var85" with its value "2".
-				logProbability$var92[i][2] = cv$rvAccumulator;
+				cv$accumulator = (cv$accumulator + logProbability$sample94[i][2]);
 			}
 			
 			// Update the variable probability
@@ -2922,11 +2748,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		// Constructor for logProbability$sample35
 		logProbability$sample35 = new double[3];
 		
-		// Constructor for logProbability$var92
-		logProbability$var92 = new double[x.length][];
-		for(int i = 0; i < x.length; i += 1)
-			logProbability$var92[i] = new double[3];
-		
 		// Constructor for logProbability$sample94
 		logProbability$sample94 = new double[x.length][];
 		for(int i = 0; i < x.length; i += 1)
@@ -3278,30 +3099,15 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var22 = Double.NaN;
 		logProbability$weights = 0.0;
-		logProbability$indicator = 0.0;
-		logProbability$p = 0.0;
 		if(!fixedProbFlag$sample35) {
 			// Unrolled loop
 			logProbability$sample35[0] = Double.NaN;
 			logProbability$sample35[1] = Double.NaN;
 			logProbability$sample35[2] = Double.NaN;
 		}
-		logProbability$var40 = 0.0;
 		if(!fixedProbFlag$sample42)
 			logProbability$bias = Double.NaN;
-		for(int i = 0; i < n; i += 1) {
-			// Unrolled loop
-			// Substituted "j$var85" with its value "0".
-			logProbability$var92[i][0] = Double.NaN;
-			
-			// Substituted "j$var85" with its value "1".
-			logProbability$var92[i][1] = Double.NaN;
-			
-			// Substituted "j$var85" with its value "2".
-			logProbability$var92[i][2] = Double.NaN;
-		}
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample94) {
 			for(int i = 0; i < n; i += 1) {

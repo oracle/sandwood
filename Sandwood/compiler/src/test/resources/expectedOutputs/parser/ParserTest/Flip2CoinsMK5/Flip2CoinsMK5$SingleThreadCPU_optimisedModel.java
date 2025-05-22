@@ -21,7 +21,6 @@ final class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$flips;
 	private double[] logProbability$sample44;
 	private double logProbability$var18;
-	private double logProbability$var6;
 	private int[] shape;
 	private boolean system$gibbsForward = true;
 
@@ -170,7 +169,6 @@ final class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(bias[var17], 1.0, 1.0));
-			logProbability$var6 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var18 = cv$sampleAccumulator;
@@ -208,8 +206,6 @@ final class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var6 = logProbability$var18;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -464,7 +460,6 @@ final class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var6 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample18)
 			logProbability$var18 = Double.NaN;

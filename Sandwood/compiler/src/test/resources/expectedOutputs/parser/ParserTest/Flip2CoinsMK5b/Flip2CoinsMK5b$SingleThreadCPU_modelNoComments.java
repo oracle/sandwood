@@ -19,7 +19,6 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends org.sandwood.runtime.internal
 	private double logProbability$flips;
 	private double[] logProbability$sample18;
 	private double[] logProbability$sample47;
-	private double[] logProbability$var17;
 	private int[] shape;
 	private boolean system$gibbsForward = true;
 
@@ -141,7 +140,6 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends org.sandwood.runtime.internal
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var17[((i - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample18[((i - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$bias = (logProbability$bias + cv$accumulator);
@@ -158,7 +156,6 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends org.sandwood.runtime.internal
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var17[((i - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -274,9 +271,6 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends org.sandwood.runtime.internal
 				flips[j] = new boolean[shape[j]];
 		}
 		{
-			logProbability$var17 = new double[((((shape.length - 1) - 0) / 1) + 1)];
-		}
-		{
 			logProbability$sample18 = new double[((((shape.length - 1) - 0) / 1) + 1)];
 		}
 		{
@@ -361,8 +355,6 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends org.sandwood.runtime.internal
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int i = 0; i < coins; i += 1)
-			logProbability$var17[((i - 0) / 1)] = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample18) {
 			for(int i = 0; i < coins; i += 1)

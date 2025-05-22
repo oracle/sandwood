@@ -24,13 +24,8 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	private double[] logProbability$sample68;
 	private double[] logProbability$sample72;
 	private double logProbability$sigma;
-	private double logProbability$var16;
-	private double logProbability$var22;
 	private double logProbability$var34;
-	private double logProbability$var40;
 	private double logProbability$var52;
-	private double[] logProbability$var67;
-	private double[] logProbability$var71;
 	private double logProbability$x;
 	private double logProbability$z;
 	private double[] mu;
@@ -221,7 +216,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var16 = cv$sampleAccumulator;
 			logProbability$phi = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample17)
@@ -233,7 +227,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			double cv$sampleValue = logProbability$phi;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var16 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample17)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -276,7 +269,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var22 = cv$sampleAccumulator;
 			logProbability$var34 = cv$sampleAccumulator;
 			logProbability$mu = (logProbability$mu + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -292,7 +284,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			double cv$sampleValue = logProbability$var34;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var22 = cv$rvAccumulator;
 			logProbability$mu = (logProbability$mu + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample34)
@@ -336,7 +327,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var40 = cv$sampleAccumulator;
 			logProbability$var52 = cv$sampleAccumulator;
 			logProbability$sigma = (logProbability$sigma + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -352,7 +342,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			double cv$sampleValue = logProbability$var52;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var40 = cv$rvAccumulator;
 			logProbability$sigma = (logProbability$sigma + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample52)
@@ -392,7 +381,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			cv$sampleReached = true;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var67[((i$var66 - 0) / 1)] = cv$sampleAccumulator;
 			logProbability$sample68[((i$var66 - 0) / 1)] = cv$sampleProbability;
 		}
 		logProbability$z = (logProbability$z + cv$accumulator);
@@ -433,7 +421,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			cv$sampleReached = true;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var71[((i$var66 - 0) / 1)] = cv$sampleAccumulator;
 			logProbability$sample72[((i$var66 - 0) / 1)] = cv$sampleProbability;
 		}
 		logProbability$x = (logProbability$x + cv$accumulator);
@@ -560,12 +547,12 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					{
 						cv$temp$0$phi = phi;
 					}
-					int cv$temp$1$$var350;
+					int cv$temp$1$$var340;
 					{
-						int $var350 = k;
-						cv$temp$1$$var350 = $var350;
+						int $var340 = k;
+						cv$temp$1$$var340 = $var340;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var350))?Math.log(cv$temp$0$phi[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var340))?Math.log(cv$temp$0$phi[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							boolean guard$sample68gaussian71 = false;
@@ -740,13 +727,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			z = new int[((((length$xMeasured - 1) - 0) / 1) + 1)];
 		}
 		{
-			logProbability$var67 = new double[((((length$xMeasured - 1) - 0) / 1) + 1)];
-		}
-		{
 			logProbability$sample68 = new double[((((length$xMeasured - 1) - 0) / 1) + 1)];
-		}
-		{
-			logProbability$var71 = new double[((((length$xMeasured - 1) - 0) / 1) + 1)];
 		}
 		{
 			logProbability$sample72 = new double[((((length$xMeasured - 1) - 0) / 1) + 1)];
@@ -968,24 +949,17 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
 			logProbability$phi = Double.NaN;
-		logProbability$var22 = Double.NaN;
 		logProbability$mu = 0.0;
 		if(!fixedProbFlag$sample34)
 			logProbability$var34 = Double.NaN;
-		logProbability$var40 = Double.NaN;
 		logProbability$sigma = 0.0;
 		if(!fixedProbFlag$sample52)
 			logProbability$var52 = Double.NaN;
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-			logProbability$var67[((i$var66 - 0) / 1)] = Double.NaN;
 		logProbability$z = 0.0;
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
 			logProbability$sample68[((i$var66 - 0) / 1)] = Double.NaN;
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-			logProbability$var71[((i$var66 - 0) / 1)] = Double.NaN;
 		logProbability$x = 0.0;
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
 			logProbability$sample72[((i$var66 - 0) / 1)] = Double.NaN;

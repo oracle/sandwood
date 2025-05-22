@@ -30,11 +30,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 	private double[] logProbability$sample82;
 	private double logProbability$sum;
 	private double logProbability$ut;
-	private double[] logProbability$var145;
-	private double[] logProbability$var25;
-	private double[] logProbability$var80;
-	private double logProbability$weekly_rates;
-	private double logProbability$weekly_ut;
 	private int noProducts;
 	private double r;
 	private int[] sales_sum;
@@ -203,7 +198,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
 				double cv$distributionAccumulator = DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[t$var105], noProducts, sales_sum[t$var105]);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var145[t$var105] = cv$distributionAccumulator;
 				logProbability$sample149[t$var105] = cv$distributionAccumulator;
 			}
 			logProbability$Sales = (logProbability$Sales + cv$accumulator);
@@ -212,11 +206,8 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 			fixedProbFlag$sample149 = fixedFlag$sample26;
 		} else {
 			double cv$accumulator = 0.0;
-			for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-				double cv$rvAccumulator = logProbability$sample149[t$var105];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var145[t$var105] = cv$rvAccumulator;
-			}
+			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample149[t$var105]);
 			logProbability$Sales = (logProbability$Sales + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -229,15 +220,10 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
 				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((ut[j$var20] / 1.4142135623730951)) - 0.34657359027997264);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var25[(j$var20 - 1)] = cv$distributionAccumulator;
 				logProbability$sample26[(j$var20 - 1)] = cv$distributionAccumulator;
 				logProbability$exped = (logProbability$exped + cv$distributionAccumulator);
 				logProbability$sum = (logProbability$sum + cv$distributionAccumulator);
 				logProbability$expedNorm = (logProbability$expedNorm + cv$distributionAccumulator);
-				if((0 < T)) {
-					logProbability$weekly_ut = (logProbability$weekly_ut + cv$distributionAccumulator);
-					logProbability$weekly_rates = (logProbability$weekly_rates + cv$distributionAccumulator);
-				}
 			}
 			logProbability$ut = (logProbability$ut + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -249,14 +235,9 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
 				double cv$sampleValue = logProbability$sample26[(j$var20 - 1)];
 				cv$accumulator = (cv$accumulator + cv$sampleValue);
-				logProbability$var25[(j$var20 - 1)] = cv$sampleValue;
 				logProbability$exped = (logProbability$exped + cv$sampleValue);
 				logProbability$sum = (logProbability$sum + cv$sampleValue);
 				logProbability$expedNorm = (logProbability$expedNorm + cv$sampleValue);
-				if((0 < T)) {
-					logProbability$weekly_ut = (logProbability$weekly_ut + cv$sampleValue);
-					logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleValue);
-				}
 			}
 			logProbability$ut = (logProbability$ut + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -271,7 +252,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 			for(int t$var78 = 0; t$var78 < T; t$var78 += 1) {
 				double cv$distributionAccumulator = DistributionSampling.logProbabilityPoisson(sales_sum[t$var78], 0.5);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var80[t$var78] = cv$distributionAccumulator;
 				logProbability$sample82[t$var78] = cv$distributionAccumulator;
 				logProbability$Sales = (logProbability$Sales + cv$distributionAccumulator);
 			}
@@ -284,7 +264,6 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 			for(int t$var78 = 0; t$var78 < T; t$var78 += 1) {
 				double cv$sampleValue = logProbability$sample82[t$var78];
 				cv$accumulator = (cv$accumulator + cv$sampleValue);
-				logProbability$var80[t$var78] = cv$sampleValue;
 				logProbability$Sales = (logProbability$Sales + cv$sampleValue);
 			}
 			logProbability$sales_sum = (logProbability$sales_sum + cv$accumulator);
@@ -573,11 +552,8 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 		weekly_ut = new double[T][];
 		for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
 			weekly_ut[t$var105] = new double[noProducts];
-		logProbability$var25 = new double[(noProducts - 1)];
 		logProbability$sample26 = new double[(noProducts - 1)];
-		logProbability$var80 = new double[T];
 		logProbability$sample82 = new double[T];
-		logProbability$var145 = new double[T];
 		logProbability$sample149 = new double[T];
 		allocateScratch();
 	}
@@ -741,28 +717,20 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-			logProbability$var25[(j$var20 - 1)] = Double.NaN;
 		logProbability$ut = 0.0;
 		logProbability$exped = 0.0;
 		logProbability$sum = 0.0;
 		logProbability$expedNorm = 0.0;
-		logProbability$weekly_ut = 0.0;
-		logProbability$weekly_rates = 0.0;
 		if(!fixedProbFlag$sample26) {
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
 				logProbability$sample26[(j$var20 - 1)] = Double.NaN;
 		}
-		for(int t$var78 = 0; t$var78 < T; t$var78 += 1)
-			logProbability$var80[t$var78] = Double.NaN;
 		logProbability$sales_sum = 0.0;
 		logProbability$Sales = 0.0;
 		if(!fixedProbFlag$sample82) {
 			for(int t$var78 = 0; t$var78 < T; t$var78 += 1)
 				logProbability$sample82[t$var78] = Double.NaN;
 		}
-		for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-			logProbability$var145[t$var105] = Double.NaN;
 		if(!fixedProbFlag$sample149) {
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
 				logProbability$sample149[t$var105] = Double.NaN;

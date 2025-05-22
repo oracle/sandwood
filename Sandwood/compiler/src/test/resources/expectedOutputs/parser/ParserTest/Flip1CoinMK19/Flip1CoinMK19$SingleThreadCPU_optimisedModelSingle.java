@@ -24,9 +24,7 @@ final class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$flips;
 	private double logProbability$q;
 	private double logProbability$t;
-	private double logProbability$var15;
 	private double logProbability$var47;
-	private double logProbability$var9;
 	private double q;
 	private int samples;
 	private boolean system$gibbsForward = true;
@@ -261,11 +259,6 @@ final class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(q, 1.0, 1.0);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var9 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$q = cv$distributionAccumulator;
 			
@@ -326,8 +319,6 @@ final class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var9 = logProbability$q;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -377,11 +368,6 @@ final class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// 
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(t, 1.0, 1.0);
-			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var15 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
 			logProbability$t = cv$distributionAccumulator;
@@ -443,8 +429,6 @@ final class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var15 = logProbability$t;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -760,11 +744,9 @@ final class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var9 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample10)
 			logProbability$q = Double.NaN;
-		logProbability$var15 = 0.0;
 		if(!fixedProbFlag$sample16)
 			logProbability$t = Double.NaN;
 		logProbability$bernoulli = Double.NaN;

@@ -49,22 +49,13 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private double logProbability$metric_valid_g;
 	private double logProbability$metric_valid_inner;
 	private double logProbability$st;
-	private double logProbability$var108;
 	private double logProbability$var130;
-	private double logProbability$var135;
 	private double logProbability$var157;
-	private double logProbability$var162;
 	private double logProbability$var184;
-	private double logProbability$var19;
-	private double logProbability$var21;
-	private double logProbability$var231;
 	private double logProbability$var232;
-	private double logProbability$var244;
 	private double logProbability$var245;
 	private double logProbability$var33;
-	private double logProbability$var54;
 	private double logProbability$var55;
-	private double logProbability$var73;
 	private double logProbability$var74;
 	private double[][] m;
 	private int max_metric;
@@ -743,10 +734,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				}
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var231 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -754,7 +744,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var232 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -794,20 +783,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 < noServers)) {
-				for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-					if((0 < length$metric[sample$var196][0]))
-						// Record that the sample was reached.
-						cv$sampleReached = true;
-				}
-			}
-			if(cv$sampleReached)
-				logProbability$var231 = logProbability$var232;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -983,10 +958,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				}
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var244 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -994,7 +968,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var245 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -1026,20 +999,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-						if(metric_valid_g[sample$var196][server][timeStep$var226])
-							// Record that the sample was reached.
-							cv$sampleReached = true;
-					}
-				}
-			}
-			if(cv$sampleReached)
-				logProbability$var244 = logProbability$var245;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -1093,10 +1052,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 				}
 				
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(cv$sampleReached) {
-					logProbability$var54 = cv$sampleAccumulator;
-					
+				// Only update the sample if it was reached, otherwise the NaN will be
+				// erroneously over written.
+				if(cv$sampleReached)
 					// Store the random variable instance probability
 					// 
 					// Add the probability of this instance of the random variable to the probability
@@ -1104,7 +1062,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// 
 					// Accumulator for probabilities of instances of the random variable
 					logProbability$var55 = cv$sampleAccumulator;
-				}
 				
 				// Update the variable probability
 				// 
@@ -1139,14 +1096,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < noSamples))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var54 = logProbability$var55;
-			
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
 			if(fixedFlag$sample57)
 				// Update the variable probability
@@ -1284,10 +1233,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					}
 				}
 				
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(cv$sampleReached) {
-					logProbability$var73 = cv$sampleAccumulator;
-					
+				// Only update the sample if it was reached, otherwise the NaN will be
+				// erroneously over written.
+				if(cv$sampleReached)
 					// Store the random variable instance probability
 					// 
 					// Add the probability of this instance of the random variable to the probability
@@ -1295,7 +1243,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// 
 					// Accumulator for probabilities of instances of the random variable
 					logProbability$var74 = cv$sampleAccumulator;
-				}
 				
 				// Update the variable probability
 				// 
@@ -1330,16 +1277,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-				if((1 < length$metric[sample$var45][0]))
-					// Record that the sample was reached.
-					cv$sampleReached = true;
-			}
-			if(cv$sampleReached)
-				logProbability$var73 = logProbability$var74;
-			
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
 			if(fixedFlag$sample76)
 				// Update the variable probability
@@ -1397,13 +1334,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				}
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var108 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				logProbability$var130 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -1438,14 +1373,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if(((0 < noServers) && (0 < noStates)))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var108 = logProbability$var130;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -1500,13 +1427,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				}
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var135 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				logProbability$var157 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -1541,14 +1466,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if(((0 < noServers) && (0 < noStates)))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var135 = logProbability$var157;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -1603,13 +1520,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				}
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var162 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				logProbability$var184 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -1644,14 +1559,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if(((0 < noServers) && (0 < noStates)))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var162 = logProbability$var184;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -1702,11 +1609,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(initialStateDistribution, v, noStates);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var19 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$initialStateDistribution = cv$distributionAccumulator;
 			
@@ -1751,8 +1653,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var19 = logProbability$initialStateDistribution;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -1806,10 +1706,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				}
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var231 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -1817,7 +1716,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var232 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -1857,20 +1755,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 < noServers)) {
-				for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-					if((0 < length$metric[sample$var196][0]))
-						// Record that the sample was reached.
-						cv$sampleReached = true;
-				}
-			}
-			if(cv$sampleReached)
-				logProbability$var231 = logProbability$var232;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -1933,10 +1817,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				}
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var244 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -1944,7 +1827,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var245 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -1976,20 +1858,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-						if(metric_valid_g[sample$var196][server][timeStep$var226])
-							// Record that the sample was reached.
-							cv$sampleReached = true;
-					}
-				}
-			}
-			if(cv$sampleReached)
-				logProbability$var244 = logProbability$var245;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -2039,13 +1907,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(m[var32], v, noStates));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var21 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				logProbability$var33 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -2080,14 +1946,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < noStates))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var21 = logProbability$var33;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -2141,10 +1999,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var54 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -2152,7 +2009,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var55 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -2187,14 +2043,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < noSamples))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var54 = logProbability$var55;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -2250,10 +2098,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				}
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var73 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -2261,7 +2108,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var74 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -2296,16 +2142,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-				if((1 < length$metric[sample$var45][0]))
-					// Record that the sample was reached.
-					cv$sampleReached = true;
-			}
-			if(cv$sampleReached)
-				logProbability$var73 = logProbability$var74;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -6498,38 +6334,29 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var19 = 0.0;
 		if(!fixedProbFlag$sample20)
 			logProbability$initialStateDistribution = Double.NaN;
-		logProbability$var21 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample33)
 			logProbability$var33 = Double.NaN;
-		logProbability$var54 = Double.NaN;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample57)
 			logProbability$var55 = Double.NaN;
-		logProbability$var73 = Double.NaN;
 		if(!fixedProbFlag$sample76)
 			logProbability$var74 = Double.NaN;
-		logProbability$var108 = Double.NaN;
 		logProbability$current_metric_mean = 0.0;
 		if(!fixedProbFlag$sample134)
 			logProbability$var130 = Double.NaN;
-		logProbability$var135 = Double.NaN;
 		logProbability$current_metric_var = 0.0;
 		if(!fixedProbFlag$sample162)
 			logProbability$var157 = Double.NaN;
-		logProbability$var162 = Double.NaN;
 		logProbability$current_metric_valid_bias = 0.0;
 		if(!fixedProbFlag$sample190)
 			logProbability$var184 = Double.NaN;
-		logProbability$var231 = Double.NaN;
 		logProbability$metric_valid_inner = 0.0;
 		logProbability$metric_valid_g = 0.0;
 		if(!fixedProbFlag$sample241)
 			logProbability$var232 = Double.NaN;
-		logProbability$var244 = Double.NaN;
 		logProbability$metric_g = 0.0;
 		if(!fixedProbFlag$sample256)
 			logProbability$var245 = Double.NaN;

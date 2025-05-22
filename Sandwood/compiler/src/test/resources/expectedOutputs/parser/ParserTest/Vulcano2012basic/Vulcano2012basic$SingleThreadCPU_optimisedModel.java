@@ -28,10 +28,6 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 	private double[] logProbability$sample26;
 	private double logProbability$sum;
 	private double logProbability$ut;
-	private double[] logProbability$var152;
-	private double[] logProbability$var25;
-	private double logProbability$weekly_rates;
-	private double logProbability$weekly_ut;
 	private int noProducts;
 	private double r;
 	private int[] sales_sum;
@@ -269,11 +265,6 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var152[t$var112] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample157[t$var112] = cv$distributionAccumulator;
 			}
@@ -294,12 +285,8 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample157[t$var112];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var152[t$var112] = cv$rvAccumulator;
-			}
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample157[t$var112]);
 			
 			// Update the variable probability
 			logProbability$Sales = (logProbability$Sales + cv$accumulator);
@@ -353,31 +340,24 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var25[(j$var20 - 1)] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample26[(j$var20 - 1)] = cv$distributionAccumulator;
 				
+				// Add probability to constructed variables that have guards, so need per sample probabilities
+				// from the combined probability
+				// 
+				// Looking for a path between Sample 26 and consumer double[] 41.
+				// 
 				// Update the variable probability
 				logProbability$exped = (logProbability$exped + cv$distributionAccumulator);
 				
+				// Looking for a path between Sample 26 and consumer double 52.
+				// 
 				// Update the variable probability
 				logProbability$sum = (logProbability$sum + cv$distributionAccumulator);
 				
 				// Update the variable probability
 				logProbability$expedNorm = (logProbability$expedNorm + cv$distributionAccumulator);
-				
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 < T)) {
-					// Update the variable probability
-					logProbability$weekly_ut = (logProbability$weekly_ut + cv$distributionAccumulator);
-					
-					// Update the variable probability
-					logProbability$weekly_rates = (logProbability$weekly_rates + cv$distributionAccumulator);
-				}
 			}
 			
 			// Update the variable probability
@@ -403,25 +383,22 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
 				double cv$sampleValue = logProbability$sample26[(j$var20 - 1)];
 				cv$accumulator = (cv$accumulator + cv$sampleValue);
-				logProbability$var25[(j$var20 - 1)] = cv$sampleValue;
 				
+				// Add probability to constructed variables that have guards, so need per sample probabilities
+				// from the combined probability
+				// 
+				// Looking for a path between Sample 26 and consumer double[] 41.
+				// 
 				// Update the variable probability
 				logProbability$exped = (logProbability$exped + cv$sampleValue);
 				
+				// Looking for a path between Sample 26 and consumer double 52.
+				// 
 				// Update the variable probability
 				logProbability$sum = (logProbability$sum + cv$sampleValue);
 				
 				// Update the variable probability
 				logProbability$expedNorm = (logProbability$expedNorm + cv$sampleValue);
-				
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 < T)) {
-					// Update the variable probability
-					logProbability$weekly_ut = (logProbability$weekly_ut + cv$sampleValue);
-					
-					// Update the variable probability
-					logProbability$weekly_rates = (logProbability$weekly_rates + cv$sampleValue);
-				}
 			}
 			
 			// Update the variable probability
@@ -1432,14 +1409,8 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 		for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
 			weekly_ut[t$var112] = new double[noProducts];
 		
-		// Constructor for logProbability$var25
-		logProbability$var25 = new double[(noProducts - 1)];
-		
 		// Constructor for logProbability$sample26
 		logProbability$sample26 = new double[(noProducts - 1)];
-		
-		// Constructor for logProbability$var152
-		logProbability$var152 = new double[T];
 		
 		// Constructor for logProbability$sample157
 		logProbability$sample157 = new double[T];
@@ -1792,20 +1763,14 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-			logProbability$var25[(j$var20 - 1)] = Double.NaN;
 		logProbability$ut = 0.0;
 		logProbability$exped = 0.0;
 		logProbability$sum = 0.0;
 		logProbability$expedNorm = 0.0;
-		logProbability$weekly_ut = 0.0;
-		logProbability$weekly_rates = 0.0;
 		if(!fixedProbFlag$sample26) {
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
 				logProbability$sample26[(j$var20 - 1)] = Double.NaN;
 		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-			logProbability$var152[t$var112] = Double.NaN;
 		logProbability$Sales = 0.0;
 		if(!fixedProbFlag$sample157) {
 			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)

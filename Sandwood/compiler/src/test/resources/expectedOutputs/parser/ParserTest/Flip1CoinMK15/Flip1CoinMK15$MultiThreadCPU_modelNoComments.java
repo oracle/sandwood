@@ -19,11 +19,9 @@ final class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$b;
 	private double logProbability$bernoulli;
 	private double logProbability$bias;
-	private double logProbability$c;
 	private double logProbability$flips;
 	private double logProbability$sample8;
 	private double logProbability$var47;
-	private double logProbability$var7;
 	private int samples;
 	private boolean system$gibbsForward = true;
 
@@ -218,10 +216,8 @@ final class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var7 = cv$sampleAccumulator;
 			logProbability$sample8 = cv$sampleProbability;
 			boolean cv$guard$bias = false;
-			boolean cv$guard$c = false;
 			logProbability$b = (logProbability$b + cv$accumulator);
 			{
 				if(guard1) {
@@ -255,22 +251,6 @@ final class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					}
 				}
 			}
-			{
-				if(!guard1) {
-					if(!cv$guard$c) {
-						cv$guard$c = true;
-						logProbability$c = (logProbability$c + cv$accumulator);
-					}
-				}
-			}
-			{
-				if(!guard1) {
-					if(!cv$guard$c) {
-						cv$guard$c = true;
-						logProbability$c = (logProbability$c + cv$accumulator);
-					}
-				}
-			}
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample8)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -281,9 +261,7 @@ final class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$sampleValue = logProbability$sample8;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var7 = cv$rvAccumulator;
 			boolean cv$guard$bias = false;
-			boolean cv$guard$c = false;
 			logProbability$b = (logProbability$b + cv$accumulator);
 			{
 				if(guard1) {
@@ -314,22 +292,6 @@ final class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.m
 								}
 							}
 						}
-					}
-				}
-			}
-			{
-				if(!guard1) {
-					if(!cv$guard$c) {
-						cv$guard$c = true;
-						logProbability$c = (logProbability$c + cv$accumulator);
-					}
-				}
-			}
-			{
-				if(!guard1) {
-					if(!cv$guard$c) {
-						cv$guard$c = true;
-						logProbability$c = (logProbability$c + cv$accumulator);
 					}
 				}
 			}
@@ -512,14 +474,14 @@ final class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.m
 									{
 										if((0 < 2)) {
 											double reduceVar$var33$17 = 0.0;
-											for(int cv$reduction409Index = 0; cv$reduction409Index < 0; cv$reduction409Index += 1) {
+											for(int cv$reduction395Index = 0; cv$reduction395Index < 0; cv$reduction395Index += 1) {
 												double i$var30 = reduceVar$var33$17;
-												double j = c[cv$reduction409Index];
+												double j = c[cv$reduction395Index];
 												reduceVar$var33$17 = (i$var30 + j);
 											}
-											for(int cv$reduction409Index = (0 + 1); cv$reduction409Index < 2; cv$reduction409Index += 1) {
+											for(int cv$reduction395Index = (0 + 1); cv$reduction395Index < 2; cv$reduction395Index += 1) {
 												double i$var30 = reduceVar$var33$17;
-												double j = c[cv$reduction409Index];
+												double j = c[cv$reduction395Index];
 												reduceVar$var33$17 = (i$var30 + j);
 											}
 											double cv$reduced30 = reduceVar$var33$17;
@@ -578,14 +540,14 @@ final class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.m
 									{
 										if((0 < 2)) {
 											double reduceVar$var33$18 = 0.0;
-											for(int cv$reduction430Index = 0; cv$reduction430Index < 1; cv$reduction430Index += 1) {
+											for(int cv$reduction416Index = 0; cv$reduction416Index < 1; cv$reduction416Index += 1) {
 												double i$var30 = reduceVar$var33$18;
-												double j = c[cv$reduction430Index];
+												double j = c[cv$reduction416Index];
 												reduceVar$var33$18 = (i$var30 + j);
 											}
-											for(int cv$reduction430Index = (1 + 1); cv$reduction430Index < 2; cv$reduction430Index += 1) {
+											for(int cv$reduction416Index = (1 + 1); cv$reduction416Index < 2; cv$reduction416Index += 1) {
 												double i$var30 = reduceVar$var33$18;
-												double j = c[cv$reduction430Index];
+												double j = c[cv$reduction416Index];
 												reduceVar$var33$18 = (i$var30 + j);
 											}
 											double cv$reduced30 = reduceVar$var33$18;
@@ -897,9 +859,7 @@ final class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var7 = 0.0;
 		logProbability$b = 0.0;
-		logProbability$c = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample8)
 			logProbability$sample8 = Double.NaN;
