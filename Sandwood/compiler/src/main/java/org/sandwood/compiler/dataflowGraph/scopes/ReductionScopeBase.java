@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sandwood.compiler.compilation.CompilationContext;
-import org.sandwood.compiler.compilation.ScopeTracking;
+import org.sandwood.compiler.compilation.scopesState.ScopeTracking;
 import org.sandwood.compiler.dataflowGraph.Id;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ReductionInput;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
@@ -49,7 +49,7 @@ public abstract class ReductionScopeBase<A extends Variable<A>> extends Id imple
         returnVar = rs.returnVar;
         scopeCondition = rs.getScopeCondition();
     }
-    
+
     public ReductionScopeBase(IntVariable start, IntVariable end, ArrayVariable<A> array, Variable<A> emptyValue) {
         this.start = start;
         this.end = end;
@@ -130,7 +130,8 @@ public abstract class ReductionScopeBase<A extends Variable<A>> extends Id imple
         // Construct outer scopes
         IfScope ifScope = new IfScope(outerScope,
                 ri.start.lessThan(ri.array.length()).and(ri.end.greaterThan(ri.start)));
-        ReductionScopeCopied<A> newReductionScope = new ReductionScopeCopied<>(ifScope, mask, emptyValue, reductionScope);
+        ReductionScopeCopied<A> newReductionScope = new ReductionScopeCopied<>(ifScope, mask, emptyValue,
+                reductionScope);
 
         // Set the substitution, and evaluate the function minus the masked value.
         compilationCtx.addScopeSubstitute(reductionScope, newReductionScope);

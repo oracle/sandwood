@@ -299,8 +299,8 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		double[] cv$stateProbabilityLocal = cv$var68$stateProbabilityGlobal[threadID$cv$i$var66];
 		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
 			z[i$var66] = cv$valuePos;
-			double cv$temp$3$var70 = sigma[cv$valuePos];
-			cv$stateProbabilityLocal[cv$valuePos] = ((DistributionSampling.logProbabilityGaussian(((x[i$var66] - mu[cv$valuePos]) / Math.sqrt(cv$temp$3$var70))) + Math.log(phi[cv$valuePos])) - (Math.log(cv$temp$3$var70) * 0.5));
+			double var70 = sigma[cv$valuePos];
+			cv$stateProbabilityLocal[cv$valuePos] = ((DistributionSampling.logProbabilityGaussian(((x[i$var66] - mu[cv$valuePos]) / Math.sqrt(var70))) + Math.log(phi[cv$valuePos])) - (Math.log(var70) * 0.5));
 		}
 		double cv$logSum;
 		double cv$lseMax = cv$stateProbabilityLocal[0];

@@ -230,9 +230,9 @@ final class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample18 = fixedFlag$sample18;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -304,9 +304,9 @@ final class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample46 = fixedFlag$sample18;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -350,8 +350,6 @@ final class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$b" with its value "b".
-			// 
 			// Set the current value to the current state of the tree.
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$originalValue, a, b);
 			
@@ -380,9 +378,6 @@ final class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// inputs.
 				// 
 				// Substituted "j" with its value "i".
-				// 
-				// cv$temp$2$var34's comment
-				// Constructing a random variable input for use later.
 				cv$accumulatedProbabilities = (Math.log((flips[i][var45]?traceTempVariable$var34$2_1:(1.0 - traceTempVariable$var34$2_1))) + cv$accumulatedProbabilities);
 			
 			// Initialize a log space accumulator to take the product of all the distribution
@@ -394,15 +389,11 @@ final class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		
-		// Update Sample and intermediate values
-		// 
 		// Guards to ensure that bias is only updated when there is a valid path.
 		bias[i] = (1 - cv$proposedValue);
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$1$b" with its value "b".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, a, b);
 		
 		// Processing random variable 35.
@@ -428,15 +419,8 @@ final class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// inputs.
 			// 
 			// Substituted "j" with its value "i".
-			// 
-			// cv$temp$2$var34's comment
-			// Constructing a random variable input for use later.
 			cv$accumulatedProbabilities = (Math.log((flips[i][var45]?traceTempVariable$var34$2_1:(1.0 - traceTempVariable$var34$2_1))) + cv$accumulatedProbabilities);
 		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		// 
 		// The probability ration for the proposed value and the current value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
@@ -445,7 +429,12 @@ final class Flip2CoinsMK7$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		
+		// Test if the probability of the sample is sufficient to keep the value. This needs
+		// to be less than or equal as otherwise if the proposed value is not possible and
+		// the random value is 0 an impossible value will be accepted.
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
 			// If it is not revert the changes.
 			// 
 			// Set the sample value

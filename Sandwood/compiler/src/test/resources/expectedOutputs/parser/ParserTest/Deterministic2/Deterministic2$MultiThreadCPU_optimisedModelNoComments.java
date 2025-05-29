@@ -174,16 +174,13 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 					double cv$probabilityReached = 0.0;
 					int cv$sampleValue = a[i$var46];
 					if((1 == i$var46)) {
-						int var28 = b[1];
-						if(((0 <= var28) && (var28 < 5))) {
-							cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 5))?Math.log(m[0][cv$sampleValue]):Double.NEGATIVE_INFINITY);
-							cv$probabilityReached = 1.0;
-						}
+						cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 5))?Math.log(m[0][cv$sampleValue]):Double.NEGATIVE_INFINITY);
+						cv$probabilityReached = 1.0;
 					}
 					if((2 <= i$var46)) {
-						int var28 = b[i$var46];
-						if(((0 <= var28) && (var28 < 5))) {
-							double cv$weightedProbability = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 5))?Math.log(m[a[(i$var46 - 1)]][cv$sampleValue]):Double.NEGATIVE_INFINITY);
+						int traceTempVariable$var51$6_3 = a[(i$var46 - 1)];
+						if(((0 <= traceTempVariable$var51$6_3) && (traceTempVariable$var51$6_3 < 5))) {
+							double cv$weightedProbability = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 5))?Math.log(m[traceTempVariable$var51$6_3][cv$sampleValue]):Double.NEGATIVE_INFINITY);
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -243,7 +240,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 					if((i$var46 < n)) {
 						for(int index$sample55$5 = 0; index$sample55$5 < 5; index$sample55$5 += 1) {
 							double cv$probabilitySample55Value6 = distribution$sample55[(i$var46 - 1)][index$sample55$5];
-							double var72 = (double)(1 / a[(j + 1)]);
+							double var72 = (double)(1 / index$sample55$5);
 							double cv$weightedProbability = (Math.log(cv$probabilitySample55Value6) + Math.log((cv$sampleValue?var72:(1.0 - var72))));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
@@ -356,26 +353,24 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 		for(int cv$loopIndex = 0; cv$loopIndex < 5; cv$loopIndex += 1)
 			cv$countLocal[cv$loopIndex] = 0.0;
 		if(fixedFlag$sample55) {
-			if(((1 < n) && (var28 == b[1])))
+			if(((1 < n) && (var28 == 0)))
 				cv$countLocal[a[1]] = (cv$countLocal[a[1]] + 1.0);
 			for(int i$var46 = 2; i$var46 < n; i$var46 += 1) {
-				if((var28 == b[i$var46]))
+				if((var28 == a[(i$var46 - 1)]))
 					cv$countLocal[a[i$var46]] = (cv$countLocal[a[i$var46]] + 1.0);
 			}
 		} else {
-			if(((1 < n) && (var28 == b[1]))) {
+			if(((1 < n) && (var28 == 0))) {
 				for(int cv$loopIndex = 0; cv$loopIndex < 5; cv$loopIndex += 1)
 					cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + distribution$sample55[0][cv$loopIndex]);
 			}
-			for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
-				if((var28 == b[i$var46])) {
+			if((var28 < 5)) {
+				for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
 					int index$i$27 = (i$var46 - 1);
 					if((1 <= index$i$27)) {
-						for(int index$sample55$28 = 0; index$sample55$28 < 5; index$sample55$28 += 1) {
-							double cv$distributionProbability = distribution$sample55[(index$i$27 - 1)][index$sample55$28];
-							for(int cv$loopIndex = 0; cv$loopIndex < 5; cv$loopIndex += 1)
-								cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample55[(i$var46 - 1)][cv$loopIndex] * cv$distributionProbability));
-						}
+						double cv$distributionProbability = distribution$sample55[(index$i$27 - 1)][var28];
+						for(int cv$loopIndex = 0; cv$loopIndex < 5; cv$loopIndex += 1)
+							cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample55[(i$var46 - 1)][cv$loopIndex] * cv$distributionProbability));
 					}
 				}
 			}
@@ -384,100 +379,69 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	private final void sample55(int i$var46) {
-		int cv$numNumStates = 0;
-		if((1 == i$var46)) {
-			int var28 = b[1];
-			if(((0 <= var28) && (var28 < 5)))
-				cv$numNumStates = 5;
-		}
-		if(fixedFlag$sample55) {
-			if((2 <= i$var46)) {
-				int var28 = b[i$var46];
-				if(((0 <= var28) && (var28 < 5)))
-					cv$numNumStates = 5;
-			}
-		} else {
-			int index$i$6 = (i$var46 - 1);
-			if(((1 <= index$i$6) && !(index$i$6 == i$var46))) {
-				int var28 = b[i$var46];
-				if(((0 <= var28) && (var28 < 5)))
-					cv$numNumStates = 5;
-			}
-		}
-		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+		int cv$numStates = 0;
+		if((1 == i$var46))
+			cv$numStates = 5;
+		int index$i$5 = (i$var46 - 1);
+		if(((1 <= index$i$5) && !(index$i$5 == i$var46)))
+			cv$numStates = 5;
+		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 			double cv$reachedDistributionSourceRV = 0.0;
 			double cv$accumulatedDistributionProbabilities = 0.0;
 			if((1 == i$var46)) {
-				int var28 = b[1];
-				if(((0 <= var28) && (var28 < 5))) {
-					cv$reachedDistributionSourceRV = 1.0;
-					double cv$temp$6$var72 = (double)(1 / cv$valuePos);
-					cv$stateProbabilityValue = (Math.log((flips[0]?cv$temp$6$var72:(1.0 - cv$temp$6$var72))) + Math.log(m[0][cv$valuePos]));
-				}
+				cv$reachedDistributionSourceRV = 1.0;
+				double var72 = (double)(1 / cv$valuePos);
+				cv$stateProbabilityValue = (Math.log((flips[0]?var72:(1.0 - var72))) + Math.log(m[0][cv$valuePos]));
 			}
-			int index$i$18 = (i$var46 - 1);
-			if(((1 <= index$i$18) && !(index$i$18 == i$var46))) {
-				for(int index$sample55$19 = 0; index$sample55$19 < 5; index$sample55$19 += 1) {
-					double cv$probabilitySample55Value20 = distribution$sample55[(index$i$18 - 1)][index$sample55$19];
-					int var28 = b[i$var46];
-					if(((0 <= var28) && (var28 < 5))) {
-						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample55Value20);
-						double cv$temp$8$var72 = (double)(1 / index$sample55$19);
-						double cv$accumulatedProbabilities = ((Math.log((flips[(i$var46 - 1)]?cv$temp$8$var72:(1.0 - cv$temp$8$var72))) + Math.log(cv$probabilitySample55Value20)) + Math.log(m[cv$valuePos][cv$valuePos]));
-						if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
-							cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
-						else {
-							if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
-								cv$stateProbabilityValue = cv$accumulatedProbabilities;
-							else
-								cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
-						}
+			int index$i$15 = (i$var46 - 1);
+			if(((1 <= index$i$15) && !(index$i$15 == i$var46))) {
+				for(int index$sample55$16 = 0; index$sample55$16 < 5; index$sample55$16 += 1) {
+					double cv$probabilitySample55Value17 = distribution$sample55[(index$i$15 - 1)][index$sample55$16];
+					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample55Value17);
+					double var72 = (double)(1 / index$sample55$16);
+					double cv$accumulatedProbabilities = ((Math.log((flips[(i$var46 - 1)]?var72:(1.0 - var72))) + Math.log(cv$probabilitySample55Value17)) + Math.log(m[index$sample55$16][cv$valuePos]));
+					if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
+						cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
+					else {
+						if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
+							cv$stateProbabilityValue = cv$accumulatedProbabilities;
+						else
+							cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
 					}
 				}
 			}
-			int index$i$37_2 = (i$var46 + 1);
-			if((index$i$37_2 < n)) {
+			int index$i$34_2 = (i$var46 + 1);
+			if((index$i$34_2 < n)) {
 				for(int cv$i = 0; cv$i < 5; cv$i += 1)
 					cv$distributionAccumulator$var53[cv$i] = 0.0;
-				double cv$reachedDistributionProbability = 0.0;
-				int var28 = b[index$i$37_2];
-				if(((0 <= var28) && (var28 < 5))) {
-					double scopeVariable$reachedSourceProbability = 0.0;
-					if((1 == i$var46)) {
-						int index$var28$42_1 = b[1];
-						if(((0 <= index$var28$42_1) && (index$var28$42_1 < 5)))
-							scopeVariable$reachedSourceProbability = 1.0;
-					}
-					int index$i$44 = (i$var46 - 1);
-					if((((1 <= index$i$44) && !(index$i$44 == i$var46)) && !(index$i$44 == index$i$37_2))) {
-						for(int index$sample55$45 = 0; index$sample55$45 < 5; index$sample55$45 += 1) {
-							int index$var28$50_1 = b[i$var46];
-							if(((0 <= index$var28$50_1) && (index$var28$50_1 < 5)))
-								scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + distribution$sample55[(index$i$44 - 1)][index$sample55$45]);
-						}
-					}
-					cv$reachedDistributionProbability = scopeVariable$reachedSourceProbability;
-					DistributionSampling.addProbabilityDistributionCategorical(cv$distributionAccumulator$var53, scopeVariable$reachedSourceProbability, m[cv$valuePos], 5);
+				double scopeVariable$reachedSourceProbability = 0.0;
+				if((1 == i$var46))
+					scopeVariable$reachedSourceProbability = 1.0;
+				int index$i$41 = (i$var46 - 1);
+				if((((1 <= index$i$41) && !(index$i$41 == i$var46)) && !(index$i$41 == index$i$34_2))) {
+					for(int index$sample55$42 = 0; index$sample55$42 < 5; index$sample55$42 += 1)
+						scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + distribution$sample55[(index$i$41 - 1)][index$sample55$42]);
 				}
-				double[] cv$sampleDistribution = distribution$sample55[(index$i$37_2 - 1)];
+				DistributionSampling.addProbabilityDistributionCategorical(cv$distributionAccumulator$var53, scopeVariable$reachedSourceProbability, m[cv$valuePos], 5);
+				double[] cv$sampleDistribution = distribution$sample55[(index$i$34_2 - 1)];
 				double cv$overlap = 0.0;
 				for(int cv$i = 0; cv$i < 5; cv$i += 1) {
-					double cv$normalisedDistValue = (cv$distributionAccumulator$var53[cv$i] / cv$reachedDistributionProbability);
+					double cv$normalisedDistValue = (cv$distributionAccumulator$var53[cv$i] / scopeVariable$reachedSourceProbability);
 					double cv$sampleDistValue = cv$sampleDistribution[cv$i];
 					if((cv$sampleDistValue < cv$normalisedDistValue))
 						cv$overlap = (cv$overlap + cv$sampleDistValue);
 					else
 						cv$overlap = (cv$overlap + cv$normalisedDistValue);
 				}
-				cv$accumulatedDistributionProbabilities = Math.log((((cv$overlap * cv$reachedDistributionProbability) + 1.0) - Math.min(cv$reachedDistributionProbability, 1.0)));
+				cv$accumulatedDistributionProbabilities = Math.log((((cv$overlap * scopeVariable$reachedSourceProbability) + 1.0) - Math.min(scopeVariable$reachedSourceProbability, 1.0)));
 			}
 			cv$var54$stateProbabilityGlobal[cv$valuePos] = ((cv$stateProbabilityValue + cv$accumulatedDistributionProbabilities) - Math.log(cv$reachedDistributionSourceRV));
 		}
 		double[] cv$localProbability = distribution$sample55[(i$var46 - 1)];
 		double cv$logSum;
 		double cv$lseMax = cv$var54$stateProbabilityGlobal[0];
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 			double cv$lseElementValue = cv$var54$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
@@ -486,18 +450,18 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 			cv$logSum = Double.NEGATIVE_INFINITY;
 		else {
 			double cv$lseSum = 0.0;
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var54$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
 		}
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
-				cv$localProbability[cv$indexName] = (1.0 / cv$numNumStates);
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+				cv$localProbability[cv$indexName] = (1.0 / cv$numStates);
 		} else {
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				cv$localProbability[cv$indexName] = Math.exp((cv$var54$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
-		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$var54$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numStates; cv$indexName < cv$var54$stateProbabilityGlobal.length; cv$indexName += 1)
 			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
@@ -571,23 +535,17 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 				for(int index$var53 = 0; index$var53 < 5; index$var53 += 1)
 					cv$distribution$sample55[index$var53] = 0.0;
 				if((1 == i$var46)) {
-					int var28 = b[1];
-					if(((0 <= var28) && (var28 < 5))) {
-						double[] var52 = m[0];
-						for(int index$var53 = 0; index$var53 < 5; index$var53 += 1)
-							cv$distribution$sample55[index$var53] = (cv$distribution$sample55[index$var53] + var52[index$var53]);
-					}
+					double[] var52 = m[0];
+					for(int index$var53 = 0; index$var53 < 5; index$var53 += 1)
+						cv$distribution$sample55[index$var53] = (cv$distribution$sample55[index$var53] + var52[index$var53]);
 				}
 				int index$i$4 = (i$var46 - 1);
 				if((1 <= index$i$4)) {
 					for(int index$sample55$5 = 0; index$sample55$5 < 5; index$sample55$5 += 1) {
 						double cv$probabilitySample55Value6 = distribution$sample55[(index$i$4 - 1)][index$sample55$5];
-						int var28 = b[i$var46];
-						if(((0 <= var28) && (var28 < 5))) {
-							double[] var52 = m[a[(i$var46 - 1)]];
-							for(int index$var53 = 0; index$var53 < 5; index$var53 += 1)
-								cv$distribution$sample55[index$var53] = (cv$distribution$sample55[index$var53] + (cv$probabilitySample55Value6 * var52[index$var53]));
-						}
+						double[] var52 = m[index$sample55$5];
+						for(int index$var53 = 0; index$var53 < 5; index$var53 += 1)
+							cv$distribution$sample55[index$var53] = (cv$distribution$sample55[index$var53] + (cv$probabilitySample55Value6 * var52[index$var53]));
 					}
 				}
 				double cv$var53$sum = 0.0;

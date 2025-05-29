@@ -223,9 +223,9 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample50 = fixedFlag$sample8;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			logProbability$bernoulli = logProbability$var47;
@@ -334,9 +334,9 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample8 = fixedFlag$sample8;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -390,12 +390,12 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$var6" with its value "1.0".
-			// 
 			// Set the current value to the current state of the tree.
 			// 
 			// The original value of the sample
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(b, 1.0, 1.0);
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(guard1) {
 				// Processing sample task 50 of consumer random variable bernoulli.
 				for(int var46 = 0; var46 < samples; var46 += 1)
@@ -412,8 +412,6 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "cv$temp$2$bias" with its value "cv$currentValue".
-					// 
 					// Set the current value to the current state of the tree.
 					// 
 					// The original value of the sample
@@ -422,30 +420,9 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			else {
-				// Variable declaration of reduceVar$var33$3 moved.
+				// Variable declaration of reduceVar$var33$2 moved.
 				// Declaration comment was:
-				// Variable declaration of reduceVar$var33$3 moved.
-				// Declaration comment was:
-				// Reduction of array c
-				// 
-				// A generated name to prevent name collisions if the reduction is implemented more
-				// than once in inference and probability code. Initialize the variable to the unit
-				// value
-				// 
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// j's comment
-				// Set the right hand term to a value from the array c
-				// 
-				// Substituted "cv$reduction165Index" with its value "1".
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// Variable declaration of reduceVar$var33$3 moved.
+				// Variable declaration of reduceVar$var33$2 moved.
 				// Declaration comment was:
 				// Reduction of array c
 				// 
@@ -455,6 +432,23 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Execute the reduction function, saving the result into the return value.
 				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// j's comment
+				// Set the right hand term to a value from the array c
+				// 
+				// Substituted "cv$reduction169Index" with its value "1".
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// Variable declaration of reduceVar$var33$2 moved.
+				// Declaration comment was:
+				// Reduction of array c
+				// 
+				// A generated name to prevent name collisions if the reduction is implemented more
+				// than once in inference and probability code. Initialize the variable to the unit
+				// value
+				// 
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
@@ -462,8 +456,8 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction165Index" with its value "1".
-				double reduceVar$var33$3 = ((b / 2) + c[1]);
+				// Substituted "cv$reduction169Index" with its value "1".
+				double reduceVar$var33$2 = ((b / 2) + c[1]);
 				
 				// Processing sample task 50 of consumer random variable bernoulli.
 				for(int var46 = 0; var46 < samples; var46 += 1)
@@ -479,9 +473,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// Declaration comment was:
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
-					// 
-					// Substituted "cv$temp$3$bias" with its value "traceTempVariable$bias$7_4".
-					cv$accumulatedProbabilities = (Math.log((flips[var46]?reduceVar$var33$3:(1.0 - reduceVar$var33$3))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((flips[var46]?reduceVar$var33$2:(1.0 - reduceVar$var33$2))) + cv$accumulatedProbabilities);
 			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
@@ -497,6 +489,8 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// 
 		// Write out the new value of the sample.
 		b = cv$proposedValue;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(guard1)
 			bias = cv$proposedValue;
 		
@@ -535,9 +529,9 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$1$var6" with its value "1.0".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, 1.0, 1.0);
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(guard1) {
 			// Processing sample task 50 of consumer random variable bernoulli.
 			for(int var46 = 0; var46 < samples; var46 += 1)
@@ -553,37 +547,14 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				// 
-				// Substituted "cv$temp$2$bias" with its value "cv$currentValue".
 				cv$accumulatedProbabilities = (Math.log((flips[var46]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		else {
-			// Variable declaration of reduceVar$var33$3 moved.
+			// Variable declaration of reduceVar$var33$2 moved.
 			// Declaration comment was:
-			// Variable declaration of reduceVar$var33$3 moved.
-			// Declaration comment was:
-			// Reduction of array c
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			// 
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// j's comment
-			// Set the right hand term to a value from the array c
-			// 
-			// Substituted "cv$reduction165Index" with its value "1".
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// Variable declaration of reduceVar$var33$3 moved.
+			// Variable declaration of reduceVar$var33$2 moved.
 			// Declaration comment was:
 			// Reduction of array c
 			// 
@@ -593,6 +564,23 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// 
 			// Execute the reduction function, saving the result into the return value.
 			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array c
+			// 
+			// Substituted "cv$reduction169Index" with its value "1".
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// Variable declaration of reduceVar$var33$2 moved.
+			// Declaration comment was:
+			// Reduction of array c
+			// 
+			// A generated name to prevent name collisions if the reduction is implemented more
+			// than once in inference and probability code. Initialize the variable to the unit
+			// value
+			// 
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
@@ -600,8 +588,8 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// j's comment
 			// Set the right hand term to a value from the array c
 			// 
-			// Substituted "cv$reduction165Index" with its value "1".
-			double reduceVar$var33$3 = ((cv$proposedValue / 2) + c[1]);
+			// Substituted "cv$reduction169Index" with its value "1".
+			double reduceVar$var33$2 = ((cv$proposedValue / 2) + c[1]);
 			
 			// Processing sample task 50 of consumer random variable bernoulli.
 			for(int var46 = 0; var46 < samples; var46 += 1)
@@ -617,15 +605,9 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				// 
-				// Substituted "cv$temp$3$bias" with its value "traceTempVariable$bias$7_4".
-				cv$accumulatedProbabilities = (Math.log((flips[var46]?reduceVar$var33$3:(1.0 - reduceVar$var33$3))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((flips[var46]?reduceVar$var33$2:(1.0 - reduceVar$var33$2))) + cv$accumulatedProbabilities);
 		}
 		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		// 
 		// The probability ration for the proposed value and the current value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
@@ -634,12 +616,19 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		
+		// Test if the probability of the sample is sufficient to keep the value. This needs
+		// to be less than or equal as otherwise if the proposed value is not possible and
+		// the random value is 0 an impossible value will be accepted.
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
 			// Write out the new value of the sample.
 			b = cv$originalValue;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(guard1)
 				// b's comment
 				// Write out the new value of the sample.

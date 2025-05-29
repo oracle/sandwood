@@ -263,9 +263,9 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample101 = fixedFlag$sample101;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -359,9 +359,9 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample165 = fixedFlag$sample101;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -403,8 +403,6 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$var84" with its value "1.0".
-			// 
 			// Set the current value to the current state of the tree.
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$originalValue);
 			for(int t = 1; t < T; t += 1) {
@@ -418,7 +416,7 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Reduce for every value except a masked value which will be skipped.
 				// 
 				// Substituted "j" with its value "var95".
-				for(int cv$reduction658Index = 0; cv$reduction658Index < var95; cv$reduction658Index += 1)
+				for(int cv$reduction641Index = 0; cv$reduction641Index < var95; cv$reduction641Index += 1)
 					// Execute the reduction function, saving the result into the return value.
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
@@ -432,12 +430,10 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 					// Substituted "index$t$4_6" with its value "t".
 					// 
 					// Substituted "index$i$4_7" with its value "i$var80".
-					reduceVar$var151$10 = (reduceVar$var151$10 + time_impact[t][i$var80][cv$reduction658Index]);
+					reduceVar$var151$10 = (reduceVar$var151$10 + time_impact[t][i$var80][cv$reduction641Index]);
 				
 				// Substituted "j" with its value "var95".
-				for(int cv$reduction658Index = (var95 + 1); cv$reduction658Index < time_dim; cv$reduction658Index += 1)
-					// Execute the reduction function, saving the result into the return value.
-					// 
+				for(int cv$reduction641Index = (var95 + 1); cv$reduction641Index < time_dim; cv$reduction641Index += 1)
 					// Execute the reduction function, saving the result into the return value.
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
@@ -451,7 +447,7 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 					// Substituted "index$t$4_6" with its value "t".
 					// 
 					// Substituted "index$i$4_7" with its value "i$var80".
-					reduceVar$var151$10 = (reduceVar$var151$10 + time_impact[t][i$var80][cv$reduction658Index]);
+					reduceVar$var151$10 = (reduceVar$var151$10 + time_impact[t][i$var80][cv$reduction641Index]);
 				
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
@@ -478,11 +474,6 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Substituted "index$i$4_11" with its value "index$i$4_7".
 				// 
 				// Substituted "index$t$4_10" with its value "t".
-				// 
-				// cv$temp$2$var156's comment
-				// Variable declaration of cv$temp$2$var156 moved.
-				// 
-				// Constructing a random variable input for use later.
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityPoisson(arr[t][i$var80], reduceVar$var151$10) + cv$accumulatedProbabilities);
 			}
 			
@@ -535,8 +526,6 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$1$var84" with its value "1.0".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue);
 		for(int t = 1; t < T; t += 1) {
 			// Reduction of array null
@@ -549,7 +538,7 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Reduce for every value except a masked value which will be skipped.
 			// 
 			// Substituted "j" with its value "var95".
-			for(int cv$reduction658Index = 0; cv$reduction658Index < var95; cv$reduction658Index += 1)
+			for(int cv$reduction641Index = 0; cv$reduction641Index < var95; cv$reduction641Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
@@ -563,12 +552,10 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Substituted "index$t$4_6" with its value "t".
 				// 
 				// Substituted "index$i$4_7" with its value "i$var80".
-				reduceVar$var151$10 = (reduceVar$var151$10 + time_impact[t][i$var80][cv$reduction658Index]);
+				reduceVar$var151$10 = (reduceVar$var151$10 + time_impact[t][i$var80][cv$reduction641Index]);
 			
 			// Substituted "j" with its value "var95".
-			for(int cv$reduction658Index = (var95 + 1); cv$reduction658Index < time_dim; cv$reduction658Index += 1)
-				// Execute the reduction function, saving the result into the return value.
-				// 
+			for(int cv$reduction641Index = (var95 + 1); cv$reduction641Index < time_dim; cv$reduction641Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
@@ -582,7 +569,7 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Substituted "index$t$4_6" with its value "t".
 				// 
 				// Substituted "index$i$4_7" with its value "i$var80".
-				reduceVar$var151$10 = (reduceVar$var151$10 + time_impact[t][i$var80][cv$reduction658Index]);
+				reduceVar$var151$10 = (reduceVar$var151$10 + time_impact[t][i$var80][cv$reduction641Index]);
 			
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
@@ -607,18 +594,9 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Substituted "index$i$4_11" with its value "index$i$4_7".
 			// 
 			// Substituted "index$t$4_10" with its value "t".
-			// 
-			// cv$temp$2$var156's comment
-			// Variable declaration of cv$temp$2$var156 moved.
-			// 
-			// Constructing a random variable input for use later.
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityPoisson(arr[t][i$var80], reduceVar$var151$10) + cv$accumulatedProbabilities);
 		}
 		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		// 
 		// The probability ration for the proposed value and the current value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
@@ -627,7 +605,12 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		
+		// Test if the probability of the sample is sufficient to keep the value. This needs
+		// to be less than or equal as otherwise if the proposed value is not possible and
+		// the random value is 0 an impossible value will be accepted.
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value

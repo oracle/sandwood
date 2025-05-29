@@ -164,26 +164,28 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 			// An accumulator for the distributed probability space covered.
 			double cv$probabilityReached = 0.0;
 			{
-				// The sample value to calculate the probability of generating
-				double cv$sampleValue = bias[0];
 				{
+					// The sample value to calculate the probability of generating
+					double cv$sampleValue = bias[0];
 					{
-						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, a, b));
-						
-						// Add the probability of this sample task to the distribution accumulator.
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							// If the second value is -infinity.
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							// Store the value of the function call, so the function call is only made once.
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, a, b));
+							
+							// Add the probability of this sample task to the distribution accumulator.
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								// If the second value is -infinity.
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							
+							// Add the probability of this distribution configuration to the accumulator.
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						
-						// Add the probability of this distribution configuration to the accumulator.
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -219,9 +221,9 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample10 = fixedFlag$sample10;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -265,28 +267,30 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 				// An accumulator for the distributed probability space covered.
 				double cv$probabilityReached = 0.0;
 				{
-					// The sample value to calculate the probability of generating
-					boolean cv$sampleValue = flips[i];
 					{
+						// The sample value to calculate the probability of generating
+						boolean cv$sampleValue = flips[i];
 						{
-							double var29 = bias[i];
-							
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var29:(1.0 - var29))));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							{
+								double var29 = bias[i];
+								
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var29:(1.0 - var29))));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -327,9 +331,9 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample31 = fixedFlag$sample10;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -370,21 +374,27 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 				{
 					// Looking for a path between Sample 10 and consumer Bernoulli 30.
 					{
-						for(int i = 0; i < samples; i += 1) {
-							if((0 == i)) {
-								// Processing sample task 31 of consumer random variable bernoulli.
-								{
+						{
+							for(int i = 0; i < samples; i += 1) {
+								if((0 == i)) {
+									// Processing sample task 31 of consumer random variable bernoulli.
 									{
 										{
 											{
 												{
-													// Include the value sampled by task 31 from random variable bernoulli.
-													// Increment the number of samples.
-													cv$count = (cv$count + 1);
-													
-													// If the sample value was positive increase the count
-													if(flips[i])
-														cv$sum = (cv$sum + 1);
+													{
+														{
+															{
+																// Include the value sampled by task 31 from random variable bernoulli.
+																// Increment the number of samples.
+																cv$count = (cv$count + 1);
+																
+																// If the sample value was positive increase the count
+																if(flips[i])
+																	cv$sum = (cv$sum + 1);
+															}
+														}
+													}
 												}
 											}
 										}
@@ -392,23 +402,29 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 								}
 							}
 						}
-						if((0 == 0)) {
-							for(int i = 0; i < samples; i += 1) {
-								for(int index$i$2_2 = 0; index$i$2_2 < samples; index$i$2_2 += 1) {
-									if(((i + 1) == index$i$2_2)) {
-										// Processing sample task 31 of consumer random variable bernoulli.
-										{
+						{
+							if((0 == 0)) {
+								for(int i = 0; i < samples; i += 1) {
+									for(int index$i$2_2 = 0; index$i$2_2 < samples; index$i$2_2 += 1) {
+										if(((i + 1) == index$i$2_2)) {
+											// Processing sample task 31 of consumer random variable bernoulli.
 											{
 												{
 													{
 														{
-															// Include the value sampled by task 31 from random variable bernoulli.
-															// Increment the number of samples.
-															cv$count = (cv$count + 1);
-															
-															// If the sample value was positive increase the count
-															if(flips[index$i$2_2])
-																cv$sum = (cv$sum + 1);
+															{
+																{
+																	{
+																		// Include the value sampled by task 31 from random variable bernoulli.
+																		// Increment the number of samples.
+																		cv$count = (cv$count + 1);
+																		
+																		// If the sample value was positive increase the count
+																		if(flips[index$i$2_2])
+																			cv$sum = (cv$sum + 1);
+																	}
+																}
+															}
 														}
 													}
 												}
@@ -429,7 +445,9 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 			// Guards to ensure that bias is only updated when there is a valid path.
 			{
 				{
-					bias[0] = var10;
+					{
+						bias[0] = var10;
+					}
 				}
 			}
 			
@@ -437,9 +455,11 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 			// 
 			// Looking for a path between Sample 10 and consumer double[] 28.
 			{
-				if((0 == 0)) {
-					for(int i = 0; i < samples; i += 1)
-						bias[(i + 1)] = bias[0];
+				{
+					if((0 == 0)) {
+						for(int i = 0; i < samples; i += 1)
+							bias[(i + 1)] = bias[0];
+					}
 				}
 			}
 		}

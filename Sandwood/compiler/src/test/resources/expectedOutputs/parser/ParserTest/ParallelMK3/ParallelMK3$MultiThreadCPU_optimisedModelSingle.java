@@ -237,9 +237,9 @@ final class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample21 = fixedFlag$sample21;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to constructed variables from the combined probability
@@ -334,9 +334,9 @@ final class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample38 = fixedFlag$sample21;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -434,7 +434,7 @@ final class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$$var247" with its value "10".
+			// A reference local to the function for the sample variable.
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(sample, v, 10);
 			for(int i = 0; i < length$observed; i += 1)
 				// Set the flags to false
@@ -452,10 +452,8 @@ final class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// variable instance.
 					guard$sample21gaussian37$global[i] = true;
 					
-					// Variable declaration of cv$temp$3$var36 moved.
-					// 
 					// Constructing a random variable input for use later.
-					double cv$temp$3$var36 = indirection[i];
+					double var36 = indirection[i];
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -472,9 +470,8 @@ final class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// cv$temp$2$var35's comment
 					// Constructing a random variable input for use later.
-					cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(cv$temp$3$var36))) + cv$accumulatedProbabilities) - (Math.log(cv$temp$3$var36) * 0.5));
+					cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(var36))) + cv$accumulatedProbabilities) - (Math.log(var36) * 0.5));
 				}
 			}
 			for(int i = 0; i < length$observed; i += 1) {
@@ -498,12 +495,6 @@ final class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// inputs.
 					// 
 					// Substituted "index$i$5_3" with its value "i".
-					// 
-					// cv$temp$5$var36's comment
-					// Constructing a random variable input for use later.
-					// 
-					// cv$temp$4$var35's comment
-					// Variable declaration of cv$temp$4$var35 moved.
 					// 
 					// Constructing a random variable input for use later.
 					// 
@@ -547,7 +538,7 @@ final class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$$var247" with its value "10".
+		// A reference local to the function for the sample variable.
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(sample, v, 10);
 		for(int i = 0; i < length$observed; i += 1)
 			// Set the flags to false
@@ -565,10 +556,8 @@ final class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// variable instance.
 				guard$sample21gaussian37$global[i] = true;
 				
-				// Variable declaration of cv$temp$3$var36 moved.
-				// 
 				// Constructing a random variable input for use later.
-				double cv$temp$3$var36 = indirection[i];
+				double var36 = indirection[i];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -585,9 +574,8 @@ final class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$2$var35's comment
 				// Constructing a random variable input for use later.
-				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(cv$temp$3$var36))) + cv$accumulatedProbabilities) - (Math.log(cv$temp$3$var36) * 0.5));
+				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(var36))) + cv$accumulatedProbabilities) - (Math.log(var36) * 0.5));
 			}
 		}
 		for(int i = 0; i < length$observed; i += 1) {
@@ -618,12 +606,6 @@ final class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// Substituted "index$i$5_3" with its value "i".
 				// 
-				// cv$temp$5$var36's comment
-				// Constructing a random variable input for use later.
-				// 
-				// cv$temp$4$var35's comment
-				// Variable declaration of cv$temp$4$var35 moved.
-				// 
 				// Constructing a random variable input for use later.
 				// 
 				// Substituted "index$i$5_3" with its value "i".
@@ -634,6 +616,8 @@ final class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
 		// the random value is 0 an impossible value will be accepted.
+		// 
+		// Ratio of the probability of proposed and original sample values
 		// 
 		// Variable declaration of cv$proposedProbability moved.
 		// Declaration comment was:
@@ -679,9 +663,9 @@ final class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {
-		// Constructor for guard$sample21gaussian37$global
-		// 
 		// Allocate scratch space.
+		// 
+		// Constructor for guard$sample21gaussian37$global
 		// 
 		// Allocation of guard$sample21gaussian37$global for single threaded execution
 		guard$sample21gaussian37$global = new boolean[length$observed];

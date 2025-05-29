@@ -317,9 +317,9 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample17 = fixedFlag$sample17;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -393,9 +393,9 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample34 = fixedFlag$sample34;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -474,9 +474,9 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample52 = fixedFlag$sample52;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -727,7 +727,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		// Get a local reference to the scratch space.
 		double[] cv$stateProbabilityLocal = cv$var68$stateProbabilityGlobal[threadID$cv$i$var66];
 		
-		// cv$numNumStates's comment
+		// cv$numStates's comment
 		// variable marginalization
 		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
 			// Write out the new value of the sample.
@@ -735,12 +735,10 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// Value of the variable at this index
 			z[i$var66] = cv$valuePos;
 			
-			// Variable declaration of cv$temp$3$var70 moved.
-			// 
 			// Constructing a random variable input for use later.
 			// 
 			// Value of the variable at this index
-			double cv$temp$3$var70 = sigma[cv$valuePos];
+			double var70 = sigma[cv$valuePos];
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
@@ -762,8 +760,8 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$0$phi" with its value "phi".
-			cv$stateProbabilityLocal[cv$valuePos] = ((DistributionSampling.logProbabilityGaussian(((x[i$var66] - mu[cv$valuePos]) / Math.sqrt(cv$temp$3$var70))) + Math.log(phi[cv$valuePos])) - (Math.log(cv$temp$3$var70) * 0.5));
+			// Value of the variable at this index
+			cv$stateProbabilityLocal[cv$valuePos] = ((DistributionSampling.logProbabilityGaussian(((x[i$var66] - mu[cv$valuePos]) / Math.sqrt(var70))) + Math.log(phi[cv$valuePos])) - (Math.log(var70) * 0.5));
 		}
 		
 		// This value is not used before it is set again, so removing the value declaration.
@@ -807,7 +805,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			
 			// Offset values, move to normal space, and sum.
 			// 
-			// cv$numNumStates's comment
+			// cv$numStates's comment
 			// variable marginalization
 			for(int cv$lseIndex = 0; cv$lseIndex < 5; cv$lseIndex += 1)
 				cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
@@ -822,16 +820,16 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
 			// 
-			// cv$numNumStates's comment
+			// cv$numStates's comment
 			// variable marginalization
 			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
-				// cv$numNumStates's comment
+				// cv$numStates's comment
 				// variable marginalization
 				cv$stateProbabilityLocal[cv$indexName] = 0.2;
 		} else {
 			// Normalize log space values and move to normal space
 			// 
-			// cv$numNumStates's comment
+			// cv$numStates's comment
 			// variable marginalization
 			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
 				cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
@@ -839,14 +837,14 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		
 		// Set array values that are not computed for the input to negative infinity.
 		// 
-		// cv$numNumStates's comment
+		// cv$numStates's comment
 		// variable marginalization
 		for(int cv$indexName = 5; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 			cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the new value of the sample.
 		// 
-		// cv$numNumStates's comment
+		// cv$numStates's comment
 		// variable marginalization
 		z[i$var66] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, 5);
 	}

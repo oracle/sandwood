@@ -289,26 +289,28 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// An accumulator for the distributed probability space covered.
 				double cv$probabilityReached = 0.0;
 				{
-					// The sample value to calculate the probability of generating
-					double[] cv$sampleValue = m[var29];
 					{
+						// The sample value to calculate the probability of generating
+						double[] cv$sampleValue = m[var29];
 						{
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, noStates));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							{
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, noStates));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -348,9 +350,9 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample30 = fixedFlag$sample30;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -400,29 +402,31 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// An accumulator for the distributed probability space covered.
 				double cv$probabilityReached = 0.0;
 				{
-					// The sample value to calculate the probability of generating
-					double cv$sampleValue = bias[var45];
 					{
+						// The sample value to calculate the probability of generating
+						double cv$sampleValue = bias[var45];
 						{
-							double var32 = 1.0;
-							double var33 = 1.0;
-							
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var32, var33));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							{
+								double var32 = 1.0;
+								double var33 = 1.0;
+								
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var32, var33));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -462,9 +466,9 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample47 = fixedFlag$sample47;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -514,28 +518,30 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// An accumulator for the distributed probability space covered.
 				double cv$probabilityReached = 0.0;
 				{
-					// The sample value to calculate the probability of generating
-					int cv$sampleValue = st[i$var58];
 					{
+						// The sample value to calculate the probability of generating
+						int cv$sampleValue = st[i$var58];
 						{
-							double[] var59 = m[i$var58];
-							
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates))?Math.log(var59[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							{
+								double[] var59 = m[i$var58];
+								
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates))?Math.log(var59[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -575,9 +581,9 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample62 = (fixedFlag$sample62 && fixedFlag$sample30);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -629,48 +635,50 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// An accumulator for the distributed probability space covered.
 				double cv$probabilityReached = 0.0;
 				{
-					// The sample value to calculate the probability of generating
-					boolean cv$sampleValue = flips[j$var73];
 					{
+						// The sample value to calculate the probability of generating
+						boolean cv$sampleValue = flips[j$var73];
 						{
-							// Reduction of array st
-							// 
-							// A generated name to prevent name collisions if the reduction is implemented more
-							// than once in inference and probability code. Initialize the variable to the unit
-							// value
-							int reduceVar$var82$2 = 0;
-							
-							// For each index in the array to be reduced
-							for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1) {
-								// Set the left hand term of the reduction function to the return variable value.
-								int i$var79 = reduceVar$var82$2;
-								
-								// Set the right hand term to a value from the array st
-								int j$var80 = st[cv$reduction78Index];
-								
-								// Execute the reduction function, saving the result into the return value.
+							{
+								// Reduction of array st
 								// 
-								// Copy the result of the reduction into the variable returned by the reduction.
-								reduceVar$var82$2 = (i$var79 + j$var80);
+								// A generated name to prevent name collisions if the reduction is implemented more
+								// than once in inference and probability code. Initialize the variable to the unit
+								// value
+								int reduceVar$var82$2 = 0;
+								
+								// For each index in the array to be reduced
+								for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1) {
+									// Set the left hand term of the reduction function to the return variable value.
+									int i$var79 = reduceVar$var82$2;
+									
+									// Set the right hand term to a value from the array st
+									int j$var80 = st[cv$reduction78Index];
+									
+									// Execute the reduction function, saving the result into the return value.
+									// 
+									// Copy the result of the reduction into the variable returned by the reduction.
+									reduceVar$var82$2 = (i$var79 + j$var80);
+								}
+								double var83 = bias[reduceVar$var82$2];
+								
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var83:(1.0 - var83))));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							double var83 = bias[reduceVar$var82$2];
-							
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var83:(1.0 - var83))));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -706,9 +714,9 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample87 = (fixedFlag$sample47 && fixedFlag$sample62);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -756,17 +764,23 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				{
 					// Looking for a path between Sample 30 and consumer Categorical 60.
 					{
-						for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1) {
-							if((var29 == i$var58)) {
-								// Processing sample task 62 of consumer random variable null.
-								{
+						{
+							for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1) {
+								if((var29 == i$var58)) {
+									// Processing sample task 62 of consumer random variable null.
 									{
 										{
 											{
 												{
-													// Increment the sample counter with the value sampled by sample task 62 of random
-													// variable var60
-													cv$countLocal[st[i$var58]] = (cv$countLocal[st[i$var58]] + 1.0);
+													{
+														{
+															{
+																// Increment the sample counter with the value sampled by sample task 62 of random
+																// variable var60
+																cv$countLocal[st[i$var58]] = (cv$countLocal[st[i$var58]] + 1.0);
+															}
+														}
+													}
 												}
 											}
 										}
@@ -800,35 +814,37 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				{
 					// Looking for a path between Sample 47 and consumer Bernoulli 84.
 					{
-						// Reduction of array st
-						// 
-						// A generated name to prevent name collisions if the reduction is implemented more
-						// than once in inference and probability code. Initialize the variable to the unit
-						// value
-						int reduceVar$var82$0 = 0;
-						
-						// For each index in the array to be reduced
-						for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1) {
-							// Set the left hand term of the reduction function to the return variable value.
-							int i$var79 = reduceVar$var82$0;
-							
-							// Set the right hand term to a value from the array st
-							int j$var80 = st[cv$reduction78Index];
-							
-							// Execute the reduction function, saving the result into the return value.
+						{
+							// Reduction of array st
 							// 
-							// Copy the result of the reduction into the variable returned by the reduction.
-							reduceVar$var82$0 = (i$var79 + j$var80);
-						}
-						if((var45 == reduceVar$var82$0)) {
-							for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
-								// Include the value sampled by task 87 from random variable var84.
-								// Increment the number of samples.
-								cv$count = (cv$count + 1);
+							// A generated name to prevent name collisions if the reduction is implemented more
+							// than once in inference and probability code. Initialize the variable to the unit
+							// value
+							int reduceVar$var82$0 = 0;
+							
+							// For each index in the array to be reduced
+							for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1) {
+								// Set the left hand term of the reduction function to the return variable value.
+								int i$var79 = reduceVar$var82$0;
 								
-								// If the sample value was positive increase the count
-								if(flips[j$var73])
-									cv$sum = (cv$sum + 1);
+								// Set the right hand term to a value from the array st
+								int j$var80 = st[cv$reduction78Index];
+								
+								// Execute the reduction function, saving the result into the return value.
+								// 
+								// Copy the result of the reduction into the variable returned by the reduction.
+								reduceVar$var82$0 = (i$var79 + j$var80);
+							}
+							if((var45 == reduceVar$var82$0)) {
+								for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
+									// Include the value sampled by task 87 from random variable var84.
+									// Increment the number of samples.
+									cv$count = (cv$count + 1);
+									
+									// If the sample value was positive increase the count
+									if(flips[j$var73])
+										cv$sum = (cv$sum + 1);
+								}
 							}
 						}
 					}
@@ -842,7 +858,9 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Guards to ensure that bias is only updated when there is a valid path.
 			{
 				{
-					bias[var45] = var46;
+					{
+						bias[var45] = var46;
+					}
 				}
 			}
 		}
@@ -854,15 +872,15 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private final void sample62(int i$var58) {
 		if(true) {
 			// Calculate the number of states to evaluate.
-			int cv$numNumStates = 0;
+			int cv$numStates = 0;
 			{
 				// variable marginalization
-				cv$numNumStates = Math.max(cv$numNumStates, noStates);
+				cv$numStates = Math.max(cv$numStates, noStates);
 			}
 			
 			// Get a local reference to the scratch space.
 			double[] cv$stateProbabilityLocal = cv$var61$stateProbabilityGlobal;
-			for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				// Initialize the summed probabilities to 0.
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 				
@@ -886,35 +904,28 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Guards to ensure that st is only updated when there is a valid path.
 				{
 					{
-						st[i$var58] = cv$currentValue;
+						{
+							st[i$var58] = cv$currentValue;
+						}
 					}
 				}
 				{
 					// Record the reached probability density.
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-					double[] cv$temp$0$var59;
-					{
-						// Constructing a random variable input for use later.
-						double[] var59 = m[i$var58];
-						cv$temp$0$var59 = var59;
-					}
-					int cv$temp$1$$var167;
-					{
-						// Constructing a random variable input for use later.
-						int $var167 = noStates;
-						cv$temp$1$$var167 = $var167;
-					}
+					
+					// Constructing a random variable input for use later.
+					double[] var59 = m[i$var58];
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var167))?Math.log(cv$temp$0$var59[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < noStates))?Math.log(var59[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 84.
 					{
 						{
-							int traceTempVariable$i$2_1 = cv$currentValue;
-							if(((0 <= i$var58) && (i$var58 < noCats))) {
-								{
+							{
+								int traceTempVariable$i$2_1 = cv$currentValue;
+								if(((0 <= i$var58) && (i$var58 < noCats))) {
 									if((0 < noCats)) {
 										// Reduction of array st
 										// 
@@ -924,27 +935,25 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 										int reduceVar$var82$1 = 0;
 										
 										// Reduce for every value except a masked value which will be skipped.
-										for(int cv$reduction223Index = 0; cv$reduction223Index < i$var58; cv$reduction223Index += 1) {
+										for(int cv$reduction222Index = 0; cv$reduction222Index < i$var58; cv$reduction222Index += 1) {
 											// Set the left hand term of the reduction function to the return variable value.
 											int i$var79 = reduceVar$var82$1;
 											
 											// Set the right hand term to a value from the array st
-											int j$var80 = st[cv$reduction223Index];
+											int j$var80 = st[cv$reduction222Index];
 											
 											// Execute the reduction function, saving the result into the return value.
 											// 
 											// Copy the result of the reduction into the variable returned by the reduction.
 											reduceVar$var82$1 = (i$var79 + j$var80);
 										}
-										for(int cv$reduction223Index = (i$var58 + 1); cv$reduction223Index < noCats; cv$reduction223Index += 1) {
+										for(int cv$reduction222Index = (i$var58 + 1); cv$reduction222Index < noCats; cv$reduction222Index += 1) {
 											// Set the left hand term of the reduction function to the return variable value.
 											int i$var79 = reduceVar$var82$1;
 											
 											// Set the right hand term to a value from the array st
-											int j$var80 = st[cv$reduction223Index];
+											int j$var80 = st[cv$reduction222Index];
 											
-											// Execute the reduction function, saving the result into the return value.
-											// 
 											// Execute the reduction function, saving the result into the return value.
 											// 
 											// Copy the result of the reduction into the variable returned by the reduction.
@@ -967,26 +976,24 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 												{
 													{
 														{
-															double cv$temp$2$var83;
 															{
 																// Constructing a random variable input for use later.
 																double var83 = bias[traceTempVariable$var82$2_2];
-																cv$temp$2$var83 = var83;
+																
+																// Record the probability of sample task 87 generating output with current configuration.
+																if(((Math.log(1.0) + Math.log((flips[j$var73]?var83:(1.0 - var83)))) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[j$var73]?var83:(1.0 - var83)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																else {
+																	// If the second value is -infinity.
+																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[j$var73]?var83:(1.0 - var83))));
+																	else
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[j$var73]?var83:(1.0 - var83)))))) + 1)) + (Math.log(1.0) + Math.log((flips[j$var73]?var83:(1.0 - var83)))));
+																}
+																
+																// Recorded the probability of reaching sample task 87 with the current configuration.
+																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
-															
-															// Record the probability of sample task 87 generating output with current configuration.
-															if(((Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83)))) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-															else {
-																// If the second value is -infinity.
-																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83))));
-																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83)))))) + 1)) + (Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83)))));
-															}
-															
-															// Recorded the probability of reaching sample task 87 with the current configuration.
-															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 														}
 													}
 												}
@@ -1040,7 +1047,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				double cv$lseMax = cv$stateProbabilityLocal[0];
 				
 				// Find max value.
-				for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+				for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 					double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
 					if((cv$lseMax < cv$lseElementValue))
 						cv$lseMax = cv$lseElementValue;
@@ -1056,7 +1063,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					double cv$lseSum = 0.0;
 					
 					// Offset values, move to normal space, and sum.
-					for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+					for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 						cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
 					
 					// Increment the value of the target, moving the value back into log space.
@@ -1067,26 +1074,28 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Normalize log space values and move to normal space
-				for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
-					cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numNumStates);
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numStates);
 			} else {
 				// Normalize log space values and move to normal space
-				for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 					cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
-			for(int cv$indexName = cv$numNumStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			for(int cv$indexName = cv$numStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 				cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
-			int var61 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates);
+			int var61 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
 			
 			// Guards to ensure that st is only updated when there is a valid path.
 			{
 				{
-					st[i$var58] = var61;
+					{
+						st[i$var58] = var61;
+					}
 				}
 			}
 		}

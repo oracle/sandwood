@@ -372,9 +372,9 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Substituted "fixedFlag$sample11" with its value "true".
 				fixedProbFlag$sample11 = true;
 			}
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
@@ -459,9 +459,9 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Substituted "fixedFlag$sample27" with its value "true".
 				fixedProbFlag$sample27 = true;
 			}
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -557,9 +557,9 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Substituted "fixedFlag$sample5" with its value "true".
 				fixedProbFlag$sample5 = true;
 			}
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -622,7 +622,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 									double cv$probabilitySample27Value384 = distribution$sample27[0][index$sample27$383];
 									
 									// Substituted "j" with its value "0".
-									double var51 = ((double)((v1 + v2[0]) + v2[1]) / v2[1]);
+									double var51 = ((double)((v1 + v2[0]) + index$sample27$383) / index$sample27$383);
 									
 									// Store the value of the function call, so the function call is only made once.
 									double cv$weightedProbability = (Math.log(cv$probabilitySample27Value384) + Math.log((cv$sampleValue?var51:(1.0 - var51))));
@@ -649,7 +649,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 								double cv$probabilitySample11Value373 = distribution$sample11[index$sample11$372];
 								if(fixedFlag$sample27) {
 									// Substituted "j" with its value "0".
-									double var51 = ((double)((v1 + v2[0]) + v2[1]) / v2[1]);
+									double var51 = ((double)((v1 + index$sample11$372) + v2[1]) / v2[1]);
 									
 									// Store the value of the function call, so the function call is only made once.
 									double cv$weightedProbability = (Math.log(cv$probabilitySample11Value373) + Math.log((cv$sampleValue?var51:(1.0 - var51))));
@@ -674,9 +674,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 										// 
 										// Substituted "i" with its value "0".
 										double cv$probabilitySample27Value390 = (cv$probabilitySample11Value373 * distribution$sample27[0][index$sample27$389]);
-										
-										// Substituted "j" with its value "0".
-										double var51 = ((double)((v1 + v2[0]) + v2[1]) / v2[1]);
+										double var51 = ((double)((v1 + index$sample11$372) + index$sample27$389) / index$sample27$389);
 										
 										// Store the value of the function call, so the function call is only made once.
 										double cv$weightedProbability = (Math.log(cv$probabilitySample27Value390) + Math.log((cv$sampleValue?var51:(1.0 - var51))));
@@ -733,7 +731,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 										double cv$probabilitySample27Value396 = (cv$probabilitySample5Value368 * distribution$sample27[0][index$sample27$395]);
 										
 										// Substituted "j" with its value "0".
-										double var51 = ((double)((index$sample5$367 + v2[0]) + v2[1]) / v2[1]);
+										double var51 = ((double)((index$sample5$367 + v2[0]) + index$sample27$395) / index$sample27$395);
 										
 										// Store the value of the function call, so the function call is only made once.
 										double cv$weightedProbability = (Math.log(cv$probabilitySample27Value396) + Math.log((cv$sampleValue?var51:(1.0 - var51))));
@@ -760,7 +758,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 									double cv$probabilitySample11Value378 = (cv$probabilitySample5Value368 * distribution$sample11[index$sample11$377]);
 									if(fixedFlag$sample27) {
 										// Substituted "j" with its value "0".
-										double var51 = ((double)((index$sample5$367 + v2[0]) + v2[1]) / v2[1]);
+										double var51 = ((double)((index$sample5$367 + index$sample11$377) + v2[1]) / v2[1]);
 										
 										// Store the value of the function call, so the function call is only made once.
 										double cv$weightedProbability = (Math.log(cv$probabilitySample11Value378) + Math.log((cv$sampleValue?var51:(1.0 - var51))));
@@ -785,9 +783,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 											// 
 											// Substituted "i" with its value "0".
 											double cv$probabilitySample27Value402 = (cv$probabilitySample11Value378 * distribution$sample27[0][index$sample27$401]);
-											
-											// Substituted "j" with its value "0".
-											double var51 = ((double)((index$sample5$367 + v2[0]) + v2[1]) / v2[1]);
+											double var51 = ((double)((index$sample5$367 + index$sample11$377) + index$sample27$401) / index$sample27$401);
 											
 											// Store the value of the function call, so the function call is only made once.
 											double cv$weightedProbability = (Math.log(cv$probabilitySample27Value402) + Math.log((cv$sampleValue?var51:(1.0 - var51))));
@@ -847,6 +843,8 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 								// Update the probability of sampling this value from the distribution value.
 								double cv$probabilitySample27Value441 = distribution$sample27[i][index$sample27$440];
 								
+								// Constraints moved from conditionals in inner loops/scopes/etc.
+								// 
 								// Substituted "i" with its value "(j - 1)".
 								// 
 								// Substituted "i" with its value "(j - 1)".
@@ -855,7 +853,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 								// 
 								// Substituted "i" with its value "(j - 1)".
 								if((i == j)) {
-									double var51 = ((double)((v1 + v2[j]) + v2[(j + 1)]) / v2[(j + 1)]);
+									double var51 = ((double)((v1 + index$sample27$440) + index$sample27$440) / index$sample27$440);
 									
 									// Store the value of the function call, so the function call is only made once.
 									double cv$weightedProbability = (Math.log(cv$probabilitySample27Value441) + Math.log((cv$sampleValue?var51:(1.0 - var51))));
@@ -883,7 +881,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 										// 
 										// Substituted "index$i$452" with its value "j".
 										double cv$probabilitySample27Value454 = (cv$probabilitySample27Value441 * distribution$sample27[j][index$sample27$453]);
-										double var51 = ((double)((v1 + v2[j]) + v2[(j + 1)]) / v2[(j + 1)]);
+										double var51 = ((double)((v1 + index$sample27$440) + index$sample27$453) / index$sample27$453);
 										
 										// Store the value of the function call, so the function call is only made once.
 										double cv$weightedProbability = (Math.log(cv$probabilitySample27Value454) + Math.log((cv$sampleValue?var51:(1.0 - var51))));
@@ -943,6 +941,8 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 									// Update the probability of sampling this value from the distribution value.
 									double cv$probabilitySample27Value447 = (cv$probabilitySample5Value435 * distribution$sample27[i][index$sample27$446]);
 									
+									// Constraints moved from conditionals in inner loops/scopes/etc.
+									// 
 									// Substituted "i" with its value "(j - 1)".
 									// 
 									// Substituted "i" with its value "(j - 1)".
@@ -951,7 +951,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 									// 
 									// Substituted "i" with its value "(j - 1)".
 									if((i == j)) {
-										double var51 = ((double)((index$sample5$434 + v2[j]) + v2[(j + 1)]) / v2[(j + 1)]);
+										double var51 = ((double)((index$sample5$434 + index$sample27$446) + index$sample27$446) / index$sample27$446);
 										
 										// Store the value of the function call, so the function call is only made once.
 										double cv$weightedProbability = (Math.log(cv$probabilitySample27Value447) + Math.log((cv$sampleValue?var51:(1.0 - var51))));
@@ -979,7 +979,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 											// 
 											// Substituted "index$i$459" with its value "j".
 											double cv$probabilitySample27Value461 = (cv$probabilitySample27Value447 * distribution$sample27[j][index$sample27$460]);
-											double var51 = ((double)((index$sample5$434 + v2[j]) + v2[(j + 1)]) / v2[(j + 1)]);
+											double var51 = ((double)((index$sample5$434 + index$sample27$446) + index$sample27$460) / index$sample27$460);
 											
 											// Store the value of the function call, so the function call is only made once.
 											double cv$weightedProbability = (Math.log(cv$probabilitySample27Value461) + Math.log((cv$sampleValue?var51:(1.0 - var51))));
@@ -1033,9 +1033,9 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample53 = ((fixedFlag$sample5 && fixedFlag$sample11) && fixedFlag$sample27);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -1137,9 +1137,9 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample11 = fixedFlag$sample11;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -1220,9 +1220,9 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample27 = fixedFlag$sample27;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -1312,9 +1312,9 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample5 = fixedFlag$sample5;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -1389,9 +1389,9 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample53 = ((fixedFlag$sample5 && fixedFlag$sample11) && fixedFlag$sample27);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -1411,19 +1411,19 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 	// by sample task 11 drawn from Categorical 10. Inference was performed using variable
 	// marginalization.
 	private final void sample11() {
-		// Variable declaration of cv$numNumStates moved.
+		// Variable declaration of cv$numStates moved.
 		// Declaration comment was:
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
 		// Calculate the number of states to evaluate.
 		// 
 		// variable marginalization
-		int cv$numNumStates = weightings.length;
-		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+		int cv$numStates = weightings.length;
+		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$0$weightings" with its value "weightings".
+			// Value of the variable at this index
 			double cv$accumulatedProbabilities = Math.log(weightings[cv$valuePos]);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1473,8 +1473,6 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 							double var51 = ((double)((v1 + cv$valuePos) + v2[1]) / v2[1]);
 							
 							// Substituted "j" with its value "0".
-							// 
-							// Substituted "cv$temp$28$var51" with its value "var51".
 							cv$accumulatedConsumerProbabilities = Math.log((v[0]?var51:(1.0 - var51)));
 							
 							// Recorded the probability of reaching sample task 53 with the current configuration.
@@ -1492,32 +1490,22 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 								
 								// Constructing a random variable input for use later.
 								// 
-								// Substituted "j" with its value "0".
-								// 
 								// Value of the variable at this index
-								double var51 = ((double)((v1 + cv$valuePos) + v2[1]) / v2[1]);
+								double var51 = ((double)((v1 + cv$valuePos) + index$sample27$130) / index$sample27$130);
 								
 								// Record the probability of sample task 53 generating output with current configuration.
 								// 
 								// Substituted "j" with its value "0".
-								// 
-								// Substituted "cv$temp$29$var51" with its value "var51".
 								if(((Math.log(cv$probabilitySample27Value131) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
 									// Substituted "j" with its value "0".
-									// 
-									// Substituted "cv$temp$29$var51" with its value "var51".
 									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value131) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									// If the second value is -infinity.
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 										// Substituted "j" with its value "0".
-										// 
-										// Substituted "cv$temp$29$var51" with its value "var51".
 										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value131) + Math.log((v[0]?var51:(1.0 - var51))));
 									else
 										// Substituted "j" with its value "0".
-										// 
-										// Substituted "cv$temp$29$var51" with its value "var51".
 										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value131) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample27Value131)) + Math.log((v[0]?var51:(1.0 - var51))));
 								}
 								
@@ -1541,24 +1529,16 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 								// Record the probability of sample task 53 generating output with current configuration.
 								// 
 								// Substituted "j" with its value "0".
-								// 
-								// Substituted "cv$temp$31$var51" with its value "var51".
 								if(((Math.log(cv$probabilitySample5Value125) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
 									// Substituted "j" with its value "0".
-									// 
-									// Substituted "cv$temp$31$var51" with its value "var51".
 									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample5Value125) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									// If the second value is -infinity.
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 										// Substituted "j" with its value "0".
-										// 
-										// Substituted "cv$temp$31$var51" with its value "var51".
 										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value125) + Math.log((v[0]?var51:(1.0 - var51))));
 									else
 										// Substituted "j" with its value "0".
-										// 
-										// Substituted "cv$temp$31$var51" with its value "var51".
 										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value125) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample5Value125)) + Math.log((v[0]?var51:(1.0 - var51))));
 								}
 								
@@ -1574,32 +1554,22 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 									
 									// Constructing a random variable input for use later.
 									// 
-									// Substituted "j" with its value "0".
-									// 
 									// Value of the variable at this index
-									double var51 = ((double)((index$sample5$124 + cv$valuePos) + v2[1]) / v2[1]);
+									double var51 = ((double)((index$sample5$124 + cv$valuePos) + index$sample27$136) / index$sample27$136);
 									
 									// Record the probability of sample task 53 generating output with current configuration.
 									// 
 									// Substituted "j" with its value "0".
-									// 
-									// Substituted "cv$temp$32$var51" with its value "var51".
 									if(((Math.log(cv$probabilitySample27Value137) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
 										// Substituted "j" with its value "0".
-										// 
-										// Substituted "cv$temp$32$var51" with its value "var51".
 										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value137) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 									else {
 										// If the second value is -infinity.
 										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 											// Substituted "j" with its value "0".
-											// 
-											// Substituted "cv$temp$32$var51" with its value "var51".
 											cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value137) + Math.log((v[0]?var51:(1.0 - var51))));
 										else
 											// Substituted "j" with its value "0".
-											// 
-											// Substituted "cv$temp$32$var51" with its value "var51".
 											cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value137) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample27Value137)) + Math.log((v[0]?var51:(1.0 - var51))));
 									}
 									
@@ -1651,7 +1621,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 		double cv$lseMax = cv$var11$stateProbabilityGlobal[0];
 		
 		// Find max value.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 			// Get a local reference to the scratch space.
 			double cv$lseElementValue = cv$var11$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
@@ -1668,7 +1638,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var11$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
@@ -1681,14 +1651,14 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Set the calculated probabilities to be the distribution values, and normalize
 				// 
 				// Local copy of the probability array
-				distribution$sample11[cv$indexName] = (1.0 / cv$numNumStates);
+				distribution$sample11[cv$indexName] = (1.0 / cv$numStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Set the calculated probabilities to be the distribution values, and normalize
 				// 
 				// Local copy of the probability array
@@ -1698,7 +1668,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Set array values that are not computed for the input to negative infinity.
 		// 
 		// Get a local reference to the scratch space.
-		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$var11$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numStates; cv$indexName < cv$var11$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Set the calculated probabilities to be the distribution values, and normalize
 			// 
 			// Local copy of the probability array
@@ -1709,19 +1679,19 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 	// by sample task 27 drawn from Categorical 26. Inference was performed using variable
 	// marginalization.
 	private final void sample27(int i) {
-		// Variable declaration of cv$numNumStates moved.
+		// Variable declaration of cv$numStates moved.
 		// Declaration comment was:
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
 		// Calculate the number of states to evaluate.
 		// 
 		// variable marginalization
-		int cv$numNumStates = weightings.length;
-		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+		int cv$numStates = weightings.length;
+		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$0$weightings" with its value "weightings".
+			// Value of the variable at this index
 			double cv$accumulatedProbabilities = Math.log(weightings[cv$valuePos]);
 			{
 				int j = (i + 1);
@@ -1775,15 +1745,13 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 					// 
 					// Substituted "j" with its value "(i + 1)".
 					if((i == j)) {
-						// Variable declaration of cv$temp$24$var51 moved.
-						// 
 						// Constructing a random variable input for use later.
 						// 
 						// Value of the variable at this index
-						double cv$temp$24$var51 = ((double)((v1 + cv$valuePos) + cv$valuePos) / cv$valuePos);
+						double var51 = ((double)((v1 + cv$valuePos) + cv$valuePos) / cv$valuePos);
 						
 						// Substituted "j" with its value "i".
-						cv$accumulatedConsumerProbabilities = Math.log((v[i]?cv$temp$24$var51:(1.0 - cv$temp$24$var51)));
+						cv$accumulatedConsumerProbabilities = Math.log((v[i]?var51:(1.0 - var51)));
 						
 						// Recorded the probability of reaching sample task 53 with the current configuration.
 						// 
@@ -1791,38 +1759,36 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 						// to 1 as seen values will be deducted from this value.
 						cv$consumerDistributionProbabilityAccumulator = 0.0;
 					}
-					// index$i$2's comment
+					// index$i$1's comment
 					// Copy of index so that its values can be safely substituted
 					// 
-					// Substituted "index$i$121" with its value "j".
+					// Substituted "index$i$120" with its value "j".
 					else {
 						// Enumerating the possible outputs of Categorical 26.
-						for(int index$sample27$122 = 0; index$sample27$122 < weightings.length; index$sample27$122 += 1) {
+						for(int index$sample27$121 = 0; index$sample27$121 < weightings.length; index$sample27$121 += 1) {
 							// Update the probability of sampling this value from the distribution value.
 							// 
-							// Substituted "index$i$121" with its value "j".
-							double cv$probabilitySample27Value123 = distribution$sample27[j][index$sample27$122];
+							// Substituted "index$i$120" with its value "j".
+							double cv$probabilitySample27Value122 = distribution$sample27[j][index$sample27$121];
 							
-							// Variable declaration of cv$temp$27$var51 moved.
-							// 
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							double cv$temp$27$var51 = ((double)((v1 + cv$valuePos) + cv$valuePos) / cv$valuePos);
+							double var51 = ((double)((v1 + cv$valuePos) + index$sample27$121) / index$sample27$121);
 							
 							// Record the probability of sample task 53 generating output with current configuration.
-							if(((Math.log(cv$probabilitySample27Value123) + Math.log((v[j]?cv$temp$27$var51:(1.0 - cv$temp$27$var51)))) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value123) + Math.log((v[j]?cv$temp$27$var51:(1.0 - cv$temp$27$var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+							if(((Math.log(cv$probabilitySample27Value122) + Math.log((v[j]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value122) + Math.log((v[j]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								// If the second value is -infinity.
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value123) + Math.log((v[j]?cv$temp$27$var51:(1.0 - cv$temp$27$var51))));
+									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value122) + Math.log((v[j]?var51:(1.0 - var51))));
 								else
-									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value123) + Math.log((v[j]?cv$temp$27$var51:(1.0 - cv$temp$27$var51)))))) + 1)) + Math.log(cv$probabilitySample27Value123)) + Math.log((v[j]?cv$temp$27$var51:(1.0 - cv$temp$27$var51))));
+									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value122) + Math.log((v[j]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample27Value122)) + Math.log((v[j]?var51:(1.0 - var51))));
 							}
 							
 							// Recorded the probability of reaching sample task 53 with the current configuration.
-							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample27Value123);
+							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample27Value122);
 						}
 					}
 				}
@@ -1831,72 +1797,67 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 				// the output of Sample task 27.
 				else {
 					// Enumerating the possible outputs of Categorical 4.
-					for(int index$sample5$116 = 0; index$sample5$116 < weightings.length; index$sample5$116 += 1) {
+					for(int index$sample5$115 = 0; index$sample5$115 < weightings.length; index$sample5$115 += 1) {
 						// Update the probability of sampling this value from the distribution value.
-						double cv$probabilitySample5Value117 = distribution$sample5[index$sample5$116];
+						double cv$probabilitySample5Value116 = distribution$sample5[index$sample5$115];
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
 						if((i == j)) {
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							double var51 = ((double)((index$sample5$116 + cv$valuePos) + cv$valuePos) / cv$valuePos);
+							double var51 = ((double)((index$sample5$115 + cv$valuePos) + cv$valuePos) / cv$valuePos);
 							
 							// Record the probability of sample task 53 generating output with current configuration.
 							// 
-							// Substituted "cv$temp$29$var51" with its value "var51".
-							if(((Math.log(cv$probabilitySample5Value117) + Math.log((v[i]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
-								// Substituted "cv$temp$29$var51" with its value "var51".
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample5Value117) + Math.log((v[i]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+							// Substituted "j" with its value "i".
+							if(((Math.log(cv$probabilitySample5Value116) + Math.log((v[i]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
+								// Substituted "j" with its value "i".
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample5Value116) + Math.log((v[i]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								// If the second value is -infinity.
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									// Substituted "cv$temp$29$var51" with its value "var51".
-									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value117) + Math.log((v[i]?var51:(1.0 - var51))));
+									// Substituted "j" with its value "i".
+									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value116) + Math.log((v[i]?var51:(1.0 - var51))));
 								else
-									// Substituted "cv$temp$29$var51" with its value "var51".
-									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value117) + Math.log((v[i]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample5Value117)) + Math.log((v[i]?var51:(1.0 - var51))));
+									// Substituted "j" with its value "i".
+									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value116) + Math.log((v[i]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample5Value116)) + Math.log((v[i]?var51:(1.0 - var51))));
 							}
 							
 							// Recorded the probability of reaching sample task 53 with the current configuration.
-							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample5Value117);
+							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample5Value116);
 						}
 						
-						// index$i$2's comment
+						// index$i$1's comment
 						// Copy of index so that its values can be safely substituted
 						// 
-						// Substituted "index$i$127" with its value "j".
+						// Substituted "index$i$126" with its value "j".
 						else {
 							// Enumerating the possible outputs of Categorical 26.
-							for(int index$sample27$128 = 0; index$sample27$128 < weightings.length; index$sample27$128 += 1) {
+							for(int index$sample27$127 = 0; index$sample27$127 < weightings.length; index$sample27$127 += 1) {
 								// Update the probability of sampling this value from the distribution value.
 								// 
-								// Substituted "index$i$127" with its value "j".
-								double cv$probabilitySample27Value129 = (cv$probabilitySample5Value117 * distribution$sample27[j][index$sample27$128]);
+								// Substituted "index$i$126" with its value "j".
+								double cv$probabilitySample27Value128 = (cv$probabilitySample5Value116 * distribution$sample27[j][index$sample27$127]);
 								
 								// Constructing a random variable input for use later.
 								// 
 								// Value of the variable at this index
-								double var51 = ((double)((index$sample5$116 + cv$valuePos) + cv$valuePos) / cv$valuePos);
+								double var51 = ((double)((index$sample5$115 + cv$valuePos) + index$sample27$127) / index$sample27$127);
 								
 								// Record the probability of sample task 53 generating output with current configuration.
-								// 
-								// Substituted "cv$temp$32$var51" with its value "var51".
-								if(((Math.log(cv$probabilitySample27Value129) + Math.log((v[j]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
-									// Substituted "cv$temp$32$var51" with its value "var51".
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value129) + Math.log((v[j]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								if(((Math.log(cv$probabilitySample27Value128) + Math.log((v[j]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value128) + Math.log((v[j]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									// If the second value is -infinity.
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-										// Substituted "cv$temp$32$var51" with its value "var51".
-										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value129) + Math.log((v[j]?var51:(1.0 - var51))));
+										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value128) + Math.log((v[j]?var51:(1.0 - var51))));
 									else
-										// Substituted "cv$temp$32$var51" with its value "var51".
-										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value129) + Math.log((v[j]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample27Value129)) + Math.log((v[j]?var51:(1.0 - var51))));
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value128) + Math.log((v[j]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample27Value128)) + Math.log((v[j]?var51:(1.0 - var51))));
 								}
 								
 								// Recorded the probability of reaching sample task 53 with the current configuration.
-								cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample27Value129);
+								cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample27Value128);
 							}
 						}
 					}
@@ -1953,7 +1914,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 							
 							// Substituted "j" with its value "i".
 							// 
-							// Substituted "cv$temp$48$var51" with its value "var51".
+							// Substituted "i" with its value "0".
 							cv$accumulatedConsumerProbabilities = Math.log((v[0]?var51:(1.0 - var51)));
 							
 							// Recorded the probability of reaching sample task 53 with the current configuration.
@@ -1963,123 +1924,119 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 							cv$consumerDistributionProbabilityAccumulator = 0.0;
 						} else {
 							// Enumerating the possible outputs of Categorical 10.
-							for(int index$sample11$228 = 0; index$sample11$228 < weightings.length; index$sample11$228 += 1) {
+							for(int index$sample11$227 = 0; index$sample11$227 < weightings.length; index$sample11$227 += 1) {
 								// Update the probability of sampling this value from the distribution value.
-								double cv$probabilitySample11Value229 = distribution$sample11[index$sample11$228];
+								double cv$probabilitySample11Value228 = distribution$sample11[index$sample11$227];
 								
 								// Constructing a random variable input for use later.
 								// 
-								// Substituted "j" with its value "i".
-								// 
 								// Value of the variable at this index
-								double var51 = ((double)((v1 + v2[0]) + cv$valuePos) / cv$valuePos);
+								double var51 = ((double)((v1 + index$sample11$227) + cv$valuePos) / cv$valuePos);
 								
 								// Record the probability of sample task 53 generating output with current configuration.
 								// 
 								// Substituted "j" with its value "i".
 								// 
-								// Substituted "cv$temp$50$var51" with its value "var51".
-								if(((Math.log(cv$probabilitySample11Value229) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
+								// Substituted "i" with its value "0".
+								if(((Math.log(cv$probabilitySample11Value228) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
 									// Substituted "j" with its value "i".
 									// 
-									// Substituted "cv$temp$50$var51" with its value "var51".
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample11Value229) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+									// Substituted "i" with its value "0".
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample11Value228) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									// If the second value is -infinity.
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 										// Substituted "j" with its value "i".
 										// 
-										// Substituted "cv$temp$50$var51" with its value "var51".
-										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample11Value229) + Math.log((v[0]?var51:(1.0 - var51))));
+										// Substituted "i" with its value "0".
+										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample11Value228) + Math.log((v[0]?var51:(1.0 - var51))));
 									else
 										// Substituted "j" with its value "i".
 										// 
-										// Substituted "cv$temp$50$var51" with its value "var51".
-										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample11Value229) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample11Value229)) + Math.log((v[0]?var51:(1.0 - var51))));
+										// Substituted "i" with its value "0".
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample11Value228) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample11Value228)) + Math.log((v[0]?var51:(1.0 - var51))));
 								}
 								
 								// Recorded the probability of reaching sample task 53 with the current configuration.
-								cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample11Value229);
+								cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample11Value228);
 							}
 						}
 					} else {
 						// Enumerating the possible outputs of Categorical 4.
-						for(int index$sample5$223 = 0; index$sample5$223 < weightings.length; index$sample5$223 += 1) {
+						for(int index$sample5$222 = 0; index$sample5$222 < weightings.length; index$sample5$222 += 1) {
 							// Update the probability of sampling this value from the distribution value.
-							double cv$probabilitySample5Value224 = distribution$sample5[index$sample5$223];
+							double cv$probabilitySample5Value223 = distribution$sample5[index$sample5$222];
 							if(fixedFlag$sample11) {
 								// Constructing a random variable input for use later.
 								// 
 								// Substituted "j" with its value "i".
 								// 
 								// Value of the variable at this index
-								double var51 = ((double)((index$sample5$223 + v2[0]) + cv$valuePos) / cv$valuePos);
+								double var51 = ((double)((index$sample5$222 + v2[0]) + cv$valuePos) / cv$valuePos);
 								
 								// Record the probability of sample task 53 generating output with current configuration.
 								// 
 								// Substituted "j" with its value "i".
 								// 
-								// Substituted "cv$temp$52$var51" with its value "var51".
-								if(((Math.log(cv$probabilitySample5Value224) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
+								// Substituted "i" with its value "0".
+								if(((Math.log(cv$probabilitySample5Value223) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
 									// Substituted "j" with its value "i".
 									// 
-									// Substituted "cv$temp$52$var51" with its value "var51".
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample5Value224) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+									// Substituted "i" with its value "0".
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample5Value223) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									// If the second value is -infinity.
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 										// Substituted "j" with its value "i".
 										// 
-										// Substituted "cv$temp$52$var51" with its value "var51".
-										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value224) + Math.log((v[0]?var51:(1.0 - var51))));
+										// Substituted "i" with its value "0".
+										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value223) + Math.log((v[0]?var51:(1.0 - var51))));
 									else
 										// Substituted "j" with its value "i".
 										// 
-										// Substituted "cv$temp$52$var51" with its value "var51".
-										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value224) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample5Value224)) + Math.log((v[0]?var51:(1.0 - var51))));
+										// Substituted "i" with its value "0".
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value223) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample5Value223)) + Math.log((v[0]?var51:(1.0 - var51))));
 								}
 								
 								// Recorded the probability of reaching sample task 53 with the current configuration.
-								cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample5Value224);
+								cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample5Value223);
 							} else {
 								// Enumerating the possible outputs of Categorical 10.
-								for(int index$sample11$233 = 0; index$sample11$233 < weightings.length; index$sample11$233 += 1) {
+								for(int index$sample11$232 = 0; index$sample11$232 < weightings.length; index$sample11$232 += 1) {
 									// Update the probability of sampling this value from the distribution value.
-									double cv$probabilitySample11Value234 = (cv$probabilitySample5Value224 * distribution$sample11[index$sample11$233]);
+									double cv$probabilitySample11Value233 = (cv$probabilitySample5Value223 * distribution$sample11[index$sample11$232]);
 									
 									// Constructing a random variable input for use later.
 									// 
-									// Substituted "j" with its value "i".
-									// 
 									// Value of the variable at this index
-									double var51 = ((double)((index$sample5$223 + v2[0]) + cv$valuePos) / cv$valuePos);
+									double var51 = ((double)((index$sample5$222 + index$sample11$232) + cv$valuePos) / cv$valuePos);
 									
 									// Record the probability of sample task 53 generating output with current configuration.
 									// 
 									// Substituted "j" with its value "i".
 									// 
-									// Substituted "cv$temp$54$var51" with its value "var51".
-									if(((Math.log(cv$probabilitySample11Value234) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
+									// Substituted "i" with its value "0".
+									if(((Math.log(cv$probabilitySample11Value233) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
 										// Substituted "j" with its value "i".
 										// 
-										// Substituted "cv$temp$54$var51" with its value "var51".
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample11Value234) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+										// Substituted "i" with its value "0".
+										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample11Value233) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 									else {
 										// If the second value is -infinity.
 										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 											// Substituted "j" with its value "i".
 											// 
-											// Substituted "cv$temp$54$var51" with its value "var51".
-											cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample11Value234) + Math.log((v[0]?var51:(1.0 - var51))));
+											// Substituted "i" with its value "0".
+											cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample11Value233) + Math.log((v[0]?var51:(1.0 - var51))));
 										else
 											// Substituted "j" with its value "i".
 											// 
-											// Substituted "cv$temp$54$var51" with its value "var51".
-											cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample11Value234) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample11Value234)) + Math.log((v[0]?var51:(1.0 - var51))));
+											// Substituted "i" with its value "0".
+											cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample11Value233) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample11Value233)) + Math.log((v[0]?var51:(1.0 - var51))));
 									}
 									
 									// Recorded the probability of reaching sample task 53 with the current configuration.
-									cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample11Value234);
+									cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample11Value233);
 								}
 							}
 						}
@@ -2089,105 +2046,95 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Enumerating the possible arguments for the variable Bernoulli 52 which is consuming
 				// the output of Sample task 27.
 				if(fixedFlag$sample5) {
-					int index$i$267 = (i - 1);
+					int index$i$266 = (i - 1);
 					
-					// index$i$2's comment
+					// index$i$1's comment
 					// Copy of index so that its values can be safely substituted
 					// 
-					// Substituted "index$i$267" with its value "(i - 1)".
+					// Substituted "index$i$266" with its value "(i - 1)".
 					// 
-					// Substituted "index$i$267" with its value "(i - 1)".
+					// Substituted "index$i$266" with its value "(i - 1)".
 					// 
-					// Substituted "index$i$267" with its value "(i - 1)".
+					// Substituted "index$i$266" with its value "(i - 1)".
 					// 
-					// Substituted "index$i$267" with its value "(i - 1)".
-					if(((0 <= index$i$267) && !(index$i$267 == i))) {
+					// Substituted "index$i$266" with its value "(i - 1)".
+					if(((0 <= index$i$266) && !(index$i$266 == i))) {
 						// Enumerating the possible outputs of Categorical 26.
-						for(int index$sample27$268 = 0; index$sample27$268 < weightings.length; index$sample27$268 += 1) {
+						for(int index$sample27$267 = 0; index$sample27$267 < weightings.length; index$sample27$267 += 1) {
 							// Update the probability of sampling this value from the distribution value.
-							double cv$probabilitySample27Value269 = distribution$sample27[index$i$267][index$sample27$268];
+							double cv$probabilitySample27Value268 = distribution$sample27[index$i$266][index$sample27$267];
 							
-							// Variable declaration of cv$temp$58$var51 moved.
-							// 
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							double cv$temp$58$var51 = ((double)((v1 + cv$valuePos) + cv$valuePos) / cv$valuePos);
+							double var51 = ((double)((v1 + index$sample27$267) + cv$valuePos) / cv$valuePos);
 							
 							// Record the probability of sample task 53 generating output with current configuration.
 							// 
 							// Substituted "j" with its value "i".
-							if(((Math.log(cv$probabilitySample27Value269) + Math.log((v[i]?cv$temp$58$var51:(1.0 - cv$temp$58$var51)))) < cv$accumulatedConsumerProbabilities))
+							if(((Math.log(cv$probabilitySample27Value268) + Math.log((v[i]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
 								// Substituted "j" with its value "i".
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value269) + Math.log((v[i]?cv$temp$58$var51:(1.0 - cv$temp$58$var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value268) + Math.log((v[i]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								// If the second value is -infinity.
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 									// Substituted "j" with its value "i".
-									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value269) + Math.log((v[i]?cv$temp$58$var51:(1.0 - cv$temp$58$var51))));
+									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value268) + Math.log((v[i]?var51:(1.0 - var51))));
 								else
 									// Substituted "j" with its value "i".
-									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value269) + Math.log((v[i]?cv$temp$58$var51:(1.0 - cv$temp$58$var51)))))) + 1)) + Math.log(cv$probabilitySample27Value269)) + Math.log((v[i]?cv$temp$58$var51:(1.0 - cv$temp$58$var51))));
+									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value268) + Math.log((v[i]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample27Value268)) + Math.log((v[i]?var51:(1.0 - var51))));
 							}
 							
 							// Recorded the probability of reaching sample task 53 with the current configuration.
-							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample27Value269);
+							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample27Value268);
 						}
 					}
 				} else {
 					// Enumerating the possible outputs of Categorical 4.
-					for(int index$sample5$262 = 0; index$sample5$262 < weightings.length; index$sample5$262 += 1) {
+					for(int index$sample5$261 = 0; index$sample5$261 < weightings.length; index$sample5$261 += 1) {
 						// Update the probability of sampling this value from the distribution value.
-						double cv$probabilitySample5Value263 = distribution$sample5[index$sample5$262];
-						int index$i$273 = (i - 1);
+						double cv$probabilitySample5Value262 = distribution$sample5[index$sample5$261];
+						int index$i$272 = (i - 1);
 						
-						// index$i$2's comment
+						// index$i$1's comment
 						// Copy of index so that its values can be safely substituted
 						// 
-						// Substituted "index$i$273" with its value "(i - 1)".
+						// Substituted "index$i$272" with its value "(i - 1)".
 						// 
-						// Substituted "index$i$273" with its value "(i - 1)".
+						// Substituted "index$i$272" with its value "(i - 1)".
 						// 
-						// Substituted "index$i$273" with its value "(i - 1)".
+						// Substituted "index$i$272" with its value "(i - 1)".
 						// 
-						// Substituted "index$i$273" with its value "(i - 1)".
-						if(((0 <= index$i$273) && !(index$i$273 == i))) {
+						// Substituted "index$i$272" with its value "(i - 1)".
+						if(((0 <= index$i$272) && !(index$i$272 == i))) {
 							// Enumerating the possible outputs of Categorical 26.
-							for(int index$sample27$274 = 0; index$sample27$274 < weightings.length; index$sample27$274 += 1) {
+							for(int index$sample27$273 = 0; index$sample27$273 < weightings.length; index$sample27$273 += 1) {
 								// Update the probability of sampling this value from the distribution value.
-								double cv$probabilitySample27Value275 = (cv$probabilitySample5Value263 * distribution$sample27[index$i$273][index$sample27$274]);
+								double cv$probabilitySample27Value274 = (cv$probabilitySample5Value262 * distribution$sample27[index$i$272][index$sample27$273]);
 								
 								// Constructing a random variable input for use later.
 								// 
 								// Value of the variable at this index
-								double var51 = ((double)((index$sample5$262 + cv$valuePos) + cv$valuePos) / cv$valuePos);
+								double var51 = ((double)((index$sample5$261 + index$sample27$273) + cv$valuePos) / cv$valuePos);
 								
 								// Record the probability of sample task 53 generating output with current configuration.
 								// 
 								// Substituted "j" with its value "i".
-								// 
-								// Substituted "cv$temp$63$var51" with its value "var51".
-								if(((Math.log(cv$probabilitySample27Value275) + Math.log((v[i]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
+								if(((Math.log(cv$probabilitySample27Value274) + Math.log((v[i]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
 									// Substituted "j" with its value "i".
-									// 
-									// Substituted "cv$temp$63$var51" with its value "var51".
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value275) + Math.log((v[i]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value274) + Math.log((v[i]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									// If the second value is -infinity.
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 										// Substituted "j" with its value "i".
-										// 
-										// Substituted "cv$temp$63$var51" with its value "var51".
-										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value275) + Math.log((v[i]?var51:(1.0 - var51))));
+										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value274) + Math.log((v[i]?var51:(1.0 - var51))));
 									else
 										// Substituted "j" with its value "i".
-										// 
-										// Substituted "cv$temp$63$var51" with its value "var51".
-										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value275) + Math.log((v[i]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample27Value275)) + Math.log((v[i]?var51:(1.0 - var51))));
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value274) + Math.log((v[i]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample27Value274)) + Math.log((v[i]?var51:(1.0 - var51))));
 								}
 								
 								// Recorded the probability of reaching sample task 53 with the current configuration.
-								cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample27Value275);
+								cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample27Value274);
 							}
 						}
 					}
@@ -2242,7 +2189,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 							
 							// Substituted "j" with its value "i".
 							// 
-							// Substituted "cv$temp$80$var51" with its value "var51".
+							// Substituted "i" with its value "0".
 							cv$accumulatedConsumerProbabilities = Math.log((v[0]?var51:(1.0 - var51)));
 							
 							// Recorded the probability of reaching sample task 53 with the current configuration.
@@ -2252,123 +2199,119 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 							cv$consumerDistributionProbabilityAccumulator = 0.0;
 						} else {
 							// Enumerating the possible outputs of Categorical 10.
-							for(int index$sample11$374 = 0; index$sample11$374 < weightings.length; index$sample11$374 += 1) {
+							for(int index$sample11$373 = 0; index$sample11$373 < weightings.length; index$sample11$373 += 1) {
 								// Update the probability of sampling this value from the distribution value.
-								double cv$probabilitySample11Value375 = distribution$sample11[index$sample11$374];
+								double cv$probabilitySample11Value374 = distribution$sample11[index$sample11$373];
 								
 								// Constructing a random variable input for use later.
 								// 
-								// Substituted "j" with its value "i".
-								// 
 								// Value of the variable at this index
-								double var51 = ((double)((v1 + v2[0]) + cv$valuePos) / cv$valuePos);
+								double var51 = ((double)((v1 + index$sample11$373) + cv$valuePos) / cv$valuePos);
 								
 								// Record the probability of sample task 53 generating output with current configuration.
 								// 
 								// Substituted "j" with its value "i".
 								// 
-								// Substituted "cv$temp$82$var51" with its value "var51".
-								if(((Math.log(cv$probabilitySample11Value375) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
+								// Substituted "i" with its value "0".
+								if(((Math.log(cv$probabilitySample11Value374) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
 									// Substituted "j" with its value "i".
 									// 
-									// Substituted "cv$temp$82$var51" with its value "var51".
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample11Value375) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+									// Substituted "i" with its value "0".
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample11Value374) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									// If the second value is -infinity.
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 										// Substituted "j" with its value "i".
 										// 
-										// Substituted "cv$temp$82$var51" with its value "var51".
-										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample11Value375) + Math.log((v[0]?var51:(1.0 - var51))));
+										// Substituted "i" with its value "0".
+										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample11Value374) + Math.log((v[0]?var51:(1.0 - var51))));
 									else
 										// Substituted "j" with its value "i".
 										// 
-										// Substituted "cv$temp$82$var51" with its value "var51".
-										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample11Value375) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample11Value375)) + Math.log((v[0]?var51:(1.0 - var51))));
+										// Substituted "i" with its value "0".
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample11Value374) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample11Value374)) + Math.log((v[0]?var51:(1.0 - var51))));
 								}
 								
 								// Recorded the probability of reaching sample task 53 with the current configuration.
-								cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample11Value375);
+								cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample11Value374);
 							}
 						}
 					} else {
 						// Enumerating the possible outputs of Categorical 4.
-						for(int index$sample5$369 = 0; index$sample5$369 < weightings.length; index$sample5$369 += 1) {
+						for(int index$sample5$368 = 0; index$sample5$368 < weightings.length; index$sample5$368 += 1) {
 							// Update the probability of sampling this value from the distribution value.
-							double cv$probabilitySample5Value370 = distribution$sample5[index$sample5$369];
+							double cv$probabilitySample5Value369 = distribution$sample5[index$sample5$368];
 							if(fixedFlag$sample11) {
 								// Constructing a random variable input for use later.
 								// 
 								// Substituted "j" with its value "i".
 								// 
 								// Value of the variable at this index
-								double var51 = ((double)((index$sample5$369 + v2[0]) + cv$valuePos) / cv$valuePos);
+								double var51 = ((double)((index$sample5$368 + v2[0]) + cv$valuePos) / cv$valuePos);
 								
 								// Record the probability of sample task 53 generating output with current configuration.
 								// 
 								// Substituted "j" with its value "i".
 								// 
-								// Substituted "cv$temp$84$var51" with its value "var51".
-								if(((Math.log(cv$probabilitySample5Value370) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
+								// Substituted "i" with its value "0".
+								if(((Math.log(cv$probabilitySample5Value369) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
 									// Substituted "j" with its value "i".
 									// 
-									// Substituted "cv$temp$84$var51" with its value "var51".
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample5Value370) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+									// Substituted "i" with its value "0".
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample5Value369) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									// If the second value is -infinity.
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 										// Substituted "j" with its value "i".
 										// 
-										// Substituted "cv$temp$84$var51" with its value "var51".
-										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value370) + Math.log((v[0]?var51:(1.0 - var51))));
+										// Substituted "i" with its value "0".
+										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value369) + Math.log((v[0]?var51:(1.0 - var51))));
 									else
 										// Substituted "j" with its value "i".
 										// 
-										// Substituted "cv$temp$84$var51" with its value "var51".
-										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value370) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample5Value370)) + Math.log((v[0]?var51:(1.0 - var51))));
+										// Substituted "i" with its value "0".
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value369) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample5Value369)) + Math.log((v[0]?var51:(1.0 - var51))));
 								}
 								
 								// Recorded the probability of reaching sample task 53 with the current configuration.
-								cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample5Value370);
+								cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample5Value369);
 							} else {
 								// Enumerating the possible outputs of Categorical 10.
-								for(int index$sample11$379 = 0; index$sample11$379 < weightings.length; index$sample11$379 += 1) {
+								for(int index$sample11$378 = 0; index$sample11$378 < weightings.length; index$sample11$378 += 1) {
 									// Update the probability of sampling this value from the distribution value.
-									double cv$probabilitySample11Value380 = (cv$probabilitySample5Value370 * distribution$sample11[index$sample11$379]);
+									double cv$probabilitySample11Value379 = (cv$probabilitySample5Value369 * distribution$sample11[index$sample11$378]);
 									
 									// Constructing a random variable input for use later.
 									// 
-									// Substituted "j" with its value "i".
-									// 
 									// Value of the variable at this index
-									double var51 = ((double)((index$sample5$369 + v2[0]) + cv$valuePos) / cv$valuePos);
+									double var51 = ((double)((index$sample5$368 + index$sample11$378) + cv$valuePos) / cv$valuePos);
 									
 									// Record the probability of sample task 53 generating output with current configuration.
 									// 
 									// Substituted "j" with its value "i".
 									// 
-									// Substituted "cv$temp$86$var51" with its value "var51".
-									if(((Math.log(cv$probabilitySample11Value380) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
+									// Substituted "i" with its value "0".
+									if(((Math.log(cv$probabilitySample11Value379) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
 										// Substituted "j" with its value "i".
 										// 
-										// Substituted "cv$temp$86$var51" with its value "var51".
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample11Value380) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+										// Substituted "i" with its value "0".
+										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample11Value379) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 									else {
 										// If the second value is -infinity.
 										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 											// Substituted "j" with its value "i".
 											// 
-											// Substituted "cv$temp$86$var51" with its value "var51".
-											cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample11Value380) + Math.log((v[0]?var51:(1.0 - var51))));
+											// Substituted "i" with its value "0".
+											cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample11Value379) + Math.log((v[0]?var51:(1.0 - var51))));
 										else
 											// Substituted "j" with its value "i".
 											// 
-											// Substituted "cv$temp$86$var51" with its value "var51".
-											cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample11Value380) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample11Value380)) + Math.log((v[0]?var51:(1.0 - var51))));
+											// Substituted "i" with its value "0".
+											cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample11Value379) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample11Value379)) + Math.log((v[0]?var51:(1.0 - var51))));
 									}
 									
 									// Recorded the probability of reaching sample task 53 with the current configuration.
-									cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample11Value380);
+									cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample11Value379);
 								}
 							}
 						}
@@ -2378,105 +2321,95 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Enumerating the possible arguments for the variable Bernoulli 52 which is consuming
 				// the output of Sample task 27.
 				if(fixedFlag$sample5) {
-					int index$i$413 = (i - 1);
+					int index$i$412 = (i - 1);
 					
-					// index$i$2's comment
+					// index$i$1's comment
 					// Copy of index so that its values can be safely substituted
 					// 
-					// Substituted "index$i$413" with its value "(i - 1)".
+					// Substituted "index$i$412" with its value "(i - 1)".
 					// 
-					// Substituted "index$i$413" with its value "(i - 1)".
+					// Substituted "index$i$412" with its value "(i - 1)".
 					// 
-					// Substituted "index$i$413" with its value "(i - 1)".
+					// Substituted "index$i$412" with its value "(i - 1)".
 					// 
-					// Substituted "index$i$413" with its value "(i - 1)".
-					if(((0 <= index$i$413) && !(index$i$413 == i))) {
+					// Substituted "index$i$412" with its value "(i - 1)".
+					if(((0 <= index$i$412) && !(index$i$412 == i))) {
 						// Enumerating the possible outputs of Categorical 26.
-						for(int index$sample27$414 = 0; index$sample27$414 < weightings.length; index$sample27$414 += 1) {
+						for(int index$sample27$413 = 0; index$sample27$413 < weightings.length; index$sample27$413 += 1) {
 							// Update the probability of sampling this value from the distribution value.
-							double cv$probabilitySample27Value415 = distribution$sample27[index$i$413][index$sample27$414];
+							double cv$probabilitySample27Value414 = distribution$sample27[index$i$412][index$sample27$413];
 							
-							// Variable declaration of cv$temp$90$var51 moved.
-							// 
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							double cv$temp$90$var51 = ((double)((v1 + cv$valuePos) + cv$valuePos) / cv$valuePos);
+							double var51 = ((double)((v1 + index$sample27$413) + cv$valuePos) / cv$valuePos);
 							
 							// Record the probability of sample task 53 generating output with current configuration.
 							// 
 							// Substituted "j" with its value "i".
-							if(((Math.log(cv$probabilitySample27Value415) + Math.log((v[i]?cv$temp$90$var51:(1.0 - cv$temp$90$var51)))) < cv$accumulatedConsumerProbabilities))
+							if(((Math.log(cv$probabilitySample27Value414) + Math.log((v[i]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
 								// Substituted "j" with its value "i".
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value415) + Math.log((v[i]?cv$temp$90$var51:(1.0 - cv$temp$90$var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value414) + Math.log((v[i]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 							else {
 								// If the second value is -infinity.
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 									// Substituted "j" with its value "i".
-									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value415) + Math.log((v[i]?cv$temp$90$var51:(1.0 - cv$temp$90$var51))));
+									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value414) + Math.log((v[i]?var51:(1.0 - var51))));
 								else
 									// Substituted "j" with its value "i".
-									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value415) + Math.log((v[i]?cv$temp$90$var51:(1.0 - cv$temp$90$var51)))))) + 1)) + Math.log(cv$probabilitySample27Value415)) + Math.log((v[i]?cv$temp$90$var51:(1.0 - cv$temp$90$var51))));
+									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value414) + Math.log((v[i]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample27Value414)) + Math.log((v[i]?var51:(1.0 - var51))));
 							}
 							
 							// Recorded the probability of reaching sample task 53 with the current configuration.
-							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample27Value415);
+							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample27Value414);
 						}
 					}
 				} else {
 					// Enumerating the possible outputs of Categorical 4.
-					for(int index$sample5$408 = 0; index$sample5$408 < weightings.length; index$sample5$408 += 1) {
+					for(int index$sample5$407 = 0; index$sample5$407 < weightings.length; index$sample5$407 += 1) {
 						// Update the probability of sampling this value from the distribution value.
-						double cv$probabilitySample5Value409 = distribution$sample5[index$sample5$408];
-						int index$i$419 = (i - 1);
+						double cv$probabilitySample5Value408 = distribution$sample5[index$sample5$407];
+						int index$i$418 = (i - 1);
 						
-						// index$i$2's comment
+						// index$i$1's comment
 						// Copy of index so that its values can be safely substituted
 						// 
-						// Substituted "index$i$419" with its value "(i - 1)".
+						// Substituted "index$i$418" with its value "(i - 1)".
 						// 
-						// Substituted "index$i$419" with its value "(i - 1)".
+						// Substituted "index$i$418" with its value "(i - 1)".
 						// 
-						// Substituted "index$i$419" with its value "(i - 1)".
+						// Substituted "index$i$418" with its value "(i - 1)".
 						// 
-						// Substituted "index$i$419" with its value "(i - 1)".
-						if(((0 <= index$i$419) && !(index$i$419 == i))) {
+						// Substituted "index$i$418" with its value "(i - 1)".
+						if(((0 <= index$i$418) && !(index$i$418 == i))) {
 							// Enumerating the possible outputs of Categorical 26.
-							for(int index$sample27$420 = 0; index$sample27$420 < weightings.length; index$sample27$420 += 1) {
+							for(int index$sample27$419 = 0; index$sample27$419 < weightings.length; index$sample27$419 += 1) {
 								// Update the probability of sampling this value from the distribution value.
-								double cv$probabilitySample27Value421 = (cv$probabilitySample5Value409 * distribution$sample27[index$i$419][index$sample27$420]);
+								double cv$probabilitySample27Value420 = (cv$probabilitySample5Value408 * distribution$sample27[index$i$418][index$sample27$419]);
 								
 								// Constructing a random variable input for use later.
 								// 
 								// Value of the variable at this index
-								double var51 = ((double)((index$sample5$408 + cv$valuePos) + cv$valuePos) / cv$valuePos);
+								double var51 = ((double)((index$sample5$407 + index$sample27$419) + cv$valuePos) / cv$valuePos);
 								
 								// Record the probability of sample task 53 generating output with current configuration.
 								// 
 								// Substituted "j" with its value "i".
-								// 
-								// Substituted "cv$temp$95$var51" with its value "var51".
-								if(((Math.log(cv$probabilitySample27Value421) + Math.log((v[i]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
+								if(((Math.log(cv$probabilitySample27Value420) + Math.log((v[i]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
 									// Substituted "j" with its value "i".
-									// 
-									// Substituted "cv$temp$95$var51" with its value "var51".
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value421) + Math.log((v[i]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value420) + Math.log((v[i]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									// If the second value is -infinity.
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 										// Substituted "j" with its value "i".
-										// 
-										// Substituted "cv$temp$95$var51" with its value "var51".
-										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value421) + Math.log((v[i]?var51:(1.0 - var51))));
+										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value420) + Math.log((v[i]?var51:(1.0 - var51))));
 									else
 										// Substituted "j" with its value "i".
-										// 
-										// Substituted "cv$temp$95$var51" with its value "var51".
-										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value421) + Math.log((v[i]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample27Value421)) + Math.log((v[i]?var51:(1.0 - var51))));
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value420) + Math.log((v[i]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample27Value420)) + Math.log((v[i]?var51:(1.0 - var51))));
 								}
 								
 								// Recorded the probability of reaching sample task 53 with the current configuration.
-								cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample27Value421);
+								cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - cv$probabilitySample27Value420);
 							}
 						}
 					}
@@ -2527,7 +2460,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 		double cv$lseMax = cv$var27$stateProbabilityGlobal[0];
 		
 		// Find max value.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 			// Get a local reference to the scratch space.
 			double cv$lseElementValue = cv$var27$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
@@ -2544,7 +2477,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var27$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
@@ -2557,11 +2490,11 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
-				cv$localProbability[cv$indexName] = (1.0 / cv$numNumStates);
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+				cv$localProbability[cv$indexName] = (1.0 / cv$numStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$localProbability[cv$indexName] = Math.exp((cv$var27$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
@@ -2569,7 +2502,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Set array values that are not computed for the input to negative infinity.
 		// 
 		// Get a local reference to the scratch space.
-		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$var27$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numStates; cv$indexName < cv$var27$stateProbabilityGlobal.length; cv$indexName += 1)
 			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
@@ -2577,19 +2510,19 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 	// by sample task 5 drawn from Categorical 4. Inference was performed using variable
 	// marginalization.
 	private final void sample5() {
-		// Variable declaration of cv$numNumStates moved.
+		// Variable declaration of cv$numStates moved.
 		// Declaration comment was:
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
 		// Calculate the number of states to evaluate.
 		// 
 		// variable marginalization
-		int cv$numNumStates = weightings.length;
-		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+		int cv$numStates = weightings.length;
+		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$0$weightings" with its value "weightings".
+			// Value of the variable at this index
 			double cv$accumulatedProbabilities = Math.log(weightings[cv$valuePos]);
 			
 			// Processing random variable 52.
@@ -2619,8 +2552,6 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 							double var51 = ((double)((cv$valuePos + v2[0]) + v2[1]) / v2[1]);
 							
 							// Substituted "j" with its value "0".
-							// 
-							// Substituted "cv$temp$38$var51" with its value "var51".
 							cv$accumulatedConsumerProbabilities = Math.log((v[0]?var51:(1.0 - var51)));
 							
 							// Recorded the probability of reaching sample task 53 with the current configuration.
@@ -2641,29 +2572,21 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 								// Substituted "j" with its value "0".
 								// 
 								// Value of the variable at this index
-								double var51 = ((double)((cv$valuePos + v2[0]) + v2[1]) / v2[1]);
+								double var51 = ((double)((cv$valuePos + v2[0]) + index$sample27$177) / index$sample27$177);
 								
 								// Record the probability of sample task 53 generating output with current configuration.
 								// 
 								// Substituted "j" with its value "0".
-								// 
-								// Substituted "cv$temp$39$var51" with its value "var51".
 								if(((Math.log(cv$probabilitySample27Value178) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
 									// Substituted "j" with its value "0".
-									// 
-									// Substituted "cv$temp$39$var51" with its value "var51".
 									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value178) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									// If the second value is -infinity.
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 										// Substituted "j" with its value "0".
-										// 
-										// Substituted "cv$temp$39$var51" with its value "var51".
 										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value178) + Math.log((v[0]?var51:(1.0 - var51))));
 									else
 										// Substituted "j" with its value "0".
-										// 
-										// Substituted "cv$temp$39$var51" with its value "var51".
 										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value178) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample27Value178)) + Math.log((v[0]?var51:(1.0 - var51))));
 								}
 								
@@ -2682,29 +2605,21 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 								// Substituted "j" with its value "0".
 								// 
 								// Value of the variable at this index
-								double var51 = ((double)((cv$valuePos + v2[0]) + v2[1]) / v2[1]);
+								double var51 = ((double)((cv$valuePos + index$sample11$171) + v2[1]) / v2[1]);
 								
 								// Record the probability of sample task 53 generating output with current configuration.
 								// 
 								// Substituted "j" with its value "0".
-								// 
-								// Substituted "cv$temp$41$var51" with its value "var51".
 								if(((Math.log(cv$probabilitySample11Value172) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
 									// Substituted "j" with its value "0".
-									// 
-									// Substituted "cv$temp$41$var51" with its value "var51".
 									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample11Value172) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									// If the second value is -infinity.
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 										// Substituted "j" with its value "0".
-										// 
-										// Substituted "cv$temp$41$var51" with its value "var51".
 										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample11Value172) + Math.log((v[0]?var51:(1.0 - var51))));
 									else
 										// Substituted "j" with its value "0".
-										// 
-										// Substituted "cv$temp$41$var51" with its value "var51".
 										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample11Value172) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample11Value172)) + Math.log((v[0]?var51:(1.0 - var51))));
 								}
 								
@@ -2720,32 +2635,22 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 									
 									// Constructing a random variable input for use later.
 									// 
-									// Substituted "j" with its value "0".
-									// 
 									// Value of the variable at this index
-									double var51 = ((double)((cv$valuePos + v2[0]) + v2[1]) / v2[1]);
+									double var51 = ((double)((cv$valuePos + index$sample11$171) + index$sample27$183) / index$sample27$183);
 									
 									// Record the probability of sample task 53 generating output with current configuration.
 									// 
 									// Substituted "j" with its value "0".
-									// 
-									// Substituted "cv$temp$42$var51" with its value "var51".
 									if(((Math.log(cv$probabilitySample27Value184) + Math.log((v[0]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
 										// Substituted "j" with its value "0".
-										// 
-										// Substituted "cv$temp$42$var51" with its value "var51".
 										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value184) + Math.log((v[0]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 									else {
 										// If the second value is -infinity.
 										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 											// Substituted "j" with its value "0".
-											// 
-											// Substituted "cv$temp$42$var51" with its value "var51".
 											cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value184) + Math.log((v[0]?var51:(1.0 - var51))));
 										else
 											// Substituted "j" with its value "0".
-											// 
-											// Substituted "cv$temp$42$var51" with its value "var51".
 											cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value184) + Math.log((v[0]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample27Value184)) + Math.log((v[0]?var51:(1.0 - var51))));
 									}
 									
@@ -2762,22 +2667,20 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 				if(fixedFlag$sample27) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
 					if((1 <= j)) {
-						// Variable declaration of cv$temp$44$var51 moved.
-						// 
 						// Constructing a random variable input for use later.
 						// 
 						// Value of the variable at this index
-						double cv$temp$44$var51 = ((double)((cv$valuePos + v2[j]) + v2[(j + 1)]) / v2[(j + 1)]);
+						double var51 = ((double)((cv$valuePos + v2[j]) + v2[(j + 1)]) / v2[(j + 1)]);
 						
 						// Record the probability of sample task 53 generating output with current configuration.
-						if((Math.log((v[j]?cv$temp$44$var51:(1.0 - cv$temp$44$var51))) < cv$accumulatedConsumerProbabilities))
-							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((Math.log((v[j]?cv$temp$44$var51:(1.0 - cv$temp$44$var51))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+						if((Math.log((v[j]?var51:(1.0 - var51))) < cv$accumulatedConsumerProbabilities))
+							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((Math.log((v[j]?var51:(1.0 - var51))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 						else {
 							// If the second value is -infinity.
 							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-								cv$accumulatedConsumerProbabilities = Math.log((v[j]?cv$temp$44$var51:(1.0 - cv$temp$44$var51)));
+								cv$accumulatedConsumerProbabilities = Math.log((v[j]?var51:(1.0 - var51)));
 							else
-								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log((v[j]?cv$temp$44$var51:(1.0 - cv$temp$44$var51))))) + 1)) + Math.log((v[j]?cv$temp$44$var51:(1.0 - cv$temp$44$var51))));
+								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log((v[j]?var51:(1.0 - var51))))) + 1)) + Math.log((v[j]?var51:(1.0 - var51))));
 						}
 						
 						// Recorded the probability of reaching sample task 53 with the current configuration.
@@ -2793,6 +2696,8 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Update the probability of sampling this value from the distribution value.
 							double cv$probabilitySample27Value204 = distribution$sample27[i][index$sample27$203];
 							
+							// Constraints moved from conditionals in inner loops/scopes/etc.
+							// 
 							// Substituted "i" with its value "(j - 1)".
 							// 
 							// Substituted "i" with its value "(j - 1)".
@@ -2801,22 +2706,20 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 							// 
 							// Substituted "i" with its value "(j - 1)".
 							if((i == j)) {
-								// Variable declaration of cv$temp$45$var51 moved.
-								// 
 								// Constructing a random variable input for use later.
 								// 
 								// Value of the variable at this index
-								double cv$temp$45$var51 = ((double)((cv$valuePos + v2[j]) + v2[(j + 1)]) / v2[(j + 1)]);
+								double var51 = ((double)((cv$valuePos + index$sample27$203) + index$sample27$203) / index$sample27$203);
 								
 								// Record the probability of sample task 53 generating output with current configuration.
-								if(((Math.log(cv$probabilitySample27Value204) + Math.log((v[j]?cv$temp$45$var51:(1.0 - cv$temp$45$var51)))) < cv$accumulatedConsumerProbabilities))
-									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value204) + Math.log((v[j]?cv$temp$45$var51:(1.0 - cv$temp$45$var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+								if(((Math.log(cv$probabilitySample27Value204) + Math.log((v[j]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value204) + Math.log((v[j]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 								else {
 									// If the second value is -infinity.
 									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value204) + Math.log((v[j]?cv$temp$45$var51:(1.0 - cv$temp$45$var51))));
+										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value204) + Math.log((v[j]?var51:(1.0 - var51))));
 									else
-										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value204) + Math.log((v[j]?cv$temp$45$var51:(1.0 - cv$temp$45$var51)))))) + 1)) + Math.log(cv$probabilitySample27Value204)) + Math.log((v[j]?cv$temp$45$var51:(1.0 - cv$temp$45$var51))));
+										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value204) + Math.log((v[j]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample27Value204)) + Math.log((v[j]?var51:(1.0 - var51))));
 								}
 								
 								// Recorded the probability of reaching sample task 53 with the current configuration.
@@ -2832,22 +2735,20 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 									// Substituted "index$i$209" with its value "j".
 									double cv$probabilitySample27Value211 = (cv$probabilitySample27Value204 * distribution$sample27[j][index$sample27$210]);
 									
-									// Variable declaration of cv$temp$48$var51 moved.
-									// 
 									// Constructing a random variable input for use later.
 									// 
 									// Value of the variable at this index
-									double cv$temp$48$var51 = ((double)((cv$valuePos + v2[j]) + v2[(j + 1)]) / v2[(j + 1)]);
+									double var51 = ((double)((cv$valuePos + index$sample27$203) + index$sample27$210) / index$sample27$210);
 									
 									// Record the probability of sample task 53 generating output with current configuration.
-									if(((Math.log(cv$probabilitySample27Value211) + Math.log((v[j]?cv$temp$48$var51:(1.0 - cv$temp$48$var51)))) < cv$accumulatedConsumerProbabilities))
-										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value211) + Math.log((v[j]?cv$temp$48$var51:(1.0 - cv$temp$48$var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+									if(((Math.log(cv$probabilitySample27Value211) + Math.log((v[j]?var51:(1.0 - var51)))) < cv$accumulatedConsumerProbabilities))
+										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample27Value211) + Math.log((v[j]?var51:(1.0 - var51)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 									else {
 										// If the second value is -infinity.
 										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-											cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value211) + Math.log((v[j]?cv$temp$48$var51:(1.0 - cv$temp$48$var51))));
+											cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample27Value211) + Math.log((v[j]?var51:(1.0 - var51))));
 										else
-											cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value211) + Math.log((v[j]?cv$temp$48$var51:(1.0 - cv$temp$48$var51)))))) + 1)) + Math.log(cv$probabilitySample27Value211)) + Math.log((v[j]?cv$temp$48$var51:(1.0 - cv$temp$48$var51))));
+											cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample27Value211) + Math.log((v[j]?var51:(1.0 - var51)))))) + 1)) + Math.log(cv$probabilitySample27Value211)) + Math.log((v[j]?var51:(1.0 - var51))));
 									}
 									
 									// Recorded the probability of reaching sample task 53 with the current configuration.
@@ -2898,7 +2799,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 		double cv$lseMax = cv$var5$stateProbabilityGlobal[0];
 		
 		// Find max value.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 			// Get a local reference to the scratch space.
 			double cv$lseElementValue = cv$var5$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
@@ -2915,7 +2816,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var5$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
@@ -2928,14 +2829,14 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Set the calculated probabilities to be the distribution values, and normalize
 				// 
 				// Local copy of the probability array
-				distribution$sample5[cv$indexName] = (1.0 / cv$numNumStates);
+				distribution$sample5[cv$indexName] = (1.0 / cv$numStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Set the calculated probabilities to be the distribution values, and normalize
 				// 
 				// Local copy of the probability array
@@ -2945,7 +2846,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Set array values that are not computed for the input to negative infinity.
 		// 
 		// Get a local reference to the scratch space.
-		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$var5$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numStates; cv$indexName < cv$var5$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Set the calculated probabilities to be the distribution values, and normalize
 			// 
 			// Local copy of the probability array

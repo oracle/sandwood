@@ -246,12 +246,12 @@ final class HMMTestPart1$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private final void sample50() {
 		{
 			st = 0;
-			double cv$temp$2$var50 = bias[0];
-			cv$var49$stateProbabilityGlobal[0] = (Math.log((flip?cv$temp$2$var50:(1.0 - cv$temp$2$var50))) + Math.log(m[0][0]));
+			double var50 = bias[0];
+			cv$var49$stateProbabilityGlobal[0] = (Math.log((flip?var50:(1.0 - var50))) + Math.log(m[0][0]));
 		}
 		st = 1;
-		double cv$temp$2$var50 = bias[1];
-		cv$var49$stateProbabilityGlobal[1] = (Math.log((flip?cv$temp$2$var50:(1.0 - cv$temp$2$var50))) + Math.log(m[0][1]));
+		double var50 = bias[1];
+		cv$var49$stateProbabilityGlobal[1] = (Math.log((flip?var50:(1.0 - var50))) + Math.log(m[0][1]));
 		double cv$logSum;
 		double cv$lseMax = cv$var49$stateProbabilityGlobal[0];
 		double cv$lseElementValue = cv$var49$stateProbabilityGlobal[1];

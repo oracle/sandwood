@@ -227,9 +227,9 @@ final class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample39 = fixedFlag$sample39;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -303,9 +303,9 @@ final class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample54 = fixedFlag$sample39;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -425,19 +425,15 @@ final class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$0$var35" with its value "a[y]".
-			// 
-			// Substituted "cv$temp$1$$var177" with its value "lengthCV$a$37_11".
+			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_11);
 			
 			// Processing random variable 39.
 			// 
 			// Processing sample task 54 of consumer random variable null.
 			for(int var51 = 0; var51 < length$obs_measured; var51 += 1) {
-				// Variable declaration of cv$temp$2$var38 moved.
-				// 
 				// Constructing a random variable input for use later.
-				double cv$temp$2$var38 = d[y];
+				double var38 = d[y];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -451,7 +447,7 @@ final class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = (Math.log((obs[var51]?cv$temp$2$var38:(1.0 - cv$temp$2$var38))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((obs[var51]?var38:(1.0 - var38))) + cv$accumulatedProbabilities);
 			}
 			
 			// Initialize an accumulator to take the product of all the distribution probabilities
@@ -496,19 +492,15 @@ final class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$0$var35" with its value "a[y]".
-		// 
-		// Substituted "cv$temp$1$$var177" with its value "lengthCV$a$37_11".
+		// Constructing a random variable input for use later.
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_11);
 		
 		// Processing random variable 39.
 		// 
 		// Processing sample task 54 of consumer random variable null.
 		for(int var51 = 0; var51 < length$obs_measured; var51 += 1) {
-			// Variable declaration of cv$temp$2$var38 moved.
-			// 
 			// Constructing a random variable input for use later.
-			double cv$temp$2$var38 = d[y];
+			double var38 = d[y];
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -522,12 +514,14 @@ final class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			cv$accumulatedProbabilities = (Math.log((obs[var51]?cv$temp$2$var38:(1.0 - cv$temp$2$var38))) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((obs[var51]?var38:(1.0 - var38))) + cv$accumulatedProbabilities);
 		}
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
 		// the random value is 0 an impossible value will be accepted.
+		// 
+		// Ratio of the probability of proposed and original sample values
 		// 
 		// Variable declaration of cv$proposedProbability moved.
 		// Declaration comment was:

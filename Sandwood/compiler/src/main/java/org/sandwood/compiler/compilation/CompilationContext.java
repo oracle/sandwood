@@ -27,12 +27,14 @@ import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.CompilationOptions;
 import org.sandwood.compiler.compilation.ForwardExecutionBuilder.GuardStatus;
 import org.sandwood.compiler.compilation.inferenceRange.InferenceRange;
+import org.sandwood.compiler.compilation.scopesState.ScopeState;
+import org.sandwood.compiler.compilation.scopesState.ScopeState.InitializedState;
+import org.sandwood.compiler.compilation.scopesState.ScopeTracking.ScopeTrackingState;
 import org.sandwood.compiler.compilation.util.TreeUtils;
 import org.sandwood.compiler.compilation.util.TreeUtils.ArrayDesc;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope.ScopeType;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
-import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
@@ -568,8 +570,7 @@ public class CompilationContext {
 
     public CompilationPhase phase = CompilationPhase.MAIN_METHODS;
 
-    private ScopeTracking scopes = new ScopeTracking(this);
-    private final Stack<ScopeTracking> scopeStack = new Stack<>();
+    private final ScopeState scopeState = new ScopeState(this);
 
     // Java class field name, class field type.
     private final Map<VariableName, FieldDesc<?>> classFields = new HashMap<>();
@@ -583,8 +584,6 @@ public class CompilationContext {
     private final Stack<Substitutions> substitutionsStack = new Stack<>();
 
     private final InferenceRangesMap inferenceRanges;
-
-    private final Stack<Set<Variable<?>>> initialized = new Stack<>();
 
     private boolean fullInferenceRequired = true;
 
@@ -693,11 +692,8 @@ public class CompilationContext {
     }
 
     public void initialize() {
-        scopes.clear();
-        scopeStack.clear();
+        scopeState.clear();
         substitutions.removeAllSubstitutes();
-        initialized.clear();
-        initialized.push(new HashSet<>());
         exploredDistSamples.clear();
         exploredDistSamples.push(new HashMap<>());
     }
@@ -817,26 +813,21 @@ public class CompilationContext {
         return classFields;
     }
 
-    /**
-     * Methods for checking which variables have had a local value for them declared.
-     *
-     * @param v The array to test.
-     * @return
-     */
-    public boolean initialized(Variable<?> v) {
-        return initialized.peek().contains(v.instanceHandle());
+    // Calls initialisation tracking.
+    public <A extends Variable<A>> Variable<A> getInitializedVariable(Variable<A> v) {
+        return scopeState.getInitializedVariable(v);
     }
 
-    public void addInitialized(Variable<?> v) {
-        initialized.peek().add(v.instanceHandle());
+    public boolean initializedInScope(Variable<?> v) {
+        return scopeState.initializedInScope(v);
     }
 
-    public void pushInitializedArrays() {
-        initialized.push(new HashSet<>());
+    public <A extends Variable<A>> Variable<A> addInitialized(Variable<A> v) {
+        return scopeState.addInitialized(v);
     }
 
-    public void popInitializedArrays() {
-        initialized.pop();
+    public InitializedState getInitializedState() {
+        return scopeState.getInitializedState();
     }
 
     /**
@@ -848,7 +839,7 @@ public class CompilationContext {
     public void addTreeToScope(Scope scope, IRTreeVoid tree) {
         if(codeGuard.peek() != null)
             tree = restructure(tree);
-        scopes.addTreeToScope(scope, tree);
+        scopeState.addTreeToScope(scope, tree);
     }
 
     /**
@@ -858,31 +849,12 @@ public class CompilationContext {
      * @param comment
      */
     public void addCommentToScope(Scope scope, String comment) {
-        scopes.addCommentToScope(scope, comment);
-    }
-
-    /**
-     * Method for adding trees to the scope described by the dataflow task.
-     *
-     * @param task
-     * @param tree
-     */
-
-    public void addTreeToScope(Scope scope, IRTreeVoid tree, DataflowTask<?> task) {
-        if(codeGuard.peek() != null)
-            tree = restructure(tree);
-        scopes.addTreeToScope(scope, tree, task);
+        scopeState.addCommentToScope(scope, comment);
     }
 
     private IRTreeVoid restructure(IRTreeVoid tree) {
         switch(tree.type) {
             case INITIALIZE:
-                /*
-                 * Assertion removed because methods don't have side effects, so it is not needed. IRInitialize<?> i =
-                 * (IRInitialize<?>) tree; assert(i.value.type == IRTreeType.CONST_BOOLEAN || i.value.type ==
-                 * IRTreeType.CONST_DOUBLE || i.value.type == IRTreeType.CONST_INT || i.value.type ==
-                 * IRTreeType.ARRAY_GET);
-                 */
                 return tree;
             case INITIALIZE_UNSET:
                 return tree;
@@ -893,19 +865,19 @@ public class CompilationContext {
     }
 
     public IRTreeVoid getOutermostScopeTree() {
-        return scopes.getOutermostScopeTree();
+        return scopeState.getOutermostScopeTree();
     }
 
     public void enterScope(Scope s) {
-        scopes.enterScope(s);
+        scopeState.enterScope(s);
     }
 
     public void leaveScope(Scope s) {
-        scopes.leaveScope(substituteScope(s));
+        scopeState.leaveScope(s);
     }
 
     public void setreverseScopes(boolean reverseScopes) {
-        scopes.setreverseScopes(reverseScopes);
+        scopeState.setreverseScopes(reverseScopes);
     }
 
     /**
@@ -916,18 +888,36 @@ public class CompilationContext {
      * @param s The scope to touch.
      */
     public void touchScope(Scope s) {
-        scopes.touchScope(s);
+        scopeState.touchScope(s);
     }
 
-    public void pushScope() {
-        scopeStack.push(scopes);
-        scopes = new ScopeTracking(this);
-        codeGuard.push(null);
+    public ScopeTrackingState getState(Scope scope) {
+        return scopeState.getState(scope);
     }
 
-    public void popScope() {
-        scopes = scopeStack.pop();
-        codeGuard.pop();
+    public Scope getTargetScope(Scope scope) {
+        return scopeState.getTargetScope(scope);
+    }
+
+    public void pushScopeState() {
+        scopeState.push();
+        substitutionsStack.push(substitutions);
+        substitutions = new Substitutions();
+    }
+
+    public void pushScopeState(Set<Scope> taskScopes, ScopeTrackingState scopeTrackingState,
+            InitializedState initialised) {
+        scopeState.push(taskScopes, scopeTrackingState, initialised, this);
+        substitutionsStack.push(substitutions);
+    }
+
+    public void popScopeState() {
+        substitutions = substitutionsStack.pop();
+        scopeState.pop();
+    }
+
+    public boolean scopeConstructed(Scope scope) {
+        return scopeState.scopeConstructed(scope);
     }
 
     public IRTreeVoid getVarAllocator() {
@@ -976,6 +966,7 @@ public class CompilationContext {
     }
 
     public void addScopeSubstitute(Scope source, Scope replacement) {
+        touchScope(replacement);
         substitutions.addScopeSubstitute(source, replacement);
     }
 
@@ -989,15 +980,6 @@ public class CompilationContext {
 
     public void removeSubstitute(Variable<?> v) {
         substitutions.removeSubstitute(v);
-    }
-
-    public void pushSubstitutions() {
-        substitutionsStack.push(substitutions);
-        substitutions = new Substitutions();
-    }
-
-    public void popSubstitutions() {
-        substitutions = substitutionsStack.pop();
     }
 
     /*

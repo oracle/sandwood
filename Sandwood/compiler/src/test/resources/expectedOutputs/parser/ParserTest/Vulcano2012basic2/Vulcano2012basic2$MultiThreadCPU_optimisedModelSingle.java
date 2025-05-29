@@ -314,9 +314,9 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample149 = fixedFlag$sample26;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -420,9 +420,9 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample26 = fixedFlag$sample26;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$rvAccumulator = 0.0;
@@ -530,9 +530,9 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample82 = true;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$rvAccumulator = 0.0;
@@ -579,8 +579,6 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$var24" with its value "2.0".
-			// 
 			// Set the current value to the current state of the tree.
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 1.4142135623730951)) - 0.34657359027997264);
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
@@ -613,7 +611,6 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// cv$temp$4$var144's comment
 					// Constructing a random variable input for use later.
 					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[t$var105], noProducts, sales_sum[t$var105]) + cv$accumulatedProbabilities);
 				}
@@ -642,7 +639,6 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// cv$temp$7$var144's comment
 					// Constructing a random variable input for use later.
 					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[t$var105], noProducts, sales_sum[t$var105]) + cv$accumulatedProbabilities);
 				}
@@ -671,7 +667,6 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// cv$temp$10$var144's comment
 					// Constructing a random variable input for use later.
 					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[t$var105], noProducts, sales_sum[t$var105]) + cv$accumulatedProbabilities);
 				}
@@ -694,7 +689,6 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// cv$temp$13$var144's comment
 					// Constructing a random variable input for use later.
 					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[t$var105], noProducts, sales_sum[t$var105]) + cv$accumulatedProbabilities);
 			}
@@ -708,8 +702,6 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		
-		// Update Sample and intermediate values
-		// 
 		// Guards to ensure that ut is only updated when there is a valid path.
 		ut[j$var20] = cv$proposedValue;
 		
@@ -1018,8 +1010,6 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$1$var24" with its value "2.0".
 		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 1.4142135623730951)) - 0.34657359027997264);
 		for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
 			// Set the flags to false
@@ -1051,7 +1041,6 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$4$var144's comment
 				// Constructing a random variable input for use later.
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[t$var105], noProducts, sales_sum[t$var105]) + cv$accumulatedProbabilities);
 			}
@@ -1080,7 +1069,6 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$7$var144's comment
 				// Constructing a random variable input for use later.
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[t$var105], noProducts, sales_sum[t$var105]) + cv$accumulatedProbabilities);
 			}
@@ -1109,7 +1097,6 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$10$var144's comment
 				// Constructing a random variable input for use later.
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[t$var105], noProducts, sales_sum[t$var105]) + cv$accumulatedProbabilities);
 			}
@@ -1138,16 +1125,11 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$13$var144's comment
 				// Constructing a random variable input for use later.
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[t$var105], noProducts, sales_sum[t$var105]) + cv$accumulatedProbabilities);
 			}
 		}
 		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		// 
 		// The probability ration for the proposed value and the current value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
@@ -1156,7 +1138,12 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		
+		// Test if the probability of the sample is sufficient to keep the value. This needs
+		// to be less than or equal as otherwise if the proposed value is not possible and
+		// the random value is 0 an impossible value will be accepted.
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -27,7 +27,6 @@ import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.compilation.inference.InferenceGenerator;
 import org.sandwood.compiler.compilation.inference.InferenceGeneratorScalar;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
-import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
@@ -48,6 +47,7 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVaria
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.TraceHandle;
+import org.sandwood.compiler.traces.guards.ScopeConstructor;
 import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
@@ -88,9 +88,8 @@ public class GammaToGaussian
     @Override
     protected IRTreeReturn<DoubleVariable> calculateSampleValue(CompilationContext compilationCtx,
             GammaToGaussianData funcData) {
-        // TODO adjust this so it traces back to find the constructor, and get the
-        // values
-        // from them. This will allow arrays of random variables.
+        // TODO adjust this so it traces back to find the constructor, and get the values from them. This will allow
+        // arrays of random variables.
         // Get the arguments constructed
         IRTreeReturn<DoubleVariable> alpha = funcData.sourceRandom.alpha.getForwardIR(compilationCtx);
         IRTreeReturn<DoubleVariable> beta = funcData.sourceRandom.beta.getForwardIR(compilationCtx);
@@ -109,14 +108,15 @@ public class GammaToGaussian
      * @param funcData       The function data for this inference function.
      */
     @Override
-    protected void constructFunctionVariables(CompilationContext compilationCtx, GammaToGaussianData funcData) {
+    protected void constructFunctionVariables(GammaToGaussianData funcData, CompilationContext compilationCtx) {
+        funcData.targetScope.addTree((TreeBuilderInfo info) -> {
+            // add a trees to initialize the temporary variables.
+            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sumName, constant(0.0),
+                    "Variable to track the sum of the difference between the samples and the random variables mean squared."));
 
-        // add a trees to initialize the temporary variables.
-        compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sumName, constant(0.0),
-                "Variable to track the sum of the difference between the samples and the random variables mean squared."));
-
-        compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countName, constant(0),
-                "Variable to record how many samples have been included in this calculation."));
+            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countName, constant(0),
+                    "Variable to record how many samples have been included in this calculation."));
+        });
     }
 
     @Override
@@ -279,8 +279,8 @@ public class GammaToGaussian
     protected void finalize(GammaToGaussianData funcData, CompilationContext compilationCtx) {}
 
     @Override
-    protected Scope getBackTraceScope(GammaToGaussianData funcData) {
-        return GlobalScope.scope;
+    protected ScopeConstructor getBackTraceScope(GammaToGaussianData funcData) {
+        return funcData.targetScope;
     }
 
     @Override

@@ -216,29 +216,31 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 				// An accumulator for the distributed probability space covered.
 				double cv$probabilityReached = 0.0;
 				{
-					// The sample value to calculate the probability of generating
-					double cv$sampleValue = bias[i$var21];
 					{
+						// The sample value to calculate the probability of generating
+						double cv$sampleValue = bias[i$var21];
 						{
-							double var5 = 1.0;
-							double var6 = 1.0;
-							
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var5, var6));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							{
+								double var5 = 1.0;
+								double var6 = 1.0;
+								
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var5, var6));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -279,9 +281,9 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample22 = fixedFlag$sample22;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -332,28 +334,30 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 					// An accumulator for the distributed probability space covered.
 					double cv$probabilityReached = 0.0;
 					{
-						// The sample value to calculate the probability of generating
-						boolean cv$sampleValue = flips[j][var48];
 						{
+							// The sample value to calculate the probability of generating
+							boolean cv$sampleValue = flips[j][var48];
 							{
-								double var37 = bias[j];
-								
-								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var37:(1.0 - var37))));
-								
-								// Add the probability of this sample task to the distribution accumulator.
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									// If the second value is -infinity.
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								{
+									double var37 = bias[j];
+									
+									// Store the value of the function call, so the function call is only made once.
+									double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var37:(1.0 - var37))));
+									
+									// Add the probability of this sample task to the distribution accumulator.
+									if((cv$weightedProbability < cv$distributionAccumulator))
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+									else {
+										// If the second value is -infinity.
+										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+											cv$distributionAccumulator = cv$weightedProbability;
+										else
+											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+									}
+									
+									// Add the probability of this distribution configuration to the accumulator.
+									cv$probabilityReached = (cv$probabilityReached + 1.0);
 								}
-								
-								// Add the probability of this distribution configuration to the accumulator.
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
 						}
 					}
@@ -391,9 +395,9 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample49 = (fixedFlag$sample9 && fixedFlag$sample22);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -442,28 +446,30 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 					// An accumulator for the distributed probability space covered.
 					double cv$probabilityReached = 0.0;
 					{
-						// The sample value to calculate the probability of generating
-						boolean cv$sampleValue = flips[k][var75];
 						{
+							// The sample value to calculate the probability of generating
+							boolean cv$sampleValue = flips[k][var75];
 							{
-								double var64 = bias[k];
-								
-								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var64:(1.0 - var64))));
-								
-								// Add the probability of this sample task to the distribution accumulator.
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									// If the second value is -infinity.
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								{
+									double var64 = bias[k];
+									
+									// Store the value of the function call, so the function call is only made once.
+									double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var64:(1.0 - var64))));
+									
+									// Add the probability of this sample task to the distribution accumulator.
+									if((cv$weightedProbability < cv$distributionAccumulator))
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+									else {
+										// If the second value is -infinity.
+										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+											cv$distributionAccumulator = cv$weightedProbability;
+										else
+											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+									}
+									
+									// Add the probability of this distribution configuration to the accumulator.
+									cv$probabilityReached = (cv$probabilityReached + 1.0);
 								}
-								
-								// Add the probability of this distribution configuration to the accumulator.
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
 						}
 					}
@@ -501,9 +507,9 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample77 = (fixedFlag$sample9 && fixedFlag$sample22);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -548,29 +554,31 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 			// An accumulator for the distributed probability space covered.
 			double cv$probabilityReached = 0.0;
 			{
-				// The sample value to calculate the probability of generating
-				double cv$sampleValue = bias[0];
 				{
+					// The sample value to calculate the probability of generating
+					double cv$sampleValue = bias[0];
 					{
-						double var5 = 1.0;
-						double var6 = 1.0;
-						
-						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var5, var6));
-						
-						// Add the probability of this sample task to the distribution accumulator.
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							// If the second value is -infinity.
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var5 = 1.0;
+							double var6 = 1.0;
+							
+							// Store the value of the function call, so the function call is only made once.
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var5, var6));
+							
+							// Add the probability of this sample task to the distribution accumulator.
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								// If the second value is -infinity.
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							
+							// Add the probability of this distribution configuration to the accumulator.
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						
-						// Add the probability of this distribution configuration to the accumulator.
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -607,9 +615,9 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample9 = fixedFlag$sample9;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -647,18 +655,22 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 				{
 					// Looking for a path between Sample 22 and consumer Bernoulli 38.
 					{
-						for(int j = 0; j < 1; j += 1) {
-							if((i$var21 == j)) {
-								// Processing sample task 49 of consumer random variable bernoulli1.
-								{
-									for(int var48 = 0; var48 < length$flipsMeasured[j]; var48 += 1) {
-										// Include the value sampled by task 49 from random variable bernoulli1.
-										// Increment the number of samples.
-										cv$count = (cv$count + 1);
-										
-										// If the sample value was positive increase the count
-										if(flips[j][var48])
-											cv$sum = (cv$sum + 1);
+						{
+							for(int j = 0; j < 1; j += 1) {
+								if((i$var21 == j)) {
+									// Processing sample task 49 of consumer random variable bernoulli1.
+									{
+										{
+											for(int var48 = 0; var48 < length$flipsMeasured[j]; var48 += 1) {
+												// Include the value sampled by task 49 from random variable bernoulli1.
+												// Increment the number of samples.
+												cv$count = (cv$count + 1);
+												
+												// If the sample value was positive increase the count
+												if(flips[j][var48])
+													cv$sum = (cv$sum + 1);
+											}
+										}
 									}
 								}
 							}
@@ -670,18 +682,22 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 				{
 					// Looking for a path between Sample 22 and consumer Bernoulli 65.
 					{
-						for(int k = 1; k < coins; k += 1) {
-							if((i$var21 == k)) {
-								// Processing sample task 77 of consumer random variable bernoulli2.
-								{
-									for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1) {
-										// Include the value sampled by task 77 from random variable bernoulli2.
-										// Increment the number of samples.
-										cv$count = (cv$count + 1);
-										
-										// If the sample value was positive increase the count
-										if(flips[k][var75])
-											cv$sum = (cv$sum + 1);
+						{
+							for(int k = 1; k < coins; k += 1) {
+								if((i$var21 == k)) {
+									// Processing sample task 77 of consumer random variable bernoulli2.
+									{
+										{
+											for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1) {
+												// Include the value sampled by task 77 from random variable bernoulli2.
+												// Increment the number of samples.
+												cv$count = (cv$count + 1);
+												
+												// If the sample value was positive increase the count
+												if(flips[k][var75])
+													cv$sum = (cv$sum + 1);
+											}
+										}
 									}
 								}
 							}
@@ -697,7 +713,9 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Guards to ensure that bias is only updated when there is a valid path.
 			{
 				{
-					bias[i$var21] = var22;
+					{
+						bias[i$var21] = var22;
+					}
 				}
 			}
 		}
@@ -718,18 +736,22 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 				{
 					// Looking for a path between Sample 9 and consumer Bernoulli 38.
 					{
-						for(int j = 0; j < 1; j += 1) {
-							if((0 == j)) {
-								// Processing sample task 49 of consumer random variable bernoulli1.
-								{
-									for(int var48 = 0; var48 < length$flipsMeasured[j]; var48 += 1) {
-										// Include the value sampled by task 49 from random variable bernoulli1.
-										// Increment the number of samples.
-										cv$count = (cv$count + 1);
-										
-										// If the sample value was positive increase the count
-										if(flips[j][var48])
-											cv$sum = (cv$sum + 1);
+						{
+							for(int j = 0; j < 1; j += 1) {
+								if((0 == j)) {
+									// Processing sample task 49 of consumer random variable bernoulli1.
+									{
+										{
+											for(int var48 = 0; var48 < length$flipsMeasured[j]; var48 += 1) {
+												// Include the value sampled by task 49 from random variable bernoulli1.
+												// Increment the number of samples.
+												cv$count = (cv$count + 1);
+												
+												// If the sample value was positive increase the count
+												if(flips[j][var48])
+													cv$sum = (cv$sum + 1);
+											}
+										}
 									}
 								}
 							}
@@ -741,18 +763,22 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 				{
 					// Looking for a path between Sample 9 and consumer Bernoulli 65.
 					{
-						for(int k = 1; k < coins; k += 1) {
-							if((0 == k)) {
-								// Processing sample task 77 of consumer random variable bernoulli2.
-								{
-									for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1) {
-										// Include the value sampled by task 77 from random variable bernoulli2.
-										// Increment the number of samples.
-										cv$count = (cv$count + 1);
-										
-										// If the sample value was positive increase the count
-										if(flips[k][var75])
-											cv$sum = (cv$sum + 1);
+						{
+							for(int k = 1; k < coins; k += 1) {
+								if((0 == k)) {
+									// Processing sample task 77 of consumer random variable bernoulli2.
+									{
+										{
+											for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1) {
+												// Include the value sampled by task 77 from random variable bernoulli2.
+												// Increment the number of samples.
+												cv$count = (cv$count + 1);
+												
+												// If the sample value was positive increase the count
+												if(flips[k][var75])
+													cv$sum = (cv$sum + 1);
+											}
+										}
 									}
 								}
 							}
@@ -768,7 +794,9 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Guards to ensure that bias is only updated when there is a valid path.
 			{
 				{
-					bias[0] = var9;
+					{
+						bias[0] = var9;
+					}
 				}
 			}
 		}

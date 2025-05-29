@@ -169,8 +169,8 @@ final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		double cv$originalProbability = ((((0.0 <= generated[j]) && (generated[j] < 10))?Math.log(indirection2[j][generated[j]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$originalValue) && (cv$originalValue < 1.0))?0.0:Double.NEGATIVE_INFINITY));
 		indirection1[i][j] = cv$proposedValue;
 		indirection2[j][i] = indirection1[i][j];
-		double cv$accumulatedProbabilities = ((((0.0 <= generated[j]) && (generated[j] < 10))?Math.log(indirection2[j][generated[j]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY));
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		double cv$ratio = (((((0.0 <= generated[j]) && (generated[j] < 10))?Math.log(indirection2[j][generated[j]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY)) - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			indirection1[i][j] = cv$originalValue;
 			indirection2[j][i] = indirection1[i][j];
 		}

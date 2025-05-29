@@ -190,18 +190,19 @@ final class Flip2CoinsMK8$SingleThreadCPU extends org.sandwood.runtime.internal.
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$originalValue, a, b);
 			for(int var45 = 0; var45 < length$flipsMeasured[i]; var45 += 1) {
-				double cv$temp$2$var34 = (1 - cv$originalValue);
-				cv$accumulatedProbabilities = (Math.log((flips[i][var45]?cv$temp$2$var34:(1.0 - cv$temp$2$var34))) + cv$accumulatedProbabilities);
+				double var34 = (1 - cv$originalValue);
+				cv$accumulatedProbabilities = (Math.log((flips[i][var45]?var34:(1.0 - var34))) + cv$accumulatedProbabilities);
 			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		bias[i] = cv$proposedValue;
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, a, b);
 		for(int var45 = 0; var45 < length$flipsMeasured[i]; var45 += 1) {
-			double cv$temp$2$var34 = (1 - cv$proposedValue);
-			cv$accumulatedProbabilities = (Math.log((flips[i][var45]?cv$temp$2$var34:(1.0 - cv$temp$2$var34))) + cv$accumulatedProbabilities);
+			double var34 = (1 - cv$proposedValue);
+			cv$accumulatedProbabilities = (Math.log((flips[i][var45]?var34:(1.0 - var34))) + cv$accumulatedProbabilities);
 		}
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
 			bias[i] = cv$originalValue;
 	}
 

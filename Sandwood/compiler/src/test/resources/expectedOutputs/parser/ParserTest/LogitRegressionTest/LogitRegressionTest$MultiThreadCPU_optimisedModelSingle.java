@@ -314,9 +314,9 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample35 = fixedFlag$sample35;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Variable declaration of cv$rvAccumulator moved.
@@ -412,9 +412,9 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample42 = fixedFlag$sample42;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -541,9 +541,9 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample94 = (fixedFlag$sample35 && fixedFlag$sample42);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -586,8 +586,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		{
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
-			// 
-			// Substituted "cv$temp$1$var21" with its value "10.0".
 			// 
 			// Set the current value to the current state of the tree.
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
@@ -701,7 +699,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 0)) {
-				// Unrolled loop
 				for(int i = 0; i < n; i += 1) {
 					// Substituted "j$var61" with its value "0".
 					// 
@@ -716,12 +713,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// variable instance.
 						guard$sample35bernoulli93$global[i][0] = true;
 						
-						// Variable declaration of cv$temp$2$var91 moved.
-						// 
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "0".
-						double cv$temp$2$var91 = ((indicator[i][0] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((indicator[i][0] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -739,7 +734,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// inputs.
 						// 
 						// Substituted "index$j$15_7" with its value "0".
-						cv$accumulatedProbabilities = (Math.log((y[i][0]?cv$temp$2$var91:(1.0 - cv$temp$2$var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -750,12 +745,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// variable instance.
 						guard$sample35bernoulli93$global[i][1] = true;
 						
-						// Variable declaration of cv$temp$2$var91 moved.
-						// 
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "1".
-						double cv$temp$2$var91 = ((indicator[i][1] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((indicator[i][1] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -773,7 +766,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// inputs.
 						// 
 						// Substituted "index$j$15_7" with its value "1".
-						cv$accumulatedProbabilities = (Math.log((y[i][1]?cv$temp$2$var91:(1.0 - cv$temp$2$var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -784,12 +777,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// variable instance.
 						guard$sample35bernoulli93$global[i][2] = true;
 						
-						// Variable declaration of cv$temp$2$var91 moved.
-						// 
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "2".
-						double cv$temp$2$var91 = ((indicator[i][2] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((indicator[i][2] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -807,14 +798,13 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// inputs.
 						// 
 						// Substituted "index$j$15_7" with its value "2".
-						cv$accumulatedProbabilities = (Math.log((y[i][2]?cv$temp$2$var91:(1.0 - cv$temp$2$var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 1)) {
-				// Unrolled loop
 				for(int i = 0; i < n; i += 1) {
 					// Substituted "j$var61" with its value "1".
 					// 
@@ -829,12 +819,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// variable instance.
 						guard$sample35bernoulli93$global[i][0] = true;
 						
-						// Variable declaration of cv$temp$3$var91 moved.
-						// 
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "0".
-						double cv$temp$3$var91 = ((indicator[i][0] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
+						double var91 = ((indicator[i][0] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -852,7 +840,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// inputs.
 						// 
 						// Substituted "index$j$16_7" with its value "0".
-						cv$accumulatedProbabilities = (Math.log((y[i][0]?cv$temp$3$var91:(1.0 - cv$temp$3$var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -863,12 +851,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// variable instance.
 						guard$sample35bernoulli93$global[i][1] = true;
 						
-						// Variable declaration of cv$temp$3$var91 moved.
-						// 
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "1".
-						double cv$temp$3$var91 = ((indicator[i][1] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
+						double var91 = ((indicator[i][1] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -886,7 +872,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// inputs.
 						// 
 						// Substituted "index$j$16_7" with its value "1".
-						cv$accumulatedProbabilities = (Math.log((y[i][1]?cv$temp$3$var91:(1.0 - cv$temp$3$var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -897,12 +883,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// variable instance.
 						guard$sample35bernoulli93$global[i][2] = true;
 						
-						// Variable declaration of cv$temp$3$var91 moved.
-						// 
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "2".
-						double cv$temp$3$var91 = ((indicator[i][2] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
+						double var91 = ((indicator[i][2] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -920,14 +904,13 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// inputs.
 						// 
 						// Substituted "index$j$16_7" with its value "2".
-						cv$accumulatedProbabilities = (Math.log((y[i][2]?cv$temp$3$var91:(1.0 - cv$temp$3$var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 2)) {
-				// Unrolled loop
 				for(int i = 0; i < n; i += 1) {
 					// Substituted "j$var61" with its value "2".
 					// 
@@ -942,12 +925,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// variable instance.
 						guard$sample35bernoulli93$global[i][0] = true;
 						
-						// Variable declaration of cv$temp$4$var91 moved.
-						// 
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "0".
-						double cv$temp$4$var91 = ((indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
+						double var91 = ((indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -965,7 +946,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// inputs.
 						// 
 						// Substituted "index$j$17_7" with its value "0".
-						cv$accumulatedProbabilities = (Math.log((y[i][0]?cv$temp$4$var91:(1.0 - cv$temp$4$var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -976,12 +957,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// variable instance.
 						guard$sample35bernoulli93$global[i][1] = true;
 						
-						// Variable declaration of cv$temp$4$var91 moved.
-						// 
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "1".
-						double cv$temp$4$var91 = ((indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
+						double var91 = ((indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -999,7 +978,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// inputs.
 						// 
 						// Substituted "index$j$17_7" with its value "1".
-						cv$accumulatedProbabilities = (Math.log((y[i][1]?cv$temp$4$var91:(1.0 - cv$temp$4$var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1010,12 +989,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// variable instance.
 						guard$sample35bernoulli93$global[i][2] = true;
 						
-						// Variable declaration of cv$temp$4$var91 moved.
-						// 
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "2".
-						double cv$temp$4$var91 = ((indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
+						double var91 = ((indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1033,7 +1010,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// inputs.
 						// 
 						// Substituted "index$j$17_7" with its value "2".
-						cv$accumulatedProbabilities = (Math.log((y[i][2]?cv$temp$4$var91:(1.0 - cv$temp$4$var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 					}
 				}
 			}
@@ -1049,14 +1026,12 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// variable instance.
 						guard$sample35bernoulli93$global[i][0] = true;
 						
-						// Variable declaration of cv$temp$5$var91 moved.
-						// 
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var61" with its value "0".
 						// 
 						// Set the current value to the current state of the tree.
-						double cv$temp$5$var91 = ((Math.exp((cv$originalValue * x[i][0])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((Math.exp((cv$originalValue * x[i][0])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1074,7 +1049,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// inputs.
 						// 
 						// Substituted "index$j$18_7" with its value "0".
-						cv$accumulatedProbabilities = (Math.log((y[i][0]?cv$temp$5$var91:(1.0 - cv$temp$5$var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 					}
 				}
 			}
@@ -1090,14 +1065,12 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// variable instance.
 						guard$sample35bernoulli93$global[i][1] = true;
 						
-						// Variable declaration of cv$temp$5$var91 moved.
-						// 
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var61" with its value "1".
 						// 
 						// Set the current value to the current state of the tree.
-						double cv$temp$5$var91 = ((Math.exp((cv$originalValue * x[i][1])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((Math.exp((cv$originalValue * x[i][1])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1115,7 +1088,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// inputs.
 						// 
 						// Substituted "index$j$18_7" with its value "1".
-						cv$accumulatedProbabilities = (Math.log((y[i][1]?cv$temp$5$var91:(1.0 - cv$temp$5$var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 					}
 				}
 			}
@@ -1131,14 +1104,12 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// variable instance.
 						guard$sample35bernoulli93$global[i][2] = true;
 						
-						// Variable declaration of cv$temp$5$var91 moved.
-						// 
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var61" with its value "2".
 						// 
 						// Set the current value to the current state of the tree.
-						double cv$temp$5$var91 = ((Math.exp((cv$originalValue * x[i][2])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((Math.exp((cv$originalValue * x[i][2])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1156,7 +1127,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						// inputs.
 						// 
 						// Substituted "index$j$18_7" with its value "2".
-						cv$accumulatedProbabilities = (Math.log((y[i][2]?cv$temp$5$var91:(1.0 - cv$temp$5$var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 					}
 				}
 			}
@@ -1170,8 +1141,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		
-		// Update Sample and intermediate values
-		// 
 		// Guards to ensure that weights is only updated when there is a valid path.
 		weights[var33] = cv$proposedValue;
 		
@@ -1500,8 +1469,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$1$var21" with its value "10.0".
 		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1613,7 +1580,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 0)) {
-			// Unrolled loop
 			for(int i = 0; i < n; i += 1) {
 				// Substituted "j$var61" with its value "0".
 				double traceTempVariable$var69$15_4 = Math.exp((cv$proposedValue * x[i][0]));
@@ -1626,12 +1592,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// variable instance.
 					guard$sample35bernoulli93$global[i][0] = true;
 					
-					// Variable declaration of cv$temp$2$var91 moved.
-					// 
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "j$var85" with its value "0".
-					double cv$temp$2$var91 = ((indicator[i][0] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
+					double var91 = ((indicator[i][0] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1649,7 +1613,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// inputs.
 					// 
 					// Substituted "index$j$15_7" with its value "0".
-					cv$accumulatedProbabilities = (Math.log((y[i][0]?cv$temp$2$var91:(1.0 - cv$temp$2$var91))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1660,12 +1624,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// variable instance.
 					guard$sample35bernoulli93$global[i][1] = true;
 					
-					// Variable declaration of cv$temp$2$var91 moved.
-					// 
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "j$var85" with its value "1".
-					double cv$temp$2$var91 = ((indicator[i][1] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
+					double var91 = ((indicator[i][1] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1683,7 +1645,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// inputs.
 					// 
 					// Substituted "index$j$15_7" with its value "1".
-					cv$accumulatedProbabilities = (Math.log((y[i][1]?cv$temp$2$var91:(1.0 - cv$temp$2$var91))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1694,12 +1656,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// variable instance.
 					guard$sample35bernoulli93$global[i][2] = true;
 					
-					// Variable declaration of cv$temp$2$var91 moved.
-					// 
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "j$var85" with its value "2".
-					double cv$temp$2$var91 = ((indicator[i][2] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
+					double var91 = ((indicator[i][2] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1717,14 +1677,13 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// inputs.
 					// 
 					// Substituted "index$j$15_7" with its value "2".
-					cv$accumulatedProbabilities = (Math.log((y[i][2]?cv$temp$2$var91:(1.0 - cv$temp$2$var91))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 				}
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 1)) {
-			// Unrolled loop
 			for(int i = 0; i < n; i += 1) {
 				// Substituted "j$var61" with its value "1".
 				double traceTempVariable$var71$16_4 = Math.exp((cv$proposedValue * x[i][1]));
@@ -1737,12 +1696,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// variable instance.
 					guard$sample35bernoulli93$global[i][0] = true;
 					
-					// Variable declaration of cv$temp$3$var91 moved.
-					// 
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "j$var85" with its value "0".
-					double cv$temp$3$var91 = ((indicator[i][0] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
+					double var91 = ((indicator[i][0] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1760,7 +1717,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// inputs.
 					// 
 					// Substituted "index$j$16_7" with its value "0".
-					cv$accumulatedProbabilities = (Math.log((y[i][0]?cv$temp$3$var91:(1.0 - cv$temp$3$var91))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1771,12 +1728,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// variable instance.
 					guard$sample35bernoulli93$global[i][1] = true;
 					
-					// Variable declaration of cv$temp$3$var91 moved.
-					// 
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "j$var85" with its value "1".
-					double cv$temp$3$var91 = ((indicator[i][1] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
+					double var91 = ((indicator[i][1] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1794,7 +1749,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// inputs.
 					// 
 					// Substituted "index$j$16_7" with its value "1".
-					cv$accumulatedProbabilities = (Math.log((y[i][1]?cv$temp$3$var91:(1.0 - cv$temp$3$var91))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1805,12 +1760,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// variable instance.
 					guard$sample35bernoulli93$global[i][2] = true;
 					
-					// Variable declaration of cv$temp$3$var91 moved.
-					// 
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "j$var85" with its value "2".
-					double cv$temp$3$var91 = ((indicator[i][2] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
+					double var91 = ((indicator[i][2] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1828,14 +1781,13 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// inputs.
 					// 
 					// Substituted "index$j$16_7" with its value "2".
-					cv$accumulatedProbabilities = (Math.log((y[i][2]?cv$temp$3$var91:(1.0 - cv$temp$3$var91))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 				}
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 2)) {
-			// Unrolled loop
 			for(int i = 0; i < n; i += 1) {
 				// Substituted "j$var61" with its value "2".
 				double traceTempVariable$var74$17_4 = Math.exp((cv$proposedValue * x[i][2]));
@@ -1848,12 +1800,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// variable instance.
 					guard$sample35bernoulli93$global[i][0] = true;
 					
-					// Variable declaration of cv$temp$4$var91 moved.
-					// 
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "j$var85" with its value "0".
-					double cv$temp$4$var91 = ((indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
+					double var91 = ((indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1871,7 +1821,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// inputs.
 					// 
 					// Substituted "index$j$17_7" with its value "0".
-					cv$accumulatedProbabilities = (Math.log((y[i][0]?cv$temp$4$var91:(1.0 - cv$temp$4$var91))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1882,12 +1832,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// variable instance.
 					guard$sample35bernoulli93$global[i][1] = true;
 					
-					// Variable declaration of cv$temp$4$var91 moved.
-					// 
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "j$var85" with its value "1".
-					double cv$temp$4$var91 = ((indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
+					double var91 = ((indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1905,7 +1853,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// inputs.
 					// 
 					// Substituted "index$j$17_7" with its value "1".
-					cv$accumulatedProbabilities = (Math.log((y[i][1]?cv$temp$4$var91:(1.0 - cv$temp$4$var91))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1916,12 +1864,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// variable instance.
 					guard$sample35bernoulli93$global[i][2] = true;
 					
-					// Variable declaration of cv$temp$4$var91 moved.
-					// 
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "j$var85" with its value "2".
-					double cv$temp$4$var91 = ((indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
+					double var91 = ((indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1939,7 +1885,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// inputs.
 					// 
 					// Substituted "index$j$17_7" with its value "2".
-					cv$accumulatedProbabilities = (Math.log((y[i][2]?cv$temp$4$var91:(1.0 - cv$temp$4$var91))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 				}
 			}
 		}
@@ -1955,12 +1901,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// variable instance.
 					guard$sample35bernoulli93$global[i][0] = true;
 					
-					// Variable declaration of cv$temp$5$var91 moved.
-					// 
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "j$var61" with its value "0".
-					double cv$temp$5$var91 = ((Math.exp((cv$proposedValue * x[i][0])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
+					double var91 = ((Math.exp((cv$proposedValue * x[i][0])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1978,7 +1922,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// inputs.
 					// 
 					// Substituted "index$j$18_7" with its value "0".
-					cv$accumulatedProbabilities = (Math.log((y[i][0]?cv$temp$5$var91:(1.0 - cv$temp$5$var91))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 				}
 			}
 		}
@@ -1994,12 +1938,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// variable instance.
 					guard$sample35bernoulli93$global[i][1] = true;
 					
-					// Variable declaration of cv$temp$5$var91 moved.
-					// 
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "j$var61" with its value "1".
-					double cv$temp$5$var91 = ((Math.exp((cv$proposedValue * x[i][1])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
+					double var91 = ((Math.exp((cv$proposedValue * x[i][1])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -2017,7 +1959,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// inputs.
 					// 
 					// Substituted "index$j$18_7" with its value "1".
-					cv$accumulatedProbabilities = (Math.log((y[i][1]?cv$temp$5$var91:(1.0 - cv$temp$5$var91))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 				}
 			}
 		}
@@ -2033,12 +1975,10 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// variable instance.
 					guard$sample35bernoulli93$global[i][2] = true;
 					
-					// Variable declaration of cv$temp$5$var91 moved.
-					// 
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "j$var61" with its value "2".
-					double cv$temp$5$var91 = ((Math.exp((cv$proposedValue * x[i][2])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
+					double var91 = ((Math.exp((cv$proposedValue * x[i][2])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -2056,15 +1996,11 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// inputs.
 					// 
 					// Substituted "index$j$18_7" with its value "2".
-					cv$accumulatedProbabilities = (Math.log((y[i][2]?cv$temp$5$var91:(1.0 - cv$temp$5$var91))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 				}
 			}
 		}
 		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		// 
 		// The probability ration for the proposed value and the current value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
@@ -2073,7 +2009,12 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		
+		// Test if the probability of the sample is sufficient to keep the value. This needs
+		// to be less than or equal as otherwise if the proposed value is not possible and
+		// the random value is 0 an impossible value will be accepted.
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -2436,8 +2377,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$var39" with its value "10.0".
-			// 
 			// Set the current value to the current state of the tree.
 			// 
 			// The original value of the sample
@@ -2447,8 +2386,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			for(int i = 0; i < n; i += 1) {
 				// Unrolled loop
 				{
-					// Variable declaration of cv$temp$2$var91 moved.
-					// 
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "j$var85" with its value "0".
@@ -2456,7 +2393,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// Set the current value to the current state of the tree.
 					// 
 					// The original value of the sample
-					double cv$temp$2$var91 = (p[i][0] + bias);
+					double var91 = (p[i][0] + bias);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -2474,11 +2411,9 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// inputs.
 					// 
 					// Substituted "j$var85" with its value "0".
-					cv$accumulatedProbabilities = (Math.log((y[i][0]?cv$temp$2$var91:(1.0 - cv$temp$2$var91))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 				}
 				{
-					// Variable declaration of cv$temp$2$var91 moved.
-					// 
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "j$var85" with its value "1".
@@ -2486,7 +2421,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// Set the current value to the current state of the tree.
 					// 
 					// The original value of the sample
-					double cv$temp$2$var91 = (p[i][1] + bias);
+					double var91 = (p[i][1] + bias);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -2504,11 +2439,9 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					// inputs.
 					// 
 					// Substituted "j$var85" with its value "1".
-					cv$accumulatedProbabilities = (Math.log((y[i][1]?cv$temp$2$var91:(1.0 - cv$temp$2$var91))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 				}
 				
-				// Variable declaration of cv$temp$2$var91 moved.
-				// 
 				// Constructing a random variable input for use later.
 				// 
 				// Substituted "j$var85" with its value "2".
@@ -2516,7 +2449,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				// Set the current value to the current state of the tree.
 				// 
 				// The original value of the sample
-				double cv$temp$2$var91 = (p[i][2] + bias);
+				double var91 = (p[i][2] + bias);
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -2534,7 +2467,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				// inputs.
 				// 
 				// Substituted "j$var85" with its value "2".
-				cv$accumulatedProbabilities = (Math.log((y[i][2]?cv$temp$2$var91:(1.0 - cv$temp$2$var91))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
@@ -2553,20 +2486,16 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$1$var39" with its value "10.0".
 		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
 		
 		// Processing random variable 92.
 		for(int i = 0; i < n; i += 1) {
 			// Unrolled loop
 			{
-				// Variable declaration of cv$temp$2$var91 moved.
-				// 
 				// Constructing a random variable input for use later.
 				// 
 				// Substituted "j$var85" with its value "0".
-				double cv$temp$2$var91 = (p[i][0] + cv$proposedValue);
+				double var91 = (p[i][0] + cv$proposedValue);
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -2584,15 +2513,13 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				// inputs.
 				// 
 				// Substituted "j$var85" with its value "0".
-				cv$accumulatedProbabilities = (Math.log((y[i][0]?cv$temp$2$var91:(1.0 - cv$temp$2$var91))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 			}
 			{
-				// Variable declaration of cv$temp$2$var91 moved.
-				// 
 				// Constructing a random variable input for use later.
 				// 
 				// Substituted "j$var85" with its value "1".
-				double cv$temp$2$var91 = (p[i][1] + cv$proposedValue);
+				double var91 = (p[i][1] + cv$proposedValue);
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -2610,15 +2537,13 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				// inputs.
 				// 
 				// Substituted "j$var85" with its value "1".
-				cv$accumulatedProbabilities = (Math.log((y[i][1]?cv$temp$2$var91:(1.0 - cv$temp$2$var91))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 			}
 			
-			// Variable declaration of cv$temp$2$var91 moved.
-			// 
 			// Constructing a random variable input for use later.
 			// 
 			// Substituted "j$var85" with its value "2".
-			double cv$temp$2$var91 = (p[i][2] + cv$proposedValue);
+			double var91 = (p[i][2] + cv$proposedValue);
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -2636,13 +2561,9 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			// inputs.
 			// 
 			// Substituted "j$var85" with its value "2".
-			cv$accumulatedProbabilities = (Math.log((y[i][2]?cv$temp$2$var91:(1.0 - cv$temp$2$var91))) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
 		}
 		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		// 
 		// The probability ration for the proposed value and the current value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
@@ -2651,7 +2572,12 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		
+		// Test if the probability of the sample is sufficient to keep the value. This needs
+		// to be less than or equal as otherwise if the proposed value is not possible and
+		// the random value is 0 an impossible value will be accepted.
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -2748,7 +2674,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
 						int i = index$i;
 						int threadID$i = threadID$index$i;
-						boolean[] var89 = y[i];
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
 						if(!fixedFlag$sample35)
@@ -2763,6 +2688,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 								}
 							);
 
+						boolean[] var89 = y[i];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 						parallelFor(RNG$1, 0, 3, 1,
@@ -2868,7 +2794,6 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
 						int i = index$i;
 						int threadID$i = threadID$index$i;
-						boolean[] var89 = y[i];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 						parallelFor(RNG$1, 0, 3, 1,
@@ -2880,6 +2805,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 										indicator[i][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
 							}
 						);
+						boolean[] var89 = y[i];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 						parallelFor(RNG$1, 0, 3, 1,

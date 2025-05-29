@@ -260,9 +260,9 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample11 = fixedFlag$sample11;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -348,9 +348,9 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample27 = (fixedFlag$sample7 && fixedFlag$sample11);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -438,9 +438,9 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample7 = fixedFlag$sample7;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -484,8 +484,6 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$var9" with its value "5.0".
-			// 
 			// Set the current value to the current state of the tree.
 			// 
 			// The original value of the sample
@@ -507,9 +505,6 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				// 
-				// cv$temp$2$var25's comment
-				// Variable declaration of cv$temp$2$var25 moved.
 				// 
 				// Constructing a random variable input for use later.
 				// 
@@ -534,8 +529,6 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$1$var9" with its value "5.0".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityHalfCauchy(cv$proposedValue, 1.0, 5.0);
 		
 		// Processing random variable 26.
@@ -555,16 +548,9 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// cv$temp$2$var25's comment
-			// Variable declaration of cv$temp$2$var25 moved.
-			// 
 			// Constructing a random variable input for use later.
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (b0 + (cv$proposedValue * x[i]))) + cv$accumulatedProbabilities);
 		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		// 
 		// The probability ration for the proposed value and the current value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
@@ -573,7 +559,12 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		
+		// Test if the probability of the sample is sufficient to keep the value. This needs
+		// to be less than or equal as otherwise if the proposed value is not possible and
+		// the random value is 0 an impossible value will be accepted.
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -610,8 +601,6 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$var5" with its value "2.0".
-			// 
 			// Set the current value to the current state of the tree.
 			// 
 			// The original value of the sample
@@ -633,9 +622,6 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				// 
-				// cv$temp$2$var25's comment
-				// Variable declaration of cv$temp$2$var25 moved.
 				// 
 				// Constructing a random variable input for use later.
 				// 
@@ -660,8 +646,6 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$1$var5" with its value "2.0".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCauchy(cv$proposedValue, 0.0, 2.0);
 		
 		// Processing random variable 26.
@@ -681,16 +665,9 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// cv$temp$2$var25's comment
-			// Variable declaration of cv$temp$2$var25 moved.
-			// 
 			// Constructing a random variable input for use later.
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (cv$proposedValue + (b1 * x[i]))) + cv$accumulatedProbabilities);
 		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		// 
 		// The probability ration for the proposed value and the current value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
@@ -699,7 +676,12 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		
+		// Test if the probability of the sample is sufficient to keep the value. This needs
+		// to be less than or equal as otherwise if the proposed value is not possible and
+		// the random value is 0 an impossible value will be accepted.
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
 			// If it is not revert the changes.
 			// 
 			// Set the sample value

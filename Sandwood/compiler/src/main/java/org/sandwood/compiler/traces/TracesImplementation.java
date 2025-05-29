@@ -84,7 +84,7 @@ public class TracesImplementation extends Traces {
     // A set containing all the intermediate variables that will have a fix value method.
     private final Set<Variable<?>> fixableIntermediates = new HashSet<>();
     // Set containing all the fix-able sample tasks.
-    private final Set<SampleTask<?, ?>> fixableTasks = new HashSet<>();
+    private final Set<SampleTask<?, ?>> fixableTasks = new LinkedHashSet<>();
     // Map of top names to variables for top level variables. For Variables such as
     // arrays that might appear multiple times it is the instance variable that is
     // held.
@@ -118,7 +118,7 @@ public class TracesImplementation extends Traces {
     private final Map<Variable<?>, Set<Variable<?>>> sourceObservedVars = new HashMap<>();
 
     // Set of all the distribution sample tasks.
-    private final Set<DistributionSampleTask<?, ?>> distributionSampleTasks = new HashSet<>();
+    private final Set<DistributionSampleTask<?, ?>> distributionSampleTasks = new LinkedHashSet<>();
 
     // Set of named variables on traces from a sample task that are read by a random variable argument and fixed by an
     // observation.
@@ -1436,7 +1436,7 @@ public class TracesImplementation extends Traces {
                         if(d.argPos == 0) {
                             conditionalGuard = d;
                             Map<ProducingDataflowTask<?>, Set<TraceHandle>> m = conditionalTraceTasks
-                                    .computeIfAbsent(sourceSample, k -> new HashMap<>());
+                                    .computeIfAbsent(sourceSample, k -> new LinkedHashMap<>());
                             Set<TraceHandle> traces = m.computeIfAbsent(d.task, k -> new HashSet<>());
                             Trace trace = handle.getTrace();
                             while(trace.peek() != d)
@@ -1465,7 +1465,7 @@ public class TracesImplementation extends Traces {
                         if(d.argPos == 3) {
                             conditionalGuard = d;
                             Map<ProducingDataflowTask<?>, Set<TraceHandle>> m = conditionalTraceTasks
-                                    .computeIfAbsent(sourceSample, k -> new HashMap<>());
+                                    .computeIfAbsent(sourceSample, k -> new LinkedHashMap<>());
                             Set<TraceHandle> traces = m.computeIfAbsent(d.task, k -> new HashSet<>());
                             Trace trace = handle.getTrace();
                             while(trace.peek() != d)

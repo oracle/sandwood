@@ -247,8 +247,8 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			int index$i$3_2 = (i$var46 + 1);
 			if((index$i$3_2 < n))
 				cv$accumulatedProbabilities = ((((0.0 <= a[index$i$3_2]) && (a[index$i$3_2] < 5))?Math.log(m[cv$valuePos][a[index$i$3_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
-			double cv$temp$4$var72 = (double)(1 / cv$valuePos);
-			cv$accumulatedProbabilities = (Math.log((flips[(i$var46 - 1)]?cv$temp$4$var72:(1.0 - cv$temp$4$var72))) + cv$accumulatedProbabilities);
+			double var72 = (double)(1 / cv$valuePos);
+			cv$accumulatedProbabilities = (Math.log((flips[(i$var46 - 1)]?var72:(1.0 - var72))) + cv$accumulatedProbabilities);
 			cv$var54$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
 		}
 		double cv$logSum;

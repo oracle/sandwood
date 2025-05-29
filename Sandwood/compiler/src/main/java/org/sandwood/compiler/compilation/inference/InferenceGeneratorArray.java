@@ -26,6 +26,7 @@ import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.names.VariableNames;
+import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
 
@@ -48,9 +49,8 @@ public abstract class InferenceGeneratorArray<A extends Variable<A>, B extends R
         }
     }
 
-    // Methods passing through to the subclasses. this provides a point where we
-    // can add in code that should be executed for all array values, but not for
-    // scalars.
+    // Methods passing through to the subclasses. this provides a point where we can add in code that should be executed
+    // for all array values, but not for scalars.
     @Override
     protected void addSampleValueTree(FuncData funcData, CompilationContext compilationCtx) {
         IRTreeVoid sampleValue = calculateSampleValue(funcData, compilationCtx);
@@ -61,7 +61,7 @@ public abstract class InferenceGeneratorArray<A extends Variable<A>, B extends R
     protected abstract IRTreeVoid calculateSampleValue(FuncData funcData, CompilationContext compilationCtx);
 
     @Override
-    protected void constructFunctionVariablesInternal(CompilationContext compilationCtx, FuncData funcData) {
+    protected void constructFunctionVariablesInternal(FuncData funcData, CompilationContext compilationCtx) {
         // Set up a pointer for accessing local space.
         IRTreeReturn<ArrayVariable<A>> globalState;
         if(funcData.sampleDesc.targetFound()) {
@@ -80,11 +80,13 @@ public abstract class InferenceGeneratorArray<A extends Variable<A>, B extends R
         }
         IRTreeVoid getLocalState = initializeVariable(funcData.targetLocal, globalState,
                 "A reference local to the function for the sample variable.");
-        compilationCtx.addTreeToScope(GlobalScope.scope, getLocalState);
-        constructFunctionVariables(compilationCtx, funcData);
+        funcData.targetScope.addTree((TreeBuilderInfo t) -> {
+            compilationCtx.addTreeToScope(GlobalScope.scope, getLocalState);
+        });
+        constructFunctionVariables(funcData, compilationCtx);
     }
 
-    protected abstract void constructFunctionVariables(CompilationContext compilationCtx, FuncData funcData);
+    protected abstract void constructFunctionVariables(FuncData funcData, CompilationContext compilationCtx);
 
     @Override
     protected void allocateGlobalStateInternal(CompilationContext compilationCtx, FuncData funcData) {

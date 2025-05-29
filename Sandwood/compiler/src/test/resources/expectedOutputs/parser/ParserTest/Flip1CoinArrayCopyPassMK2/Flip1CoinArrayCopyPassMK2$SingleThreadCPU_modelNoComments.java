@@ -118,19 +118,21 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
-				double cv$sampleValue = bias[0];
 				{
+					double cv$sampleValue = bias[0];
 					{
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, a, b));
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, a, b));
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -169,20 +171,22 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
-					boolean cv$sampleValue = flips[i];
 					{
+						boolean cv$sampleValue = flips[i];
 						{
-							double var29 = bias[i];
-							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var29:(1.0 - var29))));
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							{
+								double var29 = bias[i];
+								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var29:(1.0 - var29))));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -225,16 +229,22 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 			{
 				{
 					{
-						for(int i = 0; i < samples; i += 1) {
-							if((0 == i)) {
-								{
+						{
+							for(int i = 0; i < samples; i += 1) {
+								if((0 == i)) {
 									{
 										{
 											{
 												{
-													cv$count = (cv$count + 1);
-													if(flips[i])
-														cv$sum = (cv$sum + 1);
+													{
+														{
+															{
+																cv$count = (cv$count + 1);
+																if(flips[i])
+																	cv$sum = (cv$sum + 1);
+															}
+														}
+													}
 												}
 											}
 										}
@@ -242,18 +252,24 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 								}
 							}
 						}
-						if((0 == 0)) {
-							for(int i = 0; i < samples; i += 1) {
-								for(int index$i$2_2 = 0; index$i$2_2 < samples; index$i$2_2 += 1) {
-									if(((i + 1) == index$i$2_2)) {
-										{
+						{
+							if((0 == 0)) {
+								for(int i = 0; i < samples; i += 1) {
+									for(int index$i$2_2 = 0; index$i$2_2 < samples; index$i$2_2 += 1) {
+										if(((i + 1) == index$i$2_2)) {
 											{
 												{
 													{
 														{
-															cv$count = (cv$count + 1);
-															if(flips[index$i$2_2])
-																cv$sum = (cv$sum + 1);
+															{
+																{
+																	{
+																		cv$count = (cv$count + 1);
+																		if(flips[index$i$2_2])
+																			cv$sum = (cv$sum + 1);
+																	}
+																}
+															}
 														}
 													}
 												}
@@ -269,13 +285,17 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 			double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
 			{
 				{
-					bias[0] = var10;
+					{
+						bias[0] = var10;
+					}
 				}
 			}
 			{
-				if((0 == 0)) {
-					for(int i = 0; i < samples; i += 1)
-						bias[(i + 1)] = bias[0];
+				{
+					if((0 == 0)) {
+						for(int i = 0; i < samples; i += 1)
+							bias[(i + 1)] = bias[0];
+					}
 				}
 			}
 		}
