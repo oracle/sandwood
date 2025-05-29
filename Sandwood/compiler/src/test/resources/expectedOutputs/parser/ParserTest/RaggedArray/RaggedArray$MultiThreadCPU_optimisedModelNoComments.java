@@ -164,8 +164,8 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			lengthCV$a$71_8 = 2;
 		if((1 == y))
 			lengthCV$a$71_8 = 3;
-		int cv$numNumStates = Math.max(0, lengthCV$a$71_8);
-		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+		int cv$numStates = Math.max(0, lengthCV$a$71_8);
+		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			i = cv$valuePos;
 			p = b[y][cv$valuePos];
 			int lengthCV$a$71_9 = -1;
@@ -180,7 +180,7 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 		double cv$logSum;
 		double cv$lseMax = cv$var69$stateProbabilityGlobal[0];
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 			double cv$lseElementValue = cv$var69$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
@@ -189,20 +189,20 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			cv$logSum = Double.NEGATIVE_INFINITY;
 		else {
 			double cv$lseSum = 0.0;
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var69$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
 		}
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
-				cv$var69$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numNumStates);
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+				cv$var69$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
 		} else {
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				cv$var69$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var69$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
-		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$var69$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numStates; cv$indexName < cv$var69$stateProbabilityGlobal.length; cv$indexName += 1)
 			cv$var69$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
-		i = DistributionSampling.sampleCategorical(RNG$, cv$var69$stateProbabilityGlobal, cv$numNumStates);
+		i = DistributionSampling.sampleCategorical(RNG$, cv$var69$stateProbabilityGlobal, cv$numStates);
 		p = b[y][i];
 	}
 

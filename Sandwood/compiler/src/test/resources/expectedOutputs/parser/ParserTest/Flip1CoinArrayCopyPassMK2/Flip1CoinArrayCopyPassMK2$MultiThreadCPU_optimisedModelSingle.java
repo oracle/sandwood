@@ -234,9 +234,9 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample10 = fixedFlag$sample10;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -331,9 +331,9 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample31 = fixedFlag$sample10;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// A guard to check if the sample value is ever reached.

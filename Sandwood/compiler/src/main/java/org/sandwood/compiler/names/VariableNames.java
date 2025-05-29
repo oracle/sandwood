@@ -298,6 +298,11 @@ public final class VariableNames {
         return new VariableDescription<>(desc + Name.prefix + id, desc.type, true);
     }
 
+    public static <V extends Variable<V>> VariableDescription<V> scopedCopySubstitute(Variable<V> v, int id) {
+        VariableDescription<V> desc = v.getUniqueVarDesc();
+        return new VariableDescription<>("sc" + Name.prefix + desc + Name.prefix + id, desc.type, true);
+    }
+
     public static <A extends Variable<A>> VariableDescription<ArrayVariable<ArrayVariable<A>>> subarrayName(int suffix,
             Type<ArrayVariable<ArrayVariable<A>>> type) {
         return new VariableDescription<>("subarray" + Name.prefix + suffix, type, true);

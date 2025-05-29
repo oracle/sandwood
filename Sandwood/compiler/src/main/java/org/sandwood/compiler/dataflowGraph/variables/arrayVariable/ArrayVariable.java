@@ -876,7 +876,6 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         ScopeStack.pushScope(scope);
         NamedArrayVariable<A> nv = new NamedArrayVariable<>(varDesc);
         ArrayVariable<A> v = new ArrayVariable<>(nv);
-        v.setIntermediate();
         ScopeStack.popScope(scope);
         return v;
     }

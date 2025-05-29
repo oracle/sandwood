@@ -401,9 +401,9 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample28 = fixedFlag$sample28;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -511,9 +511,9 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample45 = fixedFlag$sample45;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -620,9 +620,9 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample53 = (fixedFlag$sample53 && fixedFlag$sample28);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -717,9 +717,9 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample76 = ((fixedFlag$sample76 && fixedFlag$sample28) && fixedFlag$sample53);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -812,9 +812,9 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample99 = ((fixedFlag$sample45 && fixedFlag$sample53) && fixedFlag$sample76);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -921,10 +921,9 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
-			// 
-			// cv$temp$0$var50's comment
 			// Constructing a random variable input for use later.
+			// 
+			// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = Math.log(m[0][0]);
 			
 			// Substituted "i$var67" with its value "4".
@@ -946,7 +945,6 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// 
 				// Substituted "i$var67" with its value "4".
 				// 
-				// cv$temp$2$var73's comment
 				// Constructing a random variable input for use later.
 				// 
 				// Processing random variable 74.
@@ -961,8 +959,6 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Substituted "j" with its value "5".
 			if((0 < samples)) {
 				// Processing sample task 99 of consumer random variable null.
-				// Variable declaration of cv$temp$4$var96 moved.
-				// 
 				// Constructing a random variable input for use later.
 				// 
 				// Processing random variable 97.
@@ -972,7 +968,7 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// Value of the variable at this index
 				// 
 				// Substituted "cv$valuePos" with its value "0".
-				double cv$temp$4$var96 = bias[0];
+				double var96 = bias[0];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -988,7 +984,7 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// inputs.
 				// 
 				// Substituted "j" with its value "5".
-				cv$accumulatedProbabilities = (Math.log((flips[0]?cv$temp$4$var96:(1.0 - cv$temp$4$var96))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((flips[0]?var96:(1.0 - var96))) + cv$accumulatedProbabilities);
 			}
 			
 			// Save the calculated index value into the array of index value probabilities
@@ -1011,10 +1007,9 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
-		// 
-		// cv$temp$0$var50's comment
 		// Constructing a random variable input for use later.
+		// 
+		// Substituted "cv$valuePos" with its value "1".
 		double cv$accumulatedProbabilities = Math.log(m[0][1]);
 		
 		// Substituted "i$var67" with its value "4".
@@ -1036,7 +1031,6 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// 
 			// Substituted "i$var67" with its value "4".
 			// 
-			// cv$temp$2$var73's comment
 			// Constructing a random variable input for use later.
 			// 
 			// Processing random variable 74.
@@ -1051,8 +1045,6 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Substituted "j" with its value "5".
 		if((0 < samples)) {
 			// Processing sample task 99 of consumer random variable null.
-			// Variable declaration of cv$temp$4$var96 moved.
-			// 
 			// Constructing a random variable input for use later.
 			// 
 			// Processing random variable 97.
@@ -1062,7 +1054,7 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "1".
-			double cv$temp$4$var96 = bias[2];
+			double var96 = bias[2];
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -1078,7 +1070,7 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// inputs.
 			// 
 			// Substituted "j" with its value "5".
-			cv$accumulatedProbabilities = (Math.log((flips[0]?cv$temp$4$var96:(1.0 - cv$temp$4$var96))) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((flips[0]?var96:(1.0 - var96))) + cv$accumulatedProbabilities);
 		}
 		
 		// Save the calculated index value into the array of index value probabilities
@@ -1155,7 +1147,7 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		// 
-		// cv$numNumStates's comment
+		// cv$numStates's comment
 		// variable marginalization
 		st[0] = (DistributionSampling.sampleCategorical(RNG$, cv$var52$stateProbabilityGlobal, 2) * 2);
 	}
@@ -1176,10 +1168,9 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
-			// 
-			// cv$temp$0$var73's comment
 			// Constructing a random variable input for use later.
+			// 
+			// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = Math.log(m[st[(i$var67 - 4)]][0]);
 			int index$i$2_2 = (i$var67 + 1);
 			if((index$i$2_2 < (samples + 3)))
@@ -1198,7 +1189,6 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$2$var73's comment
 				// Constructing a random variable input for use later.
 				// 
 				// Processing random variable 74.
@@ -1210,8 +1200,6 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// Substituted "cv$valuePos" with its value "0".
 				cv$accumulatedProbabilities = ((((0.0 <= (st[(index$i$2_2 - 3)] / 2)) && ((st[(index$i$2_2 - 3)] / 2) < 2))?Math.log(m[0][(st[(index$i$2_2 - 3)] / 2)]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
-			// Variable declaration of cv$temp$4$var96 moved.
-			// 
 			// Constructing a random variable input for use later.
 			// 
 			// Processing random variable 97.
@@ -1221,7 +1209,7 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "0".
-			double cv$temp$4$var96 = bias[0];
+			double var96 = bias[0];
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -1239,7 +1227,7 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// inputs.
 			// 
 			// Substituted "j" with its value "(i$var67 + 2)".
-			cv$accumulatedProbabilities = (Math.log((flips[(i$var67 - 3)]?cv$temp$4$var96:(1.0 - cv$temp$4$var96))) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((flips[(i$var67 - 3)]?var96:(1.0 - var96))) + cv$accumulatedProbabilities);
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
@@ -1261,10 +1249,9 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
-		// 
-		// cv$temp$0$var73's comment
 		// Constructing a random variable input for use later.
+		// 
+		// Substituted "cv$valuePos" with its value "1".
 		double cv$accumulatedProbabilities = Math.log(m[st[(i$var67 - 4)]][1]);
 		int index$i$2_2 = (i$var67 + 1);
 		if((index$i$2_2 < (samples + 3)))
@@ -1283,7 +1270,6 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// cv$temp$2$var73's comment
 			// Constructing a random variable input for use later.
 			// 
 			// Processing random variable 74.
@@ -1295,8 +1281,6 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Substituted "cv$valuePos" with its value "1".
 			cv$accumulatedProbabilities = ((((0.0 <= (st[(index$i$2_2 - 3)] / 2)) && ((st[(index$i$2_2 - 3)] / 2) < 2))?Math.log(m[2][(st[(index$i$2_2 - 3)] / 2)]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		
-		// Variable declaration of cv$temp$4$var96 moved.
-		// 
 		// Constructing a random variable input for use later.
 		// 
 		// Processing random variable 97.
@@ -1306,7 +1290,7 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
-		double cv$temp$4$var96 = bias[2];
+		double var96 = bias[2];
 		
 		// A check to ensure rounding of floating point values can never result in a negative
 		// value.
@@ -1324,7 +1308,7 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// inputs.
 		// 
 		// Substituted "j" with its value "(i$var67 + 2)".
-		cv$accumulatedProbabilities = (Math.log((flips[(i$var67 - 3)]?cv$temp$4$var96:(1.0 - cv$temp$4$var96))) + cv$accumulatedProbabilities);
+		cv$accumulatedProbabilities = (Math.log((flips[(i$var67 - 3)]?var96:(1.0 - var96))) + cv$accumulatedProbabilities);
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
@@ -1400,7 +1384,7 @@ final class HMMTestPart5b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		// 
-		// cv$numNumStates's comment
+		// cv$numStates's comment
 		// variable marginalization
 		st[(i$var67 - 3)] = (DistributionSampling.sampleCategorical(RNG$, cv$var75$stateProbabilityGlobal, 2) * 2);
 	}

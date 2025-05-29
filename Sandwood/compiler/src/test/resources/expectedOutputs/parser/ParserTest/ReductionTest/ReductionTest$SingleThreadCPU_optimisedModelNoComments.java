@@ -305,25 +305,25 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	private final void sample62(int i$var58) {
-		int cv$numNumStates = Math.max(0, noStates);
-		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+		int cv$numStates = Math.max(0, noStates);
+		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			st[i$var58] = cv$valuePos;
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(m[i$var58][cv$valuePos]):Double.NEGATIVE_INFINITY);
 			int reduceVar$var82$1 = 0;
-			for(int cv$reduction223Index = 0; cv$reduction223Index < i$var58; cv$reduction223Index += 1)
-				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction223Index]);
-			for(int cv$reduction223Index = (i$var58 + 1); cv$reduction223Index < noCats; cv$reduction223Index += 1)
-				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction223Index]);
+			for(int cv$reduction222Index = 0; cv$reduction222Index < i$var58; cv$reduction222Index += 1)
+				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction222Index]);
+			for(int cv$reduction222Index = (i$var58 + 1); cv$reduction222Index < noCats; cv$reduction222Index += 1)
+				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction222Index]);
 			reduceVar$var82$1 = (cv$valuePos + reduceVar$var82$1);
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
-				double cv$temp$2$var83 = bias[reduceVar$var82$1];
-				cv$accumulatedProbabilities = (Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83))) + cv$accumulatedProbabilities);
+				double var83 = bias[reduceVar$var82$1];
+				cv$accumulatedProbabilities = (Math.log((flips[j$var73]?var83:(1.0 - var83))) + cv$accumulatedProbabilities);
 			}
 			cv$var61$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
 		}
 		double cv$logSum;
 		double cv$lseMax = cv$var61$stateProbabilityGlobal[0];
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 			double cv$lseElementValue = cv$var61$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
@@ -332,20 +332,20 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			cv$logSum = Double.NEGATIVE_INFINITY;
 		else {
 			double cv$lseSum = 0.0;
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var61$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
 		}
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
-				cv$var61$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numNumStates);
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+				cv$var61$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
 		} else {
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				cv$var61$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var61$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
-		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$var61$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numStates; cv$indexName < cv$var61$stateProbabilityGlobal.length; cv$indexName += 1)
 			cv$var61$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
-		st[i$var58] = DistributionSampling.sampleCategorical(RNG$, cv$var61$stateProbabilityGlobal, cv$numNumStates);
+		st[i$var58] = DistributionSampling.sampleCategorical(RNG$, cv$var61$stateProbabilityGlobal, cv$numStates);
 	}
 
 	@Override

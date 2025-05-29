@@ -139,29 +139,31 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// An accumulator for the distributed probability space covered.
 			double cv$probabilityReached = 0.0;
 			{
-				// The sample value to calculate the probability of generating
-				double cv$sampleValue = b;
 				{
+					// The sample value to calculate the probability of generating
+					double cv$sampleValue = b;
 					{
-						double var10 = 0.0;
-						double var11 = 1.0;
-						
-						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + (((var10 <= cv$sampleValue) && (cv$sampleValue < var11))?(-Math.log((var11 - var10))):Double.NEGATIVE_INFINITY));
-						
-						// Add the probability of this sample task to the distribution accumulator.
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							// If the second value is -infinity.
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var10 = 0.0;
+							double var11 = 1.0;
+							
+							// Store the value of the function call, so the function call is only made once.
+							double cv$weightedProbability = (Math.log(1.0) + (((var10 <= cv$sampleValue) && (cv$sampleValue < var11))?(-Math.log((var11 - var10))):Double.NEGATIVE_INFINITY));
+							
+							// Add the probability of this sample task to the distribution accumulator.
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								// If the second value is -infinity.
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							
+							// Add the probability of this distribution configuration to the accumulator.
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						
-						// Add the probability of this distribution configuration to the accumulator.
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -192,14 +194,16 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Add probability to constructed variables that have guards, so need per sample probabilities
 			// from the combined probability
 			{
-				if(!guard) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$value) {
-						// Set the guard so the update is only applied once.
-						cv$guard$value = true;
-						
-						// Update the variable probability
-						logProbability$value = (logProbability$value + cv$sampleProbability);
+				{
+					if(!guard) {
+						// If the probability of the variable has not already been updated
+						if(!cv$guard$value) {
+							// Set the guard so the update is only applied once.
+							cv$guard$value = true;
+							
+							// Update the variable probability
+							logProbability$value = (logProbability$value + cv$sampleProbability);
+						}
 					}
 				}
 			}
@@ -211,9 +215,9 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample13 = true;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -231,14 +235,16 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Add probability to constructed variables that have guards, so need per sample probabilities
 			// from the combined probability
 			{
-				if(!guard) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$value) {
-						// Set the guard so the update is only applied once.
-						cv$guard$value = true;
-						
-						// Update the variable probability
-						logProbability$value = (logProbability$value + cv$sampleValue);
+				{
+					if(!guard) {
+						// If the probability of the variable has not already been updated
+						if(!cv$guard$value) {
+							// Set the guard so the update is only applied once.
+							cv$guard$value = true;
+							
+							// Update the variable probability
+							logProbability$value = (logProbability$value + cv$sampleValue);
+						}
 					}
 				}
 			}
@@ -267,28 +273,30 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// An accumulator for the distributed probability space covered.
 			double cv$probabilityReached = 0.0;
 			{
-				// The sample value to calculate the probability of generating
-				boolean cv$sampleValue = guard;
 				{
+					// The sample value to calculate the probability of generating
+					boolean cv$sampleValue = guard;
 					{
-						double var3 = 0.5;
-						
-						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var3:(1.0 - var3))));
-						
-						// Add the probability of this sample task to the distribution accumulator.
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							// If the second value is -infinity.
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var3 = 0.5;
+							
+							// Store the value of the function call, so the function call is only made once.
+							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var3:(1.0 - var3))));
+							
+							// Add the probability of this sample task to the distribution accumulator.
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								// If the second value is -infinity.
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							
+							// Add the probability of this distribution configuration to the accumulator.
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						
-						// Add the probability of this distribution configuration to the accumulator.
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -318,9 +326,9 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample5 = true;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -354,29 +362,31 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// An accumulator for the distributed probability space covered.
 			double cv$probabilityReached = 0.0;
 			{
-				// The sample value to calculate the probability of generating
-				double cv$sampleValue = a;
 				{
+					// The sample value to calculate the probability of generating
+					double cv$sampleValue = a;
 					{
-						double var6 = 0.0;
-						double var7 = 1.0;
-						
-						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + (((var6 <= cv$sampleValue) && (cv$sampleValue < var7))?(-Math.log((var7 - var6))):Double.NEGATIVE_INFINITY));
-						
-						// Add the probability of this sample task to the distribution accumulator.
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							// If the second value is -infinity.
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var6 = 0.0;
+							double var7 = 1.0;
+							
+							// Store the value of the function call, so the function call is only made once.
+							double cv$weightedProbability = (Math.log(1.0) + (((var6 <= cv$sampleValue) && (cv$sampleValue < var7))?(-Math.log((var7 - var6))):Double.NEGATIVE_INFINITY));
+							
+							// Add the probability of this sample task to the distribution accumulator.
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								// If the second value is -infinity.
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							
+							// Add the probability of this distribution configuration to the accumulator.
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						
-						// Add the probability of this distribution configuration to the accumulator.
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -407,14 +417,16 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Add probability to constructed variables that have guards, so need per sample probabilities
 			// from the combined probability
 			{
-				if(guard) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$value) {
-						// Set the guard so the update is only applied once.
-						cv$guard$value = true;
-						
-						// Update the variable probability
-						logProbability$value = (logProbability$value + cv$sampleProbability);
+				{
+					if(guard) {
+						// If the probability of the variable has not already been updated
+						if(!cv$guard$value) {
+							// Set the guard so the update is only applied once.
+							cv$guard$value = true;
+							
+							// Update the variable probability
+							logProbability$value = (logProbability$value + cv$sampleProbability);
+						}
 					}
 				}
 			}
@@ -426,9 +438,9 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample9 = true;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -446,14 +458,16 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Add probability to constructed variables that have guards, so need per sample probabilities
 			// from the combined probability
 			{
-				if(guard) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$value) {
-						// Set the guard so the update is only applied once.
-						cv$guard$value = true;
-						
-						// Update the variable probability
-						logProbability$value = (logProbability$value + cv$sampleValue);
+				{
+					if(guard) {
+						// If the probability of the variable has not already been updated
+						if(!cv$guard$value) {
+							// Set the guard so the update is only applied once.
+							cv$guard$value = true;
+							
+							// Update the variable probability
+							logProbability$value = (logProbability$value + cv$sampleValue);
+						}
 					}
 				}
 			}
@@ -607,18 +621,26 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		guard = observedGuard;
 		value = observedValue;
 		{
-			if(guard) {
-				{
-					if(guard)
-						a = observedValue;
+			{
+				if(guard) {
+					{
+						{
+							if(guard)
+								a = observedValue;
+						}
+					}
 				}
 			}
 		}
 		{
-			if(!guard) {
-				{
-					if(!guard)
-						b = observedValue;
+			{
+				if(!guard) {
+					{
+						{
+							if(!guard)
+								b = observedValue;
+						}
+					}
 				}
 			}
 		}

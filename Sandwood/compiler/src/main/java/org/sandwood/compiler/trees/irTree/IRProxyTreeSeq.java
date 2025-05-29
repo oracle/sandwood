@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -31,18 +31,6 @@ public class IRProxyTreeSeq extends IRTreeVoid {
     private IRProxyTreeSeq(List<IRTreeVoid> trees, String comment) {
         super(IRTreeType.PROXY_SEQ, comment);
         this.trees = trees;
-    }
-
-    public IRTreeVoid getTree() {
-        IRTreeVoid[] ts = getChildren();
-        if(ts.length > 1)
-            return sequential(ts, comment);
-        else if(ts.length == 1) {
-            IRTreeVoid t = ts[0];
-            t.prefixComment(comment);
-            return t;
-        } else
-            return null;
     }
 
     @Override
@@ -91,11 +79,15 @@ public class IRProxyTreeSeq extends IRTreeVoid {
      */
     @Override
     public TransTreeVoid toTransformationTree() {
-        IRTreeVoid t = getTree();
-        if(t == null)
+        IRTreeVoid[] ts = getChildren();
+        if(ts.length > 1)
+            return sequential(ts, comment).toTransformationTree();
+        else if(ts.length == 1) {
+            TransTreeVoid t = ts[0].toTransformationTree();
+            t.prefixComment(comment);
+            return t;
+        } else
             return TransTree.nop();
-        else
-            return t.toTransformationTree();
     }
 
     @Override

@@ -181,8 +181,8 @@ final class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			for(int i = 0; i < length$observed; i += 1) {
 				if(!guard$sample21gaussian37$global[i]) {
 					guard$sample21gaussian37$global[i] = true;
-					double cv$temp$3$var36 = indirection[i];
-					cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(cv$temp$3$var36))) + cv$accumulatedProbabilities) - (Math.log(cv$temp$3$var36) * 0.5));
+					double var36 = indirection[i];
+					cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(var36))) + cv$accumulatedProbabilities) - (Math.log(var36) * 0.5));
 				}
 			}
 			for(int i = 0; i < length$observed; i += 1) {
@@ -206,8 +206,8 @@ final class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		for(int i = 0; i < length$observed; i += 1) {
 			if(!guard$sample21gaussian37$global[i]) {
 				guard$sample21gaussian37$global[i] = true;
-				double cv$temp$3$var36 = indirection[i];
-				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(cv$temp$3$var36))) + cv$accumulatedProbabilities) - (Math.log(cv$temp$3$var36) * 0.5));
+				double var36 = indirection[i];
+				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(var36))) + cv$accumulatedProbabilities) - (Math.log(var36) * 0.5));
 			}
 		}
 		for(int i = 0; i < length$observed; i += 1) {

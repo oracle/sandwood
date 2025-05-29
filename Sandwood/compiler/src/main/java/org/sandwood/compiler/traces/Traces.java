@@ -225,16 +225,13 @@ public abstract class Traces {
             Variable<X> vSub = compilationCtx.getSubstitute(v);
             ProducingDataflowTask<X> task = vSub.getParent();
             IRTreeReturn<X> t = task.getForwardIR(compilationCtx);
-            if(!compilationCtx.initialized(v)) {
-                compilationCtx.addTreeToScope(v.scope(),
-                        TreeUtils.putIndirectValue(v, t, "Write out the new sample value.", compilationCtx));
-                compilationCtx.addInitialized(v);
-            }
+            compilationCtx.addTreeToScope(v.scope(),
+                    TreeUtils.putIndirectValue(v, t, "Write out the new sample value.", compilationCtx));
         }
     }
 
     public static class LengthTraceDesc {
-        public final Map<PutTask<?>, Set<TraceHandle>> toPutTraces = new HashMap<>();
+        public final Map<PutTask<?>, Set<TraceHandle>> toPutTraces = new LinkedHashMap<>();
 
         public void addTraceToPut(TraceHandle traceToPut) {
             PutTask<?> pt = (PutTask<?>) traceToPut.get(0).task;

@@ -85,6 +85,8 @@ import org.sandwood.compiler.trees.Visibility;
 import org.sandwood.compiler.trees.irTree.IRFunction;
 import org.sandwood.compiler.trees.irTree.IRFunctionCall;
 import org.sandwood.compiler.trees.irTree.IRSandwoodClassGenerated;
+import org.sandwood.compiler.trees.irTree.IRTree;
+import org.sandwood.compiler.trees.irTree.IRTree.TreeVisitor;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
 import org.sandwood.compiler.trees.irTree.IRVoidFunction;
@@ -592,14 +594,29 @@ public class APICompile {
         }
     }
 
+    private static class ContainsStateVisitor implements TreeVisitor {
+        boolean containsState = false;
+
+        @Override
+        public void visit(IRTree tree) {
+            switch(tree.type) {
+                case INITIALIZE:
+                case INITIALIZE_UNSET:
+                    containsState = true;
+                    break;
+                default:
+                    break;
+            }
+            tree.traverseTree(this);
+        }
+    }
+
     private static void gibbsRound(CompilationContext compilationCtx) {
         compilationCtx.initialize();
         // As this method calls the inference functions, it is treated as an inference function from the point of view
         // of which scopes need to be serialised.
         compilationCtx.setInInference(true);
-        VariableDescription<BooleanVariable> flagName = new VariableDescription<>(
-                VariableNames.internalSystemName("gibbsForward"), VariableType.BooleanVariable);
-        compilationCtx.addConstructedClassField(flagName, constant(true));
+
         Map<SampleTask<?, ?>, IRFunction<?>> inferenceFunctions = compilationCtx
                 .getFunctionMap(SampleFunctionClass.INFERENCE);
 
@@ -610,13 +627,26 @@ public class APICompile {
             callSampleMethod(s, f, compilationCtx);
         }
         IRTreeVoid forwardTree = compilationCtx.getOutermostScopeTree();
-        IRTreeVoid reverseTree = new ReverseTreeTransformation().transform(forwardTree);
+        ContainsStateVisitor v = new ContainsStateVisitor();
+        forwardTree.traverseTree(v);
 
-        IRTreeVoid conditional = ifElse(load(flagName), forwardTree, "Infer the samples in chronological order.",
-                reverseTree, "Infer the samples in reverse chronological order.");
+        IRTreeVoid tree;
+        // TODO come up with a better way of doing this. We should not need to avoid state as there shouldn't be any
+        // state.
+        if(v.containsState)
+            tree = forwardTree;
+        else {
+            VariableDescription<BooleanVariable> flagName = new VariableDescription<>(
+                    VariableNames.internalSystemName("gibbsForward"), VariableType.BooleanVariable);
+            compilationCtx.addConstructedClassField(flagName, constant(true));
+            IRTreeVoid reverseTree = new ReverseTreeTransformation().transform(forwardTree);
 
-        IRTreeVoid tree = sequential(Tree.NoComment, conditional, store(flagName, negateBoolean(load(flagName)),
-                "Reverse the direction of execution for the next iteration"));
+            IRTreeVoid conditional = ifElse(load(flagName), forwardTree, "Infer the samples in chronological order.",
+                    reverseTree, "Infer the samples in reverse chronological order.");
+
+            tree = sequential(Tree.NoComment, conditional, store(flagName, negateBoolean(load(flagName)),
+                    "Reverse the direction of execution for the next iteration"));
+        }
 
         compilationCtx.addFunction(AuxFunctionType.GIBBS_ROUND, Visibility.PUBLIC, new ArgDesc[0], tree, true,
                 "Method to execute one round of Gibbs sampling.");

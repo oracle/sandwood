@@ -284,8 +284,7 @@ public class TreeUtils {
         if(desc == null)
             return null;
         // Set up the scope tracking to record the tree we generate.
-        compilationCtx.pushScope();
-        compilationCtx.pushSubstitutions();
+        compilationCtx.pushScopeState();
         Scope scope = desc.scope;
         compilationCtx.enterScope(scope);
 
@@ -311,8 +310,7 @@ public class TreeUtils {
 
         // Restore the old scope
         compilationCtx.phase = currentPhase;
-        compilationCtx.popSubstitutions();
-        compilationCtx.popScope();
+        compilationCtx.popScopeState();
         return t;
     }
 
@@ -481,10 +479,10 @@ public class TreeUtils {
             CompilationContext compilationCtx) {
 
         // Set up the scope tracking to record the tree we generate.
-        compilationCtx.pushScope();
+        compilationCtx.pushScopeState();
         initializeInScope(name, value, desc, compilationCtx);
         IRTreeVoid t = compilationCtx.getOutermostScopeTree();
-        compilationCtx.popScope();
+        compilationCtx.popScopeState();
         return t;
     }
 

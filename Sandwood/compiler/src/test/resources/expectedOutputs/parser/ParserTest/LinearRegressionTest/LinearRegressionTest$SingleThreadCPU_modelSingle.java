@@ -266,29 +266,31 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 				// An accumulator for the distributed probability space covered.
 				double cv$probabilityReached = 0.0;
 				{
-					// The sample value to calculate the probability of generating
-					double cv$sampleValue = weights[var23];
 					{
+						// The sample value to calculate the probability of generating
+						double cv$sampleValue = weights[var23];
 						{
-							double var10 = 0.0;
-							double var11 = 10.0;
-							
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var10) / Math.sqrt(var11))) - (0.5 * Math.log(var11))));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							{
+								double var10 = 0.0;
+								double var11 = 10.0;
+								
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var10) / Math.sqrt(var11))) - (0.5 * Math.log(var11))));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -331,9 +333,9 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample24 = fixedFlag$sample24;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -382,29 +384,31 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			// An accumulator for the distributed probability space covered.
 			double cv$probabilityReached = 0.0;
 			{
-				// The sample value to calculate the probability of generating
-				double cv$sampleValue = bias;
 				{
+					// The sample value to calculate the probability of generating
+					double cv$sampleValue = bias;
 					{
-						double var28 = 0.0;
-						double var29 = 10.0;
-						
-						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var28) / Math.sqrt(var29))) - (0.5 * Math.log(var29))));
-						
-						// Add the probability of this sample task to the distribution accumulator.
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							// If the second value is -infinity.
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var28 = 0.0;
+							double var29 = 10.0;
+							
+							// Store the value of the function call, so the function call is only made once.
+							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var28) / Math.sqrt(var29))) - (0.5 * Math.log(var29))));
+							
+							// Add the probability of this sample task to the distribution accumulator.
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								// If the second value is -infinity.
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							
+							// Add the probability of this distribution configuration to the accumulator.
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						
-						// Add the probability of this distribution configuration to the accumulator.
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -437,9 +441,9 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample31 = fixedFlag$sample31;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -477,29 +481,31 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			// An accumulator for the distributed probability space covered.
 			double cv$probabilityReached = 0.0;
 			{
-				// The sample value to calculate the probability of generating
-				double cv$sampleValue = tau;
 				{
+					// The sample value to calculate the probability of generating
+					double cv$sampleValue = tau;
 					{
-						double var32 = 3.0;
-						double var33 = 1.0;
-						
-						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityInverseGamma(cv$sampleValue, var32, var33));
-						
-						// Add the probability of this sample task to the distribution accumulator.
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							// If the second value is -infinity.
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var32 = 3.0;
+							double var33 = 1.0;
+							
+							// Store the value of the function call, so the function call is only made once.
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityInverseGamma(cv$sampleValue, var32, var33));
+							
+							// Add the probability of this sample task to the distribution accumulator.
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								// If the second value is -infinity.
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							
+							// Add the probability of this distribution configuration to the accumulator.
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						
-						// Add the probability of this distribution configuration to the accumulator.
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -532,9 +538,9 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample35 = fixedFlag$sample35;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -575,48 +581,50 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 				// An accumulator for the distributed probability space covered.
 				double cv$probabilityReached = 0.0;
 				{
-					// The sample value to calculate the probability of generating
-					double cv$sampleValue = y[i$var45];
 					{
+						// The sample value to calculate the probability of generating
+						double cv$sampleValue = y[i$var45];
 						{
-							// Reduction of array phi
-							// 
-							// A generated name to prevent name collisions if the reduction is implemented more
-							// than once in inference and probability code. Initialize the variable to the unit
-							// value
-							double reduceVar$var70$3 = 0.0;
-							
-							// For each index in the array to be reduced
-							for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
-								// Set the left hand term of the reduction function to the return variable value.
-								double i$var67 = reduceVar$var70$3;
-								
-								// Set the right hand term to a value from the array phi
-								double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
-								
-								// Execute the reduction function, saving the result into the return value.
+							{
+								// Reduction of array phi
 								// 
-								// Copy the result of the reduction into the variable returned by the reduction.
-								reduceVar$var70$3 = (i$var67 + j$var68);
+								// A generated name to prevent name collisions if the reduction is implemented more
+								// than once in inference and probability code. Initialize the variable to the unit
+								// value
+								double reduceVar$var70$3 = 0.0;
+								
+								// For each index in the array to be reduced
+								for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+									// Set the left hand term of the reduction function to the return variable value.
+									double i$var67 = reduceVar$var70$3;
+									
+									// Set the right hand term to a value from the array phi
+									double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+									
+									// Execute the reduction function, saving the result into the return value.
+									// 
+									// Copy the result of the reduction into the variable returned by the reduction.
+									reduceVar$var70$3 = (i$var67 + j$var68);
+								}
+								double var71 = (reduceVar$var70$3 + bias);
+								
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var71) / Math.sqrt(tau))) - (0.5 * Math.log(tau))));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							double var71 = (reduceVar$var70$3 + bias);
-							
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var71) / Math.sqrt(tau))) - (0.5 * Math.log(tau))));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -655,9 +663,9 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample74 = ((fixedFlag$sample24 && fixedFlag$sample31) && fixedFlag$sample35);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -703,77 +711,79 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 				{
 					// Looking for a path between Sample 24 and consumer Gaussian 72.
 					{
-						for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
-							if((var23 == j$var55)) {
-								for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-									if(((0 <= j$var55) && (j$var55 < k))) {
-										{
+						{
+							for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
+								if((var23 == j$var55)) {
+									for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+										if(((0 <= j$var55) && (j$var55 < k))) {
 											// Processing sample task 74 of consumer random variable null.
 											{
 												{
 													{
 														{
 															{
-																// State for tracking the changes that happen to the sampled value between it being
-																// consumed and it being produced.
-																double cv$denominator = 1.0;
-																double cv$numerator = 0.0;
-																cv$numerator = (cv$numerator * x[i$var45][j$var55]);
-																cv$denominator = (cv$denominator * x[i$var45][j$var55]);
-																if((0 < k)) {
-																	// Reduction of array phi
-																	// 
-																	// A generated name to prevent name collisions if the reduction is implemented more
-																	// than once in inference and probability code. Initialize the variable to the unit
-																	// value
-																	double reduceVar$var70$0 = 0.0;
-																	
-																	// Reduce for every value except a masked value which will be skipped.
-																	for(int cv$reduction155Index = 0; cv$reduction155Index < j$var55; cv$reduction155Index += 1) {
-																		// Set the left hand term of the reduction function to the return variable value.
-																		double i$var67 = reduceVar$var70$0;
+																{
+																	{
+																		// State for tracking the changes that happen to the sampled value between it being
+																		// consumed and it being produced.
+																		double cv$denominator = 1.0;
+																		double cv$numerator = 0.0;
+																		cv$numerator = (cv$numerator * x[i$var45][j$var55]);
+																		cv$denominator = (cv$denominator * x[i$var45][j$var55]);
+																		if((0 < k)) {
+																			// Reduction of array phi
+																			// 
+																			// A generated name to prevent name collisions if the reduction is implemented more
+																			// than once in inference and probability code. Initialize the variable to the unit
+																			// value
+																			double reduceVar$var70$0 = 0.0;
+																			
+																			// Reduce for every value except a masked value which will be skipped.
+																			for(int cv$reduction149Index = 0; cv$reduction149Index < j$var55; cv$reduction149Index += 1) {
+																				// Set the left hand term of the reduction function to the return variable value.
+																				double i$var67 = reduceVar$var70$0;
+																				
+																				// Set the right hand term to a value from the array phi
+																				double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction149Index];
+																				
+																				// Execute the reduction function, saving the result into the return value.
+																				// 
+																				// Copy the result of the reduction into the variable returned by the reduction.
+																				reduceVar$var70$0 = (i$var67 + j$var68);
+																			}
+																			for(int cv$reduction149Index = (j$var55 + 1); cv$reduction149Index < k; cv$reduction149Index += 1) {
+																				// Set the left hand term of the reduction function to the return variable value.
+																				double i$var67 = reduceVar$var70$0;
+																				
+																				// Set the right hand term to a value from the array phi
+																				double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction149Index];
+																				
+																				// Execute the reduction function, saving the result into the return value.
+																				// 
+																				// Copy the result of the reduction into the variable returned by the reduction.
+																				reduceVar$var70$0 = (i$var67 + j$var68);
+																			}
+																			double cv$reduced65 = reduceVar$var70$0;
+																			cv$numerator = (cv$numerator + cv$reduced65);
+																		}
+																		cv$numerator = (cv$numerator + bias);
 																		
-																		// Set the right hand term to a value from the array phi
-																		double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction155Index];
-																		
-																		// Execute the reduction function, saving the result into the return value.
+																		// Record the value of a sample generated by a consuming sample 74 of random variable
+																		// var72.
 																		// 
-																		// Copy the result of the reduction into the variable returned by the reduction.
-																		reduceVar$var70$0 = (i$var67 + j$var68);
+																		// Add the denominator squared to the sample denominator
+																		cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+																		
+																		// Add the weighting of the sample to the sum.
+																		cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
+																		
+																		// If we have not got the value of sigma yet record it and set a flag so it is not
+																		// recorded again.
+																		if(cv$sigmaNotFound) {
+																			cv$sigmaValue = tau;
+																			cv$sigmaNotFound = false;
+																		}
 																	}
-																	for(int cv$reduction155Index = (j$var55 + 1); cv$reduction155Index < k; cv$reduction155Index += 1) {
-																		// Set the left hand term of the reduction function to the return variable value.
-																		double i$var67 = reduceVar$var70$0;
-																		
-																		// Set the right hand term to a value from the array phi
-																		double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction155Index];
-																		
-																		// Execute the reduction function, saving the result into the return value.
-																		// 
-																		// Execute the reduction function, saving the result into the return value.
-																		// 
-																		// Copy the result of the reduction into the variable returned by the reduction.
-																		reduceVar$var70$0 = (i$var67 + j$var68);
-																	}
-																	double cv$reduced65 = reduceVar$var70$0;
-																	cv$numerator = (cv$numerator + cv$reduced65);
-																}
-																cv$numerator = (cv$numerator + bias);
-																
-																// Record the value of a sample generated by a consuming sample 74 of random variable
-																// var72.
-																// 
-																// Add the denominator squared to the sample denominator
-																cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-																
-																// Add the weighting of the sample to the sum.
-																cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
-																
-																// If we have not got the value of sigma yet record it and set a flag so it is not
-																// recorded again.
-																if(cv$sigmaNotFound) {
-																	cv$sigmaValue = tau;
-																	cv$sigmaNotFound = false;
 																}
 															}
 														}
@@ -796,7 +806,9 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			// Guards to ensure that weights is only updated when there is a valid path.
 			{
 				{
-					weights[var23] = var24;
+					{
+						weights[var23] = var24;
+					}
 				}
 			}
 			
@@ -804,10 +816,12 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			// 
 			// Looking for a path between Sample 24 and consumer double[] 60.
 			{
-				for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
-					if((var23 == j$var55)) {
-						for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
-							phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+				{
+					for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
+						if((var23 == j$var55)) {
+							for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
+								phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+						}
 					}
 				}
 			}
@@ -835,48 +849,50 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 				// Processing random variable 72.
 				{
 					{
-						for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-							// State for tracking the changes that happen to the sampled value between it being
-							// consumed and it being produced.
-							double cv$denominator = 1.0;
-							double cv$numerator = 0.0;
-							
-							// Reduction of array phi
-							// 
-							// A generated name to prevent name collisions if the reduction is implemented more
-							// than once in inference and probability code. Initialize the variable to the unit
-							// value
-							double reduceVar$var70$1 = 0.0;
-							
-							// For each index in the array to be reduced
-							for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
-								// Set the left hand term of the reduction function to the return variable value.
-								double i$var67 = reduceVar$var70$1;
+						{
+							for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+								// State for tracking the changes that happen to the sampled value between it being
+								// consumed and it being produced.
+								double cv$denominator = 1.0;
+								double cv$numerator = 0.0;
 								
-								// Set the right hand term to a value from the array phi
-								double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
-								
-								// Execute the reduction function, saving the result into the return value.
+								// Reduction of array phi
 								// 
-								// Copy the result of the reduction into the variable returned by the reduction.
-								reduceVar$var70$1 = (i$var67 + j$var68);
-							}
-							cv$numerator = (reduceVar$var70$1 + cv$numerator);
-							
-							// Record the value of a sample generated by a consuming sample 74 of random variable
-							// var72.
-							// 
-							// Add the denominator squared to the sample denominator
-							cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-							
-							// Add the weighting of the sample to the sum.
-							cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
-							
-							// If we have not got the value of sigma yet record it and set a flag so it is not
-							// recorded again.
-							if(cv$sigmaNotFound) {
-								cv$sigmaValue = tau;
-								cv$sigmaNotFound = false;
+								// A generated name to prevent name collisions if the reduction is implemented more
+								// than once in inference and probability code. Initialize the variable to the unit
+								// value
+								double reduceVar$var70$1 = 0.0;
+								
+								// For each index in the array to be reduced
+								for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+									// Set the left hand term of the reduction function to the return variable value.
+									double i$var67 = reduceVar$var70$1;
+									
+									// Set the right hand term to a value from the array phi
+									double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+									
+									// Execute the reduction function, saving the result into the return value.
+									// 
+									// Copy the result of the reduction into the variable returned by the reduction.
+									reduceVar$var70$1 = (i$var67 + j$var68);
+								}
+								cv$numerator = (reduceVar$var70$1 + cv$numerator);
+								
+								// Record the value of a sample generated by a consuming sample 74 of random variable
+								// var72.
+								// 
+								// Add the denominator squared to the sample denominator
+								cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+								
+								// Add the weighting of the sample to the sum.
+								cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
+								
+								// If we have not got the value of sigma yet record it and set a flag so it is not
+								// recorded again.
+								if(cv$sigmaNotFound) {
+									cv$sigmaValue = tau;
+									cv$sigmaNotFound = false;
+								}
 							}
 						}
 					}
@@ -903,41 +919,43 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 				// Processing random variable 72.
 				{
 					{
-						for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-							// Reduction of array phi
-							// 
-							// A generated name to prevent name collisions if the reduction is implemented more
-							// than once in inference and probability code. Initialize the variable to the unit
-							// value
-							double reduceVar$var70$2 = 0.0;
-							
-							// For each index in the array to be reduced
-							for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
-								// Set the left hand term of the reduction function to the return variable value.
-								double i$var67 = reduceVar$var70$2;
-								
-								// Set the right hand term to a value from the array phi
-								double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
-								
-								// Execute the reduction function, saving the result into the return value.
+						{
+							for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+								// Reduction of array phi
 								// 
-								// Copy the result of the reduction into the variable returned by the reduction.
-								reduceVar$var70$2 = (i$var67 + j$var68);
+								// A generated name to prevent name collisions if the reduction is implemented more
+								// than once in inference and probability code. Initialize the variable to the unit
+								// value
+								double reduceVar$var70$2 = 0.0;
+								
+								// For each index in the array to be reduced
+								for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+									// Set the left hand term of the reduction function to the return variable value.
+									double i$var67 = reduceVar$var70$2;
+									
+									// Set the right hand term to a value from the array phi
+									double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+									
+									// Execute the reduction function, saving the result into the return value.
+									// 
+									// Copy the result of the reduction into the variable returned by the reduction.
+									reduceVar$var70$2 = (i$var67 + j$var68);
+								}
+								
+								// The mean parameter for Gaussian var72.
+								double cv$var72$mu = (reduceVar$var70$2 + bias);
+								
+								// Consume sample task 74 from random variable var72.
+								// 
+								// The difference between the mean parameter and the value sampled from the Gaussian.
+								double cv$var72$diff = (cv$var72$mu - y[i$var45]);
+								
+								// Include this sample by adding the square of the difference to the sum.
+								cv$sum = (cv$sum + (cv$var72$diff * cv$var72$diff));
+								
+								// Increment the number of samples in the calculation.
+								cv$count = (cv$count + 1);
 							}
-							
-							// The mean parameter for Gaussian var72.
-							double cv$var72$mu = (reduceVar$var70$2 + bias);
-							
-							// Consume sample task 74 from random variable var72.
-							// 
-							// The difference between the mean parameter and the value sampled from the Gaussian.
-							double cv$var72$diff = (cv$var72$mu - y[i$var45]);
-							
-							// Include this sample by adding the square of the difference to the sum.
-							cv$sum = (cv$sum + (cv$var72$diff * cv$var72$diff));
-							
-							// Increment the number of samples in the calculation.
-							cv$count = (cv$count + 1);
 						}
 					}
 				}

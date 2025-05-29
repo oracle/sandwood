@@ -357,9 +357,9 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample15 = fixedFlag$sample15;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -446,9 +446,9 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample21 = fixedFlag$sample21;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -521,9 +521,9 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample35 = (fixedFlag$sample9 && fixedFlag$sample15);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -599,9 +599,9 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample39 = (fixedFlag$sample9 && fixedFlag$sample21);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -690,9 +690,9 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample9 = fixedFlag$sample9;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -830,8 +830,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$var7" with its value "900.0".
-			// 
 			// Set the current value to the current state of the tree.
 			// 
 			// The original value of the sample
@@ -853,10 +851,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				// 
-				// Substituted "cv$temp$2$mean1" with its value "mean1".
-				// 
-				// Substituted "cv$temp$3$priorSigma2" with its value "cv$currentValue".
 				// 
 				// Set the current value to the current state of the tree.
 				// 
@@ -880,10 +874,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "cv$temp$4$mean2" with its value "mean2".
-				// 
-				// Substituted "cv$temp$5$priorSigma2" with its value "cv$currentValue".
-				// 
 				// Set the current value to the current state of the tree.
 				// 
 				// The original value of the sample
@@ -905,8 +895,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$1$var7" with its value "900.0".
 		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((cv$proposedValue - 10000.0) / 30.0)) - 3.4011973816621555);
 		
 		// Processing random variable 34.
@@ -925,10 +913,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			// 
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			// 
-			// Substituted "cv$temp$2$mean1" with its value "mean1".
-			// 
-			// Substituted "cv$temp$3$priorSigma2" with its value "cv$currentValue".
 			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(cv$proposedValue))) + cv$accumulatedProbabilities) - (Math.log(cv$proposedValue) * 0.5));
 		
 		// Processing random variable 38.
@@ -947,16 +931,8 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			// 
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			// 
-			// Substituted "cv$temp$4$mean2" with its value "mean2".
-			// 
-			// Substituted "cv$temp$5$priorSigma2" with its value "cv$currentValue".
 			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(cv$proposedValue))) + cv$accumulatedProbabilities) - (Math.log(cv$proposedValue) * 0.5));
 		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		// 
 		// The probability ration for the proposed value and the current value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
@@ -965,7 +941,12 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		
+		// Test if the probability of the sample is sufficient to keep the value. This needs
+		// to be less than or equal as otherwise if the proposed value is not possible and
+		// the random value is 0 an impossible value will be accepted.
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
 			// If it is not revert the changes.
 			// 
 			// Set the sample value

@@ -182,8 +182,8 @@ final class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				lengthCV$a$37_11 = 3;
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_11);
 			for(int var51 = 0; var51 < length$obs_measured; var51 += 1) {
-				double cv$temp$2$var38 = d[y];
-				cv$accumulatedProbabilities = (Math.log((obs[var51]?cv$temp$2$var38:(1.0 - cv$temp$2$var38))) + cv$accumulatedProbabilities);
+				double var38 = d[y];
+				cv$accumulatedProbabilities = (Math.log((obs[var51]?var38:(1.0 - var38))) + cv$accumulatedProbabilities);
 			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
@@ -199,8 +199,8 @@ final class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			lengthCV$a$37_11 = 3;
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_11);
 		for(int var51 = 0; var51 < length$obs_measured; var51 += 1) {
-			double cv$temp$2$var38 = d[y];
-			cv$accumulatedProbabilities = (Math.log((obs[var51]?cv$temp$2$var38:(1.0 - cv$temp$2$var38))) + cv$accumulatedProbabilities);
+			double var38 = d[y];
+			cv$accumulatedProbabilities = (Math.log((obs[var51]?var38:(1.0 - var38))) + cv$accumulatedProbabilities);
 		}
 		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$)))) {
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)

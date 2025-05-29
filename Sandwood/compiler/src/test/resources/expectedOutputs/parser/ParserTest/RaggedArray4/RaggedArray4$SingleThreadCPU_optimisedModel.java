@@ -268,9 +268,9 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample47 = fixedFlag$sample47;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -297,12 +297,12 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			int lengthCV$a$48_4 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$48_4 = 3;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
 				lengthCV$a$48_4 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$48_4 = 3;
 			
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -368,9 +368,9 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample50 = (fixedFlag$sample50 && fixedFlag$sample47);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -403,12 +403,12 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				int lengthCV$a$48_5 = -1;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == y))
-					lengthCV$a$48_5 = 3;
-				
-				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((0 == y))
 					lengthCV$a$48_5 = 2;
+				
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if((1 == y))
+					lengthCV$a$48_5 = 3;
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -454,9 +454,9 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample64 = fixedFlag$sample50;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -498,7 +498,7 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$0$b" with its value "b".
+		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "0".
 		// 
@@ -513,7 +513,7 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$0$b" with its value "b".
+		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "0".
 		// 
@@ -524,9 +524,6 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
 		// 
-		// cv$temp$3$$var137's comment
-		// 
-		// $var137's comment
 		// Constructing a random variable input for use later.
 		// 
 		// Processing random variable 47.
@@ -556,7 +553,7 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$0$b" with its value "b".
+		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
 		// 
@@ -571,7 +568,7 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$0$b" with its value "b".
+		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
 		// 
@@ -582,9 +579,6 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
 		// 
-		// cv$temp$3$$var137's comment
-		// 
-		// $var137's comment
 		// Constructing a random variable input for use later.
 		// 
 		// Processing random variable 47.
@@ -656,7 +650,7 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Write out the new value of the sample.
 		// 
-		// cv$numNumStates's comment
+		// cv$numStates's comment
 		// variable marginalization
 		y = DistributionSampling.sampleCategorical(RNG$, cv$var45$stateProbabilityGlobal, 2);
 	}
@@ -669,12 +663,12 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		int lengthCV$a$48_2 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == y))
-			lengthCV$a$48_2 = 3;
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((0 == y))
 			lengthCV$a$48_2 = 2;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((1 == y))
+			lengthCV$a$48_2 = 3;
 		
 		// Initialize the array values to 0.
 		// 
@@ -697,12 +691,12 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		int lengthCV$a$48_3 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == y))
-			lengthCV$a$48_3 = 3;
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((0 == y))
 			lengthCV$a$48_3 = 2;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((1 == y))
+			lengthCV$a$48_3 = 3;
 		
 		// Calculate the new sample value
 		// 
@@ -747,12 +741,12 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			int lengthCV$a$48_0 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$48_0 = 3;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
 				lengthCV$a$48_0 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$48_0 = 3;
 			d = new double[lengthCV$a$48_0];
 		}
 		
@@ -775,12 +769,12 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			int lengthCV$a$48_6 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$48_6 = 3;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
 				lengthCV$a$48_6 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$48_6 = 3;
 			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_6, d);
 		}
 		
@@ -788,12 +782,12 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		int lengthCV$a$48_7 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == y))
-			lengthCV$a$48_7 = 3;
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((0 == y))
 			lengthCV$a$48_7 = 2;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((1 == y))
+			lengthCV$a$48_7 = 3;
 		for(int var61 = 0; var61 < length$obs_measured; var61 += 1)
 			obs[var61] = DistributionSampling.sampleCategorical(RNG$, d, lengthCV$a$48_7);
 	}
@@ -812,12 +806,12 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			int lengthCV$a$48_12 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$48_12 = 3;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
 				lengthCV$a$48_12 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$48_12 = 3;
 			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_12, d);
 		}
 	}
@@ -835,12 +829,12 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			int lengthCV$a$48_8 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$48_8 = 3;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
 				lengthCV$a$48_8 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$48_8 = 3;
 			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_8, d);
 		}
 		
@@ -848,12 +842,12 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		int lengthCV$a$48_9 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == y))
-			lengthCV$a$48_9 = 3;
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((0 == y))
 			lengthCV$a$48_9 = 2;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((1 == y))
+			lengthCV$a$48_9 = 3;
 		for(int var61 = 0; var61 < length$obs_measured; var61 += 1)
 			obs[var61] = DistributionSampling.sampleCategorical(RNG$, d, lengthCV$a$48_9);
 	}
@@ -871,12 +865,12 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			int lengthCV$a$48_10 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$48_10 = 3;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
 				lengthCV$a$48_10 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$48_10 = 3;
 			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_10, d);
 		}
 	}
@@ -895,12 +889,12 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			int lengthCV$a$48_11 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$48_11 = 3;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
 				lengthCV$a$48_11 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$48_11 = 3;
 			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_11, d);
 		}
 	}

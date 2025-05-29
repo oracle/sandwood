@@ -16,12 +16,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Stack;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.compilation.scopesState.ScopeState.InitializedState;
 import org.sandwood.compiler.dataflowGraph.scopes.BlockScope;
+import org.sandwood.compiler.dataflowGraph.scopes.CommentScope;
 import org.sandwood.compiler.dataflowGraph.scopes.ElseScope;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
@@ -48,7 +51,6 @@ import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.Trace;
 import org.sandwood.compiler.traces.TraceHandle;
 import org.sandwood.compiler.traces.guards.ScopeConstructor.Values;
-import org.sandwood.compiler.traces.guards.ScopeDescription.Substitutions;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
@@ -94,12 +96,12 @@ public class TraceArrayRestrictions {
             toUse.addAll(scopes);
         }
 
-        public Set<Scope> getConstructScopes() {
-            return toConstruct;
+        public void addToSubstitute(Scope s) {
+            toSubstitute.add(s);
         }
 
-        public Set<ForTask> getUsedScopes() {
-            return toUse;
+        public Set<Scope> getConstructScopes() {
+            return toConstruct;
         }
 
         public Set<Scope> getSubstituteScopes() {
@@ -155,12 +157,6 @@ public class TraceArrayRestrictions {
         final Map<Scope, IntVariable> existingEndScopes;
 
         /**
-         * Set of all the loops that have already been constructed, so if created again will have to be duplicates. This
-         * exists purely to make the generated code easier to read, we could just make all new loops duplicates.
-         */
-        final Set<Scope> existingScopes;
-
-        /**
          * Set of all the reduction inputs that consume an array that have been seen so far.
          */
         final Set<ReductionInput<?>> reductionInputs;
@@ -181,6 +177,22 @@ public class TraceArrayRestrictions {
         final boolean passValues;
 
         /**
+         * The initialisation state of variables in the final scopes if any final scopes have been created.
+         */
+        final InitializedState finalInitilizationState;
+
+        /**
+         * A set containing all the scopes encompassing the final task in the trace.
+         */
+        final Set<Scope> allFinalScopes = new HashSet<>();
+
+        /**
+         * The position in the scope description that is being updated. TODO, determine if this is always the most
+         * recent position. I think it might be.
+         */
+        final int position;
+
+        /**
          *
          * @param trace
          * @param existingStartScopes
@@ -189,14 +201,16 @@ public class TraceArrayRestrictions {
          * @param globalID
          */
 
-        public RestrictionsData(TraceHandle trace, Map<Scope, IntVariable> existingStartScopes,
+        public RestrictionsData(int position, TraceHandle trace, Map<Scope, IntVariable> existingStartScopes,
                 Map<Scope, IntVariable> existingEndScopes, Set<Scope> existingScopes,
-                Set<ReductionInput<?>> reductionInputs, int globalID, Values arrayValues) {
+                Set<ReductionInput<?>> reductionInputs, InitializedState finalInitilizationState, int globalID,
+                Values arrayValues) {
+            this.position = position;
             this.trace = trace;
             this.existingStartScopes = Collections.unmodifiableMap(existingStartScopes);
             this.existingEndScopes = Collections.unmodifiableMap(existingEndScopes);
-            this.existingScopes = new HashSet<>(existingScopes);
             this.reductionInputs = new HashSet<>(reductionInputs);
+            this.finalInitilizationState = finalInitilizationState;
             this.globalID = globalID;
             passValues = arrayValues == Values.PASS_VALUES;
         }
@@ -227,21 +241,24 @@ public class TraceArrayRestrictions {
      * @return A new distribution description that represents the original distribution with the constraints of the
      *         trace added.
      */
+    // Scopes that are already constructed at the end are not included as the trees that are placed into them may not be
+    // valid further out.
     public static ScopeDescription constructRestriction(TraceHandle trace, Map<Scope, IntVariable> existingStartScopes,
-            Map<Scope, IntVariable> existingEndScopes, ScopeDescription target, int globalID, Values arrayValues,
-            int position, CompilationContext compilationCtx) {
+            Map<Scope, IntVariable> existingEndScopes, InitializedState finalInitilizationState,
+            ScopeDescription target, int globalID, Values arrayValues, int position,
+            CompilationContext compilationCtx) {
         Set<TraceHandle> rawTraces = new HashSet<>();
         rawTraces.add(trace);
-        return constructRestriction(trace, rawTraces, existingStartScopes, existingEndScopes, target, globalID,
-                arrayValues, position, compilationCtx);
+        return constructRestriction(trace, rawTraces, existingStartScopes, existingEndScopes, finalInitilizationState,
+                target, globalID, arrayValues, position, compilationCtx);
     }
 
     public static ScopeDescription constructRestriction(TraceHandle trace, Set<TraceHandle> rawTraces,
             Map<Scope, IntVariable> existingStartScopes, Map<Scope, IntVariable> existingEndScopes,
-            ScopeDescription target, int globalID, Values arrayValues, int position,
-            CompilationContext compilationCtx) {
-        RestrictionsData data = new RestrictionsData(trace, existingStartScopes, existingEndScopes,
-                target.existingScopes, target.reductionInputs, globalID, arrayValues);
+            InitializedState finalInitilizationState, ScopeDescription target, int globalID, Values arrayValues,
+            int position, CompilationContext compilationCtx) {
+        RestrictionsData data = new RestrictionsData(position, trace, existingStartScopes, existingEndScopes,
+                target.existingScopes, target.reductionInputs, finalInitilizationState, globalID, arrayValues);
 
         constructOpPairs(data);
 
@@ -253,7 +270,7 @@ public class TraceArrayRestrictions {
 
         getScopeRequirements(data);
 
-        return constructRestrictionInternal(data, target, position, compilationCtx);
+        return constructRestrictionInternal(data, target, compilationCtx);
     }
 
     /**
@@ -292,6 +309,9 @@ public class TraceArrayRestrictions {
                         DataflowTaskArgDesc sd = sourceTrace.pop();
                         if(!d.task.equals(sd.task))
                             return;
+                        // TODO there may be issues here if the same task is met on a distribution trace, but in a
+                        // different iteration, and then back tracking is used on the trace. Make sure that there are
+                        // sufficient guards to prevent this.
                         data.storeSubstitutions.add((PutTask<?>) d.task);
                         if(d.argPos != sd.argPos)
                             return;
@@ -533,27 +553,29 @@ public class TraceArrayRestrictions {
 
         // If we are moving to the fixed scopes, not away from them, the trace needs to
         // be evaluated in reverse to exclude the fixed scopes.
-        Set<Scope> existingEndScope = new HashSet<>(data.existingEndScopes.keySet());
+        Set<Scope> existingEndScopes = new HashSet<>(data.existingEndScopes.keySet());
+        Set<Scope> endScopesInScope = new HashSet<>(existingEndScopes);
 
         // Get the set of scopes that should be constructed by the end.
         Set<Scope> constructEndScopes = new HashSet<>();
         if(!traceHandle.isEmpty()) {
             Scope s = traceHandle.peek().task.scope();
             while(s != null) {
-                if(!existingEndScope.contains(s)) {
+                if(!existingEndScopes.contains(s)) {
                     switch(s.getScopeType()) {
                         case ELSE:
                         case FOR:
                         case IF:
-                            constructEndScopes.add(s);
-                            break;
                         case BLOCK:
                         case COMMENT:
+                            constructEndScopes.add(s);
+                            break;
                         case GLOBAL:
                         case REDUCE:
                             break;
                     }
                 }
+                data.allFinalScopes.add(s);
                 s = s.getEnclosingScope();
             }
         }
@@ -568,10 +590,10 @@ public class TraceArrayRestrictions {
                     if(s != null) {
                         // Remove from the construction and substitution any end scopes that
                         // have already been constructed.
-                        for(Scope t:existingEndScope) {
+                        for(Scope t:endScopesInScope) {
                             s.toConstruct.remove(t);
                             if(s.toUse.contains(t))
-                                s.toSubstitute.add(t);
+                                s.addToSubstitute(t);
                         }
 
                         // Remove constructed scopes from the set that need to be constructed.
@@ -607,7 +629,7 @@ public class TraceArrayRestrictions {
                         // Remove scopes that are used in an earlier iteration, as the
                         // value of the scope may have changed, so a new scope should
                         // now be created in the earlier steps.
-                        existingEndScope.removeAll(outOfScopeScopess);
+                        endScopesInScope.removeAll(outOfScopeScopess);
                         // Versions of these scopes constructed after this point
                         // are not necessarily in the correct iteration, so duplicates
                         // need to be constructed, and this is where we mark this.
@@ -671,6 +693,7 @@ public class TraceArrayRestrictions {
             DataflowTaskArgDesc d = traceHandle.get(i);
             switch(d.task.getType()) {
                 case GET:
+                case IF_ASSIGNMENT:
                     break;
 
                 case PUT: {
@@ -799,25 +822,25 @@ public class TraceArrayRestrictions {
     }
 
     private static ScopeDescription constructRestrictionInternal(RestrictionsData data, ScopeDescription target,
-            int position, CompilationContext compilationCtx) {
-
-        if(position != 0 && !data.existingStartScopes.isEmpty())
-            target.applySubstitutions(position - 1, compilationCtx);
-
-        Map<Variable<?>, VariablePair<?>> varSubstitutions = new HashMap<>();
-
+            CompilationContext compilationCtx) {
         TraceHandle traceHandle = data.trace;
 
-        // Get a copy of the substitutions for the end point as they stand at the
-        // moment.
-        Substitutions originalSubstitutions = target.getSubstitutions(position);
-
-        Map<Scope, IntVariable> scopeSubstitutions = new HashMap<>(data.existingStartScopes);
+        {
+            List<VariablePair<?>> subs = new ArrayList<>();
+            for(Entry<Scope, IntVariable> p:data.existingStartScopes.entrySet()) {
+                Scope s = p.getKey();
+                if(s.getScopeType() == ScopeType.FOR)
+                    subs.add(new VariablePair<>(((ForTask) s).getIndex(), p.getValue()));
+            }
+            if(!subs.isEmpty())
+                target = target.addSubstitutions(data.position, subs);
+        }
 
         // A map from dataflow tasks to put task indexes that were calculated earlier.
         Map<DataflowTask<?>, IRTreeReturn<IntVariable>> putIndexes = new HashMap<>();
 
-        Scope innerScope = target.innerScope;
+        // Add an isolating scope to all traces in case scope parameters cause variables to be declared.
+        target = target.insertBlockScope(Tree.NoComment, compilationCtx);
 
         int size = traceHandle.size();
         for(int i = 0; i < size; i++) {
@@ -829,22 +852,18 @@ public class TraceArrayRestrictions {
 
                         // Construct the environment
                         ScopeChanges s = data.scopeData.get(gt);
-                        innerScope = constructEnvironment(gt, data, scopeSubstitutions, innerScope, compilationCtx);
+                        target = constructEnvironment(s, data, target, compilationCtx);
 
                         // If there is a put to go with this get a guard will be needed
                         IRTreeReturn<IntVariable> putIndex = putIndexes.get(gt);
                         if(putIndex != null) {
                             // Construct the guard.
-                            IRTreeReturn<IntVariable> getIndex = getForwardIR(gt.index, gt.scope(), innerScope,
-                                    compilationCtx);
-                            innerScope = new IfScope(innerScope, IRTree.eq(putIndex, getIndex));
+                            target.applySubstitutions(data.position, compilationCtx);
+                            IRTreeReturn<IntVariable> getIndex = gt.index.getForwardIR(compilationCtx);
+                            target.removeSubstitutions(data.position, compilationCtx);
+                            target = target.insertIfScope(IRTree.eq(putIndex, getIndex), compilationCtx);
                         }
-
-                        target = target.insertScope(innerScope, compilationCtx);
-
-                        removeSubstitutions(s, scopeSubstitutions, compilationCtx);
                     }
-
                     break;
                 }
 
@@ -854,11 +873,10 @@ public class TraceArrayRestrictions {
                     if(task != null) {
                         // Construct the value of the put index
                         ScopeChanges s = data.scopeData.get(pt);
-                        innerScope = constructEnvironment(pt, data, scopeSubstitutions, innerScope, compilationCtx);
+                        target = constructEnvironment(s, data, target, compilationCtx);
 
                         if(data.storeSubstitutions.contains(pt))
-                            target = target.addSubstitutions(position, pt,
-                                    constructSubstituions(originalSubstitutions, varSubstitutions, scopeSubstitutions));
+                            target = target.saveTaskState(data.position, pt);
 
                         // Construct all the values that the put value will depend on. This is required
                         // in the case that the intermediate also depends on the values being updated,
@@ -870,56 +888,62 @@ public class TraceArrayRestrictions {
                             while(!p.isEmpty()) {
                                 Variable<?> v = p.poll();
                                 if(v != pt.value)
-                                    constructVarSubstitution(v, pt.scope(), innerScope, data, varSubstitutions,
-                                            compilationCtx);
+                                    target = constructVarSubstitution(v, target, data, compilationCtx);
                             }
 
-                            if(!pt.value.getType().isArray() && !isSampleGeneration(pt.value, compilationCtx)) {
-                                IRTreeReturn<?> t = getForwardIR(pt.value, pt.scope(), innerScope, compilationCtx);
-                                constructVarSubstitution(task.getOutput(), t, innerScope, data, varSubstitutions,
-                                        compilationCtx);
+                            if(!pt.value.getType().isArray()) {
+                                target.applySubstitutions(data.position, compilationCtx);
+                                Variable<?> vSub = compilationCtx.getSubstitute(pt.value);
+                                // If not a sample or the sample is substituted create a substitution for the value.
+                                if(!isSampleGeneration(pt.value, compilationCtx) || vSub != pt.value) {
+                                    IRTreeReturn<?> t = vSub.getForwardIR(compilationCtx);
+                                    target.removeSubstitutions(data.position, compilationCtx);
+                                    target = constructVarSubstitution(task.getOutput(), t, target, data,
+                                            compilationCtx);
+                                } else
+                                    target.removeSubstitutions(data.position, compilationCtx);
                             }
                         }
 
                         // Construct the index for put task, this will be used in the guards later.
-                        IRTreeReturn<IntVariable> putIndex = getForwardIR(pt.index, pt.scope(), innerScope,
-                                compilationCtx);
+                        target.applySubstitutions(data.position, compilationCtx);
+                        IRTreeReturn<IntVariable> putIndex = pt.index.getForwardIR(compilationCtx);
+                        target.removeSubstitutions(data.position, compilationCtx);
 
                         // And construct a description of the index and the value paired with the
                         // corresponding get.
                         putIndexes.put(task, putIndex);
-
-                        removeSubstitutions(s, scopeSubstitutions, compilationCtx);
                     } else {
                         // No restrictions are required, but the status of the scopes at the point this
                         // is reached should be recorded.
                         if(data.storeSubstitutions.contains(pt))
-                            target = target.addSubstitutions(position, pt,
-                                    constructSubstituions(originalSubstitutions, varSubstitutions, scopeSubstitutions));
+                            target = target.saveTaskState(data.position, pt);
                     }
                     break;
                 }
 
                 case REDUCE_INPUT: {
                     ReductionInput<?> ri = (ReductionInput<?>) d.task;
+                    ScopeChanges s = data.scopeData.get(ri);
 
                     // Construct the environment
-                    innerScope = constructEnvironment(ri, data, scopeSubstitutions, innerScope, compilationCtx);
+                    target = constructEnvironment(s, data, target, compilationCtx);
                     IRTreeReturn<IntVariable> index = putIndexes.get(ri);
                     if(index != null) {
                         // Check that the put was in the range of the range of the reduction
-                        IRTreeReturn<IntVariable> start = getForwardIR(ri.start, ri.start.scope(), innerScope,
-                                compilationCtx);
-                        IRTreeReturn<IntVariable> end = getForwardIR(ri.end, ri.end.scope(), innerScope,
-                                compilationCtx);
+                        target.applySubstitutions(data.position, compilationCtx);
+                        IRTreeReturn<IntVariable> start = ri.start.getForwardIR(compilationCtx);
+                        IRTreeReturn<IntVariable> end = ri.end.getForwardIR(compilationCtx);
+                        target.removeSubstitutions(data.position, compilationCtx);
                         IRTreeReturn<BooleanVariable> guard = IRTree.and(IRTree.lessThanEqual(start, index),
                                 IRTree.lessThan(index, end));
-                        innerScope = new IfScope(innerScope, guard);
-                    }
 
-                    // Isolate the reduction just in case. This is probably not required, but will
-                    // be removed in optimisation.
-                    innerScope = new BlockScope(innerScope, Tree.NoComment);
+                        target = target.insertIfScope(guard, compilationCtx);
+                    } else {
+                        // Isolate the reduction just in case. This is probably not required, but will
+                        // be removed in optimisation.
+                        target = target.insertBlockScope(Tree.NoComment, compilationCtx);
+                    }
 
                     // Process the reduction
                     if(data.passValues) {
@@ -932,15 +956,11 @@ public class TraceArrayRestrictions {
                                                 + "performing operations on the model. This is not supported.",
                                         ri);
                             data.reductionInputs.add(ri);
-                            innerScope = processReductionInput(ri, index, innerScope, data, varSubstitutions,
-                                    compilationCtx);
+                            target = processReductionInput(ri, index, target, data, compilationCtx);
                         } else
                             // Otherwise just process the reduction.
-                            innerScope = processReductionInput(ri, innerScope, data, varSubstitutions, compilationCtx);
+                            target = processReductionInput(ri, target, data, compilationCtx);
                     }
-
-                    ScopeChanges s = data.scopeData.get(ri);
-                    removeSubstitutions(s, scopeSubstitutions, compilationCtx);
 
                     break;
                 }
@@ -950,8 +970,7 @@ public class TraceArrayRestrictions {
 
                     // Construct the environment
                     ScopeChanges s = data.scopeData.get(ifElseAssignmentTask);
-                    innerScope = constructEnvironment(ifElseAssignmentTask, data, scopeSubstitutions, innerScope,
-                            compilationCtx);
+                    target = constructEnvironment(s, data, target, compilationCtx);
 
                     // Construct the guard.
                     switch(d.argPos) {
@@ -961,8 +980,10 @@ public class TraceArrayRestrictions {
 
                         case 1:
                         case 2: {
-                            IRTreeReturn<BooleanVariable> guard = getForwardIR(ifElseAssignmentTask.guard,
-                                    ifElseAssignmentTask.scope(), innerScope, compilationCtx);
+                            target.applySubstitutions(data.position, compilationCtx);
+                            IRTreeReturn<BooleanVariable> guard = ifElseAssignmentTask.guard
+                                    .getForwardIR(compilationCtx);
+                            target.removeSubstitutions(data.position, compilationCtx);
                             Variable<?> v;
                             if(d.argPos == 1)
                                 v = ifElseAssignmentTask.ifValue;
@@ -971,13 +992,14 @@ public class TraceArrayRestrictions {
                                 guard = IRTree.negateBoolean(guard);
                             }
 
-                            innerScope = new IfScope(innerScope, guard);
+                            target = target.insertIfScope(guard, compilationCtx);
 
                             if(data.passValues) {
-                                IRTreeReturn<?> t = getForwardIR(v, ifElseAssignmentTask.scope(), innerScope,
+                                target.applySubstitutions(data.position, compilationCtx);
+                                IRTreeReturn<?> t = v.getForwardIR(compilationCtx);
+                                target.removeSubstitutions(data.position, compilationCtx);
+                                target = constructVarSubstitution(ifElseAssignmentTask.getOutput(), t, target, data,
                                         compilationCtx);
-                                constructVarSubstitution(ifElseAssignmentTask.getOutput(), t, innerScope, data,
-                                        varSubstitutions, compilationCtx);
                             }
                             break;
                         }
@@ -985,10 +1007,6 @@ public class TraceArrayRestrictions {
                         default:
                             throw new CompilerException("Unexpected argument position " + d.argPos);
                     }
-
-                    target = target.insertScope(innerScope, compilationCtx);
-
-                    removeSubstitutions(s, scopeSubstitutions, compilationCtx);
 
                     break;
                 }
@@ -998,23 +1016,11 @@ public class TraceArrayRestrictions {
             }
         }
 
-        innerScope = constructAdditionalScopes(data, scopeSubstitutions, innerScope, compilationCtx);
+        target = constructAdditionalScopes(data, target, compilationCtx);
 
         PriorityQueue<Variable<?>> p = new PriorityQueue<>(data.requiredVariables.get(data.trace.peek().task));
-        Scope targetScope = data.trace.peek().task.scope();
         while(!p.isEmpty())
-            constructVarSubstitution(p.poll(), targetScope, innerScope, data, varSubstitutions, compilationCtx);
-
-        // Remove added variable substitutions.
-        for(Variable<?> v:varSubstitutions.keySet())
-            compilationCtx.removeSubstitute(v);
-
-        if(position != 0 && !data.existingStartScopes.isEmpty())
-            target.removeSubstitutions(position - 1, compilationCtx);
-
-        Substitutions s = constructSubstituions(originalSubstitutions, varSubstitutions, scopeSubstitutions);
-        target = target.insertScope(innerScope, data.existingScopes, data.reductionInputs, compilationCtx);
-        target = target.addSubstitutions(position, s);
+            target = constructVarSubstitution(p.poll(), target, data, compilationCtx);
 
         return target;
     }
@@ -1023,9 +1029,11 @@ public class TraceArrayRestrictions {
         return compilationCtx.getSubstitute(v).getParent().getType() == DFType.SAMPLE;
     }
 
-    private static <A extends Variable<A>> Scope processReductionInput(ReductionInput<A> ri,
-            IRTreeReturn<IntVariable> putIndex, Scope innerScope, RestrictionsData data,
-            Map<Variable<?>, VariablePair<?>> varSubstitutions, CompilationContext compilationCtx) {
+    private static <A extends Variable<A>> ScopeDescription processReductionInput(ReductionInput<A> ri,
+            IRTreeReturn<IntVariable> putIndex, ScopeDescription target, RestrictionsData data,
+            CompilationContext compilationCtx) {
+
+        ScopeDescription original = target;
 
         Variable<A> output = ri.getOutput();
         if(output.getType().isArray())
@@ -1033,35 +1041,38 @@ public class TraceArrayRestrictions {
                     + "error is being caused because the compiler is trying to declare local variables to avoid altering "
                     + "the model state at this part of the code, but can only do this for scalar values.");
         /*
-         * If values are being passed, the sum of the elements except the one being passed is first constructed, then
-         * the passed value is included.
+         * If values are being passed, the reduction of the elements except the one being passed is first constructed,
+         * then the passed value is included.
          */
+
         // For now remove the put task substitution
+        target.applySubstitutions(data.position, compilationCtx);
         Variable<A> putValue = compilationCtx.getSubstitute(output);
         compilationCtx.removeSubstitute(output);
 
         ReductionScope<A> rs = ri.scope();
 
-        // Construct the value from the rest of the array.
-        compilationCtx.addScopeSubstitute(rs.getEnclosingScope(), innerScope);
+        // Construct the value from the rest of the array.);
         Variable<A> maskedResult = rs.reduceArrayValue(ri, putIndex, compilationCtx);
-        compilationCtx.removeScopeSubstitute(rs.getEnclosingScope());
-        innerScope = maskedResult.scope();
 
-        compilationCtx.addScopeSubstitute(rs, innerScope);
+        target = target.insertScope(maskedResult.scope(), compilationCtx);
+
         compilationCtx.addSubstitute(output, putValue);
-        compilationCtx.addSubstitute(rs.j, maskedResult);
-        Variable<?> returnVar = rs.returnVar;
-        constructVarSubstitution(returnVar, rs.getEnclosingScope(), innerScope, data, varSubstitutions, compilationCtx);
+        original.removeSubstitutions(data.position, compilationCtx);
 
+        compilationCtx.addSubstitute(rs.j, maskedResult);
+        compilationCtx.addScopeSubstitute(rs, maskedResult.scope());
+        target = constructVarSubstitution(rs.returnVar, target, data, compilationCtx);
         compilationCtx.removeScopeSubstitute(rs);
         compilationCtx.removeSubstitute(rs.j);
-        return innerScope;
+
+        return target;
     }
 
-    private static <A extends Variable<A>> Scope processReductionInput(ReductionInput<A> ri, Scope innerScope,
-            RestrictionsData data, Map<Variable<?>, VariablePair<?>> varSubstitutions,
-            CompilationContext compilationCtx) {
+    private static <A extends Variable<A>> ScopeDescription processReductionInput(ReductionInput<A> ri,
+            ScopeDescription target, RestrictionsData data, CompilationContext compilationCtx) {
+
+        ScopeDescription original = target;
 
         Variable<A> output = ri.getOutput();
         if(output.getType().isArray())
@@ -1072,37 +1083,18 @@ public class TraceArrayRestrictions {
         ReductionScope<A> rs = ri.scope();
 
         // Construct the value from the rest of the array.
-        compilationCtx.addScopeSubstitute(rs.getEnclosingScope(), innerScope);
+        target.applySubstitutions(data.position, compilationCtx);
         Variable<A> maskedResult = rs.reduceEmptyValue(ri, compilationCtx);
-        compilationCtx.removeScopeSubstitute(rs.getEnclosingScope());
-        innerScope = maskedResult.scope();
 
-        compilationCtx.addScopeSubstitute(rs, innerScope);
+        target = target.insertScope(maskedResult.scope(), compilationCtx);
+        original.removeSubstitutions(data.position, compilationCtx);
+
         compilationCtx.addSubstitute(rs.i, rs.emptyValue);
         compilationCtx.addSubstitute(rs.j, maskedResult);
-        Variable<?> returnVar = rs.returnVar;
-        constructVarSubstitution(returnVar, rs.getEnclosingScope(), innerScope, data, varSubstitutions, compilationCtx);
-
-        compilationCtx.removeScopeSubstitute(rs);
+        target = constructVarSubstitution(rs.returnVar, target, data, compilationCtx);
         compilationCtx.removeSubstitute(rs.i);
         compilationCtx.removeSubstitute(rs.j);
-        return innerScope;
-    }
-
-    private static Substitutions constructSubstituions(Substitutions originalSubstitutions,
-            Map<Variable<?>, VariablePair<?>> varSubstitutions, Map<Scope, IntVariable> forSubstitutions) {
-        HashMap<Variable<?>, VariablePair<?>> returnSubstitutions = new HashMap<>(
-                originalSubstitutions.varSubstitutions);
-        returnSubstitutions.putAll(varSubstitutions);
-        for(Scope scope:forSubstitutions.keySet()) {
-            if(scope.getScopeType() == ScopeType.FOR) {
-                ForTask t = (ForTask) scope;
-                IntVariable index = t.getIndex();
-                returnSubstitutions.put(index, new VariablePair<>(index, forSubstitutions.get(t)));
-            }
-        }
-
-        return new Substitutions(returnSubstitutions);
+        return target;
     }
 
     /**
@@ -1119,18 +1111,14 @@ public class TraceArrayRestrictions {
      * @param varSubstitutions A set recording all the substitutions made.
      * @param compilationCtx   The compilation context of the function.
      */
-    private static <A extends Variable<A>> void constructVarSubstitution(Variable<A> v, IRTreeReturn<?> t, Scope scope,
-            RestrictionsData data, Map<Variable<?>, VariablePair<?>> varSubstitutions,
-            CompilationContext compilationCtx) {
-        if(!varSubstitutions.containsKey(v)) {
-            VariableDescription<A> subName = VariableNames.traceTempName(v.getVarDesc().name, data.globalID,
-                    data.localID++, v.getType());
-            IRTreeVoid init = IRTree.initializeVariable(subName, (IRTreeReturn<A>) t, Tree.NoComment);
-            compilationCtx.addTreeToScope(scope, init);
-            Variable<A> replacement = Variable.namedVariable(subName, scope);
-            compilationCtx.addSubstitute(v, replacement);
-            varSubstitutions.put(v, new VariablePair<>(v, replacement));
-        }
+    private static <A extends Variable<A>> ScopeDescription constructVarSubstitution(Variable<A> v, IRTreeReturn<?> t,
+            ScopeDescription target, RestrictionsData data, CompilationContext compilationCtx) {
+        VariableDescription<A> subName = VariableNames.traceTempName(v.getVarDesc().name, data.globalID, data.localID++,
+                v.getType());
+        IRTreeVoid init = IRTree.initializeVariable(subName, (IRTreeReturn<A>) t, Tree.NoComment);
+        target = target.addSubstitution(data.position, v, target.constructVariableInScope(subName));
+        target.addTreeToScope(init, compilationCtx);
+        return target;
     }
 
     /**
@@ -1146,265 +1134,110 @@ public class TraceArrayRestrictions {
      * @param varSubstitutions A set recording all the substitutions made.
      * @param compilationCtx   The compilation context of the function.
      */
-    private static <A extends Variable<A>> void constructVarSubstitution(Variable<A> v, Scope sourceScope,
-            Scope targetScope, RestrictionsData data, Map<Variable<?>, VariablePair<?>> varSubstitutions,
-            CompilationContext compilationCtx) {
-        if(!varSubstitutions.containsKey(v)) {
-            v.calculateIntermediate(true);
-            IRTreeReturn<A> t = getForwardIR(v, sourceScope, targetScope, compilationCtx);
-            v.calculateIntermediate(false);
-            constructVarSubstitution(v, t, targetScope, data, varSubstitutions, compilationCtx);
-        }
-    }
-
-    private static <A extends Variable<A>> IRTreeReturn<A> getForwardIR(Variable<A> v, Scope sourceScope,
-            Scope targetScope, CompilationContext compilationCtx) {
-        Scope s = sourceScope;
-        while(s != null) {
-            compilationCtx.addScopeSubstitute(s, GlobalScope.scope);
-            s = s.getEnclosingScope();
-        }
-
-        s = targetScope;
-        while(s != null) {
-            compilationCtx.addScopeSubstitute(s, GlobalScope.scope);
-            s = s.getEnclosingScope();
-        }
-
-        compilationCtx.pushScope();
-        compilationCtx.pushInitializedArrays();
-
+    private static <A extends Variable<A>> ScopeDescription constructVarSubstitution(Variable<A> v,
+            ScopeDescription target, RestrictionsData data, CompilationContext compilationCtx) {
+        target.applySubstitutions(data.position, compilationCtx);
+        v.calculateIntermediate(true);
         IRTreeReturn<A> t = v.getForwardIR(compilationCtx);
-        IRTreeVoid scopeTree = compilationCtx.getOutermostScopeTree();
-
-        compilationCtx.popInitializedArrays();
-        compilationCtx.popScope();
-
-        s = targetScope;
-        while(s != null) {
-            compilationCtx.removeScopeSubstitute(s);
-            s = s.getEnclosingScope();
-        }
-
-        s = sourceScope;
-        while(s != null) {
-            compilationCtx.removeScopeSubstitute(s);
-            s = s.getEnclosingScope();
-        }
-
-        compilationCtx.addTreeToScope(targetScope, scopeTree);
-        return t;
+        v.calculateIntermediate(false);
+        target.removeSubstitutions(data.position, compilationCtx);
+        return constructVarSubstitution(v, t, target, data, compilationCtx);
     }
 
-    private static Scope constructEnvironment(DataflowTask<?> task, RestrictionsData data,
-            Map<Scope, IntVariable> substitutions, Scope outerScope, CompilationContext compilationCtx) {
-        ScopeChanges s = data.scopeData.get(task);
+    private static ScopeDescription constructEnvironment(ScopeChanges s, RestrictionsData data,
+            ScopeDescription outerScope, CompilationContext compilationCtx) {
 
-        // Set all the current substitutions so they are there when the scopes are created.
-        for(Scope scope:substitutions.keySet()) {
-            if(scope.getScopeType() == ScopeType.FOR) {
-                IntVariable index = substitutions.get(scope);
-                compilationCtx.addSubstitute(((ForTask) scope).getIndex(), index);
-            }
-            compilationCtx.addScopeSubstitute(scope, outerScope);
-        }
+        Set<Scope> finalSubstitutionScopes = s.getSubstituteScopes();
+        Set<Scope> constructScopes = s.getConstructScopes();
 
         // Construct any required substitutions for existing Scopes
-        PriorityQueue<Scope> p = new PriorityQueue<>(scopeCmp);
-        p.addAll(s.getSubstituteScopes());
-        while(!p.isEmpty()) {
-            Scope scope = p.poll();
+        if(!finalSubstitutionScopes.isEmpty()) {
+            PriorityQueue<Scope> p = new PriorityQueue<>(scopeCmp);
+            p.addAll(finalSubstitutionScopes);
+            Scope scope = p.peek();
+            while(!p.isEmpty()) {
+                scope = p.poll();
 
-            // If we have replaced the old scope remove its substitution
-            if(substitutions.containsKey(scope)) {
-                compilationCtx.removeScopeSubstitute(scope);
-                if(scope.getScopeType() == ScopeType.FOR)
-                    compilationCtx.removeSubstitute(((ForTask) scope).getIndex());
+                // If we have replaced the old scope remove its substitution
+                // Add in substitutes for the new scopes
+                if(scope.getScopeType() == ScopeType.FOR) {
+                    IntVariable index = data.existingEndScopes.get(scope);
+                    outerScope = outerScope.addSubstitution(data.position, ((ForTask) scope).getIndex(), index);
+                }
             }
-
-            // Add in substitutes for the new scopes
-            compilationCtx.addScopeSubstitute(scope, outerScope);
-            if(scope.getScopeType() == ScopeType.FOR) {
-                IntVariable index = data.existingEndScopes.get(scope);
-                compilationCtx.addSubstitute(((ForTask) scope).getIndex(), index);
-
-                // Store the substitute for later
-                substitutions.put(scope, index);
-            } else
-                // Store the substitute for later
-                substitutions.put(scope, null);
+            outerScope = outerScope.mergeInInitialised(data.position, data.finalInitilizationState, scope);
         }
 
         // Construct any required Scopes
-        Set<Scope> constructScopes = s.getConstructScopes();
-        p.addAll(constructScopes);
-        while(!p.isEmpty()) {
-            Scope scope = p.poll();
+        if(!constructScopes.isEmpty()) {
+            PriorityQueue<Scope> p = new PriorityQueue<>(scopeCmp);
+            p.addAll(constructScopes);
+            while(!p.isEmpty()) {
+                Scope scope = p.poll();
 
-            switch(scope.getScopeType()) {
-                case IF: {
-                    IfScope ifScope = (IfScope) scope;
-                    IRTreeReturn<BooleanVariable> guardTree = ifScope.guard.getForwardIR(compilationCtx);
-                    outerScope = new IfScope(outerScope, guardTree);
-
-                    // If we have replaced the old scope remove its substitution
-                    if(substitutions.containsKey(scope))
-                        compilationCtx.removeScopeSubstitute(scope);
-
-                    // Add in substitutes for the newly
-                    compilationCtx.addScopeSubstitute(scope, outerScope);
-
-                    // Store the substitute for later
-                    substitutions.put(ifScope, null);
-
-                    break;
-                }
-                case ELSE: {
-                    ElseScope elseScope = (ElseScope) scope;
-                    IRTreeReturn<BooleanVariable> guardTree = elseScope.ifScope.guard.getForwardIR(compilationCtx);
-                    guardTree = IRTree.negateBoolean(guardTree);
-                    outerScope = new IfScope(outerScope, guardTree);
-
-                    // If we have replaced the old scope remove its substitution
-                    if(substitutions.containsKey(scope))
-                        compilationCtx.removeScopeSubstitute(scope);
-
-                    // Add in substitutes for the newly
-                    compilationCtx.addScopeSubstitute(scope, outerScope);
-
-                    // Store the substitute for later
-                    substitutions.put(elseScope, null);
-
-                    break;
-                }
-                case FOR: {
-                    ForTask t = (ForTask) scope;
-                    ForTask newScope = ScopeUtils.constructForScope(outerScope, t, data.existingScopes.contains(scope),
-                            data.globalID + "_" + data.localID++, compilationCtx);
-                    data.existingScopes.add(t);
-
-                    // If we have replaced the old scope remove its substitution
-                    if(substitutions.containsKey(t)) {
-                        compilationCtx.removeSubstitute(t.getIndex());
-                        compilationCtx.removeScopeSubstitute(t);
+                switch(scope.getScopeType()) {
+                    case IF: {
+                        IfScope ifScope = (IfScope) scope;
+                        outerScope = outerScope.insertIfScope(ifScope.guard, compilationCtx);
+                        break;
                     }
-
-                    // Add in substitutes for the newly
-                    compilationCtx.addSubstitute(t.getIndex(), newScope.getIndex());
-                    compilationCtx.addScopeSubstitute(t, newScope);
-
-                    // Store the substitute for later
-                    substitutions.put(t, newScope.getIndex());
-
-                    // and update the outer scope.
-                    outerScope = newScope;
-                    break;
+                    case ELSE: {
+                        ElseScope elseScope = (ElseScope) scope;
+                        outerScope = outerScope.insertElseScope(elseScope.ifScope.guard, compilationCtx);
+                        break;
+                    }
+                    case FOR: {
+                        ForTask t = (ForTask) scope;
+                        outerScope = outerScope.insertForScope(t, data.globalID + "_" + data.localID++, data.position,
+                                compilationCtx);
+                        break;
+                    }
+                    case BLOCK: {
+                        BlockScope blockScope = (BlockScope) scope;
+                        outerScope = outerScope.insertBlockScope(blockScope.comment, compilationCtx);
+                        break;
+                    }
+                    case COMMENT: {
+                        CommentScope commentScope = (CommentScope) scope;
+                        outerScope = outerScope.insertCommentScope(commentScope.comment, compilationCtx);
+                        break;
+                    }
+                    default:
+                        break;
                 }
-                default:
-                    break;
             }
         }
-
-        // Now the scopes are created remove the substitutions.
-        for(Scope scope:substitutions.keySet()) {
-            if(scope.getScopeType() == ScopeType.FOR)
-                compilationCtx.removeSubstitute(((ForTask) scope).getIndex());
-            compilationCtx.removeScopeSubstitute(scope);
-        }
-
-        /*
-         * Set any required substitutions for the guard. TODO This currently includes the scopes needed for other
-         * scopes. This could be tightened in the future, but it had no negative effects beyond compiler performance
-         * including unused scopes.
-         */
-        for(ForTask t:s.getUsedScopes()) {
-            IntVariable index = substitutions.get(t);
-            if(index != null) {
-                compilationCtx.addSubstitute(t.getIndex(), index);
-                compilationCtx.addScopeSubstitute(t, outerScope);
-            }
-        }
-
         return outerScope;
     }
 
-    private static void removeSubstitutions(ScopeChanges s, Map<Scope, IntVariable> substitutions,
+    private static ScopeDescription constructAdditionalScopes(RestrictionsData data, ScopeDescription target,
             CompilationContext compilationCtx) {
-        // Remove any required substitutions
-        for(ForTask t:s.getUsedScopes()) {
-            if(substitutions.containsKey(t)) {
-                compilationCtx.removeSubstitute(t.getIndex());
-                compilationCtx.removeScopeSubstitute(t);
-            }
-        }
-    }
-
-    private static Scope constructAdditionalScopes(RestrictionsData data, Map<Scope, IntVariable> substitutions,
-            Scope outerScope, CompilationContext compilationCtx) {
-        // Set all the current substitutions so they are there when the scopes are
-        // created.
-        for(Scope scope:substitutions.keySet()) {
-            if(scope.getScopeType() == ScopeType.FOR)
-                compilationCtx.addSubstitute(((ForTask) scope).getIndex(), substitutions.get(scope));
-            compilationCtx.addScopeSubstitute(scope, outerScope);
-        }
-
         for(Scope scope:data.finalScopes) {
             switch(scope.getScopeType()) {
                 case IF: {
                     IfScope ifScope = (IfScope) scope;
-                    IRTreeReturn<BooleanVariable> guardTree = ifScope.guard.getForwardIR(compilationCtx);
-                    outerScope = new IfScope(outerScope, guardTree);
-
-                    // If we have replaced the old scope remove its substitution
-                    if(substitutions.containsKey(scope))
-                        compilationCtx.removeScopeSubstitute(scope);
-
-                    // Add in substitutes for the newly created scope
-                    compilationCtx.addScopeSubstitute(scope, outerScope);
-
-                    // Store the substitute for later
-                    substitutions.put(ifScope, null);
-
+                    target = target.insertIfScope(ifScope.guard, compilationCtx);
                     break;
                 }
                 case ELSE: {
                     ElseScope elseScope = (ElseScope) scope;
-                    IRTreeReturn<BooleanVariable> guardTree = elseScope.ifScope.guard.getForwardIR(compilationCtx);
-                    guardTree = IRTree.negateBoolean(guardTree);
-                    outerScope = new IfScope(outerScope, guardTree);
-
-                    // If we have replaced the old scope remove its substitution
-                    if(substitutions.containsKey(scope))
-                        compilationCtx.removeScopeSubstitute(scope);
-
-                    // Add in substitutes for the newly
-                    compilationCtx.addScopeSubstitute(scope, outerScope);
-
-                    // Store the substitute for later
-                    substitutions.put(elseScope, null);
-
+                    target = target.insertElseScope(elseScope.ifScope.guard, compilationCtx);
                     break;
                 }
                 case FOR: {
                     ForTask t = (ForTask) scope;
-                    ForTask newScope = ScopeUtils.constructForScope(outerScope, t, data.existingScopes.contains(t),
-                            data.globalID + "_" + data.localID++, compilationCtx);
-                    data.existingScopes.add(t);
-
-                    // If we have replaced the old scope remove its substitution
-                    if(substitutions.containsKey(t)) {
-                        compilationCtx.removeSubstitute(t.getIndex());
-                        compilationCtx.removeScopeSubstitute(t);
-                    }
-
-                    // Add in substitutes for the newly
-                    compilationCtx.addSubstitute(t.getIndex(), newScope.getIndex());
-                    compilationCtx.addScopeSubstitute(t, newScope);
-
-                    // Store the substitute for later
-                    substitutions.put(t, newScope.getIndex());
-                    outerScope = newScope;
+                    target = target.insertForScope(t, data.globalID + "_" + data.localID++, data.position,
+                            compilationCtx);
+                    break;
+                }
+                case BLOCK: {
+                    BlockScope blockScope = (BlockScope) scope;
+                    target = target.insertBlockScope(blockScope.comment, compilationCtx);
+                    break;
+                }
+                case COMMENT: {
+                    CommentScope commentScope = (CommentScope) scope;
+                    target = target.insertCommentScope(commentScope.comment, compilationCtx);
                     break;
                 }
                 default:
@@ -1412,14 +1245,7 @@ public class TraceArrayRestrictions {
             }
         }
 
-        // Now the scopes are created remove the substitutions.
-        for(Scope scope:substitutions.keySet()) {
-            if(scope.getScopeType() == ScopeType.FOR)
-                compilationCtx.removeSubstitute(((ForTask) scope).getIndex());
-            compilationCtx.removeScopeSubstitute(scope);
-        }
-
-        return outerScope;
+        return target;
     }
 
     public static boolean restrictionRequired(TraceHandle th) {

@@ -249,7 +249,7 @@ public class ForwardExecutionBuilder {
         ScopeConstructor sc = ScopeConstructor.construct(v.getParent(), Tree.NoComment, compilationCtx);
 
         if(guard != null)
-            sc = sc.addCondition(guard).ifScopeConstructor;
+            sc = sc.addCondition(guard).ifScopeConstructor();
 
         VariableDescription<BooleanVariable> guardName = VariableNames.observedGuard(v);
         sc.addTree((TreeBuilderInfo info) -> {
@@ -263,7 +263,7 @@ public class ForwardExecutionBuilder {
                     IRTree.store(guardName, IRTree.constant(true), "Observation reached"));
         });
 
-        sc = sc.addCondition(IRTree.negateBoolean(IRTree.load(guardName))).ifScopeConstructor;
+        sc = sc.addCondition(IRTree.negateBoolean(IRTree.load(guardName))).ifScopeConstructor();
         sc.addTree((TreeBuilderInfo info) -> {
             t.build();
         });

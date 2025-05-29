@@ -158,7 +158,8 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 		for(int var18 = 0; var18 < length$observed; var18 += 1)
 			cv$accumulatedProbabilities = (Math.log((output[var18]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
 			prior = cv$originalValue;
 	}
 

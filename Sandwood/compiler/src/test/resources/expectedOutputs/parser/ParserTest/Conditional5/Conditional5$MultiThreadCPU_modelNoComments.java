@@ -110,21 +110,23 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
-				double cv$sampleValue = b;
 				{
+					double cv$sampleValue = b;
 					{
-						double var10 = 0.0;
-						double var11 = 1.0;
-						double cv$weightedProbability = (Math.log(1.0) + (((var10 <= cv$sampleValue) && (cv$sampleValue < var11))?(-Math.log((var11 - var10))):Double.NEGATIVE_INFINITY));
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var10 = 0.0;
+							double var11 = 1.0;
+							double cv$weightedProbability = (Math.log(1.0) + (((var10 <= cv$sampleValue) && (cv$sampleValue < var11))?(-Math.log((var11 - var10))):Double.NEGATIVE_INFINITY));
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -139,10 +141,12 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			boolean cv$guard$value = false;
 			logProbability$b = (logProbability$b + cv$accumulator);
 			{
-				if(!guard) {
-					if(!cv$guard$value) {
-						cv$guard$value = true;
-						logProbability$value = (logProbability$value + cv$sampleProbability);
+				{
+					if(!guard) {
+						if(!cv$guard$value) {
+							cv$guard$value = true;
+							logProbability$value = (logProbability$value + cv$sampleProbability);
+						}
 					}
 				}
 			}
@@ -158,10 +162,12 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			boolean cv$guard$value = false;
 			logProbability$b = (logProbability$b + cv$accumulator);
 			{
-				if(!guard) {
-					if(!cv$guard$value) {
-						cv$guard$value = true;
-						logProbability$value = (logProbability$value + cv$sampleValue);
+				{
+					if(!guard) {
+						if(!cv$guard$value) {
+							cv$guard$value = true;
+							logProbability$value = (logProbability$value + cv$sampleValue);
+						}
 					}
 				}
 			}
@@ -177,20 +183,22 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
-				boolean cv$sampleValue = guard;
 				{
+					boolean cv$sampleValue = guard;
 					{
-						double var3 = 0.5;
-						double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var3:(1.0 - var3))));
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var3 = 0.5;
+							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var3:(1.0 - var3))));
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -225,21 +233,23 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
-				double cv$sampleValue = a;
 				{
+					double cv$sampleValue = a;
 					{
-						double var6 = 0.0;
-						double var7 = 1.0;
-						double cv$weightedProbability = (Math.log(1.0) + (((var6 <= cv$sampleValue) && (cv$sampleValue < var7))?(-Math.log((var7 - var6))):Double.NEGATIVE_INFINITY));
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var6 = 0.0;
+							double var7 = 1.0;
+							double cv$weightedProbability = (Math.log(1.0) + (((var6 <= cv$sampleValue) && (cv$sampleValue < var7))?(-Math.log((var7 - var6))):Double.NEGATIVE_INFINITY));
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -254,10 +264,12 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			boolean cv$guard$value = false;
 			logProbability$a = (logProbability$a + cv$accumulator);
 			{
-				if(guard) {
-					if(!cv$guard$value) {
-						cv$guard$value = true;
-						logProbability$value = (logProbability$value + cv$sampleProbability);
+				{
+					if(guard) {
+						if(!cv$guard$value) {
+							cv$guard$value = true;
+							logProbability$value = (logProbability$value + cv$sampleProbability);
+						}
 					}
 				}
 			}
@@ -273,10 +285,12 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			boolean cv$guard$value = false;
 			logProbability$a = (logProbability$a + cv$accumulator);
 			{
-				if(guard) {
-					if(!cv$guard$value) {
-						cv$guard$value = true;
-						logProbability$value = (logProbability$value + cv$sampleValue);
+				{
+					if(guard) {
+						if(!cv$guard$value) {
+							cv$guard$value = true;
+							logProbability$value = (logProbability$value + cv$sampleValue);
+						}
 					}
 				}
 			}
@@ -374,18 +388,26 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		guard = observedGuard;
 		value = observedValue;
 		{
-			if(guard) {
-				{
-					if(guard)
-						a = observedValue;
+			{
+				if(guard) {
+					{
+						{
+							if(guard)
+								a = observedValue;
+						}
+					}
 				}
 			}
 		}
 		{
-			if(!guard) {
-				{
-					if(!guard)
-						b = observedValue;
+			{
+				if(!guard) {
+					{
+						{
+							if(!guard)
+								b = observedValue;
+						}
+					}
 				}
 			}
 		}

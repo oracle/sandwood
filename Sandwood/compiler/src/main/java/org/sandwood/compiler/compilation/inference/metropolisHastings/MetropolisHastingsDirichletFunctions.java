@@ -44,6 +44,7 @@ import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Dirichlet;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.names.VariableNames;
+import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
@@ -84,94 +85,94 @@ public class MetropolisHastingsDirichletFunctions extends MetropolisHastingsArra
      */
 
     @Override
-    protected void constructFunctionVariablesProb(CompilationContext compilationCtx,
-            MetropolisHastingsArrayData<DoubleVariable, Dirichlet> funcData) {
-        super.constructFunctionVariablesProb(compilationCtx, funcData);
+    protected void constructFunctionVariablesProb(MetropolisHastingsArrayData<DoubleVariable, Dirichlet> funcData,
+            CompilationContext compilationCtx) {
+        super.constructFunctionVariablesProb(funcData, compilationCtx);
+        funcData.targetScope.addTree((TreeBuilderInfo info) -> {
+            // Array Length
+            IRTreeReturn<IntVariable> arrayLengthTree = ((ArrayVariable<DoubleVariable>) funcData.sampleDesc.output)
+                    .getLength(compilationCtx);
+            IRTreeVoid arrayLengthTreeInit = initializeVariable(arrayLength, arrayLengthTree, Tree.NoComment);
+            compilationCtx.addTreeToScope(GlobalScope.scope, arrayLengthTreeInit);
 
-        // Array Length
+            // Index to Change
+            // TODO confirm this cannot return arrayLength.
+            IRTreeReturn<IntVariable> indexToChangeTree = castToInteger(functionCallReturn(FunctionType.SAMPLE,
+                    VariableType.DoubleVariable, VariableType.Uniform, constant(0.0), load(arrayLength)));
+            IRTreeVoid indexToChangeTreeInit = initializeVariable(indexToChange, indexToChangeTree,
+                    "Pick a value in the array to adjust.");
+            compilationCtx.addTreeToScope(GlobalScope.scope, indexToChangeTreeInit);
 
-        IRTreeReturn<IntVariable> arrayLengthTree = ((ArrayVariable<DoubleVariable>) funcData.sampleDesc.output)
-                .getLength(compilationCtx);
-        IRTreeVoid arrayLengthTreeInit = initializeVariable(arrayLength, arrayLengthTree, Tree.NoComment);
-        compilationCtx.addTreeToScope(GlobalScope.scope, arrayLengthTreeInit);
+            // Fraction to move selected index by.
+            IRTreeReturn<DoubleVariable> movementRatioTree = subtractDI(
+                    multiplyDD(functionCallReturn(FunctionType.SAMPLE, VariableType.DoubleVariable, VariableType.Beta,
+                            constant(5), constant(5)), constant(1.9999)),
+                    constant(1));
+            IRTreeVoid movementRatioTreeInit = initializeVariable(movementRatio, movementRatioTree,
+                    "Pick how much the value "
+                            + "should be moved by. Initially this value is proposed as a ratio of the current magnitude of the value, we will check to make sure "
+                            + "the adjustment will not make this value too large or other values too small and adjust if required before it is applied.");
+            compilationCtx.addTreeToScope(GlobalScope.scope, movementRatioTreeInit);
 
-        // Index to Change
-        // TODO confirm this cannot return arrayLength.
-        IRTreeReturn<IntVariable> indexToChangeTree = castToInteger(functionCallReturn(FunctionType.SAMPLE,
-                VariableType.DoubleVariable, VariableType.Uniform, constant(0.0), load(arrayLength)));
-        IRTreeVoid indexToChangeTreeInit = initializeVariable(indexToChange, indexToChangeTree,
-                "Pick a value in the array to adjust.");
-        compilationCtx.addTreeToScope(GlobalScope.scope, indexToChangeTreeInit);
+            // Calculate the proposed difference
+            IRTreeVoid proposedDifferenceTreeInit = initializeUnsetVariable(proposedDifference,
+                    "Allocate space for the proposed change to be stored as an absolute value");
 
-        // Fraction to move selected index by.
-        IRTreeReturn<DoubleVariable> movementRatioTree = subtractDI(multiplyDD(functionCallReturn(FunctionType.SAMPLE,
-                VariableType.DoubleVariable, VariableType.Beta, constant(5), constant(5)), constant(1.9999)),
-                constant(1));
-        IRTreeVoid movementRatioTreeInit = initializeVariable(movementRatio, movementRatioTree,
-                "Pick how much the value "
-                        + "should be moved by. Initially this value is proposed as a ratio of the current magnitude of the value, we will check to make sure "
-                        + "the adjustment will not make this value too large or other values too small and adjust if required before it is applied.");
-        compilationCtx.addTreeToScope(GlobalScope.scope, movementRatioTreeInit);
+            IRTreeVoid max = sequential("Calculate the maximum magnitude of the proposed index change.", store(
+                    proposedDifference, subtractDD(constant(1.0), arrayGet(funcData.getTarget(), load(indexToChange))),
+                    "Initially set the maximum to the amount that the value we are changing could increase without exceeding 1"),
 
-        // Calculate the proposed difference
-        IRTreeVoid proposedDifferenceTreeInit = initializeUnsetVariable(proposedDifference,
-                "Allocate space for the proposed change to be stored as an absolute value");
+                    forStmt(sequential(Tree.NoComment,
+                            // Calculate the new possible lower bound on movement.
+                            initializeVariable(tempValue,
+                                    multiplyDI(arrayGet(funcData.getTarget(), load(loopIndex)),
+                                            subtractII(load(arrayLength), constant(1))),
+                                    "Calculate the maximum change value that the value at array index " + loopIndex
+                                            + " could support. Based on moving all other values by an equal amount."),
+                            // Test if it is a lower bound
+                            ifElse(lessThan(load(tempValue), load(proposedDifference)),
+                                    // And update the value if it is lower
+                                    store(proposedDifference, load(tempValue), Tree.NoComment),
+                                    "If the maximum move is less than the proposed move update the move size.")),
+                            constant(0), load(indexToChange), constant(1), loopIndex, true,
+                            "For the array values up to the index we are going to change calculate the maximum move possible."),
 
-        IRTreeVoid max = sequential("Calculate the maximum magnitude of the proposed index change.", store(
-                proposedDifference, subtractDD(constant(1.0), arrayGet(funcData.getTarget(), load(indexToChange))),
-                "Initially set the maximum to the amount that the value we are changing could increase without exceeding 1"),
+                    forStmt(sequential(Tree.NoComment,
+                            // Calculate the new possible lower bound on movement.
+                            initializeVariable(tempValue,
+                                    multiplyDI(arrayGet(funcData.getTarget(), load(loopIndex)),
+                                            subtractII(load(arrayLength), constant(1))),
+                                    "Calculate the maximum change value that the value at array index " + loopIndex
+                                            + " could support. Based on moving all other values by an equal amount."),
+                            // Test if it is a lower bound
+                            ifElse(lessThan(load(tempValue), load(proposedDifference)),
+                                    // And update the value if it is lower
+                                    store(proposedDifference, load(tempValue), Tree.NoComment),
+                                    "If this is less than the proposed increase, change the proposed increase to this value.")),
+                            addII(load(indexToChange), constant(1)), load(arrayLength), constant(1), loopIndex, true,
+                            "For the array values after the index we are going to change calculate the maximum move possible."));
 
-                forStmt(sequential(Tree.NoComment,
-                        // Calculate the new possible lower bound on movement.
-                        initializeVariable(tempValue,
-                                multiplyDI(arrayGet(funcData.getTarget(), load(loopIndex)),
-                                        subtractII(load(arrayLength), constant(1))),
-                                "Calculate the maximum change value that the value at array index " + loopIndex
-                                        + " could support. Based " + "on moving all other values by an equal amount."),
-                        // Test if it is a lower bound
-                        ifElse(lessThan(load(tempValue), load(proposedDifference)),
-                                // And update the value if it is lower
-                                store(proposedDifference, load(tempValue), Tree.NoComment),
-                                "If the maximum move is less than the proposed move update the move size.")),
-                        constant(0), load(indexToChange), constant(1), loopIndex, true,
-                        "For the array values up to the index we are going to change calculate the maximum move possible."),
+            IRTreeVoid min = store(proposedDifference, arrayGet(funcData.getTarget(), load(indexToChange)),
+                    "The maximum reduction of the array at the index without going below 0 is the value of the array at that index.");
 
-                forStmt(sequential(Tree.NoComment,
-                        // Calculate the new possible lower bound on movement.
-                        initializeVariable(tempValue,
-                                multiplyDI(arrayGet(funcData.getTarget(), load(loopIndex)),
-                                        subtractII(load(arrayLength), constant(1))),
-                                "Calculate the maximum change value that the value at array index " + loopIndex
-                                        + " could support. Based " + "on moving all other values by an equal amount."),
-                        // Test if it is a lower bound
-                        ifElse(lessThan(load(tempValue), load(proposedDifference)),
-                                // And update the value if it is lower
-                                store(proposedDifference, load(tempValue), Tree.NoComment),
-                                "If this is less than the proposed increase, change the proposed increase to this value.")),
-                        addII(load(indexToChange), constant(1)), load(arrayLength), constant(1), loopIndex, true,
-                        "For the array values after the index we are going to change calculate the maximum move possible."));
+            proposedDifferenceTreeInit = sequential(
+                    "Calculate how much we are going to move the array index " + indexToChange + " the by.",
+                    proposedDifferenceTreeInit,
+                    ifElse(lessThan(load(movementRatio), constant(0)), min,
+                            "Test if we are increasing or decreasing the value at the index. For each case calculate the maximum valid adjustment.",
+                            max, Tree.NoComment),
+                    store(proposedDifference, multiplyDD(load(movementRatio), load(proposedDifference)),
+                            "Multiply the maximum adjustment by the adjustment ratio to get the actual adjustment we are going to make."));
+            compilationCtx.addTreeToScope(GlobalScope.scope, proposedDifferenceTreeInit);
 
-        IRTreeVoid min = store(proposedDifference, arrayGet(funcData.getTarget(), load(indexToChange)),
-                "The maximum reduction of the array at the index without going below 0 is the value of the array at that index.");
-
-        proposedDifferenceTreeInit = sequential(
-                "Calculate how much we are going to move the array index " + indexToChange + " the by.",
-                proposedDifferenceTreeInit,
-                ifElse(lessThan(load(movementRatio), constant(0)), min,
-                        "Test if we are increasing or decreasing the value at the index. For each case calculate the maximum valid adjustment.",
-                        max, Tree.NoComment),
-                store(proposedDifference, multiplyDD(load(movementRatio), load(proposedDifference)),
-                        "Multiply the maximum adjustment by the adjustment ratio to get the actual adjustment we are going to make."));
-        compilationCtx.addTreeToScope(GlobalScope.scope, proposedDifferenceTreeInit);
-
-        // Finally set the amount that each of the other values should be moved by to
-        // rebalance the array.
-        IRTreeReturn<DoubleVariable> rebalanceTree = divideDI(load(proposedDifference),
-                subtractII(load(arrayLength), constant(1)));
-        IRTreeVoid rebalanceTreeInit = initializeVariable(rebalanceValue, rebalanceTree,
-                "Calculate how much each of the other indexes needs to be adjusted by in order to maintain that the sum of the indexes is 1.");
-        compilationCtx.addTreeToScope(GlobalScope.scope, rebalanceTreeInit);
-
+            // Finally set the amount that each of the other values should be moved by to
+            // rebalance the array.
+            IRTreeReturn<DoubleVariable> rebalanceTree = divideDI(load(proposedDifference),
+                    subtractII(load(arrayLength), constant(1)));
+            IRTreeVoid rebalanceTreeInit = initializeVariable(rebalanceValue, rebalanceTree,
+                    "Calculate how much each of the other indexes needs to be adjusted by in order to maintain that the sum of the indexes is 1.");
+            compilationCtx.addTreeToScope(GlobalScope.scope, rebalanceTreeInit);
+        });
     }
 
     @Override

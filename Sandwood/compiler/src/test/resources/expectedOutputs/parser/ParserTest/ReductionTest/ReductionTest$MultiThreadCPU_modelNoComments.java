@@ -202,19 +202,21 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
-					double[] cv$sampleValue = m[var29];
 					{
+						double[] cv$sampleValue = m[var29];
 						{
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, noStates));
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							{
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, noStates));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -258,21 +260,23 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
-					double cv$sampleValue = bias[var45];
 					{
+						double cv$sampleValue = bias[var45];
 						{
-							double var32 = 1.0;
-							double var33 = 1.0;
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var32, var33));
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							{
+								double var32 = 1.0;
+								double var33 = 1.0;
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var32, var33));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -316,20 +320,22 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
-					int cv$sampleValue = st[i$var58];
 					{
+						int cv$sampleValue = st[i$var58];
 						{
-							double[] var59 = m[i$var58];
-							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates))?Math.log(var59[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							{
+								double[] var59 = m[i$var58];
+								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates))?Math.log(var59[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -374,26 +380,28 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
-					boolean cv$sampleValue = flips[j$var73];
 					{
+						boolean cv$sampleValue = flips[j$var73];
 						{
-							int reduceVar$var82$7 = 0;
-							for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1) {
-								int i$var79 = reduceVar$var82$7;
-								int j$var80 = st[cv$reduction78Index];
-								reduceVar$var82$7 = (i$var79 + j$var80);
+							{
+								int reduceVar$var82$7 = 0;
+								for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1) {
+									int i$var79 = reduceVar$var82$7;
+									int j$var80 = st[cv$reduction78Index];
+									reduceVar$var82$7 = (i$var79 + j$var80);
+								}
+								double var83 = bias[reduceVar$var82$7];
+								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var83:(1.0 - var83))));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							double var83 = bias[reduceVar$var82$7];
-							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var83:(1.0 - var83))));
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -437,14 +445,20 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			{
 				{
 					{
-						for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1) {
-							if((var29 == i$var58)) {
-								{
+						{
+							for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1) {
+								if((var29 == i$var58)) {
 									{
 										{
 											{
 												{
-													cv$countLocal[st[i$var58]] = (cv$countLocal[st[i$var58]] + 1.0);
+													{
+														{
+															{
+																cv$countLocal[st[i$var58]] = (cv$countLocal[st[i$var58]] + 1.0);
+															}
+														}
+													}
 												}
 											}
 										}
@@ -466,17 +480,19 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			{
 				{
 					{
-						int reduceVar$var82$5 = 0;
-						for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1) {
-							int i$var79 = reduceVar$var82$5;
-							int j$var80 = st[cv$reduction78Index];
-							reduceVar$var82$5 = (i$var79 + j$var80);
-						}
-						if((var45 == reduceVar$var82$5)) {
-							for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
-								cv$count = (cv$count + 1);
-								if(flips[j$var73])
-									cv$sum = (cv$sum + 1);
+						{
+							int reduceVar$var82$5 = 0;
+							for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1) {
+								int i$var79 = reduceVar$var82$5;
+								int j$var80 = st[cv$reduction78Index];
+								reduceVar$var82$5 = (i$var79 + j$var80);
+							}
+							if((var45 == reduceVar$var82$5)) {
+								for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
+									cv$count = (cv$count + 1);
+									if(flips[j$var73])
+										cv$sum = (cv$sum + 1);
+								}
 							}
 						}
 					}
@@ -485,7 +501,9 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			double var46 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 			{
 				{
-					bias[var45] = var46;
+					{
+						bias[var45] = var46;
+					}
 				}
 			}
 		}
@@ -493,12 +511,12 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	private final void sample62(int i$var58) {
 		if(true) {
-			int cv$numNumStates = 0;
+			int cv$numStates = 0;
 			{
-				cv$numNumStates = Math.max(cv$numNumStates, noStates);
+				cv$numStates = Math.max(cv$numStates, noStates);
 			}
 			double[] cv$stateProbabilityLocal = cv$var61$stateProbabilityGlobal;
-			for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 				double cv$reachedDistributionSourceRV = 0.0;
 				double cv$accumulatedDistributionProbabilities = 0.0;
@@ -507,37 +525,30 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				int var61 = cv$currentValue;
 				{
 					{
-						st[i$var58] = cv$currentValue;
+						{
+							st[i$var58] = cv$currentValue;
+						}
 					}
 				}
 				{
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-					double[] cv$temp$0$var59;
-					{
-						double[] var59 = m[i$var58];
-						cv$temp$0$var59 = var59;
-					}
-					int cv$temp$1$$var268;
-					{
-						int $var268 = noStates;
-						cv$temp$1$$var268 = $var268;
-					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var268))?Math.log(cv$temp$0$var59[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double[] var59 = m[i$var58];
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < noStates))?Math.log(var59[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
-							int traceTempVariable$i$2_1 = cv$currentValue;
-							if(((0 <= i$var58) && (i$var58 < noCats))) {
-								{
+							{
+								int traceTempVariable$i$2_1 = cv$currentValue;
+								if(((0 <= i$var58) && (i$var58 < noCats))) {
 									if((0 < noCats)) {
 										int reduceVar$var82$6 = 0;
-										for(int cv$reduction397Index = 0; cv$reduction397Index < i$var58; cv$reduction397Index += 1) {
+										for(int cv$reduction436Index = 0; cv$reduction436Index < i$var58; cv$reduction436Index += 1) {
 											int i$var79 = reduceVar$var82$6;
-											int j$var80 = st[cv$reduction397Index];
+											int j$var80 = st[cv$reduction436Index];
 											reduceVar$var82$6 = (i$var79 + j$var80);
 										}
-										for(int cv$reduction397Index = (i$var58 + 1); cv$reduction397Index < noCats; cv$reduction397Index += 1) {
+										for(int cv$reduction436Index = (i$var58 + 1); cv$reduction436Index < noCats; cv$reduction436Index += 1) {
 											int i$var79 = reduceVar$var82$6;
-											int j$var80 = st[cv$reduction397Index];
+											int j$var80 = st[cv$reduction436Index];
 											reduceVar$var82$6 = (i$var79 + j$var80);
 										}
 										int cv$reduced78 = reduceVar$var82$6;
@@ -550,20 +561,18 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 												{
 													{
 														{
-															double cv$temp$2$var83;
 															{
 																double var83 = bias[traceTempVariable$var82$2_2];
-																cv$temp$2$var83 = var83;
+																if(((Math.log(1.0) + Math.log((flips[j$var73]?var83:(1.0 - var83)))) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[j$var73]?var83:(1.0 - var83)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																else {
+																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[j$var73]?var83:(1.0 - var83))));
+																	else
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[j$var73]?var83:(1.0 - var83)))))) + 1)) + (Math.log(1.0) + Math.log((flips[j$var73]?var83:(1.0 - var83)))));
+																}
+																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
-															if(((Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83)))) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-															else {
-																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83))));
-																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83)))))) + 1)) + (Math.log(1.0) + Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83)))));
-															}
-															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 														}
 													}
 												}
@@ -597,7 +606,7 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$logSum = 0.0;
 			{
 				double cv$lseMax = cv$stateProbabilityLocal[0];
-				for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+				for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 					double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
 					if((cv$lseMax < cv$lseElementValue))
 						cv$lseMax = cv$lseElementValue;
@@ -606,24 +615,26 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					cv$logSum = Double.NEGATIVE_INFINITY;
 				else {
 					double cv$lseSum = 0.0;
-					for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+					for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 						cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
 					cv$logSum = (cv$logSum + (Math.log(cv$lseSum) + cv$lseMax));
 				}
 			}
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-				for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
-					cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numNumStates);
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numStates);
 			} else {
-				for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 					cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
 			}
-			for(int cv$indexName = cv$numNumStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			for(int cv$indexName = cv$numStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 				cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
-			int var61 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates);
+			int var61 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
 			{
 				{
-					st[i$var58] = var61;
+					{
+						st[i$var58] = var61;
+					}
 				}
 			}
 		}

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -53,7 +53,7 @@ public class IRSequential extends IRTreeVoid {
             return TransTree.nop();
         else if(outputTrees.size() == 1) {
             TransTreeVoid t = outputTrees.get(0);
-            t.postfixComment(comment);
+            t.prefixComment(comment);
             return t;
         } else
             return TransTree.sequential(outputTrees, comment);

@@ -11,9 +11,9 @@ package org.sandwood.compiler.compilation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -72,7 +72,7 @@ public class ObservedValuePropagationBuilder {
 
         private VariableDependencyDesc(Variable<?> v, VarTraces traces) {
             variable = v;
-            dependencies = new HashSet<>();
+            dependencies = new LinkedHashSet<>();
             getDependencies(traces.traceToSource);
             for(TraceHandle t:traces.tracesToVar)
                 getDependencies(t);
@@ -160,14 +160,14 @@ public class ObservedValuePropagationBuilder {
 
         public static Set<VariableDependencyDesc> getVariableDependencyDescs(
                 Map<Variable<?>, VarTraces> segmentedTraces) {
-            Set<VariableDependencyDesc> vdds = new HashSet<>();
+            Set<VariableDependencyDesc> vdds = new LinkedHashSet<>();
             for(Variable<?> v:segmentedTraces.keySet()) {
                 // Construct the VariableDependencyDesc
                 VariableDependencyDesc vdd = new VariableDependencyDesc(v, segmentedTraces.get(v));
 
                 /*
                  * Add any recursive dependencies, this works because any dependencies as a later step will have already
-                 * been added to the existing VariableDependencyDescs
+                 * been added to the existing VariableDependenceyDescs
                  */
                 for(VariableDependencyDesc existing:vdds) {
                     if(vdd.dependencies.contains(existing.variable))
@@ -206,7 +206,7 @@ public class ObservedValuePropagationBuilder {
         IRTreeVoid t1 = initialiseConstants(compilationCtx);
 
         // Set to record the intermediates whose value has been fixed.
-        Set<Variable<?>> setIntermediates = new HashSet<>();
+        Set<Variable<?>> setIntermediates = new LinkedHashSet<>();
 
         // Propagate back from the observation task to the intermediate variables in the model.
         IRTreeVoid t2 = backPropagateObservedVariables(setIntermediates, compilationCtx);
@@ -267,7 +267,7 @@ public class ObservedValuePropagationBuilder {
         compilationCtx.pushIsSerial(true);
         compilationCtx.setreverseScopes(true);
 
-        Map<Variable<?>, VarTraces> segmentedTraces = new HashMap<>();
+        Map<Variable<?>, VarTraces> segmentedTraces = new LinkedHashMap<>();
         for(SampleTask<?, ?> sTask:compilationCtx.traces.getAllSampleTasks()) {
             if(compilationCtx.traces.isObserved(sTask)) {
                 // Test that the traces are valid
@@ -310,7 +310,7 @@ public class ObservedValuePropagationBuilder {
         Set<VariableDependencyDesc> vdds = VariableDependencyDesc.getVariableDependencyDescs(segmentedTraces);
         PriorityQueue<VariableDependencyDesc> p = new PriorityQueue<>(vdds);
 
-        Set<Variable<?>> copied = new HashSet<>();
+        Set<Variable<?>> copied = new LinkedHashSet<>();
         while(!p.isEmpty()) {
             Variable<?> end = p.poll().variable;
             Variable<?> instanceHandle = end.instanceHandle();
@@ -359,14 +359,13 @@ public class ObservedValuePropagationBuilder {
                 toFix.add(v);
         }
 
-        compilationCtx.pushScope();
+        compilationCtx.initialize();
         while(!toFix.isEmpty())
             ForwardExecutionBuilder.constructForwardMethod(toFix.poll(), GuardStatus.NONE,
                     Distributions.NO_DISTRIBUTIONS, PrimingStatus.PRIMING, compilationCtx);
 
         t3 = IRTree.treeScope(compilationCtx.getOutermostScopeTree(),
                 "Set any intermediates with fixed parent values.");
-        compilationCtx.popScope();
         return t3;
     }
 
@@ -490,10 +489,11 @@ public class ObservedValuePropagationBuilder {
                         // Get the tree for the array
                         IRTreeReturn<ArrayVariable<B>> arrayTree;
                         ArrayVariable<B> array = pt.array.instanceHandle();
-                        if(compilationCtx.initialized(pt.array)) {
-                            array.markStopPoint();
-                            arrayTree = array.getForwardIR(compilationCtx);
-                            array.unmarkStopPoint();
+                        if(compilationCtx.initializedInScope(array)) {
+                            Variable<ArrayVariable<B>> v = compilationCtx.getInitializedVariable(array);
+                            v.markStopPoint();
+                            arrayTree = v.getForwardIR(compilationCtx);
+                            v.unmarkStopPoint();
                         } else
                             arrayTree = array.getForwardIR(compilationCtx);
 
@@ -504,16 +504,23 @@ public class ObservedValuePropagationBuilder {
                         if(index != 0) {
                             Variable<B> value = pt.value.instanceHandle();
                             if(value.getType().getDepth() != 0 && index > 1) {
-                                if(!compilationCtx.initialized(value)) {
+                                if(!compilationCtx.initializedInScope(value)) {
+                                    Variable<B> v = compilationCtx.addInitialized(value);
                                     compilationCtx.addTreeToScope(value.scope(),
-                                            IRTree.initializeUnsetVariable(value.getUniqueVarDesc(), Tree.NoComment));
-                                    compilationCtx.addInitialized(value);
-                                }
-                                compilationCtx.addTreeToScope(pt.scope(), IRTree.store(value.getUniqueVarDesc(),
-                                        IRTree.arrayGet(arrayTree, indexTree), Tree.NoComment));
+                                            IRTree.initializeUnsetVariable(v.getUniqueVarDesc(), Tree.NoComment));
+                                    compilationCtx.addTreeToScope(pt.scope(), IRTree.store(value.getUniqueVarDesc(),
+                                            IRTree.arrayGet(arrayTree, indexTree), Tree.NoComment));
 
-                                processTask(index - 1, traceHandle, IRTree.load(value.getUniqueVarDesc()),
-                                        backTraceInfo, compilationCtx);
+                                    processTask(index - 1, traceHandle, IRTree.load(value.getUniqueVarDesc()),
+                                            backTraceInfo, compilationCtx);
+                                } else {
+                                    Variable<B> v = compilationCtx.getInitializedVariable(value);
+                                    compilationCtx.addTreeToScope(pt.scope(), IRTree.store(v.getUniqueVarDesc(),
+                                            IRTree.arrayGet(arrayTree, indexTree), Tree.NoComment));
+
+                                    processTask(index - 1, traceHandle, IRTree.load(v.getUniqueVarDesc()),
+                                            backTraceInfo, compilationCtx);
+                                }
                             } else {
                                 processTask(index - 1, traceHandle, IRTree.arrayGet(arrayTree, indexTree),
                                         backTraceInfo, compilationCtx);
@@ -617,7 +624,7 @@ public class ObservedValuePropagationBuilder {
                             if(output.isObserved()) {
                                 int start = i - 1;
                                 VarTraces segments = segmentedTraces.computeIfAbsent(result,
-                                        k -> new VarTraces(t.subTrace(start), new HashSet<>()));
+                                        k -> new VarTraces(t.subTrace(start), new LinkedHashSet<>()));
                                 segments.tracesToVar.add(TraceHandle.getTraceHandle(segment));
                                 break;
                             }
@@ -653,7 +660,7 @@ public class ObservedValuePropagationBuilder {
 
                                 int start = i - 1;
                                 VarTraces segments = segmentedTraces.computeIfAbsent(result,
-                                        k -> new VarTraces(t.subTrace(start), new HashSet<>()));
+                                        k -> new VarTraces(t.subTrace(start), new LinkedHashSet<>()));
                                 segments.tracesToVar.add(TraceHandle.getTraceHandle(segment));
 
                                 segment.clear();
