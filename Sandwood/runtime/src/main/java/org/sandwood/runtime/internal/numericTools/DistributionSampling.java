@@ -98,7 +98,7 @@ public class DistributionSampling {
         // Rejection sampling added because while with real numbers these values are not reachable, with floating point
         // arithmetic they are.
         double value = 0;
-        while(value == 0 || value == 1) {
+        while(value == 0 || value == 1 || Double.isNaN(value)) {
             double x = sampleGamma(Rng, alpha);
             double y = sampleGamma(Rng, beta);
             value = x / (x + y);
@@ -449,7 +449,9 @@ public class DistributionSampling {
      */
     static final double sampleGamma(Rng rng, double alpha) { // alpha > 0, beta implicitly 1.
         // alpha > 0
-        assert (alpha > 0);
+        if(alpha < 0)
+            throw new SandwoodModelStateException(
+                    " Attempting to sample a Gamma distribution with non-positive alpha argument " + alpha);
 
         boolean aflag = false;
         if(alpha < 1) {
