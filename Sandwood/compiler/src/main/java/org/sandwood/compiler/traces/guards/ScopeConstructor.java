@@ -1393,11 +1393,12 @@ public class ScopeConstructor {
         for(TraceHandle consumerToSampleTrace:consumerToSampleTraces.keySet()) {
             DataflowTaskArgDesc d = consumerToSampleTrace.peek();
             int argPos = d.argPos;
-            boolean distributedSample = d.task.getInput(argPos).isDistribution();
+            boolean distributedSample = d.task.getInput(argPos).isDistribution()
+                    && consumerToSampleTrace.get(0).task.getType() == DFType.SAMPLE;
 
             Map<Set<TraceHandle>, Set<Set<TraceHandle>>> splitTraces = new LinkedHashMap<>();
             traceGroups.put(consumerToSampleTrace, splitTraces);
-            Set<Integer> constraintGets = getConstraintGets(consumerToSampleTrace);
+            Set<Integer> constraintTaskIDs = getConstraintTaskIDs(consumerToSampleTrace);
             // For each set of traces split and store the traces in the set.
             for(Set<TraceHandle> argTraces:rvDistTraces) {
                 Set<TraceHandle> rawTraces = consumerToSampleTraces.get(consumerToSampleTrace);
@@ -1417,7 +1418,7 @@ public class ScopeConstructor {
                         if(!rawTraces.contains(argTrace)) {
                             // If it goes to a different argument, or it is not used in an index or is used after the
                             // consumer trace executes it can be handled later
-                            if(argTrace.peek().argPos != argPos || !guardTrace(argTrace, constraintGets))
+                            if(argTrace.peek().argPos != argPos || !guardTrace(argTrace, constraintTaskIDs))
                                 postTraces.add(argTrace);
                             else
                                 preTraces.add(argTrace);
@@ -1440,20 +1441,20 @@ public class ScopeConstructor {
     }
 
     /**
-     * Method to determine which get operations in a trace will be used to create guards.
+     * Method to determine which task operations in a trace will be used to create guards.
      * 
      * @param constraintTrace
      * @return A set containing the task ids of the gets that will be used in constraint generation.
      */
-    private Set<Integer> getConstraintGets(TraceHandle constraintTrace) {
-        Set<Integer> validGets = new HashSet<>();
+    private Set<Integer> getConstraintTaskIDs(TraceHandle constraintTrace) {
+        Set<Integer> constraintIDs = new HashSet<>();
         int validPuts = 0;
         for(DataflowTaskArgDesc d:constraintTrace)
             switch(d.task.getType()) {
                 case GET:
                     if(d.argPos == 0 && validPuts > 0) {
                         validPuts--;
-                        validGets.add(d.task.id());
+                        constraintIDs.add(d.task.id());
                     }
                     break;
                 case PUT:
@@ -1463,11 +1464,14 @@ public class ScopeConstructor {
                 case REDUCE_INPUT:
                     validPuts--;
                     break;
+                case IF_ASSIGNMENT:
+                    constraintIDs.add(d.task.id());
+                    break;
                 default:
                     break;
 
             }
-        return validGets;
+        return constraintIDs;
     }
 
     /**
@@ -1477,23 +1481,23 @@ public class ScopeConstructor {
      * @param argTrace The trace to check.
      * @return Will the value constructed by this guard be used
      */
-    private boolean guardTrace(TraceHandle argTrace, Set<Integer> validGets) {
+    private boolean guardTrace(TraceHandle argTrace, Set<Integer> validGetsOrGuards) {
         for(DataflowTaskArgDesc d:argTrace) {
-            switch(d.task.getType()) {
-                case GET:
-                    // Does this go through the index?
-                    if(d.argPos == 1 && validGets.contains(d.task.id()))
-                        return true;
-                    break;
-                case IF_ASSIGNMENT:
-                    // Need logic here to check if the value was used in the guard.
-                    // ***** This can only support one distributed value in the guard as it must
-                    // only be true once for a set of distributions. Otherwise, we need to work out
-                    // how to separate the pre-random and post-random variable tree builders. We
-                    // also need guards that track the conditions that have been met. ****
-                    throw new MissingFeatureException("Logic for an \"if\" needs to be added.");
-                default:
-                    break;
+            if(validGetsOrGuards.contains(d.task.id())) {
+                switch(d.task.getType()) {
+                    case GET:
+                        // Does this go through the index?
+                        if(d.argPos == 1)
+                            return true;
+                        break;
+                    case IF_ASSIGNMENT:
+                        // Does this go through the guard?
+                        if(d.argPos == 0)
+                            return true;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         return false;

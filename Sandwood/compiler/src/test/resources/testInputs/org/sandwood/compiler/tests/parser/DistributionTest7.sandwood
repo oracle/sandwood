@@ -1,0 +1,29 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ *
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+ 
+package org.sandwood.compiler.tests.parser;
+
+public model DistributionTest7(double observedData ) {
+
+    double[] bias = {0.2, 0.3, 0.5};
+    double[] prob = {0.2, 0.4, 0.4};
+
+    int cat = categorical(prob).sampleDistribution();
+    int result;
+    if(cat != 1) {
+    	result = binomial(bias[cat], 10).sample();
+    } else {
+    	result = 5;
+    }
+    
+
+    double data = gaussian(result, (double) cat).sample();
+
+    data.observe(observedData);
+
+    }

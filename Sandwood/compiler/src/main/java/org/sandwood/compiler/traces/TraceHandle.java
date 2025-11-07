@@ -102,11 +102,6 @@ public class TraceHandle implements Comparable<TraceHandle>, Iterable<DataflowTa
                     case GET:
                         return -Integer.compare(d.argPos, od.argPos); // As the index is after the array value, but
                         // needs computing first we reverse the order for gets.
-                    case IF_ASSIGNMENT:
-                        // Code is required here to ensure that indexes are generated ahead of other
-                        // code.
-                        throw new CompilerException(
-                                "The code for comparing traces including conditionals is not yet implemented.");
                     default:
                         return Integer.compare(d.argPos, od.argPos);
                 }

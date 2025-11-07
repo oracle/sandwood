@@ -358,7 +358,7 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
         VariableTrackingVisitor v = new VariableTrackingVisitor();
         try {
             v.visit(this);
-        } catch (CompilerException e) {
+        } catch(CompilerException e) {
             throw new CompilerException(e.getMessage() + "\n" + toString());
         }
         return v.getVariableTrackingData();
@@ -373,19 +373,19 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
         VariableTrackingVisitor v = new VariableTrackingVisitor(knownGlobals);
         try {
             v.visit(this);
-        } catch (CompilerException e) {
+        } catch(CompilerException e) {
             // Catch the exception and add the tree that was being generated that caused it.
             throw new CompilerException(e.getMessage() + "\n" + toString());
         }
         for(TransTree<?> t:additionalTrees) {
             try {
                 v.visit(t);
-            } catch (CompilerException e) {
+            } catch(CompilerException e) {
                 // Catch the exception and add the trees that were being generated that caused it.
                 String msg = e.getMessage() + "\n" + toString();
                 for(TransTree<?> t2:additionalTrees) {
                     msg = msg + "\n\n=======\n\n" + t2.toString();
-                    if(t==t2)
+                    if(t == t2)
                         throw new CompilerException(msg);
                 }
             }
@@ -807,11 +807,11 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
         return TransRemainder.getRemainderDD(a, b);
     }
 
-    public static <A extends NumberVariable<A>> TransMax<A> max(TransTreeReturn<A> a, TransTreeReturn<A> b) {
+    public static <A extends NumberVariable<A>> TransTreeReturn<A> max(TransTreeReturn<A> a, TransTreeReturn<A> b) {
         return TransMax.max(a, b);
     }
 
-    public static <A extends NumberVariable<A>> TransMin<A> min(TransTreeReturn<A> a, TransTreeReturn<A> b) {
+    public static <A extends NumberVariable<A>> TransTreeReturn<A> min(TransTreeReturn<A> a, TransTreeReturn<A> b) {
         return TransMin.min(a, b);
     }
 

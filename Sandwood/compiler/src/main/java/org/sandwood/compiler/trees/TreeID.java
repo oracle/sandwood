@@ -30,6 +30,16 @@ public class TreeID implements Comparable<TreeID> {
         tag = id;
     }
 
+    /**
+     * Method for getting the current value, this is useful for determining which trees were created after a point in a
+     * programs execution as they will have a larger ID.
+     * 
+     * @return
+     */
+    public static int getCurrentValue() {
+        return globalId.get();
+    }
+
     @Override
     public int hashCode() {
         return tag;
