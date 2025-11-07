@@ -97,7 +97,7 @@ public class TransGetIntField extends TransTreeReturn<IntVariable> {
     @Override
     public TransTreeReturn<IntVariable> minValue(Bounds bounds) {
         // Only return for array lengths when all values are being returned.
-        if(bounds.getFilter() == null && name.equals("length") && tree.getOutputType().isArray()) {
+        if(name.equals("length") && tree.getOutputType().isArray()) {
             TransTreeReturn<IntVariable> tree = constant(0);
             bounds.addTransformedTree(this, tree);
             return tree;

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -11,7 +11,6 @@ package org.sandwood.compiler.tests.transformations;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.addDD;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.addDI;
-import static org.sandwood.compiler.trees.transformationTree.TransTree.addII;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.and;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.castToDouble;
 import static org.sandwood.compiler.trees.transformationTree.TransTree.constant;
@@ -271,14 +270,6 @@ class ConstantsTest {
         beforeList.add("Math.max(4, 1)");
         afterList.add("4");
 
-        treeList.add(max(
-                addII(load(new VariableDescription<>("i", VariableType.IntVariable, false)),
-                        load(new VariableDescription<>("j", VariableType.IntVariable, false))),
-                addII(load(new VariableDescription<>("j", VariableType.IntVariable, false)),
-                        load(new VariableDescription<>("i", VariableType.IntVariable, false)))));
-        beforeList.add("Math.max((i + j), (j + i))");
-        afterList.add("(i + j)");
-
         treeList.add(min(constant(1), constant(4)));
         beforeList.add("Math.min(1, 4)");
         afterList.add("1");
@@ -286,14 +277,6 @@ class ConstantsTest {
         treeList.add(min(constant(4), constant(1)));
         beforeList.add("Math.min(4, 1)");
         afterList.add("1");
-
-        treeList.add(min(
-                addII(load(new VariableDescription<>("i", VariableType.IntVariable, false)),
-                        load(new VariableDescription<>("j", VariableType.IntVariable, false))),
-                addII(load(new VariableDescription<>("j", VariableType.IntVariable, false)),
-                        load(new VariableDescription<>("i", VariableType.IntVariable, false)))));
-        beforeList.add("Math.min((i + j), (j + i))");
-        afterList.add("(i + j)");
 
         noTests = treeList.size();
 

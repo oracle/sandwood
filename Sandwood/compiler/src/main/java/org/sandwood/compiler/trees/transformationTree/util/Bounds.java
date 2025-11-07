@@ -26,7 +26,6 @@ import java.util.Stack;
 
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
-import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.NumberVariable;
@@ -59,13 +58,90 @@ public class Bounds {
         }
     }
 
+    private static class UsedMinMaxTracker {
+        private List<Set<VariableDescription<?>>> usedMins;
+        private List<Set<VariableDescription<?>>> usedMaxs;
+
+        private int index;
+        private int size;
+
+        public UsedMinMaxTracker() {
+            usedMins = new ArrayList<>();
+            usedMins.add(new HashSet<>());
+
+            usedMaxs = new ArrayList<>();
+            usedMaxs.add(new HashSet<>());
+
+            index = 0;
+            size = 1;
+        }
+
+        public void clear() {
+            usedMins.get(index).clear();
+            usedMaxs.get(index).clear();
+        }
+
+        public void enterSubTree() {
+            index++;
+            if(index < size)
+                clear();
+            else {
+                usedMins.add(new HashSet<>());
+                usedMaxs.add(new HashSet<>());
+                size++;
+            }
+        }
+
+        public void leaveSubTree() {
+            usedMins.get(index - 1).addAll(usedMins.get(index));
+            usedMaxs.get(index - 1).addAll(usedMaxs.get(index));
+            index--;
+        }
+
+        public void enterDerivedTree() {
+            enterSubTree();
+        }
+
+        /**
+         * Derived trees are used for determining information about the subtrees, but the variables minimised when
+         * transforming them should not be copied back.
+         */
+        public void leaveDerivedTree() {
+            index--;
+        }
+
+        public Set<VariableDescription<?>> getUsedMins() {
+            return usedMins.get(index);
+        }
+
+        public Set<VariableDescription<?>> getUsedMaxs() {
+            return usedMaxs.get(index);
+        }
+
+        public void addMin(VariableDescription<?> d) {
+            usedMins.get(index).add(d);
+        }
+
+        public void addMax(VariableDescription<?> d) {
+            usedMins.get(index).add(d);
+        }
+    }
+
     // TODO constrain VariableDescription to types that extend number variable
     private final Map<VariableDescription<?>, Map<TreeID, Stack<MinMax>>> bounds = new HashMap<>();
     private final VariableTracking vars;
     public final IntGCD gcds;
-    private String filter = null;
+    private Stack<Set<VariableDescription<?>>> activeMin;
+    private Stack<Set<VariableDescription<?>>> activeMax;
+    private UsedMinMaxTracker used = new UsedMinMaxTracker();
 
     public Bounds(ArgDesc<?>[] args, KnownValuesTrans knownValues, TransTree<?> tree) {
+        activeMin = new Stack<>();
+        activeMin.push(new HashSet<>());
+
+        activeMax = new Stack<>();
+        activeMax.push(new HashSet<>());
+
         Map<ArgDesc<?>, TransTreeReturn<IntVariable>> minTrees = new HashMap<>();
         Map<ArgDesc<?>, TransTreeReturn<IntVariable>> maxTrees = new HashMap<>();
         Set<TransTree<?>> additionalTrees = new HashSet<>();
@@ -164,22 +240,12 @@ public class Bounds {
         return new PriorityQueue<>(readVars).poll();
     }
 
-    public void setFilter(String filter) {
-        this.filter = filter;
-    }
-
-    public String getFilter() {
-        return filter;
-    }
-
-    public void clearFilter() {
-        filter = null;
-    }
-
     public <X extends NumberVariable<X>> TransTreeReturn<?> getMin(TransLoad<?> tree) {
         VariableDescription<?> desc = tree.varDesc;
-        if(filter != null && !desc.name.getName().equals(filter))
+        if(activeMin.peek().contains(desc))
             return null;
+
+        used.addMin(desc);
 
         Map<TreeID, Stack<MinMax>> m = bounds.get(desc);
         if(m == null) {
@@ -198,8 +264,7 @@ public class Bounds {
 
         // Find the first element;
         TransTreeReturn<X> t = getMin(desc, m.get(tags.poll()));
-        if(t == null)// TODO use recursion here to reach forward and find out what the min and max
-            // values are going to be.
+        if(t == null)
             return null;
 
         // If there are more elements merge them in.
@@ -219,8 +284,7 @@ public class Bounds {
                     return null;
 
                 t = getMin(desc, s);
-                if(t == null)// TODO use recursion here to reach forward and find out what the min and max
-                    // values are going to be.
+                if(t == null)
                     return null;
 
                 // Check for duplicates;
@@ -270,19 +334,18 @@ public class Bounds {
     // TODO add check to ensure that all values used by the bounds are in scope.
     public <X extends NumberVariable<X>> TransTreeReturn<?> getMax(TransLoad<?> tree) {
         VariableDescription<?> desc = tree.varDesc;
-        VariableName name = desc.name;
-        if(filter != null && !name.getName().equals(filter))
+        if(activeMax.peek().contains(desc))
             return null;
+
+        used.addMax(desc);
 
         Map<TreeID, Stack<MinMax>> m = bounds.get(desc);
         if(m == null)
             return null;
 
         ScopedVarSet v = vars.readVars(tree);
-        if(v == null) {
-            System.out.println("Unable to recover tags for known bound: " + tree + " id: " + tree.id);
+        if(v == null)
             return null;
-        }
 
         PriorityQueue<TreeID> tags = new PriorityQueue<>(v.getVarDef(desc).writeLocations());
 
@@ -300,6 +363,7 @@ public class Bounds {
         Stack<MinMax> s = m.get(tag);
         if(s == null)
             return null;
+
         TransTreeReturn<X> t = (TransTreeReturn<X>) s.peek().max;
         if(t == null)
             return null;
@@ -321,9 +385,9 @@ public class Bounds {
                     return null;
 
                 t = (TransTreeReturn<X>) s.peek().max;
-                if(t == null)// TODO use recursion here to reach forward and find out what the min and max
-                    // values are going to be.
+                if(t == null)
                     return null;
+
                 // Check for duplicates;
                 for(TransTreeReturn<X> t2:trees) {
                     if(t.equivalent(t2)) {
@@ -361,8 +425,11 @@ public class Bounds {
             Stack<MinMax> s = m.get(tag);
             if(s != null) {
                 s.pop();
-                if(s.isEmpty())
-                    bounds.remove(desc);
+                if(s.isEmpty()) {
+                    m.remove(tag);
+                    if(m.isEmpty())
+                        bounds.remove(desc);
+                }
             }
         }
     }
@@ -442,5 +509,27 @@ public class Bounds {
                     toProcess.add((TransTreeReturn<?>) c);
             }
         }
+    }
+
+    public void enterSubTree() {
+        used.enterSubTree();
+    }
+
+    public void leaveSubTree() {
+        used.leaveSubTree();
+    }
+
+    public void enterDerivedTree() {
+        activeMin.push(new HashSet<>(activeMin.peek()));
+        activeMin.peek().addAll(used.getUsedMins());
+        activeMax.push(new HashSet<>(activeMax.peek()));
+        activeMax.peek().addAll(used.getUsedMaxs());
+        used.enterDerivedTree();
+    }
+
+    public void leaveDerivedTree() {
+        activeMin.pop();
+        activeMax.pop();
+        used.leaveDerivedTree();
     }
 }

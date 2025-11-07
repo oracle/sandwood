@@ -1600,7 +1600,7 @@ final class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// Substituted "index$j$13" with its value "(j$var115 - 1)".
 			if(((1 <= index$j$13) && !(index$j$13 == j$var115)))
 				// variable marginalization
-				cv$numStates = Math.max(cv$numStates, noStates);
+				cv$numStates = noStates;
 		}
 		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			// Exploring all the possible distribution values for random variable 122 creating
@@ -1713,66 +1713,39 @@ final class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						// it is added to the index probabilities.
 						// 
 						// Constructing a random variable input for use later.
-						double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample95Value23) + ((cv$valuePos < noStates)?Math.log(m[index$sample95$22][cv$valuePos]):Double.NEGATIVE_INFINITY));
+						double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample95Value23) + Math.log(m[index$sample95$22][cv$valuePos]));
 						
 						// Substituted "j$var115" with its value "1".
 						// 
 						// Substituted "j$var149" with its value "1".
-						if((1 < length$eventsMeasured[i$var104])) {
+						if((1 < length$eventsMeasured[i$var104]))
 							// Processing sample task 159 of consumer random variable null.
-							// Set an accumulator to sum the probabilities for each possible configuration of
-							// inputs.
-							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-							
+							// 
+							// A check to ensure rounding of floating point values can never result in a negative
+							// value.
+							// 
+							// Recorded the probability of reaching sample task 159 with the current configuration.
+							// 
 							// Set an accumulator to record the consumer distributions not seen. Initially set
 							// to 1 as seen values will be deducted from this value.
-							double cv$consumerDistributionProbabilityAccumulator = 1.0;
-							
-							// Enumerating the possible arguments for the variable Categorical 154 which is consuming
-							// the output of Sample task 126.
+							// 
+							// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+							// Declaration comment was:
+							// Set an accumulator to sum the probabilities for each possible configuration of
+							// inputs.
+							// 
+							// Substituted "i$var136" with its value "i$var104".
+							// 
+							// Substituted "j$var149" with its value "1".
+							// 
+							// Constructing a random variable input for use later.
 							// 
 							// Processing random variable 154.
 							// 
 							// Looking for a path between Sample 126 and consumer Categorical 154.
 							// 
 							// Value of the variable at this index
-							if((cv$valuePos < noStates)) {
-								// Substituted "i$var136" with its value "i$var104".
-								// 
-								// Substituted "j$var149" with its value "1".
-								// 
-								// Constructing a random variable input for use later.
-								// 
-								// Processing random variable 154.
-								// 
-								// Looking for a path between Sample 126 and consumer Categorical 154.
-								// 
-								// Value of the variable at this index
-								cv$accumulatedConsumerProbabilities = (((1.0 <= events[i$var104][1]) && (events[i$var104][1] < (noEvents + 1)))?Math.log(bias[cv$valuePos][(events[i$var104][1] - 1)]):Double.NEGATIVE_INFINITY);
-								
-								// Recorded the probability of reaching sample task 159 with the current configuration.
-								// 
-								// Set an accumulator to record the consumer distributions not seen. Initially set
-								// to 1 as seen values will be deducted from this value.
-								cv$consumerDistributionProbabilityAccumulator = 0.0;
-							}
-							
-							// A check to ensure rounding of floating point values can never result in a negative
-							// value.
-							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-							
-							// Multiply (log space add) in the probability of the sample task to the overall probability
-							// for this configuration of the source random variable.
-							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-							else {
-								// If the second value is -infinity.
-								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-								else
-									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-							}
-						}
+							cv$accumulatedProbabilities = ((((1.0 <= events[i$var104][1]) && (events[i$var104][1] < (noEvents + 1)))?Math.log(bias[cv$valuePos][(events[i$var104][1] - 1)]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 						
 						// Add the values for the source and any standard consumers for this configuration
 						// of arguments to the source.
@@ -1834,7 +1807,7 @@ final class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					// it is added to the index probabilities.
 					// 
 					// Constructing a random variable input for use later.
-					double cv$accumulatedProbabilities = (((((1.0 <= events[i$var104][j$var115]) && (events[i$var104][j$var115] < (noEvents + 1)))?Math.log(bias[index$sample126$31][(events[i$var104][j$var115] - 1)]):Double.NEGATIVE_INFINITY) + Math.log(cv$probabilitySample126Value32)) + ((cv$valuePos < noStates)?Math.log(m[index$sample126$31][cv$valuePos]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (((((1.0 <= events[i$var104][j$var115]) && (events[i$var104][j$var115] < (noEvents + 1)))?Math.log(bias[index$sample126$31][(events[i$var104][j$var115] - 1)]):Double.NEGATIVE_INFINITY) + Math.log(cv$probabilitySample126Value32)) + Math.log(m[index$sample126$31][cv$valuePos]));
 					
 					// Add the values for the source and any standard consumers for this configuration
 					// of arguments to the source.
