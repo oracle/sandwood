@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -72,7 +72,7 @@ public class Max<A extends NumberVariable<A>> extends NumberProducingDataflowTas
 
     @Override
     public IRTreeReturn<A> getMin(CompilationContext compilationCtx) {
-        return IRTree.min(a.getMin(compilationCtx), b.getMin(compilationCtx));
+        return IRTree.max(a.getMin(compilationCtx), b.getMin(compilationCtx));
     }
 
     /* Factory methods for construction */
