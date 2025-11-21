@@ -18,7 +18,6 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVari
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.traces.guards.BackTraceInfo;
-import org.sandwood.compiler.trees.irTree.IRBinOp;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
@@ -48,7 +47,7 @@ public class Or extends ProducingDataflowTaskImplementation<BooleanVariable> {
     }
 
     @Override
-    public IRBinOp<BooleanVariable, BooleanVariable, BooleanVariable> getForwardIRinternal(
+    public IRTreeReturn<BooleanVariable> getForwardIRinternal(
             CompilationContext compilationCtx) {
         return IRTree.or(left.getForwardIR(compilationCtx), right.getForwardIR(compilationCtx));
     }
