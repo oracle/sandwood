@@ -8,7 +8,7 @@
 
 package org.sandwood.compiler.compilation.inference.metropolisHastings;
 
-import static org.sandwood.compiler.trees.irTree.IRTree.constant;
+import static org.sandwood.compiler.trees.irTree.IRTree.*;
 import static org.sandwood.compiler.trees.irTree.IRTree.functionCallReturn;
 import static org.sandwood.compiler.trees.irTree.IRTree.initializeVariable;
 import static org.sandwood.compiler.trees.irTree.IRTree.lessThan;
@@ -42,7 +42,7 @@ import org.sandwood.compiler.trees.irTree.IRTreeVoid;
  * of 3. If the offset is not 0 the sample is drawn from a Gaussian with mean 0 and variance 0.001 times the current
  * sample value. The special case for 0 is required to stop the offset being deterministically 0.
  * 
- * The parameters for the gaussian for non-zero values are picked to give average offsets that are %5 of the size of the
+ * The parameters for the Gaussian for non-zero values are picked to give average offsets that are %5 of the size of the
  * current value.
  */
 
@@ -55,20 +55,20 @@ public class MetropolisHastingsDoubleFunctions<B extends RandomVariable<DoubleVa
                 true);
 
         // Calculate the variance based on the current value.
-        double fractionOfCurrentValue = 0.1;
+        double fractionOfCurrentValue = 40;
         IRTreeReturn<DoubleVariable> proposedVar = multiplyDD(
-                multiplyDD(load(funcData.originalValueName), load(funcData.originalValueName)),
-                multiplyDD(constant(fractionOfCurrentValue), constant(fractionOfCurrentValue)));
+                conditionalAssignment(lessThan(load(funcData.originalValueName), constant(0)),
+                        negate(load(funcData.originalValueName)), load(funcData.originalValueName))
+                        , constant(fractionOfCurrentValue));
         funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(varName, proposedVar, "Calculate a proposed variance."));
 
         // Ensure it is not too small
-        IRTreeReturn<BooleanVariable> guard = lessThan(load(varName),
-                multiplyDD(constant(fractionOfCurrentValue), constant(fractionOfCurrentValue)));
-        IRTreeVoid ifStmt = store(varName,
-                multiplyDD(constant(fractionOfCurrentValue), constant(fractionOfCurrentValue)), Tree.NoComment);
+        double minVariance = 0.01;
+        IRTreeReturn<BooleanVariable> guard = lessThan(load(varName), constant(minVariance));
+        IRTreeVoid ifStmt = store(varName, constant(minVariance), Tree.NoComment);
         funcData.compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.ifElse(guard, ifStmt,
-                "Ensure the variance is at least " + removeRounding(fractionOfCurrentValue * fractionOfCurrentValue)));
+                "Ensure the variance is at least " + minVariance));
 
         // Sample a Gaussian distribution based on it to generate the new proposed value.
         funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
@@ -76,12 +76,6 @@ public class MetropolisHastingsDoubleFunctions<B extends RandomVariable<DoubleVa
                         functionCallReturn(FunctionType.SAMPLE, VariableType.DoubleVariable, VariableType.Gaussian,
                                 load(funcData.originalValueName), load(varName)),
                         "The proposed new value for the sample"));
-    }
-
-    private double removeRounding(double d) {
-        long m = 100000000;
-        d *= m;
-        return (double) ((long) d) / m;
     }
 
     /**

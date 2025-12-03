@@ -27,9 +27,9 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU<State, 
 	private final void inferSample7() {
 		state.constrainedFlag$sample7 = false;
 		double cv$originalValue = state.bias;
-		double cv$var = ((state.bias * state.bias) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((state.bias < 0)?(-state.bias):state.bias) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + state.bias);
 		state.constrainedFlag$sample7 = true;
 		double cv$originalProbability = ((((0.0 <= state.bias) && (state.bias <= 1.0))?Math.log((state.flip?state.bias:(1.0 - state.bias))):Double.NEGATIVE_INFINITY) + (((0.0 <= state.bias) && (state.bias <= 1.0))?(DistributionSampling.logProbabilityGaussian((state.bias - 0.5)) + 0.9599163336956222):Double.NEGATIVE_INFINITY));

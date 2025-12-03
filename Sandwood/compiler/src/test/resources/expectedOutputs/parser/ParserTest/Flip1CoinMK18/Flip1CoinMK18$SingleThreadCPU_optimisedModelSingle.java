@@ -61,11 +61,11 @@ final class Flip1CoinMK18$SingleThreadCPU extends CoreModelSingleThreadCPU<State
 		// Calculate a proposed variance.
 		// 
 						// The original value of the sample
-		double cv$var = ((state.q * state.q) * 0.010000000000000002);
+		double cv$var = (((state.q < 0)?(-state.q):state.q) * 40.0);
 		
 		// Ensure the variance is at least 0.01
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		
 		// The proposed new value for the sample
 		// 
@@ -390,11 +390,11 @@ final class Flip1CoinMK18$SingleThreadCPU extends CoreModelSingleThreadCPU<State
 		// Calculate a proposed variance.
 		// 
 						// The original value of the sample
-		double cv$var = ((state.t * state.t) * 0.010000000000000002);
+		double cv$var = (((state.t < 0)?(-state.t):state.t) * 40.0);
 		
 		// Ensure the variance is at least 0.01
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		
 		// The proposed new value for the sample
 		// 

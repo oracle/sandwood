@@ -28,9 +28,9 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU<St
 		state.constrainedFlag$sample5 = false;
 		double cv$originalValue = state.prior;
 		double cv$originalProbability;
-		double cv$var = ((state.prior * state.prior) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((state.prior < 0)?(-state.prior):state.prior) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + state.prior);
 		{
 			double cv$accumulatedProbabilities = (((0.0 <= state.prior) && (state.prior < 1.0))?0.0:Double.NEGATIVE_INFINITY);

@@ -92,9 +92,9 @@ double[] cv$distributionAccumulator$var55;
 		state.constrainedFlag$sample113[var111] = false;
 		double cv$originalValue = state.pageFaultsMean[var111];
 		double cv$originalProbability;
-		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((cv$originalValue - 814.0) / 579.2667779184303)) - 6.361763127793193);
@@ -265,9 +265,9 @@ double[] cv$distributionAccumulator$var55;
 		state.constrainedFlag$sample130[var128] = false;
 		double cv$originalValue = state.cpuVar[var128];
 		double cv$originalProbability;
-		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityInverseGamma(cv$originalValue, 5.0, 0.5);
@@ -430,9 +430,9 @@ double[] cv$distributionAccumulator$var55;
 		state.constrainedFlag$sample147[var145] = false;
 		double cv$originalValue = state.memVar[var145];
 		double cv$originalProbability;
-		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityInverseGamma(cv$originalValue, 5.0, 0.5);
@@ -595,9 +595,9 @@ double[] cv$distributionAccumulator$var55;
 		state.constrainedFlag$sample164[var162] = false;
 		double cv$originalValue = state.pageFaultsVar[var162];
 		double cv$originalProbability;
-		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityInverseGamma(cv$originalValue, 5.0, 0.5);
@@ -1358,9 +1358,9 @@ double[] cv$distributionAccumulator$var55;
 		state.constrainedFlag$sample77[var75] = false;
 		double cv$originalValue = state.cpuMean[var75];
 		double cv$originalProbability;
-		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((cv$originalValue - 16.0) / 2.932575659723036)) - 1.075881101629731);
@@ -1531,9 +1531,9 @@ double[] cv$distributionAccumulator$var55;
 		state.constrainedFlag$sample95[var93] = false;
 		double cv$originalValue = state.memMean[var93];
 		double cv$originalProbability;
-		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian((cv$originalValue - 94.0));

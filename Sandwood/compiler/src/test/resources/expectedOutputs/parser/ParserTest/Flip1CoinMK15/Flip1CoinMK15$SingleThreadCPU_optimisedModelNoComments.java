@@ -35,9 +35,9 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU<State
 		state.constrainedFlag$sample8 = false;
 		double cv$originalValue = state.b;
 		double cv$originalProbability;
-		double cv$var = ((state.b * state.b) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((state.b < 0)?(-state.b):state.b) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + state.b);
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(state.b, 1.0, 1.0);

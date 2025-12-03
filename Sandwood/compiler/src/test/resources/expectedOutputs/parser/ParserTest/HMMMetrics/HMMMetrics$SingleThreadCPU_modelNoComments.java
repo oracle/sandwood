@@ -131,9 +131,9 @@ double[] cv$distributionAccumulator$var55;
 			}
 			double cv$originalValue = state.pageFaultsMean[var111];
 			double cv$originalProbability = 0.0;
-			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
-			if((cv$var < (0.1 * 0.1)))
-				cv$var = (0.1 * 0.1);
+			double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
+			if((cv$var < 0.01))
+				cv$var = 0.01;
 			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
@@ -782,9 +782,9 @@ double[] cv$distributionAccumulator$var55;
 			}
 			double cv$originalValue = state.cpuVar[var128];
 			double cv$originalProbability = 0.0;
-			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
-			if((cv$var < (0.1 * 0.1)))
-				cv$var = (0.1 * 0.1);
+			double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
+			if((cv$var < 0.01))
+				cv$var = 0.01;
 			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
@@ -1433,9 +1433,9 @@ double[] cv$distributionAccumulator$var55;
 			}
 			double cv$originalValue = state.memVar[var145];
 			double cv$originalProbability = 0.0;
-			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
-			if((cv$var < (0.1 * 0.1)))
-				cv$var = (0.1 * 0.1);
+			double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
+			if((cv$var < 0.01))
+				cv$var = 0.01;
 			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
@@ -2084,9 +2084,9 @@ double[] cv$distributionAccumulator$var55;
 			}
 			double cv$originalValue = state.pageFaultsVar[var162];
 			double cv$originalProbability = 0.0;
-			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
-			if((cv$var < (0.1 * 0.1)))
-				cv$var = (0.1 * 0.1);
+			double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
+			if((cv$var < 0.01))
+				cv$var = 0.01;
 			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
@@ -9121,9 +9121,9 @@ double[] cv$distributionAccumulator$var55;
 			}
 			double cv$originalValue = state.cpuMean[var75];
 			double cv$originalProbability = 0.0;
-			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
-			if((cv$var < (0.1 * 0.1)))
-				cv$var = (0.1 * 0.1);
+			double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
+			if((cv$var < 0.01))
+				cv$var = 0.01;
 			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
@@ -9772,9 +9772,9 @@ double[] cv$distributionAccumulator$var55;
 			}
 			double cv$originalValue = state.memMean[var93];
 			double cv$originalProbability = 0.0;
-			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
-			if((cv$var < (0.1 * 0.1)))
-				cv$var = (0.1 * 0.1);
+			double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
+			if((cv$var < 0.01))
+				cv$var = 0.01;
 			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {

@@ -27,9 +27,9 @@ final class NullModelMK3$MultiThreadCPU extends CoreModelMultiThreadCPU<State, S
 	private final void inferSample10() {
 		state.constrainedFlag$sample10 = false;
 		double cv$originalValue = state.bias;
-		double cv$var = ((state.bias * state.bias) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((state.bias < 0)?(-state.bias):state.bias) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + state.bias);
 		state.constrainedFlag$sample10 = true;
 		double cv$originalProbability = (DistributionSampling.logProbabilityBinomial(state.positiveCount, state.bias, state.observedSampleCount) + (((state.min <= state.bias) && (state.bias < 1.0))?(-Math.log((1.0 - state.min))):Double.NEGATIVE_INFINITY));

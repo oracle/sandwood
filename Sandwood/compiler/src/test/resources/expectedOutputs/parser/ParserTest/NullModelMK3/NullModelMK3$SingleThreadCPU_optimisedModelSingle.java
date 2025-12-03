@@ -39,11 +39,11 @@ final class NullModelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU<State,
 		// Calculate a proposed variance.
 		// 
 						// The original value of the sample
-		double cv$var = ((state.bias * state.bias) * 0.010000000000000002);
+		double cv$var = (((state.bias < 0)?(-state.bias):state.bias) * 40.0);
 		
 		// Ensure the variance is at least 0.01
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		
 		// The proposed new value for the sample
 		// 

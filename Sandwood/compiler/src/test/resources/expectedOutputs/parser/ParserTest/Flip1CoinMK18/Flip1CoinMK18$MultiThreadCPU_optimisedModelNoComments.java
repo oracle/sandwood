@@ -44,9 +44,9 @@ final class Flip1CoinMK18$MultiThreadCPU extends CoreModelMultiThreadCPU<State, 
 		state.constrainedFlag$sample11 = false;
 		double cv$originalValue = state.q;
 		double cv$originalProbability;
-		double cv$var = ((state.q * state.q) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((state.q < 0)?(-state.q):state.q) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + state.q);
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(state.q, 1.0, 1.0);
@@ -142,9 +142,9 @@ final class Flip1CoinMK18$MultiThreadCPU extends CoreModelMultiThreadCPU<State, 
 		state.constrainedFlag$sample17 = false;
 		double cv$originalValue = state.t;
 		double cv$originalProbability;
-		double cv$var = ((state.t * state.t) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((state.t < 0)?(-state.t):state.t) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + state.t);
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(state.t, 1.0, 1.0);

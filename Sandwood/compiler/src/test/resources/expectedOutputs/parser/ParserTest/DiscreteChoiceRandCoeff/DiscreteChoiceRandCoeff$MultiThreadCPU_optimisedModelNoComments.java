@@ -126,9 +126,9 @@ boolean[] guard$sample21categorical102$global;
 		state.constrainedFlag$sample21[var20] = false;
 		double cv$originalValue = state.ut[var20];
 		double cv$originalProbability;
-		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 		{
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
@@ -273,9 +273,9 @@ boolean[] guard$sample21categorical102$global;
 		state.constrainedFlag$sample47[var46] = false;
 		double cv$originalValue = state.beta[var46];
 		double cv$originalProbability;
-		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		{
 			double cv$accumulatedProbabilities = ((0.0 < state.sigma)?(DistributionSampling.logProbabilityGaussian(((cv$originalValue - state.b) / Math.sqrt(state.sigma))) - (Math.log(state.sigma) * 0.5)):Double.NEGATIVE_INFINITY);

@@ -49,11 +49,11 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU<S
 		// Calculate a proposed variance.
 		// 
 						// The original value of the sample
-		double cv$var = ((state.b1 * state.b1) * 0.010000000000000002);
+		double cv$var = (((state.b1 < 0)?(-state.b1):state.b1) * 40.0);
 		
 		// Ensure the variance is at least 0.01
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		
 		// The proposed new value for the sample
 		// 
@@ -171,11 +171,11 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU<S
 		// Calculate a proposed variance.
 		// 
 						// The original value of the sample
-		double cv$var = ((state.b0 * state.b0) * 0.010000000000000002);
+		double cv$var = (((state.b0 < 0)?(-state.b0):state.b0) * 40.0);
 		
 		// Ensure the variance is at least 0.01
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		
 		// The proposed new value for the sample
 		// 

@@ -39,9 +39,9 @@ double[] cv$var4$stateProbabilityGlobal;
 	private final void inferSample21() {
 		state.constrainedFlag$sample21 = false;
 		double cv$originalValue = state.var19;
-		double cv$var = ((state.var19 * state.var19) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((state.var19 < 0)?(-state.var19):state.var19) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + state.var19);
 		state.constrainedFlag$sample21 = true;
 		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(state.value, state.var19, 1.0) + (((0.0 <= state.var19) && (state.var19 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));

@@ -75,9 +75,9 @@ final class AnonymousSample$SingleThreadCPU extends CoreModelSingleThreadCPU<Sta
 		state.constrainedFlag$sample9 = false;
 		double cv$originalValue = state.priorSigma2;
 		double cv$originalProbability;
-		double cv$var = ((state.priorSigma2 * state.priorSigma2) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((state.priorSigma2 < 0)?(-state.priorSigma2):state.priorSigma2) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + state.priorSigma2);
 		{
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((state.priorSigma2 - 10000.0) / 30.0)) - 3.4011973816621555);

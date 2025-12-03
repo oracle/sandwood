@@ -169,11 +169,11 @@ final class Flip1CoinMK12b$SingleThreadCPU extends CoreModelSingleThreadCPU<Stat
 			double cv$originalProbability = 0.0;
 			
 			// Calculate a proposed variance.
-			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
+			double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
 			
 			// Ensure the variance is at least 0.01
-			if((cv$var < (0.1 * 0.1)))
-				cv$var = (0.1 * 0.1);
+			if((cv$var < 0.01))
+				cv$var = 0.01;
 			
 			// The proposed new value for the sample
 			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
@@ -385,11 +385,11 @@ final class Flip1CoinMK12b$SingleThreadCPU extends CoreModelSingleThreadCPU<Stat
 			double cv$originalProbability = 0.0;
 			
 			// Calculate a proposed variance.
-			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
+			double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
 			
 			// Ensure the variance is at least 0.01
-			if((cv$var < (0.1 * 0.1)))
-				cv$var = (0.1 * 0.1);
+			if((cv$var < 0.01))
+				cv$var = 0.01;
 			
 			// The proposed new value for the sample
 			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
