@@ -145,9 +145,9 @@ final class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	private final void sample10() {
 		double cv$originalValue = bias;
-		double cv$var = ((bias * bias) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((bias < 0)?(-bias):bias) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + bias);
 		double cv$originalProbability = (DistributionSampling.logProbabilityBinomial(positiveCount, bias, observedSampleCount) + (((min <= bias) && (bias < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY));
 		bias = cv$proposedValue;

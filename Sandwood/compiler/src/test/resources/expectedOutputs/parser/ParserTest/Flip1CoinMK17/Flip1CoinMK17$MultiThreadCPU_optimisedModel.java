@@ -304,11 +304,11 @@ final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Calculate a proposed variance.
 		// 
 		// The original value of the sample
-		double cv$var = ((bias * bias) * 0.010000000000000002);
+		double cv$var = (((bias < 0)?(-bias):bias) * 40.0);
 		
 		// Ensure the variance is at least 0.01
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		
 		// The proposed new value for the sample
 		// 

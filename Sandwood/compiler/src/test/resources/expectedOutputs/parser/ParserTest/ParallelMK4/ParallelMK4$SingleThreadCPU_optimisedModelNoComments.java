@@ -162,9 +162,9 @@ final class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	private final void sample61(int i, int j) {
 		double cv$originalValue = indirection1[i][j];
-		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 		double cv$originalProbability = ((((0.0 <= generated[i]) && (generated[i] < 10))?Math.log(indirection2[i][generated[i]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$originalValue) && (cv$originalValue < 1.0))?0.0:Double.NEGATIVE_INFINITY));
 		indirection1[i][j] = cv$proposedValue;

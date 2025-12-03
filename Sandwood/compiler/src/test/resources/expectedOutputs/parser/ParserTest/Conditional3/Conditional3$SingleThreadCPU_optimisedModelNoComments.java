@@ -187,9 +187,9 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 
 	private final void sample16() {
 		double cv$originalValue = var14;
-		double cv$var = ((var14 * var14) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((var14 < 0)?(-var14):var14) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + var14);
 		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(value, var14, 1.0) + (((0.0 <= var14) && (var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
 		var14 = cv$proposedValue;

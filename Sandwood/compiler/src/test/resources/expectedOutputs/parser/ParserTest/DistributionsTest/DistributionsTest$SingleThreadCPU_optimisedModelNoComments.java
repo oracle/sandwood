@@ -185,9 +185,9 @@ final class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void sample11() {
 		double cv$originalValue = b1;
 		double cv$originalProbability;
-		double cv$var = ((b1 * b1) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((b1 < 0)?(-b1):b1) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + b1);
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityHalfCauchy(b1, 1.0, 5.0);
@@ -207,9 +207,9 @@ final class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void sample7() {
 		double cv$originalValue = b0;
 		double cv$originalProbability;
-		double cv$var = ((b0 * b0) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((b0 < 0)?(-b0):b0) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + b0);
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCauchy(b0, 0.0, 2.0);

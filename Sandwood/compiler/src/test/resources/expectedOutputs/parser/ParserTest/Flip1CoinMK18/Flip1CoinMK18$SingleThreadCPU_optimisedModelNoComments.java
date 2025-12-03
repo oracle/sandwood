@@ -233,9 +233,9 @@ final class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private final void sample11() {
 		double cv$originalValue = q;
 		double cv$originalProbability;
-		double cv$var = ((q * q) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((q < 0)?(-q):q) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + q);
 		double cv$proposedProbability;
 		{
@@ -314,9 +314,9 @@ final class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private final void sample17() {
 		double cv$originalValue = t;
 		double cv$originalProbability;
-		double cv$var = ((t * t) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((t < 0)?(-t):t) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + t);
 		double cv$proposedProbability;
 		{

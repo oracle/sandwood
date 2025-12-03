@@ -169,9 +169,9 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private final void sample8() {
 		double cv$originalValue = b;
 		double cv$originalProbability;
-		double cv$var = ((b * b) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((b < 0)?(-b):b) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + b);
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(b, 1.0, 1.0);

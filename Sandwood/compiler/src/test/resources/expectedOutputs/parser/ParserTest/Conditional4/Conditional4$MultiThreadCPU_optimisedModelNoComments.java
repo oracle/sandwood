@@ -191,9 +191,9 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	private final void sample21() {
 		double cv$originalValue = var19;
-		double cv$var = ((var19 * var19) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((var19 < 0)?(-var19):var19) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + var19);
 		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(value, var19, 1.0) + (((0.0 <= var19) && (var19 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
 		var19 = cv$proposedValue;

@@ -144,9 +144,9 @@ final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.intern
 	private final void sample5() {
 		double cv$originalValue = prior;
 		double cv$originalProbability;
-		double cv$var = ((prior * prior) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((prior < 0)?(-prior):prior) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + prior);
 		{
 			double cv$accumulatedProbabilities = (((0.0 <= prior) && (prior < 1.0))?0.0:Double.NEGATIVE_INFINITY);

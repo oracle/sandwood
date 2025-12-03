@@ -554,11 +554,11 @@ final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Calculate a proposed variance.
 		// 
 		// The original value of the sample
-		double cv$var = ((q * q) * 0.010000000000000002);
+		double cv$var = (((q < 0)?(-q):q) * 40.0);
 		
 		// Ensure the variance is at least 0.01
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		
 		// The proposed new value for the sample
 		// 
@@ -857,11 +857,11 @@ final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Calculate a proposed variance.
 		// 
 		// The original value of the sample
-		double cv$var = ((t * t) * 0.010000000000000002);
+		double cv$var = (((t < 0)?(-t):t) * 40.0);
 		
 		// Ensure the variance is at least 0.01
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		
 		// The proposed new value for the sample
 		// 

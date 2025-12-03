@@ -455,11 +455,11 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 		// Calculate a proposed variance.
 		// 
 		// The original value of the sample
-		double cv$var = ((b1 * b1) * 0.010000000000000002);
+		double cv$var = (((b1 < 0)?(-b1):b1) * 40.0);
 		
 		// Ensure the variance is at least 0.01
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		
 		// The proposed new value for the sample
 		// 
@@ -572,11 +572,11 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 		// Calculate a proposed variance.
 		// 
 		// The original value of the sample
-		double cv$var = ((b0 * b0) * 0.010000000000000002);
+		double cv$var = (((b0 < 0)?(-b0):b0) * 40.0);
 		
 		// Ensure the variance is at least 0.01
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		
 		// The proposed new value for the sample
 		// 

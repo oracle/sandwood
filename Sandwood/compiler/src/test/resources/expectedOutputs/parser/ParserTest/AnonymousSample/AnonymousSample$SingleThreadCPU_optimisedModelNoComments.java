@@ -319,9 +319,9 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 	private final void sample9() {
 		double cv$originalValue = priorSigma2;
 		double cv$originalProbability;
-		double cv$var = ((priorSigma2 * priorSigma2) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
+		double cv$var = (((priorSigma2 < 0)?(-priorSigma2):priorSigma2) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + priorSigma2);
 		{
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((priorSigma2 - 10000.0) / 30.0)) - 3.4011973816621555);
