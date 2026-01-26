@@ -11,6 +11,7 @@ final class Flip2CoinsMK8$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double b;
 	private double[] bias;
 	private int coins;
+	private boolean[] constrainedFlag$sample17;
 	private boolean fixedFlag$sample17 = false;
 	private boolean fixedProbFlag$sample17 = false;
 	private boolean fixedProbFlag$sample46 = false;
@@ -299,7 +300,7 @@ final class Flip2CoinsMK8$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// Store the value of the function call, so the function call is only made once.
 					// 
 					// The sample value to calculate the probability of generating
-					cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[j][var45]?var34:(1.0 - var34))));
+					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var34) && (var34 <= 1.0))?Math.log((flips[j][var45]?var34:(1.0 - var34))):Double.NEGATIVE_INFINITY));
 				}
 			}
 			
@@ -374,6 +375,8 @@ final class Flip2CoinsMK8$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 17 drawn from Beta 16. Inference was performed using Metropolis-Hastings.
 	private final void sample17(int i, int threadID$cv$i, Rng RNG$) {
+		constrainedFlag$sample17[i] = false;
+		
 		// The original value of the sample
 		double cv$originalValue = bias[i];
 		
@@ -402,6 +405,9 @@ final class Flip2CoinsMK8$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// 
 			// Substituted "j" with its value "i".
 			for(int var45 = 0; var45 < length$flipsMeasured[i]; var45 += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample17[i] = true;
+				
 				// Constructing a random variable input for use later.
 				// 
 				// Set the current value to the current state of the tree.
@@ -421,7 +427,7 @@ final class Flip2CoinsMK8$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// inputs.
 				// 
 				// Substituted "j" with its value "i".
-				cv$accumulatedProbabilities = (Math.log((flips[i][var45]?var34:(1.0 - var34))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var34) && (var34 <= 1.0))?Math.log((flips[i][var45]?var34:(1.0 - var34))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
@@ -433,60 +439,66 @@ final class Flip2CoinsMK8$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		bias[i] = cv$proposedValue;
-		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, a, b);
-		
-		// Processing sample task 46 of consumer random variable bernoulli.
-		// 
-		// Substituted "j" with its value "i".
-		for(int var45 = 0; var45 < length$flipsMeasured[i]; var45 += 1) {
-			// Constructing a random variable input for use later.
-			double var34 = (1 - cv$proposedValue);
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(constrainedFlag$sample17[i]) {
+			// Guards to ensure that bias is only updated when there is a valid path.
+			bias[i] = cv$proposedValue;
 			
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 46 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-			// Declaration comment was:
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, a, b);
+			
+			// Processing sample task 46 of consumer random variable bernoulli.
 			// 
 			// Substituted "j" with its value "i".
-			cv$accumulatedProbabilities = (Math.log((flips[i][var45]?var34:(1.0 - var34))) + cv$accumulatedProbabilities);
+			for(int var45 = 0; var45 < length$flipsMeasured[i]; var45 += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample17[i] = true;
+				
+				// Constructing a random variable input for use later.
+				double var34 = (1 - cv$proposedValue);
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 46 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				// 
+				// Substituted "j" with its value "i".
+				cv$accumulatedProbabilities = ((((0.0 <= var34) && (var34 <= 1.0))?Math.log((flips[i][var45]?var34:(1.0 - var34))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			
+			// The probability ration for the proposed value and the current value.
+			// 
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+				// If it is not revert the changes.
+				// 
+				// Set the sample value
+				// 
+				// Guards to ensure that bias is only updated when there is a valid path.
+				// 
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				bias[i] = cv$originalValue;
 		}
-		
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
-			// If it is not revert the changes.
-			// 
-			// Set the sample value
-			// 
-			// Guards to ensure that bias is only updated when there is a valid path.
-			// 
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
-			bias[i] = cv$originalValue;
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -507,6 +519,9 @@ final class Flip2CoinsMK8$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		flips = new boolean[length$flipsMeasured.length][];
 		for(int j = 0; j < length$flipsMeasured.length; j += 1)
 			flips[j] = new boolean[length$flipsMeasured[j]];
+		
+		// Constructor for constrainedFlag$sample17
+		constrainedFlag$sample17 = new boolean[length$flipsMeasured.length];
 	}
 
 	// Method to execute the model code conventionally.
@@ -690,13 +705,6 @@ final class Flip2CoinsMK8$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		coins = length$flipsMeasured.length;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -714,6 +722,17 @@ final class Flip2CoinsMK8$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample46)
 			logProbability$var46 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		coins = length$flipsMeasured.length;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample17$1 = 0; index$constrainedFlag$sample17$1 < constrainedFlag$sample17.length; index$constrainedFlag$sample17$1 += 1)
+			constrainedFlag$sample17[index$constrainedFlag$sample17$1] = true;
 	}
 
 	// Construct the evidence probabilities.

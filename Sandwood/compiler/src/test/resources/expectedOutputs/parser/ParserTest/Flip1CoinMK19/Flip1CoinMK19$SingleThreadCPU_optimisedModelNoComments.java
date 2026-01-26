@@ -8,6 +8,8 @@ final class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private int a;
 	private int b;
 	private double[][] bias;
+	private boolean constrainedFlag$sample10 = true;
+	private boolean constrainedFlag$sample16 = true;
 	private boolean fixedFlag$sample10 = false;
 	private boolean fixedFlag$sample16 = false;
 	private boolean fixedProbFlag$sample10 = false;
@@ -206,7 +208,7 @@ final class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.
 				double[] inner = bias[0];
 				inner[0] = q;
 				double var34 = inner[b];
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[var46]?var34:(1.0 - var34))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var34) && (var34 <= 1.0))?Math.log((flips[var46]?var34:(1.0 - var34))):Double.NEGATIVE_INFINITY));
 			}
 			logProbability$bernoulli = cv$sampleAccumulator;
 			logProbability$var47 = cv$sampleAccumulator;
@@ -223,31 +225,39 @@ final class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	private final void sample10() {
+		constrainedFlag$sample10 = false;
 		int cv$sum = 0;
 		int cv$count = 0;
 		if((0 == b)) {
 			for(int var46 = 0; var46 < samples; var46 += 1) {
+				constrainedFlag$sample10 = true;
 				cv$count = (cv$count + 1);
 				if(flips[var46])
 					cv$sum = (cv$sum + 1);
 			}
 		}
-		q = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias[0][0] = q;
+		if(constrainedFlag$sample10) {
+			q = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			bias[0][0] = q;
+		}
 	}
 
 	private final void sample16() {
+		constrainedFlag$sample16 = false;
 		int cv$sum = 0;
 		int cv$count = 0;
 		if((1 == b)) {
 			for(int var46 = 0; var46 < samples; var46 += 1) {
+				constrainedFlag$sample16 = true;
 				cv$count = (cv$count + 1);
 				if(flips[var46])
 					cv$sum = (cv$sum + 1);
 			}
 		}
-		t = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias[0][1] = t;
+		if(constrainedFlag$sample16) {
+			t = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			bias[0][1] = t;
+		}
 	}
 
 	@Override
@@ -336,9 +346,6 @@ final class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -352,6 +359,9 @@ final class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(!fixedProbFlag$sample48)
 			logProbability$var47 = Double.NaN;
 	}
+
+	@Override
+	public final void initializeModel() {}
 
 	@Override
 	public final void logEvidenceProbabilities() {

@@ -6,6 +6,7 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean constrainedFlag$sample8 = true;
 	private boolean fixedFlag$sample8 = false;
 	private boolean fixedProbFlag$sample21 = false;
 	private boolean fixedProbFlag$sample35 = false;
@@ -241,7 +242,7 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips1[var20]?bias:(1.0 - bias))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= bias) && (bias <= 1.0))?Math.log((flips1[var20]?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY));
 			logProbability$bernoulli1 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -319,7 +320,7 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips2[var34]?bias:(1.0 - bias))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= bias) && (bias <= 1.0))?Math.log((flips2[var34]?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY));
 			logProbability$bernoulli2 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -464,6 +465,8 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	// by sample task 8 drawn from Beta 7. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample8() {
+		constrainedFlag$sample8 = false;
+		
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
 		
@@ -474,7 +477,11 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		// 
 		// Processing sample task 21 of consumer random variable bernoulli1.
 		for(int var20 = 0; var20 < samples1; var20 += 1) {
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample8 = true;
+			
 			// Include the value sampled by task 21 from random variable bernoulli1.
+			// 
 			// Increment the number of samples.
 			cv$count = (cv$count + 1);
 			
@@ -487,7 +494,11 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		// 
 		// Processing sample task 35 of consumer random variable bernoulli2.
 		for(int var34 = 0; var34 < samples2; var34 += 1) {
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample8 = true;
+			
 			// Include the value sampled by task 35 from random variable bernoulli2.
+			// 
 			// Increment the number of samples.
 			cv$count = (cv$count + 1);
 			
@@ -495,9 +506,9 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 			if(flips2[var34])
 				cv$sum = (cv$sum + 1);
 		}
-		
-		// Write out the new value of the sample.
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		if(constrainedFlag$sample8)
+			// Write out the new value of the sample.
+			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -576,14 +587,6 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		samples1 = length$flipsMeasured1;
-		samples2 = length$flipsMeasured2;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -604,6 +607,14 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		logProbability$flips2 = 0.0;
 		if(!fixedProbFlag$sample35)
 			logProbability$var35 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		samples1 = length$flipsMeasured1;
+		samples2 = length$flipsMeasured2;
 	}
 
 	// Construct the evidence probabilities.

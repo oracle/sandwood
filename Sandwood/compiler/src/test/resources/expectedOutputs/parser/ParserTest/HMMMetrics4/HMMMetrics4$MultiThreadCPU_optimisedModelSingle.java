@@ -8,6 +8,13 @@ import org.sandwood.runtime.model.ExecutionTarget;
 final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements HMMMetrics4$CoreInterface {
 	
 	// Declare the variables for the model.
+	private boolean[][] constrainedFlag$sample134;
+	private boolean[][] constrainedFlag$sample162;
+	private boolean[][] constrainedFlag$sample190;
+	private boolean constrainedFlag$sample20 = true;
+	private boolean[] constrainedFlag$sample33;
+	private boolean[] constrainedFlag$sample57;
+	private boolean[][] constrainedFlag$sample76;
 	private double[][] current_metric_mean;
 	private double[][] current_metric_valid_bias;
 	private double[][] current_metric_var;
@@ -622,7 +629,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									double var230 = current_metric_valid_bias[server][st[sample$var196][0]];
 									
 									// Store the value of the function call, so the function call is only made once.
-									cv$distributionAccumulator = Math.log((cv$sampleValue?var230:(1.0 - var230)));
+									cv$distributionAccumulator = (((0.0 <= var230) && (var230 <= 1.0))?Math.log((cv$sampleValue?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY);
 									
 									// Add the probability of this distribution configuration to the accumulator.
 									// 
@@ -639,7 +646,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									double var230 = current_metric_valid_bias[server][index$sample57$4];
 									
 									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(cv$probabilitySample57Value5) + Math.log((cv$sampleValue?var230:(1.0 - var230))));
+									double cv$weightedProbability = (Math.log(cv$probabilitySample57Value5) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((cv$sampleValue?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
 									
 									// Add the probability of this sample task to the distribution accumulator.
 									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -667,7 +674,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									double var230 = current_metric_valid_bias[server][st[sample$var196][timeStep$var226]];
 									
 									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = Math.log((cv$sampleValue?var230:(1.0 - var230)));
+									double cv$weightedProbability = (((0.0 <= var230) && (var230 <= 1.0))?Math.log((cv$sampleValue?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY);
 									
 									// Add the probability of this sample task to the distribution accumulator.
 									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -693,7 +700,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									double var230 = current_metric_valid_bias[server][index$sample76$13];
 									
 									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(cv$probabilitySample76Value14) + Math.log((cv$sampleValue?var230:(1.0 - var230))));
+									double cv$weightedProbability = (Math.log(cv$probabilitySample76Value14) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((cv$sampleValue?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
 									
 									// Add the probability of this sample task to the distribution accumulator.
 									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -840,7 +847,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 											// Store the value of the function call, so the function call is only made once.
 											// 
 											// Substituted "timeStep$var226" with its value "0".
-											cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][st[sample$var196][0]]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5));
+											cv$distributionAccumulator = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][st[sample$var196][0]]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 											
 											// Add the probability of this distribution configuration to the accumulator.
 											// 
@@ -858,7 +865,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 										double var243 = current_metric_var[server][index$sample57$4];
 										
 										// Store the value of the function call, so the function call is only made once.
-										double cv$weightedProbability = ((Math.log(cv$probabilitySample57Value5) + DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][index$sample57$4]) / Math.sqrt(var243)))) - (Math.log(var243) * 0.5));
+										double cv$weightedProbability = (Math.log(cv$probabilitySample57Value5) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][index$sample57$4]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
 										
 										// Add the probability of this sample task to the distribution accumulator.
 										if((cv$weightedProbability < cv$distributionAccumulator))
@@ -888,7 +895,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 											double var243 = current_metric_var[server][st[sample$var196][timeStep$var226]];
 											
 											// Store the value of the function call, so the function call is only made once.
-											double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][st[sample$var196][timeStep$var226]]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5));
+											double cv$weightedProbability = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][st[sample$var196][timeStep$var226]]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 											
 											// Add the probability of this sample task to the distribution accumulator.
 											if((cv$weightedProbability < cv$distributionAccumulator))
@@ -915,7 +922,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 										double var243 = current_metric_var[server][index$sample76$49];
 										
 										// Store the value of the function call, so the function call is only made once.
-										double cv$weightedProbability = ((Math.log(cv$probabilitySample76Value50) + DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][index$sample76$49]) / Math.sqrt(var243)))) - (Math.log(var243) * 0.5));
+										double cv$weightedProbability = (Math.log(cv$probabilitySample76Value50) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][index$sample76$49]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
 										
 										// Add the probability of this sample task to the distribution accumulator.
 										if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1041,7 +1048,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// An accumulator for log probabilities.
 					// 
 					// Store the value of the function call, so the function call is only made once.
-					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+					cv$sampleAccumulator = (cv$sampleAccumulator + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$sampleValue])) && (initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 				}
 				
 				// Only update the sample if it was reached, otherwise the NaN will be
@@ -1142,10 +1149,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								
 								// Substituted "timeStep$var66" with its value "1".
 								if(((0 <= var32) && (var32 < noStates))) {
-									// Store the value of the function call, so the function call is only made once.
-									// 
 									// Substituted "timeStep$var66" with its value "1".
-									cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates))?Math.log(m[st[sample$var45][0]][cv$sampleValue]):Double.NEGATIVE_INFINITY);
+									double[] var72 = m[st[sample$var45][0]];
+									
+									// Store the value of the function call, so the function call is only made once.
+									cv$distributionAccumulator = (((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 									
 									// Add the probability of this distribution configuration to the accumulator.
 									// 
@@ -1159,9 +1167,10 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// 
 									// Substituted "index$sample$5" with its value "sample$var45".
 									double cv$probabilitySample57Value7 = distribution$sample57[sample$var45][index$sample57$6];
+									double[] var72 = m[index$sample57$6];
 									
 									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(cv$probabilitySample57Value7) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates))?Math.log(m[index$sample57$6][cv$sampleValue]):Double.NEGATIVE_INFINITY));
+									double cv$weightedProbability = (Math.log(cv$probabilitySample57Value7) + (((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 									
 									// Add the probability of this sample task to the distribution accumulator.
 									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1186,8 +1195,10 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						if((2 <= timeStep$var66)) {
 							int var32 = st[sample$var45][(timeStep$var66 - 1)];
 							if(((0 <= var32) && (var32 < noStates))) {
+								double[] var72 = m[st[sample$var45][(timeStep$var66 - 1)]];
+								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates))?Math.log(m[st[sample$var45][(timeStep$var66 - 1)]][cv$sampleValue]):Double.NEGATIVE_INFINITY);
+								double cv$weightedProbability = (((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1687,7 +1698,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// Store the value of the function call, so the function call is only made once.
 						// 
 						// The sample value to calculate the probability of generating
-						cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))));
+						cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
 					}
 				}
 			}
@@ -1797,7 +1808,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Store the value of the function call, so the function call is only made once.
 							// 
 							// The sample value to calculate the probability of generating
-							cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((var245[sample$var196][server][timeStep$var226] - current_metric_mean[server][st[sample$var196][timeStep$var226]]) / Math.sqrt(var243)))) - (Math.log(var243) * 0.5));
+							cv$sampleAccumulator = (cv$sampleAccumulator + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][server][timeStep$var226] - current_metric_mean[server][st[sample$var196][timeStep$var226]]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
 						}
 					}
 				}
@@ -1982,7 +1993,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+				cv$sampleAccumulator = (cv$sampleAccumulator + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$sampleValue])) && (initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
@@ -2063,6 +2074,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
 					// The sample value to calculate the probability of generating
 					int cv$sampleValue = st[sample$var45][timeStep$var66];
+					double[] var72 = m[st[sample$var45][(timeStep$var66 - 1)]];
 					
 					// Record that the sample was reached.
 					cv$sampleReached = true;
@@ -2080,7 +2092,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// An accumulator for log probabilities.
 					// 
 					// Store the value of the function call, so the function call is only made once.
-					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates))?Math.log(m[st[sample$var45][(timeStep$var66 - 1)]][cv$sampleValue]):Double.NEGATIVE_INFINITY));
+					cv$sampleAccumulator = (cv$sampleAccumulator + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 				}
 			}
 			
@@ -2149,6 +2161,8 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 134 drawn from Uniform 108. Inference was performed using Metropolis-Hastings.
 	private final void sample134(int var119, int var129, int threadID$cv$var129, Rng RNG$) {
+		constrainedFlag$sample134[var119][var129] = false;
+		
 		// The original value of the sample
 		double cv$originalValue = current_metric_mean[var119][var129];
 		
@@ -2175,8 +2189,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Set the current value to the current state of the tree.
 			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue < (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY);
 			
-			// Processing random variable 244.
-			// 
 			// Looking for a path between Sample 134 and consumer Gaussian 244.
 			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2184,8 +2196,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					if(fixedFlag$sample57) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
 						if((var129 == st[sample$var196][0])) {
-							// Processing sample task 256 of consumer random variable null.
-							// 
+							// Mark that the sample has observed constrained data.
+							constrainedFlag$sample134[var119][var129] = true;
+							
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -2205,7 +2218,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								// Substituted "server" with its value "var119".
 								// 
 								// Set the current value to the current state of the tree.
-								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][0] - cv$originalValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5));
+								cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][0] - cv$originalValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 								
 								// Recorded the probability of reaching sample task 256 with the current configuration.
 								// 
@@ -2238,6 +2251,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// Substituted "index$sample57$7" with its value "var129".
 						double cv$probabilitySample57Value8 = distribution$sample57[sample$var196][var129];
 						
+						// Mark that the sample has observed constrained data.
+						constrainedFlag$sample134[var119][var129] = true;
+						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "server" with its value "var119".
@@ -2247,15 +2263,13 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 256 of consumer random variable null.
-						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
 						// Substituted "server" with its value "var119".
 						// 
 						// Set the current value to the current state of the tree.
-						double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample57Value8) + DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][0] - cv$originalValue) / Math.sqrt(var243)))) - (Math.log(var243) * 0.5));
+						double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][0] - cv$originalValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
 						
 						// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
 						// Declaration comment was:
@@ -2317,8 +2331,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						if(fixedFlag$sample76) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							if((var129 == st[sample$var196][timeStep$var226])) {
-								// Processing sample task 256 of consumer random variable null.
-								// 
+								// Mark that the sample has observed constrained data.
+								constrainedFlag$sample134[var119][var129] = true;
+								
 								// Set an accumulator to sum the probabilities for each possible configuration of
 								// inputs.
 								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -2338,7 +2353,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Substituted "server" with its value "var119".
 									// 
 									// Set the current value to the current state of the tree.
-									cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][timeStep$var226] - cv$originalValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5));
+									cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][timeStep$var226] - cv$originalValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 									
 									// Recorded the probability of reaching sample task 256 with the current configuration.
 									// 
@@ -2371,6 +2386,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Substituted "index$sample76$19" with its value "var129".
 							double cv$probabilitySample76Value20 = distribution$sample76[sample$var196][(timeStep$var226 - 1)][var129];
 							
+							// Mark that the sample has observed constrained data.
+							constrainedFlag$sample134[var119][var129] = true;
+							
 							// Constructing a random variable input for use later.
 							// 
 							// Substituted "server" with its value "var119".
@@ -2380,15 +2398,13 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							
 							// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 							// Declaration comment was:
-							// Processing sample task 256 of consumer random variable null.
-							// 
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							// 
 							// Substituted "server" with its value "var119".
 							// 
 							// Set the current value to the current state of the tree.
-							double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample76Value20) + DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][timeStep$var226] - cv$originalValue) / Math.sqrt(var243)))) - (Math.log(var243) * 0.5));
+							double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][timeStep$var226] - cv$originalValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
 							
 							// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
 							// Declaration comment was:
@@ -2453,154 +2469,27 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Initialize a counter to track the reached distributions.
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
-		current_metric_mean[var119][var129] = cv$proposedValue;
 		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		// 
-		// Constructing a random variable input for use later.
-		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY);
-		
-		// Processing random variable 244.
-		// 
-		// Looking for a path between Sample 134 and consumer Gaussian 244.
-		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(((0 < length$metric[sample$var196][0]) && metric_valid_g[sample$var196][var119][0])) {
-				if(fixedFlag$sample57) {
-					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((var129 == st[sample$var196][0])) {
-						// Processing sample task 256 of consumer random variable null.
-						// 
-						// Set an accumulator to sum the probabilities for each possible configuration of
-						// inputs.
-						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-						
-						// Set an accumulator to record the consumer distributions not seen. Initially set
-						// to 1 as seen values will be deducted from this value.
-						double cv$consumerDistributionProbabilityAccumulator = 1.0;
-						int var156 = st[sample$var196][0];
-						
-						// Substituted "server" with its value "var119".
-						if(((0 <= var156) && (var156 < noStates))) {
-							// Constructing a random variable input for use later.
-							// 
-							// Substituted "server" with its value "var119".
-							double var243 = current_metric_var[var119][st[sample$var196][0]];
-							
-							// Substituted "server" with its value "var119".
-							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][0] - cv$proposedValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5));
-							
-							// Recorded the probability of reaching sample task 256 with the current configuration.
-							// 
-							// Set an accumulator to record the consumer distributions not seen. Initially set
-							// to 1 as seen values will be deducted from this value.
-							cv$consumerDistributionProbabilityAccumulator = 0.0;
-						}
-						
-						// A check to ensure rounding of floating point values can never result in a negative
-						// value.
-						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-						
-						// Multiply (log space add) in the probability of the sample task to the overall probability
-						// for this configuration of the source random variable.
-						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-						else {
-							// If the second value is -infinity.
-							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-							else
-								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-						}
-					}
-				} else {
-					// Update the probability of sampling this value from the distribution value.
-					// 
-					// Substituted "sample$var45" with its value "sample$var196".
-					// 
-					// Substituted "index$sample57$7" with its value "var129".
-					double cv$probabilitySample57Value8 = distribution$sample57[sample$var196][var129];
-					
-					// Constructing a random variable input for use later.
-					// 
-					// Substituted "server" with its value "var119".
-					// 
-					// Substituted "index$sample57$7" with its value "var129".
-					double var243 = current_metric_var[var119][var129];
-					
-					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-					// Declaration comment was:
-					// Processing sample task 256 of consumer random variable null.
-					// 
-					// Set an accumulator to sum the probabilities for each possible configuration of
-					// inputs.
-					// 
-					// Substituted "server" with its value "var119".
-					double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample57Value8) + DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][0] - cv$proposedValue) / Math.sqrt(var243)))) - (Math.log(var243) * 0.5));
-					
-					// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
-					// Declaration comment was:
-					// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
-					// Declaration comment was:
-					// Set an accumulator to record the consumer distributions not seen. Initially set
-					// to 1 as seen values will be deducted from this value.
-					// 
-					// Recorded the probability of reaching sample task 256 with the current configuration.
-					// 
-					// Set an accumulator to record the consumer distributions not seen. Initially set
-					// to 1 as seen values will be deducted from this value.
-					// 
-					// A check to ensure rounding of floating point values can never result in a negative
-					// value.
-					// 
-					// Recorded the probability of reaching sample task 256 with the current configuration.
-					// 
-					// Set an accumulator to record the consumer distributions not seen. Initially set
-					// to 1 as seen values will be deducted from this value.
-					double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample57Value8), 0.0);
-					
-					// Multiply (log space add) in the probability of the sample task to the overall probability
-					// for this configuration of the source random variable.
-					if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-						cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-					else {
-						// If the second value is -infinity.
-						// 
-						// Constructing a random variable input for use later.
-						// 
-						// Substituted "server" with its value "var119".
-						// 
-						// Substituted "index$sample57$7" with its value "var129".
-						// 
-						// Constructing a random variable input for use later.
-						// 
-						// Substituted "server" with its value "var119".
-						// 
-						// Substituted "index$sample57$7" with its value "var129".
-						// 
-						// Constructing a random variable input for use later.
-						// 
-						// Substituted "server" with its value "var119".
-						// 
-						// Substituted "index$sample57$7" with its value "var129".
-						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-							cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-						else
-							cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-					}
-				}
-			}
-		}
-		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-			for(int timeStep$var226 = 1; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-				// Substituted "server" with its value "var119".
-				if(metric_valid_g[sample$var196][var119][timeStep$var226]) {
-					if(fixedFlag$sample76) {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(constrainedFlag$sample134[var119][var129]) {
+			current_metric_mean[var119][var129] = cv$proposedValue;
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// Constructing a random variable input for use later.
+			double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY);
+			
+			// Looking for a path between Sample 134 and consumer Gaussian 244.
+			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(((0 < length$metric[sample$var196][0]) && metric_valid_g[sample$var196][var119][0])) {
+					if(fixedFlag$sample57) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((var129 == st[sample$var196][timeStep$var226])) {
-							// Processing sample task 256 of consumer random variable null.
-							// 
+						if((var129 == st[sample$var196][0])) {
+							// Mark that the sample has observed constrained data.
+							constrainedFlag$sample134[var119][var129] = true;
+							
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -2608,17 +2497,17 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Set an accumulator to record the consumer distributions not seen. Initially set
 							// to 1 as seen values will be deducted from this value.
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
-							int var156 = st[sample$var196][timeStep$var226];
+							int var156 = st[sample$var196][0];
 							
 							// Substituted "server" with its value "var119".
 							if(((0 <= var156) && (var156 < noStates))) {
 								// Constructing a random variable input for use later.
 								// 
 								// Substituted "server" with its value "var119".
-								double var243 = current_metric_var[var119][st[sample$var196][timeStep$var226]];
+								double var243 = current_metric_var[var119][st[sample$var196][0]];
 								
 								// Substituted "server" with its value "var119".
-								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][timeStep$var226] - cv$proposedValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5));
+								cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][0] - cv$proposedValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 								
 								// Recorded the probability of reaching sample task 256 with the current configuration.
 								// 
@@ -2648,25 +2537,26 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// 
 						// Substituted "sample$var45" with its value "sample$var196".
 						// 
-						// Substituted "index$sample76$19" with its value "var129".
-						double cv$probabilitySample76Value20 = distribution$sample76[sample$var196][(timeStep$var226 - 1)][var129];
+						// Substituted "index$sample57$7" with its value "var129".
+						double cv$probabilitySample57Value8 = distribution$sample57[sample$var196][var129];
+						
+						// Mark that the sample has observed constrained data.
+						constrainedFlag$sample134[var119][var129] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "server" with its value "var119".
 						// 
-						// Substituted "index$sample76$19" with its value "var129".
+						// Substituted "index$sample57$7" with its value "var129".
 						double var243 = current_metric_var[var119][var129];
 						
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 256 of consumer random variable null.
-						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
 						// Substituted "server" with its value "var119".
-						double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample76Value20) + DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][timeStep$var226] - cv$proposedValue) / Math.sqrt(var243)))) - (Math.log(var243) * 0.5));
+						double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][0] - cv$proposedValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
 						
 						// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
 						// Declaration comment was:
@@ -2687,7 +2577,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
-						double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample76Value20), 0.0);
+						double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample57Value8), 0.0);
 						
 						// Multiply (log space add) in the probability of the sample task to the overall probability
 						// for this configuration of the source random variable.
@@ -2700,19 +2590,19 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// 
 							// Substituted "server" with its value "var119".
 							// 
-							// Substituted "index$sample76$19" with its value "var129".
+							// Substituted "index$sample57$7" with its value "var129".
 							// 
 							// Constructing a random variable input for use later.
 							// 
 							// Substituted "server" with its value "var119".
 							// 
-							// Substituted "index$sample76$19" with its value "var129".
+							// Substituted "index$sample57$7" with its value "var129".
 							// 
 							// Constructing a random variable input for use later.
 							// 
 							// Substituted "server" with its value "var119".
 							// 
-							// Substituted "index$sample76$19" with its value "var129".
+							// Substituted "index$sample57$7" with its value "var129".
 							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
 							else
@@ -2721,34 +2611,168 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					}
 				}
 			}
+			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+				for(int timeStep$var226 = 1; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+					// Substituted "server" with its value "var119".
+					if(metric_valid_g[sample$var196][var119][timeStep$var226]) {
+						if(fixedFlag$sample76) {
+							// Constraints moved from conditionals in inner loops/scopes/etc.
+							if((var129 == st[sample$var196][timeStep$var226])) {
+								// Mark that the sample has observed constrained data.
+								constrainedFlag$sample134[var119][var129] = true;
+								
+								// Set an accumulator to sum the probabilities for each possible configuration of
+								// inputs.
+								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+								
+								// Set an accumulator to record the consumer distributions not seen. Initially set
+								// to 1 as seen values will be deducted from this value.
+								double cv$consumerDistributionProbabilityAccumulator = 1.0;
+								int var156 = st[sample$var196][timeStep$var226];
+								
+								// Substituted "server" with its value "var119".
+								if(((0 <= var156) && (var156 < noStates))) {
+									// Constructing a random variable input for use later.
+									// 
+									// Substituted "server" with its value "var119".
+									double var243 = current_metric_var[var119][st[sample$var196][timeStep$var226]];
+									
+									// Substituted "server" with its value "var119".
+									cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][timeStep$var226] - cv$proposedValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
+									
+									// Recorded the probability of reaching sample task 256 with the current configuration.
+									// 
+									// Set an accumulator to record the consumer distributions not seen. Initially set
+									// to 1 as seen values will be deducted from this value.
+									cv$consumerDistributionProbabilityAccumulator = 0.0;
+								}
+								
+								// A check to ensure rounding of floating point values can never result in a negative
+								// value.
+								cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+								
+								// Multiply (log space add) in the probability of the sample task to the overall probability
+								// for this configuration of the source random variable.
+								if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+								else {
+									// If the second value is -infinity.
+									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+										cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+									else
+										cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+								}
+							}
+						} else {
+							// Update the probability of sampling this value from the distribution value.
+							// 
+							// Substituted "sample$var45" with its value "sample$var196".
+							// 
+							// Substituted "index$sample76$19" with its value "var129".
+							double cv$probabilitySample76Value20 = distribution$sample76[sample$var196][(timeStep$var226 - 1)][var129];
+							
+							// Mark that the sample has observed constrained data.
+							constrainedFlag$sample134[var119][var129] = true;
+							
+							// Constructing a random variable input for use later.
+							// 
+							// Substituted "server" with its value "var119".
+							// 
+							// Substituted "index$sample76$19" with its value "var129".
+							double var243 = current_metric_var[var119][var129];
+							
+							// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+							// Declaration comment was:
+							// Set an accumulator to sum the probabilities for each possible configuration of
+							// inputs.
+							// 
+							// Substituted "server" with its value "var119".
+							double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][timeStep$var226] - cv$proposedValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
+							
+							// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
+							// Declaration comment was:
+							// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
+							// Declaration comment was:
+							// Set an accumulator to record the consumer distributions not seen. Initially set
+							// to 1 as seen values will be deducted from this value.
+							// 
+							// Recorded the probability of reaching sample task 256 with the current configuration.
+							// 
+							// Set an accumulator to record the consumer distributions not seen. Initially set
+							// to 1 as seen values will be deducted from this value.
+							// 
+							// A check to ensure rounding of floating point values can never result in a negative
+							// value.
+							// 
+							// Recorded the probability of reaching sample task 256 with the current configuration.
+							// 
+							// Set an accumulator to record the consumer distributions not seen. Initially set
+							// to 1 as seen values will be deducted from this value.
+							double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample76Value20), 0.0);
+							
+							// Multiply (log space add) in the probability of the sample task to the overall probability
+							// for this configuration of the source random variable.
+							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+							else {
+								// If the second value is -infinity.
+								// 
+								// Constructing a random variable input for use later.
+								// 
+								// Substituted "server" with its value "var119".
+								// 
+								// Substituted "index$sample76$19" with its value "var129".
+								// 
+								// Constructing a random variable input for use later.
+								// 
+								// Substituted "server" with its value "var119".
+								// 
+								// Substituted "index$sample76$19" with its value "var129".
+								// 
+								// Constructing a random variable input for use later.
+								// 
+								// Substituted "server" with its value "var119".
+								// 
+								// Substituted "index$sample76$19" with its value "var129".
+								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+								else
+									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+							}
+						}
+					}
+				}
+			}
+			
+			// The probability ration for the proposed value and the current value.
+			// 
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+				// If it is not revert the changes.
+				// 
+				// Set the sample value
+				// 
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				current_metric_mean[var119][var129] = cv$originalValue;
 		}
-		
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
-			// If it is not revert the changes.
-			// 
-			// Set the sample value
-			// 
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
-			current_metric_mean[var119][var129] = cv$originalValue;
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 162 drawn from InverseGamma 135. Inference was performed using Metropolis-Hastings.
 	private final void sample162(int var146, int var156, int threadID$cv$var156, Rng RNG$) {
+		constrainedFlag$sample162[var146][var156] = false;
+		
 		// The original value of the sample
 		double cv$originalValue = current_metric_var[var146][var156];
 		
@@ -2773,8 +2797,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Set the current value to the current state of the tree.
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityInverseGamma(cv$originalValue, 1.0, 1.0);
 			
-			// Processing random variable 244.
-			// 
 			// Looking for a path between Sample 162 and consumer Gaussian 244.
 			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2782,8 +2804,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					if(fixedFlag$sample57) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
 						if((var156 == st[sample$var196][0])) {
-							// Processing sample task 256 of consumer random variable null.
-							// 
+							// Mark that the sample has observed constrained data.
+							constrainedFlag$sample162[var146][var156] = true;
+							
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -2798,7 +2821,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								// Substituted "server" with its value "var146".
 								// 
 								// Set the current value to the current state of the tree.
-								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][0] - current_metric_mean[var146][st[sample$var196][0]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5));
+								cv$accumulatedConsumerProbabilities = ((0.0 < cv$originalValue)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][0] - current_metric_mean[var146][st[sample$var196][0]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)):Double.NEGATIVE_INFINITY);
 								
 								// Recorded the probability of reaching sample task 256 with the current configuration.
 								// 
@@ -2831,10 +2854,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// Substituted "index$sample57$7" with its value "var156".
 						double cv$probabilitySample57Value8 = distribution$sample57[sample$var196][var156];
 						
+						// Mark that the sample has observed constrained data.
+						constrainedFlag$sample162[var146][var156] = true;
+						
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 256 of consumer random variable null.
-						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
@@ -2847,7 +2871,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// Substituted "server" with its value "var146".
 						// 
 						// Substituted "index$sample57$7" with its value "var156".
-						double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample57Value8) + DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][0] - current_metric_mean[var146][var156]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
+						double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < cv$originalValue)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][0] - current_metric_mean[var146][var156]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)):Double.NEGATIVE_INFINITY));
 						
 						// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
 						// Declaration comment was:
@@ -2895,8 +2919,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						if(fixedFlag$sample76) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							if((var156 == st[sample$var196][timeStep$var226])) {
-								// Processing sample task 256 of consumer random variable null.
-								// 
+								// Mark that the sample has observed constrained data.
+								constrainedFlag$sample162[var146][var156] = true;
+								
 								// Set an accumulator to sum the probabilities for each possible configuration of
 								// inputs.
 								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -2915,7 +2940,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Constructing a random variable input for use later.
 									// 
 									// Substituted "server" with its value "var146".
-									cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][st[sample$var196][timeStep$var226]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5));
+									cv$accumulatedConsumerProbabilities = ((0.0 < cv$originalValue)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][st[sample$var196][timeStep$var226]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)):Double.NEGATIVE_INFINITY);
 									
 									// Recorded the probability of reaching sample task 256 with the current configuration.
 									// 
@@ -2948,10 +2973,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Substituted "index$sample76$19" with its value "var156".
 							double cv$probabilitySample76Value20 = distribution$sample76[sample$var196][(timeStep$var226 - 1)][var156];
 							
+							// Mark that the sample has observed constrained data.
+							constrainedFlag$sample162[var146][var156] = true;
+							
 							// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 							// Declaration comment was:
-							// Processing sample task 256 of consumer random variable null.
-							// 
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							// 
@@ -2964,7 +2990,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Substituted "server" with its value "var146".
 							// 
 							// Substituted "index$sample76$19" with its value "var156".
-							double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample76Value20) + DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][var156]) / Math.sqrt(cv$originalValue)))) - (Math.log(cv$originalValue) * 0.5));
+							double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < cv$originalValue)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][var156]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)):Double.NEGATIVE_INFINITY));
 							
 							// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
 							// Declaration comment was:
@@ -3015,136 +3041,25 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Initialize a counter to track the reached distributions.
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
-		current_metric_var[var146][var156] = cv$proposedValue;
 		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityInverseGamma(cv$proposedValue, 1.0, 1.0);
-		
-		// Processing random variable 244.
-		// 
-		// Looking for a path between Sample 162 and consumer Gaussian 244.
-		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(((0 < length$metric[sample$var196][0]) && metric_valid_g[sample$var196][var146][0])) {
-				if(fixedFlag$sample57) {
-					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((var156 == st[sample$var196][0])) {
-						// Processing sample task 256 of consumer random variable null.
-						// 
-						// Set an accumulator to sum the probabilities for each possible configuration of
-						// inputs.
-						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-						
-						// Set an accumulator to record the consumer distributions not seen. Initially set
-						// to 1 as seen values will be deducted from this value.
-						double cv$consumerDistributionProbabilityAccumulator = 1.0;
-						int var129 = st[sample$var196][0];
-						
-						// Substituted "server" with its value "var146".
-						if(((0 <= var129) && (var129 < noStates))) {
-							// Substituted "server" with its value "var146".
-							// 
-							// Constructing a random variable input for use later.
-							// 
-							// Substituted "server" with its value "var146".
-							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][0] - current_metric_mean[var146][st[sample$var196][0]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5));
-							
-							// Recorded the probability of reaching sample task 256 with the current configuration.
-							// 
-							// Set an accumulator to record the consumer distributions not seen. Initially set
-							// to 1 as seen values will be deducted from this value.
-							cv$consumerDistributionProbabilityAccumulator = 0.0;
-						}
-						
-						// A check to ensure rounding of floating point values can never result in a negative
-						// value.
-						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-						
-						// Multiply (log space add) in the probability of the sample task to the overall probability
-						// for this configuration of the source random variable.
-						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-						else {
-							// If the second value is -infinity.
-							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-							else
-								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-						}
-					}
-				} else {
-					// Update the probability of sampling this value from the distribution value.
-					// 
-					// Substituted "sample$var45" with its value "sample$var196".
-					// 
-					// Substituted "index$sample57$7" with its value "var156".
-					double cv$probabilitySample57Value8 = distribution$sample57[sample$var196][var156];
-					
-					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-					// Declaration comment was:
-					// Processing sample task 256 of consumer random variable null.
-					// 
-					// Set an accumulator to sum the probabilities for each possible configuration of
-					// inputs.
-					// 
-					// Substituted "server" with its value "var146".
-					// 
-					// Constructing a random variable input for use later.
-					// 
-					// Substituted "server" with its value "var146".
-					// 
-					// Substituted "index$sample57$7" with its value "var156".
-					double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample57Value8) + DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][0] - current_metric_mean[var146][var156]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
-					
-					// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
-					// Declaration comment was:
-					// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
-					// Declaration comment was:
-					// Set an accumulator to record the consumer distributions not seen. Initially set
-					// to 1 as seen values will be deducted from this value.
-					// 
-					// Recorded the probability of reaching sample task 256 with the current configuration.
-					// 
-					// Set an accumulator to record the consumer distributions not seen. Initially set
-					// to 1 as seen values will be deducted from this value.
-					// 
-					// A check to ensure rounding of floating point values can never result in a negative
-					// value.
-					// 
-					// Recorded the probability of reaching sample task 256 with the current configuration.
-					// 
-					// Set an accumulator to record the consumer distributions not seen. Initially set
-					// to 1 as seen values will be deducted from this value.
-					double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample57Value8), 0.0);
-					
-					// Multiply (log space add) in the probability of the sample task to the overall probability
-					// for this configuration of the source random variable.
-					if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-						cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-					else {
-						// If the second value is -infinity.
-						// 
-						// The proposed new value for the sample
-						// 
-						// The proposed new value for the sample
-						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-							cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-						else
-							cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-					}
-				}
-			}
-		}
-		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-			for(int timeStep$var226 = 1; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-				// Substituted "server" with its value "var146".
-				if(metric_valid_g[sample$var196][var146][timeStep$var226]) {
-					if(fixedFlag$sample76) {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(constrainedFlag$sample162[var146][var156]) {
+			current_metric_var[var146][var156] = cv$proposedValue;
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityInverseGamma(cv$proposedValue, 1.0, 1.0);
+			
+			// Looking for a path between Sample 162 and consumer Gaussian 244.
+			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(((0 < length$metric[sample$var196][0]) && metric_valid_g[sample$var196][var146][0])) {
+					if(fixedFlag$sample57) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((var156 == st[sample$var196][timeStep$var226])) {
-							// Processing sample task 256 of consumer random variable null.
-							// 
+						if((var156 == st[sample$var196][0])) {
+							// Mark that the sample has observed constrained data.
+							constrainedFlag$sample162[var146][var156] = true;
+							
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -3152,7 +3067,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Set an accumulator to record the consumer distributions not seen. Initially set
 							// to 1 as seen values will be deducted from this value.
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
-							int var129 = st[sample$var196][timeStep$var226];
+							int var129 = st[sample$var196][0];
 							
 							// Substituted "server" with its value "var146".
 							if(((0 <= var129) && (var129 < noStates))) {
@@ -3161,7 +3076,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								// Constructing a random variable input for use later.
 								// 
 								// Substituted "server" with its value "var146".
-								cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][st[sample$var196][timeStep$var226]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5));
+								cv$accumulatedConsumerProbabilities = ((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][0] - current_metric_mean[var146][st[sample$var196][0]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY);
 								
 								// Recorded the probability of reaching sample task 256 with the current configuration.
 								// 
@@ -3191,13 +3106,14 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// 
 						// Substituted "sample$var45" with its value "sample$var196".
 						// 
-						// Substituted "index$sample76$19" with its value "var156".
-						double cv$probabilitySample76Value20 = distribution$sample76[sample$var196][(timeStep$var226 - 1)][var156];
+						// Substituted "index$sample57$7" with its value "var156".
+						double cv$probabilitySample57Value8 = distribution$sample57[sample$var196][var156];
+						
+						// Mark that the sample has observed constrained data.
+						constrainedFlag$sample162[var146][var156] = true;
 						
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
-						// Processing sample task 256 of consumer random variable null.
-						// 
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
@@ -3207,8 +3123,8 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// 
 						// Substituted "server" with its value "var146".
 						// 
-						// Substituted "index$sample76$19" with its value "var156".
-						double cv$accumulatedConsumerProbabilities = ((Math.log(cv$probabilitySample76Value20) + DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][var156]) / Math.sqrt(cv$proposedValue)))) - (Math.log(cv$proposedValue) * 0.5));
+						// Substituted "index$sample57$7" with its value "var156".
+						double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][0] - current_metric_mean[var146][var156]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY));
 						
 						// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
 						// Declaration comment was:
@@ -3229,7 +3145,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// 
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
-						double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample76Value20), 0.0);
+						double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample57Value8), 0.0);
 						
 						// Multiply (log space add) in the probability of the sample task to the overall probability
 						// for this configuration of the source random variable.
@@ -3249,35 +3165,153 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					}
 				}
 			}
+			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+				for(int timeStep$var226 = 1; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+					// Substituted "server" with its value "var146".
+					if(metric_valid_g[sample$var196][var146][timeStep$var226]) {
+						if(fixedFlag$sample76) {
+							// Constraints moved from conditionals in inner loops/scopes/etc.
+							if((var156 == st[sample$var196][timeStep$var226])) {
+								// Mark that the sample has observed constrained data.
+								constrainedFlag$sample162[var146][var156] = true;
+								
+								// Set an accumulator to sum the probabilities for each possible configuration of
+								// inputs.
+								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+								
+								// Set an accumulator to record the consumer distributions not seen. Initially set
+								// to 1 as seen values will be deducted from this value.
+								double cv$consumerDistributionProbabilityAccumulator = 1.0;
+								int var129 = st[sample$var196][timeStep$var226];
+								
+								// Substituted "server" with its value "var146".
+								if(((0 <= var129) && (var129 < noStates))) {
+									// Substituted "server" with its value "var146".
+									// 
+									// Constructing a random variable input for use later.
+									// 
+									// Substituted "server" with its value "var146".
+									cv$accumulatedConsumerProbabilities = ((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][st[sample$var196][timeStep$var226]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY);
+									
+									// Recorded the probability of reaching sample task 256 with the current configuration.
+									// 
+									// Set an accumulator to record the consumer distributions not seen. Initially set
+									// to 1 as seen values will be deducted from this value.
+									cv$consumerDistributionProbabilityAccumulator = 0.0;
+								}
+								
+								// A check to ensure rounding of floating point values can never result in a negative
+								// value.
+								cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+								
+								// Multiply (log space add) in the probability of the sample task to the overall probability
+								// for this configuration of the source random variable.
+								if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+									cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+								else {
+									// If the second value is -infinity.
+									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+										cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+									else
+										cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+								}
+							}
+						} else {
+							// Update the probability of sampling this value from the distribution value.
+							// 
+							// Substituted "sample$var45" with its value "sample$var196".
+							// 
+							// Substituted "index$sample76$19" with its value "var156".
+							double cv$probabilitySample76Value20 = distribution$sample76[sample$var196][(timeStep$var226 - 1)][var156];
+							
+							// Mark that the sample has observed constrained data.
+							constrainedFlag$sample162[var146][var156] = true;
+							
+							// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+							// Declaration comment was:
+							// Set an accumulator to sum the probabilities for each possible configuration of
+							// inputs.
+							// 
+							// Substituted "server" with its value "var146".
+							// 
+							// Constructing a random variable input for use later.
+							// 
+							// Substituted "server" with its value "var146".
+							// 
+							// Substituted "index$sample76$19" with its value "var156".
+							double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][var156]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY));
+							
+							// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
+							// Declaration comment was:
+							// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
+							// Declaration comment was:
+							// Set an accumulator to record the consumer distributions not seen. Initially set
+							// to 1 as seen values will be deducted from this value.
+							// 
+							// Recorded the probability of reaching sample task 256 with the current configuration.
+							// 
+							// Set an accumulator to record the consumer distributions not seen. Initially set
+							// to 1 as seen values will be deducted from this value.
+							// 
+							// A check to ensure rounding of floating point values can never result in a negative
+							// value.
+							// 
+							// Recorded the probability of reaching sample task 256 with the current configuration.
+							// 
+							// Set an accumulator to record the consumer distributions not seen. Initially set
+							// to 1 as seen values will be deducted from this value.
+							double cv$consumerDistributionProbabilityAccumulator = Math.max((1.0 - cv$probabilitySample76Value20), 0.0);
+							
+							// Multiply (log space add) in the probability of the sample task to the overall probability
+							// for this configuration of the source random variable.
+							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+								cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+							else {
+								// If the second value is -infinity.
+								// 
+								// The proposed new value for the sample
+								// 
+								// The proposed new value for the sample
+								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+								else
+									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+							}
+						}
+					}
+				}
+			}
+			
+			// The probability ration for the proposed value and the current value.
+			// 
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+				// If it is not revert the changes.
+				// 
+				// Set the sample value
+				// 
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				current_metric_var[var146][var156] = cv$originalValue;
 		}
-		
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
-			// If it is not revert the changes.
-			// 
-			// Set the sample value
-			// 
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
-			current_metric_var[var146][var156] = cv$originalValue;
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 190 drawn from Beta 162. Inference was performed using a Beta to
 	// Bernoulli/Binomial conjugate prior.
 	private final void sample190(int var173, int var183, int threadID$cv$var183, Rng RNG$) {
+		constrainedFlag$sample190[var173][var183] = false;
+		
 		// Local variable to record the number of true samples.
 		double cv$sum = 0.0;
 		
@@ -3293,8 +3327,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				if(fixedFlag$sample57) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
 					if((var183 == st[sample$var196][0])) {
-						// Processing sample task 241 of consumer random variable null.
-						// 
+						// Mark that the sample has observed constrained data.
+						constrainedFlag$sample190[var173][var183] = true;
+						
 						// Include the value sampled by task 241 from random variable var231.
 						// 
 						// Increment the number of samples.
@@ -3316,6 +3351,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					
 					// Processing sample task 241 of consumer random variable null.
 					// 
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample190[var173][var183] = true;
+					
 					// Include the value sampled by task 241 from random variable var231.
 					// 
 					// Increment the number of samples.
@@ -3336,6 +3374,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					if((var183 == st[sample$var196][timeStep$var226])) {
 						// Processing sample task 241 of consumer random variable null.
 						// 
+						// Mark that the sample has observed constrained data.
+						constrainedFlag$sample190[var173][var183] = true;
+						
 						// Include the value sampled by task 241 from random variable var231.
 						// 
 						// Increment the number of samples.
@@ -3357,6 +3398,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					
 					// Processing sample task 241 of consumer random variable null.
 					// 
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample190[var173][var183] = true;
+					
 					// Include the value sampled by task 241 from random variable var231.
 					// 
 					// Increment the number of samples.
@@ -3370,16 +3414,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				}
 			}
 		}
-		
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		current_metric_valid_bias[var173][var183] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		if(constrainedFlag$sample190[var173][var183])
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			current_metric_valid_bias[var173][var183] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 20 drawn from Dirichlet 19. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
 	private final void sample20() {
+		constrainedFlag$sample20 = false;
+		
 		// Initialize the array values to 0.
 		// 
 		// Get the length of the array
@@ -3390,14 +3436,17 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(fixedFlag$sample57) {
 			// Processing random variable 54.
-			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1)
+			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
 				// Processing sample task 57 of consumer random variable null.
-				// 
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample20 = true;
+				
 				// Increment the sample counter with the value sampled by sample task 57 of random
 				// variable var54
 				// 
 				// A local reference to the scratch space.
 				cv$var20$countGlobal[st[sample$var45][0]] = (cv$var20$countGlobal[st[sample$var45][0]] + 1.0);
+			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -3417,19 +3466,21 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					cv$var20$countGlobal[cv$loopIndex] = (cv$var20$countGlobal[cv$loopIndex] + distribution$sample57[sample$var45][cv$loopIndex]);
 			}
 		}
-		
-		// Calculate the new sample value
-		// 
-		// Calculate a new sample value and write it into cv$targetLocal.
-		// 
-		// A reference local to the function for the sample variable.
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var20$countGlobal, initialStateDistribution, noStates);
+		if(constrainedFlag$sample20)
+			// Calculate the new sample value
+			// 
+			// Calculate a new sample value and write it into cv$targetLocal.
+			// 
+			// A reference local to the function for the sample variable.
+			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var20$countGlobal, initialStateDistribution, noStates);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 33 drawn from Dirichlet 21. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
 	private final void sample33(int var32, int threadID$cv$var32, Rng RNG$) {
+		constrainedFlag$sample33[var32] = false;
+		
 		// A local reference to the scratch space.
 		double[] cv$countLocal = cv$var33$countGlobal[threadID$cv$var32];
 		
@@ -3446,15 +3497,20 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				if((1 < length$metric[sample$var45][0])) {
 					if(fixedFlag$sample57) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((var32 == st[sample$var45][0]))
+						if((var32 == st[sample$var45][0])) {
+							// Mark that the sample has observed constrained data.
+							constrainedFlag$sample33[var32] = true;
+							
 							// Increment the sample counter with the value sampled by sample task 76 of random
 							// variable var73
 							// 
 							// Substituted "timeStep$var66" with its value "1".
 							cv$countLocal[st[sample$var45][1]] = (cv$countLocal[st[sample$var45][1]] + 1.0);
-					} else
-						// Processing sample task 76 of consumer random variable null.
-						// 
+						}
+					} else {
+						// Mark that the sample has observed constrained data.
+						constrainedFlag$sample33[var32] = true;
+						
 						// Increment the sample counter with the value sampled by sample task 76 of random
 						// variable var73
 						// 
@@ -3462,16 +3518,21 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// 
 						// Substituted "index$sample57$5" with its value "var32".
 						cv$countLocal[st[sample$var45][1]] = (cv$countLocal[st[sample$var45][1]] + distribution$sample57[sample$var45][var32]);
+					}
 				}
 			}
 			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
 				for(int timeStep$var66 = 2; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
-					if((var32 == st[sample$var45][(timeStep$var66 - 1)]))
+					if((var32 == st[sample$var45][(timeStep$var66 - 1)])) {
 						// Processing sample task 76 of consumer random variable null.
 						// 
+						// Mark that the sample has observed constrained data.
+						constrainedFlag$sample33[var32] = true;
+						
 						// Increment the sample counter with the value sampled by sample task 76 of random
 						// variable var73
 						cv$countLocal[st[sample$var45][timeStep$var66]] = (cv$countLocal[st[sample$var45][timeStep$var66]] + 1.0);
+					}
 				}
 			}
 		}
@@ -3550,19 +3611,21 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				}
 			}
 		}
-		
-		// Calculate the new sample value
-		// 
-		// Calculate a new sample value and write it into cv$targetLocal.
-		// 
-		// A reference local to the function for the sample variable.
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, m[var32], noStates);
+		if(constrainedFlag$sample33[var32])
+			// Calculate the new sample value
+			// 
+			// Calculate a new sample value and write it into cv$targetLocal.
+			// 
+			// A reference local to the function for the sample variable.
+			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, m[var32], noStates);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 57 drawn from Categorical 54. Inference was performed using variable
 	// marginalization.
 	private final void sample57(int sample$var45, int threadID$cv$sample$var45, Rng RNG$) {
+		constrainedFlag$sample57[sample$var45] = false;
+		
 		// Variable declaration of cv$numStates moved.
 		// Declaration comment was:
 		// Calculate the number of states to evaluate.
@@ -3584,13 +3647,14 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// it is added to the index probabilities.
 			// 
 			// Value of the variable at this index
-			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(initialStateDistribution[cv$valuePos]):Double.NEGATIVE_INFINITY);
+			double cv$accumulatedProbabilities = (((((cv$valuePos < noStates) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$valuePos])) && (initialStateDistribution[cv$valuePos] <= 1.0))?Math.log(initialStateDistribution[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((fixedFlag$sample76 && (1 < length$metric[sample$var45][0]))) {
 				// Looking for a path between Sample 57 and consumer Categorical 73.
-				// Processing sample task 76 of consumer random variable null.
-				// 
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample57[sample$var45] = true;
+				
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -3604,12 +3668,13 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// Value of the variable at this index
 				if((cv$valuePos < noStates)) {
-					// Substituted "index$sample$2_2" with its value "sample$var45".
-					// 
 					// Constructing a random variable input for use later.
 					// 
 					// Value of the variable at this index
-					cv$accumulatedConsumerProbabilities = (((0.0 <= st[sample$var45][1]) && (st[sample$var45][1] < noStates))?Math.log(m[cv$valuePos][st[sample$var45][1]]):Double.NEGATIVE_INFINITY);
+					double[] var72 = m[cv$valuePos];
+					
+					// Substituted "index$sample$2_2" with its value "sample$var45".
+					cv$accumulatedConsumerProbabilities = (((((0.0 <= st[sample$var45][1]) && (st[sample$var45][1] < noStates)) && (0.0 <= var72[st[sample$var45][1]])) && (var72[st[sample$var45][1]] <= 1.0))?Math.log(var72[st[sample$var45][1]]):Double.NEGATIVE_INFINITY);
 					
 					// Recorded the probability of reaching sample task 76 with the current configuration.
 					// 
@@ -3640,6 +3705,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Looking for a path between Sample 57 and consumer Bernoulli 231.
 				for(int server = 0; server < noServers; server += 1) {
 					// Processing sample task 241 of consumer random variable null.
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample57[sample$var45] = true;
+					
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -3656,7 +3724,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						double var230 = current_metric_valid_bias[server][cv$valuePos];
 						
 						// Substituted "sample$var196" with its value "sample$var45".
-						cv$accumulatedConsumerProbabilities = Math.log((metric_valid_g[sample$var45][server][0]?var230:(1.0 - var230)));
+						cv$accumulatedConsumerProbabilities = (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var45][server][0]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY);
 						
 						// Recorded the probability of reaching sample task 241 with the current configuration.
 						// 
@@ -3713,8 +3781,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// Substituted "sample$var196" with its value "sample$var45".
 						guard$sample57gaussian255[sample$var45][server][0] = true;
 						
-						// Processing sample task 256 of consumer random variable null.
-						// 
+						// Mark that the sample has observed constrained data.
+						constrainedFlag$sample57[sample$var45] = true;
+						
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -3735,7 +3804,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][0] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5));
+							cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][0] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 							
 							// Recorded the probability of reaching sample task 256 with the current configuration.
 							// 
@@ -3769,8 +3838,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// Substituted "sample$var196" with its value "sample$var45".
 						guard$sample57gaussian255[sample$var45][server][0] = true;
 						
-						// Processing sample task 256 of consumer random variable null.
-						// 
+						// Mark that the sample has observed constrained data.
+						constrainedFlag$sample57[sample$var45] = true;
+						
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -3791,7 +3861,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][0] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5));
+							cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][0] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 							
 							// Recorded the probability of reaching sample task 256 with the current configuration.
 							// 
@@ -3898,68 +3968,70 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Initialize a counter to track the reached distributions.
 			cv$stateProbabilityLocal[cv$valuePos] = (cv$accumulatedProbabilities + cv$accumulatedDistributionProbabilities);
 		}
-		
-		// Set the calculated probabilities to be the distribution values, and normalize
-		// 
-		// Local copy of the probability array
-		double[] cv$localProbability = distribution$sample57[sample$var45];
-		
-		// This value is not used before it is set again, so removing the value declaration.
-		// 
-		// The sum of all the probabilities in log space
-		double cv$logSum;
-		
-		// Sum all the values
-		// 
-		// Initialise the max to the first element.
-		double cv$lseMax = cv$stateProbabilityLocal[0];
-		
-		// Find max value.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
-			double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
-			if((cv$lseMax < cv$lseElementValue))
-				cv$lseMax = cv$lseElementValue;
-		}
-		
-		// If the maximum value is -infinity return -infinity.
-		if((cv$lseMax == Double.NEGATIVE_INFINITY))
-			cv$logSum = Double.NEGATIVE_INFINITY;
-		
-		// Sum the values in the array.
-		else {
-			// Initialise the sum of the array elements
-			double cv$lseSum = 0.0;
+		if(constrainedFlag$sample57[sample$var45]) {
+			// Set the calculated probabilities to be the distribution values, and normalize
+			// Local copy of the probability array
+			double[] cv$localProbability = distribution$sample57[sample$var45];
 			
-			// Offset values, move to normal space, and sum.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
-				cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
-			
-			// Increment the value of the target, moving the value back into log space.
+			// This value is not used before it is set again, so removing the value declaration.
 			// 
 			// The sum of all the probabilities in log space
-			cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
+			double cv$logSum;
+			
+			// Sum all the values
+			// 
+			// Initialise the max to the first element.
+			double cv$lseMax = cv$stateProbabilityLocal[0];
+			
+			// Find max value.
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
+				double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
+				if((cv$lseMax < cv$lseElementValue))
+					cv$lseMax = cv$lseElementValue;
+			}
+			
+			// If the maximum value is -infinity return -infinity.
+			if((cv$lseMax == Double.NEGATIVE_INFINITY))
+				cv$logSum = Double.NEGATIVE_INFINITY;
+			
+			// Sum the values in the array.
+			else {
+				// Initialise the sum of the array elements
+				double cv$lseSum = 0.0;
+				
+				// Offset values, move to normal space, and sum.
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
+					cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
+				
+				// Increment the value of the target, moving the value back into log space.
+				// 
+				// The sum of all the probabilities in log space
+				cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
+			}
+			
+			// If all the sum is zero, just share the probability evenly.
+			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
+				// Normalize log space values and move to normal space
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					cv$localProbability[cv$indexName] = (1.0 / cv$numStates);
+			} else {
+				// Normalize log space values and move to normal space
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					cv$localProbability[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
+			}
+			
+			// Set array values that are not computed for the input to negative infinity.
+			for(int cv$indexName = cv$numStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+				cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 		}
-		
-		// If all the sum is zero, just share the probability evenly.
-		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-				cv$localProbability[cv$indexName] = (1.0 / cv$numStates);
-		} else {
-			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-				cv$localProbability[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
-		}
-		
-		// Set array values that are not computed for the input to negative infinity.
-		for(int cv$indexName = cv$numStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
-			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 76 drawn from Categorical 73. Inference was performed using variable
 	// marginalization.
 	private final void sample76(int sample$var45, int timeStep$var66, int threadID$cv$sample$var45, Rng RNG$) {
+		constrainedFlag$sample76[sample$var45][(timeStep$var66 - 1)] = false;
+		
 		// Calculate the number of states to evaluate.
 		int cv$numStates = 0;
 		
@@ -4041,21 +4113,27 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// Initialize a counter to track the reached distributions.
 						cv$reachedDistributionSourceRV = 1.0;
 						
+						// Constructing a random variable input for use later.
+						// 
+						// Substituted "timeStep$var66" with its value "1".
+						double[] var72 = m[st[sample$var45][0]];
+						
 						// An accumulator to allow the value for each distribution to be constructed before
 						// it is added to the index probabilities.
 						// 
 						// Value of the variable at this index
-						// 
-						// Constructing a random variable input for use later.
-						// 
-						// Substituted "timeStep$var66" with its value "1".
-						double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(m[st[sample$var45][0]][cv$valuePos]):Double.NEGATIVE_INFINITY);
+						double cv$accumulatedProbabilities = ((((cv$valuePos < noStates) && (0.0 <= var72[cv$valuePos])) && (var72[cv$valuePos] <= 1.0))?Math.log(var72[cv$valuePos]):Double.NEGATIVE_INFINITY);
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
 						if((1 < length$metric[sample$var45][0])) {
 							// Looking for a path between Sample 76 and consumer Bernoulli 231.
 							for(int server = 0; server < noServers; server += 1) {
 								// Processing sample task 241 of consumer random variable null.
+								// Mark that the sample has observed constrained data.
+								// 
+								// Substituted "timeStep$var66" with its value "1".
+								constrainedFlag$sample76[sample$var45][0] = true;
+								
 								// Set an accumulator to sum the probabilities for each possible configuration of
 								// inputs.
 								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -4074,7 +4152,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Substituted "sample$var196" with its value "sample$var45".
 									// 
 									// Substituted "timeStep$var226" with its value "1".
-									cv$accumulatedConsumerProbabilities = Math.log((metric_valid_g[sample$var45][server][1]?var230:(1.0 - var230)));
+									cv$accumulatedConsumerProbabilities = (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var45][server][1]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY);
 									
 									// Recorded the probability of reaching sample task 241 with the current configuration.
 									// 
@@ -4143,8 +4221,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Substituted "timeStep$var226" with its value "1".
 									guard$sample76gaussian255[sample$var45][server][1] = true;
 									
-									// Processing sample task 256 of consumer random variable null.
+									// Mark that the sample has observed constrained data.
 									// 
+									// Substituted "timeStep$var66" with its value "1".
+									constrainedFlag$sample76[sample$var45][0] = true;
+									
 									// Set an accumulator to sum the probabilities for each possible configuration of
 									// inputs.
 									double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -4167,7 +4248,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 										// Constructing a random variable input for use later.
 										// 
 										// Value of the variable at this index
-										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5));
+										cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 										
 										// Recorded the probability of reaching sample task 256 with the current configuration.
 										// 
@@ -4205,8 +4286,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Substituted "timeStep$var226" with its value "1".
 									guard$sample76gaussian255[sample$var45][server][1] = true;
 									
-									// Processing sample task 256 of consumer random variable null.
+									// Mark that the sample has observed constrained data.
 									// 
+									// Substituted "timeStep$var66" with its value "1".
+									constrainedFlag$sample76[sample$var45][0] = true;
+									
 									// Set an accumulator to sum the probabilities for each possible configuration of
 									// inputs.
 									double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -4229,7 +4313,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 										// Constructing a random variable input for use later.
 										// 
 										// Value of the variable at this index
-										cv$accumulatedConsumerProbabilities = (DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5));
+										cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 										
 										// Recorded the probability of reaching sample task 256 with the current configuration.
 										// 
@@ -4269,17 +4353,25 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// Record the reached probability density.
 						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample57Value23);
 						
+						// Constructing a random variable input for use later.
+						double[] var72 = m[index$sample57$22];
+						
 						// An accumulator to allow the value for each distribution to be constructed before
 						// it is added to the index probabilities.
 						// 
-						// Constructing a random variable input for use later.
-						double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample57Value23) + Math.log(m[index$sample57$22][cv$valuePos]));
+						// Value of the variable at this index
+						double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample57Value23) + (((0.0 <= var72[cv$valuePos]) && (var72[cv$valuePos] <= 1.0))?Math.log(var72[cv$valuePos]):Double.NEGATIVE_INFINITY));
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
 						if((1 < length$metric[sample$var45][0])) {
 							// Looking for a path between Sample 76 and consumer Bernoulli 231.
 							for(int server = 0; server < noServers; server += 1) {
 								// Processing sample task 241 of consumer random variable null.
+								// Mark that the sample has observed constrained data.
+								// 
+								// Substituted "timeStep$var66" with its value "1".
+								constrainedFlag$sample76[sample$var45][0] = true;
+								
 								// Constructing a random variable input for use later.
 								// 
 								// Value of the variable at this index
@@ -4301,7 +4393,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								// Substituted "sample$var196" with its value "sample$var45".
 								// 
 								// Substituted "timeStep$var226" with its value "1".
-								cv$accumulatedProbabilities = (Math.log((metric_valid_g[sample$var45][server][1]?var230:(1.0 - var230))) + cv$accumulatedProbabilities);
+								cv$accumulatedProbabilities = ((((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var45][server][1]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 							}
 							
 							// Processing random variable 244.
@@ -4347,6 +4439,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Substituted "timeStep$var226" with its value "1".
 									guard$sample76gaussian255[sample$var45][server][1] = true;
 									
+									// Mark that the sample has observed constrained data.
+									// 
+									// Substituted "timeStep$var66" with its value "1".
+									constrainedFlag$sample76[sample$var45][0] = true;
+									
 									// Constructing a random variable input for use later.
 									// 
 									// Value of the variable at this index
@@ -4364,8 +4461,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Declaration comment was:
 									// This value is not used before it is set again, so removing the value declaration.
 									// 
-									// Processing sample task 256 of consumer random variable null.
-									// 
 									// Set an accumulator to sum the probabilities for each possible configuration of
 									// inputs.
 									// 
@@ -4376,7 +4471,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Constructing a random variable input for use later.
 									// 
 									// Value of the variable at this index
-									cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) + cv$accumulatedProbabilities) - (Math.log(var243) * 0.5));
+									cv$accumulatedProbabilities = (((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 								}
 							}
 							for(int server = 0; server < noServers; server += 1) {
@@ -4391,6 +4486,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Substituted "timeStep$var226" with its value "1".
 									guard$sample76gaussian255[sample$var45][server][1] = true;
 									
+									// Mark that the sample has observed constrained data.
+									// 
+									// Substituted "timeStep$var66" with its value "1".
+									constrainedFlag$sample76[sample$var45][0] = true;
+									
 									// Constructing a random variable input for use later.
 									// 
 									// Value of the variable at this index
@@ -4408,8 +4508,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Declaration comment was:
 									// This value is not used before it is set again, so removing the value declaration.
 									// 
-									// Processing sample task 256 of consumer random variable null.
-									// 
 									// Set an accumulator to sum the probabilities for each possible configuration of
 									// inputs.
 									// 
@@ -4420,7 +4518,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Constructing a random variable input for use later.
 									// 
 									// Value of the variable at this index
-									cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) + cv$accumulatedProbabilities) - (Math.log(var243) * 0.5));
+									cv$accumulatedProbabilities = (((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 								}
 							}
 						}
@@ -4468,13 +4566,19 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// Record the reached probability density.
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample76Value32);
 					
+					// Constructing a random variable input for use later.
+					double[] var72 = m[index$sample76$31];
+					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
 					// 
-					// Constructing a random variable input for use later.
-					double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample76Value32) + Math.log(m[index$sample76$31][cv$valuePos]));
+					// Value of the variable at this index
+					double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample76Value32) + (((0.0 <= var72[cv$valuePos]) && (var72[cv$valuePos] <= 1.0))?Math.log(var72[cv$valuePos]):Double.NEGATIVE_INFINITY));
 					for(int server = 0; server < noServers; server += 1) {
 						// Processing sample task 241 of consumer random variable null.
+						// Mark that the sample has observed constrained data.
+						constrainedFlag$sample76[sample$var45][(timeStep$var66 - 1)] = true;
+						
 						// Constructing a random variable input for use later.
 						double var230 = current_metric_valid_bias[server][index$sample76$31];
 						
@@ -4492,7 +4596,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// inputs.
 						// 
 						// Substituted "sample$var196" with its value "sample$var45".
-						cv$accumulatedProbabilities = (Math.log((metric_valid_g[sample$var45][server][timeStep$var66]?var230:(1.0 - var230))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var45][server][timeStep$var66]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
 					// Processing random variable 244.
@@ -4526,6 +4630,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Substituted "sample$var196" with its value "sample$var45".
 							guard$sample76gaussian255[sample$var45][server][timeStep$var66] = true;
 							
+							// Mark that the sample has observed constrained data.
+							constrainedFlag$sample76[sample$var45][(timeStep$var66 - 1)] = true;
+							
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
@@ -4543,8 +4650,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Declaration comment was:
 							// This value is not used before it is set again, so removing the value declaration.
 							// 
-							// Processing sample task 256 of consumer random variable null.
-							// 
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							// 
@@ -4553,7 +4658,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][timeStep$var66] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) + cv$accumulatedProbabilities) - (Math.log(var243) * 0.5));
+							cv$accumulatedProbabilities = (((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][timeStep$var66] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 						}
 					}
 					for(int server = 0; server < noServers; server += 1) {
@@ -4564,6 +4669,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Substituted "sample$var196" with its value "sample$var45".
 							guard$sample76gaussian255[sample$var45][server][timeStep$var66] = true;
 							
+							// Mark that the sample has observed constrained data.
+							constrainedFlag$sample76[sample$var45][(timeStep$var66 - 1)] = true;
+							
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
@@ -4581,8 +4689,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Declaration comment was:
 							// This value is not used before it is set again, so removing the value declaration.
 							// 
-							// Processing sample task 256 of consumer random variable null.
-							// 
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							// 
@@ -4591,7 +4697,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][timeStep$var66] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) + cv$accumulatedProbabilities) - (Math.log(var243) * 0.5));
+							cv$accumulatedProbabilities = (((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][timeStep$var66] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 						}
 					}
 					
@@ -4747,62 +4853,62 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Save the calculated index value into the array of index value probabilities
 			cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue + cv$accumulatedDistributionProbabilities) - Math.log(cv$reachedDistributionSourceRV));
 		}
-		
-		// Set the calculated probabilities to be the distribution values, and normalize
-		// 
-		// Local copy of the probability array
-		double[] cv$localProbability = distribution$sample76[sample$var45][(timeStep$var66 - 1)];
-		
-		// This value is not used before it is set again, so removing the value declaration.
-		// 
-		// The sum of all the probabilities in log space
-		double cv$logSum;
-		
-		// Sum all the values
-		// 
-		// Initialise the max to the first element.
-		double cv$lseMax = cv$stateProbabilityLocal[0];
-		
-		// Find max value.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
-			double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
-			if((cv$lseMax < cv$lseElementValue))
-				cv$lseMax = cv$lseElementValue;
-		}
-		
-		// If the maximum value is -infinity return -infinity.
-		if((cv$lseMax == Double.NEGATIVE_INFINITY))
-			cv$logSum = Double.NEGATIVE_INFINITY;
-		
-		// Sum the values in the array.
-		else {
-			// Initialise the sum of the array elements
-			double cv$lseSum = 0.0;
+		if(constrainedFlag$sample76[sample$var45][(timeStep$var66 - 1)]) {
+			// Set the calculated probabilities to be the distribution values, and normalize
+			// Local copy of the probability array
+			double[] cv$localProbability = distribution$sample76[sample$var45][(timeStep$var66 - 1)];
 			
-			// Offset values, move to normal space, and sum.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
-				cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
-			
-			// Increment the value of the target, moving the value back into log space.
+			// This value is not used before it is set again, so removing the value declaration.
 			// 
 			// The sum of all the probabilities in log space
-			cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
+			double cv$logSum;
+			
+			// Sum all the values
+			// 
+			// Initialise the max to the first element.
+			double cv$lseMax = cv$stateProbabilityLocal[0];
+			
+			// Find max value.
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
+				double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
+				if((cv$lseMax < cv$lseElementValue))
+					cv$lseMax = cv$lseElementValue;
+			}
+			
+			// If the maximum value is -infinity return -infinity.
+			if((cv$lseMax == Double.NEGATIVE_INFINITY))
+				cv$logSum = Double.NEGATIVE_INFINITY;
+			
+			// Sum the values in the array.
+			else {
+				// Initialise the sum of the array elements
+				double cv$lseSum = 0.0;
+				
+				// Offset values, move to normal space, and sum.
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
+					cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
+				
+				// Increment the value of the target, moving the value back into log space.
+				// 
+				// The sum of all the probabilities in log space
+				cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
+			}
+			
+			// If all the sum is zero, just share the probability evenly.
+			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
+				// Normalize log space values and move to normal space
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					cv$localProbability[cv$indexName] = (1.0 / cv$numStates);
+			} else {
+				// Normalize log space values and move to normal space
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					cv$localProbability[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
+			}
+			
+			// Set array values that are not computed for the input to negative infinity.
+			for(int cv$indexName = cv$numStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+				cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 		}
-		
-		// If all the sum is zero, just share the probability evenly.
-		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-				cv$localProbability[cv$indexName] = (1.0 / cv$numStates);
-		} else {
-			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-				cv$localProbability[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
-		}
-		
-		// Set array values that are not computed for the input to negative infinity.
-		for(int cv$indexName = cv$numStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
-			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -5038,6 +5144,32 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		for(int sample$var45 = 0; sample$var45 < length$metric.length; sample$var45 += 1)
 			distribution$sample57[sample$var45] = new double[noStates];
 		
+		// Constructor for constrainedFlag$sample190
+		constrainedFlag$sample190 = new boolean[length$metric[0].length][];
+		for(int var173 = 0; var173 < length$metric[0].length; var173 += 1)
+			constrainedFlag$sample190[var173] = new boolean[noStates];
+		
+		// Constructor for constrainedFlag$sample76
+		constrainedFlag$sample76 = new boolean[length$metric.length][];
+		for(int sample$var45 = 0; sample$var45 < length$metric.length; sample$var45 += 1)
+			constrainedFlag$sample76[sample$var45] = new boolean[(length$metric[sample$var45][0] - 1)];
+		
+		// Constructor for constrainedFlag$sample57
+		constrainedFlag$sample57 = new boolean[length$metric.length];
+		
+		// Constructor for constrainedFlag$sample134
+		constrainedFlag$sample134 = new boolean[length$metric[0].length][];
+		for(int var119 = 0; var119 < length$metric[0].length; var119 += 1)
+			constrainedFlag$sample134[var119] = new boolean[noStates];
+		
+		// Constructor for constrainedFlag$sample162
+		constrainedFlag$sample162 = new boolean[length$metric[0].length][];
+		for(int var146 = 0; var146 < length$metric[0].length; var146 += 1)
+			constrainedFlag$sample162[var146] = new boolean[noStates];
+		
+		// Constructor for constrainedFlag$sample33
+		constrainedFlag$sample33 = new boolean[noStates];
+		
 		// Allocate scratch space
 		allocateScratch();
 	}
@@ -5243,7 +5375,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								// Save the probability of each value
 								// 
 								// Probability for this value
-								cv$distribution$sample57[index$var54] = initialStateDistribution[index$var54];
+								cv$distribution$sample57[index$var54] = (((0.0 <= initialStateDistribution[index$var54]) && (initialStateDistribution[index$var54] <= 1.0))?initialStateDistribution[index$var54]:0.0);
 						}
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -5271,7 +5403,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 											double[] var72 = m[st[sample$var45][0]];
 											for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1)
 												// Save the probability of each value
-												cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] + var72[index$var73]);
+												cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] + (((0.0 <= var72[index$var73]) && (var72[index$var73] <= 1.0))?var72[index$var73]:0.0));
 										}
 									} else {
 										// Enumerating the possible outputs of Categorical 54.
@@ -5283,7 +5415,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 											double[] var72 = m[index$sample57$3];
 											for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1)
 												// Save the probability of each value
-												cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] + (cv$probabilitySample57Value4 * var72[index$var73]));
+												cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] + (cv$probabilitySample57Value4 * (((0.0 <= var72[index$var73]) && (var72[index$var73] <= 1.0))?var72[index$var73]:0.0)));
 										}
 									}
 								}
@@ -5302,7 +5434,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 										double[] var72 = m[index$sample76$12];
 										for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1)
 											// Save the probability of each value
-											cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] + (cv$probabilitySample76Value13 * var72[index$var73]));
+											cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] + (cv$probabilitySample76Value13 * (((0.0 <= var72[index$var73]) && (var72[index$var73] <= 1.0))?var72[index$var73]:0.0)));
 									}
 								}
 								
@@ -6049,25 +6181,6 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		noSamples = length$metric.length;
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noStates, 1,
-			(int forStart$var16, int forEnd$var16, int threadID$var16, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int var16 = forStart$var16; var16 < forEnd$var16; var16 += 1)
-						v[var16] = 0.1;
-			}
-		);
-		noServers = length$metric[0].length;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -6104,6 +6217,52 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		logProbability$metric_g = 0.0;
 		if(!fixedProbFlag$sample256)
 			logProbability$var245 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		noSamples = length$metric.length;
+		for(int var16 = 0; var16 < noStates; var16 += 1)
+			v[var16] = 0.1;
+		noServers = length$metric[0].length;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample190$1 = 0; index$constrainedFlag$sample190$1 < constrainedFlag$sample190.length; index$constrainedFlag$sample190$1 += 1) {
+			boolean[] cv$constrainedFlag$sample190$1 = constrainedFlag$sample190[index$constrainedFlag$sample190$1];
+			for(int index$constrainedFlag$sample190$2 = 0; index$constrainedFlag$sample190$2 < cv$constrainedFlag$sample190$1.length; index$constrainedFlag$sample190$2 += 1)
+				cv$constrainedFlag$sample190$1[index$constrainedFlag$sample190$2] = true;
+		}
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample76$1 = 0; index$constrainedFlag$sample76$1 < constrainedFlag$sample76.length; index$constrainedFlag$sample76$1 += 1) {
+			boolean[] cv$constrainedFlag$sample76$1 = constrainedFlag$sample76[index$constrainedFlag$sample76$1];
+			for(int index$constrainedFlag$sample76$2 = 0; index$constrainedFlag$sample76$2 < cv$constrainedFlag$sample76$1.length; index$constrainedFlag$sample76$2 += 1)
+				cv$constrainedFlag$sample76$1[index$constrainedFlag$sample76$2] = true;
+		}
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample57$1 = 0; index$constrainedFlag$sample57$1 < constrainedFlag$sample57.length; index$constrainedFlag$sample57$1 += 1)
+			constrainedFlag$sample57[index$constrainedFlag$sample57$1] = true;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample134$1 = 0; index$constrainedFlag$sample134$1 < constrainedFlag$sample134.length; index$constrainedFlag$sample134$1 += 1) {
+			boolean[] cv$constrainedFlag$sample134$1 = constrainedFlag$sample134[index$constrainedFlag$sample134$1];
+			for(int index$constrainedFlag$sample134$2 = 0; index$constrainedFlag$sample134$2 < cv$constrainedFlag$sample134$1.length; index$constrainedFlag$sample134$2 += 1)
+				cv$constrainedFlag$sample134$1[index$constrainedFlag$sample134$2] = true;
+		}
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample162$1 = 0; index$constrainedFlag$sample162$1 < constrainedFlag$sample162.length; index$constrainedFlag$sample162$1 += 1) {
+			boolean[] cv$constrainedFlag$sample162$1 = constrainedFlag$sample162[index$constrainedFlag$sample162$1];
+			for(int index$constrainedFlag$sample162$2 = 0; index$constrainedFlag$sample162$2 < cv$constrainedFlag$sample162$1.length; index$constrainedFlag$sample162$2 += 1)
+				cv$constrainedFlag$sample162$1[index$constrainedFlag$sample162$2] = true;
+		}
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample33$1 = 0; index$constrainedFlag$sample33$1 < constrainedFlag$sample33.length; index$constrainedFlag$sample33$1 += 1)
+			constrainedFlag$sample33[index$constrainedFlag$sample33$1] = true;
 	}
 
 	// Construct the evidence probabilities.

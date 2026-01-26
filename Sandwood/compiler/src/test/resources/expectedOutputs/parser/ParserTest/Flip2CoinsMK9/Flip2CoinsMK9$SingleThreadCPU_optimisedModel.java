@@ -9,6 +9,7 @@ final class Flip2CoinsMK9$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// Declare the variables for the model.
 	private double[] bias;
 	private int coins;
+	private boolean[] constrainedFlag$sample18;
 	private boolean fixedFlag$sample18 = false;
 	private boolean fixedProbFlag$sample18 = false;
 	private boolean fixedProbFlag$sample31 = false;
@@ -240,7 +241,7 @@ final class Flip2CoinsMK9$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// Store the value of the function call, so the function call is only made once.
 					// 
 					// The sample value to calculate the probability of generating
-					cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[j][var30]?bias[j]:(1.0 - bias[j]))));
+					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= bias[j]) && (bias[j] <= 1.0))?Math.log((flips[j][var30]?bias[j]:(1.0 - bias[j]))):Double.NEGATIVE_INFINITY));
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -287,6 +288,8 @@ final class Flip2CoinsMK9$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// by sample task 18 drawn from beta. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample18(int j) {
+		constrainedFlag$sample18[j] = false;
+		
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
 		
@@ -297,7 +300,11 @@ final class Flip2CoinsMK9$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// 
 		// Processing sample task 31 of consumer random variable bernoulli.
 		for(int var30 = 0; var30 < shape[j]; var30 += 1) {
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample18[j] = true;
+			
 			// Include the value sampled by task 31 from random variable bernoulli.
+			// 
 			// Increment the number of samples.
 			cv$count = (cv$count + 1);
 			
@@ -305,9 +312,9 @@ final class Flip2CoinsMK9$SingleThreadCPU extends org.sandwood.runtime.internal.
 			if(flips[j][var30])
 				cv$sum = (cv$sum + 1);
 		}
-		
-		// Write out the new value of the sample.
-		bias[j] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		if(constrainedFlag$sample18[j])
+			// Write out the new value of the sample.
+			bias[j] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -328,6 +335,9 @@ final class Flip2CoinsMK9$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(!fixedFlag$sample18)
 			// Constructor for bias
 			bias = new double[shape.length];
+		
+		// Constructor for constrainedFlag$sample18
+		constrainedFlag$sample18 = new boolean[shape.length];
 		
 		// Constructor for logProbability$bernoulli
 		logProbability$bernoulli = new double[shape.length];
@@ -417,13 +427,6 @@ final class Flip2CoinsMK9$SingleThreadCPU extends org.sandwood.runtime.internal.
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		coins = shape.length;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -444,6 +447,17 @@ final class Flip2CoinsMK9$SingleThreadCPU extends org.sandwood.runtime.internal.
 			for(int j = 0; j < coins; j += 1)
 				logProbability$sample31[j] = Double.NaN;
 		}
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		coins = shape.length;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample18$1 = 0; index$constrainedFlag$sample18$1 < constrainedFlag$sample18.length; index$constrainedFlag$sample18$1 += 1)
+			constrainedFlag$sample18[index$constrainedFlag$sample18$1] = true;
 	}
 
 	// Construct the evidence probabilities.

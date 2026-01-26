@@ -7,6 +7,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 final class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements PoissonDecayMK1$CoreInterface {
 	private double a;
 	private double b;
+	private boolean constrainedFlag$sample6 = true;
 	private int[] decay;
 	private int[] decayDetected;
 	private boolean fixedFlag$sample6 = false;
@@ -161,13 +162,16 @@ final class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	private final void sample6() {
+		constrainedFlag$sample6 = false;
 		double cv$sum = 0.0;
 		int cv$count = 0;
 		for(int var18 = 0; var18 < samples; var18 += 1) {
+			constrainedFlag$sample6 = true;
 			cv$sum = (cv$sum + decay[var18]);
 			cv$count = (cv$count + 1);
 		}
-		rate = Conjugates.sampleConjugateGammaPoisson(RNG$, a, b, cv$sum, cv$count);
+		if(constrainedFlag$sample6)
+			rate = Conjugates.sampleConjugateGammaPoisson(RNG$, a, b, cv$sum, cv$count);
 	}
 
 	@Override
@@ -227,11 +231,6 @@ final class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {
-		samples = length$decayDetected;
-	}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -241,6 +240,11 @@ final class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal
 		logProbability$decay = 0.0;
 		if(!fixedProbFlag$sample19)
 			logProbability$var19 = Double.NaN;
+	}
+
+	@Override
+	public final void initializeModel() {
+		samples = length$decayDetected;
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -197,6 +197,17 @@ public final class VariableNames {
         return new VariableDescription<>(fixedFlag + varDesc, VariableType.BooleanVariable, varDesc.name.comment);
     }
 
+    /**
+     * Prefix for a flag to mark if a sample task could have been constrained either by a fixed result or an observed
+     * result somewhere in the model.
+     */
+    private static final String constrainedFlag = "constrainedFlag" + Name.prefix;
+
+    public static VariableDescription<BooleanVariable> constrainedFlagName(SampleTask<?, ?> task) {
+        VariableDescription<?> varDesc = task.getUniqueVarDesc();
+        return new VariableDescription<BooleanVariable>(constrainedFlag + varDesc, VariableType.BooleanVariable, false);
+    }
+
     private static final String fixedProbFlag = "fixedProbFlag" + Name.prefix;
 
     public static VariableDescription<BooleanVariable> getProbabilityFixedFlag(SampleTask<?, ?> task) {
@@ -213,6 +224,10 @@ public final class VariableNames {
     public static VariableDescription<IntVariable> indexName(VariableDescription<?> desc, String id) {
         return new VariableDescription<>(index + desc.name + Name.prefix + id, VariableType.IntVariable,
                 desc.name.comment);
+    }
+
+    public static VariableDescription<IntVariable> indexName(VariableName name, String id) {
+        return new VariableDescription<>(index + name + Name.prefix + id, VariableType.IntVariable, name.comment);
     }
 
     public static <A extends Variable<A>> VariableDescription<A> variableName(String alias, int id, Type<A> type,

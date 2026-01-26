@@ -7,6 +7,9 @@ import org.sandwood.runtime.model.ExecutionTarget;
 final class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements LinearRegressionBasic$CoreInterface {
 	private double b0;
 	private double b1;
+	private boolean constrainedFlag$sample11 = true;
+	private boolean constrainedFlag$sample15 = true;
+	private boolean constrainedFlag$sample7 = true;
 	private boolean fixedFlag$sample11 = false;
 	private boolean fixedFlag$sample15 = false;
 	private boolean fixedFlag$sample7 = false;
@@ -198,7 +201,7 @@ final class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.i
 		if(!fixedProbFlag$sample31) {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < noSamples; i += 1) {
-				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((y[i] - (b0 + (b1 * x[i]))) / Math.sqrt(variance))) - (Math.log(variance) * 0.5));
+				double cv$distributionAccumulator = ((0.0 < variance)?(DistributionSampling.logProbabilityGaussian(((y[i] - (b0 + (b1 * x[i]))) / Math.sqrt(variance))) - (Math.log(variance) * 0.5)):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$sample31[i] = cv$distributionAccumulator;
 			}
@@ -232,11 +235,13 @@ final class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.i
 	}
 
 	private final void sample11() {
+		constrainedFlag$sample11 = false;
 		double cv$sum = 0.0;
 		double cv$denominatorSquareSum = 0.0;
 		boolean cv$sigmaNotFound = true;
 		double cv$sigmaValue = 1.0;
 		for(int i = 0; i < noSamples; i += 1) {
+			constrainedFlag$sample11 = true;
 			double cv$denominator = x[i];
 			cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
 			cv$sum = (cv$sum + (cv$denominator * (y[i] - b0)));
@@ -245,26 +250,32 @@ final class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.i
 				cv$sigmaNotFound = false;
 			}
 		}
-		b1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 1.0, 5.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		if(constrainedFlag$sample11)
+			b1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 1.0, 5.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
 	private final void sample15() {
+		constrainedFlag$sample15 = false;
 		double cv$sum = 0.0;
 		int cv$count = 0;
 		for(int i = 0; i < noSamples; i += 1) {
+			constrainedFlag$sample15 = true;
 			double cv$var30$diff = ((b0 + (b1 * x[i])) - y[i]);
 			cv$sum = (cv$sum + (cv$var30$diff * cv$var30$diff));
 			cv$count = (cv$count + 1);
 		}
-		variance = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		if(constrainedFlag$sample15)
+			variance = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	private final void sample7() {
+		constrainedFlag$sample7 = false;
 		double cv$sum = 0.0;
 		double cv$denominatorSquareSum = 0.0;
 		boolean cv$sigmaNotFound = true;
 		double cv$sigmaValue = 1.0;
 		for(int i = 0; i < noSamples; i += 1) {
+			constrainedFlag$sample7 = true;
 			cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
 			cv$sum = ((cv$sum + y[i]) - (b1 * x[i]));
 			if(cv$sigmaNotFound) {
@@ -272,7 +283,8 @@ final class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.i
 				cv$sigmaNotFound = false;
 			}
 		}
-		b0 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 2.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		if(constrainedFlag$sample7)
+			b0 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 2.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
 	@Override
@@ -358,11 +370,6 @@ final class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.i
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {
-		noSamples = x.length;
-	}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -377,6 +384,11 @@ final class LinearRegressionBasic$SingleThreadCPU extends org.sandwood.runtime.i
 			for(int i = 0; i < noSamples; i += 1)
 				logProbability$sample31[i] = Double.NaN;
 		}
+	}
+
+	@Override
+	public final void initializeModel() {
+		noSamples = x.length;
 	}
 
 	@Override

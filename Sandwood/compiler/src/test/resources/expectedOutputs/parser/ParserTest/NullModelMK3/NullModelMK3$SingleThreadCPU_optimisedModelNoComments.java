@@ -5,6 +5,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements NullModelMK3$CoreInterface {
 	private double bias;
+	private boolean constrainedFlag$sample10 = true;
 	private double eta;
 	private boolean fixedFlag$sample10 = false;
 	private boolean fixedProbFlag$sample10 = false;
@@ -144,13 +145,16 @@ final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	private final void sample10() {
+		constrainedFlag$sample10 = false;
 		double cv$originalValue = bias;
 		double cv$var = (((bias < 0)?(-bias):bias) * 40.0);
 		if((cv$var < 0.01))
 			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + bias);
+		constrainedFlag$sample10 = true;
 		double cv$originalProbability = (DistributionSampling.logProbabilityBinomial(positiveCount, bias, observedSampleCount) + (((min <= bias) && (bias < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY));
 		bias = cv$proposedValue;
+		constrainedFlag$sample10 = true;
 		double cv$ratio = ((DistributionSampling.logProbabilityBinomial(positiveCount, cv$proposedValue, observedSampleCount) + (((min <= cv$proposedValue) && (cv$proposedValue < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY)) - cv$originalProbability);
 		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
 			bias = cv$originalValue;
@@ -201,11 +205,6 @@ final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {
-		min = ((eta * 4.0) / 5.0);
-	}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -214,6 +213,11 @@ final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$binomial = 0.0;
 		if(!fixedProbFlag$sample12)
 			logProbability$positiveCount = Double.NaN;
+	}
+
+	@Override
+	public final void initializeModel() {
+		min = ((eta * 4.0) / 5.0);
 	}
 
 	@Override

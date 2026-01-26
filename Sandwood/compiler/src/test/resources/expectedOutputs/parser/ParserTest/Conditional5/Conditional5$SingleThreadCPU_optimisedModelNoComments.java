@@ -197,9 +197,6 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -214,6 +211,9 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedProbFlag$sample13)
 			logProbability$sample13 = Double.NaN;
 	}
+
+	@Override
+	public final void initializeModel() {}
 
 	@Override
 	public final void logEvidenceProbabilities() {

@@ -1,0 +1,82 @@
+/*
+ * Sandwood
+ *
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
+ *
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+ 
+package org.sandwood.compiler.tests.parser;
+
+public model NoisyOr() {
+
+
+	// 1)
+	double prior1 = 0.01;
+	boolean flag1 = bernoulli(prior1).sample();
+	
+	// 2)
+	double prior2 = 0.01;
+	boolean flag2 = bernoulli(prior2).sample();
+	
+	// 3)
+	double prior3 = 0.01;
+	boolean flag3 = bernoulli(prior3).sample();
+	
+	// 4)
+	double prior4 = 0.01;
+	boolean flag4 = bernoulli(prior4).sample();
+	
+	// 5)
+	double prior5 = 0.01;
+	boolean flag5 = bernoulli(prior5).sample();
+	
+	// 6)
+	double prior6 = 0.01;
+	boolean flag6 = bernoulli(prior6).sample();
+	
+	// Start n12
+	double[][] p = new double[6][];
+	p[0] = new double[] {0,1,0,0,0};
+	p[1] = new double[] {0.5,0.5,0,0,0};
+	p[2] = new double[] {0,0,0,1,0};
+	p[3] = new double[] {0,0,0,1,0};
+	p[4] = new double[] {0,0,1,0,0};
+	p[5] = new double[] {0,0,1,0,0};
+	
+	boolean[] noisyOr = new boolean[5];
+	
+	for(int i=0; i<5; i++) {
+		boolean[] issues = new boolean[6];
+		issues[0] = bernoulli(flag1?p[0][i]:0).sample();
+		issues[1] = bernoulli(flag2?p[1][i]:0).sample();
+		issues[2] = bernoulli(flag3?p[2][i]:0).sample();
+		issues[3] = bernoulli(flag4?p[3][i]:0).sample();
+		issues[4] = bernoulli(flag5?p[4][i]:0).sample();
+		issues[5] = bernoulli(flag6?p[5][i]:0).sample();
+		
+		noisyOr[i] = reduce(issues, false, (x, y) -> {
+			return x || y;
+		});
+	}
+	
+	// Starting n13
+	double[][] p13 = new double[5][];
+	p13[0] = new double[] {0.1, 0.9};
+	p13[1] = new double[] {1.0, 0.0};
+	p13[2] = new double[] {0.5, 0.5};
+	p13[3] = new double[] {0.5, 0.5};
+	p13[4] = new double[] {0.0, 1.0};
+	
+	boolean[] n13State = new boolean[2];
+	
+	for(int i=0; i<2; i++) {
+		boolean[] issues = new boolean[5];
+		for(int j=0; j<5; j++)
+			issues[j] = bernoulli(noisyOr[j]?p13[j][i]:0).sample();
+		
+		n13State[i] = reduce(issues, false, (x, y) -> {
+			return x || y;
+		});
+	}
+}

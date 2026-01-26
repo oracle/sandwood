@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -15,6 +15,7 @@ import static org.sandwood.compiler.trees.irTree.IRTree.load;
 import static org.sandwood.compiler.trees.irTree.IRTree.negateBoolean;
 import static org.sandwood.compiler.trees.irTree.IRTree.sequential;
 import static org.sandwood.compiler.trees.irTree.IRTree.store;
+import static org.sandwood.compiler.trees.irTree.IRTree.voidFunction;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,7 +49,8 @@ import org.sandwood.compiler.compilation.inference.metropolisHastings.Metropolis
 import org.sandwood.compiler.compilation.inference.metropolisHastings.MetropolisHastingsMultinomialFunctions;
 import org.sandwood.compiler.compilation.util.CompilationDesc;
 import org.sandwood.compiler.compilation.util.TreeUtils;
-import org.sandwood.compiler.dataflowGraph.Sandwood;
+import org.sandwood.compiler.compilation.util.TreeUtils.ArrayDesc;
+import org.sandwood.compiler.compilation.util.TreeUtils.ScopeDesc;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope.ScopeType;
@@ -74,13 +76,17 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
 import org.sandwood.compiler.exceptions.SandwoodModelException;
 import org.sandwood.compiler.names.ClassName;
+import org.sandwood.compiler.names.FunctionName;
 import org.sandwood.compiler.names.ModelClassName;
 import org.sandwood.compiler.names.PackageName;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.TraceHandle;
 import org.sandwood.compiler.traces.Traces;
+import org.sandwood.compiler.traces.Traces.IntermediateDesc;
+import org.sandwood.compiler.traces.Traces.SampleTraceDesc;
 import org.sandwood.compiler.traces.TracesImplementation;
 import org.sandwood.compiler.traces.guards.ScopeConstructor;
+import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.ArgDesc;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.Visibility;
@@ -93,6 +99,7 @@ import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
 import org.sandwood.compiler.trees.irTree.IRVoidFunction;
 import org.sandwood.compiler.trees.irTree.transformations.ReverseTreeTransformation;
+import org.sandwood.compiler.trees.irTree.util.KnownValuesIR;
 import org.sandwood.compiler.trees.outputTree.OutputSandwoodClassGenerated;
 import org.sandwood.compiler.trees.outputTree.OutputSandwoodClassWrapper;
 import org.sandwood.compiler.trees.outputTree.OutputSandwoodInterfaceGenerated;
@@ -257,7 +264,7 @@ public class APICompile {
 
     // TODO make sure only currentInstances are used when allocating fields, otherwise the same fields will be allocated
     // again and again.
-    private static void declareClassFields(CompilationContext compilationCtx) {
+    private static <A extends Variable<A>> void declareClassFields(CompilationContext compilationCtx) {
         // Construct the distribution fields required for sampled distributions probabilities.
         for(DistributionSampleTask<?, ?> rv:compilationCtx.traces.getDistributionSampleTasks()) {
             ScopeStack.pushScope(rv.scope());
@@ -291,6 +298,25 @@ public class APICompile {
             VariableDescription<BooleanVariable> flagName = VariableNames.fixedFlagName(s);
             compilationCtx.addFlagClassField(flagName, constant(false));
         }
+
+        // Constrained sample flags
+        compilationCtx.pushIsSerial(true);
+        for(SampleTask<?, ?> s:compilationCtx.traces.getAllIntermediateSamples()) {
+            VariableDescription<BooleanVariable> flagName = VariableNames.constrainedFlagName(s);
+            List<ScopeDesc> scopeDescs = TreeUtils.getScopeDescs(s);
+            if(scopeDescs.size() == 1)
+                compilationCtx.addConstructedClassField(flagName, IRTree.constant(true));
+            else {
+                ArrayDesc<A> arrayDescs = TreeUtils.getArrayDescription(scopeDescs, flagName.type);
+                VariableDescription<ArrayVariable<A>> altFlagName = VariableNames.altTypeName(flagName,
+                        arrayDescs.type);
+                IRTreeVoid allocator = TreeUtils.allocate(altFlagName, arrayDescs, compilationCtx);
+                compilationCtx.addConstructedClassField(altFlagName, allocator);
+                IRTreeVoid setter = TreeUtils.setArray(altFlagName, IRTree.constant(true));
+                compilationCtx.addArrayInitilisation(setter);
+            }
+        }
+        compilationCtx.popIsSerial();
 
         // Inputs
         for(Variable<?> v:compilationCtx.traces.modelInputs())
@@ -336,7 +362,7 @@ public class APICompile {
     private static void sharedObservationCheck(Traces traces, CompilationDesc compDesc) {
         Set<SandwoodModelException> errors = new HashSet<>();
 
-        PriorityQueue<SampleTask<?, ?>> p1 = new PriorityQueue<>(traces.getObservedSampleTasks());
+        PriorityQueue<SampleTask<?, ?>> p1 = new PriorityQueue<>(traces.getAllObservedSampleTasks());
         PriorityQueue<SampleTask<?, ?>> p2 = new PriorityQueue<>();
         while(!p1.isEmpty()) {
             SampleTask<?, ?> s1 = p1.poll();
@@ -396,8 +422,7 @@ public class APICompile {
         compilationCtx.phase = CompilationPhase.MAIN_METHODS;
         compilationCtx.initialize();
 
-        Map<Variable<?>, Set<TraceHandle>> forwardVariables = getObservedVariableForwardableInputs(vars,
-                compilationCtx);
+        Map<Variable<?>, Set<TraceHandle>> forwardVariables = getNonObservedForwardableVars(vars, compilationCtx);
         Set<Variable<?>> toRemove = new HashSet<>();
         for(Variable<?> v:forwardVariables.keySet()) {
             if(v.isSample())
@@ -438,8 +463,47 @@ public class APICompile {
                 compilationCtx.traces.getAllIntermediateSamples());
         while(!sampleQueue.isEmpty()) {
             SampleTask<?, ?> s = sampleQueue.poll();
-            processSample(s, sampleSignatures.get(s), compDesc, compilationCtx);
+            processIntermediateSample(s, sampleSignatures.get(s), compDesc, compilationCtx);
         }
+
+        sampleQueue.addAll(compilationCtx.traces.getAllTerminalSamples());
+        while(!sampleQueue.isEmpty()) {
+            SampleTask<?, ?> s = sampleQueue.poll();
+            processTerminalSample(s, compDesc, compilationCtx);
+        }
+    }
+
+    private static void processTerminalSample(SampleTask<?, ?> sample, CompilationDesc compDesc,
+            CompilationContext compilationCtx) {
+        SampleTraceDesc sampleDesc = compilationCtx.traces.getSampleTrace(sample);
+        IntermediateDesc intermediates = compilationCtx.traces.getIntermediates(sample);
+
+        compilationCtx.initialize();
+
+        List<Scope> scopes = TreeUtils.getScopes(sample);
+        int size = scopes.size();
+        for(int i = 1; i < size; i++)
+            compilationCtx.addScopeSubstitute(scopes.get(i), GlobalScope.scope);
+        ScopeConstructor c = ScopeConstructor.construct(sample, Tree.NoComment, compilationCtx);
+        for(int i = 1; i < size; i++)
+            compilationCtx.removeScopeSubstitute(scopes.get(i));
+
+        c.addTree((TreeBuilderInfo info) -> {
+            ForwardExecutionBuilder.forwardVariableBody(sampleDesc.sampleVariable, compilationCtx);
+            intermediates.setIntermediateValues(false, compilationCtx);
+        });
+        IRTreeVoid result = compilationCtx.getOutermostScopeTree();
+
+        ArgDesc<?>[] functionArgs = TreeUtils.constructGibbsArgs(scopes, compilationCtx);
+        KnownValuesIR knownValues = KnownValuesIR.constructKnownValues(scopes, compilationCtx);
+
+        VariableDescription<?> sampleName = sample.getUniqueVarDesc();
+        FunctionName functionName = FunctionName.createFunctionName(sampleName);
+
+        String comment = "Pick a value from the distribution for the unconditioned variable from " + sampleName;
+
+        IRVoidFunction f = voidFunction(Visibility.PRIVATE, functionName, functionArgs, result, comment, knownValues);
+        compilationCtx.addFunction(SampleFunctionClass.INFERENCE, sample, f);
     }
 
     private static Map<SampleTask<?, ?>, Map<RandomVariable<?, ?>, boolean[]>> constructSampleSignatures(
@@ -457,8 +521,8 @@ public class APICompile {
         return sampleSignatures;
     }
 
-    private static <A extends ScalarVariable<A>, B extends RandomVariable<A, B>> void processSample(SampleTask<?, ?> s,
-            Map<RandomVariable<?, ?>, boolean[]> signature, CompilationDesc compDesc,
+    private static <A extends ScalarVariable<A>, B extends RandomVariable<A, B>> void processIntermediateSample(
+            SampleTask<?, ?> s, Map<RandomVariable<?, ?>, boolean[]> signature, CompilationDesc compDesc,
             CompilationContext compilationCtx) {
         @SuppressWarnings("unchecked")
         SampleTask<A, B> sample = (SampleTask<A, B>) s;
@@ -614,6 +678,16 @@ public class APICompile {
     }
 
     private static void gibbsRound(CompilationContext compilationCtx) {
+        IRTreeVoid t1 = constructGibbsIntermediates(compilationCtx);
+        IRTreeVoid t2 = constructGibbsTerminal(compilationCtx);
+
+        compilationCtx.addFunction(AuxFunctionType.GIBBS_ROUND, Visibility.PUBLIC, new ArgDesc[0],
+                sequential(Tree.NoComment, t1, t2), true, "Method to execute one round of Gibbs sampling.");
+        // Rest the in inference flag once the method completes.
+        compilationCtx.setInInference(false);
+    }
+
+    private static IRTreeVoid constructGibbsTerminal(CompilationContext compilationCtx) {
         compilationCtx.initialize();
         // As this method calls the inference functions, it is treated as an inference function from the point of view
         // of which scopes need to be serialised.
@@ -622,9 +696,30 @@ public class APICompile {
         Map<SampleTask<?, ?>, IRFunction<?>> inferenceFunctions = compilationCtx
                 .getFunctionMap(SampleFunctionClass.INFERENCE);
 
-        PriorityQueue<SampleTask<?, ?>> p = new PriorityQueue<>(inferenceFunctions.keySet());
-        while(!p.isEmpty()) {
-            SampleTask<?, ?> s = p.poll();
+        PriorityQueue<SampleTask<?, ?>> intermediateToAdd = new PriorityQueue<>(
+                compilationCtx.traces.getAllTerminalSamples());
+        while(!intermediateToAdd.isEmpty()) {
+            SampleTask<?, ?> s = intermediateToAdd.poll();
+            IRFunction<?> f = inferenceFunctions.get(s);
+            callSampleMethod(s, f, compilationCtx);
+        }
+
+        return compilationCtx.getOutermostScopeTree();
+    }
+
+    private static IRTreeVoid constructGibbsIntermediates(CompilationContext compilationCtx) {
+        compilationCtx.initialize();
+        // As this method calls the inference functions, it is treated as an inference function from the point of view
+        // of which scopes need to be serialised.
+        compilationCtx.setInInference(true);
+
+        Map<SampleTask<?, ?>, IRFunction<?>> inferenceFunctions = compilationCtx
+                .getFunctionMap(SampleFunctionClass.INFERENCE);
+
+        PriorityQueue<SampleTask<?, ?>> intermediateToAdd = new PriorityQueue<>(
+                compilationCtx.traces.getAllIntermediateSamples());
+        while(!intermediateToAdd.isEmpty()) {
+            SampleTask<?, ?> s = intermediateToAdd.poll();
             IRFunction<?> f = inferenceFunctions.get(s);
             callSampleMethod(s, f, compilationCtx);
         }
@@ -649,11 +744,7 @@ public class APICompile {
             tree = sequential(Tree.NoComment, conditional, store(flagName, negateBoolean(load(flagName)),
                     "Reverse the direction of execution for the next iteration"));
         }
-
-        compilationCtx.addFunction(AuxFunctionType.GIBBS_ROUND, Visibility.PUBLIC, new ArgDesc[0], tree, true,
-                "Method to execute one round of Gibbs sampling.");
-        // Rest the in inference flag once the method completes.
-        compilationCtx.setInInference(false);
+        return tree;
     }
 
     private static void callSampleMethod(SampleTask<?, ?> sampleTask, IRFunction<?> f,
@@ -781,8 +872,7 @@ public class APICompile {
                 forwardBody, true,
                 "Method to execute the model code conventionally with priming of fixed intermediate variables.");
 
-        Map<Variable<?>, Set<TraceHandle>> forwardVariables = getObservedVariableForwardableInputs(vars,
-                compilationCtx);
+        Map<Variable<?>, Set<TraceHandle>> forwardVariables = getNonObservedForwardableVars(vars, compilationCtx);
         forwardBody = forwardBody(forwardVariables, GuardStatus.FREE, Distributions.NO_DISTRIBUTIONS,
                 PrimingStatus.NOT_PRIMING, compilationCtx);
         compilationCtx.addFunction(AuxFunctionType.FORWARD_GENERATION_VALUES_NO_OUTPUTS, Visibility.PUBLIC,
@@ -809,8 +899,9 @@ public class APICompile {
         // Clear function dependent values to prevent pollution from one context to
         // another.
         compilationCtx.initialize();
+        compilationCtx.pushIsSerial(true);
         // Set the phase
-        compilationCtx.phase = CompilationPhase.INITIALIZATION_OF_CONSTANTS;
+        compilationCtx.phase = CompilationPhase.INITIALIZATION_OF_MODEL;
 
         // Order the required variables and construct the trees to generate them.
         PriorityQueue<Variable<?>> p = new PriorityQueue<>(compilationCtx.traces.deterministicVariables());
@@ -820,13 +911,18 @@ public class APICompile {
                     PrimingStatus.PRIMING, compilationCtx);
         }
 
+        for(IRTreeVoid t:compilationCtx.getArrayInitilisations())
+            compilationCtx.addTreeToScope(GlobalScope.scope, t);
+
         IRTreeVoid body = compilationCtx.getOutermostScopeTree();
         compilationCtx.addFunction(AuxFunctionType.INITIALIZE, Visibility.PUBLIC, new ArgDesc[0], body, true,
                 "Method for initialising the model into a valid state before commencing inference etc.");
+
+        compilationCtx.popIsSerial();
     }
 
     private static void evidenceProbabilities(CompilationContext compilationCtx) {
-        Set<SampleTask<?, ?>> observedSamples = compilationCtx.traces.getObservedSampleTasks();
+        Set<SampleTask<?, ?>> observedSamples = compilationCtx.traces.getAllObservedSampleTasks();
         Set<SampleTask<?, ?>> allSamples = compilationCtx.traces.getAllSampleTasks();
         Map<SampleTask<?, ?>, IRFunction<?>> evidenceFunctions = compilationCtx
                 .getFunctionMap(SampleFunctionClass.LOG_PROBABILITY_VALUE);
@@ -861,14 +957,18 @@ public class APICompile {
                 sequential(probabilityCalls, Tree.NoComment), true, "Construct the evidence probabilities.");
     }
 
-    private static Map<Variable<?>, Set<TraceHandle>> getObservedVariableForwardableInputs(
-            Set<Variable<?>> forwardableVars, CompilationContext compilationCtx) {
-        Set<Variable<?>> evidenceVariables = compilationCtx.traces.getEvidenceVariables();
+    private static Map<Variable<?>, Set<TraceHandle>> getNonObservedForwardableVars(Set<Variable<?>> forwardableVars,
+            CompilationContext compilationCtx) {
+        Set<Variable<?>> endVariables = new HashSet<>();
+        Set<Variable<?>> terminalVariables = compilationCtx.traces.getAllTerminalVariables();
+        endVariables.addAll(compilationCtx.traces.getEvidenceVariables());
+        endVariables.addAll(terminalVariables);
 
         // Calculate all the variables that will need forward functions
-        Set<Variable<?>> inputVariables = Variable.collectInputVariable(evidenceVariables);
+        Set<Variable<?>> functionVariables = Variable.collectInputVariable(endVariables);
+        functionVariables.addAll(terminalVariables);
         Map<Variable<?>, Set<TraceHandle>> outputVariables = new HashMap<>();
-        for(Variable<?> v:inputVariables)
+        for(Variable<?> v:functionVariables)
             if(forwardableVars.contains(v) && !v.isFixed())
                 addAllVars(outputVariables, v, compilationCtx);
         return outputVariables;

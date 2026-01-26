@@ -7,6 +7,8 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean constrainedFlag$sample16 = true;
+	private boolean constrainedFlag$sample4 = true;
 	private double[] cv$var4$stateProbabilityGlobal;
 	private boolean fixedFlag$sample16 = false;
 	private boolean fixedFlag$sample4 = false;
@@ -505,6 +507,8 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 16 drawn from Uniform 13. Inference was performed using Metropolis-Hastings.
 	private final void sample16() {
+		constrainedFlag$sample16 = false;
+		
 		// The original value of the sample
 		double cv$originalValue = var14;
 		
@@ -521,6 +525,9 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// 
 		// The original value of the sample
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + var14);
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample16 = true;
 		
 		// Variable declaration of cv$originalProbability moved.
 		// Declaration comment was:
@@ -556,6 +563,9 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Write out the new value of the sample.
 		var14 = cv$proposedValue;
 		bias = cv$proposedValue;
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample16 = true;
 		
 		// The probability ration for the proposed value and the current value.
 		// 
@@ -596,6 +606,8 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 4 drawn from bernoulli. Inference was performed using variable marginalization.
 	private final void sample4() {
+		constrainedFlag$sample4 = false;
+		
 		// Write out the new value of the sample.
 		// 
 		// Variable declaration of cv$currentValue moved.
@@ -607,6 +619,9 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Substituted "cv$valuePos" with its value "0".
 		guard = false;
 		bias = var14;
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample4 = true;
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
@@ -624,10 +639,10 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Set an accumulator to record the consumer distributions not seen. Initially set
 		// to 1 as seen values will be deducted from this value.
 		// 
-		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-		// Declaration comment was:
 		// Processing sample task 16 of consumer random variable null.
 		// 
+		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+		// Declaration comment was:
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
 		// 
@@ -644,8 +659,6 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// 
 		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 		// Declaration comment was:
-		// Processing sample task 20 of consumer random variable null.
-		// 
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
 		cv$var4$stateProbabilityGlobal[0] = (((((0.0 <= var14) && (var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY) + DistributionSampling.logProbabilityBeta(value, var14, 1.0)) - 0.6931471805599453);
@@ -661,6 +674,9 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Substituted "cv$valuePos" with its value "1".
 		guard = true;
 		bias = 0.5;
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample4 = true;
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
@@ -690,8 +706,6 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// 
 		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 		// Declaration comment was:
-		// Processing sample task 20 of consumer random variable null.
-		// 
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
 		cv$var4$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBeta(value, 0.5, 1.0) - 0.6931471805599453);
@@ -896,11 +910,6 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -921,6 +930,11 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedProbFlag$sample20)
 			logProbability$value = Double.NaN;
 	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {}
 
 	// Construct the evidence probabilities.
 	@Override

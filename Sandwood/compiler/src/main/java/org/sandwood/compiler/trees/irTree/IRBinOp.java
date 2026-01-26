@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -472,8 +472,7 @@ public abstract class IRBinOp<L extends Variable<L>, R extends Variable<R>, RT e
             }
 
             @Override
-            public IRBinOp<BooleanVariable, BooleanVariable, BooleanVariable> applyTransformation(
-                    TreeTransformation t) {
+            public IRTreeReturn<BooleanVariable> applyTransformation(TreeTransformation t) {
                 return IRTree.and(t.transformReturn(left), t.transformReturn(right));
             }
 
@@ -498,8 +497,7 @@ public abstract class IRBinOp<L extends Variable<L>, R extends Variable<R>, RT e
             }
 
             @Override
-            public IRBinOp<BooleanVariable, BooleanVariable, BooleanVariable> applyTransformation(
-                    TreeTransformation t) {
+            public IRTreeReturn<BooleanVariable> applyTransformation(TreeTransformation t) {
                 return IRTree.or(t.transformReturn(left), t.transformReturn(right));
             }
 

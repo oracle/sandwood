@@ -5,6 +5,8 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements LogitRegressionTest$CoreInterface {
 	private double bias;
+	private boolean[] constrainedFlag$sample35;
+	private boolean constrainedFlag$sample42 = true;
 	private boolean fixedFlag$sample35 = false;
 	private boolean fixedFlag$sample42 = false;
 	private boolean fixedProbFlag$sample35 = false;
@@ -191,18 +193,18 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 			for(int i = 0; i < n; i += 1) {
 				{
 					double var91 = (p[i][0] + bias);
-					double cv$weightedProbability = Math.log((y[i][0]?var91:(1.0 - var91)));
+					double cv$weightedProbability = (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY);
 					cv$accumulator = (cv$accumulator + cv$weightedProbability);
 					logProbability$sample94[i][0] = cv$weightedProbability;
 				}
 				{
 					double var91 = (p[i][1] + bias);
-					double cv$weightedProbability = Math.log((y[i][1]?var91:(1.0 - var91)));
+					double cv$weightedProbability = (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY);
 					cv$accumulator = (cv$accumulator + cv$weightedProbability);
 					logProbability$sample94[i][1] = cv$weightedProbability;
 				}
 				double var91 = (p[i][2] + bias);
-				double cv$weightedProbability = Math.log((y[i][2]?var91:(1.0 - var91)));
+				double cv$weightedProbability = (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$weightedProbability);
 				logProbability$sample94[i][2] = cv$weightedProbability;
 			}
@@ -224,6 +226,7 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	private final void sample35(int var33) {
+		constrainedFlag$sample35[var33] = false;
 		double cv$originalValue = weights[var33];
 		double cv$originalProbability;
 		double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
@@ -273,18 +276,21 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 					double traceTempVariable$var69$15_4 = Math.exp((cv$originalValue * x[i][0]));
 					if(!guard$sample35bernoulli93$global[i][0]) {
 						guard$sample35bernoulli93$global[i][0] = true;
+						constrainedFlag$sample35[0] = true;
 						double var91 = ((indicator[i][0] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
-						cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					if(!guard$sample35bernoulli93$global[i][1]) {
 						guard$sample35bernoulli93$global[i][1] = true;
+						constrainedFlag$sample35[0] = true;
 						double var91 = ((indicator[i][1] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
-						cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					if(!guard$sample35bernoulli93$global[i][2]) {
 						guard$sample35bernoulli93$global[i][2] = true;
+						constrainedFlag$sample35[0] = true;
 						double var91 = ((indicator[i][2] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
-						cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
@@ -293,18 +299,21 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 					double traceTempVariable$var71$16_4 = Math.exp((cv$originalValue * x[i][1]));
 					if(!guard$sample35bernoulli93$global[i][0]) {
 						guard$sample35bernoulli93$global[i][0] = true;
+						constrainedFlag$sample35[1] = true;
 						double var91 = ((indicator[i][0] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
-						cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					if(!guard$sample35bernoulli93$global[i][1]) {
 						guard$sample35bernoulli93$global[i][1] = true;
+						constrainedFlag$sample35[1] = true;
 						double var91 = ((indicator[i][1] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
-						cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					if(!guard$sample35bernoulli93$global[i][2]) {
 						guard$sample35bernoulli93$global[i][2] = true;
+						constrainedFlag$sample35[1] = true;
 						double var91 = ((indicator[i][2] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
-						cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
@@ -313,18 +322,21 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 					double traceTempVariable$var74$17_4 = Math.exp((cv$originalValue * x[i][2]));
 					if(!guard$sample35bernoulli93$global[i][0]) {
 						guard$sample35bernoulli93$global[i][0] = true;
+						constrainedFlag$sample35[2] = true;
 						double var91 = ((indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
-						cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					if(!guard$sample35bernoulli93$global[i][1]) {
 						guard$sample35bernoulli93$global[i][1] = true;
+						constrainedFlag$sample35[2] = true;
 						double var91 = ((indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
-						cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					if(!guard$sample35bernoulli93$global[i][2]) {
 						guard$sample35bernoulli93$global[i][2] = true;
+						constrainedFlag$sample35[2] = true;
 						double var91 = ((indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
-						cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
@@ -332,8 +344,9 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 				for(int i = 0; i < n; i += 1) {
 					if(!guard$sample35bernoulli93$global[i][0]) {
 						guard$sample35bernoulli93$global[i][0] = true;
+						constrainedFlag$sample35[0] = true;
 						double var91 = ((Math.exp((cv$originalValue * x[i][0])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
-						cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
@@ -341,8 +354,9 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 				for(int i = 0; i < n; i += 1) {
 					if(!guard$sample35bernoulli93$global[i][1]) {
 						guard$sample35bernoulli93$global[i][1] = true;
+						constrainedFlag$sample35[1] = true;
 						double var91 = ((Math.exp((cv$originalValue * x[i][1])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
-						cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
@@ -350,258 +364,16 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 				for(int i = 0; i < n; i += 1) {
 					if(!guard$sample35bernoulli93$global[i][2]) {
 						guard$sample35bernoulli93$global[i][2] = true;
+						constrainedFlag$sample35[2] = true;
 						double var91 = ((Math.exp((cv$originalValue * x[i][2])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
-						cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
-		weights[var33] = cv$proposedValue;
-		if((var33 == 0)) {
-			for(int i = 0; i < n; i += 1)
-				indicator[i][0] = Math.exp((weights[0] * x[i][0]));
-		}
-		if((var33 == 1)) {
-			for(int i = 0; i < n; i += 1)
-				indicator[i][1] = Math.exp((weights[1] * x[i][1]));
-		}
-		if((var33 == 2)) {
-			for(int i = 0; i < n; i += 1)
-				indicator[i][2] = Math.exp((weights[2] * x[i][2]));
-		}
-		if((var33 == 0)) {
-			for(int i = 0; i < n; i += 1) {
-				guard$sample35put89$global[i][0] = false;
-				guard$sample35put89$global[i][1] = false;
-				guard$sample35put89$global[i][2] = false;
-			}
-		}
-		if((var33 == 1)) {
-			for(int i = 0; i < n; i += 1) {
-				guard$sample35put89$global[i][0] = false;
-				guard$sample35put89$global[i][1] = false;
-				guard$sample35put89$global[i][2] = false;
-			}
-		}
-		if((var33 == 2)) {
-			for(int i = 0; i < n; i += 1) {
-				guard$sample35put89$global[i][0] = false;
-				guard$sample35put89$global[i][1] = false;
-				guard$sample35put89$global[i][2] = false;
-			}
-		}
-		if((var33 == 0)) {
-			for(int i = 0; i < n; i += 1)
-				guard$sample35put89$global[i][0] = false;
-		}
-		if((var33 == 1)) {
-			for(int i = 0; i < n; i += 1)
-				guard$sample35put89$global[i][1] = false;
-		}
-		if((var33 == 2)) {
-			for(int i = 0; i < n; i += 1)
-				guard$sample35put89$global[i][2] = false;
-		}
-		if((var33 == 0)) {
-			for(int i = 0; i < n; i += 1) {
-				if(!guard$sample35put89$global[i][0]) {
-					guard$sample35put89$global[i][0] = true;
-					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				}
-				if(!guard$sample35put89$global[i][1]) {
-					guard$sample35put89$global[i][1] = true;
-					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				}
-				if(!guard$sample35put89$global[i][2]) {
-					guard$sample35put89$global[i][2] = true;
-					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				}
-			}
-		}
-		if((var33 == 1)) {
-			for(int i = 0; i < n; i += 1) {
-				if(!guard$sample35put89$global[i][0]) {
-					guard$sample35put89$global[i][0] = true;
-					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				}
-				if(!guard$sample35put89$global[i][1]) {
-					guard$sample35put89$global[i][1] = true;
-					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				}
-				if(!guard$sample35put89$global[i][2]) {
-					guard$sample35put89$global[i][2] = true;
-					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				}
-			}
-		}
-		if((var33 == 2)) {
-			for(int i = 0; i < n; i += 1) {
-				if(!guard$sample35put89$global[i][0]) {
-					guard$sample35put89$global[i][0] = true;
-					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				}
-				if(!guard$sample35put89$global[i][1]) {
-					guard$sample35put89$global[i][1] = true;
-					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				}
-				if(!guard$sample35put89$global[i][2]) {
-					guard$sample35put89$global[i][2] = true;
-					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				}
-			}
-		}
-		if((var33 == 0)) {
-			for(int i = 0; i < n; i += 1) {
-				if(!guard$sample35put89$global[i][0]) {
-					guard$sample35put89$global[i][0] = true;
-					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				}
-			}
-		}
-		if((var33 == 1)) {
-			for(int i = 0; i < n; i += 1) {
-				if(!guard$sample35put89$global[i][1]) {
-					guard$sample35put89$global[i][1] = true;
-					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				}
-			}
-		}
-		if((var33 == 2)) {
-			for(int i = 0; i < n; i += 1) {
-				if(!guard$sample35put89$global[i][2]) {
-					guard$sample35put89$global[i][2] = true;
-					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
-				}
-			}
-		}
-		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
-		if((var33 == 0)) {
-			for(int i = 0; i < n; i += 1)
-				guard$sample35bernoulli93$global[i][0] = false;
-			for(int i = 0; i < n; i += 1)
-				guard$sample35bernoulli93$global[i][1] = false;
-			for(int i = 0; i < n; i += 1)
-				guard$sample35bernoulli93$global[i][2] = false;
-		}
-		if((var33 == 1)) {
-			for(int i = 0; i < n; i += 1)
-				guard$sample35bernoulli93$global[i][0] = false;
-			for(int i = 0; i < n; i += 1)
-				guard$sample35bernoulli93$global[i][1] = false;
-			for(int i = 0; i < n; i += 1)
-				guard$sample35bernoulli93$global[i][2] = false;
-		}
-		if((var33 == 2)) {
-			for(int i = 0; i < n; i += 1)
-				guard$sample35bernoulli93$global[i][0] = false;
-			for(int i = 0; i < n; i += 1)
-				guard$sample35bernoulli93$global[i][1] = false;
-			for(int i = 0; i < n; i += 1)
-				guard$sample35bernoulli93$global[i][2] = false;
-		}
-		if((var33 == 0)) {
-			for(int i = 0; i < n; i += 1)
-				guard$sample35bernoulli93$global[i][0] = false;
-		}
-		if((var33 == 1)) {
-			for(int i = 0; i < n; i += 1)
-				guard$sample35bernoulli93$global[i][1] = false;
-		}
-		if((var33 == 2)) {
-			for(int i = 0; i < n; i += 1)
-				guard$sample35bernoulli93$global[i][2] = false;
-		}
-		if((var33 == 0)) {
-			for(int i = 0; i < n; i += 1) {
-				double traceTempVariable$var69$15_4 = Math.exp((cv$proposedValue * x[i][0]));
-				if(!guard$sample35bernoulli93$global[i][0]) {
-					guard$sample35bernoulli93$global[i][0] = true;
-					double var91 = ((indicator[i][0] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
-					cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
-				}
-				if(!guard$sample35bernoulli93$global[i][1]) {
-					guard$sample35bernoulli93$global[i][1] = true;
-					double var91 = ((indicator[i][1] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
-					cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
-				}
-				if(!guard$sample35bernoulli93$global[i][2]) {
-					guard$sample35bernoulli93$global[i][2] = true;
-					double var91 = ((indicator[i][2] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
-					cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
-				}
-			}
-		}
-		if((var33 == 1)) {
-			for(int i = 0; i < n; i += 1) {
-				double traceTempVariable$var71$16_4 = Math.exp((cv$proposedValue * x[i][1]));
-				if(!guard$sample35bernoulli93$global[i][0]) {
-					guard$sample35bernoulli93$global[i][0] = true;
-					double var91 = ((indicator[i][0] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
-					cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
-				}
-				if(!guard$sample35bernoulli93$global[i][1]) {
-					guard$sample35bernoulli93$global[i][1] = true;
-					double var91 = ((indicator[i][1] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
-					cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
-				}
-				if(!guard$sample35bernoulli93$global[i][2]) {
-					guard$sample35bernoulli93$global[i][2] = true;
-					double var91 = ((indicator[i][2] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
-					cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
-				}
-			}
-		}
-		if((var33 == 2)) {
-			for(int i = 0; i < n; i += 1) {
-				double traceTempVariable$var74$17_4 = Math.exp((cv$proposedValue * x[i][2]));
-				if(!guard$sample35bernoulli93$global[i][0]) {
-					guard$sample35bernoulli93$global[i][0] = true;
-					double var91 = ((indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
-					cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
-				}
-				if(!guard$sample35bernoulli93$global[i][1]) {
-					guard$sample35bernoulli93$global[i][1] = true;
-					double var91 = ((indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
-					cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
-				}
-				if(!guard$sample35bernoulli93$global[i][2]) {
-					guard$sample35bernoulli93$global[i][2] = true;
-					double var91 = ((indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
-					cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
-				}
-			}
-		}
-		if((var33 == 0)) {
-			for(int i = 0; i < n; i += 1) {
-				if(!guard$sample35bernoulli93$global[i][0]) {
-					guard$sample35bernoulli93$global[i][0] = true;
-					double var91 = ((Math.exp((cv$proposedValue * x[i][0])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
-					cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
-				}
-			}
-		}
-		if((var33 == 1)) {
-			for(int i = 0; i < n; i += 1) {
-				if(!guard$sample35bernoulli93$global[i][1]) {
-					guard$sample35bernoulli93$global[i][1] = true;
-					double var91 = ((Math.exp((cv$proposedValue * x[i][1])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
-					cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
-				}
-			}
-		}
-		if((var33 == 2)) {
-			for(int i = 0; i < n; i += 1) {
-				if(!guard$sample35bernoulli93$global[i][2]) {
-					guard$sample35bernoulli93$global[i][2] = true;
-					double var91 = ((Math.exp((cv$proposedValue * x[i][2])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
-					cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
-				}
-			}
-		}
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-			weights[var33] = cv$originalValue;
+		if(constrainedFlag$sample35[var33]) {
+			weights[var33] = cv$proposedValue;
 			if((var33 == 0)) {
 				for(int i = 0; i < n; i += 1)
 					indicator[i][0] = Math.exp((weights[0] * x[i][0]));
@@ -719,10 +491,268 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 					}
 				}
 			}
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
+			if((var33 == 0)) {
+				for(int i = 0; i < n; i += 1)
+					guard$sample35bernoulli93$global[i][0] = false;
+				for(int i = 0; i < n; i += 1)
+					guard$sample35bernoulli93$global[i][1] = false;
+				for(int i = 0; i < n; i += 1)
+					guard$sample35bernoulli93$global[i][2] = false;
+			}
+			if((var33 == 1)) {
+				for(int i = 0; i < n; i += 1)
+					guard$sample35bernoulli93$global[i][0] = false;
+				for(int i = 0; i < n; i += 1)
+					guard$sample35bernoulli93$global[i][1] = false;
+				for(int i = 0; i < n; i += 1)
+					guard$sample35bernoulli93$global[i][2] = false;
+			}
+			if((var33 == 2)) {
+				for(int i = 0; i < n; i += 1)
+					guard$sample35bernoulli93$global[i][0] = false;
+				for(int i = 0; i < n; i += 1)
+					guard$sample35bernoulli93$global[i][1] = false;
+				for(int i = 0; i < n; i += 1)
+					guard$sample35bernoulli93$global[i][2] = false;
+			}
+			if((var33 == 0)) {
+				for(int i = 0; i < n; i += 1)
+					guard$sample35bernoulli93$global[i][0] = false;
+			}
+			if((var33 == 1)) {
+				for(int i = 0; i < n; i += 1)
+					guard$sample35bernoulli93$global[i][1] = false;
+			}
+			if((var33 == 2)) {
+				for(int i = 0; i < n; i += 1)
+					guard$sample35bernoulli93$global[i][2] = false;
+			}
+			if((var33 == 0)) {
+				for(int i = 0; i < n; i += 1) {
+					double traceTempVariable$var69$15_4 = Math.exp((cv$proposedValue * x[i][0]));
+					if(!guard$sample35bernoulli93$global[i][0]) {
+						guard$sample35bernoulli93$global[i][0] = true;
+						constrainedFlag$sample35[0] = true;
+						double var91 = ((indicator[i][0] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					}
+					if(!guard$sample35bernoulli93$global[i][1]) {
+						guard$sample35bernoulli93$global[i][1] = true;
+						constrainedFlag$sample35[0] = true;
+						double var91 = ((indicator[i][1] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					}
+					if(!guard$sample35bernoulli93$global[i][2]) {
+						guard$sample35bernoulli93$global[i][2] = true;
+						constrainedFlag$sample35[0] = true;
+						double var91 = ((indicator[i][2] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					}
+				}
+			}
+			if((var33 == 1)) {
+				for(int i = 0; i < n; i += 1) {
+					double traceTempVariable$var71$16_4 = Math.exp((cv$proposedValue * x[i][1]));
+					if(!guard$sample35bernoulli93$global[i][0]) {
+						guard$sample35bernoulli93$global[i][0] = true;
+						constrainedFlag$sample35[1] = true;
+						double var91 = ((indicator[i][0] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					}
+					if(!guard$sample35bernoulli93$global[i][1]) {
+						guard$sample35bernoulli93$global[i][1] = true;
+						constrainedFlag$sample35[1] = true;
+						double var91 = ((indicator[i][1] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					}
+					if(!guard$sample35bernoulli93$global[i][2]) {
+						guard$sample35bernoulli93$global[i][2] = true;
+						constrainedFlag$sample35[1] = true;
+						double var91 = ((indicator[i][2] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					}
+				}
+			}
+			if((var33 == 2)) {
+				for(int i = 0; i < n; i += 1) {
+					double traceTempVariable$var74$17_4 = Math.exp((cv$proposedValue * x[i][2]));
+					if(!guard$sample35bernoulli93$global[i][0]) {
+						guard$sample35bernoulli93$global[i][0] = true;
+						constrainedFlag$sample35[2] = true;
+						double var91 = ((indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					}
+					if(!guard$sample35bernoulli93$global[i][1]) {
+						guard$sample35bernoulli93$global[i][1] = true;
+						constrainedFlag$sample35[2] = true;
+						double var91 = ((indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					}
+					if(!guard$sample35bernoulli93$global[i][2]) {
+						guard$sample35bernoulli93$global[i][2] = true;
+						constrainedFlag$sample35[2] = true;
+						double var91 = ((indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					}
+				}
+			}
+			if((var33 == 0)) {
+				for(int i = 0; i < n; i += 1) {
+					if(!guard$sample35bernoulli93$global[i][0]) {
+						guard$sample35bernoulli93$global[i][0] = true;
+						constrainedFlag$sample35[0] = true;
+						double var91 = ((Math.exp((cv$proposedValue * x[i][0])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					}
+				}
+			}
+			if((var33 == 1)) {
+				for(int i = 0; i < n; i += 1) {
+					if(!guard$sample35bernoulli93$global[i][1]) {
+						guard$sample35bernoulli93$global[i][1] = true;
+						constrainedFlag$sample35[1] = true;
+						double var91 = ((Math.exp((cv$proposedValue * x[i][1])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					}
+				}
+			}
+			if((var33 == 2)) {
+				for(int i = 0; i < n; i += 1) {
+					if(!guard$sample35bernoulli93$global[i][2]) {
+						guard$sample35bernoulli93$global[i][2] = true;
+						constrainedFlag$sample35[2] = true;
+						double var91 = ((Math.exp((cv$proposedValue * x[i][2])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					}
+				}
+			}
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				weights[var33] = cv$originalValue;
+				if((var33 == 0)) {
+					for(int i = 0; i < n; i += 1)
+						indicator[i][0] = Math.exp((weights[0] * x[i][0]));
+				}
+				if((var33 == 1)) {
+					for(int i = 0; i < n; i += 1)
+						indicator[i][1] = Math.exp((weights[1] * x[i][1]));
+				}
+				if((var33 == 2)) {
+					for(int i = 0; i < n; i += 1)
+						indicator[i][2] = Math.exp((weights[2] * x[i][2]));
+				}
+				if((var33 == 0)) {
+					for(int i = 0; i < n; i += 1) {
+						guard$sample35put89$global[i][0] = false;
+						guard$sample35put89$global[i][1] = false;
+						guard$sample35put89$global[i][2] = false;
+					}
+				}
+				if((var33 == 1)) {
+					for(int i = 0; i < n; i += 1) {
+						guard$sample35put89$global[i][0] = false;
+						guard$sample35put89$global[i][1] = false;
+						guard$sample35put89$global[i][2] = false;
+					}
+				}
+				if((var33 == 2)) {
+					for(int i = 0; i < n; i += 1) {
+						guard$sample35put89$global[i][0] = false;
+						guard$sample35put89$global[i][1] = false;
+						guard$sample35put89$global[i][2] = false;
+					}
+				}
+				if((var33 == 0)) {
+					for(int i = 0; i < n; i += 1)
+						guard$sample35put89$global[i][0] = false;
+				}
+				if((var33 == 1)) {
+					for(int i = 0; i < n; i += 1)
+						guard$sample35put89$global[i][1] = false;
+				}
+				if((var33 == 2)) {
+					for(int i = 0; i < n; i += 1)
+						guard$sample35put89$global[i][2] = false;
+				}
+				if((var33 == 0)) {
+					for(int i = 0; i < n; i += 1) {
+						if(!guard$sample35put89$global[i][0]) {
+							guard$sample35put89$global[i][0] = true;
+							p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						}
+						if(!guard$sample35put89$global[i][1]) {
+							guard$sample35put89$global[i][1] = true;
+							p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						}
+						if(!guard$sample35put89$global[i][2]) {
+							guard$sample35put89$global[i][2] = true;
+							p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						}
+					}
+				}
+				if((var33 == 1)) {
+					for(int i = 0; i < n; i += 1) {
+						if(!guard$sample35put89$global[i][0]) {
+							guard$sample35put89$global[i][0] = true;
+							p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						}
+						if(!guard$sample35put89$global[i][1]) {
+							guard$sample35put89$global[i][1] = true;
+							p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						}
+						if(!guard$sample35put89$global[i][2]) {
+							guard$sample35put89$global[i][2] = true;
+							p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						}
+					}
+				}
+				if((var33 == 2)) {
+					for(int i = 0; i < n; i += 1) {
+						if(!guard$sample35put89$global[i][0]) {
+							guard$sample35put89$global[i][0] = true;
+							p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						}
+						if(!guard$sample35put89$global[i][1]) {
+							guard$sample35put89$global[i][1] = true;
+							p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						}
+						if(!guard$sample35put89$global[i][2]) {
+							guard$sample35put89$global[i][2] = true;
+							p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						}
+					}
+				}
+				if((var33 == 0)) {
+					for(int i = 0; i < n; i += 1) {
+						if(!guard$sample35put89$global[i][0]) {
+							guard$sample35put89$global[i][0] = true;
+							p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						}
+					}
+				}
+				if((var33 == 1)) {
+					for(int i = 0; i < n; i += 1) {
+						if(!guard$sample35put89$global[i][1]) {
+							guard$sample35put89$global[i][1] = true;
+							p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						}
+					}
+				}
+				if((var33 == 2)) {
+					for(int i = 0; i < n; i += 1) {
+						if(!guard$sample35put89$global[i][2]) {
+							guard$sample35put89$global[i][2] = true;
+							p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						}
+					}
+				}
+			}
 		}
 	}
 
 	private final void sample42() {
+		constrainedFlag$sample42 = false;
 		double cv$originalValue = bias;
 		double cv$originalProbability;
 		double cv$var = (((bias < 0)?(-bias):bias) * 40.0);
@@ -733,35 +763,43 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((bias / 3.1622776601683795)) - 1.151292546497023);
 			for(int i = 0; i < n; i += 1) {
 				{
+					constrainedFlag$sample42 = true;
 					double var91 = (p[i][0] + bias);
-					cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				{
+					constrainedFlag$sample42 = true;
 					double var91 = (p[i][1] + bias);
-					cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
+				constrainedFlag$sample42 = true;
 				double var91 = (p[i][2] + bias);
-				cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
-		bias = cv$proposedValue;
-		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
-		for(int i = 0; i < n; i += 1) {
-			{
-				double var91 = (p[i][0] + cv$proposedValue);
-				cv$accumulatedProbabilities = (Math.log((y[i][0]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
+		if(constrainedFlag$sample42) {
+			bias = cv$proposedValue;
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
+			for(int i = 0; i < n; i += 1) {
+				{
+					constrainedFlag$sample42 = true;
+					double var91 = (p[i][0] + cv$proposedValue);
+					cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
+				{
+					constrainedFlag$sample42 = true;
+					double var91 = (p[i][1] + cv$proposedValue);
+					cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
+				constrainedFlag$sample42 = true;
+				double var91 = (p[i][2] + cv$proposedValue);
+				cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
-			{
-				double var91 = (p[i][1] + cv$proposedValue);
-				cv$accumulatedProbabilities = (Math.log((y[i][1]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
-			}
-			double var91 = (p[i][2] + cv$proposedValue);
-			cv$accumulatedProbabilities = (Math.log((y[i][2]?var91:(1.0 - var91))) + cv$accumulatedProbabilities);
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+				bias = cv$originalValue;
 		}
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
-			bias = cv$originalValue;
 	}
 
 	@Override
@@ -791,6 +829,7 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 		p = new double[x.length][];
 		for(int i = 0; i < x.length; i += 1)
 			p[i] = new double[3];
+		constrainedFlag$sample35 = new boolean[3];
 		logProbability$sample35 = new double[3];
 		logProbability$sample94 = new double[x.length][];
 		for(int i = 0; i < x.length; i += 1)
@@ -930,11 +969,6 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {
-		n = x.length;
-	}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -954,6 +988,13 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 				logProbability$sample94[i][2] = Double.NaN;
 			}
 		}
+	}
+
+	@Override
+	public final void initializeModel() {
+		n = x.length;
+		for(int index$constrainedFlag$sample35$1 = 0; index$constrainedFlag$sample35$1 < constrainedFlag$sample35.length; index$constrainedFlag$sample35$1 += 1)
+			constrainedFlag$sample35[index$constrainedFlag$sample35$1] = true;
 	}
 
 	@Override

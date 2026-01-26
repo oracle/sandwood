@@ -8,6 +8,8 @@ final class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.in
 	
 	// Declare the variables for the model.
 	private double[] beta;
+	private boolean constrainedFlag$sample17 = true;
+	private boolean constrainedFlag$sample20 = true;
 	private double[] cv$var17$countGlobal;
 	private boolean fixedFlag$sample17 = false;
 	private boolean fixedFlag$sample20 = false;
@@ -458,7 +460,7 @@ final class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.in
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((output[i$var47]?var24:(1.0 - var24))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var24) && (var24 <= 1.0))?Math.log((output[i$var47]?var24:(1.0 - var24))):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -555,7 +557,7 @@ final class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.in
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((output[i$var59]?var29:(1.0 - var29))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var29) && (var29 <= 1.0))?Math.log((output[i$var59]?var29:(1.0 - var29))):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -652,7 +654,7 @@ final class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.in
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((output[i$var71]?var34:(1.0 - var34))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var34) && (var34 <= 1.0))?Math.log((output[i$var71]?var34:(1.0 - var34))):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -720,6 +722,8 @@ final class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.in
 	// by sample task 17 drawn from Dirichlet 16. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
 	private final void sample17() {
+		constrainedFlag$sample17 = false;
+		
 		// Unrolled loop
 		// 
 		// A local reference to the scratch space.
@@ -731,26 +735,37 @@ final class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.in
 		// A local reference to the scratch space.
 		cv$var17$countGlobal[2] = 0.0;
 		
-		// A local reference to the scratch space.
-		cv$var17$countGlobal[0] = (cv$var17$countGlobal[0] + prior[0]);
-		
-		// A local reference to the scratch space.
-		cv$var17$countGlobal[1] = (cv$var17$countGlobal[1] + prior[1]);
-		
-		// A local reference to the scratch space.
-		cv$var17$countGlobal[2] = (cv$var17$countGlobal[2] + prior[2]);
-		
-		// Calculate the new sample value
-		// 
-		// Calculate a new sample value and write it into cv$targetLocal.
-		// 
-		// A reference local to the function for the sample variable.
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, beta, cv$var17$countGlobal, p, 3);
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((fixedFlag$sample20 || constrainedFlag$sample20)) {
+			// Processing random variable 19.
+			// 
+			// Processing sample task 20 of consumer random variable null.
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample17 = true;
+			
+			// A local reference to the scratch space.
+			cv$var17$countGlobal[0] = (cv$var17$countGlobal[0] + prior[0]);
+			
+			// A local reference to the scratch space.
+			cv$var17$countGlobal[1] = (cv$var17$countGlobal[1] + prior[1]);
+			
+			// A local reference to the scratch space.
+			cv$var17$countGlobal[2] = (cv$var17$countGlobal[2] + prior[2]);
+		}
+		if(constrainedFlag$sample17)
+			// Calculate the new sample value
+			// 
+			// Calculate a new sample value and write it into cv$targetLocal.
+			// 
+			// A reference local to the function for the sample variable.
+			Conjugates.sampleConjugateDirichletCategorical(RNG$, beta, cv$var17$countGlobal, p, 3);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 20 drawn from Multinomial 19. Inference was performed using Metropolis-Hastings.
 	private final void sample20() {
+		constrainedFlag$sample20 = false;
+		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
 		// Calculate the probability of the random variable generating the original sampled
@@ -805,6 +820,9 @@ final class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.in
 			// 
 			// Processing sample task 48 of consumer random variable b1.
 			for(int i$var47 = 0; i$var47 < length; i$var47 += 3) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample20 = true;
+				
 				// Constructing a random variable input for use later.
 				double var24 = (double)(prior[0] / 10);
 				
@@ -820,13 +838,16 @@ final class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.in
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = (Math.log((output[i$var47]?var24:(1.0 - var24))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var24) && (var24 <= 1.0))?Math.log((output[i$var47]?var24:(1.0 - var24))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Processing random variable 30.
 			// 
 			// Processing sample task 60 of consumer random variable b2.
 			for(int i$var59 = 1; i$var59 < length; i$var59 += 3) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample20 = true;
+				
 				// Constructing a random variable input for use later.
 				double var29 = (double)(prior[1] / 10);
 				
@@ -842,13 +863,16 @@ final class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.in
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = (Math.log((output[i$var59]?var29:(1.0 - var29))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var29) && (var29 <= 1.0))?Math.log((output[i$var59]?var29:(1.0 - var29))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Processing random variable 35.
 			// 
 			// Processing sample task 72 of consumer random variable b3.
 			for(int i$var71 = 2; i$var71 < length; i$var71 += 3) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample20 = true;
+				
 				// Constructing a random variable input for use later.
 				double var34 = (double)(prior[2] / 10);
 				
@@ -864,7 +888,7 @@ final class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.in
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = (Math.log((output[i$var71]?var34:(1.0 - var34))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var34) && (var34 <= 1.0))?Math.log((output[i$var71]?var34:(1.0 - var34))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Initialize an accumulator to take the product of all the distribution probabilities
@@ -876,117 +900,128 @@ final class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.in
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		
-		// Update Sample and intermediate values
-		// 
-		// Update the sample values
-		// 
-		// A reference local to the function for the sample variable.
-		prior[cv$sourceIndex] = (prior[cv$sourceIndex] - cv$changeValue);
-		
-		// A reference local to the function for the sample variable.
-		prior[cv$destinationIndex] = (prior[cv$destinationIndex] + cv$changeValue);
-		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		// 
-		// A reference local to the function for the sample variable.
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityMultinomial(prior, p, 3, 10);
-		
-		// Processing random variable 25.
-		// 
-		// Processing sample task 48 of consumer random variable b1.
-		for(int i$var47 = 0; i$var47 < length; i$var47 += 3) {
-			// Constructing a random variable input for use later.
-			double var24 = (double)(prior[0] / 10);
-			
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 48 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-			// Declaration comment was:
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
-			cv$accumulatedProbabilities = (Math.log((output[i$var47]?var24:(1.0 - var24))) + cv$accumulatedProbabilities);
-		}
-		
-		// Processing random variable 30.
-		// 
-		// Processing sample task 60 of consumer random variable b2.
-		for(int i$var59 = 1; i$var59 < length; i$var59 += 3) {
-			// Constructing a random variable input for use later.
-			double var29 = (double)(prior[1] / 10);
-			
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 60 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-			// Declaration comment was:
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
-			cv$accumulatedProbabilities = (Math.log((output[i$var59]?var29:(1.0 - var29))) + cv$accumulatedProbabilities);
-		}
-		
-		// Processing random variable 35.
-		// 
-		// Processing sample task 72 of consumer random variable b3.
-		for(int i$var71 = 2; i$var71 < length; i$var71 += 3) {
-			// Constructing a random variable input for use later.
-			double var34 = (double)(prior[2] / 10);
-			
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 72 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-			// Declaration comment was:
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
-			cv$accumulatedProbabilities = (Math.log((output[i$var71]?var34:(1.0 - var34))) + cv$accumulatedProbabilities);
-		}
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		// 
-		// Ratio of the probability of proposed and original sample values
-		// 
-		// Variable declaration of cv$proposedProbability moved.
-		// Declaration comment was:
-		// The probability of the random variable generating the new sample value.
-		// 
-		// Initialize an accumulator to take the product of all the distribution probabilities
-		// in log space.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$)))) {
-			// If it is not revert the sample value and intermediates to their original values.
-			// 
-			// Set the sample value
-			// 
-			// Calculate the new sample value
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(constrainedFlag$sample20) {
+			// Update Sample and intermediate values
 			// 
 			// Update the sample values
+			// 
 			// A reference local to the function for the sample variable.
-			prior[cv$sourceIndex] = (prior[cv$sourceIndex] + cv$changeValue);
+			prior[cv$sourceIndex] = (prior[cv$sourceIndex] - cv$changeValue);
 			
 			// A reference local to the function for the sample variable.
-			prior[cv$destinationIndex] = (prior[cv$destinationIndex] - cv$changeValue);
+			prior[cv$destinationIndex] = (prior[cv$destinationIndex] + cv$changeValue);
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// A reference local to the function for the sample variable.
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityMultinomial(prior, p, 3, 10);
+			
+			// Processing random variable 25.
+			// 
+			// Processing sample task 48 of consumer random variable b1.
+			for(int i$var47 = 0; i$var47 < length; i$var47 += 3) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample20 = true;
+				
+				// Constructing a random variable input for use later.
+				double var24 = (double)(prior[0] / 10);
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 48 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				cv$accumulatedProbabilities = ((((0.0 <= var24) && (var24 <= 1.0))?Math.log((output[i$var47]?var24:(1.0 - var24))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			
+			// Processing random variable 30.
+			// 
+			// Processing sample task 60 of consumer random variable b2.
+			for(int i$var59 = 1; i$var59 < length; i$var59 += 3) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample20 = true;
+				
+				// Constructing a random variable input for use later.
+				double var29 = (double)(prior[1] / 10);
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 60 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				cv$accumulatedProbabilities = ((((0.0 <= var29) && (var29 <= 1.0))?Math.log((output[i$var59]?var29:(1.0 - var29))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			
+			// Processing random variable 35.
+			// 
+			// Processing sample task 72 of consumer random variable b3.
+			for(int i$var71 = 2; i$var71 < length; i$var71 += 3) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample20 = true;
+				
+				// Constructing a random variable input for use later.
+				double var34 = (double)(prior[2] / 10);
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 72 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				cv$accumulatedProbabilities = ((((0.0 <= var34) && (var34 <= 1.0))?Math.log((output[i$var71]?var34:(1.0 - var34))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			
+			// Ratio of the probability of proposed and original sample values
+			// 
+			// Initialize an accumulator to take the product of all the distribution probabilities
+			// in log space.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			// 
+			// Substituted "cv$valuePos" with its value "1".
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				// If it is not revert the sample value and intermediates to their original values.
+				// 
+				// Set the sample value
+				// 
+				// Calculate the new sample value
+				// 
+				// Update the sample values
+				// A reference local to the function for the sample variable.
+				prior[cv$sourceIndex] = (prior[cv$sourceIndex] + cv$changeValue);
+				
+				// A reference local to the function for the sample variable.
+				prior[cv$destinationIndex] = (prior[cv$destinationIndex] - cv$changeValue);
+			}
 		}
 	}
 
@@ -1111,16 +1146,6 @@ final class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.in
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		beta[0] = 0.1;
-		beta[1] = 0.1;
-		beta[2] = 0.1;
-		length = length$observed;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -1145,6 +1170,16 @@ final class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.in
 		logProbability$b3 = Double.NaN;
 		if(!fixedProbFlag$sample72)
 			logProbability$var72 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		beta[0] = 0.1;
+		beta[1] = 0.1;
+		beta[2] = 0.1;
+		length = length$observed;
 	}
 
 	// Construct the evidence probabilities.

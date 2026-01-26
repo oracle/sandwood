@@ -7,6 +7,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 final class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ExponentialDecayMK1$CoreInterface {
 	private double a;
 	private double b;
+	private boolean constrainedFlag$sample6 = true;
 	private double[] decay;
 	private double[] decayDetected;
 	private boolean fixedFlag$sample6 = false;
@@ -139,7 +140,7 @@ final class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.int
 						double cv$sampleValue = decay[var18];
 						{
 							{
-								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && !(cv$sampleValue == Double.POSITIVE_INFINITY))?(Math.log(rate) - (rate * cv$sampleValue)):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((((0.0 <= cv$sampleValue) && !(cv$sampleValue == Double.POSITIVE_INFINITY)) && (0.0 < rate))?(Math.log(rate) - (rate * cv$sampleValue)):Double.NEGATIVE_INFINITY));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -235,6 +236,7 @@ final class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.int
 
 	private final void sample6() {
 		if(true) {
+			constrainedFlag$sample6 = false;
 			double cv$sum = 0.0;
 			int cv$count = 0;
 			{
@@ -244,8 +246,22 @@ final class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.int
 							{
 								{
 									for(int var18 = 0; var18 < samples; var18 += 1) {
-										cv$sum = (cv$sum + decay[var18]);
-										cv$count = (cv$count + 1);
+										boolean cv$sampleConstrained = true;
+										if(cv$sampleConstrained) {
+											constrainedFlag$sample6 = true;
+											{
+												{
+													{
+														{
+															{
+																cv$sum = (cv$sum + decay[var18]);
+																cv$count = (cv$count + 1);
+															}
+														}
+													}
+												}
+											}
+										}
 									}
 								}
 							}
@@ -253,7 +269,8 @@ final class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.int
 					}
 				}
 			}
-			rate = Conjugates.sampleConjugateGammaExponential(RNG$, a, b, cv$sum, cv$count);
+			if(constrainedFlag$sample6)
+				rate = Conjugates.sampleConjugateGammaExponential(RNG$, a, b, cv$sum, cv$count);
 		}
 	}
 
@@ -311,11 +328,6 @@ final class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.int
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {
-		samples = length$decayDetected;
-	}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -325,6 +337,11 @@ final class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.int
 		logProbability$decay = 0.0;
 		if(!fixedProbFlag$sample19)
 			logProbability$var19 = Double.NaN;
+	}
+
+	@Override
+	public final void initializeModel() {
+		samples = length$decayDetected;
 	}
 
 	@Override

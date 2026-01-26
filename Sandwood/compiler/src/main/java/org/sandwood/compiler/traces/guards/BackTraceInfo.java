@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -10,7 +10,6 @@ package org.sandwood.compiler.traces.guards;
 
 import java.util.Stack;
 
-import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
@@ -38,9 +37,9 @@ public class BackTraceInfo {
         return getValues.size();
     }
 
-    public void updateSubstitutions(PutTask<?> putTask, CompilationContext compilationCtx) {
+    public void updateSubstitutions(PutTask<?> putTask) {
         if(treeBuilderInfo != null)
-            treeBuilderInfo.changeSubstitutions(putTask, compilationCtx);
+            treeBuilderInfo.changeSubstitutions(putTask);
     }
 
     public boolean traceConstructedCorrectly() {

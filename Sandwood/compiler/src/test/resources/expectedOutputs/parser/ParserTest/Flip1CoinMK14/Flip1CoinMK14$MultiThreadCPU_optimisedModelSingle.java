@@ -9,6 +9,7 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double b;
 	private double bias;
 	private double[] c;
+	private boolean constrainedFlag$sample8 = true;
 	private boolean fixedFlag$sample8 = false;
 	private boolean fixedProbFlag$sample37 = false;
 	private boolean fixedProbFlag$sample8 = false;
@@ -198,7 +199,7 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[var34]?bias:(1.0 - bias))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= bias) && (bias <= 1.0))?Math.log((flips[var34]?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -408,6 +409,8 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 8 drawn from Beta 7. Inference was performed using Metropolis-Hastings.
 	private final void sample8() {
+		constrainedFlag$sample8 = false;
+		
 		// The original value of the sample
 		double cv$originalValue = b;
 		
@@ -438,14 +441,15 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// The original value of the sample
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(b, 1.0, 1.0);
 			
-			// Processing random variable 23.
-			// 
 			// Looking for a path between Sample 8 and consumer Bernoulli 23.
 			// 
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(guard1) {
 				// Processing sample task 37 of consumer random variable bernoulli.
-				for(int var34 = 0; var34 < samples; var34 += 1)
+				for(int var34 = 0; var34 < samples; var34 += 1) {
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample8 = true;
+					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
@@ -462,7 +466,8 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// Set the current value to the current state of the tree.
 					// 
 					// The original value of the sample
-					cv$accumulatedProbabilities = (Math.log((flips[var34]?b:(1.0 - b))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((0.0 <= b) && (b <= 1.0))?Math.log((flips[var34]?b:(1.0 - b))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -473,7 +478,10 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				double traceTempVariable$var21$5_2 = (b / 2);
 				
 				// Processing sample task 37 of consumer random variable bernoulli.
-				for(int var34 = 0; var34 < samples; var34 += 1)
+				for(int var34 = 0; var34 < samples; var34 += 1) {
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample8 = true;
+					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
@@ -486,7 +494,8 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// Declaration comment was:
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
-					cv$accumulatedProbabilities = (Math.log((flips[var34]?traceTempVariable$var21$5_2:(1.0 - traceTempVariable$var21$5_2))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var21$5_2) && (traceTempVariable$var21$5_2 <= 1.0))?Math.log((flips[var34]?traceTempVariable$var21$5_2:(1.0 - traceTempVariable$var21$5_2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
 			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
@@ -498,94 +507,12 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		
-		// Update Sample and intermediate values
-		// 
-		// Write out the new value of the sample.
-		b = cv$proposedValue;
-		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		// 
-		// Looking for a path between Sample 8 and consumer double 22.
-		// 
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(guard1)
-			bias = cv$proposedValue;
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		// 
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		else {
-			c[0] = (cv$proposedValue / 2);
-			bias = c[0];
-		}
-		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, 1.0, 1.0);
-		
-		// Processing random variable 23.
-		// 
-		// Looking for a path between Sample 8 and consumer Bernoulli 23.
-		// 
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(guard1) {
-			// Processing sample task 37 of consumer random variable bernoulli.
-			for(int var34 = 0; var34 < samples; var34 += 1)
-				// A check to ensure rounding of floating point values can never result in a negative
-				// value.
-				// 
-				// Recorded the probability of reaching sample task 37 with the current configuration.
-				// 
-				// Set an accumulator to record the consumer distributions not seen. Initially set
-				// to 1 as seen values will be deducted from this value.
-				// 
-				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-				// Declaration comment was:
-				// Set an accumulator to sum the probabilities for each possible configuration of
-				// inputs.
-				cv$accumulatedProbabilities = (Math.log((flips[var34]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
-		}
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		else {
-			double traceTempVariable$var21$5_2 = (cv$proposedValue / 2);
-			
-			// Processing sample task 37 of consumer random variable bernoulli.
-			for(int var34 = 0; var34 < samples; var34 += 1)
-				// A check to ensure rounding of floating point values can never result in a negative
-				// value.
-				// 
-				// Recorded the probability of reaching sample task 37 with the current configuration.
-				// 
-				// Set an accumulator to record the consumer distributions not seen. Initially set
-				// to 1 as seen values will be deducted from this value.
-				// 
-				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-				// Declaration comment was:
-				// Set an accumulator to sum the probabilities for each possible configuration of
-				// inputs.
-				cv$accumulatedProbabilities = (Math.log((flips[var34]?traceTempVariable$var21$5_2:(1.0 - traceTempVariable$var21$5_2))) + cv$accumulatedProbabilities);
-		}
-		
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-			// If it is not revert the changes.
+		if(constrainedFlag$sample8) {
+			// Update Sample and intermediate values
 			// 
-			// Set the sample value
 			// Write out the new value of the sample.
-			b = cv$originalValue;
+			b = cv$proposedValue;
 			
 			// Guards to ensure that bias is only updated when there is a valid path.
 			// 
@@ -593,18 +520,109 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// 
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(guard1)
-				// b's comment
-				// Write out the new value of the sample.
-				bias = cv$originalValue;
+				bias = cv$proposedValue;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			// 
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			else {
-				// b's comment
-				// Write out the new value of the sample.
-				c[0] = (cv$originalValue / 2);
+				c[0] = (cv$proposedValue / 2);
 				bias = c[0];
+			}
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, 1.0, 1.0);
+			
+			// Looking for a path between Sample 8 and consumer Bernoulli 23.
+			// 
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(guard1) {
+				// Processing sample task 37 of consumer random variable bernoulli.
+				for(int var34 = 0; var34 < samples; var34 += 1) {
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample8 = true;
+					
+					// A check to ensure rounding of floating point values can never result in a negative
+					// value.
+					// 
+					// Recorded the probability of reaching sample task 37 with the current configuration.
+					// 
+					// Set an accumulator to record the consumer distributions not seen. Initially set
+					// to 1 as seen values will be deducted from this value.
+					// 
+					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+					// Declaration comment was:
+					// Set an accumulator to sum the probabilities for each possible configuration of
+					// inputs.
+					cv$accumulatedProbabilities = ((((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?Math.log((flips[var34]?cv$proposedValue:(1.0 - cv$proposedValue))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
+			}
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			else {
+				double traceTempVariable$var21$5_2 = (cv$proposedValue / 2);
+				
+				// Processing sample task 37 of consumer random variable bernoulli.
+				for(int var34 = 0; var34 < samples; var34 += 1) {
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample8 = true;
+					
+					// A check to ensure rounding of floating point values can never result in a negative
+					// value.
+					// 
+					// Recorded the probability of reaching sample task 37 with the current configuration.
+					// 
+					// Set an accumulator to record the consumer distributions not seen. Initially set
+					// to 1 as seen values will be deducted from this value.
+					// 
+					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+					// Declaration comment was:
+					// Set an accumulator to sum the probabilities for each possible configuration of
+					// inputs.
+					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var21$5_2) && (traceTempVariable$var21$5_2 <= 1.0))?Math.log((flips[var34]?traceTempVariable$var21$5_2:(1.0 - traceTempVariable$var21$5_2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
+			}
+			
+			// The probability ration for the proposed value and the current value.
+			// 
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				// If it is not revert the changes.
+				// 
+				// Set the sample value
+				// Write out the new value of the sample.
+				b = cv$originalValue;
+				
+				// Guards to ensure that bias is only updated when there is a valid path.
+				// 
+				// Looking for a path between Sample 8 and consumer double 22.
+				// 
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(guard1)
+					// b's comment
+					// Write out the new value of the sample.
+					bias = cv$originalValue;
+				
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				// 
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				else {
+					// b's comment
+					// Write out the new value of the sample.
+					c[0] = (cv$originalValue / 2);
+					bias = c[0];
+				}
 			}
 		}
 	}
@@ -737,13 +755,6 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		samples = length$flipsMeasured;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -762,6 +773,13 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample37)
 			logProbability$var35 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		samples = length$flipsMeasured;
 	}
 
 	// Construct the evidence probabilities.

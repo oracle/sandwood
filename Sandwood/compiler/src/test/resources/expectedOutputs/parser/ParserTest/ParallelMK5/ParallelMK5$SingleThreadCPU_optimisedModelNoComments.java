@@ -4,6 +4,7 @@ import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
 final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ParallelMK5$CoreInterface {
+	private boolean[][] constrainedFlag$sample61;
 	private boolean fixedFlag$sample61 = false;
 	private boolean fixedProbFlag$sample103 = false;
 	private boolean fixedProbFlag$sample61 = false;
@@ -109,7 +110,8 @@ final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$accumulator = 0.0;
 			for(int m = 0; m < length$observed; m += 1) {
 				int cv$sampleValue = generated[m];
-				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 10))?Math.log(indirection2[m][cv$sampleValue]):Double.NEGATIVE_INFINITY);
+				double[] var99 = indirection2[m];
+				double cv$distributionAccumulator = (((((0.0 <= cv$sampleValue) && (cv$sampleValue < 10)) && (0.0 <= var99[cv$sampleValue])) && (var99[cv$sampleValue] <= 1.0))?Math.log(var99[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$sample103[m] = cv$distributionAccumulator;
 			}
@@ -162,17 +164,26 @@ final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	private final void sample61(int i, int j) {
 		double cv$originalValue = indirection1[i][j];
+		double cv$originalProbability;
 		double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
 		if((cv$var < 0.01))
 			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
-		double cv$originalProbability = ((((0.0 <= generated[j]) && (generated[j] < 10))?Math.log(indirection2[j][generated[j]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$originalValue) && (cv$originalValue < 1.0))?0.0:Double.NEGATIVE_INFINITY));
-		indirection1[i][j] = cv$proposedValue;
-		indirection2[j][i] = indirection1[i][j];
-		double cv$ratio = (((((0.0 <= generated[j]) && (generated[j] < 10))?Math.log(indirection2[j][generated[j]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY)) - cv$originalProbability);
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-			indirection1[i][j] = cv$originalValue;
+		{
+			constrainedFlag$sample61[i][j] = true;
+			double[] var99 = indirection2[j];
+			cv$originalProbability = ((((((0.0 <= generated[j]) && (generated[j] < 10)) && (0.0 <= var99[generated[j]])) && (var99[generated[j]] <= 1.0))?Math.log(var99[generated[j]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$originalValue) && (cv$originalValue < 1.0))?0.0:Double.NEGATIVE_INFINITY));
+		}
+		if(constrainedFlag$sample61[i][j]) {
+			indirection1[i][j] = cv$proposedValue;
 			indirection2[j][i] = indirection1[i][j];
+			constrainedFlag$sample61[i][j] = true;
+			double[] var99 = indirection2[j];
+			double cv$ratio = (((((((0.0 <= generated[j]) && (generated[j] < 10)) && (0.0 <= var99[generated[j]])) && (var99[generated[j]] <= 1.0))?Math.log(var99[generated[j]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY)) - cv$originalProbability);
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				indirection1[i][j] = cv$originalValue;
+				indirection2[j][i] = indirection1[i][j];
+			}
 		}
 	}
 
@@ -190,6 +201,9 @@ final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		indirection2 = new double[length$observed][];
 		for(int var31 = 0; var31 < length$observed; var31 += 1)
 			indirection2[var31] = new double[10];
+		constrainedFlag$sample61 = new boolean[10][];
+		for(int i = 0; i < 10; i += 1)
+			constrainedFlag$sample61[i] = new boolean[length$observed];
 		logProbability$sample61 = new double[10][];
 		for(int i = 0; i < 10; i += 1)
 			logProbability$sample61[i] = new double[length$observed];
@@ -298,9 +312,6 @@ final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -316,6 +327,15 @@ final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		if(!fixedProbFlag$sample103) {
 			for(int m = 0; m < length$observed; m += 1)
 				logProbability$sample103[m] = Double.NaN;
+		}
+	}
+
+	@Override
+	public final void initializeModel() {
+		for(int index$constrainedFlag$sample61$1 = 0; index$constrainedFlag$sample61$1 < constrainedFlag$sample61.length; index$constrainedFlag$sample61$1 += 1) {
+			boolean[] cv$constrainedFlag$sample61$1 = constrainedFlag$sample61[index$constrainedFlag$sample61$1];
+			for(int index$constrainedFlag$sample61$2 = 0; index$constrainedFlag$sample61$2 < cv$constrainedFlag$sample61$1.length; index$constrainedFlag$sample61$2 += 1)
+				cv$constrainedFlag$sample61$1[index$constrainedFlag$sample61$2] = true;
 		}
 	}
 

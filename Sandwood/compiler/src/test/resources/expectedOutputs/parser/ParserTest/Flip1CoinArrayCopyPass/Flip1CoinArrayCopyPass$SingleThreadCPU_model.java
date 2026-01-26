@@ -10,6 +10,7 @@ final class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.
 	private double a;
 	private double b;
 	private double[] bias;
+	private boolean constrainedFlag$sample10 = true;
 	private boolean fixedFlag$sample10 = false;
 	private boolean fixedProbFlag$sample10 = false;
 	private boolean fixedProbFlag$sample26 = false;
@@ -275,7 +276,7 @@ final class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.
 								double var24 = bias[i];
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var24:(1.0 - var24))));
+								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var24) && (var24 <= 1.0))?Math.log((cv$sampleValue?var24:(1.0 - var24))):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -361,6 +362,8 @@ final class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.
 	// conjugate prior.
 	private final void sample10() {
 		if(true) {
+			constrainedFlag$sample10 = false;
+			
 			// Local variable to record the number of true samples.
 			int cv$sum = 0;
 			
@@ -377,18 +380,24 @@ final class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.
 									// Processing sample task 26 of consumer random variable bernoulli.
 									{
 										{
-											{
+											// Flag recording if this sample task of the consuming random variable is constrained.
+											boolean cv$sampleConstrained = true;
+											if(cv$sampleConstrained) {
+												// Mark that the sample has observed constrained data.
+												constrainedFlag$sample10 = true;
 												{
 													{
 														{
 															{
-																// Include the value sampled by task 26 from random variable bernoulli.
-																// Increment the number of samples.
-																cv$count = (cv$count + 1);
-																
-																// If the sample value was positive increase the count
-																if(flips[i])
-																	cv$sum = (cv$sum + 1);
+																{
+																	// Include the value sampled by task 26 from random variable bernoulli.
+																	// Increment the number of samples.
+																	cv$count = (cv$count + 1);
+																	
+																	// If the sample value was positive increase the count
+																	if(flips[i])
+																		cv$sum = (cv$sum + 1);
+																}
 															}
 														}
 													}
@@ -407,18 +416,24 @@ final class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.
 											// Processing sample task 26 of consumer random variable bernoulli.
 											{
 												{
-													{
+													// Flag recording if this sample task of the consuming random variable is constrained.
+													boolean cv$sampleConstrained = true;
+													if(cv$sampleConstrained) {
+														// Mark that the sample has observed constrained data.
+														constrainedFlag$sample10 = true;
 														{
 															{
 																{
 																	{
-																		// Include the value sampled by task 26 from random variable bernoulli.
-																		// Increment the number of samples.
-																		cv$count = (cv$count + 1);
-																		
-																		// If the sample value was positive increase the count
-																		if(flips[index$i$2_2])
-																			cv$sum = (cv$sum + 1);
+																		{
+																			// Include the value sampled by task 26 from random variable bernoulli.
+																			// Increment the number of samples.
+																			cv$count = (cv$count + 1);
+																			
+																			// If the sample value was positive increase the count
+																			if(flips[index$i$2_2])
+																				cv$sum = (cv$sum + 1);
+																		}
 																	}
 																}
 															}
@@ -434,28 +449,29 @@ final class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.
 					}
 				}
 			}
-			
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
-			double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
-			
-			// Guards to ensure that bias is only updated when there is a valid path.
-			{
+			if(constrainedFlag$sample10) {
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
+				
+				// Guards to ensure that bias is only updated when there is a valid path.
 				{
 					{
-						bias[0] = var10;
+						{
+							bias[0] = var10;
+						}
 					}
 				}
-			}
-			
-			// Guards to ensure that bias is only updated when there is a valid path.
-			// 
-			// Looking for a path between Sample 10 and consumer double[] 32.
-			{
+				
+				// Guards to ensure that bias is only updated when there is a valid path.
+				// 
+				// Looking for a path between Sample 10 and consumer double[] 32.
 				{
-					if((0 == 0)) {
-						for(int i = 0; i < samples; i += 1)
-							bias[(i + 1)] = bias[0];
+					{
+						if((0 == 0)) {
+							for(int i = 0; i < samples; i += 1)
+								bias[(i + 1)] = bias[0];
+						}
 					}
 				}
 			}
@@ -514,6 +530,8 @@ final class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample10)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, a, b);
+		for(int i = 0; i < samples; i += 1)
+			bias[(i + 1)] = bias[0];
 	}
 
 	// Method to execute the model code conventionally with priming of fixed intermediate
@@ -534,6 +552,10 @@ final class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample10)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, a, b);
+		for(int i = 0; i < samples; i += 1) {
+			if(!fixedFlag$sample10)
+				bias[(i + 1)] = bias[0];
+		}
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -543,6 +565,8 @@ final class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.
 	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample10)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, a, b);
+		for(int i = 0; i < samples; i += 1)
+			bias[(i + 1)] = bias[0];
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -561,14 +585,6 @@ final class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
-	}
-
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		a = 1.0;
-		b = 1.0;
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
@@ -591,6 +607,14 @@ final class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.
 			for(int i = 0; i < samples; i += 1)
 				logProbability$sample26[((i - 0) / 1)] = Double.NaN;
 		}
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		a = 1.0;
+		b = 1.0;
 	}
 
 	// Construct the evidence probabilities.
@@ -658,7 +682,10 @@ final class Flip1CoinArrayCopyPass$SingleThreadCPU extends org.sandwood.runtime.
 	// through the model. Any non-fixed sample values may be sampled to random variables
 	// as part of this process.
 	@Override
-	public final void setIntermediates() {}
+	public final void setIntermediates() {
+		for(int i = 0; i < samples; i += 1)
+			bias[(i + 1)] = bias[0];
+	}
 
 	@Override
 	public String modelCode() {

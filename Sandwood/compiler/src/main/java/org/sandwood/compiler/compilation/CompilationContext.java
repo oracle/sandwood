@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -67,7 +67,7 @@ public class CompilationContext {
     public enum AuxFunctionType {
         VAR_ALLOCATOR("allocator"),
         SCRATCH_ALLOCATOR("allocateScratch"),
-        INITIALIZE("initializeConstants"),
+        INITIALIZE("initializeModel"),
         INITIALIZE_LOG_PROBABILITY_FIELDS("initializeLogProbabilityFields"),
         SET_INTERMEDIATES("setIntermediates"),
         GIBBS_ROUND("gibbsRound"),
@@ -92,12 +92,13 @@ public class CompilationContext {
         INFERENCE,
         LOG_PROBABILITY_VALUE,
         LOG_PROBABILITY_DISTRIBUTIONS,
-        FIXED_SAMPLE_PROBABILITY
+        FIXED_SAMPLE_PROBABILITY,
+        SAMPLE
     }
 
     public enum CompilationPhase {
         MAIN_METHODS,
-        INITIALIZATION_OF_CONSTANTS,
+        INITIALIZATION_OF_MODEL,
         ALLOCATION
     }
 
@@ -609,6 +610,8 @@ public class CompilationContext {
      * A stack to track the distribution samples that have already been explored by outer scope constructors.
      */
     private final Stack<Map<DistributionSampleTask<?, ?>, List<DistSampleDesc<?>>>> exploredDistSamples = new Stack<>();
+    
+    private final List<IRTreeVoid> arrayInitialisations = new ArrayList<>();
 
     public CompilationContext(CompilationOptions options, Traces traces, ExecutionType target) {
         this.traces = traces;
@@ -1105,5 +1108,13 @@ public class CompilationContext {
 
     public void popExploredDistSamples() {
         exploredDistSamples.pop();
+    }
+
+    public void addArrayInitilisation(IRTreeVoid t) {
+        arrayInitialisations.add(t);
+    }
+    
+    public List<IRTreeVoid> getArrayInitilisations() {
+        return arrayInitialisations;
     }
 }

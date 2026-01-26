@@ -7,6 +7,8 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	
 	// Declare the variables for the model.
 	private double[] bias;
+	private boolean constrainedFlag$sample21 = true;
+	private boolean constrainedFlag$sample4 = true;
 	private double[] cv$var4$stateProbabilityGlobal;
 	private boolean fixedFlag$sample21 = false;
 	private boolean fixedFlag$sample4 = false;
@@ -502,6 +504,8 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 21 drawn from Uniform 18. Inference was performed using Metropolis-Hastings.
 	private final void sample21() {
+		constrainedFlag$sample21 = false;
+		
 		// The original value of the sample
 		double cv$originalValue = var19;
 		
@@ -518,6 +522,9 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// 
 		// The original value of the sample
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + var19);
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample21 = true;
 		
 		// Variable declaration of cv$originalProbability moved.
 		// Declaration comment was:
@@ -555,6 +562,9 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Guards to ensure that bias is only updated when there is a valid path.
 		bias[0] = cv$proposedValue;
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample21 = true;
 		
 		// The probability ration for the proposed value and the current value.
 		// 
@@ -597,6 +607,8 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 4 drawn from bernoulli. Inference was performed using variable marginalization.
 	private final void sample4() {
+		constrainedFlag$sample4 = false;
+		
 		// Write out the new value of the sample.
 		// 
 		// Variable declaration of cv$currentValue moved.
@@ -608,6 +620,11 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Substituted "cv$valuePos" with its value "0".
 		guard = false;
 		bias[0] = var19;
+		
+		// Processing sample task 27 of consumer random variable null.
+		// 
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample4 = true;
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
@@ -662,6 +679,11 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Substituted "cv$valuePos" with its value "1".
 		guard = true;
 		
+		// Looking for a path between Put 16 and consumer Beta 24.
+		// 
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample4 = true;
+		
 		// Save the calculated index value into the array of index value probabilities
 		// 
 		// Get a local reference to the scratch space.
@@ -688,12 +710,8 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Set an accumulator to record the consumer distributions not seen. Initially set
 		// to 1 as seen values will be deducted from this value.
 		// 
-		// Looking for a path between Put 16 and consumer Beta 24.
-		// 
 		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 		// Declaration comment was:
-		// Processing sample task 27 of consumer random variable null.
-		// 
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
 		cv$var4$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBeta(value, 0.5, 1.0) - 0.6931471805599453);
@@ -898,11 +916,6 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -923,6 +936,11 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		if(!fixedProbFlag$sample27)
 			logProbability$value = Double.NaN;
 	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {}
 
 	// Construct the evidence probabilities.
 	@Override

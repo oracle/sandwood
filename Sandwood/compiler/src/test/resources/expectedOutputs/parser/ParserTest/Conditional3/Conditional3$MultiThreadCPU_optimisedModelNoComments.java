@@ -5,6 +5,8 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Conditional3$CoreInterface {
 	private double bias;
+	private boolean constrainedFlag$sample16 = true;
+	private boolean constrainedFlag$sample4 = true;
 	private double[] cv$var4$stateProbabilityGlobal;
 	private boolean fixedFlag$sample16 = false;
 	private boolean fixedFlag$sample4 = false;
@@ -186,14 +188,17 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	private final void sample16() {
+		constrainedFlag$sample16 = false;
 		double cv$originalValue = var14;
 		double cv$var = (((var14 < 0)?(-var14):var14) * 40.0);
 		if((cv$var < 0.01))
 			cv$var = 0.01;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + var14);
+		constrainedFlag$sample16 = true;
 		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(value, var14, 1.0) + (((0.0 <= var14) && (var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
 		var14 = cv$proposedValue;
 		bias = cv$proposedValue;
+		constrainedFlag$sample16 = true;
 		double cv$ratio = ((DistributionSampling.logProbabilityBeta(value, cv$proposedValue, 1.0) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY)) - cv$originalProbability);
 		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			var14 = cv$originalValue;
@@ -202,11 +207,14 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	private final void sample4() {
+		constrainedFlag$sample4 = false;
 		guard = false;
 		bias = var14;
+		constrainedFlag$sample4 = true;
 		cv$var4$stateProbabilityGlobal[0] = (((((0.0 <= var14) && (var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY) + DistributionSampling.logProbabilityBeta(value, var14, 1.0)) - 0.6931471805599453);
 		guard = true;
 		bias = 0.5;
+		constrainedFlag$sample4 = true;
 		cv$var4$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBeta(value, 0.5, 1.0) - 0.6931471805599453);
 		double cv$logSum;
 		double cv$lseMax = cv$var4$stateProbabilityGlobal[0];
@@ -333,9 +341,6 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -349,6 +354,9 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		if(!fixedProbFlag$sample20)
 			logProbability$value = Double.NaN;
 	}
+
+	@Override
+	public final void initializeModel() {}
 
 	@Override
 	public final void logEvidenceProbabilities() {

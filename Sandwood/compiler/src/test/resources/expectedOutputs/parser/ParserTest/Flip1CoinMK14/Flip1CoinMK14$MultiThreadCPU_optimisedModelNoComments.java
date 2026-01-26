@@ -7,6 +7,7 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double b;
 	private double bias;
 	private double[] c;
+	private boolean constrainedFlag$sample8 = true;
 	private boolean fixedFlag$sample8 = false;
 	private boolean fixedProbFlag$sample37 = false;
 	private boolean fixedProbFlag$sample8 = false;
@@ -132,7 +133,7 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedProbFlag$sample37) {
 			double cv$sampleAccumulator = 0.0;
 			for(int var34 = 0; var34 < samples; var34 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[var34]?bias:(1.0 - bias))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= bias) && (bias <= 1.0))?Math.log((flips[var34]?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY));
 			logProbability$bernoulli = cv$sampleAccumulator;
 			logProbability$var35 = cv$sampleAccumulator;
 			logProbability$flips = (logProbability$flips + cv$sampleAccumulator);
@@ -179,6 +180,7 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	private final void sample8() {
+		constrainedFlag$sample8 = false;
 		double cv$originalValue = b;
 		double cv$originalProbability;
 		double cv$var = (((b < 0)?(-b):b) * 40.0);
@@ -188,39 +190,49 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(b, 1.0, 1.0);
 			if(guard1) {
-				for(int var34 = 0; var34 < samples; var34 += 1)
-					cv$accumulatedProbabilities = (Math.log((flips[var34]?b:(1.0 - b))) + cv$accumulatedProbabilities);
+				for(int var34 = 0; var34 < samples; var34 += 1) {
+					constrainedFlag$sample8 = true;
+					cv$accumulatedProbabilities = ((((0.0 <= b) && (b <= 1.0))?Math.log((flips[var34]?b:(1.0 - b))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
 			} else {
 				double traceTempVariable$var21$5_2 = (b / 2);
-				for(int var34 = 0; var34 < samples; var34 += 1)
-					cv$accumulatedProbabilities = (Math.log((flips[var34]?traceTempVariable$var21$5_2:(1.0 - traceTempVariable$var21$5_2))) + cv$accumulatedProbabilities);
+				for(int var34 = 0; var34 < samples; var34 += 1) {
+					constrainedFlag$sample8 = true;
+					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var21$5_2) && (traceTempVariable$var21$5_2 <= 1.0))?Math.log((flips[var34]?traceTempVariable$var21$5_2:(1.0 - traceTempVariable$var21$5_2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
 			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
-		b = cv$proposedValue;
-		if(guard1)
-			bias = cv$proposedValue;
-		else {
-			c[0] = (cv$proposedValue / 2);
-			bias = c[0];
-		}
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, 1.0, 1.0);
-		if(guard1) {
-			for(int var34 = 0; var34 < samples; var34 += 1)
-				cv$accumulatedProbabilities = (Math.log((flips[var34]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
-		} else {
-			double traceTempVariable$var21$5_2 = (cv$proposedValue / 2);
-			for(int var34 = 0; var34 < samples; var34 += 1)
-				cv$accumulatedProbabilities = (Math.log((flips[var34]?traceTempVariable$var21$5_2:(1.0 - traceTempVariable$var21$5_2))) + cv$accumulatedProbabilities);
-		}
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-			b = cv$originalValue;
+		if(constrainedFlag$sample8) {
+			b = cv$proposedValue;
 			if(guard1)
-				bias = cv$originalValue;
+				bias = cv$proposedValue;
 			else {
-				c[0] = (cv$originalValue / 2);
+				c[0] = (cv$proposedValue / 2);
 				bias = c[0];
+			}
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, 1.0, 1.0);
+			if(guard1) {
+				for(int var34 = 0; var34 < samples; var34 += 1) {
+					constrainedFlag$sample8 = true;
+					cv$accumulatedProbabilities = ((((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?Math.log((flips[var34]?cv$proposedValue:(1.0 - cv$proposedValue))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
+			} else {
+				double traceTempVariable$var21$5_2 = (cv$proposedValue / 2);
+				for(int var34 = 0; var34 < samples; var34 += 1) {
+					constrainedFlag$sample8 = true;
+					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var21$5_2) && (traceTempVariable$var21$5_2 <= 1.0))?Math.log((flips[var34]?traceTempVariable$var21$5_2:(1.0 - traceTempVariable$var21$5_2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
+			}
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				b = cv$originalValue;
+				if(guard1)
+					bias = cv$originalValue;
+				else {
+					c[0] = (cv$originalValue / 2);
+					bias = c[0];
+				}
 			}
 		}
 	}
@@ -319,11 +331,6 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {
-		samples = length$flipsMeasured;
-	}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -335,6 +342,11 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample37)
 			logProbability$var35 = Double.NaN;
+	}
+
+	@Override
+	public final void initializeModel() {
+		samples = length$flipsMeasured;
 	}
 
 	@Override

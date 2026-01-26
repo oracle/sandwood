@@ -7,6 +7,9 @@ import org.sandwood.runtime.model.ExecutionTarget;
 final class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements LinearRegressionWrongNameFail$CoreInterface {
 	private double b0;
 	private double b1;
+	private boolean constrainedFlag$sample11 = true;
+	private boolean constrainedFlag$sample15 = true;
+	private boolean constrainedFlag$sample7 = true;
 	private boolean fixedFlag$sample11 = false;
 	private boolean fixedFlag$sample15 = false;
 	private boolean fixedFlag$sample7 = false;
@@ -177,7 +180,7 @@ final class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.r
 						{
 							double var8 = 1.0;
 							double var9 = 5.0;
-							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var8) / Math.sqrt(var9))) - (0.5 * Math.log(var9))));
+							double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var9)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var8) / Math.sqrt(var9))) - (0.5 * Math.log(var9))):Double.NEGATIVE_INFINITY));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -280,7 +283,7 @@ final class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.r
 						{
 							{
 								double var29 = (b0 + (b1 * x[i]));
-								double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var29) / Math.sqrt(variance))) - (0.5 * Math.log(variance))));
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < variance)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var29) / Math.sqrt(variance))) - (0.5 * Math.log(variance))):Double.NEGATIVE_INFINITY));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -337,7 +340,7 @@ final class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.r
 						{
 							double var4 = 0.0;
 							double var5 = 2.0;
-							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var4) / Math.sqrt(var5))) - (0.5 * Math.log(var5))));
+							double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var5)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var4) / Math.sqrt(var5))) - (0.5 * Math.log(var5))):Double.NEGATIVE_INFINITY));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -377,6 +380,7 @@ final class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.r
 
 	private final void sample11() {
 		if(true) {
+			constrainedFlag$sample11 = false;
 			double cv$sum = 0.0;
 			double cv$denominatorSquareSum = 0.0;
 			boolean cv$sigmaNotFound = true;
@@ -386,28 +390,44 @@ final class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.r
 					{
 						{
 							for(int i = 0; i < noSamples; i += 1) {
-								double cv$denominator = 1.0;
-								double cv$numerator = 0.0;
-								cv$numerator = (cv$numerator * x[i]);
-								cv$denominator = (cv$denominator * x[i]);
-								cv$numerator = (b0 + cv$numerator);
-								cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-								cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
-								if(cv$sigmaNotFound) {
-									cv$sigmaValue = variance;
-									cv$sigmaNotFound = false;
+								boolean cv$sampleConstrained = true;
+								if(cv$sampleConstrained) {
+									constrainedFlag$sample11 = true;
+									{
+										{
+											{
+												{
+													{
+														double cv$denominator = 1.0;
+														double cv$numerator = 0.0;
+														cv$numerator = (cv$numerator * x[i]);
+														cv$denominator = (cv$denominator * x[i]);
+														cv$numerator = (b0 + cv$numerator);
+														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+														cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
+														if(cv$sigmaNotFound) {
+															cv$sigmaValue = variance;
+															cv$sigmaNotFound = false;
+														}
+													}
+												}
+											}
+										}
+									}
 								}
 							}
 						}
 					}
 				}
 			}
-			b1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 1.0, 5.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+			if(constrainedFlag$sample11)
+				b1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 1.0, 5.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 		}
 	}
 
 	private final void sample15() {
 		if(true) {
+			constrainedFlag$sample15 = false;
 			double cv$sum = 0.0;
 			int cv$count = 0;
 			{
@@ -415,21 +435,37 @@ final class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.r
 					{
 						{
 							for(int i = 0; i < noSamples; i += 1) {
-								double cv$var30$mu = (b0 + (b1 * x[i]));
-								double cv$var30$diff = (cv$var30$mu - y[i]);
-								cv$sum = (cv$sum + (cv$var30$diff * cv$var30$diff));
-								cv$count = (cv$count + 1);
+								boolean cv$sampleConstrained = true;
+								if(cv$sampleConstrained) {
+									constrainedFlag$sample15 = true;
+									{
+										{
+											{
+												{
+													{
+														double cv$var30$mu = (b0 + (b1 * x[i]));
+														double cv$var30$diff = (cv$var30$mu - y[i]);
+														cv$sum = (cv$sum + (cv$var30$diff * cv$var30$diff));
+														cv$count = (cv$count + 1);
+													}
+												}
+											}
+										}
+									}
+								}
 							}
 						}
 					}
 				}
 			}
-			variance = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			if(constrainedFlag$sample15)
+				variance = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
 		}
 	}
 
 	private final void sample7() {
 		if(true) {
+			constrainedFlag$sample7 = false;
 			double cv$sum = 0.0;
 			double cv$denominatorSquareSum = 0.0;
 			boolean cv$sigmaNotFound = true;
@@ -439,21 +475,36 @@ final class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.r
 					{
 						{
 							for(int i = 0; i < noSamples; i += 1) {
-								double cv$denominator = 1.0;
-								double cv$numerator = 0.0;
-								cv$numerator = (cv$numerator + (b1 * x[i]));
-								cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-								cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
-								if(cv$sigmaNotFound) {
-									cv$sigmaValue = variance;
-									cv$sigmaNotFound = false;
+								boolean cv$sampleConstrained = true;
+								if(cv$sampleConstrained) {
+									constrainedFlag$sample7 = true;
+									{
+										{
+											{
+												{
+													{
+														double cv$denominator = 1.0;
+														double cv$numerator = 0.0;
+														cv$numerator = (cv$numerator + (b1 * x[i]));
+														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+														cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
+														if(cv$sigmaNotFound) {
+															cv$sigmaValue = variance;
+															cv$sigmaNotFound = false;
+														}
+													}
+												}
+											}
+										}
+									}
 								}
 							}
 						}
 					}
 				}
 			}
-			b0 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 2.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+			if(constrainedFlag$sample7)
+				b0 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 2.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 		}
 	}
 
@@ -544,11 +595,6 @@ final class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.r
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {
-		noSamples = x.length;
-	}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -563,6 +609,11 @@ final class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.r
 			for(int i = 0; i < noSamples; i += 1)
 				logProbability$sample31[((i - 0) / 1)] = Double.NaN;
 		}
+	}
+
+	@Override
+	public final void initializeModel() {
+		noSamples = x.length;
 	}
 
 	@Override

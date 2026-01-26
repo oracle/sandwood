@@ -1,0 +1,43 @@
+package org.sandwood.compiler.tests.parser;
+
+public model TerminalVariables(int evidence) {
+    double[] priors = {.01, 0.99};
+    double[][] conditionals = {{1, 0}, {0, 1}};
+
+    int c1 = categorical(priors).sample();
+    int c2 = categorical(conditionals[c1]).sample();
+    
+    int c3 = categorical(priors).sample();
+    int c4 = categorical(conditionals[c3]).sample();
+    
+    int c5 = categorical(priors).sample();
+    int c6 = categorical(conditionals[c5]).sample();
+
+    int c7 = categorical(priors).sample();
+    int c8 = categorical(conditionals[c7]).sample();
+
+    int c9 = categorical(priors).sample();
+    int c10 = categorical(conditionals[c9]).sample();
+    
+    int c11 = categorical(priors).sample();
+    int c12 = categorical(conditionals[c11]).sample();
+
+    double[][][][][] a = {
+       {
+        {{{0.3333333333333334, 0.3333333333333334, 0, 0.3333333333333334, 0}, {0.3333333333333334, 0.3333333333333334, 0, 0.3333333333333334, 0}},
+         {{0.3333333333333334, 0.3333333333333334, 0, 0.3333333333333334, 0}, {0.5, 0.5, 0, 0, 0}}},
+        {{{0, 0.5, 0, 0.5, 0}, {0, 0.5, 0, 0.5, 0}},
+         {{0, 0.5, 0, 0.5, 0}, {0, 1, 0, 0, 0}}}
+       },
+       {
+         {{{0.3333333333333334, 0.3333333333333334, 0, 0.3333333333333334, 0}, {0.5, 0.5, 0, 0, 0}},
+          {{0.3333333333333334, 0.3333333333333334, 0, 0.3333333333333334, 0}, {0.5, 0.5, 0, 0, 0}}},
+         {{{0, 0, 0, 1, 0}, {0, 0, 0, 1, 0}},
+          {{0, 0, 0, 1, 0}, {0, 0, 0, 0, 1}}}
+        }
+    };
+    int terminalVariable = categorical(a[c5][c9][c1][c4]).sample();
+    
+    // assert
+    c2.observe(evidence);
+}

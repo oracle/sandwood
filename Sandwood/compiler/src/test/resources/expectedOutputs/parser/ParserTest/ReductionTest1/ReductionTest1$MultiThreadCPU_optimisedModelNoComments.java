@@ -9,6 +9,7 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private int T;
 	private double[][] TimeFeat;
 	private int[][] arr;
+	private boolean[][] constrainedFlag$sample101;
 	private boolean fixedFlag$sample101 = false;
 	private boolean fixedProbFlag$sample101 = false;
 	private boolean fixedProbFlag$sample165 = false;
@@ -214,6 +215,7 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	private final void sample101(int i$var80, int var95, int threadID$cv$i$var80, Rng RNG$) {
+		constrainedFlag$sample101[i$var80][var95] = false;
 		double cv$originalValue = time_coeff[i$var80][var95];
 		double cv$originalProbability;
 		double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
@@ -224,44 +226,48 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$originalValue);
 			for(int t = 1; t < T; t += 1) {
 				double reduceVar$var151$10 = 0.0;
-				for(int cv$reduction641Index = 0; cv$reduction641Index < var95; cv$reduction641Index += 1)
-					reduceVar$var151$10 = (reduceVar$var151$10 + time_impact[t][i$var80][cv$reduction641Index]);
-				for(int cv$reduction641Index = (var95 + 1); cv$reduction641Index < time_dim; cv$reduction641Index += 1)
-					reduceVar$var151$10 = (reduceVar$var151$10 + time_impact[t][i$var80][cv$reduction641Index]);
+				for(int cv$reduction697Index = 0; cv$reduction697Index < var95; cv$reduction697Index += 1)
+					reduceVar$var151$10 = (reduceVar$var151$10 + time_impact[t][i$var80][cv$reduction697Index]);
+				for(int cv$reduction697Index = (var95 + 1); cv$reduction697Index < time_dim; cv$reduction697Index += 1)
+					reduceVar$var151$10 = (reduceVar$var151$10 + time_impact[t][i$var80][cv$reduction697Index]);
 				reduceVar$var151$10 = ((TimeFeat[t][var95] * cv$originalValue) + reduceVar$var151$10);
+				constrainedFlag$sample101[i$var80][var95] = true;
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityPoisson(arr[t][i$var80], reduceVar$var151$10) + cv$accumulatedProbabilities);
 			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
-		time_coeff[i$var80][var95] = cv$proposedValue;
-		for(int t = 1; t < T; t += 1)
-			time_impact[t][i$var80][var95] = (TimeFeat[t][var95] * time_coeff[i$var80][var95]);
-		for(int t = 1; t < T; t += 1) {
-			double reduceVar$var151$9 = 0.0;
-			for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1)
-				reduceVar$var151$9 = (reduceVar$var151$9 + time_impact[t][i$var80][cv$reduction152Index]);
-			sum_t[t][i$var80] = reduceVar$var151$9;
-		}
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue);
-		for(int t = 1; t < T; t += 1) {
-			double reduceVar$var151$10 = 0.0;
-			for(int cv$reduction641Index = 0; cv$reduction641Index < var95; cv$reduction641Index += 1)
-				reduceVar$var151$10 = (reduceVar$var151$10 + time_impact[t][i$var80][cv$reduction641Index]);
-			for(int cv$reduction641Index = (var95 + 1); cv$reduction641Index < time_dim; cv$reduction641Index += 1)
-				reduceVar$var151$10 = (reduceVar$var151$10 + time_impact[t][i$var80][cv$reduction641Index]);
-			reduceVar$var151$10 = ((TimeFeat[t][var95] * cv$proposedValue) + reduceVar$var151$10);
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityPoisson(arr[t][i$var80], reduceVar$var151$10) + cv$accumulatedProbabilities);
-		}
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-			time_coeff[i$var80][var95] = cv$originalValue;
+		if(constrainedFlag$sample101[i$var80][var95]) {
+			time_coeff[i$var80][var95] = cv$proposedValue;
 			for(int t = 1; t < T; t += 1)
 				time_impact[t][i$var80][var95] = (TimeFeat[t][var95] * time_coeff[i$var80][var95]);
 			for(int t = 1; t < T; t += 1) {
-				double reduceVar$var151$11 = 0.0;
+				double reduceVar$var151$9 = 0.0;
 				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1)
-					reduceVar$var151$11 = (reduceVar$var151$11 + time_impact[t][i$var80][cv$reduction152Index]);
-				sum_t[t][i$var80] = reduceVar$var151$11;
+					reduceVar$var151$9 = (reduceVar$var151$9 + time_impact[t][i$var80][cv$reduction152Index]);
+				sum_t[t][i$var80] = reduceVar$var151$9;
+			}
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue);
+			for(int t = 1; t < T; t += 1) {
+				double reduceVar$var151$10 = 0.0;
+				for(int cv$reduction697Index = 0; cv$reduction697Index < var95; cv$reduction697Index += 1)
+					reduceVar$var151$10 = (reduceVar$var151$10 + time_impact[t][i$var80][cv$reduction697Index]);
+				for(int cv$reduction697Index = (var95 + 1); cv$reduction697Index < time_dim; cv$reduction697Index += 1)
+					reduceVar$var151$10 = (reduceVar$var151$10 + time_impact[t][i$var80][cv$reduction697Index]);
+				reduceVar$var151$10 = ((TimeFeat[t][var95] * cv$proposedValue) + reduceVar$var151$10);
+				constrainedFlag$sample101[i$var80][var95] = true;
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityPoisson(arr[t][i$var80], reduceVar$var151$10) + cv$accumulatedProbabilities);
+			}
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				time_coeff[i$var80][var95] = cv$originalValue;
+				for(int t = 1; t < T; t += 1)
+					time_impact[t][i$var80][var95] = (TimeFeat[t][var95] * time_coeff[i$var80][var95]);
+				for(int t = 1; t < T; t += 1) {
+					double reduceVar$var151$11 = 0.0;
+					for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1)
+						reduceVar$var151$11 = (reduceVar$var151$11 + time_impact[t][i$var80][cv$reduction152Index]);
+					sum_t[t][i$var80] = reduceVar$var151$11;
+				}
 			}
 		}
 	}
@@ -291,6 +297,9 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 		arr = new int[T][];
 		for(int var68 = 0; var68 < T; var68 += 1)
 			arr[var68] = new int[n_ac];
+		constrainedFlag$sample101 = new boolean[n_ac][];
+		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
+			constrainedFlag$sample101[i$var80] = new boolean[TimeFeat[0].length];
 		logProbability$sample101 = new double[n_ac][];
 		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
 			logProbability$sample101[i$var80] = new double[TimeFeat[0].length];
@@ -565,11 +574,6 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {
-		time_dim = TimeFeat[0].length;
-	}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -588,6 +592,16 @@ final class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.
 				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1)
 					logProbability$sample165[(t - 1)][i$var119] = Double.NaN;
 			}
+		}
+	}
+
+	@Override
+	public final void initializeModel() {
+		time_dim = TimeFeat[0].length;
+		for(int index$constrainedFlag$sample101$1 = 0; index$constrainedFlag$sample101$1 < constrainedFlag$sample101.length; index$constrainedFlag$sample101$1 += 1) {
+			boolean[] cv$constrainedFlag$sample101$1 = constrainedFlag$sample101[index$constrainedFlag$sample101$1];
+			for(int index$constrainedFlag$sample101$2 = 0; index$constrainedFlag$sample101$2 < cv$constrainedFlag$sample101$1.length; index$constrainedFlag$sample101$2 += 1)
+				cv$constrainedFlag$sample101$1[index$constrainedFlag$sample101$2] = true;
 		}
 	}
 

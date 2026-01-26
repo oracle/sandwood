@@ -9,6 +9,10 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	
 	// Declare the variables for the model.
 	private double[] bias;
+	private boolean[] constrainedFlag$sample28;
+	private boolean[] constrainedFlag$sample45;
+	private boolean constrainedFlag$sample53 = true;
+	private boolean[] constrainedFlag$sample71;
 	private double[] cv$distributionAccumulator$var69;
 	private double[][] cv$var28$countGlobal;
 	private double[] cv$var52$stateProbabilityGlobal;
@@ -357,10 +361,11 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						
 						// Substituted "i$var64" with its value "1".
 						if(((0 <= var27) && (var27 < 5))) {
-							// Store the value of the function call, so the function call is only made once.
-							// 
 							// Substituted "i$var64" with its value "1".
-							cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 5))?Math.log(m[st[0]][cv$sampleValue]):Double.NEGATIVE_INFINITY);
+							double[] var68 = m[st[0]];
+							
+							// Store the value of the function call, so the function call is only made once.
+							cv$distributionAccumulator = (((((0.0 <= cv$sampleValue) && (cv$sampleValue < 5)) && (0.0 <= var68[cv$sampleValue])) && (var68[cv$sampleValue] <= 1.0))?Math.log(var68[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 							
 							// Add the probability of this distribution configuration to the accumulator.
 							// 
@@ -373,8 +378,10 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					if((2 <= i$var64)) {
 						int var27 = st[(i$var64 - 1)];
 						if(((0 <= var27) && (var27 < 5))) {
+							double[] var68 = m[st[(i$var64 - 1)]];
+							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 5))?Math.log(m[st[(i$var64 - 1)]][cv$sampleValue]):Double.NEGATIVE_INFINITY);
+							double cv$weightedProbability = (((((0.0 <= cv$sampleValue) && (cv$sampleValue < 5)) && (0.0 <= var68[cv$sampleValue])) && (var68[cv$sampleValue] <= 1.0))?Math.log(var68[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -479,7 +486,7 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						double var84 = bias[st[0]];
 						
 						// Store the value of the function call, so the function call is only made once.
-						cv$distributionAccumulator = Math.log((cv$sampleValue?var84:(1.0 - var84)));
+						cv$distributionAccumulator = (((0.0 <= var84) && (var84 <= 1.0))?Math.log((cv$sampleValue?var84:(1.0 - var84))):Double.NEGATIVE_INFINITY);
 						
 						// Add the probability of this distribution configuration to the accumulator.
 						// 
@@ -497,7 +504,7 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 							double var84 = bias[st[j]];
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = Math.log((cv$sampleValue?var84:(1.0 - var84)));
+							double cv$weightedProbability = (((0.0 <= var84) && (var84 <= 1.0))?Math.log((cv$sampleValue?var84:(1.0 - var84))):Double.NEGATIVE_INFINITY);
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -523,7 +530,7 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 							double var84 = bias[index$sample71$6];
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(cv$probabilitySample71Value7) + Math.log((cv$sampleValue?var84:(1.0 - var84))));
+							double cv$weightedProbability = (Math.log(cv$probabilitySample71Value7) + (((0.0 <= var84) && (var84 <= 1.0))?Math.log((cv$sampleValue?var84:(1.0 - var84))):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -759,6 +766,7 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Generating probabilities for sample task
 			// The sample value to calculate the probability of generating
 			int cv$sampleValue = st[0];
+			double[] var50 = m[0];
 			
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -779,7 +787,7 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// An accumulator for log probabilities.
 			// 
 			// Store the value of the function call, so the function call is only made once.
-			double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 5))?Math.log(m[0][cv$sampleValue]):Double.NEGATIVE_INFINITY);
+			double cv$distributionAccumulator = (((((0.0 <= cv$sampleValue) && (cv$sampleValue < 5)) && (0.0 <= var50[cv$sampleValue])) && (var50[cv$sampleValue] <= 1.0))?Math.log(var50[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
 			logProbability$var52 = cv$distributionAccumulator;
@@ -871,6 +879,7 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			for(int i$var64 = 1; i$var64 < samples; i$var64 += 1) {
 				// The sample value to calculate the probability of generating
 				int cv$sampleValue = st[i$var64];
+				double[] var68 = m[st[(i$var64 - 1)]];
 				
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
@@ -891,7 +900,7 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 5))?Math.log(m[st[(i$var64 - 1)]][cv$sampleValue]):Double.NEGATIVE_INFINITY);
+				double cv$distributionAccumulator = (((((0.0 <= cv$sampleValue) && (cv$sampleValue < 5)) && (0.0 <= var68[cv$sampleValue])) && (var68[cv$sampleValue] <= 1.0))?Math.log(var68[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -976,7 +985,7 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = Math.log((flips[j]?var84:(1.0 - var84)));
+				double cv$distributionAccumulator = (((0.0 <= var84) && (var84 <= 1.0))?Math.log((flips[j]?var84:(1.0 - var84))):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -1022,6 +1031,8 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	// by sample task 28 drawn from Dirichlet 16. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
 	private final void sample28(int var27, int threadID$cv$var27, Rng RNG$) {
+		constrainedFlag$sample28[var27] = false;
+		
 		// A local reference to the scratch space.
 		double[] cv$countLocal = cv$var28$countGlobal[threadID$cv$var27];
 		
@@ -1032,14 +1043,17 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			cv$countLocal[cv$loopIndex] = 0.0;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var27 == 0))
+		if(((var27 == 0) && (fixedFlag$sample53 || constrainedFlag$sample53))) {
 			// Looking for a path between Sample 28 and consumer Categorical 51.
 			// 
 			// Processing sample task 53 of consumer random variable null.
-			// 
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample28[0] = true;
+			
 			// Increment the sample counter with the value sampled by sample task 53 of random
 			// variable var51
 			cv$countLocal[st[0]] = (cv$countLocal[st[0]] + 1.0);
+		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(fixedFlag$sample71) {
@@ -1048,21 +1062,25 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Looking for a path between Sample 28 and consumer Categorical 69.
 			// 
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(((var27 == st[0]) && (1 < samples)))
-				// Processing sample task 71 of consumer random variable null.
-				// 
+			if(((var27 == st[0]) && (1 < samples))) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample28[var27] = true;
+				
 				// Increment the sample counter with the value sampled by sample task 71 of random
 				// variable var69
 				// 
 				// Substituted "i$var64" with its value "1".
 				cv$countLocal[st[1]] = (cv$countLocal[st[1]] + 1.0);
+			}
 			for(int i$var64 = 2; i$var64 < samples; i$var64 += 1) {
-				if((var27 == st[(i$var64 - 1)]))
-					// Processing sample task 71 of consumer random variable null.
-					// 
+				if((var27 == st[(i$var64 - 1)])) {
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample28[var27] = true;
+					
 					// Increment the sample counter with the value sampled by sample task 71 of random
 					// variable var69
 					cv$countLocal[st[i$var64]] = (cv$countLocal[st[i$var64]] + 1.0);
+				}
 			}
 		}
 		
@@ -1114,19 +1132,21 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				}
 			}
 		}
-		
-		// Calculate the new sample value
-		// 
-		// Calculate a new sample value and write it into cv$targetLocal.
-		// 
-		// A reference local to the function for the sample variable.
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, m[var27], 5);
+		if(constrainedFlag$sample28[var27])
+			// Calculate the new sample value
+			// 
+			// Calculate a new sample value and write it into cv$targetLocal.
+			// 
+			// A reference local to the function for the sample variable.
+			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, m[var27], 5);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 45 drawn from Beta 32. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample45(int var43, int threadID$cv$var43, Rng RNG$) {
+		constrainedFlag$sample45[var43] = false;
+		
 		// Local variable to record the number of true samples.
 		double cv$sum = 0.0;
 		
@@ -1141,6 +1161,9 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		if(((var43 == st[0]) && (0 < samples))) {
 			// Processing sample task 87 of consumer random variable null.
 			// 
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample45[var43] = true;
+			
 			// Include the value sampled by task 87 from random variable var85.
 			// 
 			// Increment the number of samples.
@@ -1161,6 +1184,9 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				if((var43 == st[j])) {
 					// Processing sample task 87 of consumer random variable null.
 					// 
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample45[var43] = true;
+					
 					// Include the value sampled by task 87 from random variable var85.
 					// 
 					// Increment the number of samples.
@@ -1182,6 +1208,9 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					
 					// Processing sample task 87 of consumer random variable null.
 					// 
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample45[var43] = true;
+					
 					// Include the value sampled by task 87 from random variable var85.
 					// 
 					// Increment the number of samples.
@@ -1193,18 +1222,20 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				}
 			}
 		}
-		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		// 
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		bias[var43] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		if(constrainedFlag$sample45[var43])
+			// Guards to ensure that bias is only updated when there is a valid path.
+			// 
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			bias[var43] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 53 drawn from Categorical 51. Inference was performed using variable
 	// marginalization.
 	private final void sample53() {
+		constrainedFlag$sample53 = false;
+		
 		// cv$numStates's comment
 		// variable marginalization
 		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
@@ -1217,16 +1248,26 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Value of the variable at this index
 			st[0] = cv$valuePos;
 			
+			// Constructing a random variable input for use later.
+			double[] var50 = m[0];
+			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Constructing a random variable input for use later.
-			double cv$accumulatedProbabilities = Math.log(m[0][cv$valuePos]);
+			// Value of the variable at this index
+			double cv$accumulatedProbabilities = (((0.0 <= var50[cv$valuePos]) && (var50[cv$valuePos] <= 1.0))?Math.log(var50[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((fixedFlag$sample71 && (1 < samples)))
+			if((fixedFlag$sample71 && (1 < samples))) {
 				// Looking for a path between Sample 53 and consumer Categorical 69.
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample53 = true;
+				
+				// Constructing a random variable input for use later.
 				// 
+				// Value of the variable at this index
+				double[] var68 = m[cv$valuePos];
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -1237,24 +1278,20 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// 
 				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 				// Declaration comment was:
-				// Processing sample task 71 of consumer random variable null.
-				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
 				// Substituted "i$var64" with its value "1".
-				// 
-				// Constructing a random variable input for use later.
-				// 
-				// Value of the variable at this index
-				cv$accumulatedProbabilities = ((((0.0 <= st[1]) && (st[1] < 5))?Math.log(m[cv$valuePos][st[1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((((0.0 <= st[1]) && (st[1] < 5)) && (0.0 <= var68[st[1]])) && (var68[st[1]] <= 1.0))?Math.log(var68[st[1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			
 			// Substituted "j" with its value "0".
 			if((0 < samples)) {
 				// Processing sample task 87 of consumer random variable null.
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample53 = true;
+				
 				// Constructing a random variable input for use later.
-				// 
-				// Processing random variable 85.
 				// 
 				// Looking for a path between Sample 53 and consumer Bernoulli 85.
 				// 
@@ -1275,7 +1312,7 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// inputs.
 				// 
 				// Substituted "j" with its value "0".
-				cv$accumulatedProbabilities = (Math.log((flips[0]?var84:(1.0 - var84))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var84) && (var84 <= 1.0))?Math.log((flips[0]?var84:(1.0 - var84))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1358,107 +1395,110 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Initialize a counter to track the reached distributions.
 			cv$var52$stateProbabilityGlobal[cv$valuePos] = (cv$accumulatedProbabilities + cv$accumulatedDistributionProbabilities);
 		}
-		
-		// This value is not used before it is set again, so removing the value declaration.
-		// 
-		// The sum of all the probabilities in log space
-		double cv$logSum;
-		
-		// Sum all the values
-		// 
-		// Initialise the max to the first element.
-		// 
-		// Get a local reference to the scratch space.
-		double cv$lseMax = cv$var52$stateProbabilityGlobal[0];
-		
-		// Unrolled loop
-		{
-			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var52$stateProbabilityGlobal[1];
-			if((cv$lseMax < cv$lseElementValue))
-				cv$lseMax = cv$lseElementValue;
-		}
-		{
-			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var52$stateProbabilityGlobal[2];
-			if((cv$lseMax < cv$lseElementValue))
-				cv$lseMax = cv$lseElementValue;
-		}
-		{
-			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var52$stateProbabilityGlobal[3];
-			if((cv$lseMax < cv$lseElementValue))
-				cv$lseMax = cv$lseElementValue;
-		}
-		
-		// Get a local reference to the scratch space.
-		double cv$lseElementValue = cv$var52$stateProbabilityGlobal[4];
-		if((cv$lseMax < cv$lseElementValue))
-			cv$lseMax = cv$lseElementValue;
-		
-		// If the maximum value is -infinity return -infinity.
-		if((cv$lseMax == Double.NEGATIVE_INFINITY))
-			cv$logSum = Double.NEGATIVE_INFINITY;
-		
-		// Sum the values in the array.
-		else {
-			// Initialise the sum of the array elements
-			double cv$lseSum = 0.0;
-			
-			// Offset values, move to normal space, and sum.
-			// 
-			// cv$numStates's comment
-			// variable marginalization
-			for(int cv$lseIndex = 0; cv$lseIndex < 5; cv$lseIndex += 1)
-				// Get a local reference to the scratch space.
-				cv$lseSum = (cv$lseSum + Math.exp((cv$var52$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
-			
-			// Increment the value of the target, moving the value back into log space.
+		if(constrainedFlag$sample53) {
+			// This value is not used before it is set again, so removing the value declaration.
 			// 
 			// The sum of all the probabilities in log space
-			cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
-		}
-		
-		// If all the sum is zero, just share the probability evenly.
-		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			// Normalize log space values and move to normal space
+			double cv$logSum;
+			
+			// Sum all the values
 			// 
-			// cv$numStates's comment
-			// variable marginalization
-			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
-				// Get a local reference to the scratch space.
-				cv$var52$stateProbabilityGlobal[cv$indexName] = 0.2;
-		} else {
-			// Normalize log space values and move to normal space
+			// Initialise the max to the first element.
 			// 
-			// cv$numStates's comment
-			// variable marginalization
-			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
-				// Get a local reference to the scratch space.
-				cv$var52$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var52$stateProbabilityGlobal[cv$indexName] - cv$logSum));
-		}
-		
-		// Set array values that are not computed for the input to negative infinity.
-		// 
-		// Get a local reference to the scratch space.
-		for(int cv$indexName = 5; cv$indexName < cv$var52$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Get a local reference to the scratch space.
-			cv$var52$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
-		
-		// Guards to ensure that st is only updated when there is a valid path.
-		// 
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		// 
-		// cv$numStates's comment
-		// variable marginalization
-		st[0] = DistributionSampling.sampleCategorical(RNG$, cv$var52$stateProbabilityGlobal, 5);
+			double cv$lseMax = cv$var52$stateProbabilityGlobal[0];
+			
+			// Unrolled loop
+			{
+				// Get a local reference to the scratch space.
+				double cv$lseElementValue = cv$var52$stateProbabilityGlobal[1];
+				if((cv$lseMax < cv$lseElementValue))
+					cv$lseMax = cv$lseElementValue;
+			}
+			{
+				// Get a local reference to the scratch space.
+				double cv$lseElementValue = cv$var52$stateProbabilityGlobal[2];
+				if((cv$lseMax < cv$lseElementValue))
+					cv$lseMax = cv$lseElementValue;
+			}
+			{
+				// Get a local reference to the scratch space.
+				double cv$lseElementValue = cv$var52$stateProbabilityGlobal[3];
+				if((cv$lseMax < cv$lseElementValue))
+					cv$lseMax = cv$lseElementValue;
+			}
+			
+			// Get a local reference to the scratch space.
+			double cv$lseElementValue = cv$var52$stateProbabilityGlobal[4];
+			if((cv$lseMax < cv$lseElementValue))
+				cv$lseMax = cv$lseElementValue;
+			
+			// If the maximum value is -infinity return -infinity.
+			if((cv$lseMax == Double.NEGATIVE_INFINITY))
+				cv$logSum = Double.NEGATIVE_INFINITY;
+			
+			// Sum the values in the array.
+			else {
+				// Initialise the sum of the array elements
+				double cv$lseSum = 0.0;
+				
+				// Offset values, move to normal space, and sum.
+				// 
+				// cv$numStates's comment
+				// variable marginalization
+				for(int cv$lseIndex = 0; cv$lseIndex < 5; cv$lseIndex += 1)
+					// Get a local reference to the scratch space.
+					cv$lseSum = (cv$lseSum + Math.exp((cv$var52$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
+				
+				// Increment the value of the target, moving the value back into log space.
+				// 
+				// The sum of all the probabilities in log space
+				cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
+			}
+			
+			// If all the sum is zero, just share the probability evenly.
+			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
+				// Normalize log space values and move to normal space
+				// 
+				// cv$numStates's comment
+				// variable marginalization
+				for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
+					// Get a local reference to the scratch space.
+					cv$var52$stateProbabilityGlobal[cv$indexName] = 0.2;
+			} else {
+				// Normalize log space values and move to normal space
+				// 
+				// cv$numStates's comment
+				// variable marginalization
+				for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
+					// Get a local reference to the scratch space.
+					cv$var52$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var52$stateProbabilityGlobal[cv$indexName] - cv$logSum));
+			}
+			
+			// Set array values that are not computed for the input to negative infinity.
+			// 
+			// Get a local reference to the scratch space.
+			for(int cv$indexName = 5; cv$indexName < cv$var52$stateProbabilityGlobal.length; cv$indexName += 1)
+				// Get a local reference to the scratch space.
+				cv$var52$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+			
+			// Guards to ensure that st is only updated when there is a valid path.
+			// 
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			// 
+			// cv$numStates's comment
+			// variable marginalization
+			st[0] = DistributionSampling.sampleCategorical(RNG$, cv$var52$stateProbabilityGlobal, 5);
+		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 71 drawn from Categorical 69. Inference was performed using variable
 	// marginalization.
 	private final void sample71(int i$var64) {
+		constrainedFlag$sample71[(i$var64 - 1)] = false;
+		
 		// Calculate the number of states to evaluate.
 		int cv$numStates = 0;
 		
@@ -1518,7 +1558,15 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					
 					// Constructing a random variable input for use later.
 					// 
-					// Processing random variable 85.
+					// Substituted "i$var64" with its value "1".
+					double[] var68 = m[st[0]];
+					
+					// Mark that the sample has observed constrained data.
+					// 
+					// Substituted "i$var64" with its value "1".
+					constrainedFlag$sample71[0] = true;
+					
+					// Constructing a random variable input for use later.
 					// 
 					// Looking for a path between Sample 71 and consumer Bernoulli 85.
 					// 
@@ -1537,11 +1585,7 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					// it is added to the index probabilities.
 					// 
 					// Value of the variable at this index
-					// 
-					// Constructing a random variable input for use later.
-					// 
-					// Substituted "i$var64" with its value "1".
-					cv$stateProbabilityValue = (Math.log((flips[1]?var84:(1.0 - var84))) + Math.log(m[st[0]][cv$valuePos]));
+					cv$stateProbabilityValue = ((((0.0 <= var84) && (var84 <= 1.0))?Math.log((flips[1]?var84:(1.0 - var84))):Double.NEGATIVE_INFINITY) + (((0.0 <= var68[cv$valuePos]) && (var68[cv$valuePos] <= 1.0))?Math.log(var68[cv$valuePos]):Double.NEGATIVE_INFINITY));
 				}
 			}
 			int index$i$15 = (i$var64 - 1);
@@ -1572,8 +1616,12 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample71Value17);
 					
 					// Constructing a random variable input for use later.
-					// 
-					// Processing random variable 85.
+					double[] var68 = m[index$sample71$16];
+					
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample71[(i$var64 - 1)] = true;
+					
+					// Constructing a random variable input for use later.
 					// 
 					// Looking for a path between Sample 71 and consumer Bernoulli 85.
 					double var84 = bias[index$sample71$16];
@@ -1583,7 +1631,7 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
 					// 
-					// Constructing a random variable input for use later.
+					// Value of the variable at this index
 					// 
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1596,8 +1644,8 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
 					// 
-					// Constructing a random variable input for use later.
-					double cv$accumulatedProbabilities = ((Math.log((flips[i$var64]?var84:(1.0 - var84))) + Math.log(cv$probabilitySample71Value17)) + Math.log(m[index$sample71$16][cv$valuePos]));
+					// Value of the variable at this index
+					double cv$accumulatedProbabilities = (((((0.0 <= var84) && (var84 <= 1.0))?Math.log((flips[i$var64]?var84:(1.0 - var84))):Double.NEGATIVE_INFINITY) + Math.log(cv$probabilitySample71Value17)) + (((0.0 <= var68[cv$valuePos]) && (var68[cv$valuePos] <= 1.0))?Math.log(var68[cv$valuePos]):Double.NEGATIVE_INFINITY));
 					
 					// Add the values for the source and any standard consumers for this configuration
 					// of arguments to the source.
@@ -1726,69 +1774,69 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Get a local reference to the scratch space.
 			cv$var70$stateProbabilityGlobal[cv$valuePos] = ((cv$stateProbabilityValue + cv$accumulatedDistributionProbabilities) - Math.log(cv$reachedDistributionSourceRV));
 		}
-		
-		// Set the calculated probabilities to be the distribution values, and normalize
-		// 
-		// Local copy of the probability array
-		double[] cv$localProbability = distribution$sample71[(i$var64 - 1)];
-		
-		// This value is not used before it is set again, so removing the value declaration.
-		// 
-		// The sum of all the probabilities in log space
-		double cv$logSum;
-		
-		// Sum all the values
-		// 
-		// Initialise the max to the first element.
-		// 
-		// Get a local reference to the scratch space.
-		double cv$lseMax = cv$var70$stateProbabilityGlobal[0];
-		
-		// Find max value.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
-			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var70$stateProbabilityGlobal[cv$lseIndex];
-			if((cv$lseMax < cv$lseElementValue))
-				cv$lseMax = cv$lseElementValue;
-		}
-		
-		// If the maximum value is -infinity return -infinity.
-		if((cv$lseMax == Double.NEGATIVE_INFINITY))
-			cv$logSum = Double.NEGATIVE_INFINITY;
-		
-		// Sum the values in the array.
-		else {
-			// Initialise the sum of the array elements
-			double cv$lseSum = 0.0;
+		if(constrainedFlag$sample71[(i$var64 - 1)]) {
+			// Set the calculated probabilities to be the distribution values, and normalize
+			// Local copy of the probability array
+			double[] cv$localProbability = distribution$sample71[(i$var64 - 1)];
 			
-			// Offset values, move to normal space, and sum.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
-				// Get a local reference to the scratch space.
-				cv$lseSum = (cv$lseSum + Math.exp((cv$var70$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
-			
-			// Increment the value of the target, moving the value back into log space.
+			// This value is not used before it is set again, so removing the value declaration.
 			// 
 			// The sum of all the probabilities in log space
-			cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
-		}
-		
-		// If all the sum is zero, just share the probability evenly.
-		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-				cv$localProbability[cv$indexName] = (1.0 / cv$numStates);
-		} else {
-			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+			double cv$logSum;
+			
+			// Sum all the values
+			// 
+			// Initialise the max to the first element.
+			// 
+			// Get a local reference to the scratch space.
+			double cv$lseMax = cv$var70$stateProbabilityGlobal[0];
+			
+			// Find max value.
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 				// Get a local reference to the scratch space.
-				cv$localProbability[cv$indexName] = Math.exp((cv$var70$stateProbabilityGlobal[cv$indexName] - cv$logSum));
+				double cv$lseElementValue = cv$var70$stateProbabilityGlobal[cv$lseIndex];
+				if((cv$lseMax < cv$lseElementValue))
+					cv$lseMax = cv$lseElementValue;
+			}
+			
+			// If the maximum value is -infinity return -infinity.
+			if((cv$lseMax == Double.NEGATIVE_INFINITY))
+				cv$logSum = Double.NEGATIVE_INFINITY;
+			
+			// Sum the values in the array.
+			else {
+				// Initialise the sum of the array elements
+				double cv$lseSum = 0.0;
+				
+				// Offset values, move to normal space, and sum.
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
+					// Get a local reference to the scratch space.
+					cv$lseSum = (cv$lseSum + Math.exp((cv$var70$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
+				
+				// Increment the value of the target, moving the value back into log space.
+				// 
+				// The sum of all the probabilities in log space
+				cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
+			}
+			
+			// If all the sum is zero, just share the probability evenly.
+			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
+				// Normalize log space values and move to normal space
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					cv$localProbability[cv$indexName] = (1.0 / cv$numStates);
+			} else {
+				// Normalize log space values and move to normal space
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					// Get a local reference to the scratch space.
+					cv$localProbability[cv$indexName] = Math.exp((cv$var70$stateProbabilityGlobal[cv$indexName] - cv$logSum));
+			}
+			
+			// Set array values that are not computed for the input to negative infinity.
+			// 
+			// Get a local reference to the scratch space.
+			for(int cv$indexName = cv$numStates; cv$indexName < cv$var70$stateProbabilityGlobal.length; cv$indexName += 1)
+				cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 		}
-		
-		// Set array values that are not computed for the input to negative infinity.
-		// 
-		// Get a local reference to the scratch space.
-		for(int cv$indexName = cv$numStates; cv$indexName < cv$var70$stateProbabilityGlobal.length; cv$indexName += 1)
-			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -1865,6 +1913,15 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		distribution$sample71 = new double[(length$flipsMeasured - 1)][];
 		for(int i$var64 = 1; i$var64 < length$flipsMeasured; i$var64 += 1)
 			distribution$sample71[(i$var64 - 1)] = new double[5];
+		
+		// Constructor for constrainedFlag$sample45
+		constrainedFlag$sample45 = new boolean[5];
+		
+		// Constructor for constrainedFlag$sample28
+		constrainedFlag$sample28 = new boolean[5];
+		
+		// Constructor for constrainedFlag$sample71
+		constrainedFlag$sample71 = new boolean[(length$flipsMeasured - 1)];
 		
 		// Constructor for logProbability$sample71
 		logProbability$sample71 = new double[(length$flipsMeasured - 1)];
@@ -1981,7 +2038,7 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						double[] var68 = m[st[0]];
 						for(int index$var69 = 0; index$var69 < 5; index$var69 += 1)
 							// Save the probability of each value
-							cv$distribution$sample71[index$var69] = (cv$distribution$sample71[index$var69] + var68[index$var69]);
+							cv$distribution$sample71[index$var69] = (cv$distribution$sample71[index$var69] + (((0.0 <= var68[index$var69]) && (var68[index$var69] <= 1.0))?var68[index$var69]:0.0));
 					}
 				}
 				int index$i$4 = (i$var64 - 1);
@@ -1995,7 +2052,7 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						double[] var68 = m[index$sample71$5];
 						for(int index$var69 = 0; index$var69 < 5; index$var69 += 1)
 							// Save the probability of each value
-							cv$distribution$sample71[index$var69] = (cv$distribution$sample71[index$var69] + (cv$probabilitySample71Value6 * var68[index$var69]));
+							cv$distribution$sample71[index$var69] = (cv$distribution$sample71[index$var69] + (cv$probabilitySample71Value6 * (((0.0 <= var68[index$var69]) && (var68[index$var69] <= 1.0))?var68[index$var69]:0.0)));
 					}
 				}
 				
@@ -2230,23 +2287,6 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, 5, 1,
-			(int forStart$i$var13, int forEnd$i$var13, int threadID$i$var13, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int i$var13 = forStart$i$var13; i$var13 < forEnd$i$var13; i$var13 += 1)
-						v[i$var13] = 0.1;
-			}
-		);
-		samples = length$flipsMeasured;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -2275,6 +2315,27 @@ final class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			for(int j = 0; j < samples; j += 1)
 				logProbability$sample87[j] = Double.NaN;
 		}
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		for(int i$var13 = 0; i$var13 < 5; i$var13 += 1)
+			v[i$var13] = 0.1;
+		samples = length$flipsMeasured;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample45$1 = 0; index$constrainedFlag$sample45$1 < constrainedFlag$sample45.length; index$constrainedFlag$sample45$1 += 1)
+			constrainedFlag$sample45[index$constrainedFlag$sample45$1] = true;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample28$1 = 0; index$constrainedFlag$sample28$1 < constrainedFlag$sample28.length; index$constrainedFlag$sample28$1 += 1)
+			constrainedFlag$sample28[index$constrainedFlag$sample28$1] = true;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample71$1 = 0; index$constrainedFlag$sample71$1 < constrainedFlag$sample71.length; index$constrainedFlag$sample71$1 += 1)
+			constrainedFlag$sample71[index$constrainedFlag$sample71$1] = true;
 	}
 
 	// Construct the evidence probabilities.

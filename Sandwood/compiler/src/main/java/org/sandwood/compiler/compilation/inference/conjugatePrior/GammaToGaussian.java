@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -279,7 +279,7 @@ public class GammaToGaussian
     protected void finalize(GammaToGaussianData funcData, CompilationContext compilationCtx) {}
 
     @Override
-    protected ScopeConstructor getBackTraceScope(GammaToGaussianData funcData) {
+    protected ScopeConstructor getBackTraceScope(GammaToGaussianData funcData, CompilationContext compilationCtx) {
         return funcData.targetScope;
     }
 
@@ -289,7 +289,8 @@ public class GammaToGaussian
     }
 
     @Override
-    protected void addDistributionProbabilities(GammaToGaussianData funcData, CompilationContext compilationCtx) {
+    protected void addDistributionProbabilities(ScopeConstructor targetScope, GammaToGaussianData funcData,
+            CompilationContext compilationCtx) {
         throw new CompilerException("Unable to merge distributions in this inference method.");
     }
 

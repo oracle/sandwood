@@ -8,6 +8,7 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	
 	// Declare the variables for the model.
 	private double[] bias;
+	private boolean constrainedFlag$sample10 = true;
 	private boolean fixedFlag$sample10 = false;
 	private boolean fixedProbFlag$sample10 = false;
 	private boolean fixedProbFlag$sample31 = false;
@@ -292,7 +293,7 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = Math.log((flips[i]?var29:(1.0 - var29)));
+				double cv$distributionAccumulator = (((0.0 <= var29) && (var29 <= 1.0))?Math.log((flips[i]?var29:(1.0 - var29))):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -347,6 +348,8 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	// by sample task 10 drawn from Beta 9. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample10() {
+		constrainedFlag$sample10 = false;
+		
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
 		
@@ -357,6 +360,9 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 		if((0 < samples)) {
 			// Processing sample task 31 of consumer random variable bernoulli.
 			// 
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample10 = true;
+			
 			// Include the value sampled by task 31 from random variable bernoulli.
 			// 
 			// Increment the number of samples.
@@ -375,8 +381,11 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 			int index$i$2_2 = (i + 1);
 			if((index$i$2_2 < samples)) {
 				// Processing sample task 31 of consumer random variable bernoulli.
-				// 
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample10 = true;
+				
 				// Include the value sampled by task 31 from random variable bernoulli.
+				// 
 				// Increment the number of samples.
 				cv$count = (cv$count + 1);
 				
@@ -385,18 +394,19 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 					cv$sum = (cv$sum + 1);
 			}
 		}
-		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		// 
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		bias[0] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		// 
-		// Looking for a path between Sample 10 and consumer double[] 28.
-		for(int i = 0; i < samples; i += 1)
-			bias[(i + 1)] = bias[0];
+		if(constrainedFlag$sample10) {
+			// Guards to ensure that bias is only updated when there is a valid path.
+			// 
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			bias[0] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			
+			// Guards to ensure that bias is only updated when there is a valid path.
+			// 
+			// Looking for a path between Sample 10 and consumer double[] 28.
+			for(int i = 0; i < samples; i += 1)
+				bias[(i + 1)] = bias[0];
+		}
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -537,11 +547,6 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -563,6 +568,11 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 				logProbability$sample31[i] = Double.NaN;
 		}
 	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {}
 
 	// Construct the evidence probabilities.
 	@Override

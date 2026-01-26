@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -540,10 +540,10 @@ public abstract class Model implements HasProbability, AutoCloseable {
 
     private void allocate() {
         if(!allocated) {
-            // TODO merge initializeConstants and allocate
+            // TODO merge initializeModel and allocate
             // in case an allocation depends on an earlier constant.
             core.allocator();
-            core.initializeConstants();
+            core.initializeModel();
             allocated = true;
         }
     }

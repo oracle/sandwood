@@ -9,6 +9,7 @@ final class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.int
 	// Declare the variables for the model.
 	private double a;
 	private double b;
+	private boolean constrainedFlag$sample6 = true;
 	private double[] decay;
 	private double[] decayDetected;
 	private boolean fixedFlag$sample6 = false;
@@ -192,7 +193,7 @@ final class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.int
 				// The sample value to calculate the probability of generating
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && !(cv$sampleValue == Double.POSITIVE_INFINITY))?(Math.log(rate) - (rate * cv$sampleValue)):Double.NEGATIVE_INFINITY));
+				cv$sampleAccumulator = (cv$sampleAccumulator + ((((0.0 <= cv$sampleValue) && !(cv$sampleValue == Double.POSITIVE_INFINITY)) && (0.0 < rate))?(Math.log(rate) - (rate * cv$sampleValue)):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -348,6 +349,8 @@ final class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.int
 	// by sample task 6 drawn from Gamma 5. Inference was performed using a Gamma to Exponential
 	// conjugate prior.
 	private final void sample6() {
+		constrainedFlag$sample6 = false;
+		
 		// Variable to track the sum of the samples.
 		double cv$sum = 0.0;
 		
@@ -358,16 +361,20 @@ final class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.int
 		// 
 		// Processing sample task 19 of consumer random variable exponential.
 		for(int var18 = 0; var18 < samples; var18 += 1) {
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample6 = true;
+			
 			// Consume sample task 19 from random variable exponential.
+			// 
 			// Include this sample by adding the value to the sum.
 			cv$sum = (cv$sum + decay[var18]);
 			
 			// Increment the number of samples in the calculation.
 			cv$count = (cv$count + 1);
 		}
-		
-		// Write out the new value of the sample.
-		rate = Conjugates.sampleConjugateGammaExponential(RNG$, a, b, cv$sum, cv$count);
+		if(constrainedFlag$sample6)
+			// Write out the new value of the sample.
+			rate = Conjugates.sampleConjugateGammaExponential(RNG$, a, b, cv$sum, cv$count);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -439,13 +446,6 @@ final class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.int
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		samples = length$decayDetected;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -462,6 +462,13 @@ final class ExponentialDecayMK1$SingleThreadCPU extends org.sandwood.runtime.int
 		logProbability$decay = 0.0;
 		if(!fixedProbFlag$sample19)
 			logProbability$var19 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		samples = length$decayDetected;
 	}
 
 	// Construct the evidence probabilities.

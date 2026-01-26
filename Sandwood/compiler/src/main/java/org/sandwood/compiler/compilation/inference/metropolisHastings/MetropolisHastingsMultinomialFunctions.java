@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -99,25 +99,24 @@ public class MetropolisHastingsMultinomialFunctions extends MetropolisHastingsAr
      */
 
     @Override
-    protected void constructFunctionVariablesProb(MetropolisHastingsArrayData<IntVariable, Multinomial> funcData,
-            CompilationContext compilationCtx) {
-        super.constructFunctionVariablesProb(funcData, compilationCtx);
+    protected void constructFunctionVariablesProb(MetropolisHastingsArrayData<IntVariable, Multinomial> funcData) {
+        super.constructFunctionVariablesProb(funcData);
 
         funcData.targetScope.addTree((TreeBuilderInfo info) -> {
             IRTreeReturn<ArrayVariable<IntVariable>> target = funcData.getTarget();
 
             // Array Length
-            IRTreeReturn<IntVariable> arrayLengthTree = funcData.sourceRandom.getLength(compilationCtx);
+            IRTreeReturn<IntVariable> arrayLengthTree = funcData.sourceRandom.getLength(info.compilationCtx);
             IRTreeVoid arrayLengthTreeInit = initializeVariable(arrayLength, arrayLengthTree, Tree.NoComment);
-            compilationCtx.addTreeToScope(GlobalScope.scope, arrayLengthTreeInit);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, arrayLengthTreeInit);
 
             // Count the number of non zero values
-            compilationCtx.addTreeToScope(GlobalScope.scope,
+            info.compilationCtx.addTreeToScope(GlobalScope.scope,
                     initializeVariable(nonZeroCount, constant(0), "Count how many non zero entries there are."));
             IRTreeReturn<BooleanVariable> guard = negateBoolean(eq(arrayGet(target, load(loopIndex)), constant(0)));
             IRTreeVoid increment = store(nonZeroCount, addII(load(nonZeroCount), constant(1)), Tree.NoComment);
             IRTreeVoid count = IRTree.ifElse(guard, increment, Tree.NoComment);
-            compilationCtx.addTreeToScope(GlobalScope.scope,
+            info.compilationCtx.addTreeToScope(GlobalScope.scope,
                     forStmt(count, constant(0), arrayLengthTree, constant(1), loopIndex, true, Tree.NoComment));
 
             // Index to Change
@@ -125,27 +124,27 @@ public class MetropolisHastingsMultinomialFunctions extends MetropolisHastingsAr
                     VariableType.DoubleVariable, VariableType.Uniform, constant(0.0), load(nonZeroCount)));
             IRTreeVoid indexToChangeTreeInit = initializeVariable(source, indexToChangeTree,
                     "Pick a value in the array to adjust.");
-            compilationCtx.addTreeToScope(GlobalScope.scope, indexToChangeTreeInit);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, indexToChangeTreeInit);
             guard = eq(arrayGet(target, load(loopIndex)), constant(0));
             increment = store(source, addII(load(source), constant(1)), Tree.NoComment);
             count = IRTree.ifElse(guard, increment, Tree.NoComment);
-            compilationCtx.addTreeToScope(GlobalScope.scope, forStmt(count, constant(0),
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, forStmt(count, constant(0),
                     addII(load(source), constant(1)), constant(1), loopIndex, true, Tree.NoComment));
 
             // Fraction to move selected index by.
             IRTreeReturn<IntVariable> changeValue = castToInteger(
                     functionCallReturn(FunctionType.SAMPLE, VariableType.DoubleVariable, VariableType.Uniform,
                             constant(1.0), addID(arrayGet(target, load(source)), constant(1.0))));
-            compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(change, changeValue,
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(change, changeValue,
                     "Select the number of trials to remove from the selected category."));
 
             // Calculate the destination of the change
             IRTreeReturn<IntVariable> destinationToChange = castToInteger(
                     functionCallReturn(FunctionType.SAMPLE, VariableType.DoubleVariable, VariableType.Uniform,
                             constant(0.0), subtractII(load(arrayLength), constant(1))));
-            compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(destination, destinationToChange,
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(destination, destinationToChange,
                     "Select the destination of the moved trials."));
-            compilationCtx.addTreeToScope(GlobalScope.scope,
+            info.compilationCtx.addTreeToScope(GlobalScope.scope,
                     ifElse(IRTree.lessThanEqual(load(source), load(destination)),
                             store(destination, addII(load(destination), constant(1)), Tree.NoComment),
                             "Ensure the source and target are not equal"));

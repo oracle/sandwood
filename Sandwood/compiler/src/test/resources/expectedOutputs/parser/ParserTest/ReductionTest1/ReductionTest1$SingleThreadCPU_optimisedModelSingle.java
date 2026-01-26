@@ -10,6 +10,7 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 	private int T;
 	private double[][] TimeFeat;
 	private int[][] arr;
+	private boolean[][] constrainedFlag$sample101;
 	private boolean fixedFlag$sample101 = false;
 	private boolean fixedProbFlag$sample101 = false;
 	private boolean fixedProbFlag$sample165 = false;
@@ -400,6 +401,8 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 101 drawn from Gaussian 85. Inference was performed using Metropolis-Hastings.
 	private final void sample101(int i$var80, int var95) {
+		constrainedFlag$sample101[i$var80][var95] = false;
+		
 		// The original value of the sample
 		double cv$originalValue = time_coeff[i$var80][var95];
 		
@@ -434,7 +437,7 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Reduce for every value except a masked value which will be skipped.
 				// 
 				// Substituted "j" with its value "var95".
-				for(int cv$reduction308Index = 0; cv$reduction308Index < var95; cv$reduction308Index += 1)
+				for(int cv$reduction332Index = 0; cv$reduction332Index < var95; cv$reduction332Index += 1)
 					// Execute the reduction function, saving the result into the return value.
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
@@ -448,10 +451,10 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 					// Substituted "index$t$4_6" with its value "t".
 					// 
 					// Substituted "index$i$4_7" with its value "i$var80".
-					reduceVar$var151$1 = (reduceVar$var151$1 + time_impact[t][i$var80][cv$reduction308Index]);
+					reduceVar$var151$1 = (reduceVar$var151$1 + time_impact[t][i$var80][cv$reduction332Index]);
 				
 				// Substituted "j" with its value "var95".
-				for(int cv$reduction308Index = (var95 + 1); cv$reduction308Index < time_dim; cv$reduction308Index += 1)
+				for(int cv$reduction332Index = (var95 + 1); cv$reduction332Index < time_dim; cv$reduction332Index += 1)
 					// Execute the reduction function, saving the result into the return value.
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
@@ -465,7 +468,7 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 					// Substituted "index$t$4_6" with its value "t".
 					// 
 					// Substituted "index$i$4_7" with its value "i$var80".
-					reduceVar$var151$1 = (reduceVar$var151$1 + time_impact[t][i$var80][cv$reduction308Index]);
+					reduceVar$var151$1 = (reduceVar$var151$1 + time_impact[t][i$var80][cv$reduction332Index]);
 				
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
@@ -473,6 +476,9 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 				// 
 				// Set the current value to the current state of the tree.
 				reduceVar$var151$1 = ((TimeFeat[t][var95] * cv$originalValue) + reduceVar$var151$1);
+				
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample101[i$var80][var95] = true;
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -484,8 +490,6 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 				// 
 				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 				// Declaration comment was:
-				// Processing sample task 165 of consumer random variable null.
-				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
@@ -503,138 +507,10 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Initialize a counter to track the reached distributions.
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
-		time_coeff[i$var80][var95] = cv$proposedValue;
 		
-		// Guards to ensure that time_impact is only updated when there is a valid path.
-		// 
-		// Looking for a path between Sample 101 and consumer double[][][] 138.
-		for(int t = 1; t < T; t += 1)
-			// Substituted "i$var119" with its value "i$var80".
-			// 
-			// Substituted "i$var119" with its value "i$var80".
-			time_impact[t][i$var80][var95] = (TimeFeat[t][var95] * time_coeff[i$var80][var95]);
-		for(int t = 1; t < T; t += 1) {
-			// Reduction of array null
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			double reduceVar$var151$0 = 0.0;
-			
-			// For each index in the array to be reduced
-			for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1)
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// x's comment
-				// Set the left hand term of the reduction function to the return variable value.
-				// 
-				// y's comment
-				// Set the right hand term to a value from the array var141
-				// 
-				// Substituted "index$t$3_4" with its value "t".
-				// 
-				// Substituted "index$i$3_5" with its value "i$var80".
-				reduceVar$var151$0 = (reduceVar$var151$0 + time_impact[t][i$var80][cv$reduction152Index]);
-			
-			// Substituted "index$t$3_4" with its value "t".
-			sum_t[t][i$var80] = reduceVar$var151$0;
-		}
-		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue);
-		for(int t = 1; t < T; t += 1) {
-			// Reduction of array null
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			double reduceVar$var151$1 = 0.0;
-			
-			// Reduce for every value except a masked value which will be skipped.
-			// 
-			// Substituted "j" with its value "var95".
-			for(int cv$reduction308Index = 0; cv$reduction308Index < var95; cv$reduction308Index += 1)
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// x's comment
-				// Set the left hand term of the reduction function to the return variable value.
-				// 
-				// y's comment
-				// Set the right hand term to a value from the array var141
-				// 
-				// Substituted "index$t$4_6" with its value "t".
-				// 
-				// Substituted "index$i$4_7" with its value "i$var80".
-				reduceVar$var151$1 = (reduceVar$var151$1 + time_impact[t][i$var80][cv$reduction308Index]);
-			
-			// Substituted "j" with its value "var95".
-			for(int cv$reduction308Index = (var95 + 1); cv$reduction308Index < time_dim; cv$reduction308Index += 1)
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// x's comment
-				// Set the left hand term of the reduction function to the return variable value.
-				// 
-				// y's comment
-				// Set the right hand term to a value from the array var141
-				// 
-				// Substituted "index$t$4_6" with its value "t".
-				// 
-				// Substituted "index$i$4_7" with its value "i$var80".
-				reduceVar$var151$1 = (reduceVar$var151$1 + time_impact[t][i$var80][cv$reduction308Index]);
-			
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// Substituted "j" with its value "var95".
-			reduceVar$var151$1 = ((TimeFeat[t][var95] * cv$proposedValue) + reduceVar$var151$1);
-			
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 165 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-			// Declaration comment was:
-			// Processing sample task 165 of consumer random variable null.
-			// 
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
-			// 
-			// Substituted "index$i$4_11" with its value "index$i$4_7".
-			// 
-			// Substituted "index$t$4_10" with its value "t".
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityPoisson(arr[t][i$var80], reduceVar$var151$1) + cv$accumulatedProbabilities);
-		}
-		
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-			// If it is not revert the changes.
-			// 
-			// Set the sample value
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
-			time_coeff[i$var80][var95] = cv$originalValue;
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(constrainedFlag$sample101[i$var80][var95]) {
+			time_coeff[i$var80][var95] = cv$proposedValue;
 			
 			// Guards to ensure that time_impact is only updated when there is a valid path.
 			// 
@@ -650,7 +526,7 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 				// A generated name to prevent name collisions if the reduction is implemented more
 				// than once in inference and probability code. Initialize the variable to the unit
 				// value
-				double reduceVar$var151$2 = 0.0;
+				double reduceVar$var151$0 = 0.0;
 				
 				// For each index in the array to be reduced
 				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1)
@@ -664,13 +540,146 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 					// y's comment
 					// Set the right hand term to a value from the array var141
 					// 
-					// Substituted "index$t$9_4" with its value "t".
+					// Substituted "index$t$3_4" with its value "t".
 					// 
-					// Substituted "index$i$9_5" with its value "i$var80".
-					reduceVar$var151$2 = (reduceVar$var151$2 + time_impact[t][i$var80][cv$reduction152Index]);
+					// Substituted "index$i$3_5" with its value "i$var80".
+					reduceVar$var151$0 = (reduceVar$var151$0 + time_impact[t][i$var80][cv$reduction152Index]);
 				
-				// Substituted "index$t$9_4" with its value "t".
-				sum_t[t][i$var80] = reduceVar$var151$2;
+				// Substituted "index$t$3_4" with its value "t".
+				sum_t[t][i$var80] = reduceVar$var151$0;
+			}
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue);
+			for(int t = 1; t < T; t += 1) {
+				// Reduction of array null
+				// 
+				// A generated name to prevent name collisions if the reduction is implemented more
+				// than once in inference and probability code. Initialize the variable to the unit
+				// value
+				double reduceVar$var151$1 = 0.0;
+				
+				// Reduce for every value except a masked value which will be skipped.
+				// 
+				// Substituted "j" with its value "var95".
+				for(int cv$reduction332Index = 0; cv$reduction332Index < var95; cv$reduction332Index += 1)
+					// Execute the reduction function, saving the result into the return value.
+					// 
+					// Copy the result of the reduction into the variable returned by the reduction.
+					// 
+					// x's comment
+					// Set the left hand term of the reduction function to the return variable value.
+					// 
+					// y's comment
+					// Set the right hand term to a value from the array var141
+					// 
+					// Substituted "index$t$4_6" with its value "t".
+					// 
+					// Substituted "index$i$4_7" with its value "i$var80".
+					reduceVar$var151$1 = (reduceVar$var151$1 + time_impact[t][i$var80][cv$reduction332Index]);
+				
+				// Substituted "j" with its value "var95".
+				for(int cv$reduction332Index = (var95 + 1); cv$reduction332Index < time_dim; cv$reduction332Index += 1)
+					// Execute the reduction function, saving the result into the return value.
+					// 
+					// Copy the result of the reduction into the variable returned by the reduction.
+					// 
+					// x's comment
+					// Set the left hand term of the reduction function to the return variable value.
+					// 
+					// y's comment
+					// Set the right hand term to a value from the array var141
+					// 
+					// Substituted "index$t$4_6" with its value "t".
+					// 
+					// Substituted "index$i$4_7" with its value "i$var80".
+					reduceVar$var151$1 = (reduceVar$var151$1 + time_impact[t][i$var80][cv$reduction332Index]);
+				
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// Substituted "j" with its value "var95".
+				reduceVar$var151$1 = ((TimeFeat[t][var95] * cv$proposedValue) + reduceVar$var151$1);
+				
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample101[i$var80][var95] = true;
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 165 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				// 
+				// Substituted "index$i$4_11" with its value "index$i$4_7".
+				// 
+				// Substituted "index$t$4_10" with its value "t".
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityPoisson(arr[t][i$var80], reduceVar$var151$1) + cv$accumulatedProbabilities);
+			}
+			
+			// The probability ration for the proposed value and the current value.
+			// 
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				// If it is not revert the changes.
+				// 
+				// Set the sample value
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				time_coeff[i$var80][var95] = cv$originalValue;
+				
+				// Guards to ensure that time_impact is only updated when there is a valid path.
+				// 
+				// Looking for a path between Sample 101 and consumer double[][][] 138.
+				for(int t = 1; t < T; t += 1)
+					// Substituted "i$var119" with its value "i$var80".
+					// 
+					// Substituted "i$var119" with its value "i$var80".
+					time_impact[t][i$var80][var95] = (TimeFeat[t][var95] * time_coeff[i$var80][var95]);
+				for(int t = 1; t < T; t += 1) {
+					// Reduction of array null
+					// 
+					// A generated name to prevent name collisions if the reduction is implemented more
+					// than once in inference and probability code. Initialize the variable to the unit
+					// value
+					double reduceVar$var151$2 = 0.0;
+					
+					// For each index in the array to be reduced
+					for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1)
+						// Execute the reduction function, saving the result into the return value.
+						// 
+						// Copy the result of the reduction into the variable returned by the reduction.
+						// 
+						// x's comment
+						// Set the left hand term of the reduction function to the return variable value.
+						// 
+						// y's comment
+						// Set the right hand term to a value from the array var141
+						// 
+						// Substituted "index$t$9_4" with its value "t".
+						// 
+						// Substituted "index$i$9_5" with its value "i$var80".
+						reduceVar$var151$2 = (reduceVar$var151$2 + time_impact[t][i$var80][cv$reduction152Index]);
+					
+					// Substituted "index$t$9_4" with its value "t".
+					sum_t[t][i$var80] = reduceVar$var151$2;
+				}
 			}
 		}
 	}
@@ -712,6 +721,11 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 		arr = new int[T][];
 		for(int var68 = 0; var68 < T; var68 += 1)
 			arr[var68] = new int[n_ac];
+		
+		// Constructor for constrainedFlag$sample101
+		constrainedFlag$sample101 = new boolean[n_ac][];
+		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
+			constrainedFlag$sample101[i$var80] = new boolean[TimeFeat[0].length];
 		
 		// Constructor for logProbability$sample101
 		logProbability$sample101 = new double[n_ac][];
@@ -948,13 +962,6 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		time_dim = TimeFeat[0].length;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -977,6 +984,20 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 		logProbability$arr = 0.0;
 		if(!fixedProbFlag$sample165)
 			logProbability$var158 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		time_dim = TimeFeat[0].length;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample101$1 = 0; index$constrainedFlag$sample101$1 < constrainedFlag$sample101.length; index$constrainedFlag$sample101$1 += 1) {
+			boolean[] cv$constrainedFlag$sample101$1 = constrainedFlag$sample101[index$constrainedFlag$sample101$1];
+			for(int index$constrainedFlag$sample101$2 = 0; index$constrainedFlag$sample101$2 < cv$constrainedFlag$sample101$1.length; index$constrainedFlag$sample101$2 += 1)
+				cv$constrainedFlag$sample101$1[index$constrainedFlag$sample101$2] = true;
+		}
 	}
 
 	// Construct the evidence probabilities.

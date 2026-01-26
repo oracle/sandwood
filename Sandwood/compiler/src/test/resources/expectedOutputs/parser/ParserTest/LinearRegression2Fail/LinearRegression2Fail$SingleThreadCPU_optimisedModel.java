@@ -7,6 +7,9 @@ final class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.i
 	// Declare the variables for the model.
 	private double b0;
 	private double b1;
+	private boolean constrainedFlag$sample11 = true;
+	private boolean constrainedFlag$sample15 = true;
+	private boolean constrainedFlag$sample7 = true;
 	private boolean fixedFlag$sample11 = false;
 	private boolean fixedFlag$sample15 = false;
 	private boolean fixedFlag$sample7 = false;
@@ -455,7 +458,7 @@ final class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.i
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((y[i] - (b0 + (b1 * x[i]))) / Math.sqrt(variance))) - (Math.log(variance) * 0.5));
+				double cv$distributionAccumulator = ((0.0 < variance)?(DistributionSampling.logProbabilityGaussian(((y[i] - (b0 + (b1 * x[i]))) / Math.sqrt(variance))) - (Math.log(variance) * 0.5)):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -589,6 +592,8 @@ final class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.i
 	// by sample task 11 drawn from Gaussian 10. Inference was performed using a Gaussian
 	// to Gaussian conjugate prior.
 	private final void sample11() {
+		constrainedFlag$sample11 = false;
+		
 		// State to record the weighting of each sample that is consumed. This is the:
 		// sum of the sample denominator*(the sample value - the sample nominator).
 		double cv$sum = 0.0;
@@ -605,6 +610,9 @@ final class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.i
 		// Processing random variable 30.
 		for(int i = 0; i < noSamples; i += 1) {
 			// Processing sample task 31 of consumer random variable null.
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample11 = true;
+			
 			// Variable declaration of cv$denominator moved.
 			// Declaration comment was:
 			// State for tracking the changes that happen to the sampled value between it being
@@ -636,15 +644,17 @@ final class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.i
 				cv$sigmaNotFound = false;
 			}
 		}
-		
-		// Write out the new value of the sample.
-		b1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 1.0, 5.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		if(constrainedFlag$sample11)
+			// Write out the new value of the sample.
+			b1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 1.0, 5.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 15 drawn from InverseGamma 14. Inference was performed using a Inverse
 	// Gamma to Gaussian conjugate prior.
 	private final void sample15() {
+		constrainedFlag$sample15 = false;
+		
 		// Variable to track the sum of the difference between the samples and the random
 		// variables mean squared.
 		double cv$sum = 0.0;
@@ -655,6 +665,9 @@ final class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.i
 		// Processing random variable 30.
 		for(int i = 0; i < noSamples; i += 1) {
 			// Processing sample task 31 of consumer random variable null.
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample15 = true;
+			
 			// Consume sample task 31 from random variable var30.
 			// 
 			// The difference between the mean parameter and the value sampled from the Gaussian.
@@ -668,15 +681,17 @@ final class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.i
 			// Increment the number of samples in the calculation.
 			cv$count = (cv$count + 1);
 		}
-		
-		// Write out the new value of the sample.
-		variance = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		if(constrainedFlag$sample15)
+			// Write out the new value of the sample.
+			variance = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 7 drawn from Gaussian 6. Inference was performed using a Gaussian
 	// to Gaussian conjugate prior.
 	private final void sample7() {
+		constrainedFlag$sample7 = false;
+		
 		// State to record the weighting of each sample that is consumed. This is the:
 		// sum of the sample denominator*(the sample value - the sample nominator).
 		double cv$sum = 0.0;
@@ -693,6 +708,9 @@ final class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.i
 		// Processing random variable 30.
 		for(int i = 0; i < noSamples; i += 1) {
 			// Processing sample task 31 of consumer random variable null.
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample7 = true;
+			
 			// Record the value of a sample generated by a consuming sample 31 of random variable
 			// var30.
 			// 
@@ -720,9 +738,9 @@ final class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.i
 				cv$sigmaNotFound = false;
 			}
 		}
-		
-		// Write out the new value of the sample.
-		b0 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 2.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		if(constrainedFlag$sample7)
+			// Write out the new value of the sample.
+			b0 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 2.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -832,13 +850,6 @@ final class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.i
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		noSamples = x.length;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -860,6 +871,13 @@ final class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.i
 			for(int i = 0; i < noSamples; i += 1)
 				logProbability$sample31[i] = Double.NaN;
 		}
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		noSamples = x.length;
 	}
 
 	// Construct the evidence probabilities.

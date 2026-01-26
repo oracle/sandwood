@@ -8,6 +8,7 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean constrainedFlag$sample8 = true;
 	private int count1;
 	private int count2;
 	private boolean fixedFlag$sample11 = false;
@@ -463,6 +464,8 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// conjugate prior.
 	private final void sample8() {
 		if(true) {
+			constrainedFlag$sample8 = false;
+			
 			// Local variable to record the number of true samples.
 			int cv$sum = 0;
 			
@@ -476,17 +479,23 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							// Processing sample task 11 of consumer random variable binomial.
 							{
 								{
-									{
+									// Flag recording if this sample task of the consuming random variable is constrained.
+									boolean cv$sampleConstrained = true;
+									if(cv$sampleConstrained) {
+										// Mark that the sample has observed constrained data.
+										constrainedFlag$sample8 = true;
 										{
 											{
 												{
 													{
-														// Include the value sampled by task 11 from random variable binomial.
-														// Increment the number of booleans sampled.
-														cv$count = (cv$count + 100);
-														
-														// Add to the count the number of booleans that were true.
-														cv$sum = (cv$sum + count1);
+														{
+															// Include the value sampled by task 11 from random variable binomial.
+															// Increment the number of booleans sampled.
+															cv$count = (cv$count + 100);
+															
+															// Add to the count the number of booleans that were true.
+															cv$sum = (cv$sum + count1);
+														}
 													}
 												}
 											}
@@ -498,17 +507,23 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							// Processing sample task 12 of consumer random variable binomial.
 							{
 								{
-									{
+									// Flag recording if this sample task of the consuming random variable is constrained.
+									boolean cv$sampleConstrained = true;
+									if(cv$sampleConstrained) {
+										// Mark that the sample has observed constrained data.
+										constrainedFlag$sample8 = true;
 										{
 											{
 												{
 													{
-														// Include the value sampled by task 12 from random variable binomial.
-														// Increment the number of booleans sampled.
-														cv$count = (cv$count + 100);
-														
-														// Add to the count the number of booleans that were true.
-														cv$sum = (cv$sum + count2);
+														{
+															// Include the value sampled by task 12 from random variable binomial.
+															// Increment the number of booleans sampled.
+															cv$count = (cv$count + 100);
+															
+															// Add to the count the number of booleans that were true.
+															cv$sum = (cv$sum + count2);
+														}
 													}
 												}
 											}
@@ -520,9 +535,9 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					}
 				}
 			}
-			
-			// Write out the new value of the sample.
-			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			if(constrainedFlag$sample8)
+				// Write out the new value of the sample.
+				bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 		}
 	}
 
@@ -606,11 +621,6 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -629,6 +639,11 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedProbFlag$sample12)
 			logProbability$count2 = Double.NaN;
 	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {}
 
 	// Construct the evidence probabilities.
 	@Override

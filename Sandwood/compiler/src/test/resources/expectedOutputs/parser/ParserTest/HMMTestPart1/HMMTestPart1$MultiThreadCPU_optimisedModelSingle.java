@@ -9,6 +9,9 @@ final class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	
 	// Declare the variables for the model.
 	private double[] bias;
+	private boolean[] constrainedFlag$sample28;
+	private boolean[] constrainedFlag$sample45;
+	private boolean constrainedFlag$sample50 = true;
 	private double[][] cv$var28$countGlobal;
 	private double[] cv$var49$stateProbabilityGlobal;
 	private boolean fixedFlag$sample28 = false;
@@ -469,6 +472,8 @@ final class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// just use cached values.
 		if(!fixedProbFlag$sample50) {
 			// Generating probabilities for sample task
+			double[] var47 = m[0];
+			
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
 			// Variable declaration of cv$distributionAccumulator moved.
@@ -492,7 +497,7 @@ final class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (((0.0 <= st) && (st < 2))?Math.log(m[0][st]):Double.NEGATIVE_INFINITY);
+			double cv$distributionAccumulator = (((((0.0 <= st) && (st < 2)) && (0.0 <= var47[st])) && (var47[st] <= 1.0))?Math.log(var47[st]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
 			logProbability$st = cv$distributionAccumulator;
@@ -583,7 +588,7 @@ final class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = Math.log((flip?var50:(1.0 - var50)));
+			double cv$distributionAccumulator = (((0.0 <= var50) && (var50 <= 1.0))?Math.log((flip?var50:(1.0 - var50))):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
 			logProbability$flip = cv$distributionAccumulator;
@@ -640,35 +645,42 @@ final class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	// by sample task 28 drawn from Dirichlet 16. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
 	private final void sample28(int var27, int threadID$cv$var27, Rng RNG$) {
+		constrainedFlag$sample28[var27] = false;
+		
 		// A local reference to the scratch space.
 		double[] cv$countLocal = cv$var28$countGlobal[threadID$cv$var27];
 		cv$countLocal[0] = 0.0;
 		cv$countLocal[1] = 0.0;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((var27 == 0))
+		if(((var27 == 0) && (fixedFlag$sample50 || constrainedFlag$sample50))) {
 			// Processing random variable 48.
 			// 
 			// Looking for a path between Sample 28 and consumer Categorical 48.
 			// 
 			// Processing sample task 50 of consumer random variable null.
-			// 
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample28[0] = true;
+			
 			// Increment the sample counter with the value sampled by sample task 50 of random
 			// variable var48
 			cv$countLocal[st] = (cv$countLocal[st] + 1.0);
-		
-		// Calculate the new sample value
-		// 
-		// Calculate a new sample value and write it into cv$targetLocal.
-		// 
-		// A reference local to the function for the sample variable.
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, m[var27], 2);
+		}
+		if(constrainedFlag$sample28[var27])
+			// Calculate the new sample value
+			// 
+			// Calculate a new sample value and write it into cv$targetLocal.
+			// 
+			// A reference local to the function for the sample variable.
+			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, m[var27], 2);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 45 drawn from Beta 32. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample45(int var43, int threadID$cv$var43, Rng RNG$) {
+		constrainedFlag$sample45[var43] = false;
+		
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
 		
@@ -682,8 +694,11 @@ final class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Looking for a path between Sample 45 and consumer Bernoulli 51.
 			// 
 			// Processing sample task 53 of consumer random variable null.
-			// 
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample45[var43] = true;
+			
 			// Include the value sampled by task 53 from random variable var51.
+			// 
 			// Increment the number of samples.
 			// 
 			// Local variable to record the number of samples.
@@ -694,18 +709,19 @@ final class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// Local variable to record the number of true samples.
 				cv$sum = 1;
 		}
-		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		// 
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		bias[var43] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		if(constrainedFlag$sample45[var43])
+			// Guards to ensure that bias is only updated when there is a valid path.
+			// 
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			bias[var43] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 50 drawn from Categorical 48. Inference was performed using variable
 	// marginalization.
 	private final void sample50() {
+		constrainedFlag$sample50 = false;
 		{
 			// Write out the new value of the sample.
 			// 
@@ -715,8 +731,12 @@ final class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			st = 0;
 			
 			// Constructing a random variable input for use later.
-			// 
-			// Processing random variable 51.
+			double[] var47 = m[0];
+			
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample50 = true;
+			
+			// Constructing a random variable input for use later.
 			// 
 			// Value of the variable at this index
 			// 
@@ -742,10 +762,10 @@ final class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Constructing a random variable input for use later.
+			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "0".
-			cv$var49$stateProbabilityGlobal[0] = (Math.log((flip?var50:(1.0 - var50))) + Math.log(m[0][0]));
+			cv$var49$stateProbabilityGlobal[0] = ((((0.0 <= var50) && (var50 <= 1.0))?Math.log((flip?var50:(1.0 - var50))):Double.NEGATIVE_INFINITY) + (((0.0 <= var47[0]) && (var47[0] <= 1.0))?Math.log(var47[0]):Double.NEGATIVE_INFINITY));
 		}
 		
 		// Write out the new value of the sample.
@@ -756,8 +776,12 @@ final class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		st = 1;
 		
 		// Constructing a random variable input for use later.
-		// 
-		// Processing random variable 51.
+		double[] var47 = m[0];
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample50 = true;
+		
+		// Constructing a random variable input for use later.
 		// 
 		// Value of the variable at this index
 		// 
@@ -783,10 +807,10 @@ final class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Constructing a random variable input for use later.
+		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
-		cv$var49$stateProbabilityGlobal[1] = (Math.log((flip?var50:(1.0 - var50))) + Math.log(m[0][1]));
+		cv$var49$stateProbabilityGlobal[1] = ((((0.0 <= var50) && (var50 <= 1.0))?Math.log((flip?var50:(1.0 - var50))):Double.NEGATIVE_INFINITY) + (((0.0 <= var47[1]) && (var47[1] <= 1.0))?Math.log(var47[1]):Double.NEGATIVE_INFINITY));
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -900,6 +924,12 @@ final class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		if(!fixedFlag$sample45)
 			// Constructor for bias
 			bias = new double[2];
+		
+		// Constructor for constrainedFlag$sample45
+		constrainedFlag$sample45 = new boolean[2];
+		
+		// Constructor for constrainedFlag$sample28
+		constrainedFlag$sample28 = new boolean[2];
 		
 		// Allocate scratch space
 		allocateScratch();
@@ -1156,22 +1186,6 @@ final class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, 2, 1,
-			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int i = forStart$i; i < forEnd$i; i += 1)
-						v[i] = 0.1;
-			}
-		);
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -1192,6 +1206,25 @@ final class HMMTestPart1$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			logProbability$st = Double.NaN;
 		if(!fixedProbFlag$sample53)
 			logProbability$flip = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		// Substituted "i" with its value "0".
+		v[0] = 0.1;
+		
+		// Substituted "i" with its value "1".
+		v[1] = 0.1;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample45$1 = 0; index$constrainedFlag$sample45$1 < constrainedFlag$sample45.length; index$constrainedFlag$sample45$1 += 1)
+			constrainedFlag$sample45[index$constrainedFlag$sample45$1] = true;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample28$1 = 0; index$constrainedFlag$sample28$1 < constrainedFlag$sample28.length; index$constrainedFlag$sample28$1 += 1)
+			constrainedFlag$sample28[index$constrainedFlag$sample28$1] = true;
 	}
 
 	// Construct the evidence probabilities.

@@ -6,6 +6,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements UniformBernoulli$CoreInterface {
 	
 	// Declare the variables for the model.
+	private boolean constrainedFlag$sample5 = true;
 	private boolean fixedFlag$sample5 = false;
 	private boolean fixedProbFlag$sample19 = false;
 	private boolean fixedProbFlag$sample5 = false;
@@ -169,7 +170,7 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((output[var18]?prior:(1.0 - prior))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= prior) && (prior <= 1.0))?Math.log((output[var18]?prior:(1.0 - prior))):Double.NEGATIVE_INFINITY));
 			logProbability$bernoulli = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -313,6 +314,8 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 5 drawn from Uniform 4. Inference was performed using Metropolis-Hastings.
 	private final void sample5() {
+		constrainedFlag$sample5 = false;
+		
 		// The original value of the sample
 		double cv$originalValue = prior;
 		
@@ -344,7 +347,10 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 			double cv$accumulatedProbabilities = (((0.0 <= prior) && (prior < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			
 			// Processing sample task 19 of consumer random variable bernoulli.
-			for(int var18 = 0; var18 < length$observed; var18 += 1)
+			for(int var18 = 0; var18 < length$observed; var18 += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample5 = true;
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -361,7 +367,8 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 				// Set the current value to the current state of the tree.
 				// 
 				// The original value of the sample
-				cv$accumulatedProbabilities = (Math.log((output[var18]?prior:(1.0 - prior))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= prior) && (prior <= 1.0))?Math.log((output[var18]?prior:(1.0 - prior))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
@@ -372,51 +379,58 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		
-		// Update Sample and intermediate values
-		// 
-		// Write out the new value of the sample.
-		prior = cv$proposedValue;
-		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
-		
-		// Processing sample task 19 of consumer random variable bernoulli.
-		for(int var18 = 0; var18 < length$observed; var18 += 1)
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 19 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-			// Declaration comment was:
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
-			cv$accumulatedProbabilities = (Math.log((output[var18]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
-		
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
-			// If it is not revert the changes.
-			// 
-			// Set the sample value
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(constrainedFlag$sample5) {
+			// Update Sample and intermediate values
 			// 
 			// Write out the new value of the sample.
-			prior = cv$originalValue;
+			prior = cv$proposedValue;
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
+			
+			// Processing sample task 19 of consumer random variable bernoulli.
+			for(int var18 = 0; var18 < length$observed; var18 += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample5 = true;
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 19 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				cv$accumulatedProbabilities = ((((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?Math.log((output[var18]?cv$proposedValue:(1.0 - cv$proposedValue))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			
+			// The probability ration for the proposed value and the current value.
+			// 
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+				// If it is not revert the changes.
+				// 
+				// Set the sample value
+				// 
+				// Write out the new value of the sample.
+				prior = cv$originalValue;
+		}
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -506,11 +520,6 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -528,6 +537,11 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 		if(!fixedProbFlag$sample19)
 			logProbability$var19 = Double.NaN;
 	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {}
 
 	// Construct the evidence probabilities.
 	@Override

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -85,15 +85,14 @@ public class MetropolisHastingsDirichletFunctions extends MetropolisHastingsArra
      */
 
     @Override
-    protected void constructFunctionVariablesProb(MetropolisHastingsArrayData<DoubleVariable, Dirichlet> funcData,
-            CompilationContext compilationCtx) {
-        super.constructFunctionVariablesProb(funcData, compilationCtx);
+    protected void constructFunctionVariablesProb(MetropolisHastingsArrayData<DoubleVariable, Dirichlet> funcData) {
+        super.constructFunctionVariablesProb(funcData);
         funcData.targetScope.addTree((TreeBuilderInfo info) -> {
             // Array Length
             IRTreeReturn<IntVariable> arrayLengthTree = ((ArrayVariable<DoubleVariable>) funcData.sampleDesc.output)
-                    .getLength(compilationCtx);
+                    .getLength(info.compilationCtx);
             IRTreeVoid arrayLengthTreeInit = initializeVariable(arrayLength, arrayLengthTree, Tree.NoComment);
-            compilationCtx.addTreeToScope(GlobalScope.scope, arrayLengthTreeInit);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, arrayLengthTreeInit);
 
             // Index to Change
             // TODO confirm this cannot return arrayLength.
@@ -101,7 +100,7 @@ public class MetropolisHastingsDirichletFunctions extends MetropolisHastingsArra
                     VariableType.DoubleVariable, VariableType.Uniform, constant(0.0), load(arrayLength)));
             IRTreeVoid indexToChangeTreeInit = initializeVariable(indexToChange, indexToChangeTree,
                     "Pick a value in the array to adjust.");
-            compilationCtx.addTreeToScope(GlobalScope.scope, indexToChangeTreeInit);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, indexToChangeTreeInit);
 
             // Fraction to move selected index by.
             IRTreeReturn<DoubleVariable> movementRatioTree = subtractDI(
@@ -112,7 +111,7 @@ public class MetropolisHastingsDirichletFunctions extends MetropolisHastingsArra
                     "Pick how much the value "
                             + "should be moved by. Initially this value is proposed as a ratio of the current magnitude of the value, we will check to make sure "
                             + "the adjustment will not make this value too large or other values too small and adjust if required before it is applied.");
-            compilationCtx.addTreeToScope(GlobalScope.scope, movementRatioTreeInit);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, movementRatioTreeInit);
 
             // Calculate the proposed difference
             IRTreeVoid proposedDifferenceTreeInit = initializeUnsetVariable(proposedDifference,
@@ -163,7 +162,7 @@ public class MetropolisHastingsDirichletFunctions extends MetropolisHastingsArra
                             max, Tree.NoComment),
                     store(proposedDifference, multiplyDD(load(movementRatio), load(proposedDifference)),
                             "Multiply the maximum adjustment by the adjustment ratio to get the actual adjustment we are going to make."));
-            compilationCtx.addTreeToScope(GlobalScope.scope, proposedDifferenceTreeInit);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, proposedDifferenceTreeInit);
 
             // Finally set the amount that each of the other values should be moved by to
             // rebalance the array.
@@ -171,7 +170,7 @@ public class MetropolisHastingsDirichletFunctions extends MetropolisHastingsArra
                     subtractII(load(arrayLength), constant(1)));
             IRTreeVoid rebalanceTreeInit = initializeVariable(rebalanceValue, rebalanceTree,
                     "Calculate how much each of the other indexes needs to be adjusted by in order to maintain that the sum of the indexes is 1.");
-            compilationCtx.addTreeToScope(GlobalScope.scope, rebalanceTreeInit);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, rebalanceTreeInit);
         });
     }
 

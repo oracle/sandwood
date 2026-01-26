@@ -8,6 +8,7 @@ final class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	
 	// Declare the variables for the model.
 	private double[][] a;
+	private boolean constrainedFlag$sample39 = true;
 	private double[] cv$var37$countGlobal;
 	private double[] d;
 	private boolean fixedFlag$sample39 = false;
@@ -309,7 +310,7 @@ final class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 								}
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$37_4))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$37_4)) && (0 < lengthCV$a$37_4)) && (0.0 <= d[cv$sampleValue])) && (d[cv$sampleValue] <= 1.0))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -394,6 +395,8 @@ final class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	// to Categorical conjugate prior.
 	private final void sample39() {
 		if(true) {
+			constrainedFlag$sample39 = false;
+			
 			// A reference local to the function for the sample variable.
 			double[] cv$targetLocal = d;
 			
@@ -435,42 +438,60 @@ final class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 							// Processing sample task 53 of consumer random variable null.
 							{
 								{
-									for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
-										// Increment the sample counter with the value sampled by sample task 53 of random
-										// variable var38
-										cv$countLocal[obs[var50]] = (cv$countLocal[obs[var50]] + 1.0);
+									for(int var50 = 0; var50 < length$obs_measured; var50 += 1) {
+										// Flag recording if this sample task of the consuming random variable is constrained.
+										boolean cv$sampleConstrained = true;
+										if(cv$sampleConstrained) {
+											// Mark that the sample has observed constrained data.
+											constrainedFlag$sample39 = true;
+											{
+												{
+													{
+														{
+															{
+																// Increment the sample counter with the value sampled by sample task 53 of random
+																// variable var38
+																cv$countLocal[obs[var50]] = (cv$countLocal[obs[var50]] + 1.0);
+															}
+														}
+													}
+												}
+											}
+										}
+									}
 								}
 							}
 						}
 					}
 				}
 			}
-			
-			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$37_2 = -1;
-			
-			// calculate array length.
-			// 
-			// Looking for a path between Put 17 and consumer double[] 35.
-			{
+			if(constrainedFlag$sample39) {
+				// Allocate a local variable to hold the length of the array.
+				int lengthCV$a$37_2 = -1;
+				
+				// calculate array length.
+				// 
+				// Looking for a path between Put 17 and consumer double[] 35.
 				{
-					if((0 == y))
-						lengthCV$a$37_2 = 2;
+					{
+						if((0 == y))
+							lengthCV$a$37_2 = 2;
+					}
 				}
-			}
-			
-			// Looking for a path between Put 35 and consumer double[] 35.
-			{
+				
+				// Looking for a path between Put 35 and consumer double[] 35.
 				{
-					if((1 == y))
-						lengthCV$a$37_2 = 3;
+					{
+						if((1 == y))
+							lengthCV$a$37_2 = 3;
+					}
 				}
+				
+				// Calculate the new sample value
+				// 
+				// Calculate a new sample value and write it into cv$targetLocal.
+				Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$countLocal, cv$targetLocal, lengthCV$a$37_2);
 			}
-			
-			// Calculate the new sample value
-			// 
-			// Calculate a new sample value and write it into cv$targetLocal.
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$countLocal, cv$targetLocal, lengthCV$a$37_2);
 		}
 	}
 
@@ -762,19 +783,6 @@ final class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		double[] var6 = a[0];
-		var6[0] = 0.4;
-		var6[1] = 0.6;
-		double[] var19 = a[1];
-		var19[0] = 0.2;
-		var19[1] = 0.3;
-		var19[2] = 0.5;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -790,6 +798,19 @@ final class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample53)
 			logProbability$var51 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		double[] var6 = a[0];
+		var6[0] = 0.4;
+		var6[1] = 0.6;
+		double[] var19 = a[1];
+		var19[0] = 0.2;
+		var19[1] = 0.3;
+		var19[2] = 0.5;
 	}
 
 	// Construct the evidence probabilities.

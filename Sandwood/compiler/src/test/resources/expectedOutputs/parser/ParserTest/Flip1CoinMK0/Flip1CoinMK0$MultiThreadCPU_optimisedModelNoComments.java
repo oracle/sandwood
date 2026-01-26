@@ -6,6 +6,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 final class Flip1CoinMK0$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK0$CoreInterface {
 	private double bias;
+	private boolean constrainedFlag$sample5 = true;
 	private boolean fixedFlag$sample5 = false;
 	private boolean fixedProbFlag$sample5 = false;
 	private boolean fixedProbFlag$sample7 = false;
@@ -103,7 +104,7 @@ final class Flip1CoinMK0$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	private final void logProbabilityValue$sample7() {
 		if(!fixedProbFlag$sample7) {
-			double cv$distributionAccumulator = Math.log((flip?bias:(1.0 - bias)));
+			double cv$distributionAccumulator = (((0.0 <= bias) && (bias <= 1.0))?Math.log((flip?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY);
 			logProbability$bernoulli = cv$distributionAccumulator;
 			logProbability$flip = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -117,7 +118,9 @@ final class Flip1CoinMK0$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	private final void sample5() {
+		constrainedFlag$sample5 = false;
 		int cv$sum = 0;
+		constrainedFlag$sample5 = true;
 		if(flip)
 			cv$sum = 1;
 		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, 1);
@@ -168,9 +171,6 @@ final class Flip1CoinMK0$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -180,6 +180,9 @@ final class Flip1CoinMK0$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		if(!fixedProbFlag$sample7)
 			logProbability$flip = Double.NaN;
 	}
+
+	@Override
+	public final void initializeModel() {}
 
 	@Override
 	public final void logEvidenceProbabilities() {

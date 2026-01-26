@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  * 
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -35,8 +35,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.sandwood.compiler.compilation.CompilationContext;
-import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.compilation.CompilationContext.CompilationPhase;
+import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.compilation.util.TreeUtils;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
@@ -59,9 +59,9 @@ import org.sandwood.compiler.traces.guards.ScopeConstructor;
 import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRTree;
+import org.sandwood.compiler.trees.irTree.IRTree.IRTreeType;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
-import org.sandwood.compiler.trees.irTree.IRTree.IRTreeType;
 
 /**
  * Class that implements the specific method bodies to allow inference to be performed by calculating the probabilities
@@ -468,7 +468,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
      * 
      */
     @Override
-    protected ScopeConstructor getBackTraceScope(FuncData funcData) {
+    protected ScopeConstructor getBackTraceScope(FuncData funcData, CompilationContext compilationCtx) {
         ScopeConstructor target = funcData.targetScope.addForLoop(Variable.intVariable(0),
                 Variable.namedVariable(numStatesName), Variable.intVariable(1), valuePosName, Tree.NoComment, true);
         SampleTask<A, B> sample = funcData.sampleDesc.sample;

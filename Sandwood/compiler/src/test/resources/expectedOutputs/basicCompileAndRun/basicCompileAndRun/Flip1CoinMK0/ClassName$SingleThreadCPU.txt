@@ -6,6 +6,7 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean constrainedFlag$sample4 = true;
 	private boolean fixedFlag$sample4 = false;
 	private boolean fixedProbFlag$sample4 = false;
 	private boolean fixedProbFlag$sample6 = false;
@@ -245,7 +246,7 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = Math.log((flip?bias:(1.0 - bias)));
+			double cv$distributionAccumulator = (((0.0 <= bias) && (bias <= 1.0))?Math.log((flip?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -309,8 +310,13 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	// by sample task 4 drawn from Beta 3. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample4() {
+		constrainedFlag$sample4 = false;
+		
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample4 = true;
 		
 		// If the sample value was positive increase the count
 		if(flip)
@@ -318,10 +324,6 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 			cv$sum = 1;
 		
 		// Write out the new value of the sample.
-		// 
-		// Processing random variable 5.
-		// 
-		// Processing sample task 6 of consumer random variable bernoulli.
 		// 
 		// Include the value sampled by task 6 from random variable bernoulli.
 		// 
@@ -395,11 +397,6 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -416,6 +413,11 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		if(!fixedProbFlag$sample6)
 			logProbability$flip = Double.NaN;
 	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {}
 
 	// Construct the evidence probabilities.
 	@Override

@@ -8,6 +8,7 @@ final class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean constrainedFlag$sample9 = true;
 	private boolean fixedFlag$sample9 = false;
 	private boolean fixedProbFlag$sample22 = false;
 	private boolean fixedProbFlag$sample36 = false;
@@ -237,7 +238,7 @@ final class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips1[var21]?bias:(1.0 - bias))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= bias) && (bias <= 1.0))?Math.log((flips1[var21]?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -332,7 +333,7 @@ final class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips2[var35]?bias:(1.0 - bias))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= bias) && (bias <= 1.0))?Math.log((flips2[var35]?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -488,6 +489,8 @@ final class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	// by sample task 9 drawn from Beta 8. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample9() {
+		constrainedFlag$sample9 = false;
+		
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
 		
@@ -498,7 +501,11 @@ final class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// 
 		// Processing sample task 22 of consumer random variable bernoulli1.
 		for(int var21 = 0; var21 < samples1; var21 += 1) {
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample9 = true;
+			
 			// Include the value sampled by task 22 from random variable bernoulli1.
+			// 
 			// Increment the number of samples.
 			cv$count = (cv$count + 1);
 			
@@ -511,7 +518,11 @@ final class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// 
 		// Processing sample task 36 of consumer random variable bernoulli2.
 		for(int var35 = 0; var35 < samples2; var35 += 1) {
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample9 = true;
+			
 			// Include the value sampled by task 36 from random variable bernoulli2.
+			// 
 			// Increment the number of samples.
 			cv$count = (cv$count + 1);
 			
@@ -519,9 +530,9 @@ final class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			if(flips2[var35])
 				cv$sum = (cv$sum + 1);
 		}
-		
-		// Write out the new value of the sample.
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		if(constrainedFlag$sample9)
+			// Write out the new value of the sample.
+			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -636,14 +647,6 @@ final class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		samples1 = length$flipsMeasured1;
-		samples2 = length$flipsMeasured2;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -664,6 +667,14 @@ final class Flip1CoinMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		logProbability$flips2 = 0.0;
 		if(!fixedProbFlag$sample36)
 			logProbability$var36 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		samples1 = length$flipsMeasured1;
+		samples2 = length$flipsMeasured2;
 	}
 
 	// Construct the evidence probabilities.

@@ -8,6 +8,7 @@ final class Flip1CoinMK20$SingleThreadCPU extends org.sandwood.runtime.internal.
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean constrainedFlag$sample8 = true;
 	private int count1;
 	private int count2;
 	private boolean fixedFlag$sample11 = false;
@@ -460,17 +461,23 @@ final class Flip1CoinMK20$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// by sample task 8 drawn from Beta 7. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample8() {
-		// Write out the new value of the sample.
+		constrainedFlag$sample8 = false;
+		
+		// Processing random variable 10.
 		// 
-		// Processing sample task 12 of consumer random variable binomial.
+		// Processing sample task 11 of consumer random variable binomial.
+		// 
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample8 = true;
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample8 = true;
+		
+		// Write out the new value of the sample.
 		// 
 		// Include the value sampled by task 12 from random variable binomial.
 		// 
 		// Increment the number of booleans sampled.
-		// 
-		// Processing random variable 10.
-		// 
-		// Processing sample task 11 of consumer random variable binomial.
 		// 
 		// Include the value sampled by task 11 from random variable binomial.
 		// 
@@ -553,11 +560,6 @@ final class Flip1CoinMK20$SingleThreadCPU extends org.sandwood.runtime.internal.
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -576,6 +578,11 @@ final class Flip1CoinMK20$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(!fixedProbFlag$sample12)
 			logProbability$count2 = Double.NaN;
 	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {}
 
 	// Construct the evidence probabilities.
 	@Override

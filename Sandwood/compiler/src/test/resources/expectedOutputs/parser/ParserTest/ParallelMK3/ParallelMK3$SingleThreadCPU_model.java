@@ -6,6 +6,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 final class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ParallelMK3$CoreInterface {
 	
 	// Declare the variables for the model.
+	private boolean constrainedFlag$sample21 = true;
 	private boolean fixedFlag$sample21 = false;
 	private boolean fixedProbFlag$sample21 = false;
 	private boolean fixedProbFlag$sample38 = false;
@@ -307,7 +308,7 @@ final class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 								double var36 = indirection[i];
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))));
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -390,6 +391,8 @@ final class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// by sample task 21 drawn from Dirichlet 20. Inference was performed using Metropolis-Hastings.
 	private final void sample21() {
 		if(true) {
+			constrainedFlag$sample21 = false;
+			
 			// A reference local to the function for the sample variable.
 			double[] cv$targetLocal = sample;
 			
@@ -461,147 +464,85 @@ final class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// maintain that the sum of the indexes is 1.
 			double cv$rebalanceValue = (cv$proposedDifference / (cv$arrayLength - 1));
 			for(int cv$valuePos = 0; cv$valuePos < 2; cv$valuePos += 1) {
-				// Initialize the summed probabilities to 0 in log space.
-				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
-				
-				// Initialize a counter to track the reached distributions.
-				double cv$reachedDistributionSourceRV = 0.0;
-				
-				// Initialize an accumulator to take the product of all the distribution probabilities
-				// in log space.
-				double cv$accumulatedDistributionProbabilities = 0.0;
-				if((cv$valuePos == 1)) {
-					// Update Sample and intermediate values
-					{
-						// Update the sample value
-						// 
-						// Update all the indexes up to the index selected.
-						for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
-							cv$targetLocal[cv$loopIndex] = (cv$targetLocal[cv$loopIndex] - cv$rebalanceValue);
-						
-						// Update the selected index.
-						cv$targetLocal[cv$indexToChange] = (cv$targetLocal[cv$indexToChange] + cv$proposedDifference);
-						
-						// Update all the indexes after the index we selected.
-						for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-							cv$targetLocal[cv$loopIndex] = (cv$targetLocal[cv$loopIndex] - cv$rebalanceValue);
-						
-						// Guards to ensure that indirection is only updated when there is a valid path.
+				if((constrainedFlag$sample21 || (cv$valuePos == 0))) {
+					// Initialize the summed probabilities to 0 in log space.
+					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
+					
+					// Initialize a counter to track the reached distributions.
+					double cv$reachedDistributionSourceRV = 0.0;
+					
+					// Initialize an accumulator to take the product of all the distribution probabilities
+					// in log space.
+					double cv$accumulatedDistributionProbabilities = 0.0;
+					if((cv$valuePos == 1)) {
+						// Update Sample and intermediate values
 						{
+							// Update the sample value
+							// 
+							// Update all the indexes up to the index selected.
+							for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
+								cv$targetLocal[cv$loopIndex] = (cv$targetLocal[cv$loopIndex] - cv$rebalanceValue);
+							
+							// Update the selected index.
+							cv$targetLocal[cv$indexToChange] = (cv$targetLocal[cv$indexToChange] + cv$proposedDifference);
+							
+							// Update all the indexes after the index we selected.
+							for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
+								cv$targetLocal[cv$loopIndex] = (cv$targetLocal[cv$loopIndex] - cv$rebalanceValue);
+							
+							// Guards to ensure that indirection is only updated when there is a valid path.
 							{
-								for(int i = 0; i < length$observed; i += 1)
-									indirection[i] = sample[i];
+								{
+									for(int i = 0; i < length$observed; i += 1)
+										indirection[i] = sample[i];
+								}
 							}
 						}
 					}
-				}
-				{
-					// Record the reached probability density.
-					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-					
-					// An accumulator to allow the value for each distribution to be constructed before
-					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, v, 10));
-					
-					// Processing random variable 37.
 					{
-						// Looking for a path between Sample 21 and consumer Gaussian 37.
+						// Record the reached probability density.
+						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
+						
+						// An accumulator to allow the value for each distribution to be constructed before
+						// it is added to the index probabilities.
+						double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, v, 10));
+						
+						// Processing random variable 37.
 						{
-							// Guard to check that at most one copy of the code is executed for a given random
-							// variable instance.
-							boolean[] guard$sample21gaussian37 = guard$sample21gaussian37$global;
+							// Looking for a path between Sample 21 and consumer Gaussian 37.
 							{
-								for(int i = 0; i < length$observed; i += 1)
-									// Set the flags to false
-									guard$sample21gaussian37[((i - 0) / 1)] = false;
-							}
-							{
-								for(int i = 0; i < length$observed; i += 1) {
-									for(int index$i$3_2 = 0; index$i$3_2 < length$observed; index$i$3_2 += 1) {
-										if((i == index$i$3_2))
-											// Set the flags to false
-											guard$sample21gaussian37[((i - 0) / 1)] = false;
-									}
+								// Guard to check that at most one copy of the code is executed for a given random
+								// variable instance.
+								boolean[] guard$sample21gaussian37 = guard$sample21gaussian37$global;
+								{
+									for(int i = 0; i < length$observed; i += 1)
+										// Set the flags to false
+										guard$sample21gaussian37[((i - 0) / 1)] = false;
 								}
-							}
-							{
-								for(int i = 0; i < length$observed; i += 1) {
-									if(!guard$sample21gaussian37[((i - 0) / 1)]) {
-										// The body will execute, so should not be executed again
-										guard$sample21gaussian37[((i - 0) / 1)] = true;
-										
-										// Processing sample task 38 of consumer random variable null.
-										{
-											{
-												// Set an accumulator to sum the probabilities for each possible configuration of
-												// inputs.
-												double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-												
-												// Set an accumulator to record the consumer distributions not seen. Initially set
-												// to 1 as seen values will be deducted from this value.
-												double cv$consumerDistributionProbabilityAccumulator = 1.0;
-												{
-													{
-														{
-															{
-																{
-																	// Constructing a random variable input for use later.
-																	double var35 = sample[i];
-																	
-																	// Constructing a random variable input for use later.
-																	double var36 = indirection[i];
-																	
-																	// Record the probability of sample task 38 generating output with current configuration.
-																	if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36)))) < cv$accumulatedConsumerProbabilities))
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																	else {
-																		// If the second value is -infinity.
-																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))));
-																		else
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36)))));
-																	}
-																	
-																	// Recorded the probability of reaching sample task 38 with the current configuration.
-																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																}
-															}
-														}
-													}
-												}
-												
-												// A check to ensure rounding of floating point values can never result in a negative
-												// value.
-												cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-												
-												// Multiply (log space add) in the probability of the sample task to the overall probability
-												// for this configuration of the source random variable.
-												if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-												else {
-													// If the second value is -infinity.
-													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-													else
-														cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-												}
-											}
+								{
+									for(int i = 0; i < length$observed; i += 1) {
+										for(int index$i$3_2 = 0; index$i$3_2 < length$observed; index$i$3_2 += 1) {
+											if((i == index$i$3_2))
+												// Set the flags to false
+												guard$sample21gaussian37[((i - 0) / 1)] = false;
 										}
 									}
 								}
-							}
-							{
-								for(int i = 0; i < length$observed; i += 1) {
-									double traceTempVariable$var36$5_2 = sample[i];
-									for(int index$i$5_3 = 0; index$i$5_3 < length$observed; index$i$5_3 += 1) {
-										if((i == index$i$5_3)) {
-											if(!guard$sample21gaussian37[((i - 0) / 1)]) {
-												// The body will execute, so should not be executed again
-												guard$sample21gaussian37[((i - 0) / 1)] = true;
-												
-												// Processing sample task 38 of consumer random variable null.
+								{
+									for(int i = 0; i < length$observed; i += 1) {
+										if(!guard$sample21gaussian37[((i - 0) / 1)]) {
+											// The body will execute, so should not be executed again
+											guard$sample21gaussian37[((i - 0) / 1)] = true;
+											
+											// Processing sample task 38 of consumer random variable null.
+											{
 												{
-													{
+													// Flag recording if this sample task of the consuming random variable is constrained.
+													boolean cv$sampleConstrained = true;
+													if(cv$sampleConstrained) {
+														// Mark that the sample has observed constrained data.
+														constrainedFlag$sample21 = true;
+														
 														// Set an accumulator to sum the probabilities for each possible configuration of
 														// inputs.
 														double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -615,17 +556,20 @@ final class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 																	{
 																		{
 																			// Constructing a random variable input for use later.
-																			double var35 = sample[index$i$5_3];
+																			double var35 = sample[i];
+																			
+																			// Constructing a random variable input for use later.
+																			double var36 = indirection[i];
 																			
 																			// Record the probability of sample task 38 generating output with current configuration.
-																			if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2)))) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			if(((Math.log(1.0) + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				// If the second value is -infinity.
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2))));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))):Double.NEGATIVE_INFINITY));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2)))));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))):Double.NEGATIVE_INFINITY)));
 																			}
 																			
 																			// Recorded the probability of reaching sample task 38 with the current configuration.
@@ -657,62 +601,139 @@ final class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 										}
 									}
 								}
+								{
+									for(int i = 0; i < length$observed; i += 1) {
+										double traceTempVariable$var36$5_2 = sample[i];
+										for(int index$i$5_3 = 0; index$i$5_3 < length$observed; index$i$5_3 += 1) {
+											if((i == index$i$5_3)) {
+												if(!guard$sample21gaussian37[((i - 0) / 1)]) {
+													// The body will execute, so should not be executed again
+													guard$sample21gaussian37[((i - 0) / 1)] = true;
+													
+													// Processing sample task 38 of consumer random variable null.
+													{
+														{
+															// Flag recording if this sample task of the consuming random variable is constrained.
+															boolean cv$sampleConstrained = true;
+															if(cv$sampleConstrained) {
+																// Mark that the sample has observed constrained data.
+																constrainedFlag$sample21 = true;
+																
+																// Set an accumulator to sum the probabilities for each possible configuration of
+																// inputs.
+																double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																
+																// Set an accumulator to record the consumer distributions not seen. Initially set
+																// to 1 as seen values will be deducted from this value.
+																double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																{
+																	{
+																		{
+																			{
+																				{
+																					// Constructing a random variable input for use later.
+																					double var35 = sample[index$i$5_3];
+																					
+																					// Record the probability of sample task 38 generating output with current configuration.
+																					if(((Math.log(1.0) + ((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																					else {
+																						// If the second value is -infinity.
+																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																							cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2))):Double.NEGATIVE_INFINITY));
+																						else
+																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2))):Double.NEGATIVE_INFINITY)));
+																					}
+																					
+																					// Recorded the probability of reaching sample task 38 with the current configuration.
+																					cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																				}
+																			}
+																		}
+																	}
+																}
+																
+																// A check to ensure rounding of floating point values can never result in a negative
+																// value.
+																cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																
+																// Multiply (log space add) in the probability of the sample task to the overall probability
+																// for this configuration of the source random variable.
+																if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																else {
+																	// If the second value is -infinity.
+																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																		cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																	else
+																		cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
 							}
+						}
+						
+						// Add the values for the source and any standard consumers for this configuration
+						// of arguments to the source.
+						if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
+							cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
+						else {
+							// If the second value is -infinity.
+							if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
+								cv$stateProbabilityValue = cv$accumulatedProbabilities;
+							else
+								cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
 						}
 					}
 					
-					// Add the values for the source and any standard consumers for this configuration
-					// of arguments to the source.
-					if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
-						cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
-					else {
-						// If the second value is -infinity.
-						if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
-							cv$stateProbabilityValue = cv$accumulatedProbabilities;
-						else
-							cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
-					}
-				}
-				
-				// Save the probability of the original value.
-				if((cv$valuePos == 0))
-					cv$originalProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-				
-				// Save the probability of the proposed value.
-				else
-					cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-			}
-			
-			// Ratio of the probability of proposed and original sample values
-			double cv$ratio = (cv$proposedProbability - cv$originalProbability);
-			
-			// Test if the probability of the sample is sufficient to keep the value. This needs
-			// to be less than or equal as otherwise if the proposed value is not possible and
-			// the random value is 0 an impossible value will be accepted.
-			if((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)))))) {
-				// If it is not revert the sample value and intermediates to their original values.
-				// 
-				// Set the sample value
-				// Calculate the new sample value
-				// 
-				// Update the sample value
-				// 
-				// Update all the indexes up to the index selected.
-				for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
-					cv$targetLocal[cv$loopIndex] = (cv$targetLocal[cv$loopIndex] + cv$rebalanceValue);
-				
-				// Update the selected index.
-				cv$targetLocal[cv$indexToChange] = (cv$targetLocal[cv$indexToChange] - cv$proposedDifference);
-				
-				// Update all the indexes after the index we selected.
-				for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-					cv$targetLocal[cv$loopIndex] = (cv$targetLocal[cv$loopIndex] + cv$rebalanceValue);
-				
-				// Guards to ensure that indirection is only updated when there is a valid path.
-				{
-					{
-						for(int i = 0; i < length$observed; i += 1)
-							indirection[i] = sample[i];
+					// Save the probability of the original value.
+					if((cv$valuePos == 0))
+						cv$originalProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+					
+					// Save the probability of the proposed value.
+					else
+						cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+					
+					// Ratio of the probability of proposed and original sample values
+					double cv$ratio = (cv$proposedProbability - cv$originalProbability);
+					
+					// Test if the probability of the sample is sufficient to keep the value. This needs
+					// to be less than or equal as otherwise if the proposed value is not possible and
+					// the random value is 0 an impossible value will be accepted.
+					if((cv$valuePos == 1)) {
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
+							// If it is not revert the sample value and intermediates to their original values.
+							// 
+							// Set the sample value
+							// Calculate the new sample value
+							// 
+							// Update the sample value
+							// 
+							// Update all the indexes up to the index selected.
+							for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
+								cv$targetLocal[cv$loopIndex] = (cv$targetLocal[cv$loopIndex] + cv$rebalanceValue);
+							
+							// Update the selected index.
+							cv$targetLocal[cv$indexToChange] = (cv$targetLocal[cv$indexToChange] - cv$proposedDifference);
+							
+							// Update all the indexes after the index we selected.
+							for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
+								cv$targetLocal[cv$loopIndex] = (cv$targetLocal[cv$loopIndex] + cv$rebalanceValue);
+							
+							// Guards to ensure that indirection is only updated when there is a valid path.
+							{
+								{
+									for(int i = 0; i < length$observed; i += 1)
+										indirection[i] = sample[i];
+								}
+							}
+						}
 					}
 				}
 			}
@@ -844,14 +865,6 @@ final class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		for(int var17 = 0; var17 < 10; var17 += 1)
-			v[var17] = 0.1;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -870,6 +883,14 @@ final class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			for(int i = 0; i < length$observed; i += 1)
 				logProbability$sample38[((i - 0) / 1)] = Double.NaN;
 		}
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		for(int var17 = 0; var17 < 10; var17 += 1)
+			v[var17] = 0.1;
 	}
 
 	// Construct the evidence probabilities.

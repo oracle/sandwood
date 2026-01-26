@@ -9,6 +9,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double b;
 	private double bias;
 	private double[] c;
+	private boolean constrainedFlag$sample8 = true;
 	private boolean fixedFlag$sample8 = false;
 	private boolean fixedProbFlag$sample50 = false;
 	private boolean fixedProbFlag$sample8 = false;
@@ -192,7 +193,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[var46]?bias:(1.0 - bias))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= bias) && (bias <= 1.0))?Math.log((flips[var46]?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY));
 			logProbability$bernoulli = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
@@ -363,6 +364,8 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 8 drawn from Beta 7. Inference was performed using Metropolis-Hastings.
 	private final void sample8() {
+		constrainedFlag$sample8 = false;
+		
 		// The original value of the sample
 		double cv$originalValue = b;
 		
@@ -384,8 +387,6 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// 
 		// The original value of the sample
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + b);
-		
-		// Unrolled loop
 		{
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
@@ -398,7 +399,10 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(guard1) {
 				// Processing sample task 50 of consumer random variable bernoulli.
-				for(int var46 = 0; var46 < samples; var46 += 1)
+				for(int var46 = 0; var46 < samples; var46 += 1) {
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample8 = true;
+					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
@@ -415,7 +419,8 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// Set the current value to the current state of the tree.
 					// 
 					// The original value of the sample
-					cv$accumulatedProbabilities = (Math.log((flips[var46]?b:(1.0 - b))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((0.0 <= b) && (b <= 1.0))?Math.log((flips[var46]?b:(1.0 - b))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -437,7 +442,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction169Index" with its value "1".
+				// Substituted "cv$reduction171Index" with its value "1".
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
@@ -456,11 +461,14 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction169Index" with its value "1".
+				// Substituted "cv$reduction171Index" with its value "1".
 				double reduceVar$var33$2 = ((b / 2) + c[1]);
 				
 				// Processing sample task 50 of consumer random variable bernoulli.
-				for(int var46 = 0; var46 < samples; var46 += 1)
+				for(int var46 = 0; var46 < samples; var46 += 1) {
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample8 = true;
+					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
@@ -473,7 +481,8 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// Declaration comment was:
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
-					cv$accumulatedProbabilities = (Math.log((flips[var46]?reduceVar$var33$2:(1.0 - reduceVar$var33$2))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((0.0 <= reduceVar$var33$2) && (reduceVar$var33$2 <= 1.0))?Math.log((flips[var46]?reduceVar$var33$2:(1.0 - reduceVar$var33$2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
 			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
@@ -485,170 +494,26 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		
-		// Update Sample and intermediate values
-		// 
-		// Write out the new value of the sample.
-		b = cv$proposedValue;
-		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(guard1)
-			bias = cv$proposedValue;
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		// 
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		else {
-			// Guards to ensure that c is only updated when there is a valid path.
-			c[0] = (cv$proposedValue / 2);
-			
-			// Guards to ensure that c is only updated when there is a valid path.
-			c[1] = (cv$proposedValue / 2);
-			
-			// Execute the reduction function, saving the result into the return value.
+		if(constrainedFlag$sample8) {
+			// Update Sample and intermediate values
 			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// i$var30's comment
-			// Set the left hand term of the reduction function to the return variable value.
-			// 
-			// j's comment
-			// Set the right hand term to a value from the array c
-			// 
-			// Substituted "cv$reduction30Index" with its value "1".
-			// 
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// j's comment
-			// Set the right hand term to a value from the array c
-			// 
-			// Substituted "cv$reduction30Index" with its value "0".
-			bias = (c[0] + c[1]);
-		}
-		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, 1.0, 1.0);
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(guard1) {
-			// Processing sample task 50 of consumer random variable bernoulli.
-			for(int var46 = 0; var46 < samples; var46 += 1)
-				// A check to ensure rounding of floating point values can never result in a negative
-				// value.
-				// 
-				// Recorded the probability of reaching sample task 50 with the current configuration.
-				// 
-				// Set an accumulator to record the consumer distributions not seen. Initially set
-				// to 1 as seen values will be deducted from this value.
-				// 
-				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-				// Declaration comment was:
-				// Set an accumulator to sum the probabilities for each possible configuration of
-				// inputs.
-				cv$accumulatedProbabilities = (Math.log((flips[var46]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
-		}
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		else {
-			// Variable declaration of reduceVar$var33$2 moved.
-			// Declaration comment was:
-			// Variable declaration of reduceVar$var33$2 moved.
-			// Declaration comment was:
-			// Reduction of array c
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			// 
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// j's comment
-			// Set the right hand term to a value from the array c
-			// 
-			// Substituted "cv$reduction169Index" with its value "1".
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// Variable declaration of reduceVar$var33$2 moved.
-			// Declaration comment was:
-			// Reduction of array c
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			// 
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// j's comment
-			// Set the right hand term to a value from the array c
-			// 
-			// Substituted "cv$reduction169Index" with its value "1".
-			double reduceVar$var33$2 = ((cv$proposedValue / 2) + c[1]);
-			
-			// Processing sample task 50 of consumer random variable bernoulli.
-			for(int var46 = 0; var46 < samples; var46 += 1)
-				// A check to ensure rounding of floating point values can never result in a negative
-				// value.
-				// 
-				// Recorded the probability of reaching sample task 50 with the current configuration.
-				// 
-				// Set an accumulator to record the consumer distributions not seen. Initially set
-				// to 1 as seen values will be deducted from this value.
-				// 
-				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-				// Declaration comment was:
-				// Set an accumulator to sum the probabilities for each possible configuration of
-				// inputs.
-				cv$accumulatedProbabilities = (Math.log((flips[var46]?reduceVar$var33$2:(1.0 - reduceVar$var33$2))) + cv$accumulatedProbabilities);
-		}
-		
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-			// If it is not revert the changes.
-			// 
-			// Set the sample value
 			// Write out the new value of the sample.
-			b = cv$originalValue;
+			b = cv$proposedValue;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(guard1)
-				// b's comment
-				// Write out the new value of the sample.
-				bias = cv$originalValue;
+				bias = cv$proposedValue;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			// 
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			else {
 				// Guards to ensure that c is only updated when there is a valid path.
-				// 
-				// b's comment
-				// Write out the new value of the sample.
-				c[0] = (cv$originalValue / 2);
+				c[0] = (cv$proposedValue / 2);
 				
 				// Guards to ensure that c is only updated when there is a valid path.
-				// 
-				// b's comment
-				// Write out the new value of the sample.
-				c[1] = (cv$originalValue / 2);
+				c[1] = (cv$proposedValue / 2);
 				
 				// Execute the reduction function, saving the result into the return value.
 				// 
@@ -671,6 +536,161 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Substituted "cv$reduction30Index" with its value "0".
 				bias = (c[0] + c[1]);
+			}
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, 1.0, 1.0);
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(guard1) {
+				// Processing sample task 50 of consumer random variable bernoulli.
+				for(int var46 = 0; var46 < samples; var46 += 1) {
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample8 = true;
+					
+					// A check to ensure rounding of floating point values can never result in a negative
+					// value.
+					// 
+					// Recorded the probability of reaching sample task 50 with the current configuration.
+					// 
+					// Set an accumulator to record the consumer distributions not seen. Initially set
+					// to 1 as seen values will be deducted from this value.
+					// 
+					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+					// Declaration comment was:
+					// Set an accumulator to sum the probabilities for each possible configuration of
+					// inputs.
+					cv$accumulatedProbabilities = ((((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?Math.log((flips[var46]?cv$proposedValue:(1.0 - cv$proposedValue))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
+			}
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			else {
+				// Variable declaration of reduceVar$var33$2 moved.
+				// Declaration comment was:
+				// Variable declaration of reduceVar$var33$2 moved.
+				// Declaration comment was:
+				// Reduction of array c
+				// 
+				// A generated name to prevent name collisions if the reduction is implemented more
+				// than once in inference and probability code. Initialize the variable to the unit
+				// value
+				// 
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// j's comment
+				// Set the right hand term to a value from the array c
+				// 
+				// Substituted "cv$reduction171Index" with its value "1".
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// Variable declaration of reduceVar$var33$2 moved.
+				// Declaration comment was:
+				// Reduction of array c
+				// 
+				// A generated name to prevent name collisions if the reduction is implemented more
+				// than once in inference and probability code. Initialize the variable to the unit
+				// value
+				// 
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// j's comment
+				// Set the right hand term to a value from the array c
+				// 
+				// Substituted "cv$reduction171Index" with its value "1".
+				double reduceVar$var33$2 = ((cv$proposedValue / 2) + c[1]);
+				
+				// Processing sample task 50 of consumer random variable bernoulli.
+				for(int var46 = 0; var46 < samples; var46 += 1) {
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample8 = true;
+					
+					// A check to ensure rounding of floating point values can never result in a negative
+					// value.
+					// 
+					// Recorded the probability of reaching sample task 50 with the current configuration.
+					// 
+					// Set an accumulator to record the consumer distributions not seen. Initially set
+					// to 1 as seen values will be deducted from this value.
+					// 
+					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+					// Declaration comment was:
+					// Set an accumulator to sum the probabilities for each possible configuration of
+					// inputs.
+					cv$accumulatedProbabilities = ((((0.0 <= reduceVar$var33$2) && (reduceVar$var33$2 <= 1.0))?Math.log((flips[var46]?reduceVar$var33$2:(1.0 - reduceVar$var33$2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
+			}
+			
+			// The probability ration for the proposed value and the current value.
+			// 
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				// If it is not revert the changes.
+				// 
+				// Set the sample value
+				// Write out the new value of the sample.
+				b = cv$originalValue;
+				
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(guard1)
+					// b's comment
+					// Write out the new value of the sample.
+					bias = cv$originalValue;
+				
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				// 
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				else {
+					// Guards to ensure that c is only updated when there is a valid path.
+					// 
+					// b's comment
+					// Write out the new value of the sample.
+					c[0] = (cv$originalValue / 2);
+					
+					// Guards to ensure that c is only updated when there is a valid path.
+					// 
+					// b's comment
+					// Write out the new value of the sample.
+					c[1] = (cv$originalValue / 2);
+					
+					// Execute the reduction function, saving the result into the return value.
+					// 
+					// Copy the result of the reduction into the variable returned by the reduction.
+					// 
+					// i$var30's comment
+					// Set the left hand term of the reduction function to the return variable value.
+					// 
+					// j's comment
+					// Set the right hand term to a value from the array c
+					// 
+					// Substituted "cv$reduction30Index" with its value "1".
+					// 
+					// Execute the reduction function, saving the result into the return value.
+					// 
+					// Copy the result of the reduction into the variable returned by the reduction.
+					// 
+					// j's comment
+					// Set the right hand term to a value from the array c
+					// 
+					// Substituted "cv$reduction30Index" with its value "0".
+					bias = (c[0] + c[1]);
+				}
 			}
 		}
 	}
@@ -887,13 +907,6 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		samples = length$flipsMeasured;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -912,6 +925,13 @@ final class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample50)
 			logProbability$var47 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		samples = length$flipsMeasured;
 	}
 
 	// Construct the evidence probabilities.

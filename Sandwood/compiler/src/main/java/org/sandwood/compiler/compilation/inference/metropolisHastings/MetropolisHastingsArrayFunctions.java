@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -16,14 +16,15 @@ import static org.sandwood.compiler.trees.irTree.IRTree.initializeVariable;
 import static org.sandwood.compiler.trees.irTree.IRTree.lessThanEqual;
 import static org.sandwood.compiler.trees.irTree.IRTree.load;
 import static org.sandwood.compiler.trees.irTree.IRTree.log;
+import static org.sandwood.compiler.trees.irTree.IRTree.or;
 import static org.sandwood.compiler.trees.irTree.IRTree.store;
 import static org.sandwood.compiler.trees.irTree.IRTree.subtractDD;
 
-import java.util.List;
-
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.compilation.ExternalFunction;
 import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.compilation.inference.InferenceGeneratorArrayProb;
+import org.sandwood.compiler.compilation.util.TreeUtils;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
@@ -50,7 +51,7 @@ public abstract class MetropolisHastingsArrayFunctions<A extends Variable<A>, B 
     protected static class MetropolisHastingsArrayData<A extends Variable<A>, B extends RandomVariable<ArrayVariable<A>, B>>
             extends InferenceGeneratorArrayProb.ArrayProbFunctionData<A, B> {
 
-        public List<IRTreeReturn<?>> consumerRVArgs;
+        public ScopeConstructor sampleTargetScope;
 
         protected MetropolisHastingsArrayData(SampleTask<ArrayVariable<A>, B> sample,
                 CompilationContext compilationCtx) {
@@ -75,25 +76,49 @@ public abstract class MetropolisHastingsArrayFunctions<A extends Variable<A>, B 
     }
 
     /**
+     * Method to construct the scope for the mMetropolisHastings trials to occur in, complete with guards for early
+     * termination if there is no observed data.
+     * 
+     * @param funcData The functionData.
+     * @return The scope to operate in.
+     * 
+     */
+    @Override
+    protected ScopeConstructor getBackTraceScope(MetropolisHastingsArrayData<A, B> funcData,
+            CompilationContext compilationCtx) {
+        ScopeConstructor targetScope = super.getBackTraceScope(funcData, compilationCtx);
+        IRTreeReturn<BooleanVariable> guard = or(TreeUtils.getIsConstrained(funcData.sampleDesc.sample, compilationCtx),
+                eq(funcData.valuePos, constant(0)));
+        targetScope = targetScope.addCondition(guard).ifScopeConstructor();
+        funcData.sampleTargetScope = targetScope;
+        return targetScope;
+    }
+
+    @Override
+    protected ScopeConstructor getSampleTaskScope(MetropolisHastingsArrayData<A, B> funcData,
+            CompilationContext compilationCtx) {
+        return funcData.sampleTargetScope;
+    }
+
+    /**
      * Allocate storage for the probabilities of generating each of these. Each of these probabilities will be extended
      * with the probability of generating sample, and the probability of each consuming RVs generating there samples
      * samples given the current and proposed values.
      */
     @Override
-    protected void constructFunctionVariablesProb(MetropolisHastingsArrayData<A, B> funcData,
-            CompilationContext compilationCtx) {
+    protected void constructFunctionVariablesProb(MetropolisHastingsArrayData<A, B> funcData) {
         funcData.targetScope.addTree((TreeBuilderInfo info) -> {
             // Original Probability
             IRTreeReturn<DoubleVariable> probOriginalValue = constant(0.0);
             IRTreeVoid originalProbability = initializeVariable(originalProbabilityName, probOriginalValue,
                     "Calculate the probability of the random variable generating the original sampled value.");
-            compilationCtx.addTreeToScope(GlobalScope.scope, originalProbability);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, originalProbability);
 
             // Create a space for the probability of the proposed value.
             IRTreeReturn<DoubleVariable> probProposedValue = constant(0.0);
             IRTreeVoid proposedProbability = initializeVariable(proposedProbabilityName, probProposedValue,
                     "The probability of the random variable generating the new sample value.");
-            compilationCtx.addTreeToScope(GlobalScope.scope, proposedProbability);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, proposedProbability);
         });
     }
 
@@ -120,17 +145,20 @@ public abstract class MetropolisHastingsArrayFunctions<A extends Variable<A>, B 
         IRTreeReturn<DoubleVariable> ratio = subtractDD(load(proposedProbabilityName), load(originalProbabilityName));
         compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(ratioName, ratio,
                 "Ratio of the probability of proposed and original sample values"));
+
         IRTreeReturn<DoubleVariable> bound = log(functionCallReturn(FunctionType.SAMPLE, VariableType.DoubleVariable,
                 VariableType.Uniform, constant(0.0), constant(1.0)));
         // This needs to be less than or equal as otherwise if the proposed value is not
         // possible and the random value is 0 an impossible value will be accepted.
         IRTreeReturn<BooleanVariable> guard = lessThanEqual(load(ratioName), bound);
+        guard = or(guard, functionCallReturn(ExternalFunction.IS_NAN, VariableType.BooleanVariable, load(ratioName)));
 
         ScopeConstructor targetScope = ScopeConstructor.construct(funcData.sampleDesc.sample,
                 "Test if the probability of the sample is sufficient to keep the value. This needs to be less than or equal "
                         + "as otherwise if the proposed value is not possible and the random value is 0 an impossible value will be "
                         + "accepted.",
                 compilationCtx);
+        targetScope = targetScope.addCondition(eq(funcData.valuePos, constant(1))).ifScopeConstructor();
         targetScope = targetScope.addCondition(guard).ifScopeConstructor();
         targetScope = targetScope
                 .addComment("If it is not revert the sample value and intermediates to their original values.");

@@ -12,6 +12,7 @@ final class Flip2CoinsMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double b;
 	private double[] bias;
 	private int coins;
+	private boolean[] constrainedFlag$sample20;
 	private boolean fixedFlag$sample20 = false;
 	private boolean fixedProbFlag$sample20 = false;
 	private boolean fixedProbFlag$sample45 = false;
@@ -320,7 +321,7 @@ final class Flip2CoinsMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 									double var43 = bias[j];
 									
 									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var43:(1.0 - var43))));
+									double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var43) && (var43 <= 1.0))?Math.log((cv$sampleValue?var43:(1.0 - var43))):Double.NEGATIVE_INFINITY));
 									
 									// Add the probability of this sample task to the distribution accumulator.
 									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -412,6 +413,8 @@ final class Flip2CoinsMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// conjugate prior.
 	private final void sample20(int var19, int threadID$cv$var19, Rng RNG$) {
 		if(true) {
+			constrainedFlag$sample20[((var19 - 0) / 1)] = false;
+			
 			// Local variable to record the number of true samples.
 			int cv$sum = 0;
 			
@@ -426,13 +429,29 @@ final class Flip2CoinsMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							for(int j = 0; j < coins; j += 1) {
 								if((var19 == j)) {
 									for(int i = 0; i < samples; i += 1) {
-										// Include the value sampled by task 45 from random variable bernoulli.
-										// Increment the number of samples.
-										cv$count = (cv$count + 1);
-										
-										// If the sample value was positive increase the count
-										if(flips[i][j])
-											cv$sum = (cv$sum + 1);
+										// Flag recording if this sample task of the consuming random variable is constrained.
+										boolean cv$sampleConstrained = true;
+										if(cv$sampleConstrained) {
+											// Mark that the sample has observed constrained data.
+											constrainedFlag$sample20[((var19 - 0) / 1)] = true;
+											{
+												{
+													{
+														{
+															{
+																// Include the value sampled by task 45 from random variable bernoulli.
+																// Increment the number of samples.
+																cv$count = (cv$count + 1);
+																
+																// If the sample value was positive increase the count
+																if(flips[i][j])
+																	cv$sum = (cv$sum + 1);
+															}
+														}
+													}
+												}
+											}
+										}
 									}
 								}
 							}
@@ -440,16 +459,17 @@ final class Flip2CoinsMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					}
 				}
 			}
-			
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
-			double var20 = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
-			
-			// Guards to ensure that bias is only updated when there is a valid path.
-			{
+			if(constrainedFlag$sample20[((var19 - 0) / 1)]) {
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				double var20 = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
+				
+				// Guards to ensure that bias is only updated when there is a valid path.
 				{
 					{
-						bias[var19] = var20;
+						{
+							bias[var19] = var20;
+						}
 					}
 				}
 			}
@@ -478,6 +498,11 @@ final class Flip2CoinsMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			flips = new boolean[length$flipsMeasured.length][];
 			for(int i = 0; i < length$flipsMeasured.length; i += 1)
 				flips[i] = new boolean[length$flipsMeasured[0]];
+		}
+		
+		// Constructor for constrainedFlag$sample20
+		{
+			constrainedFlag$sample20 = new boolean[((((length$flipsMeasured[0] - 1) - 0) / 1) + 1)];
 		}
 	}
 
@@ -654,14 +679,6 @@ final class Flip2CoinsMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		samples = length$flipsMeasured.length;
-		coins = length$flipsMeasured[0];
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -679,6 +696,18 @@ final class Flip2CoinsMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample45)
 			logProbability$var45 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		samples = length$flipsMeasured.length;
+		coins = length$flipsMeasured[0];
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample20$1 = 0; index$constrainedFlag$sample20$1 < constrainedFlag$sample20.length; index$constrainedFlag$sample20$1 += 1)
+			constrainedFlag$sample20[index$constrainedFlag$sample20$1] = true;
 	}
 
 	// Construct the evidence probabilities.
