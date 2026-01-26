@@ -4,6 +4,7 @@ import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
 final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements UniformBernoulli$CoreInterface {
+	private boolean constrainedFlag$sample5 = true;
 	private boolean fixedFlag$sample5 = false;
 	private boolean fixedProbFlag$sample19 = false;
 	private boolean fixedProbFlag$sample5 = false;
@@ -111,7 +112,7 @@ final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.intern
 		if(!fixedProbFlag$sample19) {
 			double cv$sampleAccumulator = 0.0;
 			for(int var18 = 0; var18 < length$observed; var18 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((output[var18]?prior:(1.0 - prior))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= prior) && (prior <= 1.0))?Math.log((output[var18]?prior:(1.0 - prior))):Double.NEGATIVE_INFINITY));
 			logProbability$bernoulli = cv$sampleAccumulator;
 			logProbability$var19 = cv$sampleAccumulator;
 			logProbability$output = (logProbability$output + cv$sampleAccumulator);
@@ -142,6 +143,7 @@ final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	private final void sample5() {
+		constrainedFlag$sample5 = false;
 		double cv$originalValue = prior;
 		double cv$originalProbability;
 		double cv$var = ((prior * prior) * 0.010000000000000002);
@@ -150,17 +152,23 @@ final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.intern
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + prior);
 		{
 			double cv$accumulatedProbabilities = (((0.0 <= prior) && (prior < 1.0))?0.0:Double.NEGATIVE_INFINITY);
-			for(int var18 = 0; var18 < length$observed; var18 += 1)
-				cv$accumulatedProbabilities = (Math.log((output[var18]?prior:(1.0 - prior))) + cv$accumulatedProbabilities);
+			for(int var18 = 0; var18 < length$observed; var18 += 1) {
+				constrainedFlag$sample5 = true;
+				cv$accumulatedProbabilities = ((((0.0 <= prior) && (prior <= 1.0))?Math.log((output[var18]?prior:(1.0 - prior))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
-		prior = cv$proposedValue;
-		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
-		for(int var18 = 0; var18 < length$observed; var18 += 1)
-			cv$accumulatedProbabilities = (Math.log((output[var18]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
-			prior = cv$originalValue;
+		if(constrainedFlag$sample5) {
+			prior = cv$proposedValue;
+			double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
+			for(int var18 = 0; var18 < length$observed; var18 += 1) {
+				constrainedFlag$sample5 = true;
+				cv$accumulatedProbabilities = ((((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?Math.log((output[var18]?cv$proposedValue:(1.0 - cv$proposedValue))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+				prior = cv$originalValue;
+		}
 	}
 
 	@Override
@@ -212,9 +220,6 @@ final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.intern
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -225,6 +230,9 @@ final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.intern
 		if(!fixedProbFlag$sample19)
 			logProbability$var19 = Double.NaN;
 	}
+
+	@Override
+	public final void initializeModel() {}
 
 	@Override
 	public final void logEvidenceProbabilities() {

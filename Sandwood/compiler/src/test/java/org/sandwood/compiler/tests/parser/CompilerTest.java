@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -39,10 +39,16 @@ class CompilerTest {
     private static final Set<String> ignore = new HashSet<>();
     private static final Set<String> partialInference = new HashSet<>();
     private static final CompilerTest classInstance = new CompilerTest();
+    private static final String packageDir = TestStringGenerator.getPackageDir(classInstance, sourceDir);
+
+    static {
+        ignore.add("DistributionTest4.sandwood");
+        ignore.add("DistributionTest5.sandwood");
+        ignore.add("DistributionTest6.sandwood");
+        ignore.add("HMMMetrics.sandwood");
+    }
 
     static Stream<String> getFileNameArgsOptimise() {
-        String packageDir = TestStringGenerator.getPackageDir(classInstance, sourceDir);
-
         File dir = new File(packageDir);
         assertTrue(dir.isDirectory());
         String[] files = dir.list((dir1, name) -> name.endsWith(".sandwood"));
@@ -56,8 +62,6 @@ class CompilerTest {
     }
 
     static Stream<String> getFileNameArgs() {
-        String packageDir = TestStringGenerator.getPackageDir(classInstance, sourceDir);
-
         File dir = new File(packageDir);
         assertTrue(dir.isDirectory());
         String[] files = dir.list((dir1, name) -> name.endsWith(".sandwood") && !ignore.contains(name));

@@ -6,6 +6,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK16$CoreInterface {
 	private double bias;
+	private boolean constrainedFlag$sample14 = true;
 	private boolean flip;
 	private boolean flipMeasured;
 	private double guard;
@@ -78,7 +79,7 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private final void logProbabilityValue$sample16() {
 		double cv$accumulator = 0.0;
 		if(Double.isNaN(guard)) {
-			double cv$distributionAccumulator = Math.log((flip?bias:(1.0 - bias)));
+			double cv$distributionAccumulator = (((0.0 <= bias) && (bias <= 1.0))?Math.log((flip?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY);
 			cv$accumulator = cv$distributionAccumulator;
 			logProbability$bernoulli = cv$distributionAccumulator;
 			logProbability$sample16 = cv$distributionAccumulator;
@@ -88,7 +89,9 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	private final void sample14() {
+		constrainedFlag$sample14 = false;
 		int cv$sum = 0;
+		constrainedFlag$sample14 = true;
 		if(flip)
 			cv$sum = 1;
 		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, 1);
@@ -141,9 +144,6 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -151,6 +151,9 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$bernoulli = Double.NaN;
 		logProbability$sample16 = Double.NaN;
 	}
+
+	@Override
+	public final void initializeModel() {}
 
 	@Override
 	public final void logEvidenceProbabilities() {

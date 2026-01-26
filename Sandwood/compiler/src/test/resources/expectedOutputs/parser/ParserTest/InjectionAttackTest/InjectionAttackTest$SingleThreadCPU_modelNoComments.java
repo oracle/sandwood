@@ -6,6 +6,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 final class InjectionAttackTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements InjectionAttackTest$CoreInterface {
 	private double bias;
+	private boolean constrainedFlag$sample6 = true;
 	private boolean fixedFlag$sample6 = false;
 	private boolean fixedProbFlag$sample6 = false;
 	private boolean fixedProbFlag$sample8 = false;
@@ -199,6 +200,7 @@ final class InjectionAttackTest$SingleThreadCPU extends org.sandwood.runtime.int
 
 	private final void sample6() {
 		if(true) {
+			constrainedFlag$sample6 = false;
 			int cv$sum = 0;
 			int cv$count = 0;
 			{
@@ -207,13 +209,17 @@ final class InjectionAttackTest$SingleThreadCPU extends org.sandwood.runtime.int
 						{
 							{
 								{
-									{
+									boolean cv$sampleConstrained = true;
+									if(cv$sampleConstrained) {
+										constrainedFlag$sample6 = true;
 										{
 											{
 												{
 													{
-														cv$count = (cv$count + observedSampleCount);
-														cv$sum = (cv$sum + positiveCount);
+														{
+															cv$count = (cv$count + observedSampleCount);
+															cv$sum = (cv$sum + positiveCount);
+														}
 													}
 												}
 											}
@@ -225,7 +231,8 @@ final class InjectionAttackTest$SingleThreadCPU extends org.sandwood.runtime.int
 					}
 				}
 			}
-			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			if(constrainedFlag$sample6)
+				bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 		}
 	}
 
@@ -279,9 +286,6 @@ final class InjectionAttackTest$SingleThreadCPU extends org.sandwood.runtime.int
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -291,6 +295,9 @@ final class InjectionAttackTest$SingleThreadCPU extends org.sandwood.runtime.int
 		if(!fixedProbFlag$sample8)
 			logProbability$positiveCount = Double.NaN;
 	}
+
+	@Override
+	public final void initializeModel() {}
 
 	@Override
 	public final void logEvidenceProbabilities() {

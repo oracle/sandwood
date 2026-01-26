@@ -9,6 +9,7 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 	// Declare the variables for the model.
 	private double a;
 	private double b;
+	private boolean constrainedFlag$sample6 = true;
 	private int[] decay;
 	private int[] decayDetected;
 	private boolean fixedFlag$sample6 = false;
@@ -336,6 +337,8 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 	// by sample task 6 drawn from Gamma 5. Inference was performed using a Gamma to Poisson
 	// conjugate prior.
 	private final void sample6() {
+		constrainedFlag$sample6 = false;
+		
 		// Variable to store the sum of all the samples from consuming random variables.
 		double cv$sum = 0.0;
 		
@@ -346,14 +349,17 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 		// 
 		// Processing sample task 19 of consumer random variable poisson.
 		for(int var18 = 0; var18 < samples; var18 += 1) {
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample6 = true;
+			
 			// Add the value of a sample from consuming random variable poisson to the inference
 			// state.
 			cv$sum = (cv$sum + decay[var18]);
 			cv$count = (cv$count + 1);
 		}
-		
-		// Write out the new value of the sample.
-		rate = Conjugates.sampleConjugateGammaPoisson(RNG$, a, b, cv$sum, cv$count);
+		if(constrainedFlag$sample6)
+			// Write out the new value of the sample.
+			rate = Conjugates.sampleConjugateGammaPoisson(RNG$, a, b, cv$sum, cv$count);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -425,13 +431,6 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		samples = length$decayDetected;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -448,6 +447,13 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 		logProbability$decay = 0.0;
 		if(!fixedProbFlag$sample19)
 			logProbability$var19 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		samples = length$decayDetected;
 	}
 
 	// Construct the evidence probabilities.

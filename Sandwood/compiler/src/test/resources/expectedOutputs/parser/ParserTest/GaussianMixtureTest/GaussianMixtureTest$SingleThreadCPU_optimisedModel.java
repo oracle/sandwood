@@ -8,6 +8,10 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 	
 	// Declare the variables for the model.
 	private double[] alpha;
+	private boolean constrainedFlag$sample17 = true;
+	private boolean[] constrainedFlag$sample34;
+	private boolean[] constrainedFlag$sample52;
+	private boolean[] constrainedFlag$sample68;
 	private double[] cv$var17$countGlobal;
 	private double[] cv$var68$stateProbabilityGlobal;
 	private boolean fixedFlag$sample17 = false;
@@ -525,7 +529,7 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 			// An accumulator for log probabilities.
 			// 
 			// Store the value of the function call, so the function call is only made once.
-			double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 5))?Math.log(phi[cv$sampleValue]):Double.NEGATIVE_INFINITY);
+			double cv$distributionAccumulator = (((((0.0 <= cv$sampleValue) && (cv$sampleValue < 5)) && (0.0 <= phi[cv$sampleValue])) && (phi[cv$sampleValue] <= 1.0))?Math.log(phi[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
@@ -575,7 +579,7 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((x[i$var66] - mu[z[i$var66]]) / Math.sqrt(var70))) - (Math.log(var70) * 0.5));
+			double cv$distributionAccumulator = ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - mu[z[i$var66]]) / Math.sqrt(var70))) - (Math.log(var70) * 0.5)):Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
@@ -601,6 +605,8 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 	// by sample task 17 drawn from Dirichlet 16. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
 	private final void sample17() {
+		constrainedFlag$sample17 = false;
+		
 		// Initialize the array values to 0.
 		// 
 		// Get the length of the array
@@ -609,27 +615,34 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 			cv$var17$countGlobal[cv$loopIndex] = 0.0;
 		
 		// Processing random variable 67.
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-			// Processing sample task 68 of consumer random variable null.
+		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(constrainedFlag$sample68[i$var66]) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample17 = true;
+				
+				// Increment the sample counter with the value sampled by sample task 68 of random
+				// variable var67
+				// 
+				// A local reference to the scratch space.
+				cv$var17$countGlobal[z[i$var66]] = (cv$var17$countGlobal[z[i$var66]] + 1.0);
+			}
+		}
+		if(constrainedFlag$sample17)
+			// Calculate the new sample value
 			// 
-			// Increment the sample counter with the value sampled by sample task 68 of random
-			// variable var67
+			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
-			// A local reference to the scratch space.
-			cv$var17$countGlobal[z[i$var66]] = (cv$var17$countGlobal[z[i$var66]] + 1.0);
-		
-		// Calculate the new sample value
-		// 
-		// Calculate a new sample value and write it into cv$targetLocal.
-		// 
-		// A reference local to the function for the sample variable.
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$var17$countGlobal, phi, 5);
+			// A reference local to the function for the sample variable.
+			Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$var17$countGlobal, phi, 5);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 34 drawn from Gaussian 22. Inference was performed using a Gaussian
 	// to Gaussian conjugate prior.
 	private final void sample34(int var33) {
+		constrainedFlag$sample34[var33] = false;
+		
 		// State to record the weighting of each sample that is consumed. This is the:
 		// sum of the sample denominator*(the sample value - the sample nominator).
 		double cv$sum = 0.0;
@@ -649,6 +662,9 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
 			if((var33 == z[i$var66])) {
 				// Processing sample task 72 of consumer random variable null.
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample34[var33] = true;
+				
 				// Record the value of a sample generated by a consuming sample 72 of random variable
 				// var71.
 				// 
@@ -672,18 +688,20 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 				}
 			}
 		}
-		
-		// Guards to ensure that mu is only updated when there is a valid path.
-		// 
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		mu[var33] = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 20.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		if(constrainedFlag$sample34[var33])
+			// Guards to ensure that mu is only updated when there is a valid path.
+			// 
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			mu[var33] = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 20.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 52 drawn from InverseGamma 40. Inference was performed using a Inverse
 	// Gamma to Gaussian conjugate prior.
 	private final void sample52(int var51) {
+		constrainedFlag$sample52[var51] = false;
+		
 		// Variable to track the sum of the difference between the samples and the random
 		// variables mean squared.
 		double cv$sum = 0.0;
@@ -697,6 +715,9 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
 			if((var51 == z[i$var66])) {
 				// Processing sample task 72 of consumer random variable null.
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample52[var51] = true;
+				
 				// Consume sample task 72 from random variable var71.
 				// 
 				// The difference between the mean parameter and the value sampled from the Gaussian.
@@ -711,18 +732,20 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 				cv$count = (cv$count + 1);
 			}
 		}
-		
-		// Guards to ensure that sigma is only updated when there is a valid path.
-		// 
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		sigma[var51] = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		if(constrainedFlag$sample52[var51])
+			// Guards to ensure that sigma is only updated when there is a valid path.
+			// 
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			sigma[var51] = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 68 drawn from Categorical 67. Inference was performed using variable
 	// marginalization.
 	private final void sample68(int i$var66) {
+		constrainedFlag$sample68[i$var66] = false;
+		
 		// cv$numStates's comment
 		// variable marginalization
 		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
@@ -730,6 +753,9 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 			// 
 			// Value of the variable at this index
 			z[i$var66] = cv$valuePos;
+			
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample68[i$var66] = true;
 			
 			// Constructing a random variable input for use later.
 			// 
@@ -756,100 +782,101 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 			// it is added to the index probabilities.
 			// 
 			// Value of the variable at this index
-			cv$var68$stateProbabilityGlobal[cv$valuePos] = ((DistributionSampling.logProbabilityGaussian(((x[i$var66] - mu[cv$valuePos]) / Math.sqrt(var70))) + Math.log(phi[cv$valuePos])) - (Math.log(var70) * 0.5));
+			cv$var68$stateProbabilityGlobal[cv$valuePos] = (((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - mu[cv$valuePos]) / Math.sqrt(var70))) - (Math.log(var70) * 0.5)):Double.NEGATIVE_INFINITY) + (((0.0 <= phi[cv$valuePos]) && (phi[cv$valuePos] <= 1.0))?Math.log(phi[cv$valuePos]):Double.NEGATIVE_INFINITY));
 		}
-		
-		// This value is not used before it is set again, so removing the value declaration.
-		// 
-		// The sum of all the probabilities in log space
-		double cv$logSum;
-		
-		// Sum all the values
-		// 
-		// Initialize the max to the first element.
-		// 
-		// Get a local reference to the scratch space.
-		double cv$lseMax = cv$var68$stateProbabilityGlobal[0];
-		
-		// Unrolled loop
-		{
-			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var68$stateProbabilityGlobal[1];
-			if((cv$lseMax < cv$lseElementValue))
-				cv$lseMax = cv$lseElementValue;
-		}
-		{
-			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var68$stateProbabilityGlobal[2];
-			if((cv$lseMax < cv$lseElementValue))
-				cv$lseMax = cv$lseElementValue;
-		}
-		{
-			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var68$stateProbabilityGlobal[3];
-			if((cv$lseMax < cv$lseElementValue))
-				cv$lseMax = cv$lseElementValue;
-		}
-		
-		// Get a local reference to the scratch space.
-		double cv$lseElementValue = cv$var68$stateProbabilityGlobal[4];
-		if((cv$lseMax < cv$lseElementValue))
-			cv$lseMax = cv$lseElementValue;
-		
-		// If the maximum value is -infinity return -infinity.
-		if((cv$lseMax == Double.NEGATIVE_INFINITY))
-			cv$logSum = Double.NEGATIVE_INFINITY;
-		
-		// Sum the values in the array.
-		else {
-			// Initialize the sum of the array elements
-			double cv$lseSum = 0.0;
-			
-			// Offset values, move to normal space, and sum.
-			// 
-			// cv$numStates's comment
-			// variable marginalization
-			for(int cv$lseIndex = 0; cv$lseIndex < 5; cv$lseIndex += 1)
-				// Get a local reference to the scratch space.
-				cv$lseSum = (cv$lseSum + Math.exp((cv$var68$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
-			
-			// Increment the value of the target, moving the value back into log space.
+		if(constrainedFlag$sample68[i$var66]) {
+			// This value is not used before it is set again, so removing the value declaration.
 			// 
 			// The sum of all the probabilities in log space
-			cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
-		}
-		
-		// If all the sum is zero, just share the probability evenly.
-		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			// Normalize log space values and move to normal space
+			double cv$logSum;
+			
+			// Sum all the values
 			// 
-			// cv$numStates's comment
-			// variable marginalization
-			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
-				// Get a local reference to the scratch space.
-				cv$var68$stateProbabilityGlobal[cv$indexName] = 0.2;
-		} else {
-			// Normalize log space values and move to normal space
+			// Initialize the max to the first element.
 			// 
-			// cv$numStates's comment
-			// variable marginalization
-			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
-				// Get a local reference to the scratch space.
-				cv$var68$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var68$stateProbabilityGlobal[cv$indexName] - cv$logSum));
-		}
-		
-		// Set array values that are not computed for the input to negative infinity.
-		// 
-		// Get a local reference to the scratch space.
-		for(int cv$indexName = 5; cv$indexName < cv$var68$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Get a local reference to the scratch space.
-			cv$var68$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
-		
-		// Write out the new value of the sample.
-		// 
-		// cv$numStates's comment
-		// variable marginalization
-		z[i$var66] = DistributionSampling.sampleCategorical(RNG$, cv$var68$stateProbabilityGlobal, 5);
+			double cv$lseMax = cv$var68$stateProbabilityGlobal[0];
+			
+			// Unrolled loop
+			{
+				// Get a local reference to the scratch space.
+				double cv$lseElementValue = cv$var68$stateProbabilityGlobal[1];
+				if((cv$lseMax < cv$lseElementValue))
+					cv$lseMax = cv$lseElementValue;
+			}
+			{
+				// Get a local reference to the scratch space.
+				double cv$lseElementValue = cv$var68$stateProbabilityGlobal[2];
+				if((cv$lseMax < cv$lseElementValue))
+					cv$lseMax = cv$lseElementValue;
+			}
+			{
+				// Get a local reference to the scratch space.
+				double cv$lseElementValue = cv$var68$stateProbabilityGlobal[3];
+				if((cv$lseMax < cv$lseElementValue))
+					cv$lseMax = cv$lseElementValue;
+			}
+			
+			// Get a local reference to the scratch space.
+			double cv$lseElementValue = cv$var68$stateProbabilityGlobal[4];
+			if((cv$lseMax < cv$lseElementValue))
+				cv$lseMax = cv$lseElementValue;
+			
+			// If the maximum value is -infinity return -infinity.
+			if((cv$lseMax == Double.NEGATIVE_INFINITY))
+				cv$logSum = Double.NEGATIVE_INFINITY;
+			
+			// Sum the values in the array.
+			else {
+				// Initialize the sum of the array elements
+				double cv$lseSum = 0.0;
+				
+				// Offset values, move to normal space, and sum.
+				// 
+				// cv$numStates's comment
+				// variable marginalization
+				for(int cv$lseIndex = 0; cv$lseIndex < 5; cv$lseIndex += 1)
+					// Get a local reference to the scratch space.
+					cv$lseSum = (cv$lseSum + Math.exp((cv$var68$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
+				
+				// Increment the value of the target, moving the value back into log space.
+				// 
+				// The sum of all the probabilities in log space
+				cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
+			}
+			
+			// If all the sum is zero, just share the probability evenly.
+			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
+				// Normalize log space values and move to normal space
+				// 
+				// cv$numStates's comment
+				// variable marginalization
+				for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
+					// Get a local reference to the scratch space.
+					cv$var68$stateProbabilityGlobal[cv$indexName] = 0.2;
+			} else {
+				// Normalize log space values and move to normal space
+				// 
+				// cv$numStates's comment
+				// variable marginalization
+				for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
+					// Get a local reference to the scratch space.
+					cv$var68$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var68$stateProbabilityGlobal[cv$indexName] - cv$logSum));
+			}
+			
+			// Set array values that are not computed for the input to negative infinity.
+			// 
+			// Get a local reference to the scratch space.
+			for(int cv$indexName = 5; cv$indexName < cv$var68$stateProbabilityGlobal.length; cv$indexName += 1)
+				// Get a local reference to the scratch space.
+				cv$var68$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+			
+			// Write out the new value of the sample.
+			// 
+			// cv$numStates's comment
+			// variable marginalization
+			z[i$var66] = DistributionSampling.sampleCategorical(RNG$, cv$var68$stateProbabilityGlobal, 5);
+		}
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -895,6 +922,15 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 		
 		// Constructor for z
 		z = new int[length$xMeasured];
+		
+		// Constructor for constrainedFlag$sample52
+		constrainedFlag$sample52 = new boolean[5];
+		
+		// Constructor for constrainedFlag$sample68
+		constrainedFlag$sample68 = new boolean[length$xMeasured];
+		
+		// Constructor for constrainedFlag$sample34
+		constrainedFlag$sample34 = new boolean[5];
 		
 		// Constructor for logProbability$sample68
 		logProbability$sample68 = new double[length$xMeasured];
@@ -1067,14 +1103,6 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		for(int i$var13 = 0; i$var13 < 5; i$var13 += 1)
-			alpha[i$var13] = 1.0;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -1098,6 +1126,26 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 		logProbability$x = 0.0;
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
 			logProbability$sample72[i$var66] = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		for(int i$var13 = 0; i$var13 < 5; i$var13 += 1)
+			alpha[i$var13] = 1.0;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample52$1 = 0; index$constrainedFlag$sample52$1 < constrainedFlag$sample52.length; index$constrainedFlag$sample52$1 += 1)
+			constrainedFlag$sample52[index$constrainedFlag$sample52$1] = true;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample68$1 = 0; index$constrainedFlag$sample68$1 < constrainedFlag$sample68.length; index$constrainedFlag$sample68$1 += 1)
+			constrainedFlag$sample68[index$constrainedFlag$sample68$1] = true;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample34$1 = 0; index$constrainedFlag$sample34$1 < constrainedFlag$sample34.length; index$constrainedFlag$sample34$1 += 1)
+			constrainedFlag$sample34[index$constrainedFlag$sample34$1] = true;
 	}
 
 	// Construct the evidence probabilities.

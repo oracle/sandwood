@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -184,7 +184,7 @@ public class GaussianToGaussian
             // Check if the environment should move to a different set of substitutions.
             DataflowTask<?> cp = scopeChangePoints.get(t);
             if(cp != null)
-                info.changeSubstitutions(cp, compilationCtx);
+                info.changeSubstitutions(cp);
 
             switch(t.getType()) {
                 case ADDITION: {
@@ -604,7 +604,7 @@ public class GaussianToGaussian
     protected void finalize(GaussianToGaussianData funcData, CompilationContext compilationCtx) {}
 
     @Override
-    protected ScopeConstructor getBackTraceScope(GaussianToGaussianData funcData) {
+    protected ScopeConstructor getBackTraceScope(GaussianToGaussianData funcData, CompilationContext compilationCtx) {
         return funcData.targetScope;
     }
 
@@ -614,7 +614,8 @@ public class GaussianToGaussian
     }
 
     @Override
-    protected void addDistributionProbabilities(GaussianToGaussianData funcData, CompilationContext compilationCtx) {
+    protected void addDistributionProbabilities(ScopeConstructor targetScope, GaussianToGaussianData funcData,
+            CompilationContext compilationCtx) {
         throw new CompilerException("Unable to merge distributions in Gaussian Gaussian inference.");
     }
 

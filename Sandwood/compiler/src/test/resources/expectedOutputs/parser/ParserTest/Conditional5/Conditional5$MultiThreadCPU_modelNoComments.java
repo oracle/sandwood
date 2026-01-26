@@ -16,8 +16,6 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	private double logProbability$b;
 	private double logProbability$bernoulli;
 	private double logProbability$guard;
-	private double logProbability$sample13;
-	private double logProbability$sample9;
 	private double logProbability$value;
 	private boolean observedGuard;
 	private double observedValue;
@@ -137,15 +135,14 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$sample13 = cv$sampleProbability;
+			logProbability$b = cv$sampleProbability;
 			boolean cv$guard$value = false;
-			logProbability$b = (logProbability$b + cv$accumulator);
 			{
 				{
 					if(!guard) {
 						if(!cv$guard$value) {
 							cv$guard$value = true;
-							logProbability$value = (logProbability$value + cv$sampleProbability);
+							logProbability$value = (logProbability$value + cv$accumulator);
 						}
 					}
 				}
@@ -156,17 +153,16 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$sample13;
+			double cv$sampleValue = logProbability$b;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			boolean cv$guard$value = false;
-			logProbability$b = (logProbability$b + cv$accumulator);
 			{
 				{
 					if(!guard) {
 						if(!cv$guard$value) {
 							cv$guard$value = true;
-							logProbability$value = (logProbability$value + cv$sampleValue);
+							logProbability$value = (logProbability$value + cv$accumulator);
 						}
 					}
 				}
@@ -188,7 +184,7 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					{
 						{
 							double var3 = 0.5;
-							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var3:(1.0 - var3))));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var3) && (var3 <= 1.0))?Math.log((cv$sampleValue?var3:(1.0 - var3))):Double.NEGATIVE_INFINITY));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -260,15 +256,14 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$sample9 = cv$sampleProbability;
+			logProbability$a = cv$sampleProbability;
 			boolean cv$guard$value = false;
-			logProbability$a = (logProbability$a + cv$accumulator);
 			{
 				{
 					if(guard) {
 						if(!cv$guard$value) {
 							cv$guard$value = true;
-							logProbability$value = (logProbability$value + cv$sampleProbability);
+							logProbability$value = (logProbability$value + cv$accumulator);
 						}
 					}
 				}
@@ -279,17 +274,16 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$sample9;
+			double cv$sampleValue = logProbability$a;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			boolean cv$guard$value = false;
-			logProbability$a = (logProbability$a + cv$accumulator);
 			{
 				{
 					if(guard) {
 						if(!cv$guard$value) {
 							cv$guard$value = true;
-							logProbability$value = (logProbability$value + cv$sampleValue);
+							logProbability$value = (logProbability$value + cv$accumulator);
 						}
 					}
 				}
@@ -341,23 +335,21 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample5)
 			logProbability$guard = Double.NaN;
-		logProbability$a = 0.0;
 		logProbability$value = 0.0;
 		if(!fixedProbFlag$sample9)
-			logProbability$sample9 = Double.NaN;
-		logProbability$b = 0.0;
+			logProbability$a = Double.NaN;
 		if(!fixedProbFlag$sample13)
-			logProbability$sample13 = Double.NaN;
+			logProbability$b = Double.NaN;
 	}
+
+	@Override
+	public final void initializeModel() {}
 
 	@Override
 	public final void logEvidenceProbabilities() {

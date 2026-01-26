@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -176,7 +176,7 @@ public abstract class Traces {
          * 
          * @param compilationCtx The compilation context.
          */
-        public void setIntermediateValues(Variable<?> source, CompilationContext compilationCtx) {
+        public void setIntermediateValues(boolean includeSampleVar, CompilationContext compilationCtx) {
             Variable<?> output = task.getOutput();
 
             // Mark a stop point so that the constructed trees do not go beyond this point
@@ -190,7 +190,7 @@ public abstract class Traces {
 
             for(Variable<?> v:new VariableDependencyTracker(traces)) {
                 // Test if the value has already been set.
-                if(!v.isFixed() && v != output && !(v == source && output.getType().isArray())) {
+                if(!v.isFixed() && (includeSampleVar || !v.isSample())) {
                     /*
                      * Add a guard so that the values are only updated if the configuration of the model would allow it.
                      * Without this array out of bounds errors are possible as well as serious inefficiency.
@@ -380,6 +380,15 @@ public abstract class Traces {
     public abstract Set<SampleTask<?, ?>> getAllIntermediateSamples();
 
     /**
+     * Method to return all the sample tasks whose output is nether observed, or consumed by other Random Variables.
+     * 
+     * @return
+     */
+    public abstract Set<SampleTask<?, ?>> getAllTerminalSamples();
+
+    public abstract boolean isTerminal(SampleTask<?, ?> sTask);
+
+    /**
      * A method that takes a sample task, and returns a map mapping random variables to sets of traces leading from the
      * random variable to back up the tree to the sample task.
      * 
@@ -439,7 +448,7 @@ public abstract class Traces {
      */
     public abstract Set<Variable<?>> getSourceObservedVariables(Variable<?> intermediate);
 
-    public abstract Set<SampleTask<?, ?>> getObservedSampleTasks();
+    public abstract Set<SampleTask<?, ?>> getAllObservedSampleTasks();
 
     public abstract boolean isObserved(SampleTask<?, ?> sTask);
 

@@ -10,6 +10,7 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 	private double a;
 	private double b;
 	private double[] bias;
+	private boolean constrainedFlag$sample10 = true;
 	private boolean fixedFlag$sample10 = false;
 	private boolean fixedProbFlag$sample10 = false;
 	private boolean fixedProbFlag$sample31 = false;
@@ -275,7 +276,7 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 								double var29 = bias[i];
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var29:(1.0 - var29))));
+								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var29) && (var29 <= 1.0))?Math.log((cv$sampleValue?var29:(1.0 - var29))):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -364,6 +365,8 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 	// conjugate prior.
 	private final void sample10() {
 		if(true) {
+			constrainedFlag$sample10 = false;
+			
 			// Local variable to record the number of true samples.
 			int cv$sum = 0;
 			
@@ -380,18 +383,24 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 									// Processing sample task 31 of consumer random variable bernoulli.
 									{
 										{
-											{
+											// Flag recording if this sample task of the consuming random variable is constrained.
+											boolean cv$sampleConstrained = true;
+											if(cv$sampleConstrained) {
+												// Mark that the sample has observed constrained data.
+												constrainedFlag$sample10 = true;
 												{
 													{
 														{
 															{
-																// Include the value sampled by task 31 from random variable bernoulli.
-																// Increment the number of samples.
-																cv$count = (cv$count + 1);
-																
-																// If the sample value was positive increase the count
-																if(flips[i])
-																	cv$sum = (cv$sum + 1);
+																{
+																	// Include the value sampled by task 31 from random variable bernoulli.
+																	// Increment the number of samples.
+																	cv$count = (cv$count + 1);
+																	
+																	// If the sample value was positive increase the count
+																	if(flips[i])
+																		cv$sum = (cv$sum + 1);
+																}
 															}
 														}
 													}
@@ -410,18 +419,24 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 											// Processing sample task 31 of consumer random variable bernoulli.
 											{
 												{
-													{
+													// Flag recording if this sample task of the consuming random variable is constrained.
+													boolean cv$sampleConstrained = true;
+													if(cv$sampleConstrained) {
+														// Mark that the sample has observed constrained data.
+														constrainedFlag$sample10 = true;
 														{
 															{
 																{
 																	{
-																		// Include the value sampled by task 31 from random variable bernoulli.
-																		// Increment the number of samples.
-																		cv$count = (cv$count + 1);
-																		
-																		// If the sample value was positive increase the count
-																		if(flips[index$i$2_2])
-																			cv$sum = (cv$sum + 1);
+																		{
+																			// Include the value sampled by task 31 from random variable bernoulli.
+																			// Increment the number of samples.
+																			cv$count = (cv$count + 1);
+																			
+																			// If the sample value was positive increase the count
+																			if(flips[index$i$2_2])
+																				cv$sum = (cv$sum + 1);
+																		}
 																	}
 																}
 															}
@@ -437,28 +452,29 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 					}
 				}
 			}
-			
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
-			double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
-			
-			// Guards to ensure that bias is only updated when there is a valid path.
-			{
+			if(constrainedFlag$sample10) {
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
+				
+				// Guards to ensure that bias is only updated when there is a valid path.
 				{
 					{
-						bias[0] = var10;
+						{
+							bias[0] = var10;
+						}
 					}
 				}
-			}
-			
-			// Guards to ensure that bias is only updated when there is a valid path.
-			// 
-			// Looking for a path between Sample 10 and consumer double[] 28.
-			{
+				
+				// Guards to ensure that bias is only updated when there is a valid path.
+				// 
+				// Looking for a path between Sample 10 and consumer double[] 28.
 				{
-					if((0 == 0)) {
-						for(int i = 0; i < samples; i += 1)
-							bias[(i + 1)] = bias[0];
+					{
+						if((0 == 0)) {
+							for(int i = 0; i < samples; i += 1)
+								bias[(i + 1)] = bias[0];
+						}
 					}
 				}
 			}
@@ -564,14 +580,6 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		a = 1.0;
-		b = 1.0;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -589,6 +597,14 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample31)
 			logProbability$var31 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		a = 1.0;
+		b = 1.0;
 	}
 
 	// Construct the evidence probabilities.

@@ -8,6 +8,9 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean constrainedFlag$sample16 = true;
+	private boolean constrainedFlag$sample28 = true;
+	private boolean constrainedFlag$sample35 = true;
 	private boolean fixedFlag$sample16 = false;
 	private boolean fixedFlag$sample28 = false;
 	private boolean fixedFlag$sample35 = false;
@@ -25,11 +28,10 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 	private double logProbability$bernoulli;
 	private double logProbability$bias;
 	private double logProbability$flips;
-	private double logProbability$sample16;
-	private double logProbability$sample28;
-	private double logProbability$sample35;
 	private double logProbability$var14;
+	private double logProbability$var24;
 	private double logProbability$var26;
+	private double logProbability$var31;
 	private double logProbability$var33;
 	private double logProbability$var48;
 	private int samples;
@@ -286,16 +288,16 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			if(guard1) {
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// An accumulator for log probabilities.
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
+				// Add the probability of this sample task to the sample task accumulator.
 				// 
-				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
+				// Accumulator for sample probabilities for a specific instance of the random variable.
 				// 
 				// Scale the probability relative to the observed distribution space.
 				// 
@@ -310,27 +312,29 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(var14, 1.0, 1.0);
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				cv$sampleAccumulator = cv$distributionAccumulator;
-				
-				// Store the sample task probability
-				logProbability$sample16 = cv$distributionAccumulator;
-				
-				// Update the variable probability
-				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
+				cv$sampleAccumulator = DistributionSampling.logProbabilityBeta(var14, 1.0, 1.0);
 			}
 			
-			// Update the variable probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var14 = (logProbability$var14 + cv$sampleAccumulator);
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var14 = cv$sampleAccumulator;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(guard1)
+				// Update the variable probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$bias = (logProbability$bias + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -357,24 +361,23 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			double cv$rvAccumulator = 0.0;
-			if(guard1) {
-				cv$rvAccumulator = logProbability$sample16;
-				
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(guard1)
 				// Update the variable probability
-				logProbability$bias = (logProbability$bias + logProbability$sample16);
-			}
-			
-			// Update the variable probability
-			logProbability$var14 = (logProbability$var14 + cv$rvAccumulator);
+				// 
+				// Variable declaration of cv$accumulator moved.
+				logProbability$bias = (logProbability$bias + logProbability$var14);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$model = (logProbability$$model + logProbability$var14);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
 			if(fixedFlag$sample16)
-				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
+				// Variable declaration of cv$accumulator moved.
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var14);
 		}
 	}
 
@@ -387,16 +390,16 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			if((!guard1 && (guard2 <= 2))) {
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// An accumulator for log probabilities.
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
+				// Add the probability of this sample task to the sample task accumulator.
 				// 
-				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
+				// Accumulator for sample probabilities for a specific instance of the random variable.
 				// 
 				// Scale the probability relative to the observed distribution space.
 				// 
@@ -411,19 +414,19 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta((var26 * 2), 1.0, 1.0);
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				cv$sampleAccumulator = cv$distributionAccumulator;
-				
-				// Store the sample task probability
-				logProbability$sample28 = cv$distributionAccumulator;
-				
-				// Update the variable probability
-				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
+				cv$sampleAccumulator = DistributionSampling.logProbabilityBeta((var26 * 2), 1.0, 1.0);
 			}
+			
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var24 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -432,6 +435,16 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			// 
 			// Accumulator for probabilities of instances of the random variable
 			logProbability$var26 = (logProbability$var26 + cv$sampleAccumulator);
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(((guard2 <= 2) && !guard1))
+				// Update the variable probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$bias = (logProbability$bias + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -458,24 +471,28 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			double cv$rvAccumulator = 0.0;
-			if((!guard1 && (guard2 <= 2))) {
-				cv$rvAccumulator = logProbability$sample28;
-				
-				// Update the variable probability
-				logProbability$bias = (logProbability$bias + logProbability$sample28);
-			}
-			
 			// Update the variable probability
-			logProbability$var26 = (logProbability$var26 + cv$rvAccumulator);
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$var26 = (logProbability$var26 + logProbability$var24);
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(((guard2 <= 2) && !guard1))
+				// Update the variable probability
+				// 
+				// Variable declaration of cv$accumulator moved.
+				logProbability$bias = (logProbability$bias + logProbability$var24);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$model = (logProbability$$model + logProbability$var24);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
 			if(fixedFlag$sample28)
-				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
+				// Variable declaration of cv$accumulator moved.
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var24);
 		}
 	}
 
@@ -488,16 +505,16 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			if((!guard1 && !(guard2 <= 2))) {
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// An accumulator for log probabilities.
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
+				// Add the probability of this sample task to the sample task accumulator.
 				// 
-				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
+				// Accumulator for sample probabilities for a specific instance of the random variable.
 				// 
 				// Scale the probability relative to the observed distribution space.
 				// 
@@ -512,19 +529,19 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta((var33 * 3), 1.0, 1.0);
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				cv$sampleAccumulator = cv$distributionAccumulator;
-				
-				// Store the sample task probability
-				logProbability$sample35 = cv$distributionAccumulator;
-				
-				// Update the variable probability
-				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
+				cv$sampleAccumulator = DistributionSampling.logProbabilityBeta((var33 * 3), 1.0, 1.0);
 			}
+			
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var31 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -533,6 +550,16 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			// 
 			// Accumulator for probabilities of instances of the random variable
 			logProbability$var33 = (logProbability$var33 + cv$sampleAccumulator);
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((!(guard2 <= 2) && !guard1))
+				// Update the variable probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$bias = (logProbability$bias + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -559,24 +586,28 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			double cv$rvAccumulator = 0.0;
-			if((!guard1 && !(guard2 <= 2))) {
-				cv$rvAccumulator = logProbability$sample35;
-				
-				// Update the variable probability
-				logProbability$bias = (logProbability$bias + logProbability$sample35);
-			}
-			
 			// Update the variable probability
-			logProbability$var33 = (logProbability$var33 + cv$rvAccumulator);
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$var33 = (logProbability$var33 + logProbability$var31);
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((!(guard2 <= 2) && !guard1))
+				// Update the variable probability
+				// 
+				// Variable declaration of cv$accumulator moved.
+				logProbability$bias = (logProbability$bias + logProbability$var31);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$model = (logProbability$$model + logProbability$var31);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
 			if(fixedFlag$sample35)
-				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
+				// Variable declaration of cv$accumulator moved.
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var31);
 		}
 	}
 
@@ -611,7 +642,7 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[var47]?bias:(1.0 - bias))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= bias) && (bias <= 1.0))?Math.log((flips[var47]?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -679,6 +710,8 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 	// by sample task 16 drawn from Beta 13. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample16() {
+		constrainedFlag$sample16 = false;
+		
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
 		
@@ -689,7 +722,11 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 		// 
 		// Processing sample task 52 of consumer random variable bernoulli.
 		for(int var47 = 0; var47 < samples; var47 += 1) {
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample16 = true;
+			
 			// Include the value sampled by task 52 from random variable bernoulli.
+			// 
 			// Increment the number of samples.
 			cv$count = (cv$count + 1);
 			
@@ -697,15 +734,18 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			if(flips[var47])
 				cv$sum = (cv$sum + 1);
 		}
-		
-		// Write out the new value of the sample.
-		var14 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		bias = var14;
+		if(constrainedFlag$sample16) {
+			// Write out the new value of the sample.
+			var14 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			bias = var14;
+		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 28 drawn from Beta 23. Inference was performed using Metropolis-Hastings.
 	private final void sample28() {
+		constrainedFlag$sample28 = false;
+		
 		// The original value of the sample
 		double cv$originalValue = (var26 * 2);
 		
@@ -731,7 +771,10 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$originalValue, 1.0, 1.0);
 			
 			// Processing sample task 52 of consumer random variable bernoulli.
-			for(int var47 = 0; var47 < samples; var47 += 1)
+			for(int var47 = 0; var47 < samples; var47 += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample28 = true;
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -744,7 +787,8 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = (Math.log((flips[var47]?var26:(1.0 - var26))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var26) && (var26 <= 1.0))?Math.log((flips[var47]?var26:(1.0 - var26))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
@@ -755,63 +799,72 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		
-		// Write out the new sample value.
-		var26 = (cv$proposedValue / 2);
-		
-		// Substituted "bias2" with its value "var26".
-		bias = var26;
-		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, 1.0, 1.0);
-		
-		// Processing sample task 52 of consumer random variable bernoulli.
-		for(int var47 = 0; var47 < samples; var47 += 1)
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 52 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-			// Declaration comment was:
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
-			cv$accumulatedProbabilities = (Math.log((flips[var47]?var26:(1.0 - var26))) + cv$accumulatedProbabilities);
-		
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-			// If it is not revert the changes.
-			// 
-			// Set the sample value
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(constrainedFlag$sample28) {
 			// Write out the new sample value.
-			// 
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
-			var26 = (cv$originalValue / 2);
+			var26 = (cv$proposedValue / 2);
 			
 			// Substituted "bias2" with its value "var26".
 			bias = var26;
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, 1.0, 1.0);
+			
+			// Processing sample task 52 of consumer random variable bernoulli.
+			for(int var47 = 0; var47 < samples; var47 += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample28 = true;
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 52 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				cv$accumulatedProbabilities = ((((0.0 <= var26) && (var26 <= 1.0))?Math.log((flips[var47]?var26:(1.0 - var26))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			
+			// The probability ration for the proposed value and the current value.
+			// 
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				// If it is not revert the changes.
+				// 
+				// Set the sample value
+				// Write out the new sample value.
+				// 
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				var26 = (cv$originalValue / 2);
+				
+				// Substituted "bias2" with its value "var26".
+				bias = var26;
+			}
 		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 35 drawn from Beta 30. Inference was performed using Metropolis-Hastings.
 	private final void sample35() {
+		constrainedFlag$sample35 = false;
+		
 		// The original value of the sample
 		double cv$originalValue = (var33 * 3);
 		
@@ -837,7 +890,10 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$originalValue, 1.0, 1.0);
 			
 			// Processing sample task 52 of consumer random variable bernoulli.
-			for(int var47 = 0; var47 < samples; var47 += 1)
+			for(int var47 = 0; var47 < samples; var47 += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample35 = true;
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -850,7 +906,8 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = (Math.log((flips[var47]?var33:(1.0 - var33))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var33) && (var33 <= 1.0))?Math.log((flips[var47]?var33:(1.0 - var33))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
@@ -861,57 +918,64 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		
-		// Write out the new sample value.
-		var33 = (cv$proposedValue / 3);
-		
-		// Substituted "bias2" with its value "var33".
-		bias = var33;
-		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, 1.0, 1.0);
-		
-		// Processing sample task 52 of consumer random variable bernoulli.
-		for(int var47 = 0; var47 < samples; var47 += 1)
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 52 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-			// Declaration comment was:
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
-			cv$accumulatedProbabilities = (Math.log((flips[var47]?var33:(1.0 - var33))) + cv$accumulatedProbabilities);
-		
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-			// If it is not revert the changes.
-			// 
-			// Set the sample value
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(constrainedFlag$sample35) {
 			// Write out the new sample value.
-			// 
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
-			var33 = (cv$originalValue / 3);
+			var33 = (cv$proposedValue / 3);
 			
 			// Substituted "bias2" with its value "var33".
 			bias = var33;
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, 1.0, 1.0);
+			
+			// Processing sample task 52 of consumer random variable bernoulli.
+			for(int var47 = 0; var47 < samples; var47 += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample35 = true;
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 52 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				cv$accumulatedProbabilities = ((((0.0 <= var33) && (var33 <= 1.0))?Math.log((flips[var47]?var33:(1.0 - var33))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			
+			// The probability ration for the proposed value and the current value.
+			// 
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				// If it is not revert the changes.
+				// 
+				// Set the sample value
+				// Write out the new sample value.
+				// 
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				var33 = (cv$originalValue / 3);
+				
+				// Substituted "bias2" with its value "var33".
+				bias = var33;
+			}
 		}
 	}
 
@@ -1088,13 +1152,6 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		samples = length$flipsMeasured;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -1105,20 +1162,26 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var14 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample16)
-			logProbability$sample16 = Double.NaN;
+			logProbability$var14 = Double.NaN;
 		logProbability$var26 = 0.0;
 		if(!fixedProbFlag$sample28)
-			logProbability$sample28 = Double.NaN;
+			logProbability$var24 = Double.NaN;
 		logProbability$var33 = 0.0;
 		if(!fixedProbFlag$sample35)
-			logProbability$sample35 = Double.NaN;
+			logProbability$var31 = Double.NaN;
 		logProbability$bernoulli = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample52)
 			logProbability$var48 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		samples = length$flipsMeasured;
 	}
 
 	// Construct the evidence probabilities.

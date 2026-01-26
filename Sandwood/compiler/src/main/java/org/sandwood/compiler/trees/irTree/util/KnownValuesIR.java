@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  * 
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -13,6 +13,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.scopes.ElseScope;
+import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
+import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.transformationTree.TransTreeReturn;
@@ -86,5 +90,27 @@ public abstract class KnownValuesIR implements Iterable<KnownValuesIR.KnownValue
                 }
             };
         }
+    }
+
+    public static KnownValuesIR constructKnownValues(List<Scope> scopes, CompilationContext compilationCtx) {
+        List<KnownValuesIR.KnownValue> values = new ArrayList<>();
+        for(Scope s:scopes) {
+            switch(s.getScopeType()) {
+                case ELSE: {
+                    ElseScope elseScope = (ElseScope) s;
+                    values.add(new KnownValue(elseScope.ifScope.getGuardTree(compilationCtx), false));
+                    break;
+                }
+                case IF: {
+                    IfScope ifScope = (IfScope) s;
+                    values.add(new KnownValue(ifScope.getGuardTree(compilationCtx), true));
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+
+        return KnownValuesIR.constructKnownValues(values);
     }
 }

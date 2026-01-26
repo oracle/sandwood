@@ -6,6 +6,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinArrayCopyPass$CoreInterface {
 	private double[] bias;
+	private boolean constrainedFlag$sample10 = true;
 	private boolean fixedFlag$sample10 = false;
 	private boolean fixedProbFlag$sample10 = false;
 	private boolean fixedProbFlag$sample26 = false;
@@ -131,7 +132,7 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < samples; i += 1) {
 				double var24 = bias[i];
-				double cv$distributionAccumulator = Math.log((flips[i]?var24:(1.0 - var24)));
+				double cv$distributionAccumulator = (((0.0 <= var24) && (var24 <= 1.0))?Math.log((flips[i]?var24:(1.0 - var24))):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$bernoulli[i] = cv$distributionAccumulator;
 				logProbability$sample26[i] = cv$distributionAccumulator;
@@ -154,9 +155,11 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 	}
 
 	private final void sample10() {
+		constrainedFlag$sample10 = false;
 		int cv$sum = 0;
 		int cv$count = 0;
 		if((0 < samples)) {
+			constrainedFlag$sample10 = true;
 			cv$count = 1;
 			if(flips[0])
 				cv$sum = 1;
@@ -164,14 +167,17 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 		for(int i = 0; i < samples; i += 1) {
 			int index$i$2_2 = (i + 1);
 			if((index$i$2_2 < samples)) {
+				constrainedFlag$sample10 = true;
 				cv$count = (cv$count + 1);
 				if(flips[index$i$2_2])
 					cv$sum = (cv$sum + 1);
 			}
 		}
-		bias[0] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		for(int i = 0; i < samples; i += 1)
-			bias[(i + 1)] = bias[0];
+		if(constrainedFlag$sample10) {
+			bias[0] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			for(int i = 0; i < samples; i += 1)
+				bias[(i + 1)] = bias[0];
+		}
 	}
 
 	@Override
@@ -205,6 +211,12 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample10)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int i = forStart$i; i < forEnd$i; i += 1)
+						bias[(i + 1)] = bias[0];
+			}
+		);
 	}
 
 	@Override
@@ -223,14 +235,27 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample10)
+		if(!fixedFlag$sample10) {
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+			parallelFor(RNG$, 0, samples, 1,
+				(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int i = forStart$i; i < forEnd$i; i += 1)
+							bias[(i + 1)] = bias[0];
+				}
+			);
+		}
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample10)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int i = forStart$i; i < forEnd$i; i += 1)
+						bias[(i + 1)] = bias[0];
+			}
+		);
 	}
 
 	@Override
@@ -239,9 +264,6 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 			sample10();
 		system$gibbsForward = !system$gibbsForward;
 	}
-
-	@Override
-	public final void initializeConstants() {}
 
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
@@ -257,6 +279,9 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 				logProbability$sample26[i] = Double.NaN;
 		}
 	}
+
+	@Override
+	public final void initializeModel() {}
 
 	@Override
 	public final void logEvidenceProbabilities() {
@@ -288,7 +313,14 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 	}
 
 	@Override
-	public final void setIntermediates() {}
+	public final void setIntermediates() {
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int i = forStart$i; i < forEnd$i; i += 1)
+						bias[(i + 1)] = bias[0];
+			}
+		);
+	}
 
 	@Override
 	public String modelCode() {

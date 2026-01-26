@@ -6,6 +6,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 final class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements AlternativeModelMK2$CoreInterface {
 	private double bias;
+	private boolean constrainedFlag$sample6 = true;
 	private boolean fixedFlag$sample6 = false;
 	private boolean fixedProbFlag$sample6 = false;
 	private boolean fixedProbFlag$sample8 = false;
@@ -128,6 +129,8 @@ final class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	private final void sample6() {
+		constrainedFlag$sample6 = false;
+		constrainedFlag$sample6 = true;
 		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, positiveCount, observedSampleCount);
 	}
 
@@ -176,9 +179,6 @@ final class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.int
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -188,6 +188,9 @@ final class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.int
 		if(!fixedProbFlag$sample8)
 			logProbability$positiveCount = Double.NaN;
 	}
+
+	@Override
+	public final void initializeModel() {}
 
 	@Override
 	public final void logEvidenceProbabilities() {

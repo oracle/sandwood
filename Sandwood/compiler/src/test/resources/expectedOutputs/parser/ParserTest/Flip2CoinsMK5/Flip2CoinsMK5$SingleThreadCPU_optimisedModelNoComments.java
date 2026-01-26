@@ -7,6 +7,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 final class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip2CoinsMK5$CoreInterface {
 	private double[] bias;
 	private int coins;
+	private boolean[] constrainedFlag$sample18;
 	private boolean fixedFlag$sample18 = false;
 	private boolean fixedProbFlag$sample18 = false;
 	private boolean fixedProbFlag$sample44 = false;
@@ -131,7 +132,7 @@ final class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.
 				double cv$sampleAccumulator = 0.0;
 				for(int var43 = 0; var43 < shape[j]; var43 += 1) {
 					double var32 = bias[j];
-					cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[j][var43]?var32:(1.0 - var32))));
+					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var32) && (var32 <= 1.0))?Math.log((flips[j][var43]?var32:(1.0 - var32))):Double.NEGATIVE_INFINITY));
 				}
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				logProbability$bernoulli[j] = cv$sampleAccumulator;
@@ -155,14 +156,17 @@ final class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	private final void sample18(int var17) {
+		constrainedFlag$sample18[var17] = false;
 		int cv$sum = 0;
 		int cv$count = 0;
 		for(int var43 = 0; var43 < shape[var17]; var43 += 1) {
+			constrainedFlag$sample18[var17] = true;
 			cv$count = (cv$count + 1);
 			if(flips[var17][var43])
 				cv$sum = (cv$sum + 1);
 		}
-		bias[var17] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		if(constrainedFlag$sample18[var17])
+			bias[var17] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	@Override
@@ -175,6 +179,7 @@ final class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.
 		flips = new boolean[shape.length][];
 		for(int j = 0; j < shape.length; j += 1)
 			flips[j] = new boolean[shape[j]];
+		constrainedFlag$sample18 = new boolean[shape.length];
 		logProbability$bernoulli = new double[shape.length];
 		logProbability$sample44 = new double[shape.length];
 	}
@@ -243,11 +248,6 @@ final class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {
-		coins = shape.length;
-	}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -261,6 +261,13 @@ final class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.
 			for(int j = 0; j < coins; j += 1)
 				logProbability$sample44[j] = Double.NaN;
 		}
+	}
+
+	@Override
+	public final void initializeModel() {
+		coins = shape.length;
+		for(int index$constrainedFlag$sample18$1 = 0; index$constrainedFlag$sample18$1 < constrainedFlag$sample18.length; index$constrainedFlag$sample18$1 += 1)
+			constrainedFlag$sample18[index$constrainedFlag$sample18$1] = true;
 	}
 
 	@Override

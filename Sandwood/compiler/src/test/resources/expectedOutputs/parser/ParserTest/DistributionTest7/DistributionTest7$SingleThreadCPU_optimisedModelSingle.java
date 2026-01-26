@@ -8,6 +8,8 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 	// Declare the variables for the model.
 	private double[] bias;
 	private int cat;
+	private boolean constrainedFlag$sample31 = true;
+	private boolean constrainedFlag$sample45 = true;
 	private double[] cv$var31$stateProbabilityGlobal;
 	private double[] cv$var43$stateProbabilityGlobal;
 	private double data;
@@ -22,7 +24,6 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 	private double logProbability$cat;
 	private double logProbability$data;
 	private double logProbability$result;
-	private double logProbability$sample45;
 	private double logProbability$var43;
 	private double observedData;
 	private double[] prob;
@@ -247,7 +248,7 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = (((0.0 <= cat) && (cat < 3))?Math.log(prob[cat]):Double.NEGATIVE_INFINITY);
+				double cv$distributionAccumulator = (((((0.0 <= cat) && (cat < 3)) && (0.0 <= prob[cat])) && (prob[cat] <= 1.0))?Math.log(prob[cat]):Double.NEGATIVE_INFINITY);
 				
 				// Store the sample task probability
 				logProbability$cat = cv$distributionAccumulator;
@@ -315,6 +316,9 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			if(!(cat == 1)) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
@@ -448,27 +452,35 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 					// Scale the probability relative to the observed distribution space.
 					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
 				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$sampleAccumulator = cv$distributionAccumulator;
-				
-				// Store the sample task probability
-				logProbability$sample45 = cv$distributionAccumulator;
-				
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((fixedFlag$sample31 && fixedFlag$sample45))
-					// Update the variable probability
-					logProbability$result = (logProbability$result + cv$distributionAccumulator);
 			}
 			
-			// Update the variable probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var43 = (logProbability$var43 + cv$sampleAccumulator);
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var43 = cv$sampleAccumulator;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(((!(cat == 1) && fixedFlag$sample31) && fixedFlag$sample45))
+				// Update the variable probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$result = (logProbability$result + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -495,26 +507,23 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			double cv$rvAccumulator = 0.0;
-			if(!(cat == 1)) {
-				cv$rvAccumulator = logProbability$sample45;
-				
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((fixedFlag$sample31 && fixedFlag$sample45))
-					// Update the variable probability
-					logProbability$result = (logProbability$result + logProbability$sample45);
-			}
-			
-			// Update the variable probability
-			logProbability$var43 = (logProbability$var43 + cv$rvAccumulator);
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(((!(cat == 1) && fixedFlag$sample31) && fixedFlag$sample45))
+				// Update the variable probability
+				// 
+				// Variable declaration of cv$accumulator moved.
+				logProbability$result = (logProbability$result + logProbability$var43);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$model = (logProbability$$model + logProbability$var43);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
 			if(fixedFlag$sample45)
-				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
+				// Variable declaration of cv$accumulator moved.
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var43);
 		}
 	}
 
@@ -538,7 +547,7 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 					// Store the value of the function call, so the function call is only made once.
 					// 
 					// The sample value to calculate the probability of generating
-					cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((data - var43) / Math.sqrt(cat))) - (Math.log(cat) * 0.5));
+					cv$distributionAccumulator = ((0.0 < (double)cat)?(DistributionSampling.logProbabilityGaussian(((data - var43) / Math.sqrt(cat))) - (Math.log(cat) * 0.5)):Double.NEGATIVE_INFINITY);
 					
 					// Add the probability of this distribution configuration to the accumulator.
 					// 
@@ -547,12 +556,17 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 				}
 			} else {
 				// Unrolled loop
+				// Update the probability of sampling this value from the distribution value.
+				// 
+				// Substituted "index$sample31$3" with its value "2".
+				double cv$probabilitySample31Value4 = distribution$sample31[2];
+				
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
 				// 
-				// Substituted "index$sample31$3" with its value "0".
-				cv$distributionAccumulator = Double.POSITIVE_INFINITY;
+				// Substituted "index$sample31$3" with its value "2".
+				cv$distributionAccumulator = ((Math.log(cv$probabilitySample31Value4) + DistributionSampling.logProbabilityGaussian(((data - var43) / 1.4142135623730951))) - 0.34657359027997264);
 				
 				// Add the probability of this distribution configuration to the accumulator.
 				// 
@@ -564,12 +578,7 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Update the probability of sampling this value from the distribution value.
 				// 
 				// Substituted "index$sample31$3" with its value "0".
-				// 
-				// cv$probabilitySample31Value4's comment
-				// Update the probability of sampling this value from the distribution value.
-				// 
-				// Substituted "index$sample31$3" with its value "2".
-				cv$probabilityReached = (distribution$sample31[0] + distribution$sample31[2]);
+				cv$probabilityReached = (distribution$sample31[0] + cv$probabilitySample31Value4);
 			}
 			if((cv$probabilityReached == 0.0))
 				// Return negative infinity if no distribution probability space is reached.
@@ -659,7 +668,7 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (((0.0 <= cat) && (cat < 3))?Math.log(prob[cat]):Double.NEGATIVE_INFINITY);
+			double cv$distributionAccumulator = (((((0.0 <= cat) && (cat < 3)) && (0.0 <= prob[cat])) && (prob[cat] <= 1.0))?Math.log(prob[cat]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
 			logProbability$cat = cv$distributionAccumulator;
@@ -727,16 +736,16 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
 			if(!(cat == 1)) {
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// An accumulator for log probabilities.
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
+				// Add the probability of this sample task to the sample task accumulator.
 				// 
-				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
+				// Accumulator for sample probabilities for a specific instance of the random variable.
 				// 
 				// Scale the probability relative to the observed distribution space.
 				// 
@@ -751,27 +760,29 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityBinomial(var43, bias[cat], 10);
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				cv$sampleAccumulator = cv$distributionAccumulator;
-				
-				// Store the sample task probability
-				logProbability$sample45 = cv$distributionAccumulator;
-				
-				// Update the variable probability
-				logProbability$result = (logProbability$result + cv$distributionAccumulator);
+				cv$sampleAccumulator = DistributionSampling.logProbabilityBinomial(var43, bias[cat], 10);
 			}
 			
-			// Update the variable probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$var43 = (logProbability$var43 + cv$sampleAccumulator);
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var43 = cv$sampleAccumulator;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(!(cat == 1))
+				// Update the variable probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$result = (logProbability$result + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -798,24 +809,23 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			double cv$rvAccumulator = 0.0;
-			if(!(cat == 1)) {
-				cv$rvAccumulator = logProbability$sample45;
-				
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(!(cat == 1))
 				// Update the variable probability
-				logProbability$result = (logProbability$result + logProbability$sample45);
-			}
-			
-			// Update the variable probability
-			logProbability$var43 = (logProbability$var43 + cv$rvAccumulator);
+				// 
+				// Variable declaration of cv$accumulator moved.
+				logProbability$result = (logProbability$result + logProbability$var43);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$model = (logProbability$$model + logProbability$var43);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
 			if(fixedFlag$sample45)
-				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
+				// Variable declaration of cv$accumulator moved.
+				logProbability$$evidence = (logProbability$$evidence + logProbability$var43);
 		}
 	}
 
@@ -849,7 +859,7 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((data - result) / Math.sqrt(cat))) - (Math.log(cat) * 0.5));
+			double cv$distributionAccumulator = ((0.0 < (double)cat)?(DistributionSampling.logProbabilityGaussian(((data - result) / Math.sqrt(cat))) - (Math.log(cat) * 0.5)):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
 			logProbability$data = cv$distributionAccumulator;
@@ -906,6 +916,23 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 	// by sample task 31 drawn from Categorical 30. Inference was performed using variable
 	// marginalization.
 	private final void sample31() {
+		constrainedFlag$sample31 = false;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		// 
+		// Substituted "cv$valuePos" with its value "0".
+		if((fixedFlag$sample45 || constrainedFlag$sample45))
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample31 = true;
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample31 = true;
+		
+		// Processing sample task 51 of consumer random variable null.
+		// 
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample31 = true;
+		
 		// Save the calculated index value into the array of index value probabilities
 		// 
 		// Get a local reference to the scratch space.
@@ -914,6 +941,102 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 		// 
 		// Initialize a counter to track the reached distributions.
 		// 
+		// A check to ensure rounding of floating point values can never result in a negative
+		// value.
+		// 
+		// Recorded the probability of reaching sample task 51 with the current configuration.
+		// 
+		// Set an accumulator to record the consumer distributions not seen. Initially set
+		// to 1 as seen values will be deducted from this value.
+		cv$var31$stateProbabilityGlobal[0] = Double.NEGATIVE_INFINITY;
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample31 = true;
+		
+		// Processing sample task 51 of consumer random variable null.
+		// 
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample31 = true;
+		
+		// Save the calculated index value into the array of index value probabilities
+		// 
+		// Get a local reference to the scratch space.
+		// 
+		// Record the reached probability density.
+		// 
+		// Initialize a counter to track the reached distributions.
+		// 
+		// An accumulator to allow the value for each distribution to be constructed before
+		// it is added to the index probabilities.
+		// 
+		// Value of the variable at this index
+		// 
+		// Substituted "cv$valuePos" with its value "1".
+		cv$var31$stateProbabilityGlobal[1] = (((0.0 <= prob[1]) && (prob[1] <= 1.0))?Math.log(prob[1]):Double.NEGATIVE_INFINITY);
+		
+		// An accumulator to allow the value for each distribution to be constructed before
+		// it is added to the index probabilities.
+		// 
+		// Value of the variable at this index
+		// 
+		// Substituted "cv$valuePos" with its value "2".
+		double cv$accumulatedProbabilities = (((0.0 <= prob[2]) && (prob[2] <= 1.0))?Math.log(prob[2]):Double.NEGATIVE_INFINITY);
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		// 
+		// Substituted "cv$valuePos" with its value "2".
+		if((fixedFlag$sample45 || constrainedFlag$sample45)) {
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample31 = true;
+			
+			// A check to ensure rounding of floating point values can never result in a negative
+			// value.
+			// 
+			// Recorded the probability of reaching sample task 45 with the current configuration.
+			// 
+			// Set an accumulator to record the consumer distributions not seen. Initially set
+			// to 1 as seen values will be deducted from this value.
+			// 
+			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+			// Declaration comment was:
+			// Set an accumulator to sum the probabilities for each possible configuration of
+			// inputs.
+			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBinomial(var43, 0.5, 10) + cv$accumulatedProbabilities);
+		}
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample31 = true;
+		
+		// A check to ensure rounding of floating point values can never result in a negative
+		// value.
+		// 
+		// Recorded the probability of reaching sample task 51 with the current configuration.
+		// 
+		// Set an accumulator to record the consumer distributions not seen. Initially set
+		// to 1 as seen values will be deducted from this value.
+		// 
+		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+		// Declaration comment was:
+		// Set an accumulator to sum the probabilities for each possible configuration of
+		// inputs.
+		// 
+		// Constructing a random variable input for use later.
+		// 
+		// Constructing a random variable input for use later.
+		// 
+		// Enumerating the possible arguments for the variable Gaussian 48 which is consuming
+		// the output of Sample task 31.
+		// 
+		// Value of the variable at this index
+		// 
+		// Substituted "cv$valuePos" with its value "2".
+		cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((data - var43) / 1.4142135623730951)) + cv$accumulatedProbabilities) - 0.34657359027997264);
+		
+		// Processing sample task 51 of consumer random variable null.
+		// 
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample31 = true;
+		
 		// A check to ensure rounding of floating point values can never result in a negative
 		// value.
 		// 
@@ -933,33 +1056,9 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 		// 
 		// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "0".
-		cv$var31$stateProbabilityGlobal[0] = Double.POSITIVE_INFINITY;
+		// Substituted "cv$valuePos" with its value "2".
+		cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((data - var43) / 1.4142135623730951)) + cv$accumulatedProbabilities) - 0.34657359027997264);
 		
-		// Save the calculated index value into the array of index value probabilities
-		// 
-		// Get a local reference to the scratch space.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		// 
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		// 
-		// Value of the variable at this index
-		// 
-		// Substituted "cv$valuePos" with its value "1".
-		cv$var31$stateProbabilityGlobal[1] = Math.log(prob[1]);
-		
-		// Save the calculated index value into the array of index value probabilities
-		// 
-		// Get a local reference to the scratch space.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		// 
 		// A check to ensure rounding of floating point values can never result in a negative
 		// value.
 		// 
@@ -980,74 +1079,19 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "2".
-		// 
-		// Processing sample task 51 of consumer random variable null.
-		// 
-		// A check to ensure rounding of floating point values can never result in a negative
-		// value.
-		// 
-		// Recorded the probability of reaching sample task 51 with the current configuration.
-		// 
-		// Set an accumulator to record the consumer distributions not seen. Initially set
-		// to 1 as seen values will be deducted from this value.
-		// 
-		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-		// Declaration comment was:
-		// Set an accumulator to sum the probabilities for each possible configuration of
-		// inputs.
-		// 
-		// Constructing a random variable input for use later.
-		// 
-		// Constructing a random variable input for use later.
-		// 
-		// Value of the variable at this index
-		// 
-		// Substituted "cv$valuePos" with its value "2".
-		// 
-		// Processing random variable 48.
-		// 
-		// A check to ensure rounding of floating point values can never result in a negative
-		// value.
-		// 
-		// Recorded the probability of reaching sample task 51 with the current configuration.
-		// 
-		// Set an accumulator to record the consumer distributions not seen. Initially set
-		// to 1 as seen values will be deducted from this value.
-		// 
-		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-		// Declaration comment was:
-		// Processing sample task 51 of consumer random variable null.
-		// 
-		// Set an accumulator to sum the probabilities for each possible configuration of
-		// inputs.
-		// 
-		// Constructing a random variable input for use later.
-		// 
-		// Constructing a random variable input for use later.
-		// 
-		// Enumerating the possible arguments for the variable Gaussian 48 which is consuming
-		// the output of Sample task 31.
-		// 
-		// Value of the variable at this index
-		// 
-		// Substituted "cv$valuePos" with its value "2".
-		// 
-		// A check to ensure rounding of floating point values can never result in a negative
-		// value.
-		// 
-		// Recorded the probability of reaching sample task 45 with the current configuration.
-		// 
-		// Set an accumulator to record the consumer distributions not seen. Initially set
-		// to 1 as seen values will be deducted from this value.
-		// 
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		// 
-		// Value of the variable at this index
-		// 
-		// Substituted "cv$valuePos" with its value "2".
-		cv$var31$stateProbabilityGlobal[2] = (((((DistributionSampling.logProbabilityBinomial(var43, bias[2], 10) + DistributionSampling.logProbabilityGaussian(((data - var43) / 1.4142135623730951))) + DistributionSampling.logProbabilityGaussian(((data - var43) / 1.4142135623730951))) + DistributionSampling.logProbabilityBinomial(var43, 0.5, 10)) + Math.log(prob[2])) - 0.6931471805599453);
+		cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBinomial(var43, bias[2], 10) + cv$accumulatedProbabilities);
 		
+		// Save the calculated index value into the array of index value probabilities
+		// 
+		// Get a local reference to the scratch space.
+		// 
+		// Record the reached probability density.
+		// 
+		// Initialize a counter to track the reached distributions.
+		cv$var31$stateProbabilityGlobal[2] = cv$accumulatedProbabilities;
+		
+		// Set the calculated probabilities to be the distribution values, and normalize
+		// 
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
 		// The sum of all the probabilities in log space
@@ -1095,34 +1139,22 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Unrolled loop
-			// Set the calculated probabilities to be the distribution values, and normalize
-			// 
 			// Local copy of the probability array
 			distribution$sample31[0] = 0.3333333333333333;
 			
-			// Set the calculated probabilities to be the distribution values, and normalize
-			// 
 			// Local copy of the probability array
 			distribution$sample31[1] = 0.3333333333333333;
 			
-			// Set the calculated probabilities to be the distribution values, and normalize
-			// 
 			// Local copy of the probability array
 			distribution$sample31[2] = 0.3333333333333333;
 		} else {
 			// Unrolled loop
-			// Set the calculated probabilities to be the distribution values, and normalize
-			// 
 			// Local copy of the probability array
 			distribution$sample31[0] = Math.exp((cv$var31$stateProbabilityGlobal[0] - cv$logSum));
 			
-			// Set the calculated probabilities to be the distribution values, and normalize
-			// 
 			// Local copy of the probability array
 			distribution$sample31[1] = Math.exp((cv$var31$stateProbabilityGlobal[1] - cv$logSum));
 			
-			// Set the calculated probabilities to be the distribution values, and normalize
-			// 
 			// Local copy of the probability array
 			distribution$sample31[2] = Math.exp((cv$var31$stateProbabilityGlobal[2] - cv$logSum));
 		}
@@ -1131,8 +1163,6 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 		// 
 		// Get a local reference to the scratch space.
 		for(int cv$indexName = 3; cv$indexName < cv$var31$stateProbabilityGlobal.length; cv$indexName += 1)
-			// Set the calculated probabilities to be the distribution values, and normalize
-			// 
 			// Local copy of the probability array
 			distribution$sample31[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
@@ -1141,6 +1171,8 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 	// by sample task 45 drawn from Binomial 42. Inference was performed using variable
 	// marginalization.
 	private final void sample45() {
+		constrainedFlag$sample45 = false;
+		
 		// Calculate the number of states to evaluate.
 		int cv$numStates = 0;
 		
@@ -1194,25 +1226,26 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 					// Initialize a counter to track the reached distributions.
 					cv$reachedDistributionSourceRV = 1.0;
 					
-					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-					// Declaration comment was:
-					// Processing sample task 51 of consumer random variable null.
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample45 = true;
+					
+					// A check to ensure rounding of floating point values can never result in a negative
+					// value.
 					// 
-					// Set an accumulator to sum the probabilities for each possible configuration of
-					// inputs.
+					// Recorded the probability of reaching sample task 51 with the current configuration.
 					// 
-					// Constructing a random variable input for use later.
-					// 
-					// Constructing a random variable input for use later.
-					// 
-					// Substituted "cat" with its value "0".
-					cv$stateProbabilityValue = Double.POSITIVE_INFINITY;
+					// Set an accumulator to record the consumer distributions not seen. Initially set
+					// to 1 as seen values will be deducted from this value.
+					cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((2 == cat)) {
 					// Record the reached probability density.
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
+					
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample45 = true;
 					
 					// Variable declaration of cv$accumulatedProbabilities moved.
 					// Declaration comment was:
@@ -1233,41 +1266,92 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 					// it is added to the index probabilities.
 					// 
 					// Value of the variable at this index
-					double cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((data - cv$valuePos) / 1.4142135623730951)) + DistributionSampling.logProbabilityBinomial(cv$valuePos, 0.5, 10)) - 0.34657359027997264);
-					
-					// Add the values for the source and any standard consumers for this configuration
-					// of arguments to the source.
-					if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
-						cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
-					else {
-						// If the second value is -infinity.
-						if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
-							cv$stateProbabilityValue = cv$accumulatedProbabilities;
-						else
-							cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
-					}
+					cv$stateProbabilityValue = ((DistributionSampling.logProbabilityGaussian(((data - cv$valuePos) / 1.4142135623730951)) + DistributionSampling.logProbabilityBinomial(cv$valuePos, 0.5, 10)) - 0.34657359027997264);
 				}
 			} else {
-				// Record the reached probability density.
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample45 = true;
+				
+				// Update the probability of sampling this value from the distribution value.
 				// 
-				// cv$probabilitySample31Value39's comment
+				// Substituted "index$sample31$31" with its value "1".
+				double cv$probabilitySample31Value32 = distribution$sample31[1];
+				
+				// An accumulator to allow the value for each distribution to be constructed before
+				// it is added to the index probabilities.
+				// 
+				// Value of the variable at this index
+				cv$stateProbabilityValue = (Math.log(cv$probabilitySample31Value32) + DistributionSampling.logProbabilityBinomial(cv$valuePos, 0.3, 10));
+				
 				// Update the probability of sampling this value from the distribution value.
 				// 
 				// Substituted "index$sample31$38" with its value "2".
-				cv$reachedDistributionSourceRV = ((distribution$sample31[0] + distribution$sample31[1]) + distribution$sample31[2]);
+				double cv$probabilitySample31Value39 = distribution$sample31[2];
 				
-				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Record the reached probability density.
+				// 
+				// Record the reached probability density.
+				// 
+				// Record the reached probability density.
+				// 
+				// Initialize a counter to track the reached distributions.
+				// 
+				// cv$probabilitySample31Value25's comment
+				// Update the probability of sampling this value from the distribution value.
+				// 
+				// Substituted "index$sample31$24" with its value "0".
+				cv$reachedDistributionSourceRV = ((distribution$sample31[0] + cv$probabilitySample31Value32) + cv$probabilitySample31Value39);
+				
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample45 = true;
+				
+				// Variable declaration of cv$accumulatedProbabilities moved.
 				// Declaration comment was:
-				// Processing sample task 51 of consumer random variable null.
+				// An accumulator to allow the value for each distribution to be constructed before
+				// it is added to the index probabilities.
 				// 
-				// Set an accumulator to sum the probabilities for each possible configuration of
-				// inputs.
+				// Value of the variable at this index
 				// 
-				// Constructing a random variable input for use later.
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
 				// 
-				// Enumerating the possible arguments for the variable Gaussian 48 which is consuming
-				// the output of Sample task 45.
-				cv$stateProbabilityValue = Double.POSITIVE_INFINITY;
+				// Recorded the probability of reaching sample task 51 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// An accumulator to allow the value for each distribution to be constructed before
+				// it is added to the index probabilities.
+				// 
+				// Value of the variable at this index
+				double cv$accumulatedProbabilities = (((DistributionSampling.logProbabilityGaussian(((data - cv$valuePos) / 1.4142135623730951)) + Math.log(cv$probabilitySample31Value39)) + DistributionSampling.logProbabilityBinomial(cv$valuePos, 0.5, 10)) - 0.34657359027997264);
+				
+				// Add the values for the source and any standard consumers for this configuration
+				// of arguments to the source.
+				if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
+					cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
+				else {
+					// If the second value is -infinity.
+					// 
+					// cv$probabilitySample31Value32's comment
+					// Update the probability of sampling this value from the distribution value.
+					// 
+					// Substituted "index$sample31$31" with its value "1".
+					// 
+					// cv$probabilitySample31Value32's comment
+					// Update the probability of sampling this value from the distribution value.
+					// 
+					// Substituted "index$sample31$31" with its value "1".
+					// 
+					// cv$probabilitySample31Value32's comment
+					// Update the probability of sampling this value from the distribution value.
+					// 
+					// Substituted "index$sample31$31" with its value "1".
+					if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
+						cv$stateProbabilityValue = cv$accumulatedProbabilities;
+					else
+						cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
+				}
 			}
 			
 			// Save the calculated index value into the array of index value probabilities
@@ -1275,72 +1359,73 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Get a local reference to the scratch space.
 			cv$var43$stateProbabilityGlobal[cv$valuePos] = (cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV));
 		}
-		
-		// This value is not used before it is set again, so removing the value declaration.
-		// 
-		// The sum of all the probabilities in log space
-		double cv$logSum;
-		
-		// Sum all the values
-		// 
-		// Initialize the max to the first element.
-		// 
-		// Get a local reference to the scratch space.
-		double cv$lseMax = cv$var43$stateProbabilityGlobal[0];
-		
-		// Find max value.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
-			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var43$stateProbabilityGlobal[cv$lseIndex];
-			if((cv$lseMax < cv$lseElementValue))
-				cv$lseMax = cv$lseElementValue;
-		}
-		
-		// If the maximum value is -infinity return -infinity.
-		if((cv$lseMax == Double.NEGATIVE_INFINITY))
-			cv$logSum = Double.NEGATIVE_INFINITY;
-		
-		// Sum the values in the array.
-		else {
-			// Initialize the sum of the array elements
-			double cv$lseSum = 0.0;
-			
-			// Offset values, move to normal space, and sum.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
-				// Get a local reference to the scratch space.
-				cv$lseSum = (cv$lseSum + Math.exp((cv$var43$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
-			
-			// Increment the value of the target, moving the value back into log space.
+		if(constrainedFlag$sample45) {
+			// This value is not used before it is set again, so removing the value declaration.
 			// 
 			// The sum of all the probabilities in log space
-			cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
-		}
-		
-		// If all the sum is zero, just share the probability evenly.
-		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-				// Get a local reference to the scratch space.
-				cv$var43$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
-		} else {
-			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-				// Get a local reference to the scratch space.
-				cv$var43$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var43$stateProbabilityGlobal[cv$indexName] - cv$logSum));
-		}
-		
-		// Set array values that are not computed for the input to negative infinity.
-		// 
-		// Get a local reference to the scratch space.
-		for(int cv$indexName = cv$numStates; cv$indexName < cv$var43$stateProbabilityGlobal.length; cv$indexName += 1)
+			double cv$logSum;
+			
+			// Sum all the values
+			// 
+			// Initialize the max to the first element.
+			// 
 			// Get a local reference to the scratch space.
-			cv$var43$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
-		
-		// Write out the new value of the sample.
-		// 
-		// Get a local reference to the scratch space.
-		var43 = DistributionSampling.sampleCategorical(RNG$, cv$var43$stateProbabilityGlobal, cv$numStates);
-		result = var43;
+			double cv$lseMax = cv$var43$stateProbabilityGlobal[0];
+			
+			// Find max value.
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
+				// Get a local reference to the scratch space.
+				double cv$lseElementValue = cv$var43$stateProbabilityGlobal[cv$lseIndex];
+				if((cv$lseMax < cv$lseElementValue))
+					cv$lseMax = cv$lseElementValue;
+			}
+			
+			// If the maximum value is -infinity return -infinity.
+			if((cv$lseMax == Double.NEGATIVE_INFINITY))
+				cv$logSum = Double.NEGATIVE_INFINITY;
+			
+			// Sum the values in the array.
+			else {
+				// Initialize the sum of the array elements
+				double cv$lseSum = 0.0;
+				
+				// Offset values, move to normal space, and sum.
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
+					// Get a local reference to the scratch space.
+					cv$lseSum = (cv$lseSum + Math.exp((cv$var43$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
+				
+				// Increment the value of the target, moving the value back into log space.
+				// 
+				// The sum of all the probabilities in log space
+				cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
+			}
+			
+			// If all the sum is zero, just share the probability evenly.
+			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
+				// Normalize log space values and move to normal space
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					// Get a local reference to the scratch space.
+					cv$var43$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
+			} else {
+				// Normalize log space values and move to normal space
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					// Get a local reference to the scratch space.
+					cv$var43$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var43$stateProbabilityGlobal[cv$indexName] - cv$logSum));
+			}
+			
+			// Set array values that are not computed for the input to negative infinity.
+			// 
+			// Get a local reference to the scratch space.
+			for(int cv$indexName = cv$numStates; cv$indexName < cv$var43$stateProbabilityGlobal.length; cv$indexName += 1)
+				// Get a local reference to the scratch space.
+				cv$var43$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+			
+			// Write out the new value of the sample.
+			// 
+			// Get a local reference to the scratch space.
+			var43 = DistributionSampling.sampleCategorical(RNG$, cv$var43$stateProbabilityGlobal, cv$numStates);
+			result = var43;
+		}
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -1406,7 +1491,7 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Create local copy of variable probabilities.
 			// 
 			// Probability for this value
-			distribution$sample31[0] = prob[0];
+			distribution$sample31[0] = (((0.0 <= prob[0]) && (prob[0] <= 1.0))?prob[0]:0.0);
 			
 			// Save the probability of each value
 			// 
@@ -1414,7 +1499,7 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Create local copy of variable probabilities.
 			// 
 			// Probability for this value
-			distribution$sample31[1] = prob[1];
+			distribution$sample31[1] = (((0.0 <= prob[1]) && (prob[1] <= 1.0))?prob[1]:0.0);
 			
 			// Save the probability of each value
 			// 
@@ -1422,7 +1507,7 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Create local copy of variable probabilities.
 			// 
 			// Probability for this value
-			distribution$sample31[2] = prob[2];
+			distribution$sample31[2] = (((0.0 <= prob[2]) && (prob[2] <= 1.0))?prob[2]:0.0);
 		}
 		if((!(cat == 1) && !fixedFlag$sample45))
 			var43 = DistributionSampling.sampleBinomial(RNG$, bias[cat], 10);
@@ -1501,18 +1586,6 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		bias[0] = 0.2;
-		bias[1] = 0.3;
-		bias[2] = 0.5;
-		prob[0] = 0.2;
-		prob[1] = 0.4;
-		prob[2] = 0.4;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -1525,12 +1598,23 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 		logProbability$$evidence = 0.0;
 		if(!fixedProbFlag$sample31)
 			logProbability$cat = Double.NaN;
-		logProbability$var43 = 0.0;
 		logProbability$result = 0.0;
 		if(!fixedProbFlag$sample45)
-			logProbability$sample45 = Double.NaN;
+			logProbability$var43 = Double.NaN;
 		if(!fixedProbFlag$sample51)
 			logProbability$data = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		bias[0] = 0.2;
+		bias[1] = 0.3;
+		bias[2] = 0.5;
+		prob[0] = 0.2;
+		prob[1] = 0.4;
+		prob[2] = 0.4;
 	}
 
 	// Construct the evidence probabilities.

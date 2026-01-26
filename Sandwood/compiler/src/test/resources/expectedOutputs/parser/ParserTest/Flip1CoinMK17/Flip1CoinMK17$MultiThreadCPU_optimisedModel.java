@@ -7,6 +7,7 @@ final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean constrainedFlag$sample7 = true;
 	private boolean fixedFlag$sample7 = false;
 	private boolean fixedProbFlag$sample7 = false;
 	private boolean fixedProbFlag$sample9 = false;
@@ -234,7 +235,7 @@ final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = Math.log((flip?bias:(1.0 - bias)));
+			double cv$distributionAccumulator = (((0.0 <= bias) && (bias <= 1.0))?Math.log((flip?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -298,6 +299,8 @@ final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// by sample task 7 drawn from TruncatedGaussian 6. Inference was performed using
 	// Metropolis-Hastings.
 	private final void sample7() {
+		constrainedFlag$sample7 = false;
+		
 		// The original value of the sample
 		double cv$originalValue = bias;
 		
@@ -314,6 +317,9 @@ final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// 
 		// The original value of the sample
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + bias);
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample7 = true;
 		
 		// Variable declaration of cv$originalProbability moved.
 		// Declaration comment was:
@@ -342,12 +348,15 @@ final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Set the current value to the current state of the tree.
 		// 
 		// The original value of the sample
-		double cv$originalProbability = (Math.log((flip?bias:(1.0 - bias))) + (((0.0 <= bias) && (bias <= 1.0))?(DistributionSampling.logProbabilityGaussian((bias - 0.5)) + 0.9599163336956222):Double.NEGATIVE_INFINITY));
+		double cv$originalProbability = ((((0.0 <= bias) && (bias <= 1.0))?Math.log((flip?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY) + (((0.0 <= bias) && (bias <= 1.0))?(DistributionSampling.logProbabilityGaussian((bias - 0.5)) + 0.9599163336956222):Double.NEGATIVE_INFINITY));
 		
 		// Update Sample and intermediate values
 		// 
 		// Write out the new value of the sample.
 		bias = cv$proposedValue;
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample7 = true;
 		
 		// The probability ration for the proposed value and the current value.
 		// 
@@ -368,7 +377,7 @@ final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// 
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
-		double cv$ratio = ((Math.log((flip?cv$proposedValue:(1.0 - cv$proposedValue))) + (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?(DistributionSampling.logProbabilityGaussian((cv$proposedValue - 0.5)) + 0.9599163336956222):Double.NEGATIVE_INFINITY)) - cv$originalProbability);
+		double cv$ratio = (((((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?Math.log((flip?cv$proposedValue:(1.0 - cv$proposedValue))):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?(DistributionSampling.logProbabilityGaussian((cv$proposedValue - 0.5)) + 0.9599163336956222):Double.NEGATIVE_INFINITY)) - cv$originalProbability);
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
@@ -446,11 +455,6 @@ final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -467,6 +471,11 @@ final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedProbFlag$sample9)
 			logProbability$flip = Double.NaN;
 	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {}
 
 	// Construct the evidence probabilities.
 	@Override

@@ -10,6 +10,8 @@ final class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.
 	// Declare the variables for the model.
 	private double[] bias;
 	private int coins;
+	private boolean constrainedFlag$sample10 = true;
+	private boolean[] constrainedFlag$sample23;
 	private boolean fixedFlag$sample10 = false;
 	private boolean fixedFlag$sample23 = false;
 	private boolean fixedProbFlag$sample10 = false;
@@ -428,7 +430,7 @@ final class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.
 					// Store the value of the function call, so the function call is only made once.
 					// 
 					// The sample value to calculate the probability of generating
-					cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[j][var47]?var36:(1.0 - var36))));
+					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var36) && (var36 <= 1.0))?Math.log((flips[j][var47]?var36:(1.0 - var36))):Double.NEGATIVE_INFINITY));
 				}
 			}
 			
@@ -504,6 +506,8 @@ final class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.
 	// by sample task 10 drawn from beta. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample10() {
+		constrainedFlag$sample10 = false;
+		
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
 		
@@ -519,7 +523,11 @@ final class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// 
 			// Substituted "j" with its value "0".
 			for(int var47 = 0; var47 < shape[0]; var47 += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample10 = true;
+				
 				// Include the value sampled by task 48 from random variable bernoulli.
+				// 
 				// Increment the number of samples.
 				cv$count = (cv$count + 1);
 				
@@ -530,18 +538,20 @@ final class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.
 					cv$sum = (cv$sum + 1);
 			}
 		}
-		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		// 
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		bias[0] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		if(constrainedFlag$sample10)
+			// Guards to ensure that bias is only updated when there is a valid path.
+			// 
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			bias[0] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 23 drawn from beta. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample23(int i, int threadID$cv$i, Rng RNG$) {
+		constrainedFlag$sample23[(i - 1)] = false;
+		
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
 		
@@ -552,7 +562,11 @@ final class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// 
 		// Substituted "j" with its value "i".
 		for(int var47 = 0; var47 < shape[i]; var47 += 1) {
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample23[(i - 1)] = true;
+			
 			// Include the value sampled by task 48 from random variable bernoulli.
+			// 
 			// Increment the number of samples.
 			cv$count = (cv$count + 1);
 			
@@ -562,12 +576,12 @@ final class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.
 			if(flips[i][var47])
 				cv$sum = (cv$sum + 1);
 		}
-		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		// 
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		bias[i] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		if(constrainedFlag$sample23[(i - 1)])
+			// Guards to ensure that bias is only updated when there is a valid path.
+			// 
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			bias[i] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -588,6 +602,9 @@ final class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.
 		if((!fixedFlag$sample10 || !fixedFlag$sample23))
 			// Constructor for bias
 			bias = new double[shape.length];
+		
+		// Constructor for constrainedFlag$sample23
+		constrainedFlag$sample23 = new boolean[(shape.length - 1)];
 	}
 
 	// Method to execute the model code conventionally.
@@ -796,13 +813,6 @@ final class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		coins = shape.length;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -823,6 +833,17 @@ final class Flip2CoinsMK10$MultiThreadCPU extends org.sandwood.runtime.internal.
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample48)
 			logProbability$var48 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		coins = shape.length;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample23$1 = 0; index$constrainedFlag$sample23$1 < constrainedFlag$sample23.length; index$constrainedFlag$sample23$1 += 1)
+			constrainedFlag$sample23[index$constrainedFlag$sample23$1] = true;
 	}
 
 	// Construct the evidence probabilities.

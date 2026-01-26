@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  * 
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -11,6 +11,7 @@ package org.sandwood.compiler.compilation.inference;
 import static org.sandwood.compiler.trees.irTree.IRTree.addDD;
 import static org.sandwood.compiler.trees.irTree.IRTree.arrayGet;
 import static org.sandwood.compiler.trees.irTree.IRTree.arrayPut;
+import static org.sandwood.compiler.trees.irTree.IRTree.conditionalAssignment;
 import static org.sandwood.compiler.trees.irTree.IRTree.constant;
 import static org.sandwood.compiler.trees.irTree.IRTree.divideDD;
 import static org.sandwood.compiler.trees.irTree.IRTree.divideDI;
@@ -178,10 +179,10 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
 
     @Override
     protected void constructFunctionVariables(FuncData funcData, CompilationContext compilationCtx) {
-        constructFunctionVariablesProb(funcData, compilationCtx);
+        constructFunctionVariablesProb(funcData);
     }
 
-    protected abstract void constructFunctionVariablesProb(FuncData funcData, CompilationContext compilationCtx);
+    protected abstract void constructFunctionVariablesProb(FuncData funcData);
 
     @Override
     protected void getPerDistributedSampleStartIR(FuncData funcData, DistributionSampleTask<?, ?> s,
@@ -317,9 +318,9 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
             CompilationContext compilationCtx);
 
     @Override
-    protected void addDistributionProbabilities(FuncData funcData, CompilationContext compilationCtx) {
-
-        ScopeConstructor targetScope = funcData.targetScope
+    protected void addDistributionProbabilities(ScopeConstructor targetScope, FuncData funcData,
+            CompilationContext compilationCtx) {
+        targetScope = targetScope
                 .addComment("Set the calculated probabilities to be the distribution values, and normalize");
 
         targetScope.addTree((TreeBuilderInfo info) -> {
@@ -484,7 +485,7 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
      * 
      */
     @Override
-    protected ScopeConstructor getBackTraceScope(FuncData funcData) {
+    protected ScopeConstructor getBackTraceScope(FuncData funcData, CompilationContext compilationCtx) {
         return funcData.targetScope.addForLoop(Variable.intVariable(0), funcData.noStates, Variable.intVariable(1),
                 valuePosName, Tree.NoComment, true);
     }

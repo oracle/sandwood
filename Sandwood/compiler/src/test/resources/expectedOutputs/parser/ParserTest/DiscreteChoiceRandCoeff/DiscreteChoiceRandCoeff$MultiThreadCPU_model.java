@@ -13,6 +13,10 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 	private double b;
 	private double[] beta;
 	private int[] choices;
+	private boolean[] constrainedFlag$sample21;
+	private boolean constrainedFlag$sample28 = true;
+	private boolean constrainedFlag$sample34 = true;
+	private boolean[] constrainedFlag$sample47;
 	private double[][] exped;
 	private boolean fixedFlag$sample21 = false;
 	private boolean fixedFlag$sample28 = false;
@@ -356,7 +360,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 						{
 							{
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noProducts))?Math.log(prob[((i - 0) / 1)][cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][cv$sampleValue])) && (prob[((i - 0) / 1)][cv$sampleValue] <= 1.0))?Math.log(prob[((i - 0) / 1)][cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -466,7 +470,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 								double var8 = 10.0;
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var7) / Math.sqrt(var8))) - (0.5 * Math.log(var8))));
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var8)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var7) / Math.sqrt(var8))) - (0.5 * Math.log(var8))):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -681,7 +685,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 							double var26 = 10.0;
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var25) / Math.sqrt(var26))) - (0.5 * Math.log(var26))));
+							double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var26)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var25) / Math.sqrt(var26))) - (0.5 * Math.log(var26))):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -875,7 +879,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 						{
 							{
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - b) / Math.sqrt(sigma))) - (0.5 * Math.log(sigma))));
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < sigma)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - b) / Math.sqrt(sigma))) - (0.5 * Math.log(sigma))):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1066,6 +1070,8 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 	// by sample task 21 drawn from Gaussian 9. Inference was performed using Metropolis-Hastings.
 	private final void sample21(int var20) {
 		if(true) {
+			constrainedFlag$sample21[((var20 - 0) / 1)] = false;
+			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
 			{
@@ -1092,188 +1098,70 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 			// The probability of the random variable generating the new sample value.
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				// Initialize the summed probabilities to 0.
-				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
-				
-				// Initialize a counter to track the reached distributions.
-				double cv$reachedDistributionSourceRV = 0.0;
-				
-				// Initialize a log space accumulator to take the product of all the distribution
-				// probabilities.
-				double cv$accumulatedDistributionProbabilities = 0.0;
-				
-				// The value currently being tested
-				double cv$currentValue;
-				if((cv$valuePos == 0))
-					// Set the current value to the current state of the tree.
-					cv$currentValue = cv$originalValue;
-				else {
-					cv$currentValue = cv$proposedValue;
+				if((constrainedFlag$sample21[((var20 - 0) / 1)] || (cv$valuePos == 0))) {
+					// Initialize the summed probabilities to 0.
+					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					
-					// Update Sample and intermediate values
-					// 
-					// Write out the value of the sample to a temporary variable prior to updating the
-					// intermediate variables.
-					double var21 = cv$proposedValue;
+					// Initialize a counter to track the reached distributions.
+					double cv$reachedDistributionSourceRV = 0.0;
 					
-					// Guards to ensure that ut is only updated when there is a valid path.
-					{
+					// Initialize a log space accumulator to take the product of all the distribution
+					// probabilities.
+					double cv$accumulatedDistributionProbabilities = 0.0;
+					
+					// The value currently being tested
+					double cv$currentValue;
+					if((cv$valuePos == 0))
+						// Set the current value to the current state of the tree.
+						cv$currentValue = cv$originalValue;
+					else {
+						cv$currentValue = cv$proposedValue;
+						
+						// Update Sample and intermediate values
+						// 
+						// Write out the value of the sample to a temporary variable prior to updating the
+						// intermediate variables.
+						double var21 = cv$proposedValue;
+						
+						// Guards to ensure that ut is only updated when there is a valid path.
 						{
 							{
-								ut[var20] = cv$currentValue;
-							}
-						}
-					}
-					
-					// Guards to ensure that exped is only updated when there is a valid path.
-					// 
-					// Looking for a path between Sample 21 and consumer double[] 77.
-					{
-						{
-							for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-								if((var20 == j$var69)) {
-									for(int i = 0; i < noObs; i += 1)
-										exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+								{
+									ut[var20] = cv$currentValue;
 								}
 							}
 						}
-					}
-					
-					// Guards to ensure that prob is only updated when there is a valid path.
-					// 
-					// Looking for a path between Sample 21 and consumer double[] 100.
-					{
-						// Guard to check that at most one copy of the code is executed for a given random
-						// variable instance.
-						boolean[][] guard$sample21put101 = guard$sample21put101$global;
+						
+						// Guards to ensure that exped is only updated when there is a valid path.
+						// 
+						// Looking for a path between Sample 21 and consumer double[] 77.
 						{
-							for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-								if((var20 == j$var69)) {
-									for(int i = 0; i < noObs; i += 1) {
-										if(((0 <= j$var69) && (j$var69 < noProducts))) {
-											for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
-												// Set the flags to false
-												guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
-										}
+							{
+								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+									if((var20 == j$var69)) {
+										for(int i = 0; i < noObs; i += 1)
+											exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
 									}
 								}
 							}
 						}
-						{
-							for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-								if((var20 == j$var69)) {
-									for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
-										if((j$var69 == j$var97)) {
-											for(int i = 0; i < noObs; i += 1)
-												// Set the flags to false
-												guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
-										}
-									}
-								}
-							}
-						}
-						{
-							for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-								if((var20 == j$var69)) {
-									for(int i = 0; i < noObs; i += 1) {
-										if(((0 <= j$var69) && (j$var69 < noProducts))) {
-											for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
-												if(!guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
-													// The body will execute, so should not be executed again
-													guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
-													{
-														// Reduction of array exped
-														// 
-														// A generated name to prevent name collisions if the reduction is implemented more
-														// than once in inference and probability code. Initialize the variable to the unit
-														// value
-														double reduceVar$sum$16 = 0.0;
-														
-														// For each index in the array to be reduced
-														for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
-															// Set the left hand term of the reduction function to the return variable value.
-															double k = reduceVar$sum$16;
-															
-															// Set the right hand term to a value from the array exped
-															double l = exped[((i - 0) / 1)][cv$reduction82Index];
-															
-															// Execute the reduction function, saving the result into the return value.
-															// 
-															// Copy the result of the reduction into the variable returned by the reduction.
-															reduceVar$sum$16 = (k + l);
-														}
-														prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$16);
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						{
-							for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-								if((var20 == j$var69)) {
-									for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
-										if((j$var69 == j$var97)) {
-											for(int i = 0; i < noObs; i += 1) {
-												if(!guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
-													// The body will execute, so should not be executed again
-													guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
-													{
-														// Reduction of array exped
-														// 
-														// A generated name to prevent name collisions if the reduction is implemented more
-														// than once in inference and probability code. Initialize the variable to the unit
-														// value
-														double reduceVar$sum$17 = 0.0;
-														
-														// For each index in the array to be reduced
-														for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
-															// Set the left hand term of the reduction function to the return variable value.
-															double k = reduceVar$sum$17;
-															
-															// Set the right hand term to a value from the array exped
-															double l = exped[((i - 0) / 1)][cv$reduction82Index];
-															
-															// Execute the reduction function, saving the result into the return value.
-															// 
-															// Copy the result of the reduction into the variable returned by the reduction.
-															reduceVar$sum$17 = (k + l);
-														}
-														prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$17);
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				{
-					// Record the reached probability density.
-					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-					
-					// An accumulator to allow the value for each distribution to be constructed before
-					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$currentValue - 0.0) / Math.sqrt(10.0))) - (0.5 * Math.log(10.0))));
-					
-					// Processing random variable 101.
-					{
-						// Looking for a path between Sample 21 and consumer Categorical 101.
+						
+						// Guards to ensure that prob is only updated when there is a valid path.
+						// 
+						// Looking for a path between Sample 21 and consumer double[] 100.
 						{
 							// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							boolean[] guard$sample21categorical102 = guard$sample21categorical102$global;
+							boolean[][] guard$sample21put101 = guard$sample21put101$global;
 							{
 								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
 									if((var20 == j$var69)) {
 										for(int i = 0; i < noObs; i += 1) {
-											if(((0 <= j$var69) && (j$var69 < noProducts)))
-												// Set the flags to false
-												guard$sample21categorical102[((i - 0) / 1)] = false;
+											if(((0 <= j$var69) && (j$var69 < noProducts))) {
+												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+													// Set the flags to false
+													guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
+											}
 										}
 									}
 								}
@@ -1285,179 +1173,313 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 											if((j$var69 == j$var97)) {
 												for(int i = 0; i < noObs; i += 1)
 													// Set the flags to false
+													guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+									if((var20 == j$var69)) {
+										for(int i = 0; i < noObs; i += 1) {
+											if(((0 <= j$var69) && (j$var69 < noProducts))) {
+												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+													if(!guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
+														// The body will execute, so should not be executed again
+														guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
+														{
+															// Reduction of array exped
+															// 
+															// A generated name to prevent name collisions if the reduction is implemented more
+															// than once in inference and probability code. Initialize the variable to the unit
+															// value
+															double reduceVar$sum$16 = 0.0;
+															
+															// For each index in the array to be reduced
+															for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+																// Set the left hand term of the reduction function to the return variable value.
+																double k = reduceVar$sum$16;
+																
+																// Set the right hand term to a value from the array exped
+																double l = exped[((i - 0) / 1)][cv$reduction82Index];
+																
+																// Execute the reduction function, saving the result into the return value.
+																// 
+																// Copy the result of the reduction into the variable returned by the reduction.
+																reduceVar$sum$16 = (k + l);
+															}
+															prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$16);
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+									if((var20 == j$var69)) {
+										for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+											if((j$var69 == j$var97)) {
+												for(int i = 0; i < noObs; i += 1) {
+													if(!guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
+														// The body will execute, so should not be executed again
+														guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
+														{
+															// Reduction of array exped
+															// 
+															// A generated name to prevent name collisions if the reduction is implemented more
+															// than once in inference and probability code. Initialize the variable to the unit
+															// value
+															double reduceVar$sum$17 = 0.0;
+															
+															// For each index in the array to be reduced
+															for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+																// Set the left hand term of the reduction function to the return variable value.
+																double k = reduceVar$sum$17;
+																
+																// Set the right hand term to a value from the array exped
+																double l = exped[((i - 0) / 1)][cv$reduction82Index];
+																
+																// Execute the reduction function, saving the result into the return value.
+																// 
+																// Copy the result of the reduction into the variable returned by the reduction.
+																reduceVar$sum$17 = (k + l);
+															}
+															prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$17);
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					{
+						// Record the reached probability density.
+						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
+						
+						// An accumulator to allow the value for each distribution to be constructed before
+						// it is added to the index probabilities.
+						double cv$accumulatedProbabilities = (Math.log(1.0) + ((0.0 < 10.0)?(DistributionSampling.logProbabilityGaussian(((cv$currentValue - 0.0) / Math.sqrt(10.0))) - (0.5 * Math.log(10.0))):Double.NEGATIVE_INFINITY));
+						
+						// Processing random variable 101.
+						{
+							// Looking for a path between Sample 21 and consumer Categorical 101.
+							{
+								// Guard to check that at most one copy of the code is executed for a given random
+								// variable instance.
+								boolean[] guard$sample21categorical102 = guard$sample21categorical102$global;
+								{
+									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+										if((var20 == j$var69)) {
+											for(int i = 0; i < noObs; i += 1) {
+												if(((0 <= j$var69) && (j$var69 < noProducts)))
+													// Set the flags to false
 													guard$sample21categorical102[((i - 0) / 1)] = false;
 											}
 										}
 									}
 								}
-							}
-							{
-								double traceTempVariable$var70$9_1 = cv$currentValue;
-								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-									if((var20 == j$var69)) {
-										for(int i = 0; i < noObs; i += 1) {
-											double traceTempVariable$k$9_4 = Math.exp((traceTempVariable$var70$9_1 - (beta[i] * Prices[i][j$var69])));
-											if(((0 <= j$var69) && (j$var69 < noProducts))) {
-												if((0 < noProducts)) {
-													// Reduction of array exped
-													// 
-													// A generated name to prevent name collisions if the reduction is implemented more
-													// than once in inference and probability code. Initialize the variable to the unit
-													// value
-													double reduceVar$sum$18 = 0.0;
-													
-													// Reduce for every value except a masked value which will be skipped.
-													for(int cv$reduction1295Index = 0; cv$reduction1295Index < j$var69; cv$reduction1295Index += 1) {
-														// Set the left hand term of the reduction function to the return variable value.
-														double k = reduceVar$sum$18;
-														
-														// Set the right hand term to a value from the array exped
-														double l = exped[((i - 0) / 1)][cv$reduction1295Index];
-														
-														// Execute the reduction function, saving the result into the return value.
-														// 
-														// Copy the result of the reduction into the variable returned by the reduction.
-														reduceVar$sum$18 = (k + l);
-													}
-													for(int cv$reduction1295Index = (j$var69 + 1); cv$reduction1295Index < noProducts; cv$reduction1295Index += 1) {
-														// Set the left hand term of the reduction function to the return variable value.
-														double k = reduceVar$sum$18;
-														
-														// Set the right hand term to a value from the array exped
-														double l = exped[((i - 0) / 1)][cv$reduction1295Index];
-														
-														// Execute the reduction function, saving the result into the return value.
-														// 
-														// Copy the result of the reduction into the variable returned by the reduction.
-														reduceVar$sum$18 = (k + l);
-													}
-													double cv$reduced82 = reduceVar$sum$18;
-													
-													// Copy the result of the reduction into the variable returned by the reduction.
-													reduceVar$sum$18 = (traceTempVariable$k$9_4 + cv$reduced82);
-													double traceTempVariable$sum$9_5 = reduceVar$sum$18;
-													if(!guard$sample21categorical102[((i - 0) / 1)]) {
-														// The body will execute, so should not be executed again
-														guard$sample21categorical102[((i - 0) / 1)] = true;
-														
-														// Processing sample task 103 of consumer random variable null.
-														{
-															{
-																// Set an accumulator to sum the probabilities for each possible configuration of
-																// inputs.
-																double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																
-																// Set an accumulator to record the consumer distributions not seen. Initially set
-																// to 1 as seen values will be deducted from this value.
-																double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																{
-																	{
-																		{
-																			{
-																				{
-																					// Record the probability of sample task 103 generating output with current configuration.
-																					if(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																					else {
-																						// If the second value is -infinity.
-																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																							cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY));
-																						else
-																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)));
-																					}
-																					
-																					// Recorded the probability of reaching sample task 103 with the current configuration.
-																					cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																				}
-																			}
-																		}
-																	}
-																}
-																
-																// A check to ensure rounding of floating point values can never result in a negative
-																// value.
-																cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																
-																// Multiply (log space add) in the probability of the sample task to the overall probability
-																// for this configuration of the source random variable.
-																if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																else {
-																	// If the second value is -infinity.
-																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																	else
-																		cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								double traceTempVariable$var70$10_1 = cv$currentValue;
-								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-									if((var20 == j$var69)) {
-										for(int i = 0; i < noObs; i += 1) {
-											double traceTempVariable$var98$10_4 = Math.exp((traceTempVariable$var70$10_1 - (beta[i] * Prices[i][j$var69])));
+								{
+									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+										if((var20 == j$var69)) {
 											for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
 												if((j$var69 == j$var97)) {
-													if(!guard$sample21categorical102[((i - 0) / 1)]) {
-														// The body will execute, so should not be executed again
-														guard$sample21categorical102[((i - 0) / 1)] = true;
+													for(int i = 0; i < noObs; i += 1)
+														// Set the flags to false
+														guard$sample21categorical102[((i - 0) / 1)] = false;
+												}
+											}
+										}
+									}
+								}
+								{
+									double traceTempVariable$var70$9_1 = cv$currentValue;
+									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+										if((var20 == j$var69)) {
+											for(int i = 0; i < noObs; i += 1) {
+												double traceTempVariable$k$9_4 = Math.exp((traceTempVariable$var70$9_1 - (beta[i] * Prices[i][j$var69])));
+												if(((0 <= j$var69) && (j$var69 < noProducts))) {
+													if((0 < noProducts)) {
+														// Reduction of array exped
+														// 
+														// A generated name to prevent name collisions if the reduction is implemented more
+														// than once in inference and probability code. Initialize the variable to the unit
+														// value
+														double reduceVar$sum$18 = 0.0;
 														
-														// Processing sample task 103 of consumer random variable null.
-														{
+														// Reduce for every value except a masked value which will be skipped.
+														for(int cv$reduction1373Index = 0; cv$reduction1373Index < j$var69; cv$reduction1373Index += 1) {
+															// Set the left hand term of the reduction function to the return variable value.
+															double k = reduceVar$sum$18;
+															
+															// Set the right hand term to a value from the array exped
+															double l = exped[((i - 0) / 1)][cv$reduction1373Index];
+															
+															// Execute the reduction function, saving the result into the return value.
+															// 
+															// Copy the result of the reduction into the variable returned by the reduction.
+															reduceVar$sum$18 = (k + l);
+														}
+														for(int cv$reduction1373Index = (j$var69 + 1); cv$reduction1373Index < noProducts; cv$reduction1373Index += 1) {
+															// Set the left hand term of the reduction function to the return variable value.
+															double k = reduceVar$sum$18;
+															
+															// Set the right hand term to a value from the array exped
+															double l = exped[((i - 0) / 1)][cv$reduction1373Index];
+															
+															// Execute the reduction function, saving the result into the return value.
+															// 
+															// Copy the result of the reduction into the variable returned by the reduction.
+															reduceVar$sum$18 = (k + l);
+														}
+														double cv$reduced82 = reduceVar$sum$18;
+														
+														// Copy the result of the reduction into the variable returned by the reduction.
+														reduceVar$sum$18 = (traceTempVariable$k$9_4 + cv$reduced82);
+														double traceTempVariable$sum$9_5 = reduceVar$sum$18;
+														if(!guard$sample21categorical102[((i - 0) / 1)]) {
+															// The body will execute, so should not be executed again
+															guard$sample21categorical102[((i - 0) / 1)] = true;
+															
+															// Processing sample task 103 of consumer random variable null.
 															{
-																// Set an accumulator to sum the probabilities for each possible configuration of
-																// inputs.
-																double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																
-																// Set an accumulator to record the consumer distributions not seen. Initially set
-																// to 1 as seen values will be deducted from this value.
-																double cv$consumerDistributionProbabilityAccumulator = 1.0;
 																{
-																	{
+																	// Flag recording if this sample task of the consuming random variable is constrained.
+																	boolean cv$sampleConstrained = true;
+																	if(cv$sampleConstrained) {
+																		// Mark that the sample has observed constrained data.
+																		constrainedFlag$sample21[((var20 - 0) / 1)] = true;
+																		
+																		// Set an accumulator to sum the probabilities for each possible configuration of
+																		// inputs.
+																		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																		
+																		// Set an accumulator to record the consumer distributions not seen. Initially set
+																		// to 1 as seen values will be deducted from this value.
+																		double cv$consumerDistributionProbabilityAccumulator = 1.0;
 																		{
 																			{
 																				{
-																					// Record the probability of sample task 103 generating output with current configuration.
-																					if(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																					else {
-																						// If the second value is -infinity.
-																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																							cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY));
-																						else
-																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)));
+																					{
+																						{
+																							// Record the probability of sample task 103 generating output with current configuration.
+																							if(((Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							else {
+																								// If the second value is -infinity.
+																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY));
+																								else
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)));
+																							}
+																							
+																							// Recorded the probability of reaching sample task 103 with the current configuration.
+																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																						}
 																					}
-																					
-																					// Recorded the probability of reaching sample task 103 with the current configuration.
-																					cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																				}
 																			}
 																		}
+																		
+																		// A check to ensure rounding of floating point values can never result in a negative
+																		// value.
+																		cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																		
+																		// Multiply (log space add) in the probability of the sample task to the overall probability
+																		// for this configuration of the source random variable.
+																		if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																		else {
+																			// If the second value is -infinity.
+																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																				cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																			else
+																				cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																		}
 																	}
 																}
-																
-																// A check to ensure rounding of floating point values can never result in a negative
-																// value.
-																cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																
-																// Multiply (log space add) in the probability of the sample task to the overall probability
-																// for this configuration of the source random variable.
-																if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																else {
-																	// If the second value is -infinity.
-																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																	else
-																		cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									double traceTempVariable$var70$10_1 = cv$currentValue;
+									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+										if((var20 == j$var69)) {
+											for(int i = 0; i < noObs; i += 1) {
+												double traceTempVariable$var98$10_4 = Math.exp((traceTempVariable$var70$10_1 - (beta[i] * Prices[i][j$var69])));
+												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+													if((j$var69 == j$var97)) {
+														if(!guard$sample21categorical102[((i - 0) / 1)]) {
+															// The body will execute, so should not be executed again
+															guard$sample21categorical102[((i - 0) / 1)] = true;
+															
+															// Processing sample task 103 of consumer random variable null.
+															{
+																{
+																	// Flag recording if this sample task of the consuming random variable is constrained.
+																	boolean cv$sampleConstrained = true;
+																	if(cv$sampleConstrained) {
+																		// Mark that the sample has observed constrained data.
+																		constrainedFlag$sample21[((var20 - 0) / 1)] = true;
+																		
+																		// Set an accumulator to sum the probabilities for each possible configuration of
+																		// inputs.
+																		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																		
+																		// Set an accumulator to record the consumer distributions not seen. Initially set
+																		// to 1 as seen values will be deducted from this value.
+																		double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																		{
+																			{
+																				{
+																					{
+																						{
+																							// Record the probability of sample task 103 generating output with current configuration.
+																							if(((Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							else {
+																								// If the second value is -infinity.
+																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY));
+																								else
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)));
+																							}
+																							
+																							// Recorded the probability of reaching sample task 103 with the current configuration.
+																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																						}
+																					}
+																				}
+																			}
+																		}
+																		
+																		// A check to ensure rounding of floating point values can never result in a negative
+																		// value.
+																		cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																		
+																		// Multiply (log space add) in the probability of the sample task to the overall probability
+																		// for this configuration of the source random variable.
+																		if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																		else {
+																			// If the second value is -infinity.
+																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																				cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																			else
+																				cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																		}
+																	}
 																}
 															}
 														}
@@ -1468,171 +1490,173 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 									}
 								}
 							}
+						}
+						
+						// Add the values for the source and any standard consumers for this configuration
+						// of arguments to the source.
+						if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
+							cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
+						else {
+							// If the second value is -infinity.
+							if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
+								cv$stateProbabilityValue = cv$accumulatedProbabilities;
+							else
+								cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
 						}
 					}
 					
-					// Add the values for the source and any standard consumers for this configuration
-					// of arguments to the source.
-					if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
-						cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
-					else {
-						// If the second value is -infinity.
-						if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
-							cv$stateProbabilityValue = cv$accumulatedProbabilities;
-						else
-							cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
-					}
-				}
-				
-				// Save the probability of the original value.
-				if((cv$valuePos == 0))
-					cv$originalProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-				
-				// Save the probability of the proposed value.
-				else
-					cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-			}
-			
-			// The probability ration for the proposed value and the current value.
-			double cv$ratio = (cv$proposedProbability - cv$originalProbability);
-			
-			// Test if the probability of the sample is sufficient to keep the value. This needs
-			// to be less than or equal as otherwise if the proposed value is not possible and
-			// the random value is 0 an impossible value will be accepted.
-			if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
-				// If it is not revert the changes.
-				// 
-				// Set the sample value
-				// Write out the value of the sample to a temporary variable prior to updating the
-				// intermediate variables.
-				double var21 = cv$originalValue;
-				
-				// Guards to ensure that ut is only updated when there is a valid path.
-				{
-					{
-						{
-							ut[var20] = var21;
-						}
-					}
-				}
-				
-				// Guards to ensure that exped is only updated when there is a valid path.
-				// 
-				// Looking for a path between Sample 21 and consumer double[] 77.
-				{
-					{
-						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-							if((var20 == j$var69)) {
-								for(int i = 0; i < noObs; i += 1)
-									exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
-							}
-						}
-					}
-				}
-				
-				// Guards to ensure that prob is only updated when there is a valid path.
-				// 
-				// Looking for a path between Sample 21 and consumer double[] 100.
-				{
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					boolean[][] guard$sample21put101 = guard$sample21put101$global;
-					{
-						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-							if((var20 == j$var69)) {
-								for(int i = 0; i < noObs; i += 1) {
-									if(((0 <= j$var69) && (j$var69 < noProducts))) {
-										for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
-											// Set the flags to false
-											guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
+					// Save the probability of the original value.
+					if((cv$valuePos == 0))
+						cv$originalProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+					
+					// Save the probability of the proposed value.
+					else
+						cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+					
+					// The probability ration for the proposed value and the current value.
+					double cv$ratio = (cv$proposedProbability - cv$originalProbability);
+					
+					// Test if the probability of the sample is sufficient to keep the value. This needs
+					// to be less than or equal as otherwise if the proposed value is not possible and
+					// the random value is 0 an impossible value will be accepted.
+					if((cv$valuePos == 1)) {
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
+							// If it is not revert the changes.
+							// 
+							// Set the sample value
+							// Write out the value of the sample to a temporary variable prior to updating the
+							// intermediate variables.
+							double var21 = cv$originalValue;
+							
+							// Guards to ensure that ut is only updated when there is a valid path.
+							{
+								{
+									{
+										ut[var20] = var21;
 									}
 								}
 							}
-						}
-					}
-					{
-						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-							if((var20 == j$var69)) {
-								for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
-									if((j$var69 == j$var97)) {
-										for(int i = 0; i < noObs; i += 1)
-											// Set the flags to false
-											guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
+							
+							// Guards to ensure that exped is only updated when there is a valid path.
+							// 
+							// Looking for a path between Sample 21 and consumer double[] 77.
+							{
+								{
+									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+										if((var20 == j$var69)) {
+											for(int i = 0; i < noObs; i += 1)
+												exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+										}
 									}
 								}
 							}
-						}
-					}
-					{
-						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-							if((var20 == j$var69)) {
-								for(int i = 0; i < noObs; i += 1) {
-									if(((0 <= j$var69) && (j$var69 < noProducts))) {
-										for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
-											if(!guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
-												// The body will execute, so should not be executed again
-												guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
-												{
-													// Reduction of array exped
-													// 
-													// A generated name to prevent name collisions if the reduction is implemented more
-													// than once in inference and probability code. Initialize the variable to the unit
-													// value
-													double reduceVar$sum$19 = 0.0;
-													
-													// For each index in the array to be reduced
-													for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
-														// Set the left hand term of the reduction function to the return variable value.
-														double k = reduceVar$sum$19;
-														
-														// Set the right hand term to a value from the array exped
-														double l = exped[((i - 0) / 1)][cv$reduction82Index];
-														
-														// Execute the reduction function, saving the result into the return value.
-														// 
-														// Copy the result of the reduction into the variable returned by the reduction.
-														reduceVar$sum$19 = (k + l);
-													}
-													prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$19);
+							
+							// Guards to ensure that prob is only updated when there is a valid path.
+							// 
+							// Looking for a path between Sample 21 and consumer double[] 100.
+							{
+								// Guard to check that at most one copy of the code is executed for a given random
+								// variable instance.
+								boolean[][] guard$sample21put101 = guard$sample21put101$global;
+								{
+									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+										if((var20 == j$var69)) {
+											for(int i = 0; i < noObs; i += 1) {
+												if(((0 <= j$var69) && (j$var69 < noProducts))) {
+													for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+														// Set the flags to false
+														guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
 												}
 											}
 										}
 									}
 								}
-							}
-						}
-					}
-					{
-						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-							if((var20 == j$var69)) {
-								for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
-									if((j$var69 == j$var97)) {
-										for(int i = 0; i < noObs; i += 1) {
-											if(!guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
-												// The body will execute, so should not be executed again
-												guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
-												{
-													// Reduction of array exped
-													// 
-													// A generated name to prevent name collisions if the reduction is implemented more
-													// than once in inference and probability code. Initialize the variable to the unit
-													// value
-													double reduceVar$sum$20 = 0.0;
-													
-													// For each index in the array to be reduced
-													for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
-														// Set the left hand term of the reduction function to the return variable value.
-														double k = reduceVar$sum$20;
-														
-														// Set the right hand term to a value from the array exped
-														double l = exped[((i - 0) / 1)][cv$reduction82Index];
-														
-														// Execute the reduction function, saving the result into the return value.
-														// 
-														// Copy the result of the reduction into the variable returned by the reduction.
-														reduceVar$sum$20 = (k + l);
+								{
+									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+										if((var20 == j$var69)) {
+											for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+												if((j$var69 == j$var97)) {
+													for(int i = 0; i < noObs; i += 1)
+														// Set the flags to false
+														guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+										if((var20 == j$var69)) {
+											for(int i = 0; i < noObs; i += 1) {
+												if(((0 <= j$var69) && (j$var69 < noProducts))) {
+													for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+														if(!guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
+															// The body will execute, so should not be executed again
+															guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
+															{
+																// Reduction of array exped
+																// 
+																// A generated name to prevent name collisions if the reduction is implemented more
+																// than once in inference and probability code. Initialize the variable to the unit
+																// value
+																double reduceVar$sum$19 = 0.0;
+																
+																// For each index in the array to be reduced
+																for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+																	// Set the left hand term of the reduction function to the return variable value.
+																	double k = reduceVar$sum$19;
+																	
+																	// Set the right hand term to a value from the array exped
+																	double l = exped[((i - 0) / 1)][cv$reduction82Index];
+																	
+																	// Execute the reduction function, saving the result into the return value.
+																	// 
+																	// Copy the result of the reduction into the variable returned by the reduction.
+																	reduceVar$sum$19 = (k + l);
+																}
+																prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$19);
+															}
+														}
 													}
-													prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$20);
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+										if((var20 == j$var69)) {
+											for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+												if((j$var69 == j$var97)) {
+													for(int i = 0; i < noObs; i += 1) {
+														if(!guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
+															// The body will execute, so should not be executed again
+															guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
+															{
+																// Reduction of array exped
+																// 
+																// A generated name to prevent name collisions if the reduction is implemented more
+																// than once in inference and probability code. Initialize the variable to the unit
+																// value
+																double reduceVar$sum$20 = 0.0;
+																
+																// For each index in the array to be reduced
+																for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+																	// Set the left hand term of the reduction function to the return variable value.
+																	double k = reduceVar$sum$20;
+																	
+																	// Set the right hand term to a value from the array exped
+																	double l = exped[((i - 0) / 1)][cv$reduction82Index];
+																	
+																	// Execute the reduction function, saving the result into the return value.
+																	// 
+																	// Copy the result of the reduction into the variable returned by the reduction.
+																	reduceVar$sum$20 = (k + l);
+																}
+																prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$20);
+															}
+														}
+													}
 												}
 											}
 										}
@@ -1651,6 +1675,8 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 	// to Gaussian conjugate prior.
 	private final void sample28() {
 		if(true) {
+			constrainedFlag$sample28 = false;
+			
 			// State to record the weighting of each sample that is consumed. This is the:
 			// sum of the sample denominator*(the sample value - the sample nominator).
 			double cv$sum = 0.0;
@@ -1672,25 +1698,41 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 							{
 								{
 									for(int var46 = 0; var46 < noObs; var46 += 1) {
-										// State for tracking the changes that happen to the sampled value between it being
-										// consumed and it being produced.
-										double cv$denominator = 1.0;
-										double cv$numerator = 0.0;
-										
-										// Record the value of a sample generated by a consuming sample 47 of random variable
-										// var35.
-										// 
-										// Add the denominator squared to the sample denominator
-										cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-										
-										// Add the weighting of the sample to the sum.
-										cv$sum = (cv$sum + (cv$denominator * (beta[var46] - cv$numerator)));
-										
-										// If we have not got the value of sigma yet record it and set a flag so it is not
-										// recorded again.
-										if(cv$sigmaNotFound) {
-											cv$sigmaValue = sigma;
-											cv$sigmaNotFound = false;
+										// Flag recording if this sample task of the consuming random variable is constrained.
+										boolean cv$sampleConstrained = (fixedFlag$sample47 || constrainedFlag$sample47[((var46 - 0) / 1)]);
+										if(cv$sampleConstrained) {
+											// Mark that the sample has observed constrained data.
+											constrainedFlag$sample28 = true;
+											{
+												{
+													{
+														{
+															{
+																// State for tracking the changes that happen to the sampled value between it being
+																// consumed and it being produced.
+																double cv$denominator = 1.0;
+																double cv$numerator = 0.0;
+																
+																// Record the value of a sample generated by a consuming sample 47 of random variable
+																// var35.
+																// 
+																// Add the denominator squared to the sample denominator
+																cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+																
+																// Add the weighting of the sample to the sum.
+																cv$sum = (cv$sum + (cv$denominator * (beta[var46] - cv$numerator)));
+																
+																// If we have not got the value of sigma yet record it and set a flag so it is not
+																// recorded again.
+																if(cv$sigmaNotFound) {
+																	cv$sigmaValue = sigma;
+																	cv$sigmaNotFound = false;
+																}
+															}
+														}
+													}
+												}
+											}
 										}
 									}
 								}
@@ -1699,9 +1741,9 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 					}
 				}
 			}
-			
-			// Write out the new value of the sample.
-			b = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+			if(constrainedFlag$sample28)
+				// Write out the new value of the sample.
+				b = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 		}
 	}
 
@@ -1710,6 +1752,8 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 	// Gamma to Gaussian conjugate prior.
 	private final void sample34() {
 		if(true) {
+			constrainedFlag$sample34 = false;
+			
 			// Variable to track the sum of the difference between the samples and the random
 			// variables mean squared.
 			double cv$sum = 0.0;
@@ -1725,19 +1769,35 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 							{
 								{
 									for(int var46 = 0; var46 < noObs; var46 += 1) {
-										// The mean parameter for Gaussian var35.
-										double cv$var35$mu = b;
-										
-										// Consume sample task 47 from random variable var35.
-										// 
-										// The difference between the mean parameter and the value sampled from the Gaussian.
-										double cv$var35$diff = (cv$var35$mu - beta[var46]);
-										
-										// Include this sample by adding the square of the difference to the sum.
-										cv$sum = (cv$sum + (cv$var35$diff * cv$var35$diff));
-										
-										// Increment the number of samples in the calculation.
-										cv$count = (cv$count + 1);
+										// Flag recording if this sample task of the consuming random variable is constrained.
+										boolean cv$sampleConstrained = (fixedFlag$sample47 || constrainedFlag$sample47[((var46 - 0) / 1)]);
+										if(cv$sampleConstrained) {
+											// Mark that the sample has observed constrained data.
+											constrainedFlag$sample34 = true;
+											{
+												{
+													{
+														{
+															{
+																// The mean parameter for Gaussian var35.
+																double cv$var35$mu = b;
+																
+																// Consume sample task 47 from random variable var35.
+																// 
+																// The difference between the mean parameter and the value sampled from the Gaussian.
+																double cv$var35$diff = (cv$var35$mu - beta[var46]);
+																
+																// Include this sample by adding the square of the difference to the sum.
+																cv$sum = (cv$sum + (cv$var35$diff * cv$var35$diff));
+																
+																// Increment the number of samples in the calculation.
+																cv$count = (cv$count + 1);
+															}
+														}
+													}
+												}
+											}
+										}
 									}
 								}
 							}
@@ -1745,9 +1805,9 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 					}
 				}
 			}
-			
-			// Write out the new value of the sample.
-			sigma = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 2.0, 2.0, cv$sum, cv$count);
+			if(constrainedFlag$sample34)
+				// Write out the new value of the sample.
+				sigma = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 2.0, 2.0, cv$sum, cv$count);
 		}
 	}
 
@@ -1755,6 +1815,8 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 	// by sample task 47 drawn from Gaussian 35. Inference was performed using Metropolis-Hastings.
 	private final void sample47(int var46, int threadID$cv$var46, Rng RNG$) {
 		if(true) {
+			constrainedFlag$sample47[((var46 - 0) / 1)] = false;
+			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
 			{
@@ -1781,188 +1843,70 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 			// The probability of the random variable generating the new sample value.
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				// Initialize the summed probabilities to 0.
-				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
-				
-				// Initialize a counter to track the reached distributions.
-				double cv$reachedDistributionSourceRV = 0.0;
-				
-				// Initialize a log space accumulator to take the product of all the distribution
-				// probabilities.
-				double cv$accumulatedDistributionProbabilities = 0.0;
-				
-				// The value currently being tested
-				double cv$currentValue;
-				if((cv$valuePos == 0))
-					// Set the current value to the current state of the tree.
-					cv$currentValue = cv$originalValue;
-				else {
-					cv$currentValue = cv$proposedValue;
+				if((constrainedFlag$sample47[((var46 - 0) / 1)] || (cv$valuePos == 0))) {
+					// Initialize the summed probabilities to 0.
+					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					
-					// Update Sample and intermediate values
-					// 
-					// Write out the value of the sample to a temporary variable prior to updating the
-					// intermediate variables.
-					double var47 = cv$proposedValue;
+					// Initialize a counter to track the reached distributions.
+					double cv$reachedDistributionSourceRV = 0.0;
 					
-					// Guards to ensure that beta is only updated when there is a valid path.
-					{
+					// Initialize a log space accumulator to take the product of all the distribution
+					// probabilities.
+					double cv$accumulatedDistributionProbabilities = 0.0;
+					
+					// The value currently being tested
+					double cv$currentValue;
+					if((cv$valuePos == 0))
+						// Set the current value to the current state of the tree.
+						cv$currentValue = cv$originalValue;
+					else {
+						cv$currentValue = cv$proposedValue;
+						
+						// Update Sample and intermediate values
+						// 
+						// Write out the value of the sample to a temporary variable prior to updating the
+						// intermediate variables.
+						double var47 = cv$proposedValue;
+						
+						// Guards to ensure that beta is only updated when there is a valid path.
 						{
 							{
-								beta[var46] = cv$currentValue;
-							}
-						}
-					}
-					
-					// Guards to ensure that exped is only updated when there is a valid path.
-					// 
-					// Looking for a path between Sample 47 and consumer double[] 77.
-					{
-						{
-							for(int i = 0; i < noObs; i += 1) {
-								if((var46 == i)) {
-									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
-										exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+								{
+									beta[var46] = cv$currentValue;
 								}
 							}
 						}
-					}
-					
-					// Guards to ensure that prob is only updated when there is a valid path.
-					// 
-					// Looking for a path between Sample 47 and consumer double[] 100.
-					{
-						// Guard to check that at most one copy of the code is executed for a given random
-						// variable instance.
-						boolean[][] guard$sample47put101 = guard$sample47put101$global[threadID$cv$var46];
+						
+						// Guards to ensure that exped is only updated when there is a valid path.
+						// 
+						// Looking for a path between Sample 47 and consumer double[] 77.
 						{
-							for(int i = 0; i < noObs; i += 1) {
-								if((var46 == i)) {
-									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-										if(((0 <= j$var69) && (j$var69 < noProducts))) {
-											for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
-												// Set the flags to false
-												guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
-										}
+							{
+								for(int i = 0; i < noObs; i += 1) {
+									if((var46 == i)) {
+										for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
+											exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
 									}
 								}
 							}
 						}
-						{
-							for(int i = 0; i < noObs; i += 1) {
-								if((var46 == i)) {
-									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-										for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
-											if((j$var69 == j$var97))
-												// Set the flags to false
-												guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
-										}
-									}
-								}
-							}
-						}
-						{
-							for(int i = 0; i < noObs; i += 1) {
-								if((var46 == i)) {
-									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-										if(((0 <= j$var69) && (j$var69 < noProducts))) {
-											for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
-												if(!guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
-													// The body will execute, so should not be executed again
-													guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
-													{
-														// Reduction of array exped
-														// 
-														// A generated name to prevent name collisions if the reduction is implemented more
-														// than once in inference and probability code. Initialize the variable to the unit
-														// value
-														double reduceVar$sum$21 = 0.0;
-														
-														// For each index in the array to be reduced
-														for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
-															// Set the left hand term of the reduction function to the return variable value.
-															double k = reduceVar$sum$21;
-															
-															// Set the right hand term to a value from the array exped
-															double l = exped[((i - 0) / 1)][cv$reduction82Index];
-															
-															// Execute the reduction function, saving the result into the return value.
-															// 
-															// Copy the result of the reduction into the variable returned by the reduction.
-															reduceVar$sum$21 = (k + l);
-														}
-														prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$21);
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						{
-							for(int i = 0; i < noObs; i += 1) {
-								if((var46 == i)) {
-									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-										for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
-											if((j$var69 == j$var97)) {
-												if(!guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
-													// The body will execute, so should not be executed again
-													guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
-													{
-														// Reduction of array exped
-														// 
-														// A generated name to prevent name collisions if the reduction is implemented more
-														// than once in inference and probability code. Initialize the variable to the unit
-														// value
-														double reduceVar$sum$22 = 0.0;
-														
-														// For each index in the array to be reduced
-														for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
-															// Set the left hand term of the reduction function to the return variable value.
-															double k = reduceVar$sum$22;
-															
-															// Set the right hand term to a value from the array exped
-															double l = exped[((i - 0) / 1)][cv$reduction82Index];
-															
-															// Execute the reduction function, saving the result into the return value.
-															// 
-															// Copy the result of the reduction into the variable returned by the reduction.
-															reduceVar$sum$22 = (k + l);
-														}
-														prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$22);
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				{
-					// Record the reached probability density.
-					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-					
-					// An accumulator to allow the value for each distribution to be constructed before
-					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$currentValue - b) / Math.sqrt(sigma))) - (0.5 * Math.log(sigma))));
-					
-					// Processing random variable 101.
-					{
-						// Looking for a path between Sample 47 and consumer Categorical 101.
+						
+						// Guards to ensure that prob is only updated when there is a valid path.
+						// 
+						// Looking for a path between Sample 47 and consumer double[] 100.
 						{
 							// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							boolean[] guard$sample47categorical102 = guard$sample47categorical102$global[threadID$cv$var46];
+							boolean[][] guard$sample47put101 = guard$sample47put101$global[threadID$cv$var46];
 							{
 								for(int i = 0; i < noObs; i += 1) {
 									if((var46 == i)) {
 										for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-											if(((0 <= j$var69) && (j$var69 < noProducts)))
-												// Set the flags to false
-												guard$sample47categorical102[((i - 0) / 1)] = false;
+											if(((0 <= j$var69) && (j$var69 < noProducts))) {
+												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+													// Set the flags to false
+													guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
+											}
 										}
 									}
 								}
@@ -1974,109 +1918,313 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 											for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
 												if((j$var69 == j$var97))
 													// Set the flags to false
+													guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int i = 0; i < noObs; i += 1) {
+									if((var46 == i)) {
+										for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+											if(((0 <= j$var69) && (j$var69 < noProducts))) {
+												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+													if(!guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
+														// The body will execute, so should not be executed again
+														guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
+														{
+															// Reduction of array exped
+															// 
+															// A generated name to prevent name collisions if the reduction is implemented more
+															// than once in inference and probability code. Initialize the variable to the unit
+															// value
+															double reduceVar$sum$21 = 0.0;
+															
+															// For each index in the array to be reduced
+															for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+																// Set the left hand term of the reduction function to the return variable value.
+																double k = reduceVar$sum$21;
+																
+																// Set the right hand term to a value from the array exped
+																double l = exped[((i - 0) / 1)][cv$reduction82Index];
+																
+																// Execute the reduction function, saving the result into the return value.
+																// 
+																// Copy the result of the reduction into the variable returned by the reduction.
+																reduceVar$sum$21 = (k + l);
+															}
+															prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$21);
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int i = 0; i < noObs; i += 1) {
+									if((var46 == i)) {
+										for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+											for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+												if((j$var69 == j$var97)) {
+													if(!guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
+														// The body will execute, so should not be executed again
+														guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
+														{
+															// Reduction of array exped
+															// 
+															// A generated name to prevent name collisions if the reduction is implemented more
+															// than once in inference and probability code. Initialize the variable to the unit
+															// value
+															double reduceVar$sum$22 = 0.0;
+															
+															// For each index in the array to be reduced
+															for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+																// Set the left hand term of the reduction function to the return variable value.
+																double k = reduceVar$sum$22;
+																
+																// Set the right hand term to a value from the array exped
+																double l = exped[((i - 0) / 1)][cv$reduction82Index];
+																
+																// Execute the reduction function, saving the result into the return value.
+																// 
+																// Copy the result of the reduction into the variable returned by the reduction.
+																reduceVar$sum$22 = (k + l);
+															}
+															prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$22);
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					{
+						// Record the reached probability density.
+						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
+						
+						// An accumulator to allow the value for each distribution to be constructed before
+						// it is added to the index probabilities.
+						double cv$accumulatedProbabilities = (Math.log(1.0) + ((0.0 < sigma)?(DistributionSampling.logProbabilityGaussian(((cv$currentValue - b) / Math.sqrt(sigma))) - (0.5 * Math.log(sigma))):Double.NEGATIVE_INFINITY));
+						
+						// Processing random variable 101.
+						{
+							// Looking for a path between Sample 47 and consumer Categorical 101.
+							{
+								// Guard to check that at most one copy of the code is executed for a given random
+								// variable instance.
+								boolean[] guard$sample47categorical102 = guard$sample47categorical102$global[threadID$cv$var46];
+								{
+									for(int i = 0; i < noObs; i += 1) {
+										if((var46 == i)) {
+											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+												if(((0 <= j$var69) && (j$var69 < noProducts)))
+													// Set the flags to false
 													guard$sample47categorical102[((i - 0) / 1)] = false;
 											}
 										}
 									}
 								}
-							}
-							{
-								double traceTempVariable$var71$9_1 = cv$currentValue;
-								for(int i = 0; i < noObs; i += 1) {
-									if((var46 == i)) {
-										for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-											double traceTempVariable$k$9_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$9_1 * Prices[i][j$var69])));
-											if(((0 <= j$var69) && (j$var69 < noProducts))) {
-												if((0 < noProducts)) {
-													// Reduction of array exped
-													// 
-													// A generated name to prevent name collisions if the reduction is implemented more
-													// than once in inference and probability code. Initialize the variable to the unit
-													// value
-													double reduceVar$sum$23 = 0.0;
-													
-													// Reduce for every value except a masked value which will be skipped.
-													for(int cv$reduction1620Index = 0; cv$reduction1620Index < j$var69; cv$reduction1620Index += 1) {
-														// Set the left hand term of the reduction function to the return variable value.
-														double k = reduceVar$sum$23;
-														
-														// Set the right hand term to a value from the array exped
-														double l = exped[((i - 0) / 1)][cv$reduction1620Index];
-														
-														// Execute the reduction function, saving the result into the return value.
+								{
+									for(int i = 0; i < noObs; i += 1) {
+										if((var46 == i)) {
+											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+													if((j$var69 == j$var97))
+														// Set the flags to false
+														guard$sample47categorical102[((i - 0) / 1)] = false;
+												}
+											}
+										}
+									}
+								}
+								{
+									double traceTempVariable$var71$9_1 = cv$currentValue;
+									for(int i = 0; i < noObs; i += 1) {
+										if((var46 == i)) {
+											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+												double traceTempVariable$k$9_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$9_1 * Prices[i][j$var69])));
+												if(((0 <= j$var69) && (j$var69 < noProducts))) {
+													if((0 < noProducts)) {
+														// Reduction of array exped
 														// 
+														// A generated name to prevent name collisions if the reduction is implemented more
+														// than once in inference and probability code. Initialize the variable to the unit
+														// value
+														double reduceVar$sum$23 = 0.0;
+														
+														// Reduce for every value except a masked value which will be skipped.
+														for(int cv$reduction1726Index = 0; cv$reduction1726Index < j$var69; cv$reduction1726Index += 1) {
+															// Set the left hand term of the reduction function to the return variable value.
+															double k = reduceVar$sum$23;
+															
+															// Set the right hand term to a value from the array exped
+															double l = exped[((i - 0) / 1)][cv$reduction1726Index];
+															
+															// Execute the reduction function, saving the result into the return value.
+															// 
+															// Copy the result of the reduction into the variable returned by the reduction.
+															reduceVar$sum$23 = (k + l);
+														}
+														for(int cv$reduction1726Index = (j$var69 + 1); cv$reduction1726Index < noProducts; cv$reduction1726Index += 1) {
+															// Set the left hand term of the reduction function to the return variable value.
+															double k = reduceVar$sum$23;
+															
+															// Set the right hand term to a value from the array exped
+															double l = exped[((i - 0) / 1)][cv$reduction1726Index];
+															
+															// Execute the reduction function, saving the result into the return value.
+															// 
+															// Copy the result of the reduction into the variable returned by the reduction.
+															reduceVar$sum$23 = (k + l);
+														}
+														double cv$reduced82 = reduceVar$sum$23;
+														
 														// Copy the result of the reduction into the variable returned by the reduction.
-														reduceVar$sum$23 = (k + l);
-													}
-													for(int cv$reduction1620Index = (j$var69 + 1); cv$reduction1620Index < noProducts; cv$reduction1620Index += 1) {
-														// Set the left hand term of the reduction function to the return variable value.
-														double k = reduceVar$sum$23;
-														
-														// Set the right hand term to a value from the array exped
-														double l = exped[((i - 0) / 1)][cv$reduction1620Index];
-														
-														// Execute the reduction function, saving the result into the return value.
-														// 
-														// Copy the result of the reduction into the variable returned by the reduction.
-														reduceVar$sum$23 = (k + l);
-													}
-													double cv$reduced82 = reduceVar$sum$23;
-													
-													// Copy the result of the reduction into the variable returned by the reduction.
-													reduceVar$sum$23 = (traceTempVariable$k$9_4 + cv$reduced82);
-													double traceTempVariable$sum$9_5 = reduceVar$sum$23;
-													if(!guard$sample47categorical102[((i - 0) / 1)]) {
-														// The body will execute, so should not be executed again
-														guard$sample47categorical102[((i - 0) / 1)] = true;
-														
-														// Processing sample task 103 of consumer random variable null.
-														{
+														reduceVar$sum$23 = (traceTempVariable$k$9_4 + cv$reduced82);
+														double traceTempVariable$sum$9_5 = reduceVar$sum$23;
+														if(!guard$sample47categorical102[((i - 0) / 1)]) {
+															// The body will execute, so should not be executed again
+															guard$sample47categorical102[((i - 0) / 1)] = true;
+															
+															// Processing sample task 103 of consumer random variable null.
 															{
-																// Set an accumulator to sum the probabilities for each possible configuration of
-																// inputs.
-																double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																
-																// Set an accumulator to record the consumer distributions not seen. Initially set
-																// to 1 as seen values will be deducted from this value.
-																double cv$consumerDistributionProbabilityAccumulator = 1.0;
 																{
-																	{
+																	// Flag recording if this sample task of the consuming random variable is constrained.
+																	boolean cv$sampleConstrained = true;
+																	if(cv$sampleConstrained) {
+																		// Mark that the sample has observed constrained data.
+																		constrainedFlag$sample47[((var46 - 0) / 1)] = true;
+																		
+																		// Set an accumulator to sum the probabilities for each possible configuration of
+																		// inputs.
+																		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																		
+																		// Set an accumulator to record the consumer distributions not seen. Initially set
+																		// to 1 as seen values will be deducted from this value.
+																		double cv$consumerDistributionProbabilityAccumulator = 1.0;
 																		{
 																			{
 																				{
-																					// Record the probability of sample task 103 generating output with current configuration.
-																					if(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																					else {
-																						// If the second value is -infinity.
-																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																							cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY));
-																						else
-																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)));
+																					{
+																						{
+																							// Record the probability of sample task 103 generating output with current configuration.
+																							if(((Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							else {
+																								// If the second value is -infinity.
+																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY));
+																								else
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)));
+																							}
+																							
+																							// Recorded the probability of reaching sample task 103 with the current configuration.
+																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																						}
 																					}
-																					
-																					// Recorded the probability of reaching sample task 103 with the current configuration.
-																					cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																				}
 																			}
 																		}
+																		
+																		// A check to ensure rounding of floating point values can never result in a negative
+																		// value.
+																		cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																		
+																		// Multiply (log space add) in the probability of the sample task to the overall probability
+																		// for this configuration of the source random variable.
+																		if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																		else {
+																			// If the second value is -infinity.
+																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																				cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																			else
+																				cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																		}
 																	}
 																}
-																
-																// A check to ensure rounding of floating point values can never result in a negative
-																// value.
-																cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																
-																// Multiply (log space add) in the probability of the sample task to the overall probability
-																// for this configuration of the source random variable.
-																if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																else {
-																	// If the second value is -infinity.
-																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																	else
-																		cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									double traceTempVariable$var71$10_1 = cv$currentValue;
+									for(int i = 0; i < noObs; i += 1) {
+										if((var46 == i)) {
+											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+												double traceTempVariable$var98$10_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$10_1 * Prices[i][j$var69])));
+												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+													if((j$var69 == j$var97)) {
+														if(!guard$sample47categorical102[((i - 0) / 1)]) {
+															// The body will execute, so should not be executed again
+															guard$sample47categorical102[((i - 0) / 1)] = true;
+															
+															// Processing sample task 103 of consumer random variable null.
+															{
+																{
+																	// Flag recording if this sample task of the consuming random variable is constrained.
+																	boolean cv$sampleConstrained = true;
+																	if(cv$sampleConstrained) {
+																		// Mark that the sample has observed constrained data.
+																		constrainedFlag$sample47[((var46 - 0) / 1)] = true;
+																		
+																		// Set an accumulator to sum the probabilities for each possible configuration of
+																		// inputs.
+																		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																		
+																		// Set an accumulator to record the consumer distributions not seen. Initially set
+																		// to 1 as seen values will be deducted from this value.
+																		double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																		{
+																			{
+																				{
+																					{
+																						{
+																							// Record the probability of sample task 103 generating output with current configuration.
+																							if(((Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							else {
+																								// If the second value is -infinity.
+																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY));
+																								else
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)));
+																							}
+																							
+																							// Recorded the probability of reaching sample task 103 with the current configuration.
+																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																						}
+																					}
+																				}
+																			}
+																		}
+																		
+																		// A check to ensure rounding of floating point values can never result in a negative
+																		// value.
+																		cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																		
+																		// Multiply (log space add) in the probability of the sample task to the overall probability
+																		// for this configuration of the source random variable.
+																		if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																		else {
+																			// If the second value is -infinity.
+																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																				cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																			else
+																				cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																		}
+																	}
 																}
 															}
 														}
@@ -2087,241 +2235,173 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 									}
 								}
 							}
-							{
-								double traceTempVariable$var71$10_1 = cv$currentValue;
-								for(int i = 0; i < noObs; i += 1) {
-									if((var46 == i)) {
-										for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-											double traceTempVariable$var98$10_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$10_1 * Prices[i][j$var69])));
-											for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
-												if((j$var69 == j$var97)) {
-													if(!guard$sample47categorical102[((i - 0) / 1)]) {
-														// The body will execute, so should not be executed again
-														guard$sample47categorical102[((i - 0) / 1)] = true;
-														
-														// Processing sample task 103 of consumer random variable null.
-														{
-															{
-																// Set an accumulator to sum the probabilities for each possible configuration of
-																// inputs.
-																double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																
-																// Set an accumulator to record the consumer distributions not seen. Initially set
-																// to 1 as seen values will be deducted from this value.
-																double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																{
-																	{
-																		{
-																			{
-																				{
-																					// Record the probability of sample task 103 generating output with current configuration.
-																					if(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																					else {
-																						// If the second value is -infinity.
-																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																							cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY));
-																						else
-																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)));
-																					}
-																					
-																					// Recorded the probability of reaching sample task 103 with the current configuration.
-																					cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																				}
-																			}
-																		}
-																	}
-																}
-																
-																// A check to ensure rounding of floating point values can never result in a negative
-																// value.
-																cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																
-																// Multiply (log space add) in the probability of the sample task to the overall probability
-																// for this configuration of the source random variable.
-																if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																else {
-																	// If the second value is -infinity.
-																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																	else
-																		cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
+						}
+						
+						// Add the values for the source and any standard consumers for this configuration
+						// of arguments to the source.
+						if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
+							cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
+						else {
+							// If the second value is -infinity.
+							if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
+								cv$stateProbabilityValue = cv$accumulatedProbabilities;
+							else
+								cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
 						}
 					}
 					
-					// Add the values for the source and any standard consumers for this configuration
-					// of arguments to the source.
-					if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
-						cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
-					else {
-						// If the second value is -infinity.
-						if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
-							cv$stateProbabilityValue = cv$accumulatedProbabilities;
-						else
-							cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
-					}
-				}
-				
-				// Save the probability of the original value.
-				if((cv$valuePos == 0))
-					cv$originalProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-				
-				// Save the probability of the proposed value.
-				else
-					cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-			}
-			
-			// The probability ration for the proposed value and the current value.
-			double cv$ratio = (cv$proposedProbability - cv$originalProbability);
-			
-			// Test if the probability of the sample is sufficient to keep the value. This needs
-			// to be less than or equal as otherwise if the proposed value is not possible and
-			// the random value is 0 an impossible value will be accepted.
-			if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
-				// If it is not revert the changes.
-				// 
-				// Set the sample value
-				// Write out the value of the sample to a temporary variable prior to updating the
-				// intermediate variables.
-				double var47 = cv$originalValue;
-				
-				// Guards to ensure that beta is only updated when there is a valid path.
-				{
-					{
-						{
-							beta[var46] = var47;
-						}
-					}
-				}
-				
-				// Guards to ensure that exped is only updated when there is a valid path.
-				// 
-				// Looking for a path between Sample 47 and consumer double[] 77.
-				{
-					{
-						for(int i = 0; i < noObs; i += 1) {
-							if((var46 == i)) {
-								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
-									exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
-							}
-						}
-					}
-				}
-				
-				// Guards to ensure that prob is only updated when there is a valid path.
-				// 
-				// Looking for a path between Sample 47 and consumer double[] 100.
-				{
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					boolean[][] guard$sample47put101 = guard$sample47put101$global[threadID$cv$var46];
-					{
-						for(int i = 0; i < noObs; i += 1) {
-							if((var46 == i)) {
-								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-									if(((0 <= j$var69) && (j$var69 < noProducts))) {
-										for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
-											// Set the flags to false
-											guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
+					// Save the probability of the original value.
+					if((cv$valuePos == 0))
+						cv$originalProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+					
+					// Save the probability of the proposed value.
+					else
+						cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+					
+					// The probability ration for the proposed value and the current value.
+					double cv$ratio = (cv$proposedProbability - cv$originalProbability);
+					
+					// Test if the probability of the sample is sufficient to keep the value. This needs
+					// to be less than or equal as otherwise if the proposed value is not possible and
+					// the random value is 0 an impossible value will be accepted.
+					if((cv$valuePos == 1)) {
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
+							// If it is not revert the changes.
+							// 
+							// Set the sample value
+							// Write out the value of the sample to a temporary variable prior to updating the
+							// intermediate variables.
+							double var47 = cv$originalValue;
+							
+							// Guards to ensure that beta is only updated when there is a valid path.
+							{
+								{
+									{
+										beta[var46] = var47;
 									}
 								}
 							}
-						}
-					}
-					{
-						for(int i = 0; i < noObs; i += 1) {
-							if((var46 == i)) {
-								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-									for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
-										if((j$var69 == j$var97))
-											// Set the flags to false
-											guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
+							
+							// Guards to ensure that exped is only updated when there is a valid path.
+							// 
+							// Looking for a path between Sample 47 and consumer double[] 77.
+							{
+								{
+									for(int i = 0; i < noObs; i += 1) {
+										if((var46 == i)) {
+											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
+												exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+										}
 									}
 								}
 							}
-						}
-					}
-					{
-						for(int i = 0; i < noObs; i += 1) {
-							if((var46 == i)) {
-								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-									if(((0 <= j$var69) && (j$var69 < noProducts))) {
-										for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
-											if(!guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
-												// The body will execute, so should not be executed again
-												guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
-												{
-													// Reduction of array exped
-													// 
-													// A generated name to prevent name collisions if the reduction is implemented more
-													// than once in inference and probability code. Initialize the variable to the unit
-													// value
-													double reduceVar$sum$24 = 0.0;
-													
-													// For each index in the array to be reduced
-													for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
-														// Set the left hand term of the reduction function to the return variable value.
-														double k = reduceVar$sum$24;
-														
-														// Set the right hand term to a value from the array exped
-														double l = exped[((i - 0) / 1)][cv$reduction82Index];
-														
-														// Execute the reduction function, saving the result into the return value.
-														// 
-														// Copy the result of the reduction into the variable returned by the reduction.
-														reduceVar$sum$24 = (k + l);
-													}
-													prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$24);
+							
+							// Guards to ensure that prob is only updated when there is a valid path.
+							// 
+							// Looking for a path between Sample 47 and consumer double[] 100.
+							{
+								// Guard to check that at most one copy of the code is executed for a given random
+								// variable instance.
+								boolean[][] guard$sample47put101 = guard$sample47put101$global[threadID$cv$var46];
+								{
+									for(int i = 0; i < noObs; i += 1) {
+										if((var46 == i)) {
+											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+												if(((0 <= j$var69) && (j$var69 < noProducts))) {
+													for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+														// Set the flags to false
+														guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
 												}
 											}
 										}
 									}
 								}
-							}
-						}
-					}
-					{
-						for(int i = 0; i < noObs; i += 1) {
-							if((var46 == i)) {
-								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-									for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
-										if((j$var69 == j$var97)) {
-											if(!guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
-												// The body will execute, so should not be executed again
-												guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
-												{
-													// Reduction of array exped
-													// 
-													// A generated name to prevent name collisions if the reduction is implemented more
-													// than once in inference and probability code. Initialize the variable to the unit
-													// value
-													double reduceVar$sum$25 = 0.0;
-													
-													// For each index in the array to be reduced
-													for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
-														// Set the left hand term of the reduction function to the return variable value.
-														double k = reduceVar$sum$25;
-														
-														// Set the right hand term to a value from the array exped
-														double l = exped[((i - 0) / 1)][cv$reduction82Index];
-														
-														// Execute the reduction function, saving the result into the return value.
-														// 
-														// Copy the result of the reduction into the variable returned by the reduction.
-														reduceVar$sum$25 = (k + l);
+								{
+									for(int i = 0; i < noObs; i += 1) {
+										if((var46 == i)) {
+											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+													if((j$var69 == j$var97))
+														// Set the flags to false
+														guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int i = 0; i < noObs; i += 1) {
+										if((var46 == i)) {
+											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+												if(((0 <= j$var69) && (j$var69 < noProducts))) {
+													for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+														if(!guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
+															// The body will execute, so should not be executed again
+															guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
+															{
+																// Reduction of array exped
+																// 
+																// A generated name to prevent name collisions if the reduction is implemented more
+																// than once in inference and probability code. Initialize the variable to the unit
+																// value
+																double reduceVar$sum$24 = 0.0;
+																
+																// For each index in the array to be reduced
+																for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+																	// Set the left hand term of the reduction function to the return variable value.
+																	double k = reduceVar$sum$24;
+																	
+																	// Set the right hand term to a value from the array exped
+																	double l = exped[((i - 0) / 1)][cv$reduction82Index];
+																	
+																	// Execute the reduction function, saving the result into the return value.
+																	// 
+																	// Copy the result of the reduction into the variable returned by the reduction.
+																	reduceVar$sum$24 = (k + l);
+																}
+																prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$24);
+															}
+														}
 													}
-													prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$25);
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int i = 0; i < noObs; i += 1) {
+										if((var46 == i)) {
+											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+													if((j$var69 == j$var97)) {
+														if(!guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
+															// The body will execute, so should not be executed again
+															guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
+															{
+																// Reduction of array exped
+																// 
+																// A generated name to prevent name collisions if the reduction is implemented more
+																// than once in inference and probability code. Initialize the variable to the unit
+																// value
+																double reduceVar$sum$25 = 0.0;
+																
+																// For each index in the array to be reduced
+																for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+																	// Set the left hand term of the reduction function to the return variable value.
+																	double k = reduceVar$sum$25;
+																	
+																	// Set the right hand term to a value from the array exped
+																	double l = exped[((i - 0) / 1)][cv$reduction82Index];
+																	
+																	// Execute the reduction function, saving the result into the return value.
+																	// 
+																	// Copy the result of the reduction into the variable returned by the reduction.
+																	reduceVar$sum$25 = (k + l);
+																}
+																prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$25);
+															}
+														}
+													}
 												}
 											}
 										}
@@ -2454,6 +2534,16 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 			prob = new double[((((noObs - 1) - 0) / 1) + 1)][];
 			for(int i = 0; i < noObs; i += 1)
 				prob[((i - 0) / 1)] = new double[noProducts];
+		}
+		
+		// Constructor for constrainedFlag$sample47
+		{
+			constrainedFlag$sample47 = new boolean[((((noObs - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample21
+		{
+			constrainedFlag$sample21 = new boolean[((((noProducts - 1) - 0) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$sample21
@@ -3011,11 +3101,6 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -3046,6 +3131,19 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 			for(int i = 0; i < noObs; i += 1)
 				logProbability$sample103[((i - 0) / 1)] = Double.NaN;
 		}
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
+			constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample21$1 = 0; index$constrainedFlag$sample21$1 < constrainedFlag$sample21.length; index$constrainedFlag$sample21$1 += 1)
+			constrainedFlag$sample21[index$constrainedFlag$sample21$1] = true;
 	}
 
 	// Construct the evidence probabilities.

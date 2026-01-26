@@ -8,6 +8,7 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean constrainedFlag$sample14 = true;
 	private boolean flip;
 	private boolean flipMeasured;
 	private double guard;
@@ -159,7 +160,7 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			cv$sampleAccumulator = Math.log((flip?bias:(1.0 - bias)));
+			cv$sampleAccumulator = (((0.0 <= bias) && (bias <= 1.0))?Math.log((flip?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -194,8 +195,13 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// by sample task 14 drawn from Beta 11. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample14() {
+		constrainedFlag$sample14 = false;
+		
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample14 = true;
 		
 		// If the sample value was positive increase the count
 		if(flip)
@@ -203,10 +209,6 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			cv$sum = 1;
 		
 		// Write out the new value of the sample.
-		// 
-		// Processing random variable 13.
-		// 
-		// Processing sample task 16 of consumer random variable bernoulli.
 		// 
 		// Include the value sampled by task 16 from random variable bernoulli.
 		// 
@@ -282,11 +284,6 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -301,6 +298,11 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$bernoulli = Double.NaN;
 		logProbability$flip = Double.NaN;
 	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {}
 
 	// Construct the evidence probabilities.
 	@Override

@@ -8,6 +8,8 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 	// Declare the variables for the model.
 	private double b0;
 	private double b1;
+	private boolean constrainedFlag$sample11 = true;
+	private boolean constrainedFlag$sample7 = true;
 	private boolean fixedFlag$sample11 = false;
 	private boolean fixedFlag$sample7 = false;
 	private boolean fixedProbFlag$sample11 = false;
@@ -444,6 +446,8 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 11 drawn from HalfCauchy 10. Inference was performed using Metropolis-Hastings.
 	private final void sample11() {
+		constrainedFlag$sample11 = false;
+		
 		// The original value of the sample
 		double cv$originalValue = b1;
 		
@@ -473,9 +477,10 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// The original value of the sample
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityHalfCauchy(b1, 1.0, 5.0);
-			
-			// Processing random variable 26.
-			for(int i = 0; i < noSamples; i += 1)
+			for(int i = 0; i < noSamples; i += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample11 = true;
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -486,8 +491,6 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 				// Declaration comment was:
-				// Processing sample task 27 of consumer random variable null.
-				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
@@ -497,6 +500,7 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// The original value of the sample
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (b0 + (b1 * x[i]))) + cv$accumulatedProbabilities);
+			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
@@ -507,60 +511,65 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		
-		// Update Sample and intermediate values
-		// 
-		// Write out the new value of the sample.
-		b1 = cv$proposedValue;
-		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityHalfCauchy(cv$proposedValue, 1.0, 5.0);
-		
-		// Processing random variable 26.
-		for(int i = 0; i < noSamples; i += 1)
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 27 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-			// Declaration comment was:
-			// Processing sample task 27 of consumer random variable null.
-			// 
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
-			// 
-			// Constructing a random variable input for use later.
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (b0 + (cv$proposedValue * x[i]))) + cv$accumulatedProbabilities);
-		
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
-			// If it is not revert the changes.
-			// 
-			// Set the sample value
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(constrainedFlag$sample11) {
+			// Update Sample and intermediate values
 			// 
 			// Write out the new value of the sample.
-			b1 = cv$originalValue;
+			b1 = cv$proposedValue;
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityHalfCauchy(cv$proposedValue, 1.0, 5.0);
+			for(int i = 0; i < noSamples; i += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample11 = true;
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 27 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				// 
+				// Constructing a random variable input for use later.
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (b0 + (cv$proposedValue * x[i]))) + cv$accumulatedProbabilities);
+			}
+			
+			// The probability ration for the proposed value and the current value.
+			// 
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+				// If it is not revert the changes.
+				// 
+				// Set the sample value
+				// 
+				// Write out the new value of the sample.
+				b1 = cv$originalValue;
+		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 7 drawn from Cauchy 6. Inference was performed using Metropolis-Hastings.
 	private final void sample7() {
+		constrainedFlag$sample7 = false;
+		
 		// The original value of the sample
 		double cv$originalValue = b0;
 		
@@ -590,9 +599,10 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// The original value of the sample
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCauchy(b0, 0.0, 2.0);
-			
-			// Processing random variable 26.
-			for(int i = 0; i < noSamples; i += 1)
+			for(int i = 0; i < noSamples; i += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample7 = true;
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -603,8 +613,6 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 				// Declaration comment was:
-				// Processing sample task 27 of consumer random variable null.
-				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
@@ -614,6 +622,7 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// The original value of the sample
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (b0 + (b1 * x[i]))) + cv$accumulatedProbabilities);
+			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
@@ -624,55 +633,58 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		
-		// Update Sample and intermediate values
-		// 
-		// Write out the new value of the sample.
-		b0 = cv$proposedValue;
-		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCauchy(cv$proposedValue, 0.0, 2.0);
-		
-		// Processing random variable 26.
-		for(int i = 0; i < noSamples; i += 1)
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 27 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-			// Declaration comment was:
-			// Processing sample task 27 of consumer random variable null.
-			// 
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
-			// 
-			// Constructing a random variable input for use later.
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (cv$proposedValue + (b1 * x[i]))) + cv$accumulatedProbabilities);
-		
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
-			// If it is not revert the changes.
-			// 
-			// Set the sample value
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(constrainedFlag$sample7) {
+			// Update Sample and intermediate values
 			// 
 			// Write out the new value of the sample.
-			b0 = cv$originalValue;
+			b0 = cv$proposedValue;
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCauchy(cv$proposedValue, 0.0, 2.0);
+			for(int i = 0; i < noSamples; i += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample7 = true;
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 27 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				// 
+				// Constructing a random variable input for use later.
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (cv$proposedValue + (b1 * x[i]))) + cv$accumulatedProbabilities);
+			}
+			
+			// The probability ration for the proposed value and the current value.
+			// 
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+				// If it is not revert the changes.
+				// 
+				// Set the sample value
+				// 
+				// Write out the new value of the sample.
+				b0 = cv$originalValue;
+		}
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -786,13 +798,6 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		noSamples = x.length;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -812,6 +817,13 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 			for(int i = 0; i < noSamples; i += 1)
 				logProbability$sample27[i] = Double.NaN;
 		}
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		noSamples = x.length;
 	}
 
 	// Construct the evidence probabilities.

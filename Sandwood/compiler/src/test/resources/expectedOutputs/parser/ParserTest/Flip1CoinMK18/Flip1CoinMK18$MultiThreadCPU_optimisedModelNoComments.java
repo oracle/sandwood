@@ -8,6 +8,8 @@ final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private int b;
 	private double[][][] bias;
 	private int c;
+	private boolean constrainedFlag$sample11 = true;
+	private boolean constrainedFlag$sample17 = true;
 	private boolean fixedFlag$sample11 = false;
 	private boolean fixedFlag$sample17 = false;
 	private boolean fixedProbFlag$sample103 = false;
@@ -180,7 +182,7 @@ final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$sampleAccumulator = 0.0;
 			for(int var96 = 0; var96 < samples; var96 += 1) {
 				double var84 = bias[a][b][c];
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[var96]?var84:(1.0 - var84))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var84) && (var84 <= 1.0))?Math.log((flips[var96]?var84:(1.0 - var84))):Double.NEGATIVE_INFINITY));
 			}
 			logProbability$bernoulli = cv$sampleAccumulator;
 			logProbability$var97 = cv$sampleAccumulator;
@@ -231,160 +233,194 @@ final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	private final void sample11() {
+		constrainedFlag$sample11 = false;
 		double cv$originalValue = q;
 		double cv$originalProbability;
 		double cv$var = ((q * q) * 0.010000000000000002);
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + q);
-		double cv$proposedProbability;
 		{
-			{
-				double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(q, 1.0, 1.0);
-				if((((0 == a) && (1 == b)) && (0 == c))) {
-					double traceTempVariable$var84$5_2 = (1 - q);
-					for(int var96 = 0; var96 < samples; var96 += 1)
-						cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$5_2:(1.0 - traceTempVariable$var84$5_2))) + cv$accumulatedProbabilities);
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(q, 1.0, 1.0);
+			if((((0 == a) && (1 == b)) && (0 == c))) {
+				double traceTempVariable$var84$5_2 = (1 - q);
+				for(int var96 = 0; var96 < samples; var96 += 1) {
+					constrainedFlag$sample11 = true;
+					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var84$5_2) && (traceTempVariable$var84$5_2 <= 1.0))?Math.log((flips[var96]?traceTempVariable$var84$5_2:(1.0 - traceTempVariable$var84$5_2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
-				if((1 == a)) {
-					if(((0 == b) && (1 == c))) {
-						double traceTempVariable$var84$6_2 = (1 - q);
-						for(int var96 = 0; var96 < samples; var96 += 1)
-							cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$6_2:(1.0 - traceTempVariable$var84$6_2))) + cv$accumulatedProbabilities);
-					}
-					if((1 == b)) {
-						if((0 == c)) {
-							double traceTempVariable$var84$7_2 = (1 - q);
-							for(int var96 = 0; var96 < samples; var96 += 1)
-								cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$7_2:(1.0 - traceTempVariable$var84$7_2))) + cv$accumulatedProbabilities);
-						}
-						if((1 == c)) {
-							for(int var96 = 0; var96 < samples; var96 += 1)
-								cv$accumulatedProbabilities = (Math.log((flips[var96]?q:(1.0 - q))) + cv$accumulatedProbabilities);
-						}
-					}
-				}
-				cv$originalProbability = cv$accumulatedProbabilities;
 			}
-			q = cv$proposedValue;
-			bias[0][1][0] = (1 - cv$proposedValue);
-			double[][] var52 = bias[1];
-			var52[0][1] = (1 - cv$proposedValue);
-			double[] var67 = var52[1];
-			var67[0] = (1 - cv$proposedValue);
-			var67[1] = cv$proposedValue;
+			if((1 == a)) {
+				if(((0 == b) && (1 == c))) {
+					double traceTempVariable$var84$6_2 = (1 - q);
+					for(int var96 = 0; var96 < samples; var96 += 1) {
+						constrainedFlag$sample11 = true;
+						cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var84$6_2) && (traceTempVariable$var84$6_2 <= 1.0))?Math.log((flips[var96]?traceTempVariable$var84$6_2:(1.0 - traceTempVariable$var84$6_2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					}
+				}
+				if((1 == b)) {
+					if((0 == c)) {
+						double traceTempVariable$var84$7_2 = (1 - q);
+						for(int var96 = 0; var96 < samples; var96 += 1) {
+							constrainedFlag$sample11 = true;
+							cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var84$7_2) && (traceTempVariable$var84$7_2 <= 1.0))?Math.log((flips[var96]?traceTempVariable$var84$7_2:(1.0 - traceTempVariable$var84$7_2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						}
+					}
+					if((1 == c)) {
+						for(int var96 = 0; var96 < samples; var96 += 1) {
+							constrainedFlag$sample11 = true;
+							cv$accumulatedProbabilities = ((((0.0 <= q) && (q <= 1.0))?Math.log((flips[var96]?q:(1.0 - q))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						}
+					}
+				}
+			}
+			cv$originalProbability = cv$accumulatedProbabilities;
+		}
+		if(constrainedFlag$sample11) {
+			{
+				q = cv$proposedValue;
+				bias[0][1][0] = (1 - cv$proposedValue);
+				double[][] var52 = bias[1];
+				var52[0][1] = (1 - cv$proposedValue);
+				double[] var67 = var52[1];
+				var67[0] = (1 - cv$proposedValue);
+				var67[1] = cv$proposedValue;
+			}
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, 1.0, 1.0);
 			if((((0 == a) && (1 == b)) && (0 == c))) {
 				double traceTempVariable$var84$5_2 = (1 - cv$proposedValue);
-				for(int var96 = 0; var96 < samples; var96 += 1)
-					cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$5_2:(1.0 - traceTempVariable$var84$5_2))) + cv$accumulatedProbabilities);
+				for(int var96 = 0; var96 < samples; var96 += 1) {
+					constrainedFlag$sample11 = true;
+					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var84$5_2) && (traceTempVariable$var84$5_2 <= 1.0))?Math.log((flips[var96]?traceTempVariable$var84$5_2:(1.0 - traceTempVariable$var84$5_2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
 			}
 			if((1 == a)) {
 				if(((0 == b) && (1 == c))) {
 					double traceTempVariable$var84$6_2 = (1 - cv$proposedValue);
-					for(int var96 = 0; var96 < samples; var96 += 1)
-						cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$6_2:(1.0 - traceTempVariable$var84$6_2))) + cv$accumulatedProbabilities);
+					for(int var96 = 0; var96 < samples; var96 += 1) {
+						constrainedFlag$sample11 = true;
+						cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var84$6_2) && (traceTempVariable$var84$6_2 <= 1.0))?Math.log((flips[var96]?traceTempVariable$var84$6_2:(1.0 - traceTempVariable$var84$6_2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					}
 				}
 				if((1 == b)) {
 					if((0 == c)) {
 						double traceTempVariable$var84$7_2 = (1 - cv$proposedValue);
-						for(int var96 = 0; var96 < samples; var96 += 1)
-							cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$7_2:(1.0 - traceTempVariable$var84$7_2))) + cv$accumulatedProbabilities);
+						for(int var96 = 0; var96 < samples; var96 += 1) {
+							constrainedFlag$sample11 = true;
+							cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var84$7_2) && (traceTempVariable$var84$7_2 <= 1.0))?Math.log((flips[var96]?traceTempVariable$var84$7_2:(1.0 - traceTempVariable$var84$7_2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						}
 					}
 					if((1 == c)) {
-						for(int var96 = 0; var96 < samples; var96 += 1)
-							cv$accumulatedProbabilities = (Math.log((flips[var96]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
+						for(int var96 = 0; var96 < samples; var96 += 1) {
+							constrainedFlag$sample11 = true;
+							cv$accumulatedProbabilities = ((((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?Math.log((flips[var96]?cv$proposedValue:(1.0 - cv$proposedValue))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						}
 					}
 				}
 			}
-			cv$proposedProbability = cv$accumulatedProbabilities;
-		}
-		double cv$ratio = (cv$proposedProbability - cv$originalProbability);
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-			q = cv$originalValue;
-			bias[0][1][0] = (1 - cv$originalValue);
-			double[][] var52 = bias[1];
-			var52[0][1] = (1 - cv$originalValue);
-			double[] var67 = var52[1];
-			var67[0] = (1 - cv$originalValue);
-			var67[1] = cv$originalValue;
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				q = cv$originalValue;
+				bias[0][1][0] = (1 - cv$originalValue);
+				double[][] var52 = bias[1];
+				var52[0][1] = (1 - cv$originalValue);
+				double[] var67 = var52[1];
+				var67[0] = (1 - cv$originalValue);
+				var67[1] = cv$originalValue;
+			}
 		}
 	}
 
 	private final void sample17() {
+		constrainedFlag$sample17 = false;
 		double cv$originalValue = t;
 		double cv$originalProbability;
 		double cv$var = ((t * t) * 0.010000000000000002);
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + t);
-		double cv$proposedProbability;
 		{
-			{
-				double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(t, 1.0, 1.0);
-				if((0 == a)) {
-					if((0 == b)) {
-						if((0 == c)) {
-							for(int var96 = 0; var96 < samples; var96 += 1)
-								cv$accumulatedProbabilities = (Math.log((flips[var96]?t:(1.0 - t))) + cv$accumulatedProbabilities);
-						}
-						if((1 == c)) {
-							double traceTempVariable$var84$6_2 = (1 - t);
-							for(int var96 = 0; var96 < samples; var96 += 1)
-								cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$6_2:(1.0 - traceTempVariable$var84$6_2))) + cv$accumulatedProbabilities);
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(t, 1.0, 1.0);
+			if((0 == a)) {
+				if((0 == b)) {
+					if((0 == c)) {
+						for(int var96 = 0; var96 < samples; var96 += 1) {
+							constrainedFlag$sample17 = true;
+							cv$accumulatedProbabilities = ((((0.0 <= t) && (t <= 1.0))?Math.log((flips[var96]?t:(1.0 - t))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 						}
 					}
-					if(((1 == b) && (1 == c))) {
-						for(int var96 = 0; var96 < samples; var96 += 1)
-							cv$accumulatedProbabilities = (Math.log((flips[var96]?t:(1.0 - t))) + cv$accumulatedProbabilities);
+					if((1 == c)) {
+						double traceTempVariable$var84$6_2 = (1 - t);
+						for(int var96 = 0; var96 < samples; var96 += 1) {
+							constrainedFlag$sample17 = true;
+							cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var84$6_2) && (traceTempVariable$var84$6_2 <= 1.0))?Math.log((flips[var96]?traceTempVariable$var84$6_2:(1.0 - traceTempVariable$var84$6_2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						}
 					}
 				}
-				if((((1 == a) && (0 == b)) && (0 == c))) {
-					for(int var96 = 0; var96 < samples; var96 += 1)
-						cv$accumulatedProbabilities = (Math.log((flips[var96]?t:(1.0 - t))) + cv$accumulatedProbabilities);
+				if(((1 == b) && (1 == c))) {
+					for(int var96 = 0; var96 < samples; var96 += 1) {
+						constrainedFlag$sample17 = true;
+						cv$accumulatedProbabilities = ((((0.0 <= t) && (t <= 1.0))?Math.log((flips[var96]?t:(1.0 - t))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					}
 				}
-				cv$originalProbability = cv$accumulatedProbabilities;
 			}
-			t = cv$proposedValue;
-			double[][] var21 = bias[0];
-			double[] var23 = var21[0];
-			var23[0] = cv$proposedValue;
-			var23[1] = (1 - cv$proposedValue);
-			var21[1][1] = cv$proposedValue;
-			bias[1][0][0] = cv$proposedValue;
+			if((((1 == a) && (0 == b)) && (0 == c))) {
+				for(int var96 = 0; var96 < samples; var96 += 1) {
+					constrainedFlag$sample17 = true;
+					cv$accumulatedProbabilities = ((((0.0 <= t) && (t <= 1.0))?Math.log((flips[var96]?t:(1.0 - t))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
+			}
+			cv$originalProbability = cv$accumulatedProbabilities;
+		}
+		if(constrainedFlag$sample17) {
+			{
+				t = cv$proposedValue;
+				double[][] var21 = bias[0];
+				double[] var23 = var21[0];
+				var23[0] = cv$proposedValue;
+				var23[1] = (1 - cv$proposedValue);
+				var21[1][1] = cv$proposedValue;
+				bias[1][0][0] = cv$proposedValue;
+			}
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, 1.0, 1.0);
 			if((0 == a)) {
 				if((0 == b)) {
 					if((0 == c)) {
-						for(int var96 = 0; var96 < samples; var96 += 1)
-							cv$accumulatedProbabilities = (Math.log((flips[var96]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
+						for(int var96 = 0; var96 < samples; var96 += 1) {
+							constrainedFlag$sample17 = true;
+							cv$accumulatedProbabilities = ((((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?Math.log((flips[var96]?cv$proposedValue:(1.0 - cv$proposedValue))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						}
 					}
 					if((1 == c)) {
 						double traceTempVariable$var84$6_2 = (1 - cv$proposedValue);
-						for(int var96 = 0; var96 < samples; var96 += 1)
-							cv$accumulatedProbabilities = (Math.log((flips[var96]?traceTempVariable$var84$6_2:(1.0 - traceTempVariable$var84$6_2))) + cv$accumulatedProbabilities);
+						for(int var96 = 0; var96 < samples; var96 += 1) {
+							constrainedFlag$sample17 = true;
+							cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var84$6_2) && (traceTempVariable$var84$6_2 <= 1.0))?Math.log((flips[var96]?traceTempVariable$var84$6_2:(1.0 - traceTempVariable$var84$6_2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						}
 					}
 				}
 				if(((1 == b) && (1 == c))) {
-					for(int var96 = 0; var96 < samples; var96 += 1)
-						cv$accumulatedProbabilities = (Math.log((flips[var96]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
+					for(int var96 = 0; var96 < samples; var96 += 1) {
+						constrainedFlag$sample17 = true;
+						cv$accumulatedProbabilities = ((((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?Math.log((flips[var96]?cv$proposedValue:(1.0 - cv$proposedValue))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					}
 				}
 			}
 			if((((1 == a) && (0 == b)) && (0 == c))) {
-				for(int var96 = 0; var96 < samples; var96 += 1)
-					cv$accumulatedProbabilities = (Math.log((flips[var96]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
+				for(int var96 = 0; var96 < samples; var96 += 1) {
+					constrainedFlag$sample17 = true;
+					cv$accumulatedProbabilities = ((((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?Math.log((flips[var96]?cv$proposedValue:(1.0 - cv$proposedValue))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				}
 			}
-			cv$proposedProbability = cv$accumulatedProbabilities;
-		}
-		double cv$ratio = (cv$proposedProbability - cv$originalProbability);
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-			t = cv$originalValue;
-			double[][] var21 = bias[0];
-			double[] var23 = var21[0];
-			var23[0] = cv$originalValue;
-			var23[1] = (1 - cv$originalValue);
-			var21[1][1] = cv$originalValue;
-			bias[1][0][0] = cv$originalValue;
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				t = cv$originalValue;
+				double[][] var21 = bias[0];
+				double[] var23 = var21[0];
+				var23[0] = cv$originalValue;
+				var23[1] = (1 - cv$originalValue);
+				var21[1][1] = cv$originalValue;
+				bias[1][0][0] = cv$originalValue;
+			}
 		}
 	}
 
@@ -549,9 +585,6 @@ final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -565,6 +598,9 @@ final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedProbFlag$sample103)
 			logProbability$var97 = Double.NaN;
 	}
+
+	@Override
+	public final void initializeModel() {}
 
 	@Override
 	public final void logEvidenceProbabilities() {

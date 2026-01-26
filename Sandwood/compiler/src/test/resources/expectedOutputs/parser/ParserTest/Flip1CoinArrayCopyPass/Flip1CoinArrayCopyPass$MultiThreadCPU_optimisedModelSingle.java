@@ -8,6 +8,7 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 	
 	// Declare the variables for the model.
 	private double[] bias;
+	private boolean constrainedFlag$sample10 = true;
 	private boolean fixedFlag$sample10 = false;
 	private boolean fixedProbFlag$sample10 = false;
 	private boolean fixedProbFlag$sample26 = false;
@@ -290,7 +291,7 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[i]?var24:(1.0 - var24))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var24) && (var24 <= 1.0))?Math.log((flips[i]?var24:(1.0 - var24))):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -363,6 +364,8 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 	// by sample task 10 drawn from Beta 9. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample10() {
+		constrainedFlag$sample10 = false;
+		
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
 		
@@ -373,6 +376,9 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 		if((0 < samples)) {
 			// Processing sample task 26 of consumer random variable bernoulli.
 			// 
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample10 = true;
+			
 			// Include the value sampled by task 26 from random variable bernoulli.
 			// 
 			// Increment the number of samples.
@@ -391,8 +397,11 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 			int index$i$2_2 = (i + 1);
 			if((index$i$2_2 < samples)) {
 				// Processing sample task 26 of consumer random variable bernoulli.
-				// 
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample10 = true;
+				
 				// Include the value sampled by task 26 from random variable bernoulli.
+				// 
 				// Increment the number of samples.
 				cv$count = (cv$count + 1);
 				
@@ -401,18 +410,19 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 					cv$sum = (cv$sum + 1);
 			}
 		}
-		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		// 
-		// Write out the value of the sample to a temporary variable prior to updating the
-		// intermediate variables.
-		bias[0] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		
-		// Guards to ensure that bias is only updated when there is a valid path.
-		// 
-		// Looking for a path between Sample 10 and consumer double[] 32.
-		for(int i = 0; i < samples; i += 1)
-			bias[(i + 1)] = bias[0];
+		if(constrainedFlag$sample10) {
+			// Guards to ensure that bias is only updated when there is a valid path.
+			// 
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			bias[0] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			
+			// Guards to ensure that bias is only updated when there is a valid path.
+			// 
+			// Looking for a path between Sample 10 and consumer double[] 32.
+			for(int i = 0; i < samples; i += 1)
+				bias[(i + 1)] = bias[0];
+		}
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -461,6 +471,17 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample10)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i = forStart$i; i < forEnd$i; i += 1)
+						bias[(i + 1)] = bias[0];
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally with priming of fixed intermediate
@@ -488,8 +509,21 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample10)
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample10) {
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+			
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, samples, 1,
+				(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int i = forStart$i; i < forEnd$i; i += 1)
+							bias[(i + 1)] = bias[0];
+				}
+			);
+		}
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -499,6 +533,17 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample10)
 			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i = forStart$i; i < forEnd$i; i += 1)
+						bias[(i + 1)] = bias[0];
+			}
+		);
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -511,11 +556,6 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
 	}
-
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
@@ -535,6 +575,11 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 		if(!fixedProbFlag$sample26)
 			logProbability$var26 = Double.NaN;
 	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {}
 
 	// Construct the evidence probabilities.
 	@Override
@@ -601,7 +646,18 @@ final class Flip1CoinArrayCopyPass$MultiThreadCPU extends org.sandwood.runtime.i
 	// through the model. Any non-fixed sample values may be sampled to random variables
 	// as part of this process.
 	@Override
-	public final void setIntermediates() {}
+	public final void setIntermediates() {
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, samples, 1,
+			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i = forStart$i; i < forEnd$i; i += 1)
+						bias[(i + 1)] = bias[0];
+			}
+		);
+	}
 
 	@Override
 	public String modelCode() {

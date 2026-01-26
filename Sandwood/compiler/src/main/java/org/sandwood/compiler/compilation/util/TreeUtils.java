@@ -26,6 +26,7 @@ import static org.sandwood.compiler.trees.irTree.IRTree.newArray;
 import static org.sandwood.compiler.trees.irTree.IRTree.sequential;
 import static org.sandwood.compiler.trees.irTree.IRTree.store;
 import static org.sandwood.compiler.trees.irTree.IRTree.subtractDD;
+import static org.sandwood.compiler.trees.irTree.IRTree.subtractII;
 import static org.sandwood.compiler.trees.irTree.IRTree.treeScope;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.sandwood.common.exceptions.SandwoodException;
+import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.CompilationContext.CompilationPhase;
 import org.sandwood.compiler.compilation.CompilationContext.FieldType;
@@ -47,9 +49,11 @@ import org.sandwood.compiler.dataflowGraph.scopes.ScopeStack;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
+import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.ArrayType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
@@ -59,6 +63,7 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVaria
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
+import org.sandwood.compiler.trees.ArgDesc;
 import org.sandwood.compiler.trees.Tag;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRTree;
@@ -626,18 +631,50 @@ public class TreeUtils {
     }
 
     /**
+     * This method puts a value into a variable based on the scopes it is currently in. This only works for compiler
+     * constructed code as there is no control over index orders or formulas in user code.
+     *
+     * @param varDesc        The variable to put the value into
+     * @param task           The task that the variable is associated with
+     * @param value          The value to place
+     * @param compilationCtx The compilation context of compilation
+     * @return
+     */
+    public static <A extends Variable<A>> IRTreeVoid putIndirectValue(VariableDescription<A> varDesc,
+            DataflowTask<?> task, IRTreeReturn<A> value, String comment, CompilationContext compilationCtx) {
+        List<IntVariable> argsVars = getScopeArgs(task);
+        List<IRTreeReturn<IntVariable>> argsTrees = toArgTrees(argsVars, compilationCtx);
+        return putIndirectValue(varDesc, argsTrees, value, comment);
+    }
+
+    /**
      * Method to construct a tree adding in the indirection when accessing variables to compute the sampling.
      *
-     * @param variableName The name of the variable.
+     * @param variableDesc   The name of the variable.
+     * @param task           The task that the variable is associated with
+     * @param compilationCtx The compilation context of compilation
+     * @return A tree accessing the variable complete with the required dereferencing.
+     */
+    public static <A extends Variable<A>> IRTreeReturn<A> getIndirectValue(VariableDescription<A> variableDesc,
+            DataflowTask<?> task, CompilationContext compilationCtx) {
+        List<IntVariable> argsVars = getScopeArgs(task);
+        List<IRTreeReturn<IntVariable>> argsTrees = toArgTrees(argsVars, compilationCtx);
+        return getIndirectValue(variableDesc, argsTrees);
+    }
+
+    /**
+     * Method to construct a tree adding in the indirection when accessing variables to compute the sampling.
+     *
+     * @param variableDesc The name of the variable.
      * @param args         The indexes needed to dereference the variable.
      * @return A tree accessing the variable complete with the required dereferencing.
      */
     @SuppressWarnings("unchecked")
-    public static <A extends Variable<A>> IRTreeReturn<A> getIndirectValue(VariableDescription<A> variableName,
+    public static <A extends Variable<A>> IRTreeReturn<A> getIndirectValue(VariableDescription<A> variableDesc,
             List<IRTreeReturn<IntVariable>> args) {
         int size = args.size();
         @SuppressWarnings("rawtypes")
-        IRTreeReturn t = load(VariableNames.altTypeName(variableName, VariableType.getType(variableName.type, size)));
+        IRTreeReturn t = load(VariableNames.altTypeName(variableDesc, VariableType.getType(variableDesc.type, size)));
         for(int i = 0; i < size; i++) {
             IRTreeReturn<IntVariable> arg = args.get(i);
             t = arrayGet(t, arg);
@@ -691,7 +728,7 @@ public class TreeUtils {
      * @param t The task we want to get the scopes for.
      * @return
      */
-    private static List<ScopeDesc> getScopeDescs(DataflowTask<?> t) {
+    public static List<ScopeDesc> getScopeDescs(DataflowTask<?> t) {
         // Add each scope to the list before moving to the enclosing scope
         List<ScopeDesc> results = new ArrayList<>();
         List<Scope> scopes = getScopes(t);
@@ -701,6 +738,8 @@ public class TreeUtils {
                     results.add(new ScopeDesc(scope, null, false));
                     break;
                 }
+                case BLOCK:
+                case COMMENT:
                 case IF:
                 case ELSE:
                     break;
@@ -1406,5 +1445,102 @@ public class TreeUtils {
         ts.add(forStmt(body, constant(0), load(lengthName), constant(1), indexName, true, Tree.NoComment));
 
         return sequential(ts, Tree.NoComment);
+    }
+
+    /**
+     * Method for collecting and ordering all the required arguments to Gibbs inference methods for the stepped ranges.
+     *
+     * @param funcData       The function data.
+     * @param compilationCtx The compilation context.
+     * @return
+     */
+    public static ArgDesc<?>[] constructGibbsArgs(List<Scope> scopes, CompilationContext compilationCtx) {
+
+        VariableDescription<IntVariable> threadIdName = null;
+        List<ArgDesc<?>> args = new ArrayList<>();
+
+        int noScopes = scopes.size();
+        for(int i = 1; i < noScopes; i++) { // First scope will always be global.
+            Scope scope = scopes.get(i);
+            if(scope.getScopeType() == ScopeType.FOR) {
+                ForTask f = (ForTask) scope;
+
+                VariableDescription<IntVariable> indexName = f.getIndex().getUniqueVarDesc();
+                IRTreeReturn<IntVariable> start = f.getStart().getForwardIR(compilationCtx);
+                IRTreeReturn<IntVariable> end = f.getEnd().getForwardIR(compilationCtx);
+                if(f.incrementing)
+                    args.add(new ArgDesc<>(indexName, start, subtractII(end, constant(1))));
+                else
+                    args.add(new ArgDesc<>(indexName, end, start));
+
+                if(!f.isSerial(compilationCtx) && (compilationCtx.target == ExecutionType.MultiThreadCPU)) {
+                    threadIdName = VariableNames
+                            .threadIdName(VariableNames.calcVarName(f.getIndex().getUniqueVarDesc().name));
+                }
+            }
+        }
+
+        // Pass in the threads random number generator.
+        if(threadIdName != null) {
+            args.add(new ArgDesc<>(threadIdName));
+            args.add(new ArgDesc<>(VariableNames.rngName(0)));
+        }
+
+        return args.toArray(new ArgDesc[args.size()]);
+    }
+
+    public static <A extends Variable<A>, B extends Variable<B>> IRTreeVoid setArray(
+            VariableDescription<ArrayVariable<A>> desc, IRTreeReturn<B> value) {
+        IRTreeVoid tree = setArray(desc.name, desc, 1, value);
+        tree.prefixComment("Set all the values in the array");
+        return tree;
+    }
+
+    private static <A extends Variable<A>, B extends Variable<B>, C extends Variable<C>> IRTreeVoid setArray(
+            VariableName baseName, VariableDescription<ArrayVariable<A>> subArrayName, int i, IRTreeReturn<B> value) {
+        IRTreeReturn<IntVariable> start = constant(0);
+        IRTreeReturn<IntVariable> end = getIntField(load(subArrayName), "length");
+        IRTreeReturn<IntVariable> step = constant(1);
+        VariableDescription<IntVariable> indexName = VariableNames.indexName(baseName, Integer.toString(i));
+
+        Type<A> elementType = ((ArrayType<A>) subArrayName.type).getElementType();
+        IRTreeReturn<ArrayVariable<A>> subArray = load(subArrayName);
+        IRTreeReturn<IntVariable> index = load(indexName);
+
+        IRTreeVoid body;
+        if(elementType.isArray()) {
+            VariableDescription<A> elementDesc = VariableNames.calcVarName(baseName.getName(), Integer.toString(i),
+                    elementType, true);
+            IRTreeVoid innerArrayGet = initializeVariable(elementDesc, arrayGet(subArray, index), IRTree.NoComment);
+            IRTreeVoid innerArraySet = setArray(baseName, (VariableDescription<ArrayVariable<C>>) elementDesc, i + 1,
+                    value);
+            body = IRTree.sequential(IRTree.NoComment, innerArrayGet, innerArraySet);
+        } else {
+            body = arrayPut(subArray, load(indexName), (IRTreeReturn<A>) value, IRTree.NoComment);
+        }
+
+        return forStmt(body, start, end, step, indexName, true, IRTree.NoComment);
+    }
+
+    public static IRTreeReturn<BooleanVariable> getIsConstrained(SampleTask<?, ?> s,
+            CompilationContext compilationCtx) {
+        if(compilationCtx.traces.isObserved(s))
+            return constant(true);
+        else if(compilationCtx.traces.isTerminal(s))
+            return load(VariableNames.fixedFlagName(s));
+        else {
+            VariableDescription<BooleanVariable> constrainedFlag = VariableNames.constrainedFlagName(s);
+            return getIndirectValue(constrainedFlag, s, compilationCtx);
+        }
+    }
+
+    public static IRTreeVoid setIsConstrained(SampleTask<?, ?> s, IRTreeReturn<BooleanVariable> value, String comment,
+            CompilationContext compilationCtx) {
+        if(compilationCtx.traces.isObserved(s) || compilationCtx.traces.isTerminal(s))
+            throw new CompilerException("Tried to set the constrained flag for an observed or a terminal variable.");
+        else {
+            VariableDescription<BooleanVariable> constrainedFlag = VariableNames.constrainedFlagName(s);
+            return putIndirectValue(constrainedFlag, s, value, comment, compilationCtx);
+        }
     }
 }

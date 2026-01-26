@@ -6,6 +6,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements RaggedArray3$CoreInterface {
 	private double[][] a;
+	private boolean constrainedFlag$sample39 = true;
 	private double[] cv$var37$countGlobal;
 	private double[] d;
 	private boolean fixedFlag$sample39 = false;
@@ -199,7 +200,7 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 											lengthCV$a$37_16 = 3;
 									}
 								}
-								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$37_16))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$37_16)) && (0 < lengthCV$a$37_16)) && (0.0 <= d[cv$sampleValue])) && (d[cv$sampleValue] <= 1.0))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -244,6 +245,7 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	private final void sample39() {
 		if(true) {
+			constrainedFlag$sample39 = false;
 			double[] cv$targetLocal = d;
 			double[] cv$countLocal = cv$var37$countGlobal;
 			int lengthCV$a$37_13 = -1;
@@ -268,28 +270,45 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						{
 							{
 								{
-									for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
-										cv$countLocal[obs[var50]] = (cv$countLocal[obs[var50]] + 1.0);
+									for(int var50 = 0; var50 < length$obs_measured; var50 += 1) {
+										boolean cv$sampleConstrained = true;
+										if(cv$sampleConstrained) {
+											constrainedFlag$sample39 = true;
+											{
+												{
+													{
+														{
+															{
+																cv$countLocal[obs[var50]] = (cv$countLocal[obs[var50]] + 1.0);
+															}
+														}
+													}
+												}
+											}
+										}
+									}
 								}
 							}
 						}
 					}
 				}
 			}
-			int lengthCV$a$37_14 = -1;
-			{
+			if(constrainedFlag$sample39) {
+				int lengthCV$a$37_14 = -1;
 				{
-					if((0 == y))
-						lengthCV$a$37_14 = 2;
+					{
+						if((0 == y))
+							lengthCV$a$37_14 = 2;
+					}
 				}
-			}
-			{
 				{
-					if((1 == y))
-						lengthCV$a$37_14 = 3;
+					{
+						if((1 == y))
+							lengthCV$a$37_14 = 3;
+					}
 				}
+				Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$countLocal, cv$targetLocal, lengthCV$a$37_14);
 			}
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$countLocal, cv$targetLocal, lengthCV$a$37_14);
 		}
 	}
 
@@ -498,17 +517,6 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {
-		double[] var6 = a[0];
-		var6[0] = 0.4;
-		var6[1] = 0.6;
-		double[] var19 = a[1];
-		var19[0] = 0.2;
-		var19[1] = 0.3;
-		var19[2] = 0.5;
-	}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -517,6 +525,17 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample53)
 			logProbability$var51 = Double.NaN;
+	}
+
+	@Override
+	public final void initializeModel() {
+		double[] var6 = a[0];
+		var6[0] = 0.4;
+		var6[1] = 0.6;
+		double[] var19 = a[1];
+		var19[0] = 0.2;
+		var19[1] = 0.3;
+		var19[2] = 0.5;
 	}
 
 	@Override

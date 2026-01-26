@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -490,7 +490,7 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
             BackTraceInfo backTraceInfo, CompilationContext compilationCtx) {
         // Update the substitutions of the scope constructor to reflect the position in
         // the trace that we have reached.
-        backTraceInfo.updateSubstitutions(this, compilationCtx);
+        backTraceInfo.updateSubstitutions(this);
         switch(argPos) {
             case 0:
                 throw new CompilerException("Assignments to arrays where the input is the array"

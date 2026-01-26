@@ -7,6 +7,10 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements GaussianMixtureTest$CoreInterface {
 	private double[] alpha;
+	private boolean constrainedFlag$sample17 = true;
+	private boolean[] constrainedFlag$sample34;
+	private boolean[] constrainedFlag$sample52;
+	private boolean[] constrainedFlag$sample68;
 	private double[] cv$var17$countGlobal;
 	private double[][] cv$var68$stateProbabilityGlobal;
 	private boolean fixedFlag$sample17 = false;
@@ -244,7 +248,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 							{
 								double var20 = 0.0;
 								double var21 = 20.0;
-								double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var20) / Math.sqrt(var21))) - (0.5 * Math.log(var21))));
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var21)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var20) / Math.sqrt(var21))) - (0.5 * Math.log(var21))):Double.NEGATIVE_INFINITY));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -361,7 +365,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					int cv$sampleValue = z[((i$var66 - 0) / 1)];
 					{
 						{
-							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < k))?Math.log(phi[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < k)) && (0 < k)) && (0.0 <= phi[cv$sampleValue])) && (phi[cv$sampleValue] <= 1.0))?Math.log(phi[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -402,7 +406,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 						{
 							double var69 = mu[z[((i$var66 - 0) / 1)]];
 							double var70 = sigma[z[((i$var66 - 0) / 1)]];
-							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))));
+							double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -433,6 +437,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 
 	private final void sample17() {
 		if(true) {
+			constrainedFlag$sample17 = false;
 			double[] cv$targetLocal = phi;
 			double[] cv$countLocal = cv$var17$countGlobal;
 			int cv$arrayLength = k;
@@ -442,18 +447,35 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				{
 					{
 						{
-							for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-								cv$countLocal[z[((i$var66 - 0) / 1)]] = (cv$countLocal[z[((i$var66 - 0) / 1)]] + 1.0);
+							for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
+								boolean cv$sampleConstrained = constrainedFlag$sample68[((i$var66 - 0) / 1)];
+								if(cv$sampleConstrained) {
+									constrainedFlag$sample17 = true;
+									{
+										{
+											{
+												{
+													{
+														cv$countLocal[z[((i$var66 - 0) / 1)]] = (cv$countLocal[z[((i$var66 - 0) / 1)]] + 1.0);
+													}
+												}
+											}
+										}
+									}
+								}
+							}
 						}
 					}
 				}
 			}
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$countLocal, cv$targetLocal, k);
+			if(constrainedFlag$sample17)
+				Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$countLocal, cv$targetLocal, k);
 		}
 	}
 
 	private final void sample34(int var33, int threadID$cv$var33, Rng RNG$) {
 		if(true) {
+			constrainedFlag$sample34[((var33 - 0) / 1)] = false;
 			double cv$sum = 0.0;
 			double cv$denominatorSquareSum = 0.0;
 			boolean cv$sigmaNotFound = true;
@@ -466,18 +488,22 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 								if((var33 == z[((i$var66 - 0) / 1)])) {
 									{
 										{
-											{
+											boolean cv$sampleConstrained = true;
+											if(cv$sampleConstrained) {
+												constrainedFlag$sample34[((var33 - 0) / 1)] = true;
 												{
 													{
 														{
 															{
-																double cv$denominator = 1.0;
-																double cv$numerator = 0.0;
-																cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-																cv$sum = (cv$sum + (cv$denominator * (x[i$var66] - cv$numerator)));
-																if(cv$sigmaNotFound) {
-																	cv$sigmaValue = sigma[z[((i$var66 - 0) / 1)]];
-																	cv$sigmaNotFound = false;
+																{
+																	double cv$denominator = 1.0;
+																	double cv$numerator = 0.0;
+																	cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+																	cv$sum = (cv$sum + (cv$denominator * (x[i$var66] - cv$numerator)));
+																	if(cv$sigmaNotFound) {
+																		cv$sigmaValue = sigma[z[((i$var66 - 0) / 1)]];
+																		cv$sigmaNotFound = false;
+																	}
 																}
 															}
 														}
@@ -492,11 +518,13 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					}
 				}
 			}
-			double var34 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 20.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-			{
+			if(constrainedFlag$sample34[((var33 - 0) / 1)]) {
+				double var34 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 20.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 				{
 					{
-						mu[var33] = var34;
+						{
+							mu[var33] = var34;
+						}
 					}
 				}
 			}
@@ -505,6 +533,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 
 	private final void sample52(int var51, int threadID$cv$var51, Rng RNG$) {
 		if(true) {
+			constrainedFlag$sample52[((var51 - 0) / 1)] = false;
 			double cv$sum = 0.0;
 			int cv$count = 0;
 			{
@@ -515,15 +544,19 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 								if((var51 == z[((i$var66 - 0) / 1)])) {
 									{
 										{
-											{
+											boolean cv$sampleConstrained = true;
+											if(cv$sampleConstrained) {
+												constrainedFlag$sample52[((var51 - 0) / 1)] = true;
 												{
 													{
 														{
 															{
-																double cv$var71$mu = mu[z[((i$var66 - 0) / 1)]];
-																double cv$var71$diff = (cv$var71$mu - x[i$var66]);
-																cv$sum = (cv$sum + (cv$var71$diff * cv$var71$diff));
-																cv$count = (cv$count + 1);
+																{
+																	double cv$var71$mu = mu[z[((i$var66 - 0) / 1)]];
+																	double cv$var71$diff = (cv$var71$mu - x[i$var66]);
+																	cv$sum = (cv$sum + (cv$var71$diff * cv$var71$diff));
+																	cv$count = (cv$count + 1);
+																}
 															}
 														}
 													}
@@ -537,11 +570,13 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					}
 				}
 			}
-			double var52 = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
-			{
+			if(constrainedFlag$sample52[((var51 - 0) / 1)]) {
+				double var52 = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
 				{
 					{
-						sigma[var51] = var52;
+						{
+							sigma[var51] = var52;
+						}
 					}
 				}
 			}
@@ -550,6 +585,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 
 	private final void sample68(int i$var66, int threadID$cv$i$var66, Rng RNG$) {
 		if(true) {
+			constrainedFlag$sample68[((i$var66 - 0) / 1)] = false;
 			int cv$numStates = 0;
 			{
 				cv$numStates = Math.max(cv$numStates, k);
@@ -564,7 +600,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				z[((i$var66 - 0) / 1)] = cv$currentValue;
 				{
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < k))?Math.log(phi[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < k)) && (0 < k)) && (0.0 <= phi[cv$currentValue])) && (phi[cv$currentValue] <= 1.0))?Math.log(phi[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							boolean guard$sample68gaussian71 = false;
@@ -573,37 +609,41 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 									guard$sample68gaussian71 = true;
 									{
 										{
-											double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-											double cv$consumerDistributionProbabilityAccumulator = 1.0;
-											{
+											boolean cv$sampleConstrained = true;
+											if(cv$sampleConstrained) {
+												constrainedFlag$sample68[((i$var66 - 0) / 1)] = true;
+												double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+												double cv$consumerDistributionProbabilityAccumulator = 1.0;
 												{
 													{
 														{
 															{
-																double var69 = mu[cv$currentValue];
-																double var70 = sigma[cv$currentValue];
-																if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70)))) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																else {
-																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))));
-																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70)))));
+																{
+																	double var69 = mu[cv$currentValue];
+																	double var70 = sigma[cv$currentValue];
+																	if(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																	else {
+																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY));
+																		else
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)));
+																	}
+																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																}
-																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
 														}
 													}
 												}
-											}
-											cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-											if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-												cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-											else {
-												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-													cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-												else
-													cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+												cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+												if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+												else {
+													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+														cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+													else
+														cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+												}
 											}
 										}
 									}
@@ -614,37 +654,41 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 									guard$sample68gaussian71 = true;
 									{
 										{
-											double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-											double cv$consumerDistributionProbabilityAccumulator = 1.0;
-											{
+											boolean cv$sampleConstrained = true;
+											if(cv$sampleConstrained) {
+												constrainedFlag$sample68[((i$var66 - 0) / 1)] = true;
+												double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+												double cv$consumerDistributionProbabilityAccumulator = 1.0;
 												{
 													{
 														{
 															{
-																double var69 = mu[cv$currentValue];
-																double var70 = sigma[cv$currentValue];
-																if(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70)))) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																else {
-																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))));
-																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70)))))) + 1)) + (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70)))));
+																{
+																	double var69 = mu[cv$currentValue];
+																	double var70 = sigma[cv$currentValue];
+																	if(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																	else {
+																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY));
+																		else
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)));
+																	}
+																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																}
-																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
 														}
 													}
 												}
-											}
-											cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-											if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-												cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-											else {
-												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-													cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-												else
-													cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+												cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+												if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+												else {
+													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+														cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+													else
+														cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+												}
 											}
 										}
 									}
@@ -663,33 +707,35 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				}
 				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
-			double cv$logSum = 0.0;
-			{
-				double cv$lseMax = cv$stateProbabilityLocal[0];
-				for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
-					double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
-					if((cv$lseMax < cv$lseElementValue))
-						cv$lseMax = cv$lseElementValue;
+			if(constrainedFlag$sample68[((i$var66 - 0) / 1)]) {
+				double cv$logSum = 0.0;
+				{
+					double cv$lseMax = cv$stateProbabilityLocal[0];
+					for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
+						double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
+						if((cv$lseMax < cv$lseElementValue))
+							cv$lseMax = cv$lseElementValue;
+					}
+					if((cv$lseMax == Double.NEGATIVE_INFINITY))
+						cv$logSum = Double.NEGATIVE_INFINITY;
+					else {
+						double cv$lseSum = 0.0;
+						for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
+							cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
+						cv$logSum = (cv$logSum + (Math.log(cv$lseSum) + cv$lseMax));
+					}
 				}
-				if((cv$lseMax == Double.NEGATIVE_INFINITY))
-					cv$logSum = Double.NEGATIVE_INFINITY;
-				else {
-					double cv$lseSum = 0.0;
-					for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
-						cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
-					cv$logSum = (cv$logSum + (Math.log(cv$lseSum) + cv$lseMax));
+				if((cv$logSum == Double.NEGATIVE_INFINITY)) {
+					for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+						cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numStates);
+				} else {
+					for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+						cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
 				}
+				for(int cv$indexName = cv$numStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+					cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
+				z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
 			}
-			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numStates);
-			} else {
-				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
-			}
-			for(int cv$indexName = cv$numStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
-				cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
-			z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
 		}
 	}
 
@@ -733,6 +779,15 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		}
 		{
 			z = new int[((((length$xMeasured - 1) - 0) / 1) + 1)];
+		}
+		{
+			constrainedFlag$sample52 = new boolean[((((5 - 1) - 0) / 1) + 1)];
+		}
+		{
+			constrainedFlag$sample68 = new boolean[((((length$xMeasured - 1) - 0) / 1) + 1)];
+		}
+		{
+			constrainedFlag$sample34 = new boolean[((((5 - 1) - 0) / 1) + 1)];
 		}
 		{
 			logProbability$sample68 = new double[((((length$xMeasured - 1) - 0) / 1) + 1)];
@@ -943,17 +998,6 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {
-		k = 5;
-		parallelFor(RNG$, 0, 5, 1,
-			(int forStart$i$var13, int forEnd$i$var13, int threadID$i$var13, org.sandwood.random.internal.Rng RNG$1) -> { 
-				for(int i$var13 = forStart$i$var13; i$var13 < forEnd$i$var13; i$var13 += 1)
-						alpha[i$var13] = 1.0;
-			}
-		);
-	}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -970,6 +1014,19 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		logProbability$x = 0.0;
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
 			logProbability$sample72[((i$var66 - 0) / 1)] = Double.NaN;
+	}
+
+	@Override
+	public final void initializeModel() {
+		k = 5;
+		for(int i$var13 = 0; i$var13 < 5; i$var13 += 1)
+			alpha[i$var13] = 1.0;
+		for(int index$constrainedFlag$sample52$1 = 0; index$constrainedFlag$sample52$1 < constrainedFlag$sample52.length; index$constrainedFlag$sample52$1 += 1)
+			constrainedFlag$sample52[index$constrainedFlag$sample52$1] = true;
+		for(int index$constrainedFlag$sample68$1 = 0; index$constrainedFlag$sample68$1 < constrainedFlag$sample68.length; index$constrainedFlag$sample68$1 += 1)
+			constrainedFlag$sample68[index$constrainedFlag$sample68$1] = true;
+		for(int index$constrainedFlag$sample34$1 = 0; index$constrainedFlag$sample34$1 < constrainedFlag$sample34.length; index$constrainedFlag$sample34$1 += 1)
+			constrainedFlag$sample34[index$constrainedFlag$sample34$1] = true;
 	}
 
 	@Override

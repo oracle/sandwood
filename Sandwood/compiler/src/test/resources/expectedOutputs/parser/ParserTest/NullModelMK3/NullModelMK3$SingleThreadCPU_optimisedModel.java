@@ -7,6 +7,7 @@ final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean constrainedFlag$sample10 = true;
 	private double eta;
 	private boolean fixedFlag$sample10 = false;
 	private boolean fixedProbFlag$sample10 = false;
@@ -332,6 +333,8 @@ final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 10 drawn from Uniform 9. Inference was performed using Metropolis-Hastings.
 	private final void sample10() {
+		constrainedFlag$sample10 = false;
+		
 		// The original value of the sample
 		double cv$originalValue = bias;
 		
@@ -348,6 +351,9 @@ final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// 
 		// The original value of the sample
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + bias);
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample10 = true;
 		
 		// Variable declaration of cv$originalProbability moved.
 		// Declaration comment was:
@@ -382,6 +388,9 @@ final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// 
 		// Write out the new value of the sample.
 		bias = cv$proposedValue;
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample10 = true;
 		
 		// The probability ration for the proposed value and the current value.
 		// 
@@ -480,13 +489,6 @@ final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		min = ((eta * 4.0) / 5.0);
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -502,6 +504,13 @@ final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$binomial = 0.0;
 		if(!fixedProbFlag$sample12)
 			logProbability$positiveCount = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		min = ((eta * 4.0) / 5.0);
 	}
 
 	// Construct the evidence probabilities.

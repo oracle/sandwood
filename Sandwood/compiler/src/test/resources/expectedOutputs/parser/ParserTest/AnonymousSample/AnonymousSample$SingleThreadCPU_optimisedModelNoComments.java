@@ -7,6 +7,9 @@ import org.sandwood.runtime.model.ExecutionTarget;
 final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements AnonymousSample$CoreInterface {
 	private double[] amounts1;
 	private double[] amounts2;
+	private boolean constrainedFlag$sample15 = true;
+	private boolean constrainedFlag$sample21 = true;
+	private boolean constrainedFlag$sample9 = true;
 	private boolean fixedFlag$sample15 = false;
 	private boolean fixedFlag$sample21 = false;
 	private boolean fixedFlag$sample9 = false;
@@ -227,7 +230,7 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 		if(!fixedProbFlag$sample35) {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < n; i += 1) {
-				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5));
+				double cv$distributionAccumulator = ((0.0 < priorSigma2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$sample35[i] = cv$distributionAccumulator;
 			}
@@ -249,7 +252,7 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 		if(!fixedProbFlag$sample39) {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < n; i += 1) {
-				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5));
+				double cv$distributionAccumulator = ((0.0 < priorSigma2)?(DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$sample39[i] = cv$distributionAccumulator;
 			}
@@ -285,11 +288,13 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 	}
 
 	private final void sample15() {
+		constrainedFlag$sample15 = false;
 		double cv$sum = 0.0;
 		double cv$denominatorSquareSum = 0.0;
 		boolean cv$sigmaNotFound = true;
 		double cv$sigmaValue = 1.0;
 		for(int i = 0; i < n; i += 1) {
+			constrainedFlag$sample15 = true;
 			cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
 			cv$sum = (cv$sum + amounts1[i]);
 			if(cv$sigmaNotFound) {
@@ -297,15 +302,18 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 				cv$sigmaNotFound = false;
 			}
 		}
-		mean1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		if(constrainedFlag$sample15)
+			mean1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
 	private final void sample21() {
+		constrainedFlag$sample21 = false;
 		double cv$sum = 0.0;
 		double cv$denominatorSquareSum = 0.0;
 		boolean cv$sigmaNotFound = true;
 		double cv$sigmaValue = 1.0;
 		for(int i = 0; i < n; i += 1) {
+			constrainedFlag$sample21 = true;
 			cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
 			cv$sum = (cv$sum + var39[i]);
 			if(cv$sigmaNotFound) {
@@ -313,10 +321,12 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 				cv$sigmaNotFound = false;
 			}
 		}
-		mean2 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		if(constrainedFlag$sample21)
+			mean2 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
 	private final void sample9() {
+		constrainedFlag$sample9 = false;
 		double cv$originalValue = priorSigma2;
 		double cv$originalProbability;
 		double cv$var = ((priorSigma2 * priorSigma2) * 0.010000000000000002);
@@ -325,21 +335,31 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + priorSigma2);
 		{
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((priorSigma2 - 10000.0) / 30.0)) - 3.4011973816621555);
-			for(int i = 0; i < n; i += 1)
-				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(priorSigma2))) + cv$accumulatedProbabilities) - (Math.log(priorSigma2) * 0.5));
-			for(int i = 0; i < n; i += 1)
-				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(priorSigma2))) + cv$accumulatedProbabilities) - (Math.log(priorSigma2) * 0.5));
+			for(int i = 0; i < n; i += 1) {
+				constrainedFlag$sample9 = true;
+				cv$accumulatedProbabilities = (((0.0 < priorSigma2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			for(int i = 0; i < n; i += 1) {
+				constrainedFlag$sample9 = true;
+				cv$accumulatedProbabilities = (((0.0 < priorSigma2)?(DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
-		priorSigma2 = cv$proposedValue;
-		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((cv$proposedValue - 10000.0) / 30.0)) - 3.4011973816621555);
-		for(int i = 0; i < n; i += 1)
-			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(cv$proposedValue))) + cv$accumulatedProbabilities) - (Math.log(cv$proposedValue) * 0.5));
-		for(int i = 0; i < n; i += 1)
-			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(cv$proposedValue))) + cv$accumulatedProbabilities) - (Math.log(cv$proposedValue) * 0.5));
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
-			priorSigma2 = cv$originalValue;
+		if(constrainedFlag$sample9) {
+			priorSigma2 = cv$proposedValue;
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((cv$proposedValue - 10000.0) / 30.0)) - 3.4011973816621555);
+			for(int i = 0; i < n; i += 1) {
+				constrainedFlag$sample9 = true;
+				cv$accumulatedProbabilities = (((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			for(int i = 0; i < n; i += 1) {
+				constrainedFlag$sample9 = true;
+				cv$accumulatedProbabilities = (((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+				priorSigma2 = cv$originalValue;
+		}
 	}
 
 	@Override
@@ -434,11 +454,6 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {
-		n = length$obsAmounts1;
-	}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -459,6 +474,11 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 			for(int i = 0; i < n; i += 1)
 				logProbability$sample39[i] = Double.NaN;
 		}
+	}
+
+	@Override
+	public final void initializeModel() {
+		n = length$obsAmounts1;
 	}
 
 	@Override

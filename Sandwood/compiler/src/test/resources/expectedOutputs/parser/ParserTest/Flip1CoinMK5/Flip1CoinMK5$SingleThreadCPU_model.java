@@ -8,6 +8,7 @@ final class Flip1CoinMK5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean constrainedFlag$sample9 = true;
 	private boolean fixedFlag$sample9 = false;
 	private boolean fixedProbFlag$sample22 = false;
 	private boolean fixedProbFlag$sample36 = false;
@@ -228,7 +229,7 @@ final class Flip1CoinMK5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 						{
 							{
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?bias:(1.0 - bias))));
+								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= bias) && (bias <= 1.0))?Math.log((cv$sampleValue?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -335,7 +336,7 @@ final class Flip1CoinMK5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 						{
 							{
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?bias:(1.0 - bias))));
+								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= bias) && (bias <= 1.0))?Math.log((cv$sampleValue?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -515,6 +516,8 @@ final class Flip1CoinMK5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	// conjugate prior.
 	private final void sample9() {
 		if(true) {
+			constrainedFlag$sample9 = false;
+			
 			// Local variable to record the number of true samples.
 			int cv$sum = 0;
 			
@@ -529,13 +532,29 @@ final class Flip1CoinMK5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 							{
 								{
 									for(int var21 = 0; var21 < samples1; var21 += 1) {
-										// Include the value sampled by task 22 from random variable bernoulli1.
-										// Increment the number of samples.
-										cv$count = (cv$count + 1);
-										
-										// If the sample value was positive increase the count
-										if(flips1[var21])
-											cv$sum = (cv$sum + 1);
+										// Flag recording if this sample task of the consuming random variable is constrained.
+										boolean cv$sampleConstrained = true;
+										if(cv$sampleConstrained) {
+											// Mark that the sample has observed constrained data.
+											constrainedFlag$sample9 = true;
+											{
+												{
+													{
+														{
+															{
+																// Include the value sampled by task 22 from random variable bernoulli1.
+																// Increment the number of samples.
+																cv$count = (cv$count + 1);
+																
+																// If the sample value was positive increase the count
+																if(flips1[var21])
+																	cv$sum = (cv$sum + 1);
+															}
+														}
+													}
+												}
+											}
+										}
 									}
 								}
 							}
@@ -551,13 +570,29 @@ final class Flip1CoinMK5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 							{
 								{
 									for(int var35 = 0; var35 < samples2; var35 += 1) {
-										// Include the value sampled by task 36 from random variable bernoulli2.
-										// Increment the number of samples.
-										cv$count = (cv$count + 1);
-										
-										// If the sample value was positive increase the count
-										if(flips2[var35])
-											cv$sum = (cv$sum + 1);
+										// Flag recording if this sample task of the consuming random variable is constrained.
+										boolean cv$sampleConstrained = true;
+										if(cv$sampleConstrained) {
+											// Mark that the sample has observed constrained data.
+											constrainedFlag$sample9 = true;
+											{
+												{
+													{
+														{
+															{
+																// Include the value sampled by task 36 from random variable bernoulli2.
+																// Increment the number of samples.
+																cv$count = (cv$count + 1);
+																
+																// If the sample value was positive increase the count
+																if(flips2[var35])
+																	cv$sum = (cv$sum + 1);
+															}
+														}
+													}
+												}
+											}
+										}
 									}
 								}
 							}
@@ -565,9 +600,9 @@ final class Flip1CoinMK5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 					}
 				}
 			}
-			
-			// Write out the new value of the sample.
-			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			if(constrainedFlag$sample9)
+				// Write out the new value of the sample.
+				bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 		}
 	}
 
@@ -658,14 +693,6 @@ final class Flip1CoinMK5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		samples1 = length$flipsMeasured1;
-		samples2 = length$flipsMeasured2;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -686,6 +713,14 @@ final class Flip1CoinMK5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$flips2 = 0.0;
 		if(!fixedProbFlag$sample36)
 			logProbability$var36 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		samples1 = length$flipsMeasured1;
+		samples2 = length$flipsMeasured2;
 	}
 
 	// Construct the evidence probabilities.

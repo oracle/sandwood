@@ -6,6 +6,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ParallelMK1$CoreInterface {
 	
 	// Declare the variables for the model.
+	private boolean[] constrainedFlag$sample20;
 	private boolean fixedFlag$sample20 = false;
 	private boolean fixedProbFlag$sample20 = false;
 	private boolean fixedProbFlag$sample24 = false;
@@ -258,7 +259,7 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(var22))) - (Math.log(var22) * 0.5));
+				double cv$distributionAccumulator = ((0.0 < var22)?(DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(var22))) - (Math.log(var22) * 0.5)):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -303,6 +304,8 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 20 drawn from Uniform 19. Inference was performed using Metropolis-Hastings.
 	private final void sample20(int i) {
+		constrainedFlag$sample20[i] = false;
+		
 		// The original value of the sample
 		double cv$originalValue = sample[i];
 		
@@ -341,6 +344,9 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				// variable instance.
 				guard$sample20gaussian23$global[i] = true;
 				
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample20[i] = true;
+				
 				// Constructing a random variable input for use later.
 				double var22 = indirection[i];
 				
@@ -354,15 +360,22 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				// 
 				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 				// Declaration comment was:
-				// Processing sample task 24 of consumer random variable null.
-				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
 				// Set the current value to the current state of the tree.
-				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$originalValue) / Math.sqrt(var22))) + cv$accumulatedProbabilities) - (Math.log(var22) * 0.5));
+				cv$accumulatedProbabilities = (((0.0 < var22)?(DistributionSampling.logProbabilityGaussian(((generated[i] - cv$originalValue) / Math.sqrt(var22))) - (Math.log(var22) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
-			if(!guard$sample20gaussian23$global[i])
+			if(!guard$sample20gaussian23$global[i]) {
+				// The body will execute, so should not be executed again
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample20gaussian23$global[i] = true;
+				
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample20[i] = true;
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -373,15 +386,14 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				// 
 				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 				// Declaration comment was:
-				// Processing sample task 24 of consumer random variable null.
-				// 
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
 				// Substituted "index$i$5_2" with its value "i".
 				// 
 				// Set the current value to the current state of the tree.
-				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$originalValue) / Math.sqrt(cv$originalValue))) + cv$accumulatedProbabilities) - (Math.log(cv$originalValue) * 0.5));
+				cv$accumulatedProbabilities = (((0.0 < cv$originalValue)?(DistributionSampling.logProbabilityGaussian(((generated[i] - cv$originalValue) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
@@ -392,99 +404,104 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		
-		// Update Sample and intermediate values
-		// 
-		// Write out the new value of the sample.
-		sample[i] = cv$proposedValue;
-		
-		// Guards to ensure that indirection is only updated when there is a valid path.
-		indirection[i] = cv$proposedValue;
-		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
-		
-		// Set the flags to false
-		// 
-		// Guard to check that at most one copy of the code is executed for a given random
-		// variable instance.
-		guard$sample20gaussian23$global[i] = false;
-		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!guard$sample20gaussian23$global[i]) {
-			// The body will execute, so should not be executed again
+		if(constrainedFlag$sample20[i]) {
+			// Update Sample and intermediate values
 			// 
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			guard$sample20gaussian23$global[i] = true;
-			
-			// Constructing a random variable input for use later.
-			double var22 = indirection[i];
-			
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 24 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-			// Declaration comment was:
-			// Processing sample task 24 of consumer random variable null.
-			// 
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
-			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$proposedValue) / Math.sqrt(var22))) + cv$accumulatedProbabilities) - (Math.log(var22) * 0.5));
-		}
-		if(!guard$sample20gaussian23$global[i]) {
-			// The body will execute, so should not be executed again
-			// 
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			guard$sample20gaussian23$global[i] = true;
-			
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 24 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-			// Declaration comment was:
-			// Processing sample task 24 of consumer random variable null.
-			// 
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
-			// 
-			// Substituted "index$i$5_2" with its value "i".
-			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$proposedValue) / Math.sqrt(cv$proposedValue))) + cv$accumulatedProbabilities) - (Math.log(cv$proposedValue) * 0.5));
-		}
-		
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-			// If it is not revert the changes.
-			// 
-			// Set the sample value
 			// Write out the new value of the sample.
-			sample[i] = cv$originalValue;
+			sample[i] = cv$proposedValue;
 			
 			// Guards to ensure that indirection is only updated when there is a valid path.
-			indirection[i] = sample[i];
+			indirection[i] = cv$proposedValue;
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
+			
+			// Set the flags to false
+			// 
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			guard$sample20gaussian23$global[i] = false;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if(!guard$sample20gaussian23$global[i]) {
+				// The body will execute, so should not be executed again
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample20gaussian23$global[i] = true;
+				
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample20[i] = true;
+				
+				// Constructing a random variable input for use later.
+				double var22 = indirection[i];
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 24 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				cv$accumulatedProbabilities = (((0.0 < var22)?(DistributionSampling.logProbabilityGaussian(((generated[i] - cv$proposedValue) / Math.sqrt(var22))) - (Math.log(var22) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			if(!guard$sample20gaussian23$global[i]) {
+				// The body will execute, so should not be executed again
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample20gaussian23$global[i] = true;
+				
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample20[i] = true;
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 24 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				// 
+				// Substituted "index$i$5_2" with its value "i".
+				cv$accumulatedProbabilities = (((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((generated[i] - cv$proposedValue) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			
+			// The probability ration for the proposed value and the current value.
+			// 
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				// If it is not revert the changes.
+				// 
+				// Set the sample value
+				// Write out the new value of the sample.
+				sample[i] = cv$originalValue;
+				
+				// Guards to ensure that indirection is only updated when there is a valid path.
+				indirection[i] = sample[i];
+			}
 		}
 	}
 
@@ -514,6 +531,9 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		if(!fixedFlag$sample20)
 			// Constructor for sample
 			sample = new double[length$observed];
+		
+		// Constructor for constrainedFlag$sample20
+		constrainedFlag$sample20 = new boolean[length$observed];
 		
 		// Constructor for logProbability$sample20
 		logProbability$sample20 = new double[length$observed];
@@ -608,11 +628,6 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -634,6 +649,15 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			for(int i = 0; i < length$observed; i += 1)
 				logProbability$sample24[i] = Double.NaN;
 		}
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample20$1 = 0; index$constrainedFlag$sample20$1 < constrainedFlag$sample20.length; index$constrainedFlag$sample20$1 += 1)
+			constrainedFlag$sample20[index$constrainedFlag$sample20$1] = true;
 	}
 
 	// Construct the evidence probabilities.

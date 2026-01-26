@@ -8,6 +8,7 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	
 	// Declare the variables for the model.
 	private double[][] a;
+	private boolean constrainedFlag$sample39 = true;
 	private double[] cv$var37$countGlobal;
 	private double[] d;
 	private boolean fixedFlag$sample39 = false;
@@ -284,7 +285,7 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$37_16))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+				cv$sampleAccumulator = (cv$sampleAccumulator + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$37_16)) && (0 < lengthCV$a$37_16)) && (0.0 <= d[cv$sampleValue])) && (d[cv$sampleValue] <= 1.0))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Store the random variable instance probability
@@ -339,6 +340,8 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	// by sample task 39 drawn from Dirichlet 36. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
 	private final void sample39() {
+		constrainedFlag$sample39 = false;
+		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$a$37_13 = -1;
 		
@@ -360,30 +363,35 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Processing random variable 38.
 		// 
 		// Processing sample task 53 of consumer random variable null.
-		for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
+		for(int var50 = 0; var50 < length$obs_measured; var50 += 1) {
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample39 = true;
+			
 			// Increment the sample counter with the value sampled by sample task 53 of random
 			// variable var38
 			// 
 			// A local reference to the scratch space.
 			cv$var37$countGlobal[obs[var50]] = (cv$var37$countGlobal[obs[var50]] + 1.0);
-		
-		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$37_14 = -1;
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((0 == y))
-			lengthCV$a$37_14 = 2;
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == y))
-			lengthCV$a$37_14 = 3;
-		
-		// Calculate the new sample value
-		// 
-		// Calculate a new sample value and write it into cv$targetLocal.
-		// 
-		// A reference local to the function for the sample variable.
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$var37$countGlobal, d, lengthCV$a$37_14);
+		}
+		if(constrainedFlag$sample39) {
+			// Allocate a local variable to hold the length of the array.
+			int lengthCV$a$37_14 = -1;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((0 == y))
+				lengthCV$a$37_14 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$37_14 = 3;
+			
+			// Calculate the new sample value
+			// 
+			// Calculate a new sample value and write it into cv$targetLocal.
+			// 
+			// A reference local to the function for the sample variable.
+			Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$var37$countGlobal, d, lengthCV$a$37_14);
+		}
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -594,19 +602,6 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		double[] var6 = a[0];
-		var6[0] = 0.4;
-		var6[1] = 0.6;
-		double[] var19 = a[1];
-		var19[0] = 0.2;
-		var19[1] = 0.3;
-		var19[2] = 0.5;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -622,6 +617,19 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample53)
 			logProbability$var51 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		double[] var6 = a[0];
+		var6[0] = 0.4;
+		var6[1] = 0.6;
+		double[] var19 = a[1];
+		var19[0] = 0.2;
+		var19[1] = 0.3;
+		var19[2] = 0.5;
 	}
 
 	// Construct the evidence probabilities.

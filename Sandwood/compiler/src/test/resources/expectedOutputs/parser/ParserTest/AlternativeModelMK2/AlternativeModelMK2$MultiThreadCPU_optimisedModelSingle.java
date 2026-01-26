@@ -8,6 +8,7 @@ final class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.inte
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean constrainedFlag$sample6 = true;
 	private boolean fixedFlag$sample6 = false;
 	private boolean fixedProbFlag$sample6 = false;
 	private boolean fixedProbFlag$sample8 = false;
@@ -312,11 +313,12 @@ final class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.inte
 	// by sample task 6 drawn from Beta 5. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void sample6() {
+		constrainedFlag$sample6 = false;
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample6 = true;
+		
 		// Write out the new value of the sample.
-		// 
-		// Processing random variable 7.
-		// 
-		// Processing sample task 8 of consumer random variable binomial.
 		// 
 		// Include the value sampled by task 8 from random variable binomial.
 		// 
@@ -390,11 +392,6 @@ final class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.inte
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -411,6 +408,11 @@ final class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.inte
 		if(!fixedProbFlag$sample8)
 			logProbability$positiveCount = Double.NaN;
 	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {}
 
 	// Construct the evidence probabilities.
 	@Override

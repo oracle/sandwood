@@ -8,6 +8,7 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 	// Declare the variables for the model.
 	private int[] ObsChoices;
 	private int[] choices;
+	private boolean[] constrainedFlag$sample24;
 	private double[] exped;
 	private boolean fixedFlag$sample24 = false;
 	private boolean fixedProbFlag$sample24 = false;
@@ -326,7 +327,7 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noProducts))?Math.log(prob[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+				cv$sampleAccumulator = (cv$sampleAccumulator + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noProducts)) && (0 < noProducts)) && (0.0 <= prob[cv$sampleValue])) && (prob[cv$sampleValue] <= 1.0))?Math.log(prob[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Store the random variable instance probability
@@ -380,6 +381,8 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 24 drawn from Gaussian 23. Inference was performed using Metropolis-Hastings.
 	private final void sample24(int i$var18) {
+		constrainedFlag$sample24[(i$var18 - 1)] = false;
+		
 		// The original value of the sample
 		double cv$originalValue = ut[i$var18];
 		
@@ -397,17 +400,16 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 		
 		// The proposed new value for the sample
 		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
-		
-		// Unrolled loop
 		{
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
 			// Set the current value to the current state of the tree.
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
-			
-			// Processing sample task 78 of consumer random variable null.
-			for(int var76 = 0; var76 < noObs; var76 += 1)
+			for(int var76 = 0; var76 < noObs; var76 += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample24[(i$var18 - 1)] = true;
+				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
 				// 
@@ -420,7 +422,8 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = ((((0.0 <= choices[var76]) && (choices[var76] < noProducts))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((((0.0 <= choices[var76]) && (choices[var76] < noProducts)) && (0.0 <= prob[choices[var76]])) && (prob[choices[var76]] <= 1.0))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
@@ -431,130 +434,10 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		
-		// Guards to ensure that ut is only updated when there is a valid path.
-		ut[i$var18] = cv$proposedValue;
-		
-		// Guards to ensure that exped is only updated when there is a valid path.
-		// 
-		// Looking for a path between Sample 24 and consumer double[] 39.
-		// 
-		// Substituted "i$var36" with its value "i$var18".
-		exped[i$var18] = Math.exp(ut[i$var18]);
-		
-		// Guards to ensure that sum is only updated when there is a valid path.
-		// 
-		// Looking for a path between Sample 24 and consumer double 50.
-		// 
-		// Reduction of array exped
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
-		double reduceVar$sum$0 = 0.0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// j's comment
-			// Set the right hand term to a value from the array exped
-			reduceVar$sum$0 = (reduceVar$sum$0 + exped[cv$reduction44Index]);
-		
-		// Write out the new sample value.
-		sum = reduceVar$sum$0;
-		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
-			// Set the flags to false
-			// 
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			guard$sample24put65$global[i$var61] = false;
-		
-		// Set the flags to false
-		// 
-		// Guard to check that at most one copy of the code is executed for a given random
-		// variable instance.
-		// 
-		// Substituted "i$var61" with its value "i$var18".
-		guard$sample24put65$global[i$var18] = false;
-		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			if(!guard$sample24put65$global[i$var61]) {
-				// The body will execute, so should not be executed again
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				guard$sample24put65$global[i$var61] = true;
-				
-				// sum's comment
-				// Write out the new sample value.
-				prob[i$var61] = (exped[i$var61] / reduceVar$sum$0);
-			}
-		}
-		
-		// Substituted "i$var36" with its value "i$var18".
-		// 
-		// Substituted "i$var61" with its value "i$var18".
-		if(!guard$sample24put65$global[i$var18]) {
-			// The body will execute, so should not be executed again
-			// 
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			// 
-			// Substituted "i$var61" with its value "i$var18".
-			guard$sample24put65$global[i$var18] = true;
-			
-			// Substituted "i$var61" with its value "i$var18".
-			// 
-			// sum's comment
-			// Write out the new sample value.
-			prob[i$var18] = (exped[i$var18] / reduceVar$sum$0);
-		}
-		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
-		
-		// Processing sample task 78 of consumer random variable null.
-		for(int var76 = 0; var76 < noObs; var76 += 1)
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 78 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-			// Declaration comment was:
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
-			cv$accumulatedProbabilities = ((((0.0 <= choices[var76]) && (choices[var76] < noProducts))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
-		
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-			// If it is not revert the changes.
-			// 
-			// Set the sample value
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(constrainedFlag$sample24[(i$var18 - 1)]) {
 			// Guards to ensure that ut is only updated when there is a valid path.
-			// 
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
-			ut[i$var18] = cv$originalValue;
+			ut[i$var18] = cv$proposedValue;
 			
 			// Guards to ensure that exped is only updated when there is a valid path.
 			// 
@@ -572,7 +455,7 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$sum$2 = 0.0;
+			double reduceVar$sum$0 = 0.0;
 			
 			// For each index in the array to be reduced
 			for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
@@ -582,10 +465,10 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 				// 
 				// j's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$2 = (reduceVar$sum$2 + exped[cv$reduction44Index]);
+				reduceVar$sum$0 = (reduceVar$sum$0 + exped[cv$reduction44Index]);
 			
 			// Write out the new sample value.
-			sum = reduceVar$sum$2;
+			sum = reduceVar$sum$0;
 			for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
 				// Set the flags to false
 				// 
@@ -612,7 +495,7 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 					
 					// sum's comment
 					// Write out the new sample value.
-					prob[i$var61] = (exped[i$var61] / reduceVar$sum$2);
+					prob[i$var61] = (exped[i$var61] / reduceVar$sum$0);
 				}
 			}
 			
@@ -632,7 +515,132 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 				// 
 				// sum's comment
 				// Write out the new sample value.
-				prob[i$var18] = (exped[i$var18] / reduceVar$sum$2);
+				prob[i$var18] = (exped[i$var18] / reduceVar$sum$0);
+			}
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
+			for(int var76 = 0; var76 < noObs; var76 += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample24[(i$var18 - 1)] = true;
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 78 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				cv$accumulatedProbabilities = ((((((0.0 <= choices[var76]) && (choices[var76] < noProducts)) && (0.0 <= prob[choices[var76]])) && (prob[choices[var76]] <= 1.0))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			
+			// The probability ration for the proposed value and the current value.
+			// 
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				// If it is not revert the changes.
+				// 
+				// Set the sample value
+				// Guards to ensure that ut is only updated when there is a valid path.
+				// 
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				ut[i$var18] = cv$originalValue;
+				
+				// Guards to ensure that exped is only updated when there is a valid path.
+				// 
+				// Looking for a path between Sample 24 and consumer double[] 39.
+				// 
+				// Substituted "i$var36" with its value "i$var18".
+				exped[i$var18] = Math.exp(ut[i$var18]);
+				
+				// Guards to ensure that sum is only updated when there is a valid path.
+				// 
+				// Looking for a path between Sample 24 and consumer double 50.
+				// 
+				// Reduction of array exped
+				// 
+				// A generated name to prevent name collisions if the reduction is implemented more
+				// than once in inference and probability code. Initialize the variable to the unit
+				// value
+				double reduceVar$sum$2 = 0.0;
+				
+				// For each index in the array to be reduced
+				for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
+					// Execute the reduction function, saving the result into the return value.
+					// 
+					// Copy the result of the reduction into the variable returned by the reduction.
+					// 
+					// j's comment
+					// Set the right hand term to a value from the array exped
+					reduceVar$sum$2 = (reduceVar$sum$2 + exped[cv$reduction44Index]);
+				
+				// Write out the new sample value.
+				sum = reduceVar$sum$2;
+				for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
+					// Set the flags to false
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample24put65$global[i$var61] = false;
+				
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				// 
+				// Substituted "i$var61" with its value "i$var18".
+				guard$sample24put65$global[i$var18] = false;
+				for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					if(!guard$sample24put65$global[i$var61]) {
+						// The body will execute, so should not be executed again
+						// 
+						// Guard to check that at most one copy of the code is executed for a given random
+						// variable instance.
+						guard$sample24put65$global[i$var61] = true;
+						
+						// sum's comment
+						// Write out the new sample value.
+						prob[i$var61] = (exped[i$var61] / reduceVar$sum$2);
+					}
+				}
+				
+				// Substituted "i$var36" with its value "i$var18".
+				// 
+				// Substituted "i$var61" with its value "i$var18".
+				if(!guard$sample24put65$global[i$var18]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					// 
+					// Substituted "i$var61" with its value "i$var18".
+					guard$sample24put65$global[i$var18] = true;
+					
+					// Substituted "i$var61" with its value "i$var18".
+					// 
+					// sum's comment
+					// Write out the new sample value.
+					prob[i$var18] = (exped[i$var18] / reduceVar$sum$2);
+				}
 			}
 		}
 	}
@@ -669,6 +677,9 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 		
 		// Constructor for choices
 		choices = new int[noObs];
+		
+		// Constructor for constrainedFlag$sample24
+		constrainedFlag$sample24 = new boolean[(noProducts - 1)];
 		
 		// Constructor for logProbability$sample24
 		logProbability$sample24 = new double[(noProducts - 1)];
@@ -869,13 +880,6 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		ut[0] = 0.0;
-	}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -897,6 +901,17 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 		logProbability$choices = 0.0;
 		if(!fixedProbFlag$sample78)
 			logProbability$var77 = Double.NaN;
+	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		ut[0] = 0.0;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample24$1 = 0; index$constrainedFlag$sample24$1 < constrainedFlag$sample24.length; index$constrainedFlag$sample24$1 += 1)
+			constrainedFlag$sample24[index$constrainedFlag$sample24$1] = true;
 	}
 
 	// Construct the evidence probabilities.

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -94,20 +94,22 @@ public class MarginalizationFunctions<A extends ScalarVariable<A>, B extends Dis
     protected static class MarginalizationData<A extends ScalarVariable<A>, B extends DistributableRandomVariable<A, B>>
             extends InferenceGeneratorScalarProb.ScalarProbFunctionData<A, B> {
 
-        // Flags for the different variables that we will need to construct for this
+        // Names for the different variables that we will need to construct for this
         // function.
         final VariableDescription<ArrayVariable<DoubleVariable>> statesProbabilityNameGlobal;
-        final VariableDescription<ArrayVariable<DoubleVariable>> statesProbabilityNameLocal;
 
         protected MarginalizationData(SampleTask<A, B> sample, CompilationContext compilationCtx) {
             super(sample, sample.randomVariable.getNumStates(), compilationCtx);
 
             statesProbabilityNameGlobal = VariableNames.calcVarName(sampleDesc.output, "stateProbabilityGlobal",
                     VariableType.arrayType(VariableType.DoubleVariable));
-            statesProbabilityNameLocal = VariableNames.calcVarName("stateProbabilityLocal",
-                    VariableType.arrayType(VariableType.DoubleVariable), true);
         }
     }
+
+    // Names for the different variables that we will need to construct for this
+    // function.
+    private final static VariableDescription<ArrayVariable<DoubleVariable>> statesProbabilityNameLocal = VariableNames
+            .calcVarName("stateProbabilityLocal", VariableType.arrayType(VariableType.DoubleVariable), true);
 
     @Override
     protected String getInferenceType() {
@@ -131,7 +133,7 @@ public class MarginalizationFunctions<A extends ScalarVariable<A>, B extends Dis
         // Set up a pointer for accessing local space.
         IRTreeReturn<ArrayVariable<DoubleVariable>> globalState = loadGlobalField(funcData.statesProbabilityNameGlobal,
                 funcData, compilationCtx);
-        IRTreeVoid getLocalState = initializeVariable(funcData.statesProbabilityNameLocal, globalState,
+        IRTreeVoid getLocalState = initializeVariable(statesProbabilityNameLocal, globalState,
                 "Get a local reference to the scratch space.");
         compilationCtx.addTreeToScope(GlobalScope.scope, getLocalState);
     }
@@ -144,7 +146,7 @@ public class MarginalizationFunctions<A extends ScalarVariable<A>, B extends Dis
     @Override
     protected IRTreeReturn<A> calculateSampleValue(CompilationContext compilationCtx,
             MarginalizationData<A, B> funcData) {
-        IRTreeReturn<ArrayVariable<DoubleVariable>> arrayValue = load(funcData.statesProbabilityNameLocal);
+        IRTreeReturn<ArrayVariable<DoubleVariable>> arrayValue = load(statesProbabilityNameLocal);
         normalizeArray(arrayValue, arrayValue, compilationCtx);
 
         return funcData.sourceRandom.getStateValue(functionCallReturn(FunctionType.SAMPLE, VariableType.IntVariable,
@@ -198,18 +200,19 @@ public class MarginalizationFunctions<A extends ScalarVariable<A>, B extends Dis
     @Override
     protected void saveBackTraceProbability(MarginalizationData<A, B> funcData, IRTreeReturn<DoubleVariable> value,
             CompilationContext compilationCtx) {
-        IRTreeReturn<ArrayVariable<DoubleVariable>> array = load(funcData.statesProbabilityNameLocal);
+        IRTreeReturn<ArrayVariable<DoubleVariable>> array = load(statesProbabilityNameLocal);
         IRTreeVoid arraySet = arrayPut(array, funcData.valuePos, value,
                 "Save the calculated index value into the array of index value probabilities");
         compilationCtx.addTreeToScope(GlobalScope.scope, arraySet);
     }
 
     @Override
-    protected void addDistributionProbabilities(MarginalizationData<A, B> funcData, CompilationContext compilationCtx) {
-        ScopeConstructor targetScope = funcData.targetScope
+    protected void addDistributionProbabilities(ScopeConstructor targetScope, MarginalizationData<A, B> funcData,
+            CompilationContext compilationCtx) {
+        targetScope = targetScope
                 .addComment("Set the calculated probabilities to be the distribution values, and normalize");
         targetScope.addTree((TreeBuilderInfo info) -> {
-            IRTreeReturn<ArrayVariable<DoubleVariable>> arrayValue = load(funcData.statesProbabilityNameLocal);
+            IRTreeReturn<ArrayVariable<DoubleVariable>> arrayValue = load(statesProbabilityNameLocal);
 
             // Get the probability array
             VariableDescription<ArrayVariable<DoubleVariable>> localProbability = VariableNames

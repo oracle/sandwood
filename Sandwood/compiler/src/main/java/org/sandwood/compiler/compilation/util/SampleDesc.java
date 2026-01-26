@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -17,6 +17,8 @@ import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
+import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
@@ -92,7 +94,10 @@ public abstract class SampleDesc<A extends Variable<A>, B extends RandomVariable
      * @param compilationCtx The compilation context.
      */
     protected void setIntermediateValues(CompilationContext compilationCtx) {
-        intermediates.setIntermediateValues(sampleVarDesc.sampleVariable, compilationCtx);
+        Variable<?> v = sampleVarDesc.sampleVariable;
+        Type<?> type = output.getType();
+        intermediates.setIntermediateValues(
+                output != v && (!type.isArray() || !((ArrayVariable<?>) output).isSubArray()), compilationCtx);
     }
 
     /**

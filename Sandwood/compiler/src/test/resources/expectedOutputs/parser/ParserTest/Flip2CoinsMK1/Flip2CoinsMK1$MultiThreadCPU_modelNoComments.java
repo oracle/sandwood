@@ -8,6 +8,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 final class Flip2CoinsMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip2CoinsMK1$CoreInterface {
 	private double[] bias;
 	private int coins;
+	private boolean[] constrainedFlag$sample17;
 	private boolean fixedFlag$sample17 = false;
 	private boolean fixedProbFlag$sample17 = false;
 	private boolean fixedProbFlag$sample44 = false;
@@ -181,7 +182,7 @@ final class Flip2CoinsMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							{
 								{
 									double var32 = bias[j];
-									double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var32:(1.0 - var32))));
+									double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var32) && (var32 <= 1.0))?Math.log((cv$sampleValue?var32:(1.0 - var32))):Double.NEGATIVE_INFINITY));
 									if((cv$weightedProbability < cv$distributionAccumulator))
 										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 									else {
@@ -231,6 +232,7 @@ final class Flip2CoinsMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	private final void sample17(int var16, int threadID$cv$var16, Rng RNG$) {
 		if(true) {
+			constrainedFlag$sample17[((var16 - 0) / 1)] = false;
 			int cv$sum = 0;
 			int cv$count = 0;
 			{
@@ -242,9 +244,23 @@ final class Flip2CoinsMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 									{
 										{
 											for(int var43 = 0; var43 < length$flipsMeasured[j]; var43 += 1) {
-												cv$count = (cv$count + 1);
-												if(flips[j][var43])
-													cv$sum = (cv$sum + 1);
+												boolean cv$sampleConstrained = true;
+												if(cv$sampleConstrained) {
+													constrainedFlag$sample17[((var16 - 0) / 1)] = true;
+													{
+														{
+															{
+																{
+																	{
+																		cv$count = (cv$count + 1);
+																		if(flips[j][var43])
+																			cv$sum = (cv$sum + 1);
+																	}
+																}
+															}
+														}
+													}
+												}
 											}
 										}
 									}
@@ -254,11 +270,13 @@ final class Flip2CoinsMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					}
 				}
 			}
-			double var17 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-			{
+			if(constrainedFlag$sample17[((var16 - 0) / 1)]) {
+				double var17 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 				{
 					{
-						bias[var16] = var17;
+						{
+							bias[var16] = var17;
+						}
 					}
 				}
 			}
@@ -279,6 +297,9 @@ final class Flip2CoinsMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			flips = new boolean[length$flipsMeasured.length][];
 			for(int j = 0; j < length$flipsMeasured.length; j += 1)
 				flips[j] = new boolean[length$flipsMeasured[j]];
+		}
+		{
+			constrainedFlag$sample17 = new boolean[((((length$flipsMeasured.length - 1) - 0) / 1) + 1)];
 		}
 		{
 			logProbability$bernoulli = new double[((((length$flipsMeasured.length - 1) - 0) / 1) + 1)];
@@ -401,11 +422,6 @@ final class Flip2CoinsMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {
-		coins = length$flipsMeasured.length;
-	}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -419,6 +435,13 @@ final class Flip2CoinsMK1$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			for(int j = 0; j < coins; j += 1)
 				logProbability$sample44[((j - 0) / 1)] = Double.NaN;
 		}
+	}
+
+	@Override
+	public final void initializeModel() {
+		coins = length$flipsMeasured.length;
+		for(int index$constrainedFlag$sample17$1 = 0; index$constrainedFlag$sample17$1 < constrainedFlag$sample17.length; index$constrainedFlag$sample17$1 += 1)
+			constrainedFlag$sample17[index$constrainedFlag$sample17$1] = true;
 	}
 
 	@Override

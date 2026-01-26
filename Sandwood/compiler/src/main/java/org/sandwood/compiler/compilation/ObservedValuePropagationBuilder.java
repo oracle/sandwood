@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  * 
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -233,7 +233,7 @@ public class ObservedValuePropagationBuilder {
     private static IRTreeVoid initializeConstants(CompilationContext compilationCtx) {
         IRTreeVoid t1;
         // Set the phase
-        compilationCtx.phase = CompilationPhase.INITIALIZATION_OF_CONSTANTS;
+            compilationCtx.phase = CompilationPhase.INITIALIZATION_OF_MODEL;
         // Clear function dependent values to prevent pollution from one context to
         // another.
         compilationCtx.initialize();
@@ -470,7 +470,7 @@ public class ObservedValuePropagationBuilder {
             }
             case PUT: {
                 PutTask<B> pt = (PutTask<B>) task;
-                backTraceInfo.updateSubstitutions(pt, compilationCtx);
+                backTraceInfo.updateSubstitutions(pt);
                 switch(d.argPos) {
                     case 0:
                         throw new CompilerException("Assignments to arrays where the input is the array"

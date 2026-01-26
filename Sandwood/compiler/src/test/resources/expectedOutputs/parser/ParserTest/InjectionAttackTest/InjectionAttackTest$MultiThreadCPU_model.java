@@ -8,6 +8,7 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean constrainedFlag$sample6 = true;
 	private boolean fixedFlag$sample6 = false;
 	private boolean fixedProbFlag$sample6 = false;
 	private boolean fixedProbFlag$sample8 = false;
@@ -315,6 +316,8 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	// conjugate prior.
 	private final void sample6() {
 		if(true) {
+			constrainedFlag$sample6 = false;
+			
 			// Local variable to record the number of true samples.
 			int cv$sum = 0;
 			
@@ -328,17 +331,23 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 							// Processing sample task 8 of consumer random variable binomial.
 							{
 								{
-									{
+									// Flag recording if this sample task of the consuming random variable is constrained.
+									boolean cv$sampleConstrained = true;
+									if(cv$sampleConstrained) {
+										// Mark that the sample has observed constrained data.
+										constrainedFlag$sample6 = true;
 										{
 											{
 												{
 													{
-														// Include the value sampled by task 8 from random variable binomial.
-														// Increment the number of booleans sampled.
-														cv$count = (cv$count + observedSampleCount);
-														
-														// Add to the count the number of booleans that were true.
-														cv$sum = (cv$sum + positiveCount);
+														{
+															// Include the value sampled by task 8 from random variable binomial.
+															// Increment the number of booleans sampled.
+															cv$count = (cv$count + observedSampleCount);
+															
+															// Add to the count the number of booleans that were true.
+															cv$sum = (cv$sum + positiveCount);
+														}
 													}
 												}
 											}
@@ -350,9 +359,9 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 					}
 				}
 			}
-			
-			// Write out the new value of the sample.
-			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			if(constrainedFlag$sample6)
+				// Write out the new value of the sample.
+				bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 		}
 	}
 
@@ -427,11 +436,6 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
-
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
 	// sample task, and its effect on the rest of the model.
@@ -448,6 +452,11 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		if(!fixedProbFlag$sample8)
 			logProbability$positiveCount = Double.NaN;
 	}
+
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {}
 
 	// Construct the evidence probabilities.
 	@Override

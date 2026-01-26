@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -15,8 +15,8 @@ import static org.sandwood.compiler.trees.irTree.IRTree.constant;
 import static org.sandwood.compiler.trees.irTree.IRTree.initializeVariable;
 import static org.sandwood.compiler.trees.irTree.IRTree.load;
 import static org.sandwood.compiler.trees.irTree.IRTree.negateBoolean;
+import static org.sandwood.compiler.trees.irTree.IRTree.or;
 import static org.sandwood.compiler.trees.irTree.IRTree.store;
-import static org.sandwood.compiler.trees.irTree.IRTree.subtractII;
 import static org.sandwood.compiler.trees.irTree.IRTree.voidFunction;
 
 import java.util.ArrayList;
@@ -28,21 +28,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.util.FunctionUtils;
 import org.sandwood.compiler.compilation.util.SampleDesc;
-import org.sandwood.compiler.dataflowGraph.scopes.ElseScope;
+import org.sandwood.compiler.compilation.util.TreeUtils;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
-import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
-import org.sandwood.compiler.dataflowGraph.scopes.Scope.ScopeType;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
-import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -50,7 +46,6 @@ import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDe
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
-import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.exceptions.MissingFeatureException;
@@ -68,11 +63,11 @@ import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.ArgDesc;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.Visibility;
+import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
 import org.sandwood.compiler.trees.irTree.IRVoidFunction;
 import org.sandwood.compiler.trees.irTree.util.KnownValuesIR;
-import org.sandwood.compiler.trees.irTree.util.KnownValuesIR.KnownValue;
 
 public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends RandomVariable<A, B>, S extends SampleDesc<A, B>, FuncData extends InferenceGeneratorBase.FunctionData<A, B, S>>
         implements InferenceGenerator<A, B> {
@@ -195,8 +190,10 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                     .getUnconditionalObservedTraces(s);
 
             // If there are no traces return the current target scope
-            if(observationTraces == null)
+            if(observationTraces == null) {
+                initialiseConstrainedFlags(targetScope, compilationCtx);
                 return targetScope;
+            }
 
             // Otherwise create a flag to record if the observed variables are reachable
             VariableDescription<BooleanVariable> observationGuard = VariableNames.calcVarName("varObserved",
@@ -216,8 +213,34 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
             }
 
             // Construct a new target scope that will only execute if none of the observed variables are reachable.
-            targetScope = targetScope.addCondition(negateBoolean(load(observationGuard))).ifScopeConstructor();
-            return targetScope;
+            IfElseScopeConstructors observationScopes = targetScope.addCondition(negateBoolean(load(observationGuard)));
+
+            // Initialise the constrained variable flag
+            initialiseConstrainedFlags(observationScopes, compilationCtx);
+            return observationScopes.ifScopeConstructor();
+        }
+
+        private void initialiseConstrainedFlags(ScopeConstructor targetScope, CompilationContext compilationCtx) {
+            targetScope.addTree((TreeBuilderInfo info) -> {
+                IRTreeVoid t = TreeUtils.setIsConstrained(sampleDesc.sample, constant(false), IRTree.NoComment,
+                        compilationCtx);
+                compilationCtx.addTreeToScope(GlobalScope.scope, t);
+            });
+        }
+
+        private void initialiseConstrainedFlags(IfElseScopeConstructors observationScopes,
+                CompilationContext compilationCtx) {
+            observationScopes.ifScopeConstructor().addTree((TreeBuilderInfo info) -> {
+                IRTreeVoid t = TreeUtils.setIsConstrained(sampleDesc.sample, constant(false), IRTree.NoComment,
+                        compilationCtx);
+                compilationCtx.addTreeToScope(GlobalScope.scope, t);
+            });
+
+            observationScopes.elseScopeConstructor().addTree((TreeBuilderInfo info) -> {
+                IRTreeVoid t = TreeUtils.setIsConstrained(sampleDesc.sample, constant(true), IRTree.NoComment,
+                        compilationCtx);
+                compilationCtx.addTreeToScope(GlobalScope.scope, t);
+            });
         }
 
         /**
@@ -232,6 +255,9 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
     }
 
     protected abstract FuncData getFunctionData(SampleTask<A, B> sample, CompilationContext compilationCtx);
+
+    private static final VariableDescription<BooleanVariable> constrained = VariableNames
+            .calcVarName("sampleConstrained", VariableType.BooleanVariable, true);
 
     /**
      * Method to generate a function calculate the result of a conjugate pairing.
@@ -256,7 +282,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         // Clear the context ready to start
         constructFunctionVariablesInternal(funcData, compilationCtx);
 
-        getBackTraceScope(funcData).addTree((TreeBuilderInfo outerInfo) -> {
+        getBackTraceScope(funcData, compilationCtx).addTree((TreeBuilderInfo outerInfo) -> {
             ScopeConstructor a = ScopeConstructor.construct(funcData.sampleDesc.sample, GlobalScope.scope,
                     funcData.distributionTraces,
                     "Exploring all the possible distribution values for random variable "
@@ -325,7 +351,6 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                         Map<DataflowTaskArgDesc, Set<TraceHandle>> sinkToConditional = splitTraces.sinkToConditional
                                 .get(sinkTask);
                         if(sink.isObserved()) {
-
                             c.addTree((TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info, compilationCtx));
                             // Handle observed outputs.
                             for(DataflowTaskArgDesc d:sinkToConditional.keySet()) {
@@ -409,7 +434,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                                          * Construct the arguments for the consumer random variable. If we could apply
                                          * the distributions before the sample task is fixed this could be moved further
                                          * out and run only once. However, as in the future there may be distributions in
-                                         * the sample trace that is not possible, so, it is placed here with the
+                                         * the sample trace that is not possible, so it is placed here with the
                                          * expectation that the optimisation phase can move shared values out where
                                          * appropriate.
                                          */
@@ -504,24 +529,27 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
 
         finalize(funcData, compilationCtx);
 
-        // Construct sample value and all the intermediate variables.
-        if(funcData.sampleDesc.sample.isDistribution())
-            addDistributionProbabilities(funcData, compilationCtx);
-        else {
-            funcData.targetScope.addTree((TreeBuilderInfo info) -> {
-                addSampleValueTree(funcData, compilationCtx);
-            });
-        }
+        {
+            // Construct sample value and all the intermediate variables.
+            ScopeConstructor targetScope = getSampleTaskScope(funcData, compilationCtx);
+            if(funcData.sampleDesc.sample.isDistribution()) {
 
-        // Get the constructed tree.
+                addDistributionProbabilities(targetScope, funcData, compilationCtx);
+            } else {
+                targetScope.addTree((TreeBuilderInfo info) -> {
+                    addSampleValueTree(funcData, compilationCtx);
+                });
+            }
+        }
         IRTreeVoid result = compilationCtx.getOutermostScopeTree();
 
         /*
          * Get the values names of any loops, and use them as the arguments for this function. At the same time known
          * true and known false expressions are collected.
          */
-        ArgDesc<?>[] functionArgs = constructGibbsArgs(funcData, compilationCtx);
-        KnownValuesIR knownValues = constructKnownValues(funcData, compilationCtx);
+        List<Scope> scopes = funcData.sampleDesc.scopes;
+        ArgDesc<?>[] functionArgs = TreeUtils.constructGibbsArgs(scopes, compilationCtx);
+        KnownValuesIR knownValues = KnownValuesIR.constructKnownValues(scopes, compilationCtx);
 
         RandomVariable<?, ?> rv = funcData.sourceRandom;
         String randomVariableName = rv.aliasSet() ? rv.getAlias() : rv.getType().toString() + " " + rv.getId();
@@ -537,68 +565,10 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                 functionArgs, result, comment, knownValues);
     }
 
-    private KnownValuesIR constructKnownValues(FuncData funcData, CompilationContext compilationCtx) {
-        List<KnownValuesIR.KnownValue> values = new ArrayList<>();
-        for(Scope s:funcData.sampleDesc.scopes) {
-            switch(s.getScopeType()) {
-                case ELSE: {
-                    ElseScope elseScope = (ElseScope) s;
-                    values.add(new KnownValue(elseScope.ifScope.getGuardTree(compilationCtx), false));
-                    break;
-                }
-                case IF: {
-                    IfScope ifScope = (IfScope) s;
-                    values.add(new KnownValue(ifScope.getGuardTree(compilationCtx), true));
-                    break;
-                }
-                default:
-                    break;
-            }
-        }
-
-        return KnownValuesIR.constructKnownValues(values);
-    }
-
-    /**
-     * Method for collecting and ordering all the required arguments to Gibbs inference methods for the stepped ranges.
-     *
-     * @param funcData       The function data.
-     * @param compilationCtx The compilation context.
-     * @return
-     */
-    private ArgDesc<?>[] constructGibbsArgs(FuncData funcData, CompilationContext compilationCtx) {
-
-        VariableDescription<IntVariable> threadIdName = null;
-        List<ArgDesc<?>> args = new ArrayList<>();
-
-        int noScopes = funcData.sampleDesc.scopes.size();
-        for(int i = 1; i < noScopes; i++) { // First scope will always be global.
-            Scope scope = funcData.sampleDesc.scopes.get(i);
-            if(scope.getScopeType() == ScopeType.FOR) {
-                ForTask f = (ForTask) scope;
-
-                VariableDescription<IntVariable> indexName = f.getIndex().getUniqueVarDesc();
-                IRTreeReturn<IntVariable> start = f.getStart().getForwardIR(compilationCtx);
-                IRTreeReturn<IntVariable> end = f.getEnd().getForwardIR(compilationCtx);
-                if(f.incrementing)
-                    args.add(new ArgDesc<>(indexName, start, subtractII(end, constant(1))));
-                else
-                    args.add(new ArgDesc<>(indexName, end, start));
-
-                if(!f.isSerial(compilationCtx) && (compilationCtx.target == ExecutionType.MultiThreadCPU)) {
-                    threadIdName = VariableNames
-                            .threadIdName(VariableNames.calcVarName(f.getIndex().getUniqueVarDesc().name));
-                }
-            }
-        }
-
-        // Pass in the threads random number generator.
-        if(threadIdName != null) {
-            args.add(new ArgDesc<>(threadIdName));
-            args.add(new ArgDesc<>(VariableNames.rngName(0)));
-        }
-
-        return args.toArray(new ArgDesc[args.size()]);
+    protected ScopeConstructor getSampleTaskScope(FuncData funcData, CompilationContext compilationCtx) {
+        IRTreeReturn<BooleanVariable> constrainedGuard = TreeUtils.getIsConstrained(funcData.sampleDesc.sample,
+                compilationCtx);
+        return funcData.targetScope.addCondition(constrainedGuard).ifScopeConstructor();
     }
 
     private void processSample(SampleTask<?, ?> s, RandomVariable<?, ?> consumer, ScopeConstructor b,
@@ -611,6 +581,34 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         ScopeConstructor c = b.addComment(
                 "Processing sample task " + s.id() + " of consumer random variable " + consumer.getAlias() + ".")
                 .addConstraint(th);
+
+        // Record if the consuming sample task is constrained.
+        c.addTree((TreeBuilderInfo info) -> {
+            IRTreeVoid setFlag;
+            if(compilationCtx.traces.getFixableTasks().contains(s))
+                setFlag = initializeVariable(constrained,
+                        or(load(VariableNames.fixedFlagName(s)), TreeUtils.getIsConstrained(s, compilationCtx)),
+                        "Flag recording if this sample task of the consuming random variable is constrained.");
+            else
+                setFlag = initializeVariable(constrained, TreeUtils.getIsConstrained(s, compilationCtx),
+                        "Flag recording if this sample task of the consuming random variable is constrained.");
+            compilationCtx.addTreeToScope(GlobalScope.scope, setFlag);
+        });
+
+        // Add a condition so the task is only processed if it is constrained.
+        IfElseScopeConstructors constrainedCondition = c.addCondition(load(constrained));
+        c = constrainedCondition.ifScopeConstructor();
+
+        processConstrainedSample(c, consumer, observationTraces, funcData, compilationCtx);
+    }
+
+    private void processConstrainedSample(ScopeConstructor c, RandomVariable<?, ?> consumer,
+            Set<TraceHandle> observationTraces, FuncData funcData, CompilationContext compilationCtx) {
+        c.addTree(0, (TreeBuilderInfo info) -> {
+            IRTreeVoid t = TreeUtils.setIsConstrained(funcData.sampleDesc.sample, constant(true),
+                    "Mark that the sample has observed constrained data.", compilationCtx);
+            compilationCtx.addTreeToScope(GlobalScope.scope, t);
+        });
 
         c.addTree((TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info, compilationCtx));
 
@@ -703,7 +701,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
              * the optimisation phase can move shared values out where appropriate.
              */
             getConsumerRVInputIR(info, consumer, funcData, compilationCtx);
-            info.changeSubstitutions(constraintCount - 1, compilationCtx);
+            info.changeSubstitutions(constraintCount - 1);
             getDistributionSampleIR(s, load(reachedSourceName), funcData, info, compilationCtx);
         });
 
@@ -725,11 +723,12 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
 
     protected abstract void finalize(FuncData funcData, CompilationContext compilationCtx);
 
-    protected abstract void addDistributionProbabilities(FuncData funcData, CompilationContext compilationCtx);
+    protected abstract void addDistributionProbabilities(ScopeConstructor targetScope, FuncData funcData,
+            CompilationContext compilationCtx);
 
     protected abstract String getInferenceType();
 
-    protected abstract ScopeConstructor getBackTraceScope(FuncData funcData);
+    protected abstract ScopeConstructor getBackTraceScope(FuncData funcData, CompilationContext compilationCtx);
 
     protected abstract void getDistributionSampleIR(DistributionSampleTask<?, ?> s,
             IRTreeReturn<DoubleVariable> sourceProbability, FuncData funcData, TreeBuilderInfo info,
@@ -804,7 +803,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
              */
             getConsumerRVInputIR(info, consumer, funcData, compilationCtx);
 
-            info.changeSubstitutions(constraintCount - 1, compilationCtx);
+            info.changeSubstitutions(constraintCount - 1);
             Trace trace = traceHandle.getTrace();
 
             DataflowTaskArgDesc d = trace.pop();

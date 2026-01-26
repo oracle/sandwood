@@ -4,6 +4,7 @@ import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
 final class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DirichletBernoulli$CoreInterface {
+	private boolean constrainedFlag$sample17 = true;
 	private boolean fixedFlag$sample17 = false;
 	private boolean fixedProbFlag$sample17 = false;
 	private boolean fixedProbFlag$sample38 = false;
@@ -139,7 +140,7 @@ final class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.inte
 			double cv$sampleAccumulator = 0.0;
 			for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1) {
 				double var19 = prior[0];
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((output[i$var37]?var19:(1.0 - var19))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var19) && (var19 <= 1.0))?Math.log((output[i$var37]?var19:(1.0 - var19))):Double.NEGATIVE_INFINITY));
 			}
 			logProbability$b1 = cv$sampleAccumulator;
 			logProbability$var38 = cv$sampleAccumulator;
@@ -160,7 +161,7 @@ final class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.inte
 			double cv$sampleAccumulator = 0.0;
 			for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1) {
 				double var22 = prior[1];
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((output[i$var50]?var22:(1.0 - var22))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var22) && (var22 <= 1.0))?Math.log((output[i$var50]?var22:(1.0 - var22))):Double.NEGATIVE_INFINITY));
 			}
 			logProbability$b2 = cv$sampleAccumulator;
 			logProbability$var51 = cv$sampleAccumulator;
@@ -177,6 +178,7 @@ final class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	private final void sample17() {
+		constrainedFlag$sample17 = false;
 		double cv$originalProbability;
 		int cv$indexToChange = (int)(DistributionSampling.sampleUniform(RNG$) * 2.0);
 		double cv$movementRatio = ((DistributionSampling.sampleBeta(RNG$, 5, 5) * 1.9999) - 1);
@@ -200,35 +202,42 @@ final class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.inte
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(prior, v, 2);
 			for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1) {
+				constrainedFlag$sample17 = true;
 				double var19 = prior[0];
-				cv$accumulatedProbabilities = (Math.log((output[i$var37]?var19:(1.0 - var19))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var19) && (var19 <= 1.0))?Math.log((output[i$var37]?var19:(1.0 - var19))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1) {
+				constrainedFlag$sample17 = true;
 				double var22 = prior[1];
-				cv$accumulatedProbabilities = (Math.log((output[i$var50]?var22:(1.0 - var22))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var22) && (var22 <= 1.0))?Math.log((output[i$var50]?var22:(1.0 - var22))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
-		for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
-			prior[cv$loopIndex] = (prior[cv$loopIndex] - cv$proposedDifference);
-		prior[cv$indexToChange] = (prior[cv$indexToChange] + cv$proposedDifference);
-		for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < 2; cv$loopIndex += 1)
-			prior[cv$loopIndex] = (prior[cv$loopIndex] - cv$proposedDifference);
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(prior, v, 2);
-		for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1) {
-			double var19 = prior[0];
-			cv$accumulatedProbabilities = (Math.log((output[i$var37]?var19:(1.0 - var19))) + cv$accumulatedProbabilities);
-		}
-		for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1) {
-			double var22 = prior[1];
-			cv$accumulatedProbabilities = (Math.log((output[i$var50]?var22:(1.0 - var22))) + cv$accumulatedProbabilities);
-		}
-		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$)))) {
+		if(constrainedFlag$sample17) {
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
-				prior[cv$loopIndex] = (prior[cv$loopIndex] + cv$proposedDifference);
-			prior[cv$indexToChange] = (prior[cv$indexToChange] - cv$proposedDifference);
+				prior[cv$loopIndex] = (prior[cv$loopIndex] - cv$proposedDifference);
+			prior[cv$indexToChange] = (prior[cv$indexToChange] + cv$proposedDifference);
 			for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < 2; cv$loopIndex += 1)
-				prior[cv$loopIndex] = (prior[cv$loopIndex] + cv$proposedDifference);
+				prior[cv$loopIndex] = (prior[cv$loopIndex] - cv$proposedDifference);
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(prior, v, 2);
+			for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1) {
+				constrainedFlag$sample17 = true;
+				double var19 = prior[0];
+				cv$accumulatedProbabilities = ((((0.0 <= var19) && (var19 <= 1.0))?Math.log((output[i$var37]?var19:(1.0 - var19))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1) {
+				constrainedFlag$sample17 = true;
+				double var22 = prior[1];
+				cv$accumulatedProbabilities = ((((0.0 <= var22) && (var22 <= 1.0))?Math.log((output[i$var50]?var22:(1.0 - var22))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
+					prior[cv$loopIndex] = (prior[cv$loopIndex] + cv$proposedDifference);
+				prior[cv$indexToChange] = (prior[cv$indexToChange] - cv$proposedDifference);
+				for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < 2; cv$loopIndex += 1)
+					prior[cv$loopIndex] = (prior[cv$loopIndex] + cv$proposedDifference);
+			}
 		}
 	}
 
@@ -288,13 +297,6 @@ final class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.inte
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	@Override
-	public final void initializeConstants() {
-		v[0] = 0.1;
-		v[1] = 0.1;
-		length = length$observed;
-	}
-
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
@@ -307,6 +309,13 @@ final class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.inte
 		logProbability$b2 = Double.NaN;
 		if(!fixedProbFlag$sample51)
 			logProbability$var51 = Double.NaN;
+	}
+
+	@Override
+	public final void initializeModel() {
+		v[0] = 0.1;
+		v[1] = 0.1;
+		length = length$observed;
 	}
 
 	@Override
