@@ -678,11 +678,11 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         }
         return v;
     }
-    
+
     public interface InitilisationBody<A extends Variable<A>> {
         ArrayVariable<A> initialise();
     }
-    
+
     public static <A extends Variable<A>> ArrayVariable<A> getArrayVariable(InitilisationBody<A> i) {
         return i.initialise();
     }

@@ -40,6 +40,8 @@ import java.util.Stack;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.PriorityQueue;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Grammar to parse Sandwood java code into api calls.
@@ -176,12 +178,31 @@ public class SandwoodParser
 
   private String processInputString(String input) {
     StringBuilder sb = new StringBuilder();
-    String[] parts = input.split("\\\\n", -1);
-    sb.append("\"" + parts[0]);
-    for(int i=1; i<parts.length; i++)
-      sb.append("\\n\"\n" + indent() + "     + \"" + parts[i]);
     sb.append("\"");
-    return sb.toString();
+      if(input.length() < 30000) {
+        String[] parts = input.split("\\\\n", -1);
+        sb.append(parts[0]);
+        for(int i = 1; i < parts.length; i++)
+          sb.append("\\n\"\n" + indent() + "     + \"" + parts[i]);
+      } else {
+        try {
+          MessageDigest md = MessageDigest.getInstance("MD5");
+          md.update(input.getBytes());
+          for(byte b: md.digest()) {
+            int decimal = (int)b & 0XFF;
+            String hex = Integer.toHexString(decimal);
+
+            if(hex.length() % 2 == 1)
+              hex = "0" + hex;
+
+            sb.append(hex);
+          }
+        } catch(NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+      }
+      sb.append("\"");
+      return sb.toString();
   }
 
   private String indent() {
