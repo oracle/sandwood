@@ -41,7 +41,7 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$bias(double[] cv$value) {
+	public final void set$bias(double[] cv$value, boolean allocated$) {
 		bias = cv$value;
 		fixedProbFlag$sample9 = false;
 		fixedProbFlag$sample22 = false;
@@ -60,8 +60,12 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$fixedFlag$sample22(boolean cv$value) {
+	public final void set$fixedFlag$sample22(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample22 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample22$1 = 0; index$constrainedFlag$sample22$1 < constrainedFlag$sample22.length; index$constrainedFlag$sample22$1 += 1)
+				constrainedFlag$sample22[index$constrainedFlag$sample22$1] = true;
+		}
 		fixedProbFlag$sample22 = (fixedFlag$sample22 && fixedProbFlag$sample22);
 		fixedProbFlag$sample49 = (fixedFlag$sample22 && fixedProbFlag$sample49);
 		fixedProbFlag$sample77 = (fixedFlag$sample22 && fixedProbFlag$sample77);
@@ -73,8 +77,9 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$fixedFlag$sample9(boolean cv$value) {
+	public final void set$fixedFlag$sample9(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample9 = cv$value;
+		constrainedFlag$sample9 = (fixedFlag$sample9 || constrainedFlag$sample9);
 		fixedProbFlag$sample9 = (fixedFlag$sample9 && fixedProbFlag$sample9);
 		fixedProbFlag$sample49 = (fixedFlag$sample9 && fixedProbFlag$sample49);
 		fixedProbFlag$sample77 = (fixedFlag$sample9 && fixedProbFlag$sample77);
@@ -91,7 +96,7 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$flipsMeasured(boolean[][] cv$value) {
+	public final void set$flipsMeasured(boolean[][] cv$value, boolean allocated$) {
 		flipsMeasured = cv$value;
 	}
 
@@ -101,7 +106,7 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$length$flipsMeasured(int[] cv$value) {
+	public final void set$length$flipsMeasured(int[] cv$value, boolean allocated$) {
 		length$flipsMeasured = cv$value;
 	}
 
@@ -138,6 +143,186 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final double get$logProbability$flips() {
 		return logProbability$flips;
+	}
+
+	private final void drawValueSample22(int i$var21) {
+		bias[i$var21] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	private final void drawValueSample9() {
+		bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	private final void inferSample22(int i$var21) {
+		if(true) {
+			constrainedFlag$sample22[((i$var21 - 1) / 1)] = false;
+			int cv$sum = 0;
+			int cv$count = 0;
+			{
+				{
+					{
+						{
+							for(int j = 0; j < 1; j += 1) {
+								if((i$var21 == j)) {
+									{
+										{
+											for(int var48 = 0; var48 < length$flipsMeasured[j]; var48 += 1) {
+												boolean cv$sampleConstrained = true;
+												if(cv$sampleConstrained) {
+													constrainedFlag$sample22[((i$var21 - 1) / 1)] = true;
+													{
+														{
+															{
+																{
+																	{
+																		cv$count = (cv$count + 1);
+																		if(flips[j][var48])
+																			cv$sum = (cv$sum + 1);
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				{
+					{
+						{
+							for(int k = 1; k < coins; k += 1) {
+								if((i$var21 == k)) {
+									{
+										{
+											for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1) {
+												boolean cv$sampleConstrained = true;
+												if(cv$sampleConstrained) {
+													constrainedFlag$sample22[((i$var21 - 1) / 1)] = true;
+													{
+														{
+															{
+																{
+																	{
+																		cv$count = (cv$count + 1);
+																		if(flips[k][var75])
+																			cv$sum = (cv$sum + 1);
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample22[((i$var21 - 1) / 1)]) {
+				double var22 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+				{
+					{
+						{
+							bias[i$var21] = var22;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private final void inferSample9() {
+		if(true) {
+			constrainedFlag$sample9 = false;
+			int cv$sum = 0;
+			int cv$count = 0;
+			{
+				{
+					{
+						{
+							for(int j = 0; j < 1; j += 1) {
+								if((0 == j)) {
+									{
+										{
+											for(int var48 = 0; var48 < length$flipsMeasured[j]; var48 += 1) {
+												boolean cv$sampleConstrained = true;
+												if(cv$sampleConstrained) {
+													constrainedFlag$sample9 = true;
+													{
+														{
+															{
+																{
+																	{
+																		cv$count = (cv$count + 1);
+																		if(flips[j][var48])
+																			cv$sum = (cv$sum + 1);
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				{
+					{
+						{
+							for(int k = 1; k < coins; k += 1) {
+								if((0 == k)) {
+									{
+										{
+											for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1) {
+												boolean cv$sampleConstrained = true;
+												if(cv$sampleConstrained) {
+													constrainedFlag$sample9 = true;
+													{
+														{
+															{
+																{
+																	{
+																		cv$count = (cv$count + 1);
+																		if(flips[k][var75])
+																			cv$sum = (cv$sum + 1);
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample9) {
+				double var9 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+				{
+					{
+						{
+							bias[0] = var9;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private final void logProbabilityValue$sample22() {
@@ -383,178 +568,6 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 		}
 	}
 
-	private final void sample22(int i$var21) {
-		if(true) {
-			constrainedFlag$sample22[((i$var21 - 1) / 1)] = false;
-			int cv$sum = 0;
-			int cv$count = 0;
-			{
-				{
-					{
-						{
-							for(int j = 0; j < 1; j += 1) {
-								if((i$var21 == j)) {
-									{
-										{
-											for(int var48 = 0; var48 < length$flipsMeasured[j]; var48 += 1) {
-												boolean cv$sampleConstrained = true;
-												if(cv$sampleConstrained) {
-													constrainedFlag$sample22[((i$var21 - 1) / 1)] = true;
-													{
-														{
-															{
-																{
-																	{
-																		cv$count = (cv$count + 1);
-																		if(flips[j][var48])
-																			cv$sum = (cv$sum + 1);
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				{
-					{
-						{
-							for(int k = 1; k < coins; k += 1) {
-								if((i$var21 == k)) {
-									{
-										{
-											for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1) {
-												boolean cv$sampleConstrained = true;
-												if(cv$sampleConstrained) {
-													constrainedFlag$sample22[((i$var21 - 1) / 1)] = true;
-													{
-														{
-															{
-																{
-																	{
-																		cv$count = (cv$count + 1);
-																		if(flips[k][var75])
-																			cv$sum = (cv$sum + 1);
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(constrainedFlag$sample22[((i$var21 - 1) / 1)]) {
-				double var22 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-				{
-					{
-						{
-							bias[i$var21] = var22;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	private final void sample9() {
-		if(true) {
-			constrainedFlag$sample9 = false;
-			int cv$sum = 0;
-			int cv$count = 0;
-			{
-				{
-					{
-						{
-							for(int j = 0; j < 1; j += 1) {
-								if((0 == j)) {
-									{
-										{
-											for(int var48 = 0; var48 < length$flipsMeasured[j]; var48 += 1) {
-												boolean cv$sampleConstrained = true;
-												if(cv$sampleConstrained) {
-													constrainedFlag$sample9 = true;
-													{
-														{
-															{
-																{
-																	{
-																		cv$count = (cv$count + 1);
-																		if(flips[j][var48])
-																			cv$sum = (cv$sum + 1);
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				{
-					{
-						{
-							for(int k = 1; k < coins; k += 1) {
-								if((0 == k)) {
-									{
-										{
-											for(int var75 = 0; var75 < length$flipsMeasured[k]; var75 += 1) {
-												boolean cv$sampleConstrained = true;
-												if(cv$sampleConstrained) {
-													constrainedFlag$sample9 = true;
-													{
-														{
-															{
-																{
-																	{
-																		cv$count = (cv$count + 1);
-																		if(flips[k][var75])
-																			cv$sum = (cv$sum + 1);
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(constrainedFlag$sample9) {
-				double var9 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-				{
-					{
-						{
-							bias[0] = var9;
-						}
-					}
-				}
-			}
-		}
-	}
-
 	@Override
 	public final void allocateScratch() {}
 
@@ -663,20 +676,26 @@ final class Flip2CoinsMK11$SingleThreadCPU extends org.sandwood.runtime.internal
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample9)
-				sample9();
+				inferSample9();
 			for(int i$var21 = 1; i$var21 < coins; i$var21 += 1) {
 				if(!fixedFlag$sample22)
-					sample22(i$var21);
+					inferSample22(i$var21);
 			}
 		} else {
 			for(int i$var21 = (coins - ((((coins - 1) - 1) % 1) + 1)); i$var21 >= ((1 - 1) + 1); i$var21 -= 1) {
 				if(!fixedFlag$sample22)
-					sample22(i$var21);
+					inferSample22(i$var21);
 			}
 			if(!fixedFlag$sample9)
-				sample9();
+				inferSample9();
 		}
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample9)
+			drawValueSample9();
+		for(int i$var21 = 1; i$var21 < coins; i$var21 += 1) {
+			if(!constrainedFlag$sample22[((i$var21 - 1) / 1)])
+				drawValueSample22(i$var21);
+		}
 	}
 
 	private final void initializeLogProbabilityFields() {

@@ -68,7 +68,7 @@ public final class DiscreteChoice extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample24(fixed);
+                system$c.set$fixedFlag$sample24(fixed, allocated);
             }
         }
 
@@ -104,7 +104,7 @@ public final class DiscreteChoice extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample24(fixed);
+                system$c.set$fixedFlag$sample24(fixed, allocated);
             }
         }
 
@@ -140,7 +140,7 @@ public final class DiscreteChoice extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample24(fixed);
+                system$c.set$fixedFlag$sample24(fixed, allocated);
             }
         }
 
@@ -164,7 +164,7 @@ public final class DiscreteChoice extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$ut(value);
+            system$c.set$ut(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -174,7 +174,7 @@ public final class DiscreteChoice extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample24(fixed);
+                system$c.set$fixedFlag$sample24(fixed, allocated);
             }
         }
 
@@ -203,7 +203,7 @@ public final class DiscreteChoice extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noObs(value); }
+        protected void setValueInternal(int value) { system$c.set$noObs(value, allocated); }
     };
 
     /**
@@ -220,7 +220,7 @@ public final class DiscreteChoice extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noProducts(value); }
+        protected void setValueInternal(int value) { system$c.set$noProducts(value, allocated); }
     };
 
     /**
@@ -239,7 +239,7 @@ public final class DiscreteChoice extends Model {
         }
 
         @Override
-        protected void setValueInternal(int[] value) { system$c.set$ObsChoices(value); }
+        protected void setValueInternal(int[] value) { system$c.set$ObsChoices(value, allocated); }
     };
 
     /**
@@ -321,19 +321,20 @@ public final class DiscreteChoice extends Model {
     private void transferData(DiscreteChoice$CoreInterface oldCore, DiscreteChoice$CoreInterface newCore) {
         //Model inputs
         if(noObs.isSet())
-            newCore.set$noObs(oldCore.get$noObs());
+            newCore.set$noObs(oldCore.get$noObs(), false);
         if(noProducts.isSet())
-            newCore.set$noProducts(oldCore.get$noProducts());
+            newCore.set$noProducts(oldCore.get$noProducts(), false);
+
         //Observed scalars
         if(ObsChoices.isSet())
-            newCore.set$ObsChoices(oldCore.get$ObsChoices());
+            newCore.set$ObsChoices(oldCore.get$ObsChoices(), false);
 
         //ComputedVariables
         if($ut.isSet())
-            newCore.set$ut(oldCore.get$ut());
+            newCore.set$ut(oldCore.get$ut(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample24(oldCore.get$fixedFlag$sample24());
+        newCore.set$fixedFlag$sample24(oldCore.get$fixedFlag$sample24(), false);
     }
 
     /**

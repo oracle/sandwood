@@ -16,8 +16,6 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$b;
 	private double logProbability$bernoulli;
 	private double logProbability$guard;
-	private double logProbability$sample13;
-	private double logProbability$sample9;
 	private double logProbability$value;
 	private boolean observedGuard;
 	private double observedValue;
@@ -84,7 +82,7 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$observedGuard(boolean cv$value) {
+	public final void set$observedGuard(boolean cv$value, boolean allocated$) {
 		observedGuard = cv$value;
 	}
 
@@ -94,7 +92,7 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$observedValue(double cv$value) {
+	public final void set$observedValue(double cv$value, boolean allocated$) {
 		observedValue = cv$value;
 	}
 
@@ -106,19 +104,17 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private final void logProbabilityValue$sample13() {
 		if(!fixedProbFlag$sample13) {
 			double cv$distributionAccumulator = (((0.0 <= b) && (b < 1.0))?0.0:Double.NEGATIVE_INFINITY);
-			logProbability$sample13 = cv$distributionAccumulator;
-			logProbability$b = (logProbability$b + cv$distributionAccumulator);
+			logProbability$b = cv$distributionAccumulator;
 			if(!guard)
 				logProbability$value = (logProbability$value + cv$distributionAccumulator);
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample13 = true;
 		} else {
-			logProbability$b = (logProbability$b + logProbability$sample13);
 			if(!guard)
-				logProbability$value = (logProbability$value + logProbability$sample13);
-			logProbability$$model = (logProbability$$model + logProbability$sample13);
-			logProbability$$evidence = (logProbability$$evidence + logProbability$sample13);
+				logProbability$value = (logProbability$value + logProbability$b);
+			logProbability$$model = (logProbability$$model + logProbability$b);
+			logProbability$$evidence = (logProbability$$evidence + logProbability$b);
 		}
 	}
 
@@ -139,19 +135,17 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private final void logProbabilityValue$sample9() {
 		if(!fixedProbFlag$sample9) {
 			double cv$distributionAccumulator = (((0.0 <= a) && (a < 1.0))?0.0:Double.NEGATIVE_INFINITY);
-			logProbability$sample9 = cv$distributionAccumulator;
-			logProbability$a = (logProbability$a + cv$distributionAccumulator);
+			logProbability$a = cv$distributionAccumulator;
 			if(guard)
 				logProbability$value = (logProbability$value + cv$distributionAccumulator);
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample9 = true;
 		} else {
-			logProbability$a = (logProbability$a + logProbability$sample9);
 			if(guard)
-				logProbability$value = (logProbability$value + logProbability$sample9);
-			logProbability$$model = (logProbability$$model + logProbability$sample9);
-			logProbability$$evidence = (logProbability$$evidence + logProbability$sample9);
+				logProbability$value = (logProbability$value + logProbability$a);
+			logProbability$$model = (logProbability$$model + logProbability$a);
+			logProbability$$evidence = (logProbability$$evidence + logProbability$a);
 		}
 	}
 
@@ -203,13 +197,11 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample5)
 			logProbability$guard = Double.NaN;
-		logProbability$a = 0.0;
 		logProbability$value = 0.0;
 		if(!fixedProbFlag$sample9)
-			logProbability$sample9 = Double.NaN;
-		logProbability$b = 0.0;
+			logProbability$a = Double.NaN;
 		if(!fixedProbFlag$sample13)
-			logProbability$sample13 = Double.NaN;
+			logProbability$b = Double.NaN;
 	}
 
 	@Override

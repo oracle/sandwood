@@ -3,12 +3,12 @@ package org.sandwood.compiler.tests.parser;
 interface MultinomialBernoulli$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 	public double[] get$beta();
 	public boolean get$fixedFlag$sample17();
-	public void set$fixedFlag$sample17(boolean cv$value);
+	public void set$fixedFlag$sample17(boolean cv$value, boolean allocated$);
 	public boolean get$fixedFlag$sample20();
-	public void set$fixedFlag$sample20(boolean cv$value);
+	public void set$fixedFlag$sample20(boolean cv$value, boolean allocated$);
 	public int get$length();
 	public int get$length$observed();
-	public void set$length$observed(int cv$value);
+	public void set$length$observed(int cv$value, boolean allocated$);
 	public double get$logProbability$b1();
 	public double get$logProbability$b2();
 	public double get$logProbability$b3();
@@ -17,10 +17,10 @@ interface MultinomialBernoulli$CoreInterface extends org.sandwood.runtime.intern
 	public double get$logProbability$prior();
 	public int get$n();
 	public boolean[] get$observed();
-	public void set$observed(boolean[] cv$value);
+	public void set$observed(boolean[] cv$value, boolean allocated$);
 	public boolean[] get$output();
 	public double[] get$p();
-	public void set$p(double[] cv$value);
+	public void set$p(double[] cv$value, boolean allocated$);
 	public int[] get$prior();
-	public void set$prior(int[] cv$value);
+	public void set$prior(int[] cv$value, boolean allocated$);
 }

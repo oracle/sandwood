@@ -6,25 +6,25 @@ interface ReductionTest$CoreInterface extends org.sandwood.runtime.internal.mode
 	public double[] get$bias();
 
 	// Setter for bias.
-	public void set$bias(double[] cv$value);
+	public void set$bias(double[] cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample30.
 	public boolean get$fixedFlag$sample30();
 
 	// Setter for fixedFlag$sample30.
-	public void set$fixedFlag$sample30(boolean cv$value);
+	public void set$fixedFlag$sample30(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample47.
 	public boolean get$fixedFlag$sample47();
 
 	// Setter for fixedFlag$sample47.
-	public void set$fixedFlag$sample47(boolean cv$value);
+	public void set$fixedFlag$sample47(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample62.
 	public boolean get$fixedFlag$sample62();
 
 	// Setter for fixedFlag$sample62.
-	public void set$fixedFlag$sample62(boolean cv$value);
+	public void set$fixedFlag$sample62(boolean cv$value, boolean allocated$);
 
 	// Getter for flips.
 	public boolean[] get$flips();
@@ -33,13 +33,13 @@ interface ReductionTest$CoreInterface extends org.sandwood.runtime.internal.mode
 	public boolean[] get$flipsMeasured();
 
 	// Setter for flipsMeasured.
-	public void set$flipsMeasured(boolean[] cv$value);
+	public void set$flipsMeasured(boolean[] cv$value, boolean allocated$);
 
 	// Getter for length$flipsMeasured.
 	public int get$length$flipsMeasured();
 
 	// Setter for length$flipsMeasured.
-	public void set$length$flipsMeasured(int cv$value);
+	public void set$length$flipsMeasured(int cv$value, boolean allocated$);
 
 	// Getter for logProbability$bias.
 	public double get$logProbability$bias();
@@ -57,13 +57,13 @@ interface ReductionTest$CoreInterface extends org.sandwood.runtime.internal.mode
 	public double[][] get$m();
 
 	// Setter for m.
-	public void set$m(double[][] cv$value);
+	public void set$m(double[][] cv$value, boolean allocated$);
 
 	// Getter for noCats.
 	public int get$noCats();
 
 	// Setter for noCats.
-	public void set$noCats(int cv$value);
+	public void set$noCats(int cv$value, boolean allocated$);
 
 	// Getter for noFlips.
 	public int get$noFlips();
@@ -75,7 +75,7 @@ interface ReductionTest$CoreInterface extends org.sandwood.runtime.internal.mode
 	public int[] get$st();
 
 	// Setter for st.
-	public void set$st(int[] cv$value);
+	public void set$st(int[] cv$value, boolean allocated$);
 
 	// Getter for v.
 	public double[] get$v();

@@ -37,8 +37,8 @@ public final class Conditional3 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample16(fixed);
-                system$c.set$fixedFlag$sample4(fixed);
+                system$c.set$fixedFlag$sample16(fixed, allocated);
+                system$c.set$fixedFlag$sample4(fixed, allocated);
             }
         }
 
@@ -66,7 +66,7 @@ public final class Conditional3 extends Model {
 
         @Override
         protected void setValueInternal(boolean value) {
-            system$c.set$guard(value);
+            system$c.set$guard(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -76,7 +76,7 @@ public final class Conditional3 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample4(fixed);
+                system$c.set$fixedFlag$sample4(fixed, allocated);
             }
         }
 
@@ -131,7 +131,7 @@ public final class Conditional3 extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$var14(value);
+            system$c.set$var14(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -162,7 +162,7 @@ public final class Conditional3 extends Model {
         }
 
         @Override
-        protected void setValueInternal(double value) { system$c.set$observedValue(value); }
+        protected void setValueInternal(double value) { system$c.set$observedValue(value, allocated); }
     };
 
     /**
@@ -232,18 +232,19 @@ public final class Conditional3 extends Model {
     }
 
     private void transferData(Conditional3$CoreInterface oldCore, Conditional3$CoreInterface newCore) {
+
         //Observed scalars
         if(observedValue.isSet())
-            newCore.set$observedValue(oldCore.get$observedValue());
+            newCore.set$observedValue(oldCore.get$observedValue(), false);
 
         //ComputedVariables
         if($guard.isSet())
-            newCore.set$guard(oldCore.get$guard());
+            newCore.set$guard(oldCore.get$guard(), false);
         if($var14.isSet())
-            newCore.set$var14(oldCore.get$var14());
+            newCore.set$var14(oldCore.get$var14(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
+        newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4(), false);
     }
 
     /**

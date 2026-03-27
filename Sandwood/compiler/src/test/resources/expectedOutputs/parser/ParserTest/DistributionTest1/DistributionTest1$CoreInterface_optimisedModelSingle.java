@@ -6,25 +6,25 @@ interface DistributionTest1$CoreInterface extends org.sandwood.runtime.internal.
 	public double[] get$distribution$sample4();
 
 	// Setter for distribution$sample4.
-	public void set$distribution$sample4(double[] cv$value);
+	public void set$distribution$sample4(double[] cv$value, boolean allocated$);
 
 	// Getter for distribution$sample6.
 	public double[] get$distribution$sample6();
 
 	// Setter for distribution$sample6.
-	public void set$distribution$sample6(double[] cv$value);
+	public void set$distribution$sample6(double[] cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample4.
 	public boolean get$fixedFlag$sample4();
 
 	// Setter for fixedFlag$sample4.
-	public void set$fixedFlag$sample4(boolean cv$value);
+	public void set$fixedFlag$sample4(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample6.
 	public boolean get$fixedFlag$sample6();
 
 	// Setter for fixedFlag$sample6.
-	public void set$fixedFlag$sample6(boolean cv$value);
+	public void set$fixedFlag$sample6(boolean cv$value, boolean allocated$);
 
 	// Getter for logProbability$v.
 	public double get$logProbability$v();
@@ -42,23 +42,23 @@ interface DistributionTest1$CoreInterface extends org.sandwood.runtime.internal.
 	public int get$v1();
 
 	// Setter for v1.
-	public void set$v1(int cv$value);
+	public void set$v1(int cv$value, boolean allocated$);
 
 	// Getter for v2.
 	public int get$v2();
 
 	// Setter for v2.
-	public void set$v2(int cv$value);
+	public void set$v2(int cv$value, boolean allocated$);
 
 	// Getter for value.
 	public boolean get$value();
 
 	// Setter for value.
-	public void set$value(boolean cv$value);
+	public void set$value(boolean cv$value, boolean allocated$);
 
 	// Getter for weightings.
 	public double[] get$weightings();
 
 	// Setter for weightings.
-	public void set$weightings(double[] cv$value);
+	public void set$weightings(double[] cv$value, boolean allocated$);
 }

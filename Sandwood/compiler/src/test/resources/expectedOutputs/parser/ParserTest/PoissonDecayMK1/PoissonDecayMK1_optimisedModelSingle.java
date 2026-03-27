@@ -56,7 +56,7 @@ public final class PoissonDecayMK1 extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$rate(value);
+            system$c.set$rate(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -66,7 +66,7 @@ public final class PoissonDecayMK1 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample6(fixed);
+                system$c.set$fixedFlag$sample6(fixed, allocated);
             }
         }
 
@@ -95,7 +95,7 @@ public final class PoissonDecayMK1 extends Model {
         }
 
         @Override
-        protected void setValueInternal(double value) { system$c.set$a(value); }
+        protected void setValueInternal(double value) { system$c.set$a(value, allocated); }
     };
 
     /**
@@ -112,7 +112,7 @@ public final class PoissonDecayMK1 extends Model {
         }
 
         @Override
-        protected void setValueInternal(double value) { system$c.set$b(value); }
+        protected void setValueInternal(double value) { system$c.set$b(value, allocated); }
     };
 
     /**
@@ -132,13 +132,13 @@ public final class PoissonDecayMK1 extends Model {
 
         @Override
         public void setValueInternal(int[] value) {
-            system$c.set$decayDetected(value);
-            system$c.set$length$decayDetected(value.length);
+            system$c.set$decayDetected(value, allocated);
+            system$c.set$length$decayDetected(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$decayDetected(shape);
+            system$c.set$length$decayDetected(shape, allocated);
         }
 
         @Override
@@ -237,24 +237,24 @@ public final class PoissonDecayMK1 extends Model {
     private void transferData(PoissonDecayMK1$CoreInterface oldCore, PoissonDecayMK1$CoreInterface newCore) {
         //Model inputs
         if(a.isSet())
-            newCore.set$a(oldCore.get$a());
+            newCore.set$a(oldCore.get$a(), false);
         if(b.isSet())
-            newCore.set$b(oldCore.get$b());
+            newCore.set$b(oldCore.get$b(), false);
 
         //Observed arrays
         if(decayDetected.isSet()) {
-            newCore.set$decayDetected(oldCore.get$decayDetected());
-            newCore.set$length$decayDetected(oldCore.get$length$decayDetected());
+            newCore.set$decayDetected(oldCore.get$decayDetected(), false);
+            newCore.set$length$decayDetected(oldCore.get$length$decayDetected(), false);
         }
         else if(decayDetected.shapeSet())
-            newCore.set$length$decayDetected(oldCore.get$length$decayDetected());
+            newCore.set$length$decayDetected(oldCore.get$length$decayDetected(), false);
 
         //ComputedVariables
         if($rate.isSet())
-            newCore.set$rate(oldCore.get$rate());
+            newCore.set$rate(oldCore.get$rate(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
+        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6(), false);
     }
 
     /**

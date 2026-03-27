@@ -55,9 +55,8 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for d.
 	@Override
-	public final void set$d(double[] cv$value) {
+	public final void set$d(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of d including if probabilities need to be updated.
-		// Set d
 		d = cv$value;
 		
 		// Unset the fixed probability flag for sample 50 as it depends on d.
@@ -75,10 +74,13 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for fixedFlag$sample47.
 	@Override
-	public final void set$fixedFlag$sample47(boolean cv$value) {
+	public final void set$fixedFlag$sample47(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample47 including if probabilities
 		// need to be updated.
 		fixedFlag$sample47 = cv$value;
+		
+		// Substituted "fixedFlag$sample47" with its value "cv$value".
+		constrainedFlag$sample47 = (cv$value || constrainedFlag$sample47);
 		
 		// Should the probability of sample 47 be set to fixed. This will only every change
 		// the flag to false.
@@ -101,10 +103,13 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for fixedFlag$sample50.
 	@Override
-	public final void set$fixedFlag$sample50(boolean cv$value) {
+	public final void set$fixedFlag$sample50(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample50 including if probabilities
 		// need to be updated.
 		fixedFlag$sample50 = cv$value;
+		
+		// Substituted "fixedFlag$sample50" with its value "cv$value".
+		constrainedFlag$sample50 = (cv$value || constrainedFlag$sample50);
 		
 		// Should the probability of sample 50 be set to fixed. This will only every change
 		// the flag to false.
@@ -127,7 +132,7 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for length$obs_measured.
 	@Override
-	public final void set$length$obs_measured(int cv$value) {
+	public final void set$length$obs_measured(int cv$value, boolean allocated$) {
 		length$obs_measured = cv$value;
 	}
 
@@ -175,8 +180,7 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for obs_measured.
 	@Override
-	public final void set$obs_measured(int[] cv$value) {
-		// Set obs_measured
+	public final void set$obs_measured(int[] cv$value, boolean allocated$) {
 		obs_measured = cv$value;
 	}
 
@@ -188,7 +192,7 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for y.
 	@Override
-	public final void set$y(int cv$value) {
+	public final void set$y(int cv$value, boolean allocated$) {
 		// Set flags for all the side effects of y including if probabilities need to be updated.
 		y = cv$value;
 		
@@ -199,287 +203,30 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		fixedProbFlag$sample50 = false;
 	}
 
-	// Calculate the probability of the samples represented by sample47 using sampled
-	// values.
-	private final void logProbabilityValue$sample47() {
-		// Determine if we need to calculate the values for sample task 47 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample47) {
-			// Generating probabilities for sample task
-			// Variable declaration of cv$distributionAccumulator moved.
-			// Declaration comment was:
-			// Variable declaration of cv$distributionAccumulator moved.
-			// Declaration comment was:
-			// An accumulator for log probabilities.
-			// 
-			// Store the value of the function call, so the function call is only made once.
-			// 
-			// The sample value to calculate the probability of generating
-			// 
-			// Scale the probability relative to the observed distribution space.
-			// 
-			// Add the probability of this distribution configuration to the accumulator.
-			// 
-			// An accumulator for the distributed probability space covered.
-			// 
-			// Variable declaration of cv$distributionAccumulator moved.
-			// Declaration comment was:
-			// An accumulator for log probabilities.
-			// 
-			// Store the value of the function call, so the function call is only made once.
-			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (((((0.0 <= y) && (y < 2)) && (0.0 <= b[y])) && (b[y] <= 1.0))?Math.log(b[y]):Double.NEGATIVE_INFINITY);
-			
-			// Store the sample task probability
-			logProbability$y = cv$distributionAccumulator;
-			
-			// Add probability to model
-			// 
-			// Variable declaration of cv$accumulator moved.
-			// Declaration comment was:
-			// Accumulator for probabilities of instances of the random variable
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			// 
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample47)
-				// Variable declaration of cv$accumulator moved.
-				// Declaration comment was:
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample47 = fixedFlag$sample47;
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			// Add probability to model
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$y);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample47)
-				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$y);
-		}
+	// Pick a value from the distribution for the unconditioned variable from sample47
+	private final void drawValueSample47() {
+		y = DistributionSampling.sampleCategorical(RNG$, b, 2);
 	}
 
-	// Calculate the probability of the samples represented by sample50 using sampled
-	// values.
-	private final void logProbabilityValue$sample50() {
-		// Determine if we need to calculate the values for sample task 50 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample50) {
-			// Generating probabilities for sample task
-			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$48_4 = -1;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == y))
-				lengthCV$a$48_4 = 2;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$48_4 = 3;
-			
-			// Variable declaration of cv$distributionAccumulator moved.
-			// Declaration comment was:
-			// Variable declaration of cv$distributionAccumulator moved.
-			// Declaration comment was:
-			// An accumulator for log probabilities.
-			// 
-			// Store the value of the function call, so the function call is only made once.
-			// 
-			// The sample value to calculate the probability of generating
-			// 
-			// Scale the probability relative to the observed distribution space.
-			// 
-			// Add the probability of this distribution configuration to the accumulator.
-			// 
-			// An accumulator for the distributed probability space covered.
-			// 
-			// Variable declaration of cv$distributionAccumulator moved.
-			// Declaration comment was:
-			// An accumulator for log probabilities.
-			// 
-			// Store the value of the function call, so the function call is only made once.
-			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_4);
-			
-			// Store the sample task probability
-			logProbability$d = cv$distributionAccumulator;
-			
-			// Add probability to model
-			// 
-			// Variable declaration of cv$accumulator moved.
-			// Declaration comment was:
-			// Accumulator for probabilities of instances of the random variable
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			// 
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample50)
-				// Variable declaration of cv$accumulator moved.
-				// Declaration comment was:
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample50 = (fixedFlag$sample50 && fixedFlag$sample47);
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			// Add probability to model
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$d);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample50)
-				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$d);
-		}
-	}
-
-	// Calculate the probability of the samples represented by sample64 using sampled
-	// values.
-	private final void logProbabilityValue$sample64() {
-		// Determine if we need to calculate the values for sample task 64 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample64) {
-			// Generating probabilities for sample task
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			for(int var61 = 0; var61 < length$obs_measured; var61 += 1) {
-				// The sample value to calculate the probability of generating
-				int cv$sampleValue = obs[var61];
-				
-				// Allocate a local variable to hold the length of the array.
-				int lengthCV$a$48_5 = -1;
-				
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == y))
-					lengthCV$a$48_5 = 2;
-				
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == y))
-					lengthCV$a$48_5 = 3;
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				// 
-				// Variable declaration of cv$distributionAccumulator moved.
-				// Declaration comment was:
-				// An accumulator for log probabilities.
-				// 
-				// Store the value of the function call, so the function call is only made once.
-				cv$sampleAccumulator = (cv$sampleAccumulator + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$48_5)) && (0 < lengthCV$a$48_5)) && (0.0 <= d[cv$sampleValue])) && (d[cv$sampleValue] <= 1.0))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-			}
-			
-			// Store the random variable instance probability
-			logProbability$var62 = cv$sampleAccumulator;
-			
-			// Update the variable probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$obs = (logProbability$obs + cv$sampleAccumulator);
-			
-			// Add probability to model
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample64 = fixedFlag$sample50;
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			// Update the variable probability
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$obs = (logProbability$obs + logProbability$var62);
-			
-			// Add probability to model
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var62);
-			
-			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var62);
-		}
+	// Pick a value from the distribution for the unconditioned variable from sample50
+	private final void drawValueSample50() {
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$48_4 = -1;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((0 == y))
+			lengthCV$a$48_4 = 2;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((1 == y))
+			lengthCV$a$48_4 = 3;
+		DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_4, d);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 47 drawn from Categorical 44. Inference was performed using variable
 	// marginalization.
-	private final void sample47() {
+	private final void inferSample47() {
 		constrainedFlag$sample47 = false;
 		{
 			// Write out the new value of the sample.
@@ -654,7 +401,7 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 50 drawn from Dirichlet 47. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
-	private final void sample50() {
+	private final void inferSample50() {
 		constrainedFlag$sample50 = false;
 		
 		// Allocate a local variable to hold the length of the array.
@@ -706,6 +453,283 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// 
 			// A reference local to the function for the sample variable.
 			Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$var48$countGlobal, d, lengthCV$a$48_3);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample47 using sampled
+	// values.
+	private final void logProbabilityValue$sample47() {
+		// Determine if we need to calculate the values for sample task 47 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample47) {
+			// Generating probabilities for sample task
+			// Variable declaration of cv$distributionAccumulator moved.
+			// Declaration comment was:
+			// Variable declaration of cv$distributionAccumulator moved.
+			// Declaration comment was:
+			// An accumulator for log probabilities.
+			// 
+			// Store the value of the function call, so the function call is only made once.
+			// 
+			// The sample value to calculate the probability of generating
+			// 
+			// Scale the probability relative to the observed distribution space.
+			// 
+			// Add the probability of this distribution configuration to the accumulator.
+			// 
+			// An accumulator for the distributed probability space covered.
+			// 
+			// Variable declaration of cv$distributionAccumulator moved.
+			// Declaration comment was:
+			// An accumulator for log probabilities.
+			// 
+			// Store the value of the function call, so the function call is only made once.
+			// 
+			// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = (((((0.0 <= y) && (y < 2)) && (0.0 <= b[y])) && (b[y] <= 1.0))?Math.log(b[y]):Double.NEGATIVE_INFINITY);
+			
+			// Store the sample task probability
+			logProbability$y = cv$distributionAccumulator;
+			
+			// Add probability to model
+			// 
+			// Variable declaration of cv$accumulator moved.
+			// Declaration comment was:
+			// Accumulator for probabilities of instances of the random variable
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			// 
+			// Add the probability of this sample task to the sample task accumulator.
+			// 
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample47)
+				// Variable declaration of cv$accumulator moved.
+				// Declaration comment was:
+				// Accumulator for probabilities of instances of the random variable
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				// 
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Accumulator for sample probabilities for a specific instance of the random variable.
+				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample47 = fixedFlag$sample47;
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			// Add probability to model
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$model = (logProbability$$model + logProbability$y);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample47)
+				// Variable declaration of cv$accumulator moved.
+				logProbability$$evidence = (logProbability$$evidence + logProbability$y);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample50 using sampled
+	// values.
+	private final void logProbabilityValue$sample50() {
+		// Determine if we need to calculate the values for sample task 50 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample50) {
+			// Generating probabilities for sample task
+			// Allocate a local variable to hold the length of the array.
+			int lengthCV$a$48_5 = -1;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((0 == y))
+				lengthCV$a$48_5 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$48_5 = 3;
+			
+			// Variable declaration of cv$distributionAccumulator moved.
+			// Declaration comment was:
+			// Variable declaration of cv$distributionAccumulator moved.
+			// Declaration comment was:
+			// An accumulator for log probabilities.
+			// 
+			// Store the value of the function call, so the function call is only made once.
+			// 
+			// The sample value to calculate the probability of generating
+			// 
+			// Scale the probability relative to the observed distribution space.
+			// 
+			// Add the probability of this distribution configuration to the accumulator.
+			// 
+			// An accumulator for the distributed probability space covered.
+			// 
+			// Variable declaration of cv$distributionAccumulator moved.
+			// Declaration comment was:
+			// An accumulator for log probabilities.
+			// 
+			// Store the value of the function call, so the function call is only made once.
+			// 
+			// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_5);
+			
+			// Store the sample task probability
+			logProbability$d = cv$distributionAccumulator;
+			
+			// Add probability to model
+			// 
+			// Variable declaration of cv$accumulator moved.
+			// Declaration comment was:
+			// Accumulator for probabilities of instances of the random variable
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			// 
+			// Add the probability of this sample task to the sample task accumulator.
+			// 
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample50)
+				// Variable declaration of cv$accumulator moved.
+				// Declaration comment was:
+				// Accumulator for probabilities of instances of the random variable
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				// 
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Accumulator for sample probabilities for a specific instance of the random variable.
+				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample50 = (fixedFlag$sample50 && fixedFlag$sample47);
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			// Add probability to model
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$model = (logProbability$$model + logProbability$d);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample50)
+				// Variable declaration of cv$accumulator moved.
+				logProbability$$evidence = (logProbability$$evidence + logProbability$d);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample64 using sampled
+	// values.
+	private final void logProbabilityValue$sample64() {
+		// Determine if we need to calculate the values for sample task 64 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample64) {
+			// Generating probabilities for sample task
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
+			for(int var61 = 0; var61 < length$obs_measured; var61 += 1) {
+				// The sample value to calculate the probability of generating
+				int cv$sampleValue = obs[var61];
+				
+				// Allocate a local variable to hold the length of the array.
+				int lengthCV$a$48_6 = -1;
+				
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if((0 == y))
+					lengthCV$a$48_6 = 2;
+				
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if((1 == y))
+					lengthCV$a$48_6 = 3;
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Scale the probability relative to the observed distribution space.
+				// 
+				// Add the probability of this distribution configuration to the accumulator.
+				// 
+				// An accumulator for the distributed probability space covered.
+				// 
+				// Variable declaration of cv$distributionAccumulator moved.
+				// Declaration comment was:
+				// An accumulator for log probabilities.
+				// 
+				// Store the value of the function call, so the function call is only made once.
+				cv$sampleAccumulator = (cv$sampleAccumulator + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$48_6)) && (0 < lengthCV$a$48_6)) && (0.0 <= d[cv$sampleValue])) && (d[cv$sampleValue] <= 1.0))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+			}
+			
+			// Store the random variable instance probability
+			logProbability$var62 = cv$sampleAccumulator;
+			
+			// Update the variable probability
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$obs = (logProbability$obs + cv$sampleAccumulator);
+			
+			// Add probability to model
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample64 = fixedFlag$sample50;
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			// Update the variable probability
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$obs = (logProbability$obs + logProbability$var62);
+			
+			// Add probability to model
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$model = (logProbability$$model + logProbability$var62);
+			
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$evidence = (logProbability$$evidence + logProbability$var62);
 		}
 	}
 
@@ -769,30 +793,30 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample50) {
 			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$48_6 = -1;
+			int lengthCV$a$48_7 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
-				lengthCV$a$48_6 = 2;
+				lengthCV$a$48_7 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((1 == y))
-				lengthCV$a$48_6 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_6, d);
+				lengthCV$a$48_7 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_7, d);
 		}
 		
 		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$48_7 = -1;
+		int lengthCV$a$48_8 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((0 == y))
-			lengthCV$a$48_7 = 2;
+			lengthCV$a$48_8 = 2;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((1 == y))
-			lengthCV$a$48_7 = 3;
+			lengthCV$a$48_8 = 3;
 		for(int var61 = 0; var61 < length$obs_measured; var61 += 1)
-			obs[var61] = DistributionSampling.sampleCategorical(RNG$, d, lengthCV$a$48_7);
+			obs[var61] = DistributionSampling.sampleCategorical(RNG$, d, lengthCV$a$48_8);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -806,16 +830,16 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample50) {
 			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$48_12 = -1;
+			int lengthCV$a$48_13 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
-				lengthCV$a$48_12 = 2;
+				lengthCV$a$48_13 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((1 == y))
-				lengthCV$a$48_12 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_12, d);
+				lengthCV$a$48_13 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_13, d);
 		}
 	}
 
@@ -829,60 +853,36 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample50) {
 			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$48_8 = -1;
+			int lengthCV$a$48_9 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
-				lengthCV$a$48_8 = 2;
+				lengthCV$a$48_9 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((1 == y))
-				lengthCV$a$48_8 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_8, d);
+				lengthCV$a$48_9 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_9, d);
 		}
 		
 		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$48_9 = -1;
+		int lengthCV$a$48_10 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((0 == y))
-			lengthCV$a$48_9 = 2;
+			lengthCV$a$48_10 = 2;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((1 == y))
-			lengthCV$a$48_9 = 3;
+			lengthCV$a$48_10 = 3;
 		for(int var61 = 0; var61 < length$obs_measured; var61 += 1)
-			obs[var61] = DistributionSampling.sampleCategorical(RNG$, d, lengthCV$a$48_9);
+			obs[var61] = DistributionSampling.sampleCategorical(RNG$, d, lengthCV$a$48_10);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample47)
-			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample50) {
-			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$48_10 = -1;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == y))
-				lengthCV$a$48_10 = 2;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$48_10 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_10, d);
-		}
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
-	// to single values.
-	@Override
-	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample47)
 			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
 		
@@ -902,26 +902,54 @@ final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		}
 	}
 
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		if(!fixedFlag$sample47)
+			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample50) {
+			// Allocate a local variable to hold the length of the array.
+			int lengthCV$a$48_12 = -1;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((0 == y))
+				lengthCV$a$48_12 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$48_12 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_12, d);
+		}
+	}
+
 	// Method to execute one round of Gibbs sampling.
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample47)
-				sample47();
+				inferSample47();
 			if(!fixedFlag$sample50)
-				sample50();
+				inferSample50();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			if(!fixedFlag$sample50)
-				sample50();
+				inferSample50();
 			if(!fixedFlag$sample47)
-				sample47();
+				inferSample47();
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample47)
+			drawValueSample47();
+		if(!constrainedFlag$sample50)
+			drawValueSample50();
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for

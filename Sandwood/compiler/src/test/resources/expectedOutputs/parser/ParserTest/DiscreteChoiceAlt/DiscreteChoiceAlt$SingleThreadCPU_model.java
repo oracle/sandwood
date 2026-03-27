@@ -42,8 +42,7 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 
 	// Setter for ObsChoices.
 	@Override
-	public final void set$ObsChoices(int[] cv$value) {
-		// Set ObsChoices
+	public final void set$ObsChoices(int[] cv$value, boolean allocated$) {
 		ObsChoices = cv$value;
 	}
 
@@ -67,10 +66,17 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 
 	// Setter for fixedFlag$sample24.
 	@Override
-	public final void set$fixedFlag$sample24(boolean cv$value) {
+	public final void set$fixedFlag$sample24(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample24 including if probabilities
 		// need to be updated.
 		fixedFlag$sample24 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample24$1 = 0; index$constrainedFlag$sample24$1 < constrainedFlag$sample24.length; index$constrainedFlag$sample24$1 += 1)
+				constrainedFlag$sample24[index$constrainedFlag$sample24$1] = true;
+		}
 		
 		// Should the probability of sample 24 be set to fixed. This will only every change
 		// the flag to false.
@@ -131,7 +137,7 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 
 	// Setter for noObs.
 	@Override
-	public final void set$noObs(int cv$value) {
+	public final void set$noObs(int cv$value, boolean allocated$) {
 		noObs = cv$value;
 	}
 
@@ -143,7 +149,7 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 
 	// Setter for noProducts.
 	@Override
-	public final void set$noProducts(int cv$value) {
+	public final void set$noProducts(int cv$value, boolean allocated$) {
 		noProducts = cv$value;
 	}
 
@@ -167,10 +173,9 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 
 	// Setter for ut.
 	@Override
-	public final void set$ut(double[] cv$value) {
+	public final void set$ut(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of ut including if probabilities need to be
 		// updated.
-		// Set ut
 		ut = cv$value;
 		
 		// Unset the fixed probability flag for sample 24 as it depends on ut.
@@ -180,412 +185,133 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 		fixedProbFlag$sample78 = false;
 	}
 
-	// Calculate the probability of the samples represented by sample24 using sampled
-	// values.
-	private final void logProbabilityValue$sample24() {
-		// Determine if we need to calculate the values for sample task 24 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample24) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				double cv$sampleAccumulator = 0.0;
-				
-				// An accumulator for log probabilities.
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				
-				// An accumulator for the distributed probability space covered.
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						// The sample value to calculate the probability of generating
-						double cv$sampleValue = ut[i$var18];
+	// Pick a value from the distribution for the unconditioned variable from sample24
+	private final void drawValueSample24(int i$var18) {
+		ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		
+		// Guards to ensure that exped is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 24 and consumer double[] 39.
+		{
+			{
+				for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+					if((i$var18 == i$var36)) {
 						{
-							{
-								double var21 = 0.0;
-								double var22 = 10.0;
-								
-								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var22)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var21) / Math.sqrt(var22))) - (0.5 * Math.log(var22))):Double.NEGATIVE_INFINITY));
-								
-								// Add the probability of this sample task to the distribution accumulator.
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									// If the second value is -infinity.
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								
-								// Add the probability of this distribution configuration to the accumulator.
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					// Return negative infinity if no distribution probability space is reached.
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					// Scale the probability relative to the observed distribution space.
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				
-				// Store the sample task probability
-				logProbability$sample24[((i$var18 - 1) / 1)] = cv$sampleProbability;
-				
-				// Guard to ensure that exped is only updated once for this probability.
-				boolean cv$guard$exped = false;
-				
-				// Guard to ensure that sum is only updated once for this probability.
-				boolean cv$guard$sum = false;
-				
-				// Guard to ensure that prob is only updated once for this probability.
-				boolean cv$guard$prob = false;
-				
-				// Add probability to constructed variables that have guards, so need per sample probabilities
-				// from the combined probability
-				// 
-				// Looking for a path between Sample 24 and consumer double[] 39.
-				{
-					{
-						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
-							if((i$var18 == i$var36)) {
-								// If the probability of the variable has not already been updated
-								if(!cv$guard$exped) {
-									// Set the guard so the update is only applied once.
-									cv$guard$exped = true;
-									
-									// Update the variable probability
-									logProbability$exped = (logProbability$exped + cv$sampleProbability);
-								}
-							}
-						}
-					}
-				}
-				
-				// Looking for a path between Sample 24 and consumer double 50.
-				{
-					{
-						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
-							if((i$var18 == i$var36)) {
-								if(((0 <= i$var36) && (i$var36 < noProducts))) {
-									// If the probability of the variable has not already been updated
-									if(!cv$guard$sum) {
-										// Set the guard so the update is only applied once.
-										cv$guard$sum = true;
-										
-										// Update the variable probability
-										logProbability$sum = (logProbability$sum + cv$sampleProbability);
-									}
-								}
-							}
-						}
-					}
-				}
-				
-				// Looking for a path between Sample 24 and consumer double[] 64.
-				{
-					{
-						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
-							if((i$var18 == i$var36)) {
-								if(((0 <= i$var36) && (i$var36 < noProducts))) {
-									for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$prob) {
-											// Set the guard so the update is only applied once.
-											cv$guard$prob = true;
-											
-											// Update the variable probability
-											logProbability$prob = (logProbability$prob + cv$sampleProbability);
-										}
-									}
-								}
-							}
-						}
-					}
-					{
-						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
-							if((i$var18 == i$var36)) {
-								for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
-									if((i$var36 == i$var61)) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$prob) {
-											// Set the guard so the update is only applied once.
-											cv$guard$prob = true;
-											
-											// Update the variable probability
-											logProbability$prob = (logProbability$prob + cv$sampleProbability);
-										}
-									}
-								}
-							}
+							exped[i$var36] = Math.exp(ut[i$var36]);
 						}
 					}
 				}
 			}
-			
-			// Update the variable probability
-			logProbability$ut = (logProbability$ut + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample24)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample24 = fixedFlag$sample24;
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
-				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample24[((i$var18 - 1) / 1)];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				
-				// Guard to ensure that exped is only updated once for this probability.
-				boolean cv$guard$exped = false;
-				
-				// Guard to ensure that sum is only updated once for this probability.
-				boolean cv$guard$sum = false;
-				
-				// Guard to ensure that prob is only updated once for this probability.
-				boolean cv$guard$prob = false;
-				
-				// Add probability to constructed variables that have guards, so need per sample probabilities
-				// from the combined probability
-				// 
-				// Looking for a path between Sample 24 and consumer double[] 39.
-				{
-					{
-						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
-							if((i$var18 == i$var36)) {
-								// If the probability of the variable has not already been updated
-								if(!cv$guard$exped) {
-									// Set the guard so the update is only applied once.
-									cv$guard$exped = true;
-									
-									// Update the variable probability
-									logProbability$exped = (logProbability$exped + cv$sampleValue);
-								}
-							}
-						}
-					}
-				}
-				
-				// Looking for a path between Sample 24 and consumer double 50.
-				{
-					{
-						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
-							if((i$var18 == i$var36)) {
-								if(((0 <= i$var36) && (i$var36 < noProducts))) {
-									// If the probability of the variable has not already been updated
-									if(!cv$guard$sum) {
-										// Set the guard so the update is only applied once.
-										cv$guard$sum = true;
-										
-										// Update the variable probability
-										logProbability$sum = (logProbability$sum + cv$sampleValue);
-									}
-								}
-							}
-						}
-					}
-				}
-				
-				// Looking for a path between Sample 24 and consumer double[] 64.
-				{
-					{
-						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
-							if((i$var18 == i$var36)) {
-								if(((0 <= i$var36) && (i$var36 < noProducts))) {
-									for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$prob) {
-											// Set the guard so the update is only applied once.
-											cv$guard$prob = true;
-											
-											// Update the variable probability
-											logProbability$prob = (logProbability$prob + cv$sampleValue);
-										}
-									}
-								}
-							}
-						}
-					}
-					{
-						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
-							if((i$var18 == i$var36)) {
-								for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
-									if((i$var36 == i$var61)) {
-										// If the probability of the variable has not already been updated
-										if(!cv$guard$prob) {
-											// Set the guard so the update is only applied once.
-											cv$guard$prob = true;
-											
-											// Update the variable probability
-											logProbability$prob = (logProbability$prob + cv$sampleValue);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			
-			// Update the variable probability
-			logProbability$ut = (logProbability$ut + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample24)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
-	}
-
-	// Calculate the probability of the samples represented by sample78 using sampled
-	// values.
-	private final void logProbabilityValue$sample78() {
-		// Determine if we need to calculate the values for sample task 78 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample78) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int var76 = 0; var76 < noObs; var76 += 1) {
-				// An accumulator for log probabilities.
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				
-				// An accumulator for the distributed probability space covered.
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						// The sample value to calculate the probability of generating
-						int cv$sampleValue = choices[var76];
-						{
+		
+		// Guards to ensure that sum is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 24 and consumer double 50.
+		{
+			{
+				for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+					if((i$var18 == i$var36)) {
+						if(((0 <= i$var36) && (i$var36 < noProducts))) {
 							{
-								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noProducts)) && (0 < noProducts)) && (0.0 <= prob[cv$sampleValue])) && (prob[cv$sampleValue] <= 1.0))?Math.log(prob[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								// Reduction of array exped
+								// 
+								// A generated name to prevent name collisions if the reduction is implemented more
+								// than once in inference and probability code. Initialize the variable to the unit
+								// value
+								double reduceVar$sum$3 = 0.0;
 								
-								// Add the probability of this sample task to the distribution accumulator.
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									// If the second value is -infinity.
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								// For each index in the array to be reduced
+								for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
+									// Set the left hand term of the reduction function to the return variable value.
+									double i$var47 = reduceVar$sum$3;
+									
+									// Set the right hand term to a value from the array exped
+									double j = exped[cv$reduction44Index];
+									
+									// Execute the reduction function, saving the result into the return value.
+									// 
+									// Copy the result of the reduction into the variable returned by the reduction.
+									reduceVar$sum$3 = (i$var47 + j);
 								}
 								
-								// Add the probability of this distribution configuration to the accumulator.
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
+								// Write out the new sample value.
+								sum = reduceVar$sum$3;
 							}
 						}
 					}
 				}
-				if((cv$probabilityReached == 0.0))
-					// Return negative infinity if no distribution probability space is reached.
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					// Scale the probability relative to the observed distribution space.
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
-			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			
-			// Store the random variable instance probability
-			logProbability$var77 = cv$sampleAccumulator;
-			
-			// Update the variable probability
-			logProbability$choices = (logProbability$choices + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample78 = fixedFlag$sample24;
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int var76 = 0; var76 < noObs; var76 += 1)
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var77;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			
-			// Update the variable probability
-			logProbability$choices = (logProbability$choices + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+		
+		// Guards to ensure that prob is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 24 and consumer double[] 64.
+		{
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			boolean[] guard$sample24put65 = guard$sample24put65$global;
+			{
+				for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+					if((i$var18 == i$var36)) {
+						if(((0 <= i$var36) && (i$var36 < noProducts))) {
+							for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
+								// Set the flags to false
+								guard$sample24put65[((i$var61 - 0) / 1)] = false;
+						}
+					}
+				}
+			}
+			{
+				for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+					if((i$var18 == i$var36)) {
+						for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+							if((i$var36 == i$var61))
+								// Set the flags to false
+								guard$sample24put65[((i$var61 - 0) / 1)] = false;
+						}
+					}
+				}
+			}
+			{
+				for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+					if((i$var18 == i$var36)) {
+						if(((0 <= i$var36) && (i$var36 < noProducts))) {
+							for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+								if(!guard$sample24put65[((i$var61 - 0) / 1)]) {
+									// The body will execute, so should not be executed again
+									guard$sample24put65[((i$var61 - 0) / 1)] = true;
+									{
+										prob[i$var61] = (exped[i$var61] / sum);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+					if((i$var18 == i$var36)) {
+						for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+							if((i$var36 == i$var61)) {
+								if(!guard$sample24put65[((i$var61 - 0) / 1)]) {
+									// The body will execute, so should not be executed again
+									guard$sample24put65[((i$var61 - 0) / 1)] = true;
+									{
+										prob[i$var61] = (exped[i$var61] / sum);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 24 drawn from Gaussian 23. Inference was performed using Metropolis-Hastings.
-	private final void sample24(int i$var18) {
+	private final void inferSample24(int i$var18) {
 		if(true) {
 			constrainedFlag$sample24[((i$var18 - 1) / 1)] = false;
 			
@@ -1148,6 +874,409 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 		}
 	}
 
+	// Calculate the probability of the samples represented by sample24 using sampled
+	// values.
+	private final void logProbabilityValue$sample24() {
+		// Determine if we need to calculate the values for sample task 24 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample24) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
+				// Accumulator for sample probabilities for a specific instance of the random variable.
+				double cv$sampleAccumulator = 0.0;
+				
+				// An accumulator for log probabilities.
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				
+				// An accumulator for the distributed probability space covered.
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						// The sample value to calculate the probability of generating
+						double cv$sampleValue = ut[i$var18];
+						{
+							{
+								double var21 = 0.0;
+								double var22 = 10.0;
+								
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var22)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var21) / Math.sqrt(var22))) - (0.5 * Math.log(var22))):Double.NEGATIVE_INFINITY));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					// Return negative infinity if no distribution probability space is reached.
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					// Scale the probability relative to the observed distribution space.
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+				
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+				
+				// Store the sample task probability
+				logProbability$sample24[((i$var18 - 1) / 1)] = cv$sampleProbability;
+				
+				// Guard to ensure that exped is only updated once for this probability.
+				boolean cv$guard$exped = false;
+				
+				// Guard to ensure that sum is only updated once for this probability.
+				boolean cv$guard$sum = false;
+				
+				// Guard to ensure that prob is only updated once for this probability.
+				boolean cv$guard$prob = false;
+				
+				// Add probability to constructed variables that have guards, so need per sample probabilities
+				// from the combined probability
+				// 
+				// Looking for a path between Sample 24 and consumer double[] 39.
+				{
+					{
+						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+							if((i$var18 == i$var36)) {
+								// If the probability of the variable has not already been updated
+								if(!cv$guard$exped) {
+									// Set the guard so the update is only applied once.
+									cv$guard$exped = true;
+									
+									// Update the variable probability
+									logProbability$exped = (logProbability$exped + cv$sampleProbability);
+								}
+							}
+						}
+					}
+				}
+				
+				// Looking for a path between Sample 24 and consumer double 50.
+				{
+					{
+						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+							if((i$var18 == i$var36)) {
+								if(((0 <= i$var36) && (i$var36 < noProducts))) {
+									// If the probability of the variable has not already been updated
+									if(!cv$guard$sum) {
+										// Set the guard so the update is only applied once.
+										cv$guard$sum = true;
+										
+										// Update the variable probability
+										logProbability$sum = (logProbability$sum + cv$sampleProbability);
+									}
+								}
+							}
+						}
+					}
+				}
+				
+				// Looking for a path between Sample 24 and consumer double[] 64.
+				{
+					{
+						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+							if((i$var18 == i$var36)) {
+								if(((0 <= i$var36) && (i$var36 < noProducts))) {
+									for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+										// If the probability of the variable has not already been updated
+										if(!cv$guard$prob) {
+											// Set the guard so the update is only applied once.
+											cv$guard$prob = true;
+											
+											// Update the variable probability
+											logProbability$prob = (logProbability$prob + cv$sampleProbability);
+										}
+									}
+								}
+							}
+						}
+					}
+					{
+						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+							if((i$var18 == i$var36)) {
+								for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+									if((i$var36 == i$var61)) {
+										// If the probability of the variable has not already been updated
+										if(!cv$guard$prob) {
+											// Set the guard so the update is only applied once.
+											cv$guard$prob = true;
+											
+											// Update the variable probability
+											logProbability$prob = (logProbability$prob + cv$sampleProbability);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			// Update the variable probability
+			logProbability$ut = (logProbability$ut + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample24)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample24 = fixedFlag$sample24;
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
+				double cv$rvAccumulator = 0.0;
+				double cv$sampleValue = logProbability$sample24[((i$var18 - 1) / 1)];
+				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+				
+				// Guard to ensure that exped is only updated once for this probability.
+				boolean cv$guard$exped = false;
+				
+				// Guard to ensure that sum is only updated once for this probability.
+				boolean cv$guard$sum = false;
+				
+				// Guard to ensure that prob is only updated once for this probability.
+				boolean cv$guard$prob = false;
+				
+				// Add probability to constructed variables that have guards, so need per sample probabilities
+				// from the combined probability
+				// 
+				// Looking for a path between Sample 24 and consumer double[] 39.
+				{
+					{
+						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+							if((i$var18 == i$var36)) {
+								// If the probability of the variable has not already been updated
+								if(!cv$guard$exped) {
+									// Set the guard so the update is only applied once.
+									cv$guard$exped = true;
+									
+									// Update the variable probability
+									logProbability$exped = (logProbability$exped + cv$sampleValue);
+								}
+							}
+						}
+					}
+				}
+				
+				// Looking for a path between Sample 24 and consumer double 50.
+				{
+					{
+						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+							if((i$var18 == i$var36)) {
+								if(((0 <= i$var36) && (i$var36 < noProducts))) {
+									// If the probability of the variable has not already been updated
+									if(!cv$guard$sum) {
+										// Set the guard so the update is only applied once.
+										cv$guard$sum = true;
+										
+										// Update the variable probability
+										logProbability$sum = (logProbability$sum + cv$sampleValue);
+									}
+								}
+							}
+						}
+					}
+				}
+				
+				// Looking for a path between Sample 24 and consumer double[] 64.
+				{
+					{
+						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+							if((i$var18 == i$var36)) {
+								if(((0 <= i$var36) && (i$var36 < noProducts))) {
+									for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+										// If the probability of the variable has not already been updated
+										if(!cv$guard$prob) {
+											// Set the guard so the update is only applied once.
+											cv$guard$prob = true;
+											
+											// Update the variable probability
+											logProbability$prob = (logProbability$prob + cv$sampleValue);
+										}
+									}
+								}
+							}
+						}
+					}
+					{
+						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+							if((i$var18 == i$var36)) {
+								for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+									if((i$var36 == i$var61)) {
+										// If the probability of the variable has not already been updated
+										if(!cv$guard$prob) {
+											// Set the guard so the update is only applied once.
+											cv$guard$prob = true;
+											
+											// Update the variable probability
+											logProbability$prob = (logProbability$prob + cv$sampleValue);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			// Update the variable probability
+			logProbability$ut = (logProbability$ut + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample24)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample78 using sampled
+	// values.
+	private final void logProbabilityValue$sample78() {
+		// Determine if we need to calculate the values for sample task 78 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample78) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var76 = 0; var76 < noObs; var76 += 1) {
+				// An accumulator for log probabilities.
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				
+				// An accumulator for the distributed probability space covered.
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						// The sample value to calculate the probability of generating
+						int cv$sampleValue = choices[var76];
+						{
+							{
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noProducts)) && (0 < noProducts)) && (0.0 <= prob[cv$sampleValue])) && (prob[cv$sampleValue] <= 1.0))?Math.log(prob[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					// Return negative infinity if no distribution probability space is reached.
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					// Scale the probability relative to the observed distribution space.
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			}
+			
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			
+			// Store the random variable instance probability
+			logProbability$var77 = cv$sampleAccumulator;
+			
+			// Update the variable probability
+			logProbability$choices = (logProbability$choices + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample78 = fixedFlag$sample24;
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var76 = 0; var76 < noObs; var76 += 1)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			double cv$sampleValue = logProbability$var77;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			
+			// Update the variable probability
+			logProbability$choices = (logProbability$choices + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -1219,12 +1348,12 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 		// A generated name to prevent name collisions if the reduction is implemented more
 		// than once in inference and probability code. Initialize the variable to the unit
 		// value
-		double reduceVar$sum$3 = 0.0;
+		double reduceVar$sum$4 = 0.0;
 		
 		// For each index in the array to be reduced
 		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
-			double i$var47 = reduceVar$sum$3;
+			double i$var47 = reduceVar$sum$4;
 			
 			// Set the right hand term to a value from the array exped
 			double j = exped[cv$reduction44Index];
@@ -1232,10 +1361,10 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Execute the reduction function, saving the result into the return value.
 			if(!fixedFlag$sample24)
 				// Copy the result of the reduction into the variable returned by the reduction.
-				reduceVar$sum$3 = (i$var47 + j);
+				reduceVar$sum$4 = (i$var47 + j);
 		}
 		if(!fixedFlag$sample24)
-			sum = reduceVar$sum$3;
+			sum = reduceVar$sum$4;
 		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
 			if(!fixedFlag$sample24)
 				prob[i$var61] = (exped[i$var61] / sum);
@@ -1249,6 +1378,122 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
+			if(!fixedFlag$sample24)
+				ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		}
+		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1)
+			exped[i$var36] = Math.exp(ut[i$var36]);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$8 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
+			// Set the left hand term of the reduction function to the return variable value.
+			double i$var47 = reduceVar$sum$8;
+			
+			// Set the right hand term to a value from the array exped
+			double j = exped[cv$reduction44Index];
+			
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			reduceVar$sum$8 = (i$var47 + j);
+		}
+		sum = reduceVar$sum$8;
+		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
+			prob[i$var61] = (exped[i$var61] / sum);
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
+			if(!fixedFlag$sample24)
+				ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		}
+		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1)
+			exped[i$var36] = Math.exp(ut[i$var36]);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$5 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
+			// Set the left hand term of the reduction function to the return variable value.
+			double i$var47 = reduceVar$sum$5;
+			
+			// Set the right hand term to a value from the array exped
+			double j = exped[cv$reduction44Index];
+			
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			reduceVar$sum$5 = (i$var47 + j);
+		}
+		sum = reduceVar$sum$5;
+		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
+			prob[i$var61] = (exped[i$var61] / sum);
+		for(int var76 = 0; var76 < noObs; var76 += 1)
+			choices[var76] = DistributionSampling.sampleCategorical(RNG$, prob, noProducts);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
+		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
+			if(!fixedFlag$sample24)
+				ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		}
+		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+			if(!fixedFlag$sample24)
+				exped[i$var36] = Math.exp(ut[i$var36]);
+		}
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$6 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
+			// Set the left hand term of the reduction function to the return variable value.
+			double i$var47 = reduceVar$sum$6;
+			
+			// Set the right hand term to a value from the array exped
+			double j = exped[cv$reduction44Index];
+			
+			// Execute the reduction function, saving the result into the return value.
+			if(!fixedFlag$sample24)
+				// Copy the result of the reduction into the variable returned by the reduction.
+				reduceVar$sum$6 = (i$var47 + j);
+		}
+		if(!fixedFlag$sample24)
+			sum = reduceVar$sum$6;
+		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+			if(!fixedFlag$sample24)
+				prob[i$var61] = (exped[i$var61] / sum);
+		}
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
 			if(!fixedFlag$sample24)
 				ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
@@ -1281,122 +1526,6 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 			prob[i$var61] = (exped[i$var61] / sum);
 	}
 
-	// Method to execute the model code conventionally with priming of fixed intermediate
-	// variables.
-	@Override
-	public final void forwardGenerationPrime() {
-		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
-			if(!fixedFlag$sample24)
-				ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		}
-		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1)
-			exped[i$var36] = Math.exp(ut[i$var36]);
-		
-		// Reduction of array exped
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
-		double reduceVar$sum$4 = 0.0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
-			// Set the left hand term of the reduction function to the return variable value.
-			double i$var47 = reduceVar$sum$4;
-			
-			// Set the right hand term to a value from the array exped
-			double j = exped[cv$reduction44Index];
-			
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			reduceVar$sum$4 = (i$var47 + j);
-		}
-		sum = reduceVar$sum$4;
-		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
-			prob[i$var61] = (exped[i$var61] / sum);
-		for(int var76 = 0; var76 < noObs; var76 += 1)
-			choices[var76] = DistributionSampling.sampleCategorical(RNG$, prob, noProducts);
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
-	@Override
-	public final void forwardGenerationValuesNoOutputs() {
-		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
-			if(!fixedFlag$sample24)
-				ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		}
-		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
-			if(!fixedFlag$sample24)
-				exped[i$var36] = Math.exp(ut[i$var36]);
-		}
-		
-		// Reduction of array exped
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
-		double reduceVar$sum$5 = 0.0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
-			// Set the left hand term of the reduction function to the return variable value.
-			double i$var47 = reduceVar$sum$5;
-			
-			// Set the right hand term to a value from the array exped
-			double j = exped[cv$reduction44Index];
-			
-			// Execute the reduction function, saving the result into the return value.
-			if(!fixedFlag$sample24)
-				// Copy the result of the reduction into the variable returned by the reduction.
-				reduceVar$sum$5 = (i$var47 + j);
-		}
-		if(!fixedFlag$sample24)
-			sum = reduceVar$sum$5;
-		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
-			if(!fixedFlag$sample24)
-				prob[i$var61] = (exped[i$var61] / sum);
-		}
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
-	// to single values.
-	@Override
-	public final void forwardGenerationValuesNoOutputsPrime() {
-		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
-			if(!fixedFlag$sample24)
-				ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		}
-		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1)
-			exped[i$var36] = Math.exp(ut[i$var36]);
-		
-		// Reduction of array exped
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
-		double reduceVar$sum$6 = 0.0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
-			// Set the left hand term of the reduction function to the return variable value.
-			double i$var47 = reduceVar$sum$6;
-			
-			// Set the right hand term to a value from the array exped
-			double j = exped[cv$reduction44Index];
-			
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			reduceVar$sum$6 = (i$var47 + j);
-		}
-		sum = reduceVar$sum$6;
-		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
-			prob[i$var61] = (exped[i$var61] / sum);
-	}
-
 	// Method to execute one round of Gibbs sampling.
 	@Override
 	public final void gibbsRound() {
@@ -1404,19 +1533,23 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 		if(system$gibbsForward) {
 			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
 				if(!fixedFlag$sample24)
-					sample24(i$var18);
+					inferSample24(i$var18);
 			}
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			for(int i$var18 = (noProducts - ((((noProducts - 1) - 1) % 1) + 1)); i$var18 >= ((1 - 1) + 1); i$var18 -= 1) {
 				if(!fixedFlag$sample24)
-					sample24(i$var18);
+					inferSample24(i$var18);
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
+			if(!constrainedFlag$sample24[((i$var18 - 1) / 1)])
+				drawValueSample24(i$var18);
+		}
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
@@ -1527,12 +1660,12 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 		// A generated name to prevent name collisions if the reduction is implemented more
 		// than once in inference and probability code. Initialize the variable to the unit
 		// value
-		double reduceVar$sum$8 = 0.0;
+		double reduceVar$sum$9 = 0.0;
 		
 		// For each index in the array to be reduced
 		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
-			double i$var47 = reduceVar$sum$8;
+			double i$var47 = reduceVar$sum$9;
 			
 			// Set the right hand term to a value from the array exped
 			double j = exped[cv$reduction44Index];
@@ -1540,9 +1673,9 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
-			reduceVar$sum$8 = (i$var47 + j);
+			reduceVar$sum$9 = (i$var47 + j);
 		}
-		sum = reduceVar$sum$8;
+		sum = reduceVar$sum$9;
 		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
 			prob[i$var61] = (exped[i$var61] / sum);
 	}

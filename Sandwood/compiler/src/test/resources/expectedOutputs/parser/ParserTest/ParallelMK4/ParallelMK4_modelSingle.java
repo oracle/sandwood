@@ -56,7 +56,7 @@ public final class ParallelMK4 extends Model {
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$indirection1(value);
+            system$c.set$indirection1(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -71,7 +71,7 @@ public final class ParallelMK4 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample61(fixed);
+                system$c.set$fixedFlag$sample61(fixed, allocated);
             }
         }
 
@@ -112,7 +112,7 @@ public final class ParallelMK4 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample61(fixed);
+                system$c.set$fixedFlag$sample61(fixed, allocated);
             }
         }
 
@@ -144,13 +144,13 @@ public final class ParallelMK4 extends Model {
 
         @Override
         public void setValueInternal(int[] value) {
-            system$c.set$observed(value);
-            system$c.set$length$observed(value.length);
+            system$c.set$observed(value, allocated);
+            system$c.set$length$observed(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$observed(shape);
+            system$c.set$length$observed(shape, allocated);
         }
 
         @Override
@@ -227,18 +227,18 @@ public final class ParallelMK4 extends Model {
 
         //Observed arrays
         if(observed.isSet()) {
-            newCore.set$observed(oldCore.get$observed());
-            newCore.set$length$observed(oldCore.get$length$observed());
+            newCore.set$observed(oldCore.get$observed(), false);
+            newCore.set$length$observed(oldCore.get$length$observed(), false);
         }
         else if(observed.shapeSet())
-            newCore.set$length$observed(oldCore.get$length$observed());
+            newCore.set$length$observed(oldCore.get$length$observed(), false);
 
         //ComputedVariables
         if($indirection1.isSet())
-            newCore.set$indirection1(oldCore.get$indirection1());
+            newCore.set$indirection1(oldCore.get$indirection1(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample61(oldCore.get$fixedFlag$sample61());
+        newCore.set$fixedFlag$sample61(oldCore.get$fixedFlag$sample61(), false);
     }
 
     /**

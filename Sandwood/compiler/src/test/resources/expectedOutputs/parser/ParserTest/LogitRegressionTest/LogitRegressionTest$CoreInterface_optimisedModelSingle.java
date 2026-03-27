@@ -6,19 +6,19 @@ interface LogitRegressionTest$CoreInterface extends org.sandwood.runtime.interna
 	public double get$bias();
 
 	// Setter for bias.
-	public void set$bias(double cv$value);
+	public void set$bias(double cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample35.
 	public boolean get$fixedFlag$sample35();
 
 	// Setter for fixedFlag$sample35.
-	public void set$fixedFlag$sample35(boolean cv$value);
+	public void set$fixedFlag$sample35(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample42.
 	public boolean get$fixedFlag$sample42();
 
 	// Setter for fixedFlag$sample42.
-	public void set$fixedFlag$sample42(boolean cv$value);
+	public void set$fixedFlag$sample42(boolean cv$value, boolean allocated$);
 
 	// Getter for k.
 	public int get$k();
@@ -39,13 +39,13 @@ interface LogitRegressionTest$CoreInterface extends org.sandwood.runtime.interna
 	public double[] get$weights();
 
 	// Setter for weights.
-	public void set$weights(double[] cv$value);
+	public void set$weights(double[] cv$value, boolean allocated$);
 
 	// Getter for x.
 	public double[][] get$x();
 
 	// Setter for x.
-	public void set$x(double[][] cv$value);
+	public void set$x(double[][] cv$value, boolean allocated$);
 
 	// Getter for y.
 	public boolean[][] get$y();
@@ -54,5 +54,5 @@ interface LogitRegressionTest$CoreInterface extends org.sandwood.runtime.interna
 	public boolean[][] get$yMeasured();
 
 	// Setter for yMeasured.
-	public void set$yMeasured(boolean[][] cv$value);
+	public void set$yMeasured(boolean[][] cv$value, boolean allocated$);
 }

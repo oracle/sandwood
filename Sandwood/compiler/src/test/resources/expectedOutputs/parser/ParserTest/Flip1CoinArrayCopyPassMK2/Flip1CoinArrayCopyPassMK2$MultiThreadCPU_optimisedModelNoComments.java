@@ -42,7 +42,7 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	}
 
 	@Override
-	public final void set$bias(double[] cv$value) {
+	public final void set$bias(double[] cv$value, boolean allocated$) {
 		bias = cv$value;
 		fixedProbFlag$sample10 = false;
 		fixedProbFlag$sample31 = false;
@@ -54,8 +54,9 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	}
 
 	@Override
-	public final void set$fixedFlag$sample10(boolean cv$value) {
+	public final void set$fixedFlag$sample10(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample10 = cv$value;
+		constrainedFlag$sample10 = (cv$value || constrainedFlag$sample10);
 		fixedProbFlag$sample10 = (cv$value && fixedProbFlag$sample10);
 		fixedProbFlag$sample31 = (cv$value && fixedProbFlag$sample31);
 	}
@@ -71,7 +72,7 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	}
 
 	@Override
-	public final void set$flipsMeasured(boolean[] cv$value) {
+	public final void set$flipsMeasured(boolean[] cv$value, boolean allocated$) {
 		flipsMeasured = cv$value;
 	}
 
@@ -106,8 +107,40 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	}
 
 	@Override
-	public final void set$samples(int cv$value) {
+	public final void set$samples(int cv$value, boolean allocated$) {
 		samples = cv$value;
+	}
+
+	private final void drawValueSample10() {
+		bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		for(int i = 0; i < samples; i += 1)
+			bias[(i + 1)] = bias[0];
+	}
+
+	private final void inferSample10() {
+		constrainedFlag$sample10 = false;
+		int cv$sum = 0;
+		int cv$count = 0;
+		if((0 < samples)) {
+			constrainedFlag$sample10 = true;
+			cv$count = 1;
+			if(flips[0])
+				cv$sum = 1;
+		}
+		for(int i = 0; i < samples; i += 1) {
+			int index$i$2_2 = (i + 1);
+			if((index$i$2_2 < samples)) {
+				constrainedFlag$sample10 = true;
+				cv$count = (cv$count + 1);
+				if(flips[index$i$2_2])
+					cv$sum = (cv$sum + 1);
+			}
+		}
+		if(constrainedFlag$sample10) {
+			bias[0] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			for(int i = 0; i < samples; i += 1)
+				bias[(i + 1)] = bias[0];
+		}
 	}
 
 	private final void logProbabilityValue$sample10() {
@@ -151,32 +184,6 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	private final void sample10() {
-		constrainedFlag$sample10 = false;
-		int cv$sum = 0;
-		int cv$count = 0;
-		if((0 < samples)) {
-			constrainedFlag$sample10 = true;
-			cv$count = 1;
-			if(flips[0])
-				cv$sum = 1;
-		}
-		for(int i = 0; i < samples; i += 1) {
-			int index$i$2_2 = (i + 1);
-			if((index$i$2_2 < samples)) {
-				constrainedFlag$sample10 = true;
-				cv$count = (cv$count + 1);
-				if(flips[index$i$2_2])
-					cv$sum = (cv$sum + 1);
-			}
-		}
-		if(constrainedFlag$sample10) {
-			bias[0] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-			for(int i = 0; i < samples; i += 1)
-				bias[(i + 1)] = bias[0];
 		}
 	}
 
@@ -261,8 +268,10 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	@Override
 	public final void gibbsRound() {
 		if(!fixedFlag$sample10)
-			sample10();
+			inferSample10();
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample10)
+			drawValueSample10();
 	}
 
 	private final void initializeLogProbabilityFields() {

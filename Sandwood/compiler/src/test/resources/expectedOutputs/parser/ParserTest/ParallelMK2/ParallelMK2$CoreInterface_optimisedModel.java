@@ -6,7 +6,7 @@ interface ParallelMK2$CoreInterface extends org.sandwood.runtime.internal.model.
 	public boolean get$fixedFlag$sample26();
 
 	// Setter for fixedFlag$sample26.
-	public void set$fixedFlag$sample26(boolean cv$value);
+	public void set$fixedFlag$sample26(boolean cv$value, boolean allocated$);
 
 	// Getter for generated.
 	public double[] get$generated();
@@ -15,13 +15,13 @@ interface ParallelMK2$CoreInterface extends org.sandwood.runtime.internal.model.
 	public double[] get$indirection();
 
 	// Setter for indirection.
-	public void set$indirection(double[] cv$value);
+	public void set$indirection(double[] cv$value, boolean allocated$);
 
 	// Getter for length$observed.
 	public int get$length$observed();
 
 	// Setter for length$observed.
-	public void set$length$observed(int cv$value);
+	public void set$length$observed(int cv$value, boolean allocated$);
 
 	// Getter for logProbability$generated.
 	public double get$logProbability$generated();
@@ -33,11 +33,11 @@ interface ParallelMK2$CoreInterface extends org.sandwood.runtime.internal.model.
 	public double[] get$observed();
 
 	// Setter for observed.
-	public void set$observed(double[] cv$value);
+	public void set$observed(double[] cv$value, boolean allocated$);
 
 	// Getter for sample.
 	public double[] get$sample();
 
 	// Setter for sample.
-	public void set$sample(double[] cv$value);
+	public void set$sample(double[] cv$value, boolean allocated$);
 }

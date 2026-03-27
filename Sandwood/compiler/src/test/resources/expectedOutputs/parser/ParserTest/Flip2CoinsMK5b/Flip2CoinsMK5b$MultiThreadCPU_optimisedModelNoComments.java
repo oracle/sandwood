@@ -34,7 +34,7 @@ final class Flip2CoinsMK5b$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$bias(double[] cv$value) {
+	public final void set$bias(double[] cv$value, boolean allocated$) {
 		bias = cv$value;
 		fixedProbFlag$sample18 = false;
 		fixedProbFlag$sample47 = false;
@@ -51,8 +51,12 @@ final class Flip2CoinsMK5b$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$fixedFlag$sample18(boolean cv$value) {
+	public final void set$fixedFlag$sample18(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample18 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample18$1 = 0; index$constrainedFlag$sample18$1 < constrainedFlag$sample18.length; index$constrainedFlag$sample18$1 += 1)
+				constrainedFlag$sample18[index$constrainedFlag$sample18$1] = true;
+		}
 		fixedProbFlag$sample18 = (cv$value && fixedProbFlag$sample18);
 		fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
 	}
@@ -68,7 +72,7 @@ final class Flip2CoinsMK5b$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$flipsMeasured(boolean[][] cv$value) {
+	public final void set$flipsMeasured(boolean[][] cv$value, boolean allocated$) {
 		flipsMeasured = cv$value;
 	}
 
@@ -103,8 +107,29 @@ final class Flip2CoinsMK5b$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$shape(int[] cv$value) {
+	public final void set$shape(int[] cv$value, boolean allocated$) {
 		shape = cv$value;
+	}
+
+	private final void drawValueSample18(int i, int threadID$cv$i, Rng RNG$) {
+		bias[i] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	private final void inferSample18(int i, int threadID$cv$i, Rng RNG$) {
+		constrainedFlag$sample18[i] = false;
+		int cv$sum = 0;
+		int cv$count = 0;
+		int j = (coins - (i + 1));
+		if((0 <= j)) {
+			for(int var46 = 0; var46 < shape[j]; var46 += 1) {
+				constrainedFlag$sample18[i] = true;
+				cv$count = (cv$count + 1);
+				if(flips[j][var46])
+					cv$sum = (cv$sum + 1);
+			}
+		}
+		if(constrainedFlag$sample18[i])
+			bias[i] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	private final void logProbabilityValue$sample18() {
@@ -159,23 +184,6 @@ final class Flip2CoinsMK5b$MultiThreadCPU extends org.sandwood.runtime.internal.
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
-	}
-
-	private final void sample18(int i, int threadID$cv$i, Rng RNG$) {
-		constrainedFlag$sample18[i] = false;
-		int cv$sum = 0;
-		int cv$count = 0;
-		int j = (coins - (i + 1));
-		if((0 <= j)) {
-			for(int var46 = 0; var46 < shape[j]; var46 += 1) {
-				constrainedFlag$sample18[i] = true;
-				cv$count = (cv$count + 1);
-				if(flips[j][var46])
-					cv$sum = (cv$sum + 1);
-			}
-		}
-		if(constrainedFlag$sample18[i])
-			bias[i] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	@Override
@@ -291,18 +299,26 @@ final class Flip2CoinsMK5b$MultiThreadCPU extends org.sandwood.runtime.internal.
 				parallelFor(RNG$, 0, coins, 1,
 					(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 						for(int i = forStart$i; i < forEnd$i; i += 1)
-								sample18(i, threadID$i, RNG$1);
+								inferSample18(i, threadID$i, RNG$1);
 					}
 				);
 			else
 				parallelFor(RNG$, 0, coins, 1,
 					(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 						for(int i = forStart$i; i < forEnd$i; i += 1)
-								sample18(i, threadID$i, RNG$1);
+								inferSample18(i, threadID$i, RNG$1);
 					}
 				);
 		}
 		system$gibbsForward = !system$gibbsForward;
+		parallelFor(RNG$, 0, coins, 1,
+			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int i = forStart$i; i < forEnd$i; i += 1) {
+						if(!constrainedFlag$sample18[i])
+							drawValueSample18(i, threadID$i, RNG$1);
+					}
+			}
+		);
 	}
 
 	private final void initializeLogProbabilityFields() {

@@ -52,8 +52,9 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$fixedFlag$sample17(boolean cv$value) {
+	public final void set$fixedFlag$sample17(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample17 = cv$value;
+		constrainedFlag$sample17 = (cv$value || constrainedFlag$sample17);
 		fixedProbFlag$sample17 = (cv$value && fixedProbFlag$sample17);
 	}
 
@@ -63,8 +64,12 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$fixedFlag$sample34(boolean cv$value) {
+	public final void set$fixedFlag$sample34(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample34 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample34$1 = 0; index$constrainedFlag$sample34$1 < constrainedFlag$sample34.length; index$constrainedFlag$sample34$1 += 1)
+				constrainedFlag$sample34[index$constrainedFlag$sample34$1] = true;
+		}
 		fixedProbFlag$sample34 = (cv$value && fixedProbFlag$sample34);
 	}
 
@@ -74,8 +79,12 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$fixedFlag$sample52(boolean cv$value) {
+	public final void set$fixedFlag$sample52(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample52 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample52$1 = 0; index$constrainedFlag$sample52$1 < constrainedFlag$sample52.length; index$constrainedFlag$sample52$1 += 1)
+				constrainedFlag$sample52[index$constrainedFlag$sample52$1] = true;
+		}
 		fixedProbFlag$sample52 = (cv$value && fixedProbFlag$sample52);
 	}
 
@@ -90,7 +99,7 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$length$xMeasured(int cv$value) {
+	public final void set$length$xMeasured(int cv$value, boolean allocated$) {
 		length$xMeasured = cv$value;
 	}
 
@@ -130,7 +139,7 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$mu(double[] cv$value) {
+	public final void set$mu(double[] cv$value, boolean allocated$) {
 		mu = cv$value;
 		fixedProbFlag$sample34 = false;
 	}
@@ -141,7 +150,7 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$phi(double[] cv$value) {
+	public final void set$phi(double[] cv$value, boolean allocated$) {
 		phi = cv$value;
 		fixedProbFlag$sample17 = false;
 	}
@@ -152,7 +161,7 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$sigma(double[] cv$value) {
+	public final void set$sigma(double[] cv$value, boolean allocated$) {
 		sigma = cv$value;
 		fixedProbFlag$sample52 = false;
 	}
@@ -168,7 +177,7 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$xMeasured(double[] cv$value) {
+	public final void set$xMeasured(double[] cv$value, boolean allocated$) {
 		xMeasured = cv$value;
 	}
 
@@ -178,8 +187,125 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$z(int[] cv$value) {
+	public final void set$z(int[] cv$value, boolean allocated$) {
 		z = cv$value;
+	}
+
+	private final void drawValueSample17() {
+		DistributionSampling.sampleDirichlet(RNG$, alpha, 5, phi);
+	}
+
+	private final void drawValueSample34(int var33) {
+		mu[var33] = (DistributionSampling.sampleGaussian(RNG$) * 4.47213595499958);
+	}
+
+	private final void drawValueSample52(int var51) {
+		sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+	}
+
+	private final void drawValueSample68(int i$var66) {
+		z[i$var66] = DistributionSampling.sampleCategorical(RNG$, phi, 5);
+	}
+
+	private final void inferSample17() {
+		constrainedFlag$sample17 = false;
+		for(int cv$loopIndex = 0; cv$loopIndex < 5; cv$loopIndex += 1)
+			cv$var17$countGlobal[cv$loopIndex] = 0.0;
+		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
+			if(constrainedFlag$sample68[i$var66]) {
+				constrainedFlag$sample17 = true;
+				cv$var17$countGlobal[z[i$var66]] = (cv$var17$countGlobal[z[i$var66]] + 1.0);
+			}
+		}
+		if(constrainedFlag$sample17)
+			Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$var17$countGlobal, phi, 5);
+	}
+
+	private final void inferSample34(int var33) {
+		constrainedFlag$sample34[var33] = false;
+		double cv$sum = 0.0;
+		double cv$denominatorSquareSum = 0.0;
+		boolean cv$sigmaNotFound = true;
+		double cv$sigmaValue = 1.0;
+		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
+			if((var33 == z[i$var66])) {
+				constrainedFlag$sample34[var33] = true;
+				cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
+				cv$sum = (cv$sum + x[i$var66]);
+				if(cv$sigmaNotFound) {
+					cv$sigmaValue = sigma[z[i$var66]];
+					cv$sigmaNotFound = false;
+				}
+			}
+		}
+		if(constrainedFlag$sample34[var33])
+			mu[var33] = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 20.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+	}
+
+	private final void inferSample52(int var51) {
+		constrainedFlag$sample52[var51] = false;
+		double cv$sum = 0.0;
+		int cv$count = 0;
+		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
+			if((var51 == z[i$var66])) {
+				constrainedFlag$sample52[var51] = true;
+				double cv$var71$diff = (mu[z[i$var66]] - x[i$var66]);
+				cv$sum = (cv$sum + (cv$var71$diff * cv$var71$diff));
+				cv$count = (cv$count + 1);
+			}
+		}
+		if(constrainedFlag$sample52[var51])
+			sigma[var51] = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
+	}
+
+	private final void inferSample68(int i$var66) {
+		constrainedFlag$sample68[i$var66] = false;
+		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
+			z[i$var66] = cv$valuePos;
+			constrainedFlag$sample68[i$var66] = true;
+			double var70 = sigma[cv$valuePos];
+			cv$var68$stateProbabilityGlobal[cv$valuePos] = (((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - mu[cv$valuePos]) / Math.sqrt(var70))) - (Math.log(var70) * 0.5)):Double.NEGATIVE_INFINITY) + (((0.0 <= phi[cv$valuePos]) && (phi[cv$valuePos] <= 1.0))?Math.log(phi[cv$valuePos]):Double.NEGATIVE_INFINITY));
+		}
+		if(constrainedFlag$sample68[i$var66]) {
+			double cv$logSum;
+			double cv$lseMax = cv$var68$stateProbabilityGlobal[0];
+			{
+				double cv$lseElementValue = cv$var68$stateProbabilityGlobal[1];
+				if((cv$lseMax < cv$lseElementValue))
+					cv$lseMax = cv$lseElementValue;
+			}
+			{
+				double cv$lseElementValue = cv$var68$stateProbabilityGlobal[2];
+				if((cv$lseMax < cv$lseElementValue))
+					cv$lseMax = cv$lseElementValue;
+			}
+			{
+				double cv$lseElementValue = cv$var68$stateProbabilityGlobal[3];
+				if((cv$lseMax < cv$lseElementValue))
+					cv$lseMax = cv$lseElementValue;
+			}
+			double cv$lseElementValue = cv$var68$stateProbabilityGlobal[4];
+			if((cv$lseMax < cv$lseElementValue))
+				cv$lseMax = cv$lseElementValue;
+			if((cv$lseMax == Double.NEGATIVE_INFINITY))
+				cv$logSum = Double.NEGATIVE_INFINITY;
+			else {
+				double cv$lseSum = 0.0;
+				for(int cv$lseIndex = 0; cv$lseIndex < 5; cv$lseIndex += 1)
+					cv$lseSum = (cv$lseSum + Math.exp((cv$var68$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
+				cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
+			}
+			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
+				for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
+					cv$var68$stateProbabilityGlobal[cv$indexName] = 0.2;
+			} else {
+				for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
+					cv$var68$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var68$stateProbabilityGlobal[cv$indexName] - cv$logSum));
+			}
+			for(int cv$indexName = 5; cv$indexName < cv$var68$stateProbabilityGlobal.length; cv$indexName += 1)
+				cv$var68$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+			z[i$var66] = DistributionSampling.sampleCategorical(RNG$, cv$var68$stateProbabilityGlobal, 5);
+		}
 	}
 
 	private final void logProbabilityValue$sample17() {
@@ -257,107 +383,6 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 		logProbability$x = (logProbability$x + cv$accumulator);
 		logProbability$$model = (logProbability$$model + cv$accumulator);
 		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-	}
-
-	private final void sample17() {
-		constrainedFlag$sample17 = false;
-		for(int cv$loopIndex = 0; cv$loopIndex < 5; cv$loopIndex += 1)
-			cv$var17$countGlobal[cv$loopIndex] = 0.0;
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
-			if(constrainedFlag$sample68[i$var66]) {
-				constrainedFlag$sample17 = true;
-				cv$var17$countGlobal[z[i$var66]] = (cv$var17$countGlobal[z[i$var66]] + 1.0);
-			}
-		}
-		if(constrainedFlag$sample17)
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$var17$countGlobal, phi, 5);
-	}
-
-	private final void sample34(int var33) {
-		constrainedFlag$sample34[var33] = false;
-		double cv$sum = 0.0;
-		double cv$denominatorSquareSum = 0.0;
-		boolean cv$sigmaNotFound = true;
-		double cv$sigmaValue = 1.0;
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
-			if((var33 == z[i$var66])) {
-				constrainedFlag$sample34[var33] = true;
-				cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
-				cv$sum = (cv$sum + x[i$var66]);
-				if(cv$sigmaNotFound) {
-					cv$sigmaValue = sigma[z[i$var66]];
-					cv$sigmaNotFound = false;
-				}
-			}
-		}
-		if(constrainedFlag$sample34[var33])
-			mu[var33] = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 20.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-	}
-
-	private final void sample52(int var51) {
-		constrainedFlag$sample52[var51] = false;
-		double cv$sum = 0.0;
-		int cv$count = 0;
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
-			if((var51 == z[i$var66])) {
-				constrainedFlag$sample52[var51] = true;
-				double cv$var71$diff = (mu[z[i$var66]] - x[i$var66]);
-				cv$sum = (cv$sum + (cv$var71$diff * cv$var71$diff));
-				cv$count = (cv$count + 1);
-			}
-		}
-		if(constrainedFlag$sample52[var51])
-			sigma[var51] = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
-	}
-
-	private final void sample68(int i$var66) {
-		constrainedFlag$sample68[i$var66] = false;
-		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
-			z[i$var66] = cv$valuePos;
-			constrainedFlag$sample68[i$var66] = true;
-			double var70 = sigma[cv$valuePos];
-			cv$var68$stateProbabilityGlobal[cv$valuePos] = (((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - mu[cv$valuePos]) / Math.sqrt(var70))) - (Math.log(var70) * 0.5)):Double.NEGATIVE_INFINITY) + (((0.0 <= phi[cv$valuePos]) && (phi[cv$valuePos] <= 1.0))?Math.log(phi[cv$valuePos]):Double.NEGATIVE_INFINITY));
-		}
-		if(constrainedFlag$sample68[i$var66]) {
-			double cv$logSum;
-			double cv$lseMax = cv$var68$stateProbabilityGlobal[0];
-			{
-				double cv$lseElementValue = cv$var68$stateProbabilityGlobal[1];
-				if((cv$lseMax < cv$lseElementValue))
-					cv$lseMax = cv$lseElementValue;
-			}
-			{
-				double cv$lseElementValue = cv$var68$stateProbabilityGlobal[2];
-				if((cv$lseMax < cv$lseElementValue))
-					cv$lseMax = cv$lseElementValue;
-			}
-			{
-				double cv$lseElementValue = cv$var68$stateProbabilityGlobal[3];
-				if((cv$lseMax < cv$lseElementValue))
-					cv$lseMax = cv$lseElementValue;
-			}
-			double cv$lseElementValue = cv$var68$stateProbabilityGlobal[4];
-			if((cv$lseMax < cv$lseElementValue))
-				cv$lseMax = cv$lseElementValue;
-			if((cv$lseMax == Double.NEGATIVE_INFINITY))
-				cv$logSum = Double.NEGATIVE_INFINITY;
-			else {
-				double cv$lseSum = 0.0;
-				for(int cv$lseIndex = 0; cv$lseIndex < 5; cv$lseIndex += 1)
-					cv$lseSum = (cv$lseSum + Math.exp((cv$var68$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
-				cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
-			}
-			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-				for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
-					cv$var68$stateProbabilityGlobal[cv$indexName] = 0.2;
-			} else {
-				for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
-					cv$var68$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var68$stateProbabilityGlobal[cv$indexName] - cv$logSum));
-			}
-			for(int cv$indexName = 5; cv$indexName < cv$var68$stateProbabilityGlobal.length; cv$indexName += 1)
-				cv$var68$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
-			z[i$var66] = DistributionSampling.sampleCategorical(RNG$, cv$var68$stateProbabilityGlobal, 5);
-		}
 	}
 
 	@Override
@@ -473,32 +498,46 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample17)
-				sample17();
+				inferSample17();
 			if(!fixedFlag$sample34) {
 				for(int var33 = 0; var33 < 5; var33 += 1)
-					sample34(var33);
+					inferSample34(var33);
 			}
 			if(!fixedFlag$sample52) {
 				for(int var51 = 0; var51 < 5; var51 += 1)
-					sample52(var51);
+					inferSample52(var51);
 			}
 			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-				sample68(i$var66);
+				inferSample68(i$var66);
 		} else {
 			for(int i$var66 = (length$xMeasured - 1); i$var66 >= 0; i$var66 -= 1)
-				sample68(i$var66);
+				inferSample68(i$var66);
 			if(!fixedFlag$sample52) {
 				for(int var51 = 4; var51 >= 0; var51 -= 1)
-					sample52(var51);
+					inferSample52(var51);
 			}
 			if(!fixedFlag$sample34) {
 				for(int var33 = 4; var33 >= 0; var33 -= 1)
-					sample34(var33);
+					inferSample34(var33);
 			}
 			if(!fixedFlag$sample17)
-				sample17();
+				inferSample17();
 		}
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample17)
+			drawValueSample17();
+		for(int var33 = 0; var33 < 5; var33 += 1) {
+			if(!constrainedFlag$sample34[var33])
+				drawValueSample34(var33);
+		}
+		for(int var51 = 0; var51 < 5; var51 += 1) {
+			if(!constrainedFlag$sample52[var51])
+				drawValueSample52(var51);
+		}
+		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
+			if(!constrainedFlag$sample68[i$var66])
+				drawValueSample68(i$var66);
+		}
 	}
 
 	private final void initializeLogProbabilityFields() {

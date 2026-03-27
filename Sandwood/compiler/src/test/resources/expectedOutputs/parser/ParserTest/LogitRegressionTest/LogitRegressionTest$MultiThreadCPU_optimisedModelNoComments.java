@@ -40,7 +40,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		bias = cv$value;
 		fixedProbFlag$sample42 = false;
 		fixedProbFlag$sample94 = false;
@@ -52,8 +52,12 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void set$fixedFlag$sample35(boolean cv$value) {
+	public final void set$fixedFlag$sample35(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample35 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample35$1 = 0; index$constrainedFlag$sample35$1 < constrainedFlag$sample35.length; index$constrainedFlag$sample35$1 += 1)
+				constrainedFlag$sample35[index$constrainedFlag$sample35$1] = true;
+		}
 		fixedProbFlag$sample35 = (cv$value && fixedProbFlag$sample35);
 		fixedProbFlag$sample94 = (cv$value && fixedProbFlag$sample94);
 	}
@@ -64,8 +68,9 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void set$fixedFlag$sample42(boolean cv$value) {
+	public final void set$fixedFlag$sample42(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample42 = cv$value;
+		constrainedFlag$sample42 = (cv$value || constrainedFlag$sample42);
 		fixedProbFlag$sample42 = (cv$value && fixedProbFlag$sample42);
 		fixedProbFlag$sample94 = (cv$value && fixedProbFlag$sample94);
 	}
@@ -111,7 +116,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void set$weights(double[] cv$value) {
+	public final void set$weights(double[] cv$value, boolean allocated$) {
 		weights = cv$value;
 		fixedProbFlag$sample35 = false;
 		fixedProbFlag$sample94 = false;
@@ -123,7 +128,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void set$x(double[][] cv$value) {
+	public final void set$x(double[][] cv$value, boolean allocated$) {
 		x = cv$value;
 	}
 
@@ -138,94 +143,136 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void set$yMeasured(boolean[][] cv$value) {
+	public final void set$yMeasured(boolean[][] cv$value, boolean allocated$) {
 		yMeasured = cv$value;
 	}
 
-	private final void logProbabilityValue$sample35() {
-		if(!fixedProbFlag$sample35) {
-			double cv$sampleAccumulator;
-			{
-				double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[0] / 3.1622776601683795)) - 1.151292546497023);
-				cv$sampleAccumulator = cv$weightedProbability;
-				logProbability$sample35[0] = cv$weightedProbability;
-			}
-			{
-				double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[1] / 3.1622776601683795)) - 1.151292546497023);
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$weightedProbability);
-				logProbability$sample35[1] = cv$weightedProbability;
-			}
-			double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[2] / 3.1622776601683795)) - 1.151292546497023);
-			cv$sampleAccumulator = (cv$sampleAccumulator + cv$weightedProbability);
-			logProbability$sample35[2] = cv$weightedProbability;
-			logProbability$weights = (logProbability$weights + cv$sampleAccumulator);
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			if(fixedFlag$sample35)
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample35 = fixedFlag$sample35;
-		} else {
-			double cv$rvAccumulator = ((logProbability$sample35[0] + logProbability$sample35[1]) + logProbability$sample35[2]);
-			logProbability$weights = (logProbability$weights + cv$rvAccumulator);
-			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
-			if(fixedFlag$sample35)
-				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
+	private final void drawValueSample35(int var33) {
+		weights[var33] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		if((var33 == 0)) {
+			for(int i = 0; i < n; i += 1)
+				indicator[i][0] = Math.exp((weights[0] * x[i][0]));
 		}
-	}
-
-	private final void logProbabilityValue$sample42() {
-		if(!fixedProbFlag$sample42) {
-			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((bias / 3.1622776601683795)) - 1.151292546497023);
-			logProbability$bias = cv$distributionAccumulator;
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			if(fixedFlag$sample42)
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample42 = fixedFlag$sample42;
-		} else {
-			logProbability$$model = (logProbability$$model + logProbability$bias);
-			if(fixedFlag$sample42)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
+		if((var33 == 1)) {
+			for(int i = 0; i < n; i += 1)
+				indicator[i][1] = Math.exp((weights[1] * x[i][1]));
 		}
-	}
-
-	private final void logProbabilityValue$sample94() {
-		if(!fixedProbFlag$sample94) {
-			double cv$accumulator = 0.0;
+		if((var33 == 2)) {
+			for(int i = 0; i < n; i += 1)
+				indicator[i][2] = Math.exp((weights[2] * x[i][2]));
+		}
+		if((var33 == 0)) {
 			for(int i = 0; i < n; i += 1) {
-				{
-					double var91 = (p[i][0] + bias);
-					double cv$weightedProbability = (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY);
-					cv$accumulator = (cv$accumulator + cv$weightedProbability);
-					logProbability$sample94[i][0] = cv$weightedProbability;
-				}
-				{
-					double var91 = (p[i][1] + bias);
-					double cv$weightedProbability = (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY);
-					cv$accumulator = (cv$accumulator + cv$weightedProbability);
-					logProbability$sample94[i][1] = cv$weightedProbability;
-				}
-				double var91 = (p[i][2] + bias);
-				double cv$weightedProbability = (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY);
-				cv$accumulator = (cv$accumulator + cv$weightedProbability);
-				logProbability$sample94[i][2] = cv$weightedProbability;
+				guard$sample35put89$global[i][0] = false;
+				guard$sample35put89$global[i][1] = false;
+				guard$sample35put89$global[i][2] = false;
 			}
-			logProbability$y = (logProbability$y + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample94 = (fixedFlag$sample35 && fixedFlag$sample42);
-		} else {
-			double cv$accumulator = 0.0;
+		}
+		if((var33 == 1)) {
 			for(int i = 0; i < n; i += 1) {
-				cv$accumulator = (cv$accumulator + logProbability$sample94[i][0]);
-				cv$accumulator = (cv$accumulator + logProbability$sample94[i][1]);
-				cv$accumulator = (cv$accumulator + logProbability$sample94[i][2]);
+				guard$sample35put89$global[i][0] = false;
+				guard$sample35put89$global[i][1] = false;
+				guard$sample35put89$global[i][2] = false;
 			}
-			logProbability$y = (logProbability$y + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+		if((var33 == 2)) {
+			for(int i = 0; i < n; i += 1) {
+				guard$sample35put89$global[i][0] = false;
+				guard$sample35put89$global[i][1] = false;
+				guard$sample35put89$global[i][2] = false;
+			}
+		}
+		if((var33 == 0)) {
+			for(int i = 0; i < n; i += 1)
+				guard$sample35put89$global[i][0] = false;
+		}
+		if((var33 == 1)) {
+			for(int i = 0; i < n; i += 1)
+				guard$sample35put89$global[i][1] = false;
+		}
+		if((var33 == 2)) {
+			for(int i = 0; i < n; i += 1)
+				guard$sample35put89$global[i][2] = false;
+		}
+		if((var33 == 0)) {
+			for(int i = 0; i < n; i += 1) {
+				if(!guard$sample35put89$global[i][0]) {
+					guard$sample35put89$global[i][0] = true;
+					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+				if(!guard$sample35put89$global[i][1]) {
+					guard$sample35put89$global[i][1] = true;
+					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+				if(!guard$sample35put89$global[i][2]) {
+					guard$sample35put89$global[i][2] = true;
+					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+			}
+		}
+		if((var33 == 1)) {
+			for(int i = 0; i < n; i += 1) {
+				if(!guard$sample35put89$global[i][0]) {
+					guard$sample35put89$global[i][0] = true;
+					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+				if(!guard$sample35put89$global[i][1]) {
+					guard$sample35put89$global[i][1] = true;
+					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+				if(!guard$sample35put89$global[i][2]) {
+					guard$sample35put89$global[i][2] = true;
+					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+			}
+		}
+		if((var33 == 2)) {
+			for(int i = 0; i < n; i += 1) {
+				if(!guard$sample35put89$global[i][0]) {
+					guard$sample35put89$global[i][0] = true;
+					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+				if(!guard$sample35put89$global[i][1]) {
+					guard$sample35put89$global[i][1] = true;
+					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+				if(!guard$sample35put89$global[i][2]) {
+					guard$sample35put89$global[i][2] = true;
+					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+			}
+		}
+		if((var33 == 0)) {
+			for(int i = 0; i < n; i += 1) {
+				if(!guard$sample35put89$global[i][0]) {
+					guard$sample35put89$global[i][0] = true;
+					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+			}
+		}
+		if((var33 == 1)) {
+			for(int i = 0; i < n; i += 1) {
+				if(!guard$sample35put89$global[i][1]) {
+					guard$sample35put89$global[i][1] = true;
+					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+			}
+		}
+		if((var33 == 2)) {
+			for(int i = 0; i < n; i += 1) {
+				if(!guard$sample35put89$global[i][2]) {
+					guard$sample35put89$global[i][2] = true;
+					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+			}
 		}
 	}
 
-	private final void sample35(int var33) {
+	private final void drawValueSample42() {
+		bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+	}
+
+	private final void inferSample35(int var33) {
 		constrainedFlag$sample35[var33] = false;
 		double cv$originalValue = weights[var33];
 		double cv$originalProbability;
@@ -751,7 +798,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		}
 	}
 
-	private final void sample42() {
+	private final void inferSample42() {
 		constrainedFlag$sample42 = false;
 		double cv$originalValue = bias;
 		double cv$originalProbability;
@@ -799,6 +846,89 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
 			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
 				bias = cv$originalValue;
+		}
+	}
+
+	private final void logProbabilityValue$sample35() {
+		if(!fixedProbFlag$sample35) {
+			double cv$sampleAccumulator;
+			{
+				double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[0] / 3.1622776601683795)) - 1.151292546497023);
+				cv$sampleAccumulator = cv$weightedProbability;
+				logProbability$sample35[0] = cv$weightedProbability;
+			}
+			{
+				double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[1] / 3.1622776601683795)) - 1.151292546497023);
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$weightedProbability);
+				logProbability$sample35[1] = cv$weightedProbability;
+			}
+			double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[2] / 3.1622776601683795)) - 1.151292546497023);
+			cv$sampleAccumulator = (cv$sampleAccumulator + cv$weightedProbability);
+			logProbability$sample35[2] = cv$weightedProbability;
+			logProbability$weights = (logProbability$weights + cv$sampleAccumulator);
+			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			if(fixedFlag$sample35)
+				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			fixedProbFlag$sample35 = fixedFlag$sample35;
+		} else {
+			double cv$rvAccumulator = ((logProbability$sample35[0] + logProbability$sample35[1]) + logProbability$sample35[2]);
+			logProbability$weights = (logProbability$weights + cv$rvAccumulator);
+			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
+			if(fixedFlag$sample35)
+				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample42() {
+		if(!fixedProbFlag$sample42) {
+			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((bias / 3.1622776601683795)) - 1.151292546497023);
+			logProbability$bias = cv$distributionAccumulator;
+			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			if(fixedFlag$sample42)
+				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+			fixedProbFlag$sample42 = fixedFlag$sample42;
+		} else {
+			logProbability$$model = (logProbability$$model + logProbability$bias);
+			if(fixedFlag$sample42)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
+		}
+	}
+
+	private final void logProbabilityValue$sample94() {
+		if(!fixedProbFlag$sample94) {
+			double cv$accumulator = 0.0;
+			for(int i = 0; i < n; i += 1) {
+				{
+					double var91 = (p[i][0] + bias);
+					double cv$weightedProbability = (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY);
+					cv$accumulator = (cv$accumulator + cv$weightedProbability);
+					logProbability$sample94[i][0] = cv$weightedProbability;
+				}
+				{
+					double var91 = (p[i][1] + bias);
+					double cv$weightedProbability = (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY);
+					cv$accumulator = (cv$accumulator + cv$weightedProbability);
+					logProbability$sample94[i][1] = cv$weightedProbability;
+				}
+				double var91 = (p[i][2] + bias);
+				double cv$weightedProbability = (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY);
+				cv$accumulator = (cv$accumulator + cv$weightedProbability);
+				logProbability$sample94[i][2] = cv$weightedProbability;
+			}
+			logProbability$y = (logProbability$y + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample94 = (fixedFlag$sample35 && fixedFlag$sample42);
+		} else {
+			double cv$accumulator = 0.0;
+			for(int i = 0; i < n; i += 1) {
+				cv$accumulator = (cv$accumulator + logProbability$sample94[i][0]);
+				cv$accumulator = (cv$accumulator + logProbability$sample94[i][1]);
+				cv$accumulator = (cv$accumulator + logProbability$sample94[i][2]);
+			}
+			logProbability$y = (logProbability$y + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -1022,22 +1152,30 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample35) {
-				sample35(0);
-				sample35(1);
-				sample35(2);
+				inferSample35(0);
+				inferSample35(1);
+				inferSample35(2);
 			}
 			if(!fixedFlag$sample42)
-				sample42();
+				inferSample42();
 		} else {
 			if(!fixedFlag$sample42)
-				sample42();
+				inferSample42();
 			if(!fixedFlag$sample35) {
-				sample35(2);
-				sample35(1);
-				sample35(0);
+				inferSample35(2);
+				inferSample35(1);
+				inferSample35(0);
 			}
 		}
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample35[0])
+			drawValueSample35(0);
+		if(!constrainedFlag$sample35[1])
+			drawValueSample35(1);
+		if(!constrainedFlag$sample35[2])
+			drawValueSample35(2);
+		if(!constrainedFlag$sample42)
+			drawValueSample42();
 	}
 
 	private final void initializeLogProbabilityFields() {

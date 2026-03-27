@@ -9,13 +9,13 @@ interface MultinomialBernoulli$CoreInterface extends org.sandwood.runtime.intern
 	public boolean get$fixedFlag$sample17();
 
 	// Setter for fixedFlag$sample17.
-	public void set$fixedFlag$sample17(boolean cv$value);
+	public void set$fixedFlag$sample17(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample20.
 	public boolean get$fixedFlag$sample20();
 
 	// Setter for fixedFlag$sample20.
-	public void set$fixedFlag$sample20(boolean cv$value);
+	public void set$fixedFlag$sample20(boolean cv$value, boolean allocated$);
 
 	// Getter for length.
 	public int get$length();
@@ -24,7 +24,7 @@ interface MultinomialBernoulli$CoreInterface extends org.sandwood.runtime.intern
 	public int get$length$observed();
 
 	// Setter for length$observed.
-	public void set$length$observed(int cv$value);
+	public void set$length$observed(int cv$value, boolean allocated$);
 
 	// Getter for logProbability$b1.
 	public double get$logProbability$b1();
@@ -51,7 +51,7 @@ interface MultinomialBernoulli$CoreInterface extends org.sandwood.runtime.intern
 	public boolean[] get$observed();
 
 	// Setter for observed.
-	public void set$observed(boolean[] cv$value);
+	public void set$observed(boolean[] cv$value, boolean allocated$);
 
 	// Getter for output.
 	public boolean[] get$output();
@@ -60,11 +60,11 @@ interface MultinomialBernoulli$CoreInterface extends org.sandwood.runtime.intern
 	public double[] get$p();
 
 	// Setter for p.
-	public void set$p(double[] cv$value);
+	public void set$p(double[] cv$value, boolean allocated$);
 
 	// Getter for prior.
 	public int[] get$prior();
 
 	// Setter for prior.
-	public void set$prior(int[] cv$value);
+	public void set$prior(int[] cv$value, boolean allocated$);
 }

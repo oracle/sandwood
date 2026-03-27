@@ -25,7 +25,7 @@ public final class LinearRegressionBasic2 extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$b0(value);
+            system$c.set$b0(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,7 +35,7 @@ public final class LinearRegressionBasic2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample7(fixed);
+                system$c.set$fixedFlag$sample7(fixed, allocated);
             }
         }
 
@@ -59,7 +59,7 @@ public final class LinearRegressionBasic2 extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$b1(value);
+            system$c.set$b1(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -69,7 +69,7 @@ public final class LinearRegressionBasic2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample11(fixed);
+                system$c.set$fixedFlag$sample11(fixed, allocated);
             }
         }
 
@@ -93,7 +93,7 @@ public final class LinearRegressionBasic2 extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$variance(value);
+            system$c.set$variance(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -103,7 +103,7 @@ public final class LinearRegressionBasic2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample16(fixed);
+                system$c.set$fixedFlag$sample16(fixed, allocated);
             }
         }
 
@@ -163,7 +163,7 @@ public final class LinearRegressionBasic2 extends Model {
         }
 
         @Override
-        protected void setValueInternal(double[] value) { system$c.set$x(value); }
+        protected void setValueInternal(double[] value) { system$c.set$x(value, allocated); }
     };
 
     /**
@@ -182,7 +182,7 @@ public final class LinearRegressionBasic2 extends Model {
         }
 
         @Override
-        protected void setValueInternal(double[] value) { system$c.set$yMeasured(value); }
+        protected void setValueInternal(double[] value) { system$c.set$yMeasured(value, allocated); }
     };
 
     /**
@@ -258,23 +258,24 @@ public final class LinearRegressionBasic2 extends Model {
     private void transferData(LinearRegressionBasic2$CoreInterface oldCore, LinearRegressionBasic2$CoreInterface newCore) {
         //Model inputs
         if(x.isSet())
-            newCore.set$x(oldCore.get$x());
+            newCore.set$x(oldCore.get$x(), false);
+
         //Observed scalars
         if(yMeasured.isSet())
-            newCore.set$yMeasured(oldCore.get$yMeasured());
+            newCore.set$yMeasured(oldCore.get$yMeasured(), false);
 
         //ComputedVariables
         if($b0.isSet())
-            newCore.set$b0(oldCore.get$b0());
+            newCore.set$b0(oldCore.get$b0(), false);
         if($b1.isSet())
-            newCore.set$b1(oldCore.get$b1());
+            newCore.set$b1(oldCore.get$b1(), false);
         if($variance.isSet())
-            newCore.set$variance(oldCore.get$variance());
+            newCore.set$variance(oldCore.get$variance(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample11(oldCore.get$fixedFlag$sample11());
-        newCore.set$fixedFlag$sample16(oldCore.get$fixedFlag$sample16());
-        newCore.set$fixedFlag$sample7(oldCore.get$fixedFlag$sample7());
+        newCore.set$fixedFlag$sample11(oldCore.get$fixedFlag$sample11(), false);
+        newCore.set$fixedFlag$sample16(oldCore.get$fixedFlag$sample16(), false);
+        newCore.set$fixedFlag$sample7(oldCore.get$fixedFlag$sample7(), false);
     }
 
     /**

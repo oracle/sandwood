@@ -73,7 +73,7 @@ public final class Vulcano2012basic extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample26(fixed);
+                system$c.set$fixedFlag$sample26(fixed, allocated);
             }
         }
 
@@ -109,7 +109,7 @@ public final class Vulcano2012basic extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample26(fixed);
+                system$c.set$fixedFlag$sample26(fixed, allocated);
             }
         }
 
@@ -145,7 +145,7 @@ public final class Vulcano2012basic extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample26(fixed);
+                system$c.set$fixedFlag$sample26(fixed, allocated);
             }
         }
 
@@ -169,7 +169,7 @@ public final class Vulcano2012basic extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$ut(value);
+            system$c.set$ut(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -179,7 +179,7 @@ public final class Vulcano2012basic extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample26(fixed);
+                system$c.set$fixedFlag$sample26(fixed, allocated);
             }
         }
 
@@ -208,7 +208,7 @@ public final class Vulcano2012basic extends Model {
         }
 
         @Override
-        protected void setValueInternal(int[][] value) { system$c.set$Avail(value); }
+        protected void setValueInternal(int[][] value) { system$c.set$Avail(value, allocated); }
     };
 
     /**
@@ -225,7 +225,7 @@ public final class Vulcano2012basic extends Model {
         }
 
         @Override
-        protected void setValueInternal(int[][] value) { system$c.set$ObsSales(value); }
+        protected void setValueInternal(int[][] value) { system$c.set$ObsSales(value, allocated); }
     };
 
     /**
@@ -242,7 +242,7 @@ public final class Vulcano2012basic extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$T(value); }
+        protected void setValueInternal(int value) { system$c.set$T(value, allocated); }
     };
 
     /**
@@ -259,7 +259,7 @@ public final class Vulcano2012basic extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noProducts(value); }
+        protected void setValueInternal(int value) { system$c.set$noProducts(value, allocated); }
     };
 
     /**
@@ -276,7 +276,7 @@ public final class Vulcano2012basic extends Model {
         }
 
         @Override
-        protected void setValueInternal(double value) { system$c.set$r(value); }
+        protected void setValueInternal(double value) { system$c.set$r(value, allocated); }
     };
 
     /**
@@ -351,22 +351,22 @@ public final class Vulcano2012basic extends Model {
     private void transferData(Vulcano2012basic$CoreInterface oldCore, Vulcano2012basic$CoreInterface newCore) {
         //Model inputs
         if(Avail.isSet())
-            newCore.set$Avail(oldCore.get$Avail());
+            newCore.set$Avail(oldCore.get$Avail(), false);
         if(ObsSales.isSet())
-            newCore.set$ObsSales(oldCore.get$ObsSales());
+            newCore.set$ObsSales(oldCore.get$ObsSales(), false);
         if(T.isSet())
-            newCore.set$T(oldCore.get$T());
+            newCore.set$T(oldCore.get$T(), false);
         if(noProducts.isSet())
-            newCore.set$noProducts(oldCore.get$noProducts());
+            newCore.set$noProducts(oldCore.get$noProducts(), false);
         if(r.isSet())
-            newCore.set$r(oldCore.get$r());
+            newCore.set$r(oldCore.get$r(), false);
 
         //ComputedVariables
         if($ut.isSet())
-            newCore.set$ut(oldCore.get$ut());
+            newCore.set$ut(oldCore.get$ut(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample26(oldCore.get$fixedFlag$sample26());
+        newCore.set$fixedFlag$sample26(oldCore.get$fixedFlag$sample26(), false);
     }
 
     /**

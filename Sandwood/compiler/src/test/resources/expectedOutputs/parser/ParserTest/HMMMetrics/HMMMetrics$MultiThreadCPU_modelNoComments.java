@@ -114,7 +114,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$cpuMean(double[] cv$value) {
+	public final void set$cpuMean(double[] cv$value, boolean allocated$) {
 		cpuMean = cv$value;
 		fixedProbFlag$sample77 = false;
 		fixedProbFlag$sample180 = false;
@@ -126,7 +126,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$cpuVar(double[] cv$value) {
+	public final void set$cpuVar(double[] cv$value, boolean allocated$) {
 		cpuVar = cv$value;
 		fixedProbFlag$sample130 = false;
 		fixedProbFlag$sample180 = false;
@@ -138,7 +138,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$cpu_measured(double[] cv$value) {
+	public final void set$cpu_measured(double[] cv$value, boolean allocated$) {
 		cpu_measured = cv$value;
 	}
 
@@ -148,7 +148,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$distribution$sample39(double[] cv$value) {
+	public final void set$distribution$sample39(double[] cv$value, boolean allocated$) {
 		distribution$sample39 = cv$value;
 	}
 
@@ -158,7 +158,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$distribution$sample57(double[][] cv$value) {
+	public final void set$distribution$sample57(double[][] cv$value, boolean allocated$) {
 		distribution$sample57 = cv$value;
 	}
 
@@ -168,8 +168,12 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$fixedFlag$sample113(boolean cv$value) {
+	public final void set$fixedFlag$sample113(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample113 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample113$1 = 0; index$constrainedFlag$sample113$1 < constrainedFlag$sample113.length; index$constrainedFlag$sample113$1 += 1)
+				constrainedFlag$sample113[index$constrainedFlag$sample113$1] = true;
+		}
 		fixedProbFlag$sample113 = (fixedFlag$sample113 && fixedProbFlag$sample113);
 		fixedProbFlag$sample190 = (fixedFlag$sample113 && fixedProbFlag$sample190);
 	}
@@ -180,8 +184,12 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$fixedFlag$sample130(boolean cv$value) {
+	public final void set$fixedFlag$sample130(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample130 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample130$1 = 0; index$constrainedFlag$sample130$1 < constrainedFlag$sample130.length; index$constrainedFlag$sample130$1 += 1)
+				constrainedFlag$sample130[index$constrainedFlag$sample130$1] = true;
+		}
 		fixedProbFlag$sample130 = (fixedFlag$sample130 && fixedProbFlag$sample130);
 		fixedProbFlag$sample180 = (fixedFlag$sample130 && fixedProbFlag$sample180);
 	}
@@ -192,8 +200,12 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$fixedFlag$sample147(boolean cv$value) {
+	public final void set$fixedFlag$sample147(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample147 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample147$1 = 0; index$constrainedFlag$sample147$1 < constrainedFlag$sample147.length; index$constrainedFlag$sample147$1 += 1)
+				constrainedFlag$sample147[index$constrainedFlag$sample147$1] = true;
+		}
 		fixedProbFlag$sample147 = (fixedFlag$sample147 && fixedProbFlag$sample147);
 		fixedProbFlag$sample185 = (fixedFlag$sample147 && fixedProbFlag$sample185);
 	}
@@ -204,8 +216,12 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$fixedFlag$sample164(boolean cv$value) {
+	public final void set$fixedFlag$sample164(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample164 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample164$1 = 0; index$constrainedFlag$sample164$1 < constrainedFlag$sample164.length; index$constrainedFlag$sample164$1 += 1)
+				constrainedFlag$sample164[index$constrainedFlag$sample164$1] = true;
+		}
 		fixedProbFlag$sample164 = (fixedFlag$sample164 && fixedProbFlag$sample164);
 		fixedProbFlag$sample190 = (fixedFlag$sample164 && fixedProbFlag$sample190);
 	}
@@ -216,8 +232,12 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$fixedFlag$sample30(boolean cv$value) {
+	public final void set$fixedFlag$sample30(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample30 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample30$1 = 0; index$constrainedFlag$sample30$1 < constrainedFlag$sample30.length; index$constrainedFlag$sample30$1 += 1)
+				constrainedFlag$sample30[index$constrainedFlag$sample30$1] = true;
+		}
 		fixedProbFlag$sample30 = (fixedFlag$sample30 && fixedProbFlag$sample30);
 		fixedProbFlag$sample57 = (fixedFlag$sample30 && fixedProbFlag$sample57);
 	}
@@ -228,8 +248,9 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$fixedFlag$sample36(boolean cv$value) {
+	public final void set$fixedFlag$sample36(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample36 = cv$value;
+		constrainedFlag$sample36 = (fixedFlag$sample36 || constrainedFlag$sample36);
 		fixedProbFlag$sample36 = (fixedFlag$sample36 && fixedProbFlag$sample36);
 		fixedProbFlag$sample39 = (fixedFlag$sample36 && fixedProbFlag$sample39);
 	}
@@ -240,8 +261,9 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$fixedFlag$sample39(boolean cv$value) {
+	public final void set$fixedFlag$sample39(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample39 = cv$value;
+		constrainedFlag$sample39 = (fixedFlag$sample39 || constrainedFlag$sample39);
 		fixedProbFlag$sample39 = (fixedFlag$sample39 && fixedProbFlag$sample39);
 		fixedProbFlag$sample57 = (fixedFlag$sample39 && fixedProbFlag$sample57);
 		fixedProbFlag$sample180 = (fixedFlag$sample39 && fixedProbFlag$sample180);
@@ -255,8 +277,12 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$fixedFlag$sample57(boolean cv$value) {
+	public final void set$fixedFlag$sample57(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample57 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample57$1 = 0; index$constrainedFlag$sample57$1 < constrainedFlag$sample57.length; index$constrainedFlag$sample57$1 += 1)
+				constrainedFlag$sample57[index$constrainedFlag$sample57$1] = true;
+		}
 		fixedProbFlag$sample57 = (fixedFlag$sample57 && fixedProbFlag$sample57);
 		fixedProbFlag$sample180 = (fixedFlag$sample57 && fixedProbFlag$sample180);
 		fixedProbFlag$sample185 = (fixedFlag$sample57 && fixedProbFlag$sample185);
@@ -269,8 +295,12 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$fixedFlag$sample77(boolean cv$value) {
+	public final void set$fixedFlag$sample77(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample77 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample77$1 = 0; index$constrainedFlag$sample77$1 < constrainedFlag$sample77.length; index$constrainedFlag$sample77$1 += 1)
+				constrainedFlag$sample77[index$constrainedFlag$sample77$1] = true;
+		}
 		fixedProbFlag$sample77 = (fixedFlag$sample77 && fixedProbFlag$sample77);
 		fixedProbFlag$sample180 = (fixedFlag$sample77 && fixedProbFlag$sample180);
 	}
@@ -281,8 +311,12 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$fixedFlag$sample95(boolean cv$value) {
+	public final void set$fixedFlag$sample95(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample95 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample95$1 = 0; index$constrainedFlag$sample95$1 < constrainedFlag$sample95.length; index$constrainedFlag$sample95$1 += 1)
+				constrainedFlag$sample95[index$constrainedFlag$sample95$1] = true;
+		}
 		fixedProbFlag$sample95 = (fixedFlag$sample95 && fixedProbFlag$sample95);
 		fixedProbFlag$sample185 = (fixedFlag$sample95 && fixedProbFlag$sample185);
 	}
@@ -293,7 +327,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$initialStateDistribution(double[] cv$value) {
+	public final void set$initialStateDistribution(double[] cv$value, boolean allocated$) {
 		initialStateDistribution = cv$value;
 		fixedProbFlag$sample36 = false;
 		fixedProbFlag$sample39 = false;
@@ -305,7 +339,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$length$cpu_measured(int cv$value) {
+	public final void set$length$cpu_measured(int cv$value, boolean allocated$) {
 		length$cpu_measured = cv$value;
 	}
 
@@ -385,7 +419,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$m(double[][] cv$value) {
+	public final void set$m(double[][] cv$value, boolean allocated$) {
 		m = cv$value;
 		fixedProbFlag$sample30 = false;
 		fixedProbFlag$sample57 = false;
@@ -402,7 +436,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$memMean(double[] cv$value) {
+	public final void set$memMean(double[] cv$value, boolean allocated$) {
 		memMean = cv$value;
 		fixedProbFlag$sample95 = false;
 		fixedProbFlag$sample185 = false;
@@ -414,7 +448,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$memVar(double[] cv$value) {
+	public final void set$memVar(double[] cv$value, boolean allocated$) {
 		memVar = cv$value;
 		fixedProbFlag$sample147 = false;
 		fixedProbFlag$sample185 = false;
@@ -426,7 +460,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$mem_measured(double[] cv$value) {
+	public final void set$mem_measured(double[] cv$value, boolean allocated$) {
 		mem_measured = cv$value;
 	}
 
@@ -436,7 +470,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$noStates(int cv$value) {
+	public final void set$noStates(int cv$value, boolean allocated$) {
 		noStates = cv$value;
 	}
 
@@ -451,7 +485,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$pageFaultsMean(double[] cv$value) {
+	public final void set$pageFaultsMean(double[] cv$value, boolean allocated$) {
 		pageFaultsMean = cv$value;
 		fixedProbFlag$sample113 = false;
 		fixedProbFlag$sample190 = false;
@@ -463,7 +497,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$pageFaultsVar(double[] cv$value) {
+	public final void set$pageFaultsVar(double[] cv$value, boolean allocated$) {
 		pageFaultsVar = cv$value;
 		fixedProbFlag$sample164 = false;
 		fixedProbFlag$sample190 = false;
@@ -475,7 +509,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$pageFaults_measured(double[] cv$value) {
+	public final void set$pageFaults_measured(double[] cv$value, boolean allocated$) {
 		pageFaults_measured = cv$value;
 	}
 
@@ -490,7 +524,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	}
 
 	@Override
-	public final void set$st(int[] cv$value) {
+	public final void set$st(int[] cv$value, boolean allocated$) {
 		st = cv$value;
 		fixedProbFlag$sample39 = false;
 		fixedProbFlag$sample57 = false;
@@ -504,2732 +538,49 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		return v;
 	}
 
-	private final void logProbabilityDistribution$sample180() {
-		if(!fixedProbFlag$sample180) {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
-				double cv$sampleAccumulator = 0.0;
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						double cv$sampleValue = cpu[i$var174];
-						if(fixedFlag$sample39) {
-							{
-								if((0 == i$var174)) {
-									{
-										for(int var75 = 0; var75 < noStates; var75 += 1) {
-											if((var75 == st[i$var174])) {
-												{
-													if((0 == i$var174)) {
-														{
-															for(int var128 = 0; var128 < noStates; var128 += 1) {
-																if((var128 == st[i$var174])) {
-																	{
-																		double var176 = cpuMean[st[i$var174]];
-																		double var177 = cpuVar[st[i$var174]];
-																		double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
-																		if((cv$weightedProbability < cv$distributionAccumulator))
-																			cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																		else {
-																			if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																				cv$distributionAccumulator = cv$weightedProbability;
-																			else
-																				cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																		}
-																		cv$probabilityReached = (cv$probabilityReached + 1.0);
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						} else {
-							if(true) {
-								for(int index$sample39$3 = 0; index$sample39$3 < noStates; index$sample39$3 += 1) {
-									int distributionTempVariable$var38$5 = index$sample39$3;
-									double cv$probabilitySample39Value4 = (1.0 * distribution$sample39[index$sample39$3]);
-									{
-										int traceTempVariable$s$6_1 = distributionTempVariable$var38$5;
-										if((0 == i$var174)) {
-											{
-												for(int var75 = 0; var75 < noStates; var75 += 1) {
-													if((var75 == traceTempVariable$s$6_1)) {
-														{
-															int traceTempVariable$s$10_1 = distributionTempVariable$var38$5;
-															if((0 == i$var174)) {
-																{
-																	for(int var128 = 0; var128 < noStates; var128 += 1) {
-																		if((var128 == traceTempVariable$s$10_1)) {
-																			{
-																				double var176 = cpuMean[traceTempVariable$s$10_1];
-																				double var177 = cpuVar[traceTempVariable$s$10_1];
-																				double cv$weightedProbability = (Math.log(cv$probabilitySample39Value4) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
-																				if((cv$weightedProbability < cv$distributionAccumulator))
-																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																				else {
-																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																						cv$distributionAccumulator = cv$weightedProbability;
-																					else
-																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																				}
-																				cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value4);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-														if(!true) {
-															for(int index$sample39$11 = 0; index$sample39$11 < noStates; index$sample39$11 += 1) {
-																int distributionTempVariable$var38$13 = index$sample39$11;
-																double cv$probabilitySample39Value12 = (cv$probabilitySample39Value4 * distribution$sample39[index$sample39$11]);
-																{
-																	int traceTempVariable$s$14_1 = distributionTempVariable$var38$13;
-																	if((0 == i$var174)) {
-																		{
-																			for(int var128 = 0; var128 < noStates; var128 += 1) {
-																				if((var128 == traceTempVariable$s$14_1)) {
-																					{
-																						double var176 = cpuMean[traceTempVariable$s$14_1];
-																						double var177 = cpuVar[traceTempVariable$s$14_1];
-																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value12) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
-																						if((cv$weightedProbability < cv$distributionAccumulator))
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																						else {
-																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																								cv$distributionAccumulator = cv$weightedProbability;
-																							else
-																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																						}
-																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value12);
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						if(fixedFlag$sample39) {
-							{
-								if((0 == i$var174)) {
-									{
-										for(int var75 = 0; var75 < noStates; var75 += 1) {
-											if((var75 == st[i$var174])) {
-												if(fixedFlag$sample57) {
-													{
-														for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-															if((i$var50 == i$var174)) {
-																{
-																	for(int var128 = 0; var128 < noStates; var128 += 1) {
-																		if((var128 == st[i$var174])) {
-																			{
-																				double var176 = cpuMean[st[i$var174]];
-																				double var177 = cpuVar[st[i$var174]];
-																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
-																				if((cv$weightedProbability < cv$distributionAccumulator))
-																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																				else {
-																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																						cv$distributionAccumulator = cv$weightedProbability;
-																					else
-																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																				}
-																				cv$probabilityReached = (cv$probabilityReached + 1.0);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												} else {
-													for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-														if(true) {
-															for(int index$sample57$27 = 0; index$sample57$27 < noStates; index$sample57$27 += 1) {
-																int distributionTempVariable$var56$29 = index$sample57$27;
-																double cv$probabilitySample57Value28 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$27]);
-																{
-																	int traceTempVariable$s$30_1 = distributionTempVariable$var56$29;
-																	if((i$var50 == i$var174)) {
-																		{
-																			for(int var128 = 0; var128 < noStates; var128 += 1) {
-																				if((var128 == traceTempVariable$s$30_1)) {
-																					{
-																						double var176 = cpuMean[traceTempVariable$s$30_1];
-																						double var177 = cpuVar[traceTempVariable$s$30_1];
-																						double cv$weightedProbability = (Math.log(cv$probabilitySample57Value28) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
-																						if((cv$weightedProbability < cv$distributionAccumulator))
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																						else {
-																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																								cv$distributionAccumulator = cv$weightedProbability;
-																							else
-																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																						}
-																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value28);
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						} else {
-							if(true) {
-								for(int index$sample39$19 = 0; index$sample39$19 < noStates; index$sample39$19 += 1) {
-									int distributionTempVariable$var38$21 = index$sample39$19;
-									double cv$probabilitySample39Value20 = (1.0 * distribution$sample39[index$sample39$19]);
-									{
-										int traceTempVariable$s$22_1 = distributionTempVariable$var38$21;
-										if((0 == i$var174)) {
-											{
-												for(int var75 = 0; var75 < noStates; var75 += 1) {
-													if((var75 == traceTempVariable$s$22_1)) {
-														if(fixedFlag$sample57) {
-															{
-																for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-																	if((i$var50 == i$var174)) {
-																		{
-																			for(int var128 = 0; var128 < noStates; var128 += 1) {
-																				if((var128 == traceTempVariable$s$22_1)) {
-																					{
-																						double var176 = cpuMean[traceTempVariable$s$22_1];
-																						double var177 = cpuVar[traceTempVariable$s$22_1];
-																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value20) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
-																						if((cv$weightedProbability < cv$distributionAccumulator))
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																						else {
-																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																								cv$distributionAccumulator = cv$weightedProbability;
-																							else
-																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																						}
-																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value20);
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														} else {
-															for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-																if(true) {
-																	for(int index$sample57$33 = 0; index$sample57$33 < noStates; index$sample57$33 += 1) {
-																		int distributionTempVariable$var56$35 = index$sample57$33;
-																		double cv$probabilitySample57Value34 = (cv$probabilitySample39Value20 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$33]);
-																		{
-																			int traceTempVariable$s$36_1 = distributionTempVariable$var56$35;
-																			if((i$var50 == i$var174)) {
-																				{
-																					for(int var128 = 0; var128 < noStates; var128 += 1) {
-																						if((var128 == traceTempVariable$s$36_1)) {
-																							{
-																								double var176 = cpuMean[traceTempVariable$s$36_1];
-																								double var177 = cpuVar[traceTempVariable$s$36_1];
-																								double cv$weightedProbability = (Math.log(cv$probabilitySample57Value34) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
-																								if((cv$weightedProbability < cv$distributionAccumulator))
-																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																								else {
-																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																										cv$distributionAccumulator = cv$weightedProbability;
-																									else
-																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																								}
-																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value34);
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						if(fixedFlag$sample57) {
-							{
-								for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-									if((i$var50 == i$var174)) {
-										{
-											for(int var75 = 0; var75 < noStates; var75 += 1) {
-												if((var75 == st[i$var174])) {
-													{
-														for(int index$i$49_1 = 1; index$i$49_1 < samples; index$i$49_1 += 1) {
-															if((index$i$49_1 == i$var174)) {
-																{
-																	for(int var128 = 0; var128 < noStates; var128 += 1) {
-																		if((var128 == st[i$var174])) {
-																			{
-																				double var176 = cpuMean[st[i$var174]];
-																				double var177 = cpuVar[st[i$var174]];
-																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
-																				if((cv$weightedProbability < cv$distributionAccumulator))
-																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																				else {
-																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																						cv$distributionAccumulator = cv$weightedProbability;
-																					else
-																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																				}
-																				cv$probabilityReached = (cv$probabilityReached + 1.0);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						} else {
-							for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-								if(true) {
-									for(int index$sample57$43 = 0; index$sample57$43 < noStates; index$sample57$43 += 1) {
-										int distributionTempVariable$var56$45 = index$sample57$43;
-										double cv$probabilitySample57Value44 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$43]);
-										{
-											int traceTempVariable$s$46_1 = distributionTempVariable$var56$45;
-											if((i$var50 == i$var174)) {
-												{
-													for(int var75 = 0; var75 < noStates; var75 += 1) {
-														if((var75 == traceTempVariable$s$46_1)) {
-															{
-																int traceTempVariable$s$50_1 = distributionTempVariable$var56$45;
-																if((i$var50 == i$var174)) {
-																	{
-																		for(int var128 = 0; var128 < noStates; var128 += 1) {
-																			if((var128 == traceTempVariable$s$50_1)) {
-																				{
-																					double var176 = cpuMean[traceTempVariable$s$50_1];
-																					double var177 = cpuVar[traceTempVariable$s$50_1];
-																					double cv$weightedProbability = (Math.log(cv$probabilitySample57Value44) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
-																					if((cv$weightedProbability < cv$distributionAccumulator))
-																						cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																					else {
-																						if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																							cv$distributionAccumulator = cv$weightedProbability;
-																						else
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																					}
-																					cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value44);
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-															for(int index$i$51 = 1; index$i$51 < samples; index$i$51 += 1) {
-																if(!(index$i$51 == i$var50)) {
-																	for(int index$sample57$52 = 0; index$sample57$52 < noStates; index$sample57$52 += 1) {
-																		int distributionTempVariable$var56$54 = index$sample57$52;
-																		double cv$probabilitySample57Value53 = (cv$probabilitySample57Value44 * distribution$sample57[((index$i$51 - 1) / 1)][index$sample57$52]);
-																		{
-																			int traceTempVariable$s$55_1 = distributionTempVariable$var56$54;
-																			if((index$i$51 == i$var174)) {
-																				{
-																					for(int var128 = 0; var128 < noStates; var128 += 1) {
-																						if((var128 == traceTempVariable$s$55_1)) {
-																							{
-																								double var176 = cpuMean[traceTempVariable$s$55_1];
-																								double var177 = cpuVar[traceTempVariable$s$55_1];
-																								double cv$weightedProbability = (Math.log(cv$probabilitySample57Value53) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
-																								if((cv$weightedProbability < cv$distributionAccumulator))
-																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																								else {
-																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																										cv$distributionAccumulator = cv$weightedProbability;
-																									else
-																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																								}
-																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value53);
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						if(fixedFlag$sample57) {
-							{
-								for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-									if((i$var50 == i$var174)) {
-										{
-											for(int var75 = 0; var75 < noStates; var75 += 1) {
-												if((var75 == st[i$var174])) {
-													if(fixedFlag$sample39) {
-														{
-															if((0 == i$var174)) {
-																{
-																	for(int var128 = 0; var128 < noStates; var128 += 1) {
-																		if((var128 == st[i$var174])) {
-																			{
-																				double var176 = cpuMean[st[i$var174]];
-																				double var177 = cpuVar[st[i$var174]];
-																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
-																				if((cv$weightedProbability < cv$distributionAccumulator))
-																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																				else {
-																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																						cv$distributionAccumulator = cv$weightedProbability;
-																					else
-																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																				}
-																				cv$probabilityReached = (cv$probabilityReached + 1.0);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													} else {
-														if(true) {
-															for(int index$sample39$68 = 0; index$sample39$68 < noStates; index$sample39$68 += 1) {
-																int distributionTempVariable$var38$70 = index$sample39$68;
-																double cv$probabilitySample39Value69 = (1.0 * distribution$sample39[index$sample39$68]);
-																{
-																	int traceTempVariable$s$71_1 = distributionTempVariable$var38$70;
-																	if((0 == i$var174)) {
-																		{
-																			for(int var128 = 0; var128 < noStates; var128 += 1) {
-																				if((var128 == traceTempVariable$s$71_1)) {
-																					{
-																						double var176 = cpuMean[traceTempVariable$s$71_1];
-																						double var177 = cpuVar[traceTempVariable$s$71_1];
-																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value69) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
-																						if((cv$weightedProbability < cv$distributionAccumulator))
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																						else {
-																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																								cv$distributionAccumulator = cv$weightedProbability;
-																							else
-																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																						}
-																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value69);
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						} else {
-							for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-								if(true) {
-									for(int index$sample57$61 = 0; index$sample57$61 < noStates; index$sample57$61 += 1) {
-										int distributionTempVariable$var56$63 = index$sample57$61;
-										double cv$probabilitySample57Value62 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$61]);
-										{
-											int traceTempVariable$s$64_1 = distributionTempVariable$var56$63;
-											if((i$var50 == i$var174)) {
-												{
-													for(int var75 = 0; var75 < noStates; var75 += 1) {
-														if((var75 == traceTempVariable$s$64_1)) {
-															if(fixedFlag$sample39) {
-																{
-																	if((0 == i$var174)) {
-																		{
-																			for(int var128 = 0; var128 < noStates; var128 += 1) {
-																				if((var128 == traceTempVariable$s$64_1)) {
-																					{
-																						double var176 = cpuMean[traceTempVariable$s$64_1];
-																						double var177 = cpuVar[traceTempVariable$s$64_1];
-																						double cv$weightedProbability = (Math.log(cv$probabilitySample57Value62) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
-																						if((cv$weightedProbability < cv$distributionAccumulator))
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																						else {
-																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																								cv$distributionAccumulator = cv$weightedProbability;
-																							else
-																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																						}
-																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value62);
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															} else {
-																if(true) {
-																	for(int index$sample39$73 = 0; index$sample39$73 < noStates; index$sample39$73 += 1) {
-																		int distributionTempVariable$var38$75 = index$sample39$73;
-																		double cv$probabilitySample39Value74 = (cv$probabilitySample57Value62 * distribution$sample39[index$sample39$73]);
-																		{
-																			int traceTempVariable$s$76_1 = distributionTempVariable$var38$75;
-																			if((0 == i$var174)) {
-																				{
-																					for(int var128 = 0; var128 < noStates; var128 += 1) {
-																						if((var128 == traceTempVariable$s$76_1)) {
-																							{
-																								double var176 = cpuMean[traceTempVariable$s$76_1];
-																								double var177 = cpuVar[traceTempVariable$s$76_1];
-																								double cv$weightedProbability = (Math.log(cv$probabilitySample39Value74) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
-																								if((cv$weightedProbability < cv$distributionAccumulator))
-																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																								else {
-																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																										cv$distributionAccumulator = cv$weightedProbability;
-																									else
-																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																								}
-																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value74);
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleReached = true;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$sample180[((i$var174 - 0) / 1)] = cv$sampleProbability;
-			}
-			logProbability$cpu = (logProbability$cpu + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample180 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample77) && fixedFlag$sample130);
-		} else {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
-				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample180[((i$var174 - 0) / 1)];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				cv$sampleReached = true;
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			}
-			logProbability$cpu = (logProbability$cpu + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+	private final void drawValueSample113(int var111, int threadID$cv$var111, Rng RNG$) {
+		pageFaultsMean[var111] = ((Math.sqrt(335550.0) * DistributionSampling.sampleGaussian(RNG$)) + 814.0);
 	}
 
-	private final void logProbabilityDistribution$sample185() {
-		if(!fixedProbFlag$sample185) {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
-				double cv$sampleAccumulator = 0.0;
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						double cv$sampleValue = mem[i$var174];
-						if(fixedFlag$sample39) {
-							{
-								if((0 == i$var174)) {
-									{
-										for(int var93 = 0; var93 < noStates; var93 += 1) {
-											if((var93 == st[i$var174])) {
-												{
-													if((0 == i$var174)) {
-														{
-															for(int var145 = 0; var145 < noStates; var145 += 1) {
-																if((var145 == st[i$var174])) {
-																	{
-																		double var181 = memMean[st[i$var174]];
-																		double var182 = memVar[st[i$var174]];
-																		double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
-																		if((cv$weightedProbability < cv$distributionAccumulator))
-																			cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																		else {
-																			if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																				cv$distributionAccumulator = cv$weightedProbability;
-																			else
-																				cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																		}
-																		cv$probabilityReached = (cv$probabilityReached + 1.0);
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						} else {
-							if(true) {
-								for(int index$sample39$3 = 0; index$sample39$3 < noStates; index$sample39$3 += 1) {
-									int distributionTempVariable$var38$5 = index$sample39$3;
-									double cv$probabilitySample39Value4 = (1.0 * distribution$sample39[index$sample39$3]);
-									{
-										int traceTempVariable$s$6_1 = distributionTempVariable$var38$5;
-										if((0 == i$var174)) {
-											{
-												for(int var93 = 0; var93 < noStates; var93 += 1) {
-													if((var93 == traceTempVariable$s$6_1)) {
-														{
-															int traceTempVariable$s$10_1 = distributionTempVariable$var38$5;
-															if((0 == i$var174)) {
-																{
-																	for(int var145 = 0; var145 < noStates; var145 += 1) {
-																		if((var145 == traceTempVariable$s$10_1)) {
-																			{
-																				double var181 = memMean[traceTempVariable$s$10_1];
-																				double var182 = memVar[traceTempVariable$s$10_1];
-																				double cv$weightedProbability = (Math.log(cv$probabilitySample39Value4) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
-																				if((cv$weightedProbability < cv$distributionAccumulator))
-																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																				else {
-																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																						cv$distributionAccumulator = cv$weightedProbability;
-																					else
-																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																				}
-																				cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value4);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-														if(!true) {
-															for(int index$sample39$11 = 0; index$sample39$11 < noStates; index$sample39$11 += 1) {
-																int distributionTempVariable$var38$13 = index$sample39$11;
-																double cv$probabilitySample39Value12 = (cv$probabilitySample39Value4 * distribution$sample39[index$sample39$11]);
-																{
-																	int traceTempVariable$s$14_1 = distributionTempVariable$var38$13;
-																	if((0 == i$var174)) {
-																		{
-																			for(int var145 = 0; var145 < noStates; var145 += 1) {
-																				if((var145 == traceTempVariable$s$14_1)) {
-																					{
-																						double var181 = memMean[traceTempVariable$s$14_1];
-																						double var182 = memVar[traceTempVariable$s$14_1];
-																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value12) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
-																						if((cv$weightedProbability < cv$distributionAccumulator))
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																						else {
-																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																								cv$distributionAccumulator = cv$weightedProbability;
-																							else
-																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																						}
-																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value12);
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						if(fixedFlag$sample39) {
-							{
-								if((0 == i$var174)) {
-									{
-										for(int var93 = 0; var93 < noStates; var93 += 1) {
-											if((var93 == st[i$var174])) {
-												if(fixedFlag$sample57) {
-													{
-														for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-															if((i$var50 == i$var174)) {
-																{
-																	for(int var145 = 0; var145 < noStates; var145 += 1) {
-																		if((var145 == st[i$var174])) {
-																			{
-																				double var181 = memMean[st[i$var174]];
-																				double var182 = memVar[st[i$var174]];
-																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
-																				if((cv$weightedProbability < cv$distributionAccumulator))
-																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																				else {
-																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																						cv$distributionAccumulator = cv$weightedProbability;
-																					else
-																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																				}
-																				cv$probabilityReached = (cv$probabilityReached + 1.0);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												} else {
-													for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-														if(true) {
-															for(int index$sample57$27 = 0; index$sample57$27 < noStates; index$sample57$27 += 1) {
-																int distributionTempVariable$var56$29 = index$sample57$27;
-																double cv$probabilitySample57Value28 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$27]);
-																{
-																	int traceTempVariable$s$30_1 = distributionTempVariable$var56$29;
-																	if((i$var50 == i$var174)) {
-																		{
-																			for(int var145 = 0; var145 < noStates; var145 += 1) {
-																				if((var145 == traceTempVariable$s$30_1)) {
-																					{
-																						double var181 = memMean[traceTempVariable$s$30_1];
-																						double var182 = memVar[traceTempVariable$s$30_1];
-																						double cv$weightedProbability = (Math.log(cv$probabilitySample57Value28) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
-																						if((cv$weightedProbability < cv$distributionAccumulator))
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																						else {
-																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																								cv$distributionAccumulator = cv$weightedProbability;
-																							else
-																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																						}
-																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value28);
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						} else {
-							if(true) {
-								for(int index$sample39$19 = 0; index$sample39$19 < noStates; index$sample39$19 += 1) {
-									int distributionTempVariable$var38$21 = index$sample39$19;
-									double cv$probabilitySample39Value20 = (1.0 * distribution$sample39[index$sample39$19]);
-									{
-										int traceTempVariable$s$22_1 = distributionTempVariable$var38$21;
-										if((0 == i$var174)) {
-											{
-												for(int var93 = 0; var93 < noStates; var93 += 1) {
-													if((var93 == traceTempVariable$s$22_1)) {
-														if(fixedFlag$sample57) {
-															{
-																for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-																	if((i$var50 == i$var174)) {
-																		{
-																			for(int var145 = 0; var145 < noStates; var145 += 1) {
-																				if((var145 == traceTempVariable$s$22_1)) {
-																					{
-																						double var181 = memMean[traceTempVariable$s$22_1];
-																						double var182 = memVar[traceTempVariable$s$22_1];
-																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value20) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
-																						if((cv$weightedProbability < cv$distributionAccumulator))
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																						else {
-																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																								cv$distributionAccumulator = cv$weightedProbability;
-																							else
-																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																						}
-																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value20);
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														} else {
-															for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-																if(true) {
-																	for(int index$sample57$33 = 0; index$sample57$33 < noStates; index$sample57$33 += 1) {
-																		int distributionTempVariable$var56$35 = index$sample57$33;
-																		double cv$probabilitySample57Value34 = (cv$probabilitySample39Value20 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$33]);
-																		{
-																			int traceTempVariable$s$36_1 = distributionTempVariable$var56$35;
-																			if((i$var50 == i$var174)) {
-																				{
-																					for(int var145 = 0; var145 < noStates; var145 += 1) {
-																						if((var145 == traceTempVariable$s$36_1)) {
-																							{
-																								double var181 = memMean[traceTempVariable$s$36_1];
-																								double var182 = memVar[traceTempVariable$s$36_1];
-																								double cv$weightedProbability = (Math.log(cv$probabilitySample57Value34) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
-																								if((cv$weightedProbability < cv$distributionAccumulator))
-																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																								else {
-																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																										cv$distributionAccumulator = cv$weightedProbability;
-																									else
-																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																								}
-																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value34);
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						if(fixedFlag$sample57) {
-							{
-								for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-									if((i$var50 == i$var174)) {
-										{
-											for(int var93 = 0; var93 < noStates; var93 += 1) {
-												if((var93 == st[i$var174])) {
-													{
-														for(int index$i$49_1 = 1; index$i$49_1 < samples; index$i$49_1 += 1) {
-															if((index$i$49_1 == i$var174)) {
-																{
-																	for(int var145 = 0; var145 < noStates; var145 += 1) {
-																		if((var145 == st[i$var174])) {
-																			{
-																				double var181 = memMean[st[i$var174]];
-																				double var182 = memVar[st[i$var174]];
-																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
-																				if((cv$weightedProbability < cv$distributionAccumulator))
-																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																				else {
-																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																						cv$distributionAccumulator = cv$weightedProbability;
-																					else
-																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																				}
-																				cv$probabilityReached = (cv$probabilityReached + 1.0);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						} else {
-							for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-								if(true) {
-									for(int index$sample57$43 = 0; index$sample57$43 < noStates; index$sample57$43 += 1) {
-										int distributionTempVariable$var56$45 = index$sample57$43;
-										double cv$probabilitySample57Value44 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$43]);
-										{
-											int traceTempVariable$s$46_1 = distributionTempVariable$var56$45;
-											if((i$var50 == i$var174)) {
-												{
-													for(int var93 = 0; var93 < noStates; var93 += 1) {
-														if((var93 == traceTempVariable$s$46_1)) {
-															{
-																int traceTempVariable$s$50_1 = distributionTempVariable$var56$45;
-																if((i$var50 == i$var174)) {
-																	{
-																		for(int var145 = 0; var145 < noStates; var145 += 1) {
-																			if((var145 == traceTempVariable$s$50_1)) {
-																				{
-																					double var181 = memMean[traceTempVariable$s$50_1];
-																					double var182 = memVar[traceTempVariable$s$50_1];
-																					double cv$weightedProbability = (Math.log(cv$probabilitySample57Value44) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
-																					if((cv$weightedProbability < cv$distributionAccumulator))
-																						cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																					else {
-																						if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																							cv$distributionAccumulator = cv$weightedProbability;
-																						else
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																					}
-																					cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value44);
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-															for(int index$i$51 = 1; index$i$51 < samples; index$i$51 += 1) {
-																if(!(index$i$51 == i$var50)) {
-																	for(int index$sample57$52 = 0; index$sample57$52 < noStates; index$sample57$52 += 1) {
-																		int distributionTempVariable$var56$54 = index$sample57$52;
-																		double cv$probabilitySample57Value53 = (cv$probabilitySample57Value44 * distribution$sample57[((index$i$51 - 1) / 1)][index$sample57$52]);
-																		{
-																			int traceTempVariable$s$55_1 = distributionTempVariable$var56$54;
-																			if((index$i$51 == i$var174)) {
-																				{
-																					for(int var145 = 0; var145 < noStates; var145 += 1) {
-																						if((var145 == traceTempVariable$s$55_1)) {
-																							{
-																								double var181 = memMean[traceTempVariable$s$55_1];
-																								double var182 = memVar[traceTempVariable$s$55_1];
-																								double cv$weightedProbability = (Math.log(cv$probabilitySample57Value53) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
-																								if((cv$weightedProbability < cv$distributionAccumulator))
-																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																								else {
-																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																										cv$distributionAccumulator = cv$weightedProbability;
-																									else
-																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																								}
-																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value53);
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						if(fixedFlag$sample57) {
-							{
-								for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-									if((i$var50 == i$var174)) {
-										{
-											for(int var93 = 0; var93 < noStates; var93 += 1) {
-												if((var93 == st[i$var174])) {
-													if(fixedFlag$sample39) {
-														{
-															if((0 == i$var174)) {
-																{
-																	for(int var145 = 0; var145 < noStates; var145 += 1) {
-																		if((var145 == st[i$var174])) {
-																			{
-																				double var181 = memMean[st[i$var174]];
-																				double var182 = memVar[st[i$var174]];
-																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
-																				if((cv$weightedProbability < cv$distributionAccumulator))
-																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																				else {
-																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																						cv$distributionAccumulator = cv$weightedProbability;
-																					else
-																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																				}
-																				cv$probabilityReached = (cv$probabilityReached + 1.0);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													} else {
-														if(true) {
-															for(int index$sample39$68 = 0; index$sample39$68 < noStates; index$sample39$68 += 1) {
-																int distributionTempVariable$var38$70 = index$sample39$68;
-																double cv$probabilitySample39Value69 = (1.0 * distribution$sample39[index$sample39$68]);
-																{
-																	int traceTempVariable$s$71_1 = distributionTempVariable$var38$70;
-																	if((0 == i$var174)) {
-																		{
-																			for(int var145 = 0; var145 < noStates; var145 += 1) {
-																				if((var145 == traceTempVariable$s$71_1)) {
-																					{
-																						double var181 = memMean[traceTempVariable$s$71_1];
-																						double var182 = memVar[traceTempVariable$s$71_1];
-																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value69) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
-																						if((cv$weightedProbability < cv$distributionAccumulator))
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																						else {
-																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																								cv$distributionAccumulator = cv$weightedProbability;
-																							else
-																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																						}
-																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value69);
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						} else {
-							for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-								if(true) {
-									for(int index$sample57$61 = 0; index$sample57$61 < noStates; index$sample57$61 += 1) {
-										int distributionTempVariable$var56$63 = index$sample57$61;
-										double cv$probabilitySample57Value62 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$61]);
-										{
-											int traceTempVariable$s$64_1 = distributionTempVariable$var56$63;
-											if((i$var50 == i$var174)) {
-												{
-													for(int var93 = 0; var93 < noStates; var93 += 1) {
-														if((var93 == traceTempVariable$s$64_1)) {
-															if(fixedFlag$sample39) {
-																{
-																	if((0 == i$var174)) {
-																		{
-																			for(int var145 = 0; var145 < noStates; var145 += 1) {
-																				if((var145 == traceTempVariable$s$64_1)) {
-																					{
-																						double var181 = memMean[traceTempVariable$s$64_1];
-																						double var182 = memVar[traceTempVariable$s$64_1];
-																						double cv$weightedProbability = (Math.log(cv$probabilitySample57Value62) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
-																						if((cv$weightedProbability < cv$distributionAccumulator))
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																						else {
-																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																								cv$distributionAccumulator = cv$weightedProbability;
-																							else
-																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																						}
-																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value62);
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															} else {
-																if(true) {
-																	for(int index$sample39$73 = 0; index$sample39$73 < noStates; index$sample39$73 += 1) {
-																		int distributionTempVariable$var38$75 = index$sample39$73;
-																		double cv$probabilitySample39Value74 = (cv$probabilitySample57Value62 * distribution$sample39[index$sample39$73]);
-																		{
-																			int traceTempVariable$s$76_1 = distributionTempVariable$var38$75;
-																			if((0 == i$var174)) {
-																				{
-																					for(int var145 = 0; var145 < noStates; var145 += 1) {
-																						if((var145 == traceTempVariable$s$76_1)) {
-																							{
-																								double var181 = memMean[traceTempVariable$s$76_1];
-																								double var182 = memVar[traceTempVariable$s$76_1];
-																								double cv$weightedProbability = (Math.log(cv$probabilitySample39Value74) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
-																								if((cv$weightedProbability < cv$distributionAccumulator))
-																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																								else {
-																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																										cv$distributionAccumulator = cv$weightedProbability;
-																									else
-																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																								}
-																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value74);
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleReached = true;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$sample185[((i$var174 - 0) / 1)] = cv$sampleProbability;
-			}
-			logProbability$mem = (logProbability$mem + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample185 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample95) && fixedFlag$sample147);
-		} else {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
-				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample185[((i$var174 - 0) / 1)];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				cv$sampleReached = true;
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			}
-			logProbability$mem = (logProbability$mem + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+	private final void drawValueSample130(int var128, int threadID$cv$var128, Rng RNG$) {
+		cpuVar[var128] = DistributionSampling.sampleInverseGamma(RNG$, 5.0, 0.5);
 	}
 
-	private final void logProbabilityDistribution$sample190() {
-		if(!fixedProbFlag$sample190) {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
-				double cv$sampleAccumulator = 0.0;
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						double cv$sampleValue = pageFaults[i$var174];
-						if(fixedFlag$sample39) {
-							{
-								if((0 == i$var174)) {
-									{
-										for(int var111 = 0; var111 < noStates; var111 += 1) {
-											if((var111 == st[i$var174])) {
-												{
-													if((0 == i$var174)) {
-														{
-															for(int var162 = 0; var162 < noStates; var162 += 1) {
-																if((var162 == st[i$var174])) {
-																	{
-																		double var186 = pageFaultsMean[st[i$var174]];
-																		double var187 = pageFaultsVar[st[i$var174]];
-																		double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
-																		if((cv$weightedProbability < cv$distributionAccumulator))
-																			cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																		else {
-																			if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																				cv$distributionAccumulator = cv$weightedProbability;
-																			else
-																				cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																		}
-																		cv$probabilityReached = (cv$probabilityReached + 1.0);
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						} else {
-							if(true) {
-								for(int index$sample39$3 = 0; index$sample39$3 < noStates; index$sample39$3 += 1) {
-									int distributionTempVariable$var38$5 = index$sample39$3;
-									double cv$probabilitySample39Value4 = (1.0 * distribution$sample39[index$sample39$3]);
-									{
-										int traceTempVariable$s$6_1 = distributionTempVariable$var38$5;
-										if((0 == i$var174)) {
-											{
-												for(int var111 = 0; var111 < noStates; var111 += 1) {
-													if((var111 == traceTempVariable$s$6_1)) {
-														{
-															int traceTempVariable$s$10_1 = distributionTempVariable$var38$5;
-															if((0 == i$var174)) {
-																{
-																	for(int var162 = 0; var162 < noStates; var162 += 1) {
-																		if((var162 == traceTempVariable$s$10_1)) {
-																			{
-																				double var186 = pageFaultsMean[traceTempVariable$s$10_1];
-																				double var187 = pageFaultsVar[traceTempVariable$s$10_1];
-																				double cv$weightedProbability = (Math.log(cv$probabilitySample39Value4) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
-																				if((cv$weightedProbability < cv$distributionAccumulator))
-																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																				else {
-																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																						cv$distributionAccumulator = cv$weightedProbability;
-																					else
-																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																				}
-																				cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value4);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-														if(!true) {
-															for(int index$sample39$11 = 0; index$sample39$11 < noStates; index$sample39$11 += 1) {
-																int distributionTempVariable$var38$13 = index$sample39$11;
-																double cv$probabilitySample39Value12 = (cv$probabilitySample39Value4 * distribution$sample39[index$sample39$11]);
-																{
-																	int traceTempVariable$s$14_1 = distributionTempVariable$var38$13;
-																	if((0 == i$var174)) {
-																		{
-																			for(int var162 = 0; var162 < noStates; var162 += 1) {
-																				if((var162 == traceTempVariable$s$14_1)) {
-																					{
-																						double var186 = pageFaultsMean[traceTempVariable$s$14_1];
-																						double var187 = pageFaultsVar[traceTempVariable$s$14_1];
-																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value12) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
-																						if((cv$weightedProbability < cv$distributionAccumulator))
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																						else {
-																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																								cv$distributionAccumulator = cv$weightedProbability;
-																							else
-																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																						}
-																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value12);
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						if(fixedFlag$sample39) {
-							{
-								if((0 == i$var174)) {
-									{
-										for(int var111 = 0; var111 < noStates; var111 += 1) {
-											if((var111 == st[i$var174])) {
-												if(fixedFlag$sample57) {
-													{
-														for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-															if((i$var50 == i$var174)) {
-																{
-																	for(int var162 = 0; var162 < noStates; var162 += 1) {
-																		if((var162 == st[i$var174])) {
-																			{
-																				double var186 = pageFaultsMean[st[i$var174]];
-																				double var187 = pageFaultsVar[st[i$var174]];
-																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
-																				if((cv$weightedProbability < cv$distributionAccumulator))
-																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																				else {
-																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																						cv$distributionAccumulator = cv$weightedProbability;
-																					else
-																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																				}
-																				cv$probabilityReached = (cv$probabilityReached + 1.0);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												} else {
-													for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-														if(true) {
-															for(int index$sample57$27 = 0; index$sample57$27 < noStates; index$sample57$27 += 1) {
-																int distributionTempVariable$var56$29 = index$sample57$27;
-																double cv$probabilitySample57Value28 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$27]);
-																{
-																	int traceTempVariable$s$30_1 = distributionTempVariable$var56$29;
-																	if((i$var50 == i$var174)) {
-																		{
-																			for(int var162 = 0; var162 < noStates; var162 += 1) {
-																				if((var162 == traceTempVariable$s$30_1)) {
-																					{
-																						double var186 = pageFaultsMean[traceTempVariable$s$30_1];
-																						double var187 = pageFaultsVar[traceTempVariable$s$30_1];
-																						double cv$weightedProbability = (Math.log(cv$probabilitySample57Value28) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
-																						if((cv$weightedProbability < cv$distributionAccumulator))
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																						else {
-																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																								cv$distributionAccumulator = cv$weightedProbability;
-																							else
-																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																						}
-																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value28);
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						} else {
-							if(true) {
-								for(int index$sample39$19 = 0; index$sample39$19 < noStates; index$sample39$19 += 1) {
-									int distributionTempVariable$var38$21 = index$sample39$19;
-									double cv$probabilitySample39Value20 = (1.0 * distribution$sample39[index$sample39$19]);
-									{
-										int traceTempVariable$s$22_1 = distributionTempVariable$var38$21;
-										if((0 == i$var174)) {
-											{
-												for(int var111 = 0; var111 < noStates; var111 += 1) {
-													if((var111 == traceTempVariable$s$22_1)) {
-														if(fixedFlag$sample57) {
-															{
-																for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-																	if((i$var50 == i$var174)) {
-																		{
-																			for(int var162 = 0; var162 < noStates; var162 += 1) {
-																				if((var162 == traceTempVariable$s$22_1)) {
-																					{
-																						double var186 = pageFaultsMean[traceTempVariable$s$22_1];
-																						double var187 = pageFaultsVar[traceTempVariable$s$22_1];
-																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value20) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
-																						if((cv$weightedProbability < cv$distributionAccumulator))
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																						else {
-																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																								cv$distributionAccumulator = cv$weightedProbability;
-																							else
-																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																						}
-																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value20);
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														} else {
-															for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-																if(true) {
-																	for(int index$sample57$33 = 0; index$sample57$33 < noStates; index$sample57$33 += 1) {
-																		int distributionTempVariable$var56$35 = index$sample57$33;
-																		double cv$probabilitySample57Value34 = (cv$probabilitySample39Value20 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$33]);
-																		{
-																			int traceTempVariable$s$36_1 = distributionTempVariable$var56$35;
-																			if((i$var50 == i$var174)) {
-																				{
-																					for(int var162 = 0; var162 < noStates; var162 += 1) {
-																						if((var162 == traceTempVariable$s$36_1)) {
-																							{
-																								double var186 = pageFaultsMean[traceTempVariable$s$36_1];
-																								double var187 = pageFaultsVar[traceTempVariable$s$36_1];
-																								double cv$weightedProbability = (Math.log(cv$probabilitySample57Value34) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
-																								if((cv$weightedProbability < cv$distributionAccumulator))
-																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																								else {
-																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																										cv$distributionAccumulator = cv$weightedProbability;
-																									else
-																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																								}
-																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value34);
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						if(fixedFlag$sample57) {
-							{
-								for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-									if((i$var50 == i$var174)) {
-										{
-											for(int var111 = 0; var111 < noStates; var111 += 1) {
-												if((var111 == st[i$var174])) {
-													{
-														for(int index$i$49_1 = 1; index$i$49_1 < samples; index$i$49_1 += 1) {
-															if((index$i$49_1 == i$var174)) {
-																{
-																	for(int var162 = 0; var162 < noStates; var162 += 1) {
-																		if((var162 == st[i$var174])) {
-																			{
-																				double var186 = pageFaultsMean[st[i$var174]];
-																				double var187 = pageFaultsVar[st[i$var174]];
-																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
-																				if((cv$weightedProbability < cv$distributionAccumulator))
-																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																				else {
-																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																						cv$distributionAccumulator = cv$weightedProbability;
-																					else
-																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																				}
-																				cv$probabilityReached = (cv$probabilityReached + 1.0);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						} else {
-							for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-								if(true) {
-									for(int index$sample57$43 = 0; index$sample57$43 < noStates; index$sample57$43 += 1) {
-										int distributionTempVariable$var56$45 = index$sample57$43;
-										double cv$probabilitySample57Value44 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$43]);
-										{
-											int traceTempVariable$s$46_1 = distributionTempVariable$var56$45;
-											if((i$var50 == i$var174)) {
-												{
-													for(int var111 = 0; var111 < noStates; var111 += 1) {
-														if((var111 == traceTempVariable$s$46_1)) {
-															{
-																int traceTempVariable$s$50_1 = distributionTempVariable$var56$45;
-																if((i$var50 == i$var174)) {
-																	{
-																		for(int var162 = 0; var162 < noStates; var162 += 1) {
-																			if((var162 == traceTempVariable$s$50_1)) {
-																				{
-																					double var186 = pageFaultsMean[traceTempVariable$s$50_1];
-																					double var187 = pageFaultsVar[traceTempVariable$s$50_1];
-																					double cv$weightedProbability = (Math.log(cv$probabilitySample57Value44) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
-																					if((cv$weightedProbability < cv$distributionAccumulator))
-																						cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																					else {
-																						if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																							cv$distributionAccumulator = cv$weightedProbability;
-																						else
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																					}
-																					cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value44);
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-															for(int index$i$51 = 1; index$i$51 < samples; index$i$51 += 1) {
-																if(!(index$i$51 == i$var50)) {
-																	for(int index$sample57$52 = 0; index$sample57$52 < noStates; index$sample57$52 += 1) {
-																		int distributionTempVariable$var56$54 = index$sample57$52;
-																		double cv$probabilitySample57Value53 = (cv$probabilitySample57Value44 * distribution$sample57[((index$i$51 - 1) / 1)][index$sample57$52]);
-																		{
-																			int traceTempVariable$s$55_1 = distributionTempVariable$var56$54;
-																			if((index$i$51 == i$var174)) {
-																				{
-																					for(int var162 = 0; var162 < noStates; var162 += 1) {
-																						if((var162 == traceTempVariable$s$55_1)) {
-																							{
-																								double var186 = pageFaultsMean[traceTempVariable$s$55_1];
-																								double var187 = pageFaultsVar[traceTempVariable$s$55_1];
-																								double cv$weightedProbability = (Math.log(cv$probabilitySample57Value53) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
-																								if((cv$weightedProbability < cv$distributionAccumulator))
-																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																								else {
-																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																										cv$distributionAccumulator = cv$weightedProbability;
-																									else
-																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																								}
-																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value53);
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						if(fixedFlag$sample57) {
-							{
-								for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-									if((i$var50 == i$var174)) {
-										{
-											for(int var111 = 0; var111 < noStates; var111 += 1) {
-												if((var111 == st[i$var174])) {
-													if(fixedFlag$sample39) {
-														{
-															if((0 == i$var174)) {
-																{
-																	for(int var162 = 0; var162 < noStates; var162 += 1) {
-																		if((var162 == st[i$var174])) {
-																			{
-																				double var186 = pageFaultsMean[st[i$var174]];
-																				double var187 = pageFaultsVar[st[i$var174]];
-																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
-																				if((cv$weightedProbability < cv$distributionAccumulator))
-																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																				else {
-																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																						cv$distributionAccumulator = cv$weightedProbability;
-																					else
-																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																				}
-																				cv$probabilityReached = (cv$probabilityReached + 1.0);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													} else {
-														if(true) {
-															for(int index$sample39$68 = 0; index$sample39$68 < noStates; index$sample39$68 += 1) {
-																int distributionTempVariable$var38$70 = index$sample39$68;
-																double cv$probabilitySample39Value69 = (1.0 * distribution$sample39[index$sample39$68]);
-																{
-																	int traceTempVariable$s$71_1 = distributionTempVariable$var38$70;
-																	if((0 == i$var174)) {
-																		{
-																			for(int var162 = 0; var162 < noStates; var162 += 1) {
-																				if((var162 == traceTempVariable$s$71_1)) {
-																					{
-																						double var186 = pageFaultsMean[traceTempVariable$s$71_1];
-																						double var187 = pageFaultsVar[traceTempVariable$s$71_1];
-																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value69) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
-																						if((cv$weightedProbability < cv$distributionAccumulator))
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																						else {
-																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																								cv$distributionAccumulator = cv$weightedProbability;
-																							else
-																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																						}
-																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value69);
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						} else {
-							for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-								if(true) {
-									for(int index$sample57$61 = 0; index$sample57$61 < noStates; index$sample57$61 += 1) {
-										int distributionTempVariable$var56$63 = index$sample57$61;
-										double cv$probabilitySample57Value62 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$61]);
-										{
-											int traceTempVariable$s$64_1 = distributionTempVariable$var56$63;
-											if((i$var50 == i$var174)) {
-												{
-													for(int var111 = 0; var111 < noStates; var111 += 1) {
-														if((var111 == traceTempVariable$s$64_1)) {
-															if(fixedFlag$sample39) {
-																{
-																	if((0 == i$var174)) {
-																		{
-																			for(int var162 = 0; var162 < noStates; var162 += 1) {
-																				if((var162 == traceTempVariable$s$64_1)) {
-																					{
-																						double var186 = pageFaultsMean[traceTempVariable$s$64_1];
-																						double var187 = pageFaultsVar[traceTempVariable$s$64_1];
-																						double cv$weightedProbability = (Math.log(cv$probabilitySample57Value62) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
-																						if((cv$weightedProbability < cv$distributionAccumulator))
-																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																						else {
-																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																								cv$distributionAccumulator = cv$weightedProbability;
-																							else
-																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																						}
-																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value62);
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															} else {
-																if(true) {
-																	for(int index$sample39$73 = 0; index$sample39$73 < noStates; index$sample39$73 += 1) {
-																		int distributionTempVariable$var38$75 = index$sample39$73;
-																		double cv$probabilitySample39Value74 = (cv$probabilitySample57Value62 * distribution$sample39[index$sample39$73]);
-																		{
-																			int traceTempVariable$s$76_1 = distributionTempVariable$var38$75;
-																			if((0 == i$var174)) {
-																				{
-																					for(int var162 = 0; var162 < noStates; var162 += 1) {
-																						if((var162 == traceTempVariable$s$76_1)) {
-																							{
-																								double var186 = pageFaultsMean[traceTempVariable$s$76_1];
-																								double var187 = pageFaultsVar[traceTempVariable$s$76_1];
-																								double cv$weightedProbability = (Math.log(cv$probabilitySample39Value74) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
-																								if((cv$weightedProbability < cv$distributionAccumulator))
-																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																								else {
-																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																										cv$distributionAccumulator = cv$weightedProbability;
-																									else
-																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																								}
-																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value74);
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleReached = true;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$sample190[((i$var174 - 0) / 1)] = cv$sampleProbability;
-			}
-			logProbability$pageFaults = (logProbability$pageFaults + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample190 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample113) && fixedFlag$sample164);
-		} else {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
-				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample190[((i$var174 - 0) / 1)];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				cv$sampleReached = true;
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			}
-			logProbability$pageFaults = (logProbability$pageFaults + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+	private final void drawValueSample147(int var145, int threadID$cv$var145, Rng RNG$) {
+		memVar[var145] = DistributionSampling.sampleInverseGamma(RNG$, 5.0, 0.5);
 	}
 
-	private final void logProbabilityDistribution$sample39() {
-		if(!fixedProbFlag$sample39) {
-			if(fixedFlag$sample39) {
-				double cv$accumulator = 0.0;
-				double cv$sampleAccumulator = 0.0;
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						int cv$sampleValue = st[0];
-						{
-							{
-								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$sampleValue])) && (initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var38 = cv$sampleProbability;
-				if(fixedFlag$sample39)
-					logProbability$st = (logProbability$st + cv$accumulator);
-				logProbability$$model = (logProbability$$model + cv$accumulator);
-				if(fixedFlag$sample39)
-					logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-				fixedProbFlag$sample39 = (fixedFlag$sample39 && fixedFlag$sample36);
-			}
-		} else {
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var38;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(fixedFlag$sample39)
-				logProbability$st = (logProbability$st + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample39)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+	private final void drawValueSample164(int var162, int threadID$cv$var162, Rng RNG$) {
+		pageFaultsVar[var162] = DistributionSampling.sampleInverseGamma(RNG$, 5.0, 0.5);
 	}
 
-	private final void logProbabilityDistribution$sample57() {
-		if(!fixedProbFlag$sample57) {
-			if(fixedFlag$sample57) {
-				double cv$accumulator = 0.0;
-				boolean cv$sampleReached = false;
-				for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-					double cv$sampleAccumulator = 0.0;
-					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					double cv$probabilityReached = 0.0;
-					int index$i$1 = i$var50;
-					{
-						{
-							int cv$sampleValue = st[i$var50];
-							if(fixedFlag$sample39) {
-								{
-									if((0 == (i$var50 - 1))) {
-										{
-											for(int var29 = 0; var29 < noStates; var29 += 1) {
-												if((var29 == st[(i$var50 - 1)])) {
-													{
-														double[] var54 = m[st[(i$var50 - 1)]];
-														double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var54[cv$sampleValue])) && (var54[cv$sampleValue] <= 1.0))?Math.log(var54[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-														if((cv$weightedProbability < cv$distributionAccumulator))
-															cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-														else {
-															if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																cv$distributionAccumulator = cv$weightedProbability;
-															else
-																cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-														}
-														cv$probabilityReached = (cv$probabilityReached + 1.0);
-													}
-												}
-											}
-										}
-									}
-								}
-							} else {
-								if(true) {
-									for(int index$sample39$4 = 0; index$sample39$4 < noStates; index$sample39$4 += 1) {
-										int distributionTempVariable$var38$6 = index$sample39$4;
-										double cv$probabilitySample39Value5 = (1.0 * distribution$sample39[index$sample39$4]);
-										{
-											int traceTempVariable$var53$7_1 = distributionTempVariable$var38$6;
-											if((0 == (i$var50 - 1))) {
-												{
-													for(int var29 = 0; var29 < noStates; var29 += 1) {
-														if((var29 == traceTempVariable$var53$7_1)) {
-															{
-																double[] var54 = m[traceTempVariable$var53$7_1];
-																double cv$weightedProbability = (Math.log(cv$probabilitySample39Value5) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var54[cv$sampleValue])) && (var54[cv$sampleValue] <= 1.0))?Math.log(var54[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-																if((cv$weightedProbability < cv$distributionAccumulator))
-																	cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																else {
-																	if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																		cv$distributionAccumulator = cv$weightedProbability;
-																	else
-																		cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																}
-																cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value5);
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								if((index$i$1 == (i$var50 - 1))) {
-									{
-										for(int var29 = 0; var29 < noStates; var29 += 1) {
-											if((var29 == st[(i$var50 - 1)])) {
-												{
-													double[] var54 = m[st[(i$var50 - 1)]];
-													double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var54[cv$sampleValue])) && (var54[cv$sampleValue] <= 1.0))?Math.log(var54[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-													if((cv$weightedProbability < cv$distributionAccumulator))
-														cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-													else {
-														if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-															cv$distributionAccumulator = cv$weightedProbability;
-														else
-															cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-													}
-													cv$probabilityReached = (cv$probabilityReached + 1.0);
-												}
-											}
-										}
-									}
-								}
-							}
-							if(fixedFlag$sample57) {
-								{
-									for(int index$i$11_1 = 1; index$i$11_1 < samples; index$i$11_1 += 1) {
-										if((index$i$11_1 == (i$var50 - 1))) {
-											{
-												for(int var29 = 0; var29 < noStates; var29 += 1) {
-													if((var29 == st[(i$var50 - 1)])) {
-														{
-															double[] var54 = m[st[(i$var50 - 1)]];
-															double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var54[cv$sampleValue])) && (var54[cv$sampleValue] <= 1.0))?Math.log(var54[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-															if((cv$weightedProbability < cv$distributionAccumulator))
-																cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-															else {
-																if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																	cv$distributionAccumulator = cv$weightedProbability;
-																else
-																	cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-															}
-															cv$probabilityReached = (cv$probabilityReached + 1.0);
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							} else {
-								for(int index$i$12 = 1; index$i$12 < samples; index$i$12 += 1) {
-									if(!(index$i$12 == index$i$1)) {
-										for(int index$sample57$13 = 0; index$sample57$13 < noStates; index$sample57$13 += 1) {
-											int distributionTempVariable$var56$15 = index$sample57$13;
-											double cv$probabilitySample57Value14 = (1.0 * distribution$sample57[((index$i$12 - 1) / 1)][index$sample57$13]);
-											{
-												int traceTempVariable$var53$16_1 = distributionTempVariable$var56$15;
-												if((index$i$12 == (i$var50 - 1))) {
-													{
-														for(int var29 = 0; var29 < noStates; var29 += 1) {
-															if((var29 == traceTempVariable$var53$16_1)) {
-																{
-																	double[] var54 = m[traceTempVariable$var53$16_1];
-																	double cv$weightedProbability = (Math.log(cv$probabilitySample57Value14) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var54[cv$sampleValue])) && (var54[cv$sampleValue] <= 1.0))?Math.log(var54[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-																	if((cv$weightedProbability < cv$distributionAccumulator))
-																		cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																	else {
-																		if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																			cv$distributionAccumulator = cv$weightedProbability;
-																		else
-																			cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																	}
-																	cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value14);
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					if((cv$probabilityReached == 0.0))
-						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					else
-						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-					double cv$sampleProbability = cv$distributionAccumulator;
-					cv$sampleReached = true;
-					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$sample57[((i$var50 - 1) / 1)] = cv$sampleProbability;
-				}
-				if(fixedFlag$sample57)
-					logProbability$st = (logProbability$st + cv$accumulator);
-				logProbability$$model = (logProbability$$model + cv$accumulator);
-				if(fixedFlag$sample57)
-					logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-				fixedProbFlag$sample57 = ((fixedFlag$sample57 && fixedFlag$sample30) && fixedFlag$sample39);
-			}
-		} else {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample57[((i$var50 - 1) / 1)];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				cv$sampleReached = true;
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			}
-			if(fixedFlag$sample57)
-				logProbability$st = (logProbability$st + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample57)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+	private final void drawValueSample30(int var29, int threadID$cv$var29, Rng RNG$) {
+		double[] var30 = m[var29];
+		DistributionSampling.sampleDirichlet(RNG$, v, noStates, var30);
 	}
 
-	private final void logProbabilityValue$sample113() {
-		if(!fixedProbFlag$sample113) {
-			double cv$accumulator = 0.0;
-			double cv$sampleAccumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int var111 = 0; var111 < noStates; var111 += 1) {
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						double cv$sampleValue = pageFaultsMean[var111];
-						{
-							{
-								double var98 = 814.0;
-								double var99 = 335550.0;
-								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var99)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var98) / Math.sqrt(var99))) - (0.5 * Math.log(var99))):Double.NEGATIVE_INFINITY));
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleReached = true;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			}
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var112 = cv$sampleAccumulator;
-			logProbability$pageFaultsMean = (logProbability$pageFaultsMean + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample113)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample113 = fixedFlag$sample113;
-		} else {
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int var111 = 0; var111 < noStates; var111 += 1)
-				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var112;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$pageFaultsMean = (logProbability$pageFaultsMean + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample113)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+	private final void drawValueSample36() {
+		DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
 	}
 
-	private final void logProbabilityValue$sample130() {
-		if(!fixedProbFlag$sample130) {
-			double cv$accumulator = 0.0;
-			double cv$sampleAccumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int var128 = 0; var128 < noStates; var128 += 1) {
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						double cv$sampleValue = cpuVar[var128];
-						{
-							{
-								double var116 = 5.0;
-								double var115 = 0.5;
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityInverseGamma(cv$sampleValue, var116, var115));
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleReached = true;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			}
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var129 = cv$sampleAccumulator;
-			logProbability$cpuVar = (logProbability$cpuVar + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample130)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample130 = fixedFlag$sample130;
-		} else {
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int var128 = 0; var128 < noStates; var128 += 1)
-				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var129;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$cpuVar = (logProbability$cpuVar + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample130)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+	private final void drawValueSample39() {
+		st[0] = DistributionSampling.sampleCategorical(RNG$, initialStateDistribution, noStates);
 	}
 
-	private final void logProbabilityValue$sample147() {
-		if(!fixedProbFlag$sample147) {
-			double cv$accumulator = 0.0;
-			double cv$sampleAccumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int var145 = 0; var145 < noStates; var145 += 1) {
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						double cv$sampleValue = memVar[var145];
-						{
-							{
-								double var133 = 5.0;
-								double var132 = 0.5;
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityInverseGamma(cv$sampleValue, var133, var132));
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleReached = true;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			}
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var146 = cv$sampleAccumulator;
-			logProbability$memVar = (logProbability$memVar + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample147)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample147 = fixedFlag$sample147;
-		} else {
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int var145 = 0; var145 < noStates; var145 += 1)
-				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var146;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$memVar = (logProbability$memVar + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample147)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+	private final void drawValueSample57(int i$var50) {
+		int index$i$1 = i$var50;
+		st[i$var50] = DistributionSampling.sampleCategorical(RNG$, m[st[(i$var50 - 1)]], noStates);
 	}
 
-	private final void logProbabilityValue$sample164() {
-		if(!fixedProbFlag$sample164) {
-			double cv$accumulator = 0.0;
-			double cv$sampleAccumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int var162 = 0; var162 < noStates; var162 += 1) {
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						double cv$sampleValue = pageFaultsVar[var162];
-						{
-							{
-								double var150 = 5.0;
-								double var149 = 0.5;
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityInverseGamma(cv$sampleValue, var150, var149));
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleReached = true;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			}
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var163 = cv$sampleAccumulator;
-			logProbability$pageFaultsVar = (logProbability$pageFaultsVar + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample164)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample164 = fixedFlag$sample164;
-		} else {
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int var162 = 0; var162 < noStates; var162 += 1)
-				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var163;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$pageFaultsVar = (logProbability$pageFaultsVar + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample164)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+	private final void drawValueSample77(int var75, int threadID$cv$var75, Rng RNG$) {
+		cpuMean[var75] = ((Math.sqrt(8.6) * DistributionSampling.sampleGaussian(RNG$)) + 16.0);
 	}
 
-	private final void logProbabilityValue$sample180() {
-		if(!fixedProbFlag$sample180) {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
-				double cv$sampleAccumulator = 0.0;
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						double cv$sampleValue = cpu[i$var174];
-						{
-							{
-								double var176 = cpuMean[st[i$var174]];
-								double var177 = cpuVar[st[i$var174]];
-								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleReached = true;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$sample180[((i$var174 - 0) / 1)] = cv$sampleProbability;
-			}
-			logProbability$cpu = (logProbability$cpu + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample180 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample77) && fixedFlag$sample130);
-		} else {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
-				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample180[((i$var174 - 0) / 1)];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				cv$sampleReached = true;
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			}
-			logProbability$cpu = (logProbability$cpu + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+	private final void drawValueSample95(int var93, int threadID$cv$var93, Rng RNG$) {
+		memMean[var93] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 94.0);
 	}
 
-	private final void logProbabilityValue$sample185() {
-		if(!fixedProbFlag$sample185) {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
-				double cv$sampleAccumulator = 0.0;
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						double cv$sampleValue = mem[i$var174];
-						{
-							{
-								double var181 = memMean[st[i$var174]];
-								double var182 = memVar[st[i$var174]];
-								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleReached = true;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$sample185[((i$var174 - 0) / 1)] = cv$sampleProbability;
-			}
-			logProbability$mem = (logProbability$mem + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample185 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample95) && fixedFlag$sample147);
-		} else {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
-				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample185[((i$var174 - 0) / 1)];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				cv$sampleReached = true;
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			}
-			logProbability$mem = (logProbability$mem + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	private final void logProbabilityValue$sample190() {
-		if(!fixedProbFlag$sample190) {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
-				double cv$sampleAccumulator = 0.0;
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						double cv$sampleValue = pageFaults[i$var174];
-						{
-							{
-								double var186 = pageFaultsMean[st[i$var174]];
-								double var187 = pageFaultsVar[st[i$var174]];
-								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleReached = true;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$sample190[((i$var174 - 0) / 1)] = cv$sampleProbability;
-			}
-			logProbability$pageFaults = (logProbability$pageFaults + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample190 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample113) && fixedFlag$sample164);
-		} else {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
-				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample190[((i$var174 - 0) / 1)];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				cv$sampleReached = true;
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			}
-			logProbability$pageFaults = (logProbability$pageFaults + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	private final void logProbabilityValue$sample30() {
-		if(!fixedProbFlag$sample30) {
-			double cv$accumulator = 0.0;
-			double cv$sampleAccumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int var29 = 0; var29 < noStates; var29 += 1) {
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						double[] cv$sampleValue = m[var29];
-						{
-							{
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, noStates));
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleReached = true;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			}
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var30 = cv$sampleAccumulator;
-			logProbability$m = (logProbability$m + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample30)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample30 = fixedFlag$sample30;
-		} else {
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int var29 = 0; var29 < noStates; var29 += 1)
-				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var30;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$m = (logProbability$m + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample30)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	private final void logProbabilityValue$sample36() {
-		if(!fixedProbFlag$sample36) {
-			double cv$accumulator = 0.0;
-			double cv$sampleAccumulator = 0.0;
-			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-			double cv$probabilityReached = 0.0;
-			{
-				{
-					double[] cv$sampleValue = initialStateDistribution;
-					{
-						{
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, noStates));
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
-						}
-					}
-				}
-			}
-			if((cv$probabilityReached == 0.0))
-				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-			else
-				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-			double cv$sampleProbability = cv$distributionAccumulator;
-			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$initialStateDistribution = cv$sampleProbability;
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample36)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample36 = fixedFlag$sample36;
-		} else {
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$initialStateDistribution;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample36)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	private final void logProbabilityValue$sample39() {
-		if(!fixedProbFlag$sample39) {
-			double cv$accumulator = 0.0;
-			double cv$sampleAccumulator = 0.0;
-			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-			double cv$probabilityReached = 0.0;
-			{
-				{
-					int cv$sampleValue = st[0];
-					{
-						{
-							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$sampleValue])) && (initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
-						}
-					}
-				}
-			}
-			if((cv$probabilityReached == 0.0))
-				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-			else
-				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-			double cv$sampleProbability = cv$distributionAccumulator;
-			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var38 = cv$sampleProbability;
-			logProbability$st = (logProbability$st + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample39)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample39 = (fixedFlag$sample39 && fixedFlag$sample36);
-		} else {
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var38;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$st = (logProbability$st + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample39)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	private final void logProbabilityValue$sample57() {
-		if(!fixedProbFlag$sample57) {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-				double cv$sampleAccumulator = 0.0;
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
-				int index$i$1 = i$var50;
-				{
-					{
-						int cv$sampleValue = st[i$var50];
-						{
-							{
-								double[] var54 = m[st[(i$var50 - 1)]];
-								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var54[cv$sampleValue])) && (var54[cv$sampleValue] <= 1.0))?Math.log(var54[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleReached = true;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$sample57[((i$var50 - 1) / 1)] = cv$sampleProbability;
-			}
-			logProbability$st = (logProbability$st + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample57)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample57 = ((fixedFlag$sample57 && fixedFlag$sample30) && fixedFlag$sample39);
-		} else {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
-				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample57[((i$var50 - 1) / 1)];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				cv$sampleReached = true;
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			}
-			logProbability$st = (logProbability$st + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample57)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	private final void logProbabilityValue$sample77() {
-		if(!fixedProbFlag$sample77) {
-			double cv$accumulator = 0.0;
-			double cv$sampleAccumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int var75 = 0; var75 < noStates; var75 += 1) {
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						double cv$sampleValue = cpuMean[var75];
-						{
-							{
-								double var63 = 16.0;
-								double var62 = 8.6;
-								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var62)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var63) / Math.sqrt(var62))) - (0.5 * Math.log(var62))):Double.NEGATIVE_INFINITY));
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleReached = true;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			}
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var76 = cv$sampleAccumulator;
-			logProbability$cpuMean = (logProbability$cpuMean + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample77)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample77 = fixedFlag$sample77;
-		} else {
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int var75 = 0; var75 < noStates; var75 += 1)
-				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var76;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$cpuMean = (logProbability$cpuMean + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample77)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	private final void logProbabilityValue$sample95() {
-		if(!fixedProbFlag$sample95) {
-			double cv$accumulator = 0.0;
-			double cv$sampleAccumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int var93 = 0; var93 < noStates; var93 += 1) {
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						double cv$sampleValue = memMean[var93];
-						{
-							{
-								double var80 = 94.0;
-								double var81 = 1.0;
-								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var81)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var80) / Math.sqrt(var81))) - (0.5 * Math.log(var81))):Double.NEGATIVE_INFINITY));
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				cv$sampleReached = true;
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			}
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var94 = cv$sampleAccumulator;
-			logProbability$memMean = (logProbability$memMean + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample95)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample95 = fixedFlag$sample95;
-		} else {
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int var93 = 0; var93 < noStates; var93 += 1)
-				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var94;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$memMean = (logProbability$memMean + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample95)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	private final void sample113(int var111, int threadID$cv$var111, Rng RNG$) {
+	private final void inferSample113(int var111, int threadID$cv$var111, Rng RNG$) {
 		if(true) {
 			constrainedFlag$sample113[((var111 - 0) / 1)] = false;
 			int cv$numStates = 0;
@@ -3880,7 +1231,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		}
 	}
 
-	private final void sample130(int var128, int threadID$cv$var128, Rng RNG$) {
+	private final void inferSample130(int var128, int threadID$cv$var128, Rng RNG$) {
 		if(true) {
 			constrainedFlag$sample130[((var128 - 0) / 1)] = false;
 			int cv$numStates = 0;
@@ -4531,7 +1882,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		}
 	}
 
-	private final void sample147(int var145, int threadID$cv$var145, Rng RNG$) {
+	private final void inferSample147(int var145, int threadID$cv$var145, Rng RNG$) {
 		if(true) {
 			constrainedFlag$sample147[((var145 - 0) / 1)] = false;
 			int cv$numStates = 0;
@@ -5182,7 +2533,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		}
 	}
 
-	private final void sample164(int var162, int threadID$cv$var162, Rng RNG$) {
+	private final void inferSample164(int var162, int threadID$cv$var162, Rng RNG$) {
 		if(true) {
 			constrainedFlag$sample164[((var162 - 0) / 1)] = false;
 			int cv$numStates = 0;
@@ -5833,7 +3184,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		}
 	}
 
-	private final void sample30(int var29, int threadID$cv$var29, Rng RNG$) {
+	private final void inferSample30(int var29, int threadID$cv$var29, Rng RNG$) {
 		if(true) {
 			constrainedFlag$sample30[((var29 - 0) / 1)] = false;
 			double[] cv$targetLocal = m[var29];
@@ -6136,7 +3487,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		}
 	}
 
-	private final void sample36() {
+	private final void inferSample36() {
 		if(true) {
 			constrainedFlag$sample36 = false;
 			double[] cv$targetLocal = initialStateDistribution;
@@ -6201,7 +3552,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		}
 	}
 
-	private final void sample39() {
+	private final void inferSample39() {
 		if(true) {
 			constrainedFlag$sample39 = false;
 			int cv$numStates = 0;
@@ -7492,7 +4843,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		}
 	}
 
-	private final void sample57(int i$var50) {
+	private final void inferSample57(int i$var50) {
 		int index$i$1 = i$var50;
 		if(true) {
 			constrainedFlag$sample57[((i$var50 - 1) / 1)] = false;
@@ -12219,7 +9570,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		}
 	}
 
-	private final void sample77(int var75, int threadID$cv$var75, Rng RNG$) {
+	private final void inferSample77(int var75, int threadID$cv$var75, Rng RNG$) {
 		if(true) {
 			constrainedFlag$sample77[((var75 - 0) / 1)] = false;
 			int cv$numStates = 0;
@@ -12870,7 +10221,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		}
 	}
 
-	private final void sample95(int var93, int threadID$cv$var93, Rng RNG$) {
+	private final void inferSample95(int var93, int threadID$cv$var93, Rng RNG$) {
 		if(true) {
 			constrainedFlag$sample95[((var93 - 0) / 1)] = false;
 			int cv$numStates = 0;
@@ -13521,6 +10872,2731 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		}
 	}
 
+	private final void logProbabilityDistribution$sample180() {
+		if(!fixedProbFlag$sample180) {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
+				double cv$sampleAccumulator = 0.0;
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						double cv$sampleValue = cpu[i$var174];
+						if(fixedFlag$sample39) {
+							{
+								if((0 == i$var174)) {
+									{
+										for(int var75 = 0; var75 < noStates; var75 += 1) {
+											if((var75 == st[i$var174])) {
+												{
+													if((0 == i$var174)) {
+														{
+															for(int var128 = 0; var128 < noStates; var128 += 1) {
+																if((var128 == st[i$var174])) {
+																	{
+																		double var176 = cpuMean[st[i$var174]];
+																		double var177 = cpuVar[st[i$var174]];
+																		double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
+																		if((cv$weightedProbability < cv$distributionAccumulator))
+																			cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																		else {
+																			if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																				cv$distributionAccumulator = cv$weightedProbability;
+																			else
+																				cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																		}
+																		cv$probabilityReached = (cv$probabilityReached + 1.0);
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						} else {
+							if(true) {
+								for(int index$sample39$3 = 0; index$sample39$3 < noStates; index$sample39$3 += 1) {
+									int distributionTempVariable$var38$5 = index$sample39$3;
+									double cv$probabilitySample39Value4 = (1.0 * distribution$sample39[index$sample39$3]);
+									{
+										int traceTempVariable$s$6_1 = distributionTempVariable$var38$5;
+										if((0 == i$var174)) {
+											{
+												for(int var75 = 0; var75 < noStates; var75 += 1) {
+													if((var75 == traceTempVariable$s$6_1)) {
+														{
+															int traceTempVariable$s$10_1 = distributionTempVariable$var38$5;
+															if((0 == i$var174)) {
+																{
+																	for(int var128 = 0; var128 < noStates; var128 += 1) {
+																		if((var128 == traceTempVariable$s$10_1)) {
+																			{
+																				double var176 = cpuMean[traceTempVariable$s$10_1];
+																				double var177 = cpuVar[traceTempVariable$s$10_1];
+																				double cv$weightedProbability = (Math.log(cv$probabilitySample39Value4) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
+																				if((cv$weightedProbability < cv$distributionAccumulator))
+																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																				else {
+																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																						cv$distributionAccumulator = cv$weightedProbability;
+																					else
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																				}
+																				cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value4);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+														if(!true) {
+															for(int index$sample39$11 = 0; index$sample39$11 < noStates; index$sample39$11 += 1) {
+																int distributionTempVariable$var38$13 = index$sample39$11;
+																double cv$probabilitySample39Value12 = (cv$probabilitySample39Value4 * distribution$sample39[index$sample39$11]);
+																{
+																	int traceTempVariable$s$14_1 = distributionTempVariable$var38$13;
+																	if((0 == i$var174)) {
+																		{
+																			for(int var128 = 0; var128 < noStates; var128 += 1) {
+																				if((var128 == traceTempVariable$s$14_1)) {
+																					{
+																						double var176 = cpuMean[traceTempVariable$s$14_1];
+																						double var177 = cpuVar[traceTempVariable$s$14_1];
+																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value12) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
+																						if((cv$weightedProbability < cv$distributionAccumulator))
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																						else {
+																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																								cv$distributionAccumulator = cv$weightedProbability;
+																							else
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																						}
+																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value12);
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						if(fixedFlag$sample39) {
+							{
+								if((0 == i$var174)) {
+									{
+										for(int var75 = 0; var75 < noStates; var75 += 1) {
+											if((var75 == st[i$var174])) {
+												if(fixedFlag$sample57) {
+													{
+														for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+															if((i$var50 == i$var174)) {
+																{
+																	for(int var128 = 0; var128 < noStates; var128 += 1) {
+																		if((var128 == st[i$var174])) {
+																			{
+																				double var176 = cpuMean[st[i$var174]];
+																				double var177 = cpuVar[st[i$var174]];
+																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
+																				if((cv$weightedProbability < cv$distributionAccumulator))
+																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																				else {
+																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																						cv$distributionAccumulator = cv$weightedProbability;
+																					else
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																				}
+																				cv$probabilityReached = (cv$probabilityReached + 1.0);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												} else {
+													for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+														if(true) {
+															for(int index$sample57$27 = 0; index$sample57$27 < noStates; index$sample57$27 += 1) {
+																int distributionTempVariable$var56$29 = index$sample57$27;
+																double cv$probabilitySample57Value28 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$27]);
+																{
+																	int traceTempVariable$s$30_1 = distributionTempVariable$var56$29;
+																	if((i$var50 == i$var174)) {
+																		{
+																			for(int var128 = 0; var128 < noStates; var128 += 1) {
+																				if((var128 == traceTempVariable$s$30_1)) {
+																					{
+																						double var176 = cpuMean[traceTempVariable$s$30_1];
+																						double var177 = cpuVar[traceTempVariable$s$30_1];
+																						double cv$weightedProbability = (Math.log(cv$probabilitySample57Value28) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
+																						if((cv$weightedProbability < cv$distributionAccumulator))
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																						else {
+																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																								cv$distributionAccumulator = cv$weightedProbability;
+																							else
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																						}
+																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value28);
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						} else {
+							if(true) {
+								for(int index$sample39$19 = 0; index$sample39$19 < noStates; index$sample39$19 += 1) {
+									int distributionTempVariable$var38$21 = index$sample39$19;
+									double cv$probabilitySample39Value20 = (1.0 * distribution$sample39[index$sample39$19]);
+									{
+										int traceTempVariable$s$22_1 = distributionTempVariable$var38$21;
+										if((0 == i$var174)) {
+											{
+												for(int var75 = 0; var75 < noStates; var75 += 1) {
+													if((var75 == traceTempVariable$s$22_1)) {
+														if(fixedFlag$sample57) {
+															{
+																for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+																	if((i$var50 == i$var174)) {
+																		{
+																			for(int var128 = 0; var128 < noStates; var128 += 1) {
+																				if((var128 == traceTempVariable$s$22_1)) {
+																					{
+																						double var176 = cpuMean[traceTempVariable$s$22_1];
+																						double var177 = cpuVar[traceTempVariable$s$22_1];
+																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value20) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
+																						if((cv$weightedProbability < cv$distributionAccumulator))
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																						else {
+																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																								cv$distributionAccumulator = cv$weightedProbability;
+																							else
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																						}
+																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value20);
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														} else {
+															for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+																if(true) {
+																	for(int index$sample57$33 = 0; index$sample57$33 < noStates; index$sample57$33 += 1) {
+																		int distributionTempVariable$var56$35 = index$sample57$33;
+																		double cv$probabilitySample57Value34 = (cv$probabilitySample39Value20 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$33]);
+																		{
+																			int traceTempVariable$s$36_1 = distributionTempVariable$var56$35;
+																			if((i$var50 == i$var174)) {
+																				{
+																					for(int var128 = 0; var128 < noStates; var128 += 1) {
+																						if((var128 == traceTempVariable$s$36_1)) {
+																							{
+																								double var176 = cpuMean[traceTempVariable$s$36_1];
+																								double var177 = cpuVar[traceTempVariable$s$36_1];
+																								double cv$weightedProbability = (Math.log(cv$probabilitySample57Value34) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
+																								if((cv$weightedProbability < cv$distributionAccumulator))
+																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																								else {
+																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																										cv$distributionAccumulator = cv$weightedProbability;
+																									else
+																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																								}
+																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value34);
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						if(fixedFlag$sample57) {
+							{
+								for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+									if((i$var50 == i$var174)) {
+										{
+											for(int var75 = 0; var75 < noStates; var75 += 1) {
+												if((var75 == st[i$var174])) {
+													{
+														for(int index$i$49_1 = 1; index$i$49_1 < samples; index$i$49_1 += 1) {
+															if((index$i$49_1 == i$var174)) {
+																{
+																	for(int var128 = 0; var128 < noStates; var128 += 1) {
+																		if((var128 == st[i$var174])) {
+																			{
+																				double var176 = cpuMean[st[i$var174]];
+																				double var177 = cpuVar[st[i$var174]];
+																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
+																				if((cv$weightedProbability < cv$distributionAccumulator))
+																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																				else {
+																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																						cv$distributionAccumulator = cv$weightedProbability;
+																					else
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																				}
+																				cv$probabilityReached = (cv$probabilityReached + 1.0);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						} else {
+							for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+								if(true) {
+									for(int index$sample57$43 = 0; index$sample57$43 < noStates; index$sample57$43 += 1) {
+										int distributionTempVariable$var56$45 = index$sample57$43;
+										double cv$probabilitySample57Value44 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$43]);
+										{
+											int traceTempVariable$s$46_1 = distributionTempVariable$var56$45;
+											if((i$var50 == i$var174)) {
+												{
+													for(int var75 = 0; var75 < noStates; var75 += 1) {
+														if((var75 == traceTempVariable$s$46_1)) {
+															{
+																int traceTempVariable$s$50_1 = distributionTempVariable$var56$45;
+																if((i$var50 == i$var174)) {
+																	{
+																		for(int var128 = 0; var128 < noStates; var128 += 1) {
+																			if((var128 == traceTempVariable$s$50_1)) {
+																				{
+																					double var176 = cpuMean[traceTempVariable$s$50_1];
+																					double var177 = cpuVar[traceTempVariable$s$50_1];
+																					double cv$weightedProbability = (Math.log(cv$probabilitySample57Value44) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
+																					if((cv$weightedProbability < cv$distributionAccumulator))
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																					else {
+																						if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																							cv$distributionAccumulator = cv$weightedProbability;
+																						else
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																					}
+																					cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value44);
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+															for(int index$i$51 = 1; index$i$51 < samples; index$i$51 += 1) {
+																if(!(index$i$51 == i$var50)) {
+																	for(int index$sample57$52 = 0; index$sample57$52 < noStates; index$sample57$52 += 1) {
+																		int distributionTempVariable$var56$54 = index$sample57$52;
+																		double cv$probabilitySample57Value53 = (cv$probabilitySample57Value44 * distribution$sample57[((index$i$51 - 1) / 1)][index$sample57$52]);
+																		{
+																			int traceTempVariable$s$55_1 = distributionTempVariable$var56$54;
+																			if((index$i$51 == i$var174)) {
+																				{
+																					for(int var128 = 0; var128 < noStates; var128 += 1) {
+																						if((var128 == traceTempVariable$s$55_1)) {
+																							{
+																								double var176 = cpuMean[traceTempVariable$s$55_1];
+																								double var177 = cpuVar[traceTempVariable$s$55_1];
+																								double cv$weightedProbability = (Math.log(cv$probabilitySample57Value53) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
+																								if((cv$weightedProbability < cv$distributionAccumulator))
+																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																								else {
+																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																										cv$distributionAccumulator = cv$weightedProbability;
+																									else
+																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																								}
+																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value53);
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						if(fixedFlag$sample57) {
+							{
+								for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+									if((i$var50 == i$var174)) {
+										{
+											for(int var75 = 0; var75 < noStates; var75 += 1) {
+												if((var75 == st[i$var174])) {
+													if(fixedFlag$sample39) {
+														{
+															if((0 == i$var174)) {
+																{
+																	for(int var128 = 0; var128 < noStates; var128 += 1) {
+																		if((var128 == st[i$var174])) {
+																			{
+																				double var176 = cpuMean[st[i$var174]];
+																				double var177 = cpuVar[st[i$var174]];
+																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
+																				if((cv$weightedProbability < cv$distributionAccumulator))
+																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																				else {
+																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																						cv$distributionAccumulator = cv$weightedProbability;
+																					else
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																				}
+																				cv$probabilityReached = (cv$probabilityReached + 1.0);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													} else {
+														if(true) {
+															for(int index$sample39$68 = 0; index$sample39$68 < noStates; index$sample39$68 += 1) {
+																int distributionTempVariable$var38$70 = index$sample39$68;
+																double cv$probabilitySample39Value69 = (1.0 * distribution$sample39[index$sample39$68]);
+																{
+																	int traceTempVariable$s$71_1 = distributionTempVariable$var38$70;
+																	if((0 == i$var174)) {
+																		{
+																			for(int var128 = 0; var128 < noStates; var128 += 1) {
+																				if((var128 == traceTempVariable$s$71_1)) {
+																					{
+																						double var176 = cpuMean[traceTempVariable$s$71_1];
+																						double var177 = cpuVar[traceTempVariable$s$71_1];
+																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value69) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
+																						if((cv$weightedProbability < cv$distributionAccumulator))
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																						else {
+																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																								cv$distributionAccumulator = cv$weightedProbability;
+																							else
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																						}
+																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value69);
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						} else {
+							for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+								if(true) {
+									for(int index$sample57$61 = 0; index$sample57$61 < noStates; index$sample57$61 += 1) {
+										int distributionTempVariable$var56$63 = index$sample57$61;
+										double cv$probabilitySample57Value62 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$61]);
+										{
+											int traceTempVariable$s$64_1 = distributionTempVariable$var56$63;
+											if((i$var50 == i$var174)) {
+												{
+													for(int var75 = 0; var75 < noStates; var75 += 1) {
+														if((var75 == traceTempVariable$s$64_1)) {
+															if(fixedFlag$sample39) {
+																{
+																	if((0 == i$var174)) {
+																		{
+																			for(int var128 = 0; var128 < noStates; var128 += 1) {
+																				if((var128 == traceTempVariable$s$64_1)) {
+																					{
+																						double var176 = cpuMean[traceTempVariable$s$64_1];
+																						double var177 = cpuVar[traceTempVariable$s$64_1];
+																						double cv$weightedProbability = (Math.log(cv$probabilitySample57Value62) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
+																						if((cv$weightedProbability < cv$distributionAccumulator))
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																						else {
+																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																								cv$distributionAccumulator = cv$weightedProbability;
+																							else
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																						}
+																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value62);
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															} else {
+																if(true) {
+																	for(int index$sample39$73 = 0; index$sample39$73 < noStates; index$sample39$73 += 1) {
+																		int distributionTempVariable$var38$75 = index$sample39$73;
+																		double cv$probabilitySample39Value74 = (cv$probabilitySample57Value62 * distribution$sample39[index$sample39$73]);
+																		{
+																			int traceTempVariable$s$76_1 = distributionTempVariable$var38$75;
+																			if((0 == i$var174)) {
+																				{
+																					for(int var128 = 0; var128 < noStates; var128 += 1) {
+																						if((var128 == traceTempVariable$s$76_1)) {
+																							{
+																								double var176 = cpuMean[traceTempVariable$s$76_1];
+																								double var177 = cpuVar[traceTempVariable$s$76_1];
+																								double cv$weightedProbability = (Math.log(cv$probabilitySample39Value74) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
+																								if((cv$weightedProbability < cv$distributionAccumulator))
+																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																								else {
+																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																										cv$distributionAccumulator = cv$weightedProbability;
+																									else
+																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																								}
+																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value74);
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+				logProbability$sample180[((i$var174 - 0) / 1)] = cv$sampleProbability;
+			}
+			logProbability$cpu = (logProbability$cpu + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample180 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample77) && fixedFlag$sample130);
+		} else {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
+				double cv$rvAccumulator = 0.0;
+				double cv$sampleValue = logProbability$sample180[((i$var174 - 0) / 1)];
+				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
+				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			}
+			logProbability$cpu = (logProbability$cpu + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityDistribution$sample185() {
+		if(!fixedProbFlag$sample185) {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
+				double cv$sampleAccumulator = 0.0;
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						double cv$sampleValue = mem[i$var174];
+						if(fixedFlag$sample39) {
+							{
+								if((0 == i$var174)) {
+									{
+										for(int var93 = 0; var93 < noStates; var93 += 1) {
+											if((var93 == st[i$var174])) {
+												{
+													if((0 == i$var174)) {
+														{
+															for(int var145 = 0; var145 < noStates; var145 += 1) {
+																if((var145 == st[i$var174])) {
+																	{
+																		double var181 = memMean[st[i$var174]];
+																		double var182 = memVar[st[i$var174]];
+																		double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
+																		if((cv$weightedProbability < cv$distributionAccumulator))
+																			cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																		else {
+																			if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																				cv$distributionAccumulator = cv$weightedProbability;
+																			else
+																				cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																		}
+																		cv$probabilityReached = (cv$probabilityReached + 1.0);
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						} else {
+							if(true) {
+								for(int index$sample39$3 = 0; index$sample39$3 < noStates; index$sample39$3 += 1) {
+									int distributionTempVariable$var38$5 = index$sample39$3;
+									double cv$probabilitySample39Value4 = (1.0 * distribution$sample39[index$sample39$3]);
+									{
+										int traceTempVariable$s$6_1 = distributionTempVariable$var38$5;
+										if((0 == i$var174)) {
+											{
+												for(int var93 = 0; var93 < noStates; var93 += 1) {
+													if((var93 == traceTempVariable$s$6_1)) {
+														{
+															int traceTempVariable$s$10_1 = distributionTempVariable$var38$5;
+															if((0 == i$var174)) {
+																{
+																	for(int var145 = 0; var145 < noStates; var145 += 1) {
+																		if((var145 == traceTempVariable$s$10_1)) {
+																			{
+																				double var181 = memMean[traceTempVariable$s$10_1];
+																				double var182 = memVar[traceTempVariable$s$10_1];
+																				double cv$weightedProbability = (Math.log(cv$probabilitySample39Value4) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
+																				if((cv$weightedProbability < cv$distributionAccumulator))
+																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																				else {
+																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																						cv$distributionAccumulator = cv$weightedProbability;
+																					else
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																				}
+																				cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value4);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+														if(!true) {
+															for(int index$sample39$11 = 0; index$sample39$11 < noStates; index$sample39$11 += 1) {
+																int distributionTempVariable$var38$13 = index$sample39$11;
+																double cv$probabilitySample39Value12 = (cv$probabilitySample39Value4 * distribution$sample39[index$sample39$11]);
+																{
+																	int traceTempVariable$s$14_1 = distributionTempVariable$var38$13;
+																	if((0 == i$var174)) {
+																		{
+																			for(int var145 = 0; var145 < noStates; var145 += 1) {
+																				if((var145 == traceTempVariable$s$14_1)) {
+																					{
+																						double var181 = memMean[traceTempVariable$s$14_1];
+																						double var182 = memVar[traceTempVariable$s$14_1];
+																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value12) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
+																						if((cv$weightedProbability < cv$distributionAccumulator))
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																						else {
+																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																								cv$distributionAccumulator = cv$weightedProbability;
+																							else
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																						}
+																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value12);
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						if(fixedFlag$sample39) {
+							{
+								if((0 == i$var174)) {
+									{
+										for(int var93 = 0; var93 < noStates; var93 += 1) {
+											if((var93 == st[i$var174])) {
+												if(fixedFlag$sample57) {
+													{
+														for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+															if((i$var50 == i$var174)) {
+																{
+																	for(int var145 = 0; var145 < noStates; var145 += 1) {
+																		if((var145 == st[i$var174])) {
+																			{
+																				double var181 = memMean[st[i$var174]];
+																				double var182 = memVar[st[i$var174]];
+																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
+																				if((cv$weightedProbability < cv$distributionAccumulator))
+																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																				else {
+																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																						cv$distributionAccumulator = cv$weightedProbability;
+																					else
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																				}
+																				cv$probabilityReached = (cv$probabilityReached + 1.0);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												} else {
+													for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+														if(true) {
+															for(int index$sample57$27 = 0; index$sample57$27 < noStates; index$sample57$27 += 1) {
+																int distributionTempVariable$var56$29 = index$sample57$27;
+																double cv$probabilitySample57Value28 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$27]);
+																{
+																	int traceTempVariable$s$30_1 = distributionTempVariable$var56$29;
+																	if((i$var50 == i$var174)) {
+																		{
+																			for(int var145 = 0; var145 < noStates; var145 += 1) {
+																				if((var145 == traceTempVariable$s$30_1)) {
+																					{
+																						double var181 = memMean[traceTempVariable$s$30_1];
+																						double var182 = memVar[traceTempVariable$s$30_1];
+																						double cv$weightedProbability = (Math.log(cv$probabilitySample57Value28) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
+																						if((cv$weightedProbability < cv$distributionAccumulator))
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																						else {
+																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																								cv$distributionAccumulator = cv$weightedProbability;
+																							else
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																						}
+																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value28);
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						} else {
+							if(true) {
+								for(int index$sample39$19 = 0; index$sample39$19 < noStates; index$sample39$19 += 1) {
+									int distributionTempVariable$var38$21 = index$sample39$19;
+									double cv$probabilitySample39Value20 = (1.0 * distribution$sample39[index$sample39$19]);
+									{
+										int traceTempVariable$s$22_1 = distributionTempVariable$var38$21;
+										if((0 == i$var174)) {
+											{
+												for(int var93 = 0; var93 < noStates; var93 += 1) {
+													if((var93 == traceTempVariable$s$22_1)) {
+														if(fixedFlag$sample57) {
+															{
+																for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+																	if((i$var50 == i$var174)) {
+																		{
+																			for(int var145 = 0; var145 < noStates; var145 += 1) {
+																				if((var145 == traceTempVariable$s$22_1)) {
+																					{
+																						double var181 = memMean[traceTempVariable$s$22_1];
+																						double var182 = memVar[traceTempVariable$s$22_1];
+																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value20) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
+																						if((cv$weightedProbability < cv$distributionAccumulator))
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																						else {
+																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																								cv$distributionAccumulator = cv$weightedProbability;
+																							else
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																						}
+																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value20);
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														} else {
+															for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+																if(true) {
+																	for(int index$sample57$33 = 0; index$sample57$33 < noStates; index$sample57$33 += 1) {
+																		int distributionTempVariable$var56$35 = index$sample57$33;
+																		double cv$probabilitySample57Value34 = (cv$probabilitySample39Value20 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$33]);
+																		{
+																			int traceTempVariable$s$36_1 = distributionTempVariable$var56$35;
+																			if((i$var50 == i$var174)) {
+																				{
+																					for(int var145 = 0; var145 < noStates; var145 += 1) {
+																						if((var145 == traceTempVariable$s$36_1)) {
+																							{
+																								double var181 = memMean[traceTempVariable$s$36_1];
+																								double var182 = memVar[traceTempVariable$s$36_1];
+																								double cv$weightedProbability = (Math.log(cv$probabilitySample57Value34) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
+																								if((cv$weightedProbability < cv$distributionAccumulator))
+																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																								else {
+																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																										cv$distributionAccumulator = cv$weightedProbability;
+																									else
+																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																								}
+																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value34);
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						if(fixedFlag$sample57) {
+							{
+								for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+									if((i$var50 == i$var174)) {
+										{
+											for(int var93 = 0; var93 < noStates; var93 += 1) {
+												if((var93 == st[i$var174])) {
+													{
+														for(int index$i$49_1 = 1; index$i$49_1 < samples; index$i$49_1 += 1) {
+															if((index$i$49_1 == i$var174)) {
+																{
+																	for(int var145 = 0; var145 < noStates; var145 += 1) {
+																		if((var145 == st[i$var174])) {
+																			{
+																				double var181 = memMean[st[i$var174]];
+																				double var182 = memVar[st[i$var174]];
+																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
+																				if((cv$weightedProbability < cv$distributionAccumulator))
+																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																				else {
+																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																						cv$distributionAccumulator = cv$weightedProbability;
+																					else
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																				}
+																				cv$probabilityReached = (cv$probabilityReached + 1.0);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						} else {
+							for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+								if(true) {
+									for(int index$sample57$43 = 0; index$sample57$43 < noStates; index$sample57$43 += 1) {
+										int distributionTempVariable$var56$45 = index$sample57$43;
+										double cv$probabilitySample57Value44 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$43]);
+										{
+											int traceTempVariable$s$46_1 = distributionTempVariable$var56$45;
+											if((i$var50 == i$var174)) {
+												{
+													for(int var93 = 0; var93 < noStates; var93 += 1) {
+														if((var93 == traceTempVariable$s$46_1)) {
+															{
+																int traceTempVariable$s$50_1 = distributionTempVariable$var56$45;
+																if((i$var50 == i$var174)) {
+																	{
+																		for(int var145 = 0; var145 < noStates; var145 += 1) {
+																			if((var145 == traceTempVariable$s$50_1)) {
+																				{
+																					double var181 = memMean[traceTempVariable$s$50_1];
+																					double var182 = memVar[traceTempVariable$s$50_1];
+																					double cv$weightedProbability = (Math.log(cv$probabilitySample57Value44) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
+																					if((cv$weightedProbability < cv$distributionAccumulator))
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																					else {
+																						if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																							cv$distributionAccumulator = cv$weightedProbability;
+																						else
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																					}
+																					cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value44);
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+															for(int index$i$51 = 1; index$i$51 < samples; index$i$51 += 1) {
+																if(!(index$i$51 == i$var50)) {
+																	for(int index$sample57$52 = 0; index$sample57$52 < noStates; index$sample57$52 += 1) {
+																		int distributionTempVariable$var56$54 = index$sample57$52;
+																		double cv$probabilitySample57Value53 = (cv$probabilitySample57Value44 * distribution$sample57[((index$i$51 - 1) / 1)][index$sample57$52]);
+																		{
+																			int traceTempVariable$s$55_1 = distributionTempVariable$var56$54;
+																			if((index$i$51 == i$var174)) {
+																				{
+																					for(int var145 = 0; var145 < noStates; var145 += 1) {
+																						if((var145 == traceTempVariable$s$55_1)) {
+																							{
+																								double var181 = memMean[traceTempVariable$s$55_1];
+																								double var182 = memVar[traceTempVariable$s$55_1];
+																								double cv$weightedProbability = (Math.log(cv$probabilitySample57Value53) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
+																								if((cv$weightedProbability < cv$distributionAccumulator))
+																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																								else {
+																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																										cv$distributionAccumulator = cv$weightedProbability;
+																									else
+																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																								}
+																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value53);
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						if(fixedFlag$sample57) {
+							{
+								for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+									if((i$var50 == i$var174)) {
+										{
+											for(int var93 = 0; var93 < noStates; var93 += 1) {
+												if((var93 == st[i$var174])) {
+													if(fixedFlag$sample39) {
+														{
+															if((0 == i$var174)) {
+																{
+																	for(int var145 = 0; var145 < noStates; var145 += 1) {
+																		if((var145 == st[i$var174])) {
+																			{
+																				double var181 = memMean[st[i$var174]];
+																				double var182 = memVar[st[i$var174]];
+																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
+																				if((cv$weightedProbability < cv$distributionAccumulator))
+																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																				else {
+																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																						cv$distributionAccumulator = cv$weightedProbability;
+																					else
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																				}
+																				cv$probabilityReached = (cv$probabilityReached + 1.0);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													} else {
+														if(true) {
+															for(int index$sample39$68 = 0; index$sample39$68 < noStates; index$sample39$68 += 1) {
+																int distributionTempVariable$var38$70 = index$sample39$68;
+																double cv$probabilitySample39Value69 = (1.0 * distribution$sample39[index$sample39$68]);
+																{
+																	int traceTempVariable$s$71_1 = distributionTempVariable$var38$70;
+																	if((0 == i$var174)) {
+																		{
+																			for(int var145 = 0; var145 < noStates; var145 += 1) {
+																				if((var145 == traceTempVariable$s$71_1)) {
+																					{
+																						double var181 = memMean[traceTempVariable$s$71_1];
+																						double var182 = memVar[traceTempVariable$s$71_1];
+																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value69) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
+																						if((cv$weightedProbability < cv$distributionAccumulator))
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																						else {
+																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																								cv$distributionAccumulator = cv$weightedProbability;
+																							else
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																						}
+																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value69);
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						} else {
+							for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+								if(true) {
+									for(int index$sample57$61 = 0; index$sample57$61 < noStates; index$sample57$61 += 1) {
+										int distributionTempVariable$var56$63 = index$sample57$61;
+										double cv$probabilitySample57Value62 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$61]);
+										{
+											int traceTempVariable$s$64_1 = distributionTempVariable$var56$63;
+											if((i$var50 == i$var174)) {
+												{
+													for(int var93 = 0; var93 < noStates; var93 += 1) {
+														if((var93 == traceTempVariable$s$64_1)) {
+															if(fixedFlag$sample39) {
+																{
+																	if((0 == i$var174)) {
+																		{
+																			for(int var145 = 0; var145 < noStates; var145 += 1) {
+																				if((var145 == traceTempVariable$s$64_1)) {
+																					{
+																						double var181 = memMean[traceTempVariable$s$64_1];
+																						double var182 = memVar[traceTempVariable$s$64_1];
+																						double cv$weightedProbability = (Math.log(cv$probabilitySample57Value62) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
+																						if((cv$weightedProbability < cv$distributionAccumulator))
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																						else {
+																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																								cv$distributionAccumulator = cv$weightedProbability;
+																							else
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																						}
+																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value62);
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															} else {
+																if(true) {
+																	for(int index$sample39$73 = 0; index$sample39$73 < noStates; index$sample39$73 += 1) {
+																		int distributionTempVariable$var38$75 = index$sample39$73;
+																		double cv$probabilitySample39Value74 = (cv$probabilitySample57Value62 * distribution$sample39[index$sample39$73]);
+																		{
+																			int traceTempVariable$s$76_1 = distributionTempVariable$var38$75;
+																			if((0 == i$var174)) {
+																				{
+																					for(int var145 = 0; var145 < noStates; var145 += 1) {
+																						if((var145 == traceTempVariable$s$76_1)) {
+																							{
+																								double var181 = memMean[traceTempVariable$s$76_1];
+																								double var182 = memVar[traceTempVariable$s$76_1];
+																								double cv$weightedProbability = (Math.log(cv$probabilitySample39Value74) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
+																								if((cv$weightedProbability < cv$distributionAccumulator))
+																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																								else {
+																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																										cv$distributionAccumulator = cv$weightedProbability;
+																									else
+																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																								}
+																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value74);
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+				logProbability$sample185[((i$var174 - 0) / 1)] = cv$sampleProbability;
+			}
+			logProbability$mem = (logProbability$mem + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample185 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample95) && fixedFlag$sample147);
+		} else {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
+				double cv$rvAccumulator = 0.0;
+				double cv$sampleValue = logProbability$sample185[((i$var174 - 0) / 1)];
+				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
+				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			}
+			logProbability$mem = (logProbability$mem + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityDistribution$sample190() {
+		if(!fixedProbFlag$sample190) {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
+				double cv$sampleAccumulator = 0.0;
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						double cv$sampleValue = pageFaults[i$var174];
+						if(fixedFlag$sample39) {
+							{
+								if((0 == i$var174)) {
+									{
+										for(int var111 = 0; var111 < noStates; var111 += 1) {
+											if((var111 == st[i$var174])) {
+												{
+													if((0 == i$var174)) {
+														{
+															for(int var162 = 0; var162 < noStates; var162 += 1) {
+																if((var162 == st[i$var174])) {
+																	{
+																		double var186 = pageFaultsMean[st[i$var174]];
+																		double var187 = pageFaultsVar[st[i$var174]];
+																		double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
+																		if((cv$weightedProbability < cv$distributionAccumulator))
+																			cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																		else {
+																			if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																				cv$distributionAccumulator = cv$weightedProbability;
+																			else
+																				cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																		}
+																		cv$probabilityReached = (cv$probabilityReached + 1.0);
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						} else {
+							if(true) {
+								for(int index$sample39$3 = 0; index$sample39$3 < noStates; index$sample39$3 += 1) {
+									int distributionTempVariable$var38$5 = index$sample39$3;
+									double cv$probabilitySample39Value4 = (1.0 * distribution$sample39[index$sample39$3]);
+									{
+										int traceTempVariable$s$6_1 = distributionTempVariable$var38$5;
+										if((0 == i$var174)) {
+											{
+												for(int var111 = 0; var111 < noStates; var111 += 1) {
+													if((var111 == traceTempVariable$s$6_1)) {
+														{
+															int traceTempVariable$s$10_1 = distributionTempVariable$var38$5;
+															if((0 == i$var174)) {
+																{
+																	for(int var162 = 0; var162 < noStates; var162 += 1) {
+																		if((var162 == traceTempVariable$s$10_1)) {
+																			{
+																				double var186 = pageFaultsMean[traceTempVariable$s$10_1];
+																				double var187 = pageFaultsVar[traceTempVariable$s$10_1];
+																				double cv$weightedProbability = (Math.log(cv$probabilitySample39Value4) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
+																				if((cv$weightedProbability < cv$distributionAccumulator))
+																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																				else {
+																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																						cv$distributionAccumulator = cv$weightedProbability;
+																					else
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																				}
+																				cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value4);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+														if(!true) {
+															for(int index$sample39$11 = 0; index$sample39$11 < noStates; index$sample39$11 += 1) {
+																int distributionTempVariable$var38$13 = index$sample39$11;
+																double cv$probabilitySample39Value12 = (cv$probabilitySample39Value4 * distribution$sample39[index$sample39$11]);
+																{
+																	int traceTempVariable$s$14_1 = distributionTempVariable$var38$13;
+																	if((0 == i$var174)) {
+																		{
+																			for(int var162 = 0; var162 < noStates; var162 += 1) {
+																				if((var162 == traceTempVariable$s$14_1)) {
+																					{
+																						double var186 = pageFaultsMean[traceTempVariable$s$14_1];
+																						double var187 = pageFaultsVar[traceTempVariable$s$14_1];
+																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value12) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
+																						if((cv$weightedProbability < cv$distributionAccumulator))
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																						else {
+																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																								cv$distributionAccumulator = cv$weightedProbability;
+																							else
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																						}
+																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value12);
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						if(fixedFlag$sample39) {
+							{
+								if((0 == i$var174)) {
+									{
+										for(int var111 = 0; var111 < noStates; var111 += 1) {
+											if((var111 == st[i$var174])) {
+												if(fixedFlag$sample57) {
+													{
+														for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+															if((i$var50 == i$var174)) {
+																{
+																	for(int var162 = 0; var162 < noStates; var162 += 1) {
+																		if((var162 == st[i$var174])) {
+																			{
+																				double var186 = pageFaultsMean[st[i$var174]];
+																				double var187 = pageFaultsVar[st[i$var174]];
+																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
+																				if((cv$weightedProbability < cv$distributionAccumulator))
+																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																				else {
+																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																						cv$distributionAccumulator = cv$weightedProbability;
+																					else
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																				}
+																				cv$probabilityReached = (cv$probabilityReached + 1.0);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												} else {
+													for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+														if(true) {
+															for(int index$sample57$27 = 0; index$sample57$27 < noStates; index$sample57$27 += 1) {
+																int distributionTempVariable$var56$29 = index$sample57$27;
+																double cv$probabilitySample57Value28 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$27]);
+																{
+																	int traceTempVariable$s$30_1 = distributionTempVariable$var56$29;
+																	if((i$var50 == i$var174)) {
+																		{
+																			for(int var162 = 0; var162 < noStates; var162 += 1) {
+																				if((var162 == traceTempVariable$s$30_1)) {
+																					{
+																						double var186 = pageFaultsMean[traceTempVariable$s$30_1];
+																						double var187 = pageFaultsVar[traceTempVariable$s$30_1];
+																						double cv$weightedProbability = (Math.log(cv$probabilitySample57Value28) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
+																						if((cv$weightedProbability < cv$distributionAccumulator))
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																						else {
+																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																								cv$distributionAccumulator = cv$weightedProbability;
+																							else
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																						}
+																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value28);
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						} else {
+							if(true) {
+								for(int index$sample39$19 = 0; index$sample39$19 < noStates; index$sample39$19 += 1) {
+									int distributionTempVariable$var38$21 = index$sample39$19;
+									double cv$probabilitySample39Value20 = (1.0 * distribution$sample39[index$sample39$19]);
+									{
+										int traceTempVariable$s$22_1 = distributionTempVariable$var38$21;
+										if((0 == i$var174)) {
+											{
+												for(int var111 = 0; var111 < noStates; var111 += 1) {
+													if((var111 == traceTempVariable$s$22_1)) {
+														if(fixedFlag$sample57) {
+															{
+																for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+																	if((i$var50 == i$var174)) {
+																		{
+																			for(int var162 = 0; var162 < noStates; var162 += 1) {
+																				if((var162 == traceTempVariable$s$22_1)) {
+																					{
+																						double var186 = pageFaultsMean[traceTempVariable$s$22_1];
+																						double var187 = pageFaultsVar[traceTempVariable$s$22_1];
+																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value20) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
+																						if((cv$weightedProbability < cv$distributionAccumulator))
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																						else {
+																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																								cv$distributionAccumulator = cv$weightedProbability;
+																							else
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																						}
+																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value20);
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														} else {
+															for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+																if(true) {
+																	for(int index$sample57$33 = 0; index$sample57$33 < noStates; index$sample57$33 += 1) {
+																		int distributionTempVariable$var56$35 = index$sample57$33;
+																		double cv$probabilitySample57Value34 = (cv$probabilitySample39Value20 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$33]);
+																		{
+																			int traceTempVariable$s$36_1 = distributionTempVariable$var56$35;
+																			if((i$var50 == i$var174)) {
+																				{
+																					for(int var162 = 0; var162 < noStates; var162 += 1) {
+																						if((var162 == traceTempVariable$s$36_1)) {
+																							{
+																								double var186 = pageFaultsMean[traceTempVariable$s$36_1];
+																								double var187 = pageFaultsVar[traceTempVariable$s$36_1];
+																								double cv$weightedProbability = (Math.log(cv$probabilitySample57Value34) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
+																								if((cv$weightedProbability < cv$distributionAccumulator))
+																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																								else {
+																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																										cv$distributionAccumulator = cv$weightedProbability;
+																									else
+																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																								}
+																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value34);
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						if(fixedFlag$sample57) {
+							{
+								for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+									if((i$var50 == i$var174)) {
+										{
+											for(int var111 = 0; var111 < noStates; var111 += 1) {
+												if((var111 == st[i$var174])) {
+													{
+														for(int index$i$49_1 = 1; index$i$49_1 < samples; index$i$49_1 += 1) {
+															if((index$i$49_1 == i$var174)) {
+																{
+																	for(int var162 = 0; var162 < noStates; var162 += 1) {
+																		if((var162 == st[i$var174])) {
+																			{
+																				double var186 = pageFaultsMean[st[i$var174]];
+																				double var187 = pageFaultsVar[st[i$var174]];
+																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
+																				if((cv$weightedProbability < cv$distributionAccumulator))
+																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																				else {
+																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																						cv$distributionAccumulator = cv$weightedProbability;
+																					else
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																				}
+																				cv$probabilityReached = (cv$probabilityReached + 1.0);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						} else {
+							for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+								if(true) {
+									for(int index$sample57$43 = 0; index$sample57$43 < noStates; index$sample57$43 += 1) {
+										int distributionTempVariable$var56$45 = index$sample57$43;
+										double cv$probabilitySample57Value44 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$43]);
+										{
+											int traceTempVariable$s$46_1 = distributionTempVariable$var56$45;
+											if((i$var50 == i$var174)) {
+												{
+													for(int var111 = 0; var111 < noStates; var111 += 1) {
+														if((var111 == traceTempVariable$s$46_1)) {
+															{
+																int traceTempVariable$s$50_1 = distributionTempVariable$var56$45;
+																if((i$var50 == i$var174)) {
+																	{
+																		for(int var162 = 0; var162 < noStates; var162 += 1) {
+																			if((var162 == traceTempVariable$s$50_1)) {
+																				{
+																					double var186 = pageFaultsMean[traceTempVariable$s$50_1];
+																					double var187 = pageFaultsVar[traceTempVariable$s$50_1];
+																					double cv$weightedProbability = (Math.log(cv$probabilitySample57Value44) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
+																					if((cv$weightedProbability < cv$distributionAccumulator))
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																					else {
+																						if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																							cv$distributionAccumulator = cv$weightedProbability;
+																						else
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																					}
+																					cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value44);
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+															for(int index$i$51 = 1; index$i$51 < samples; index$i$51 += 1) {
+																if(!(index$i$51 == i$var50)) {
+																	for(int index$sample57$52 = 0; index$sample57$52 < noStates; index$sample57$52 += 1) {
+																		int distributionTempVariable$var56$54 = index$sample57$52;
+																		double cv$probabilitySample57Value53 = (cv$probabilitySample57Value44 * distribution$sample57[((index$i$51 - 1) / 1)][index$sample57$52]);
+																		{
+																			int traceTempVariable$s$55_1 = distributionTempVariable$var56$54;
+																			if((index$i$51 == i$var174)) {
+																				{
+																					for(int var162 = 0; var162 < noStates; var162 += 1) {
+																						if((var162 == traceTempVariable$s$55_1)) {
+																							{
+																								double var186 = pageFaultsMean[traceTempVariable$s$55_1];
+																								double var187 = pageFaultsVar[traceTempVariable$s$55_1];
+																								double cv$weightedProbability = (Math.log(cv$probabilitySample57Value53) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
+																								if((cv$weightedProbability < cv$distributionAccumulator))
+																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																								else {
+																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																										cv$distributionAccumulator = cv$weightedProbability;
+																									else
+																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																								}
+																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value53);
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						if(fixedFlag$sample57) {
+							{
+								for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+									if((i$var50 == i$var174)) {
+										{
+											for(int var111 = 0; var111 < noStates; var111 += 1) {
+												if((var111 == st[i$var174])) {
+													if(fixedFlag$sample39) {
+														{
+															if((0 == i$var174)) {
+																{
+																	for(int var162 = 0; var162 < noStates; var162 += 1) {
+																		if((var162 == st[i$var174])) {
+																			{
+																				double var186 = pageFaultsMean[st[i$var174]];
+																				double var187 = pageFaultsVar[st[i$var174]];
+																				double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
+																				if((cv$weightedProbability < cv$distributionAccumulator))
+																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																				else {
+																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																						cv$distributionAccumulator = cv$weightedProbability;
+																					else
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																				}
+																				cv$probabilityReached = (cv$probabilityReached + 1.0);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													} else {
+														if(true) {
+															for(int index$sample39$68 = 0; index$sample39$68 < noStates; index$sample39$68 += 1) {
+																int distributionTempVariable$var38$70 = index$sample39$68;
+																double cv$probabilitySample39Value69 = (1.0 * distribution$sample39[index$sample39$68]);
+																{
+																	int traceTempVariable$s$71_1 = distributionTempVariable$var38$70;
+																	if((0 == i$var174)) {
+																		{
+																			for(int var162 = 0; var162 < noStates; var162 += 1) {
+																				if((var162 == traceTempVariable$s$71_1)) {
+																					{
+																						double var186 = pageFaultsMean[traceTempVariable$s$71_1];
+																						double var187 = pageFaultsVar[traceTempVariable$s$71_1];
+																						double cv$weightedProbability = (Math.log(cv$probabilitySample39Value69) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
+																						if((cv$weightedProbability < cv$distributionAccumulator))
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																						else {
+																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																								cv$distributionAccumulator = cv$weightedProbability;
+																							else
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																						}
+																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value69);
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						} else {
+							for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+								if(true) {
+									for(int index$sample57$61 = 0; index$sample57$61 < noStates; index$sample57$61 += 1) {
+										int distributionTempVariable$var56$63 = index$sample57$61;
+										double cv$probabilitySample57Value62 = (1.0 * distribution$sample57[((i$var50 - 1) / 1)][index$sample57$61]);
+										{
+											int traceTempVariable$s$64_1 = distributionTempVariable$var56$63;
+											if((i$var50 == i$var174)) {
+												{
+													for(int var111 = 0; var111 < noStates; var111 += 1) {
+														if((var111 == traceTempVariable$s$64_1)) {
+															if(fixedFlag$sample39) {
+																{
+																	if((0 == i$var174)) {
+																		{
+																			for(int var162 = 0; var162 < noStates; var162 += 1) {
+																				if((var162 == traceTempVariable$s$64_1)) {
+																					{
+																						double var186 = pageFaultsMean[traceTempVariable$s$64_1];
+																						double var187 = pageFaultsVar[traceTempVariable$s$64_1];
+																						double cv$weightedProbability = (Math.log(cv$probabilitySample57Value62) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
+																						if((cv$weightedProbability < cv$distributionAccumulator))
+																							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																						else {
+																							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																								cv$distributionAccumulator = cv$weightedProbability;
+																							else
+																								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																						}
+																						cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value62);
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															} else {
+																if(true) {
+																	for(int index$sample39$73 = 0; index$sample39$73 < noStates; index$sample39$73 += 1) {
+																		int distributionTempVariable$var38$75 = index$sample39$73;
+																		double cv$probabilitySample39Value74 = (cv$probabilitySample57Value62 * distribution$sample39[index$sample39$73]);
+																		{
+																			int traceTempVariable$s$76_1 = distributionTempVariable$var38$75;
+																			if((0 == i$var174)) {
+																				{
+																					for(int var162 = 0; var162 < noStates; var162 += 1) {
+																						if((var162 == traceTempVariable$s$76_1)) {
+																							{
+																								double var186 = pageFaultsMean[traceTempVariable$s$76_1];
+																								double var187 = pageFaultsVar[traceTempVariable$s$76_1];
+																								double cv$weightedProbability = (Math.log(cv$probabilitySample39Value74) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
+																								if((cv$weightedProbability < cv$distributionAccumulator))
+																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																								else {
+																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																										cv$distributionAccumulator = cv$weightedProbability;
+																									else
+																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																								}
+																								cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value74);
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+				logProbability$sample190[((i$var174 - 0) / 1)] = cv$sampleProbability;
+			}
+			logProbability$pageFaults = (logProbability$pageFaults + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample190 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample113) && fixedFlag$sample164);
+		} else {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
+				double cv$rvAccumulator = 0.0;
+				double cv$sampleValue = logProbability$sample190[((i$var174 - 0) / 1)];
+				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
+				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			}
+			logProbability$pageFaults = (logProbability$pageFaults + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityDistribution$sample39() {
+		if(!fixedProbFlag$sample39) {
+			if(fixedFlag$sample39) {
+				double cv$accumulator = 0.0;
+				double cv$sampleAccumulator = 0.0;
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						int cv$sampleValue = st[0];
+						{
+							{
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$sampleValue])) && (initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+				logProbability$var38 = cv$sampleProbability;
+				if(fixedFlag$sample39)
+					logProbability$st = (logProbability$st + cv$accumulator);
+				logProbability$$model = (logProbability$$model + cv$accumulator);
+				if(fixedFlag$sample39)
+					logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+				fixedProbFlag$sample39 = (fixedFlag$sample39 && fixedFlag$sample36);
+			}
+		} else {
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			double cv$sampleValue = logProbability$var38;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			if(fixedFlag$sample39)
+				logProbability$st = (logProbability$st + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample39)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityDistribution$sample57() {
+		if(!fixedProbFlag$sample57) {
+			if(fixedFlag$sample57) {
+				double cv$accumulator = 0.0;
+				boolean cv$sampleReached = false;
+				for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+					double cv$sampleAccumulator = 0.0;
+					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					double cv$probabilityReached = 0.0;
+					int index$i$1 = i$var50;
+					{
+						{
+							int cv$sampleValue = st[i$var50];
+							if(fixedFlag$sample39) {
+								{
+									if((0 == (i$var50 - 1))) {
+										{
+											for(int var29 = 0; var29 < noStates; var29 += 1) {
+												if((var29 == st[(i$var50 - 1)])) {
+													{
+														double[] var54 = m[st[(i$var50 - 1)]];
+														double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var54[cv$sampleValue])) && (var54[cv$sampleValue] <= 1.0))?Math.log(var54[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+														if((cv$weightedProbability < cv$distributionAccumulator))
+															cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+														else {
+															if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																cv$distributionAccumulator = cv$weightedProbability;
+															else
+																cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+														}
+														cv$probabilityReached = (cv$probabilityReached + 1.0);
+													}
+												}
+											}
+										}
+									}
+								}
+							} else {
+								if(true) {
+									for(int index$sample39$4 = 0; index$sample39$4 < noStates; index$sample39$4 += 1) {
+										int distributionTempVariable$var38$6 = index$sample39$4;
+										double cv$probabilitySample39Value5 = (1.0 * distribution$sample39[index$sample39$4]);
+										{
+											int traceTempVariable$var53$7_1 = distributionTempVariable$var38$6;
+											if((0 == (i$var50 - 1))) {
+												{
+													for(int var29 = 0; var29 < noStates; var29 += 1) {
+														if((var29 == traceTempVariable$var53$7_1)) {
+															{
+																double[] var54 = m[traceTempVariable$var53$7_1];
+																double cv$weightedProbability = (Math.log(cv$probabilitySample39Value5) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var54[cv$sampleValue])) && (var54[cv$sampleValue] <= 1.0))?Math.log(var54[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+																if((cv$weightedProbability < cv$distributionAccumulator))
+																	cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																else {
+																	if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																		cv$distributionAccumulator = cv$weightedProbability;
+																	else
+																		cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																}
+																cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample39Value5);
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								if((index$i$1 == (i$var50 - 1))) {
+									{
+										for(int var29 = 0; var29 < noStates; var29 += 1) {
+											if((var29 == st[(i$var50 - 1)])) {
+												{
+													double[] var54 = m[st[(i$var50 - 1)]];
+													double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var54[cv$sampleValue])) && (var54[cv$sampleValue] <= 1.0))?Math.log(var54[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+													if((cv$weightedProbability < cv$distributionAccumulator))
+														cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+													else {
+														if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+															cv$distributionAccumulator = cv$weightedProbability;
+														else
+															cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+													}
+													cv$probabilityReached = (cv$probabilityReached + 1.0);
+												}
+											}
+										}
+									}
+								}
+							}
+							if(fixedFlag$sample57) {
+								{
+									for(int index$i$11_1 = 1; index$i$11_1 < samples; index$i$11_1 += 1) {
+										if((index$i$11_1 == (i$var50 - 1))) {
+											{
+												for(int var29 = 0; var29 < noStates; var29 += 1) {
+													if((var29 == st[(i$var50 - 1)])) {
+														{
+															double[] var54 = m[st[(i$var50 - 1)]];
+															double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var54[cv$sampleValue])) && (var54[cv$sampleValue] <= 1.0))?Math.log(var54[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+															if((cv$weightedProbability < cv$distributionAccumulator))
+																cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+															else {
+																if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																	cv$distributionAccumulator = cv$weightedProbability;
+																else
+																	cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+															}
+															cv$probabilityReached = (cv$probabilityReached + 1.0);
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							} else {
+								for(int index$i$12 = 1; index$i$12 < samples; index$i$12 += 1) {
+									if(!(index$i$12 == index$i$1)) {
+										for(int index$sample57$13 = 0; index$sample57$13 < noStates; index$sample57$13 += 1) {
+											int distributionTempVariable$var56$15 = index$sample57$13;
+											double cv$probabilitySample57Value14 = (1.0 * distribution$sample57[((index$i$12 - 1) / 1)][index$sample57$13]);
+											{
+												int traceTempVariable$var53$16_1 = distributionTempVariable$var56$15;
+												if((index$i$12 == (i$var50 - 1))) {
+													{
+														for(int var29 = 0; var29 < noStates; var29 += 1) {
+															if((var29 == traceTempVariable$var53$16_1)) {
+																{
+																	double[] var54 = m[traceTempVariable$var53$16_1];
+																	double cv$weightedProbability = (Math.log(cv$probabilitySample57Value14) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var54[cv$sampleValue])) && (var54[cv$sampleValue] <= 1.0))?Math.log(var54[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+																	if((cv$weightedProbability < cv$distributionAccumulator))
+																		cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																	else {
+																		if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																			cv$distributionAccumulator = cv$weightedProbability;
+																		else
+																			cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																	}
+																	cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample57Value14);
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					if((cv$probabilityReached == 0.0))
+						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					else
+						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+					double cv$sampleProbability = cv$distributionAccumulator;
+					cv$sampleReached = true;
+					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+					logProbability$sample57[((i$var50 - 1) / 1)] = cv$sampleProbability;
+				}
+				if(fixedFlag$sample57)
+					logProbability$st = (logProbability$st + cv$accumulator);
+				logProbability$$model = (logProbability$$model + cv$accumulator);
+				if(fixedFlag$sample57)
+					logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+				fixedProbFlag$sample57 = ((fixedFlag$sample57 && fixedFlag$sample30) && fixedFlag$sample39);
+			}
+		} else {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+				double cv$rvAccumulator = 0.0;
+				double cv$sampleValue = logProbability$sample57[((i$var50 - 1) / 1)];
+				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
+				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			}
+			if(fixedFlag$sample57)
+				logProbability$st = (logProbability$st + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample57)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample113() {
+		if(!fixedProbFlag$sample113) {
+			double cv$accumulator = 0.0;
+			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var111 = 0; var111 < noStates; var111 += 1) {
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						double cv$sampleValue = pageFaultsMean[var111];
+						{
+							{
+								double var98 = 814.0;
+								double var99 = 335550.0;
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var99)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var98) / Math.sqrt(var99))) - (0.5 * Math.log(var99))):Double.NEGATIVE_INFINITY));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			}
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$var112 = cv$sampleAccumulator;
+			logProbability$pageFaultsMean = (logProbability$pageFaultsMean + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample113)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample113 = fixedFlag$sample113;
+		} else {
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var111 = 0; var111 < noStates; var111 += 1)
+				cv$sampleReached = true;
+			double cv$sampleValue = logProbability$var112;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			logProbability$pageFaultsMean = (logProbability$pageFaultsMean + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample113)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample130() {
+		if(!fixedProbFlag$sample130) {
+			double cv$accumulator = 0.0;
+			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var128 = 0; var128 < noStates; var128 += 1) {
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						double cv$sampleValue = cpuVar[var128];
+						{
+							{
+								double var116 = 5.0;
+								double var115 = 0.5;
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityInverseGamma(cv$sampleValue, var116, var115));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			}
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$var129 = cv$sampleAccumulator;
+			logProbability$cpuVar = (logProbability$cpuVar + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample130)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample130 = fixedFlag$sample130;
+		} else {
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var128 = 0; var128 < noStates; var128 += 1)
+				cv$sampleReached = true;
+			double cv$sampleValue = logProbability$var129;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			logProbability$cpuVar = (logProbability$cpuVar + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample130)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample147() {
+		if(!fixedProbFlag$sample147) {
+			double cv$accumulator = 0.0;
+			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var145 = 0; var145 < noStates; var145 += 1) {
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						double cv$sampleValue = memVar[var145];
+						{
+							{
+								double var133 = 5.0;
+								double var132 = 0.5;
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityInverseGamma(cv$sampleValue, var133, var132));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			}
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$var146 = cv$sampleAccumulator;
+			logProbability$memVar = (logProbability$memVar + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample147)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample147 = fixedFlag$sample147;
+		} else {
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var145 = 0; var145 < noStates; var145 += 1)
+				cv$sampleReached = true;
+			double cv$sampleValue = logProbability$var146;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			logProbability$memVar = (logProbability$memVar + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample147)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample164() {
+		if(!fixedProbFlag$sample164) {
+			double cv$accumulator = 0.0;
+			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var162 = 0; var162 < noStates; var162 += 1) {
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						double cv$sampleValue = pageFaultsVar[var162];
+						{
+							{
+								double var150 = 5.0;
+								double var149 = 0.5;
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityInverseGamma(cv$sampleValue, var150, var149));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			}
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$var163 = cv$sampleAccumulator;
+			logProbability$pageFaultsVar = (logProbability$pageFaultsVar + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample164)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample164 = fixedFlag$sample164;
+		} else {
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var162 = 0; var162 < noStates; var162 += 1)
+				cv$sampleReached = true;
+			double cv$sampleValue = logProbability$var163;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			logProbability$pageFaultsVar = (logProbability$pageFaultsVar + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample164)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample180() {
+		if(!fixedProbFlag$sample180) {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
+				double cv$sampleAccumulator = 0.0;
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						double cv$sampleValue = cpu[i$var174];
+						{
+							{
+								double var176 = cpuMean[st[i$var174]];
+								double var177 = cpuVar[st[i$var174]];
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var177)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var176) / Math.sqrt(var177))) - (0.5 * Math.log(var177))):Double.NEGATIVE_INFINITY));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+				logProbability$sample180[((i$var174 - 0) / 1)] = cv$sampleProbability;
+			}
+			logProbability$cpu = (logProbability$cpu + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample180 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample77) && fixedFlag$sample130);
+		} else {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
+				double cv$rvAccumulator = 0.0;
+				double cv$sampleValue = logProbability$sample180[((i$var174 - 0) / 1)];
+				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
+				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			}
+			logProbability$cpu = (logProbability$cpu + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample185() {
+		if(!fixedProbFlag$sample185) {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
+				double cv$sampleAccumulator = 0.0;
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						double cv$sampleValue = mem[i$var174];
+						{
+							{
+								double var181 = memMean[st[i$var174]];
+								double var182 = memVar[st[i$var174]];
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var182)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var181) / Math.sqrt(var182))) - (0.5 * Math.log(var182))):Double.NEGATIVE_INFINITY));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+				logProbability$sample185[((i$var174 - 0) / 1)] = cv$sampleProbability;
+			}
+			logProbability$mem = (logProbability$mem + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample185 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample95) && fixedFlag$sample147);
+		} else {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
+				double cv$rvAccumulator = 0.0;
+				double cv$sampleValue = logProbability$sample185[((i$var174 - 0) / 1)];
+				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
+				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			}
+			logProbability$mem = (logProbability$mem + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample190() {
+		if(!fixedProbFlag$sample190) {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
+				double cv$sampleAccumulator = 0.0;
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						double cv$sampleValue = pageFaults[i$var174];
+						{
+							{
+								double var186 = pageFaultsMean[st[i$var174]];
+								double var187 = pageFaultsVar[st[i$var174]];
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var187)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var186) / Math.sqrt(var187))) - (0.5 * Math.log(var187))):Double.NEGATIVE_INFINITY));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+				logProbability$sample190[((i$var174 - 0) / 1)] = cv$sampleProbability;
+			}
+			logProbability$pageFaults = (logProbability$pageFaults + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample190 = (((fixedFlag$sample39 && fixedFlag$sample57) && fixedFlag$sample113) && fixedFlag$sample164);
+		} else {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var174 = 0; i$var174 < samples; i$var174 += 1) {
+				double cv$rvAccumulator = 0.0;
+				double cv$sampleValue = logProbability$sample190[((i$var174 - 0) / 1)];
+				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
+				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			}
+			logProbability$pageFaults = (logProbability$pageFaults + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample30() {
+		if(!fixedProbFlag$sample30) {
+			double cv$accumulator = 0.0;
+			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var29 = 0; var29 < noStates; var29 += 1) {
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						double[] cv$sampleValue = m[var29];
+						{
+							{
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, noStates));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			}
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$var30 = cv$sampleAccumulator;
+			logProbability$m = (logProbability$m + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample30)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample30 = fixedFlag$sample30;
+		} else {
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var29 = 0; var29 < noStates; var29 += 1)
+				cv$sampleReached = true;
+			double cv$sampleValue = logProbability$var30;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			logProbability$m = (logProbability$m + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample30)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample36() {
+		if(!fixedProbFlag$sample36) {
+			double cv$accumulator = 0.0;
+			double cv$sampleAccumulator = 0.0;
+			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			double cv$probabilityReached = 0.0;
+			{
+				{
+					double[] cv$sampleValue = initialStateDistribution;
+					{
+						{
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, noStates));
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
+						}
+					}
+				}
+			}
+			if((cv$probabilityReached == 0.0))
+				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			else
+				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+			double cv$sampleProbability = cv$distributionAccumulator;
+			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$initialStateDistribution = cv$sampleProbability;
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample36)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample36 = fixedFlag$sample36;
+		} else {
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			double cv$sampleValue = logProbability$initialStateDistribution;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample36)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample39() {
+		if(!fixedProbFlag$sample39) {
+			double cv$accumulator = 0.0;
+			double cv$sampleAccumulator = 0.0;
+			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			double cv$probabilityReached = 0.0;
+			{
+				{
+					int cv$sampleValue = st[0];
+					{
+						{
+							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$sampleValue])) && (initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
+						}
+					}
+				}
+			}
+			if((cv$probabilityReached == 0.0))
+				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			else
+				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+			double cv$sampleProbability = cv$distributionAccumulator;
+			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$var38 = cv$sampleProbability;
+			logProbability$st = (logProbability$st + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample39)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample39 = (fixedFlag$sample39 && fixedFlag$sample36);
+		} else {
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			double cv$sampleValue = logProbability$var38;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			logProbability$st = (logProbability$st + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample39)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample57() {
+		if(!fixedProbFlag$sample57) {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+				double cv$sampleAccumulator = 0.0;
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				double cv$probabilityReached = 0.0;
+				int index$i$1 = i$var50;
+				{
+					{
+						int cv$sampleValue = st[i$var50];
+						{
+							{
+								double[] var54 = m[st[(i$var50 - 1)]];
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var54[cv$sampleValue])) && (var54[cv$sampleValue] <= 1.0))?Math.log(var54[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+				logProbability$sample57[((i$var50 - 1) / 1)] = cv$sampleProbability;
+			}
+			logProbability$st = (logProbability$st + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample57)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample57 = ((fixedFlag$sample57 && fixedFlag$sample30) && fixedFlag$sample39);
+		} else {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+				double cv$rvAccumulator = 0.0;
+				double cv$sampleValue = logProbability$sample57[((i$var50 - 1) / 1)];
+				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				cv$sampleReached = true;
+				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			}
+			logProbability$st = (logProbability$st + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample57)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample77() {
+		if(!fixedProbFlag$sample77) {
+			double cv$accumulator = 0.0;
+			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var75 = 0; var75 < noStates; var75 += 1) {
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						double cv$sampleValue = cpuMean[var75];
+						{
+							{
+								double var63 = 16.0;
+								double var62 = 8.6;
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var62)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var63) / Math.sqrt(var62))) - (0.5 * Math.log(var62))):Double.NEGATIVE_INFINITY));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			}
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$var76 = cv$sampleAccumulator;
+			logProbability$cpuMean = (logProbability$cpuMean + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample77)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample77 = fixedFlag$sample77;
+		} else {
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var75 = 0; var75 < noStates; var75 += 1)
+				cv$sampleReached = true;
+			double cv$sampleValue = logProbability$var76;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			logProbability$cpuMean = (logProbability$cpuMean + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample77)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample95() {
+		if(!fixedProbFlag$sample95) {
+			double cv$accumulator = 0.0;
+			double cv$sampleAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var93 = 0; var93 < noStates; var93 += 1) {
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						double cv$sampleValue = memMean[var93];
+						{
+							{
+								double var80 = 94.0;
+								double var81 = 1.0;
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var81)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var80) / Math.sqrt(var81))) - (0.5 * Math.log(var81))):Double.NEGATIVE_INFINITY));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				cv$sampleReached = true;
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			}
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			logProbability$var94 = cv$sampleAccumulator;
+			logProbability$memMean = (logProbability$memMean + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample95)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample95 = fixedFlag$sample95;
+		} else {
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int var93 = 0; var93 < noStates; var93 += 1)
+				cv$sampleReached = true;
+			double cv$sampleValue = logProbability$var94;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			logProbability$memMean = (logProbability$memMean + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample95)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
 	@Override
 	public final void allocateScratch() {
 		{
@@ -14163,23 +14239,23 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1) {
 							if(!fixedFlag$sample30)
-								sample30(var29, threadID$var29, RNG$1);
+								inferSample30(var29, threadID$var29, RNG$1);
 						}
 				}
 			);
 			if(!fixedFlag$sample36)
-				sample36();
+				inferSample36();
 			if(!fixedFlag$sample39)
-				sample39();
+				inferSample39();
 			for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
 				if(!fixedFlag$sample57)
-					sample57(i$var50);
+					inferSample57(i$var50);
 			}
 			parallelFor(RNG$, 0, noStates, 1,
 				(int forStart$var75, int forEnd$var75, int threadID$var75, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var75 = forStart$var75; var75 < forEnd$var75; var75 += 1) {
 							if(!fixedFlag$sample77)
-								sample77(var75, threadID$var75, RNG$1);
+								inferSample77(var75, threadID$var75, RNG$1);
 						}
 				}
 			);
@@ -14187,7 +14263,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				(int forStart$var93, int forEnd$var93, int threadID$var93, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var93 = forStart$var93; var93 < forEnd$var93; var93 += 1) {
 							if(!fixedFlag$sample95)
-								sample95(var93, threadID$var93, RNG$1);
+								inferSample95(var93, threadID$var93, RNG$1);
 						}
 				}
 			);
@@ -14195,7 +14271,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				(int forStart$var111, int forEnd$var111, int threadID$var111, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var111 = forStart$var111; var111 < forEnd$var111; var111 += 1) {
 							if(!fixedFlag$sample113)
-								sample113(var111, threadID$var111, RNG$1);
+								inferSample113(var111, threadID$var111, RNG$1);
 						}
 				}
 			);
@@ -14203,7 +14279,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				(int forStart$var128, int forEnd$var128, int threadID$var128, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var128 = forStart$var128; var128 < forEnd$var128; var128 += 1) {
 							if(!fixedFlag$sample130)
-								sample130(var128, threadID$var128, RNG$1);
+								inferSample130(var128, threadID$var128, RNG$1);
 						}
 				}
 			);
@@ -14211,7 +14287,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				(int forStart$var145, int forEnd$var145, int threadID$var145, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var145 = forStart$var145; var145 < forEnd$var145; var145 += 1) {
 							if(!fixedFlag$sample147)
-								sample147(var145, threadID$var145, RNG$1);
+								inferSample147(var145, threadID$var145, RNG$1);
 						}
 				}
 			);
@@ -14219,7 +14295,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				(int forStart$var162, int forEnd$var162, int threadID$var162, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var162 = forStart$var162; var162 < forEnd$var162; var162 += 1) {
 							if(!fixedFlag$sample164)
-								sample164(var162, threadID$var162, RNG$1);
+								inferSample164(var162, threadID$var162, RNG$1);
 						}
 				}
 			);
@@ -14228,7 +14304,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				(int forStart$var162, int forEnd$var162, int threadID$var162, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var162 = forStart$var162; var162 < forEnd$var162; var162 += 1) {
 							if(!fixedFlag$sample164)
-								sample164(var162, threadID$var162, RNG$1);
+								inferSample164(var162, threadID$var162, RNG$1);
 						}
 				}
 			);
@@ -14236,7 +14312,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				(int forStart$var145, int forEnd$var145, int threadID$var145, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var145 = forStart$var145; var145 < forEnd$var145; var145 += 1) {
 							if(!fixedFlag$sample147)
-								sample147(var145, threadID$var145, RNG$1);
+								inferSample147(var145, threadID$var145, RNG$1);
 						}
 				}
 			);
@@ -14244,7 +14320,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				(int forStart$var128, int forEnd$var128, int threadID$var128, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var128 = forStart$var128; var128 < forEnd$var128; var128 += 1) {
 							if(!fixedFlag$sample130)
-								sample130(var128, threadID$var128, RNG$1);
+								inferSample130(var128, threadID$var128, RNG$1);
 						}
 				}
 			);
@@ -14252,7 +14328,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				(int forStart$var111, int forEnd$var111, int threadID$var111, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var111 = forStart$var111; var111 < forEnd$var111; var111 += 1) {
 							if(!fixedFlag$sample113)
-								sample113(var111, threadID$var111, RNG$1);
+								inferSample113(var111, threadID$var111, RNG$1);
 						}
 				}
 			);
@@ -14260,7 +14336,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				(int forStart$var93, int forEnd$var93, int threadID$var93, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var93 = forStart$var93; var93 < forEnd$var93; var93 += 1) {
 							if(!fixedFlag$sample95)
-								sample95(var93, threadID$var93, RNG$1);
+								inferSample95(var93, threadID$var93, RNG$1);
 						}
 				}
 			);
@@ -14268,28 +14344,92 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 				(int forStart$var75, int forEnd$var75, int threadID$var75, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var75 = forStart$var75; var75 < forEnd$var75; var75 += 1) {
 							if(!fixedFlag$sample77)
-								sample77(var75, threadID$var75, RNG$1);
+								inferSample77(var75, threadID$var75, RNG$1);
 						}
 				}
 			);
 			for(int i$var50 = (samples - ((((samples - 1) - 1) % 1) + 1)); i$var50 >= ((1 - 1) + 1); i$var50 -= 1) {
 				if(!fixedFlag$sample57)
-					sample57(i$var50);
+					inferSample57(i$var50);
 			}
 			if(!fixedFlag$sample39)
-				sample39();
+				inferSample39();
 			if(!fixedFlag$sample36)
-				sample36();
+				inferSample36();
 			parallelFor(RNG$, 0, noStates, 1,
 				(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1) {
 							if(!fixedFlag$sample30)
-								sample30(var29, threadID$var29, RNG$1);
+								inferSample30(var29, threadID$var29, RNG$1);
 						}
 				}
 			);
 		}
 		system$gibbsForward = !system$gibbsForward;
+		parallelFor(RNG$, 0, noStates, 1,
+			(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1) {
+						if(!constrainedFlag$sample30[((var29 - 0) / 1)])
+							drawValueSample30(var29, threadID$var29, RNG$1);
+					}
+			}
+		);
+		if(!constrainedFlag$sample36)
+			drawValueSample36();
+		if(!constrainedFlag$sample39)
+			drawValueSample39();
+		for(int i$var50 = 1; i$var50 < samples; i$var50 += 1) {
+			if(!constrainedFlag$sample57[((i$var50 - 1) / 1)])
+				drawValueSample57(i$var50);
+		}
+		parallelFor(RNG$, 0, noStates, 1,
+			(int forStart$var75, int forEnd$var75, int threadID$var75, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var75 = forStart$var75; var75 < forEnd$var75; var75 += 1) {
+						if(!constrainedFlag$sample77[((var75 - 0) / 1)])
+							drawValueSample77(var75, threadID$var75, RNG$1);
+					}
+			}
+		);
+		parallelFor(RNG$, 0, noStates, 1,
+			(int forStart$var93, int forEnd$var93, int threadID$var93, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var93 = forStart$var93; var93 < forEnd$var93; var93 += 1) {
+						if(!constrainedFlag$sample95[((var93 - 0) / 1)])
+							drawValueSample95(var93, threadID$var93, RNG$1);
+					}
+			}
+		);
+		parallelFor(RNG$, 0, noStates, 1,
+			(int forStart$var111, int forEnd$var111, int threadID$var111, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var111 = forStart$var111; var111 < forEnd$var111; var111 += 1) {
+						if(!constrainedFlag$sample113[((var111 - 0) / 1)])
+							drawValueSample113(var111, threadID$var111, RNG$1);
+					}
+			}
+		);
+		parallelFor(RNG$, 0, noStates, 1,
+			(int forStart$var128, int forEnd$var128, int threadID$var128, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var128 = forStart$var128; var128 < forEnd$var128; var128 += 1) {
+						if(!constrainedFlag$sample130[((var128 - 0) / 1)])
+							drawValueSample130(var128, threadID$var128, RNG$1);
+					}
+			}
+		);
+		parallelFor(RNG$, 0, noStates, 1,
+			(int forStart$var145, int forEnd$var145, int threadID$var145, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var145 = forStart$var145; var145 < forEnd$var145; var145 += 1) {
+						if(!constrainedFlag$sample147[((var145 - 0) / 1)])
+							drawValueSample147(var145, threadID$var145, RNG$1);
+					}
+			}
+		);
+		parallelFor(RNG$, 0, noStates, 1,
+			(int forStart$var162, int forEnd$var162, int threadID$var162, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var162 = forStart$var162; var162 < forEnd$var162; var162 += 1) {
+						if(!constrainedFlag$sample164[((var162 - 0) / 1)])
+							drawValueSample164(var162, threadID$var162, RNG$1);
+					}
+			}
+		);
 	}
 
 	private final void initializeLogProbabilityFields() {

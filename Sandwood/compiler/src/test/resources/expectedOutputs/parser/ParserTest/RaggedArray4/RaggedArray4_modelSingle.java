@@ -25,7 +25,7 @@ public final class RaggedArray4 extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$d(value);
+            system$c.set$d(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,7 +35,7 @@ public final class RaggedArray4 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample50(fixed);
+                system$c.set$fixedFlag$sample50(fixed, allocated);
             }
         }
 
@@ -90,7 +90,7 @@ public final class RaggedArray4 extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$y(value);
+            system$c.set$y(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -100,7 +100,7 @@ public final class RaggedArray4 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample47(fixed);
+                system$c.set$fixedFlag$sample47(fixed, allocated);
             }
         }
 
@@ -132,13 +132,13 @@ public final class RaggedArray4 extends Model {
 
         @Override
         public void setValueInternal(int[] value) {
-            system$c.set$obs_measured(value);
-            system$c.set$length$obs_measured(value.length);
+            system$c.set$obs_measured(value, allocated);
+            system$c.set$length$obs_measured(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$obs_measured(shape);
+            system$c.set$length$obs_measured(shape, allocated);
         }
 
         @Override
@@ -215,21 +215,21 @@ public final class RaggedArray4 extends Model {
 
         //Observed arrays
         if(obs_measured.isSet()) {
-            newCore.set$obs_measured(oldCore.get$obs_measured());
-            newCore.set$length$obs_measured(oldCore.get$length$obs_measured());
+            newCore.set$obs_measured(oldCore.get$obs_measured(), false);
+            newCore.set$length$obs_measured(oldCore.get$length$obs_measured(), false);
         }
         else if(obs_measured.shapeSet())
-            newCore.set$length$obs_measured(oldCore.get$length$obs_measured());
+            newCore.set$length$obs_measured(oldCore.get$length$obs_measured(), false);
 
         //ComputedVariables
         if($d.isSet())
-            newCore.set$d(oldCore.get$d());
+            newCore.set$d(oldCore.get$d(), false);
         if($y.isSet())
-            newCore.set$y(oldCore.get$y());
+            newCore.set$y(oldCore.get$y(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47());
-        newCore.set$fixedFlag$sample50(oldCore.get$fixedFlag$sample50());
+        newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47(), false);
+        newCore.set$fixedFlag$sample50(oldCore.get$fixedFlag$sample50(), false);
     }
 
     /**

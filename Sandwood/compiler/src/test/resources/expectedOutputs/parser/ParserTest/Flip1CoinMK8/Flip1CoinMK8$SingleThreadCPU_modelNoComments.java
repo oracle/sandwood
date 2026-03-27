@@ -32,7 +32,7 @@ final class Flip1CoinMK8$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		bias = cv$value;
 		fixedProbFlag$sample7 = false;
 		fixedProbFlag$sample20 = false;
@@ -44,8 +44,9 @@ final class Flip1CoinMK8$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$fixedFlag$sample7(boolean cv$value) {
+	public final void set$fixedFlag$sample7(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample7 = cv$value;
+		constrainedFlag$sample7 = (fixedFlag$sample7 || constrainedFlag$sample7);
 		fixedProbFlag$sample7 = (fixedFlag$sample7 && fixedProbFlag$sample7);
 		fixedProbFlag$sample20 = (fixedFlag$sample7 && fixedProbFlag$sample20);
 	}
@@ -61,7 +62,7 @@ final class Flip1CoinMK8$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$flipsMeasured(boolean[] cv$value) {
+	public final void set$flipsMeasured(boolean[] cv$value, boolean allocated$) {
 		flipsMeasured = cv$value;
 	}
 
@@ -71,7 +72,7 @@ final class Flip1CoinMK8$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$length$flipsMeasured(int cv$value) {
+	public final void set$length$flipsMeasured(int cv$value, boolean allocated$) {
 		length$flipsMeasured = cv$value;
 	}
 
@@ -103,6 +104,51 @@ final class Flip1CoinMK8$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final int get$samples() {
 		return samples;
+	}
+
+	private final void drawValueSample7() {
+		bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	private final void inferSample7() {
+		if(true) {
+			constrainedFlag$sample7 = false;
+			int cv$sum = 0;
+			int cv$count = 0;
+			{
+				{
+					{
+						{
+							{
+								{
+									for(int var19 = 0; var19 < samples; var19 += 1) {
+										boolean cv$sampleConstrained = true;
+										if(cv$sampleConstrained) {
+											constrainedFlag$sample7 = true;
+											{
+												{
+													{
+														{
+															{
+																cv$count = (cv$count + 1);
+																if(flips[var19])
+																	cv$sum = (cv$sum + 1);
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample7)
+				bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		}
 	}
 
 	private final void logProbabilityValue$sample20() {
@@ -214,47 +260,6 @@ final class Flip1CoinMK8$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		}
 	}
 
-	private final void sample7() {
-		if(true) {
-			constrainedFlag$sample7 = false;
-			int cv$sum = 0;
-			int cv$count = 0;
-			{
-				{
-					{
-						{
-							{
-								{
-									for(int var19 = 0; var19 < samples; var19 += 1) {
-										boolean cv$sampleConstrained = true;
-										if(cv$sampleConstrained) {
-											constrainedFlag$sample7 = true;
-											{
-												{
-													{
-														{
-															{
-																cv$count = (cv$count + 1);
-																if(flips[var19])
-																	cv$sum = (cv$sum + 1);
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(constrainedFlag$sample7)
-				bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		}
-	}
-
 	@Override
 	public final void allocateScratch() {}
 
@@ -301,12 +306,14 @@ final class Flip1CoinMK8$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample7)
-				sample7();
+				inferSample7();
 		} else {
 			if(!fixedFlag$sample7)
-				sample7();
+				inferSample7();
 		}
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample7)
+			drawValueSample7();
 	}
 
 	private final void initializeLogProbabilityFields() {

@@ -56,7 +56,7 @@ public final class DistributionTest2b extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$v1(value);
+            system$c.set$v1(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -66,7 +66,7 @@ public final class DistributionTest2b extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample5(fixed);
+                system$c.set$fixedFlag$sample5(fixed, allocated);
             }
         }
 
@@ -90,7 +90,7 @@ public final class DistributionTest2b extends Model {
 
         @Override
         protected void setValueInternal(int[] value) {
-            system$c.set$v2(value);
+            system$c.set$v2(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -100,8 +100,8 @@ public final class DistributionTest2b extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample23(fixed);
-                system$c.set$fixedFlag$sample9(fixed);
+                system$c.set$fixedFlag$sample23(fixed, allocated);
+                system$c.set$fixedFlag$sample9(fixed, allocated);
             }
         }
 
@@ -129,7 +129,7 @@ public final class DistributionTest2b extends Model {
 
         @Override
         protected void setValueInternal(int[] value) {
-            system$c.set$v3(value);
+            system$c.set$v3(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -158,7 +158,7 @@ public final class DistributionTest2b extends Model {
         }
 
         @Override
-        protected void setValueInternal(double[] value) { system$c.set$weightings(value); }
+        protected void setValueInternal(double[] value) { system$c.set$weightings(value, allocated); }
     };
 
     /**
@@ -178,13 +178,13 @@ public final class DistributionTest2b extends Model {
 
         @Override
         public void setValueInternal(boolean[] value) {
-            system$c.set$value(value);
-            system$c.set$length$value(value.length);
+            system$c.set$value(value, allocated);
+            system$c.set$length$value(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$value(shape);
+            system$c.set$length$value(shape, allocated);
         }
 
         @Override
@@ -280,28 +280,28 @@ public final class DistributionTest2b extends Model {
     private void transferData(DistributionTest2b$CoreInterface oldCore, DistributionTest2b$CoreInterface newCore) {
         //Model inputs
         if(weightings.isSet())
-            newCore.set$weightings(oldCore.get$weightings());
+            newCore.set$weightings(oldCore.get$weightings(), false);
 
         //Observed arrays
         if(value.isSet()) {
-            newCore.set$value(oldCore.get$value());
-            newCore.set$length$value(oldCore.get$length$value());
+            newCore.set$value(oldCore.get$value(), false);
+            newCore.set$length$value(oldCore.get$length$value(), false);
         }
         else if(value.shapeSet())
-            newCore.set$length$value(oldCore.get$length$value());
+            newCore.set$length$value(oldCore.get$length$value(), false);
 
         //ComputedVariables
         if($v1.isSet())
-            newCore.set$v1(oldCore.get$v1());
+            newCore.set$v1(oldCore.get$v1(), false);
         if($v2.isSet())
-            newCore.set$v2(oldCore.get$v2());
+            newCore.set$v2(oldCore.get$v2(), false);
         if($v3.isSet())
-            newCore.set$v3(oldCore.get$v3());
+            newCore.set$v3(oldCore.get$v3(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample23(oldCore.get$fixedFlag$sample23());
-        newCore.set$fixedFlag$sample5(oldCore.get$fixedFlag$sample5());
-        newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9());
+        newCore.set$fixedFlag$sample23(oldCore.get$fixedFlag$sample23(), false);
+        newCore.set$fixedFlag$sample5(oldCore.get$fixedFlag$sample5(), false);
+        newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9(), false);
     }
 
     /**

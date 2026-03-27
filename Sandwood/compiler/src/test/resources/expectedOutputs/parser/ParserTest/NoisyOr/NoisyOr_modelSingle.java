@@ -25,7 +25,7 @@ public final class NoisyOr extends Model {
 
         @Override
         protected void setValueInternal(boolean value) {
-            system$c.set$flag1(value);
+            system$c.set$flag1(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,7 +35,7 @@ public final class NoisyOr extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample3(fixed);
+                system$c.set$fixedFlag$sample3(fixed, allocated);
             }
         }
 
@@ -59,7 +59,7 @@ public final class NoisyOr extends Model {
 
         @Override
         protected void setValueInternal(boolean value) {
-            system$c.set$flag2(value);
+            system$c.set$flag2(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -69,7 +69,7 @@ public final class NoisyOr extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample6(fixed);
+                system$c.set$fixedFlag$sample6(fixed, allocated);
             }
         }
 
@@ -93,7 +93,7 @@ public final class NoisyOr extends Model {
 
         @Override
         protected void setValueInternal(boolean value) {
-            system$c.set$flag3(value);
+            system$c.set$flag3(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -103,7 +103,7 @@ public final class NoisyOr extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample9(fixed);
+                system$c.set$fixedFlag$sample9(fixed, allocated);
             }
         }
 
@@ -127,7 +127,7 @@ public final class NoisyOr extends Model {
 
         @Override
         protected void setValueInternal(boolean value) {
-            system$c.set$flag4(value);
+            system$c.set$flag4(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -137,7 +137,7 @@ public final class NoisyOr extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample12(fixed);
+                system$c.set$fixedFlag$sample12(fixed, allocated);
             }
         }
 
@@ -161,7 +161,7 @@ public final class NoisyOr extends Model {
 
         @Override
         protected void setValueInternal(boolean value) {
-            system$c.set$flag5(value);
+            system$c.set$flag5(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -171,7 +171,7 @@ public final class NoisyOr extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample15(fixed);
+                system$c.set$fixedFlag$sample15(fixed, allocated);
             }
         }
 
@@ -195,7 +195,7 @@ public final class NoisyOr extends Model {
 
         @Override
         protected void setValueInternal(boolean value) {
-            system$c.set$flag6(value);
+            system$c.set$flag6(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -205,7 +205,7 @@ public final class NoisyOr extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample18(fixed);
+                system$c.set$fixedFlag$sample18(fixed, allocated);
             }
         }
 
@@ -229,7 +229,7 @@ public final class NoisyOr extends Model {
 
         @Override
         protected void setValueInternal(boolean[][] value) {
-            system$c.set$issues$var213(value);
+            system$c.set$issues$var213(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -258,7 +258,7 @@ public final class NoisyOr extends Model {
 
         @Override
         protected void setValueInternal(boolean[][] value) {
-            system$c.set$issues$var383(value);
+            system$c.set$issues$var383(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -299,7 +299,7 @@ public final class NoisyOr extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample430(fixed);
+                system$c.set$fixedFlag$sample430(fixed, allocated);
             }
         }
 
@@ -335,12 +335,12 @@ public final class NoisyOr extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample233(fixed);
-                system$c.set$fixedFlag$sample248(fixed);
-                system$c.set$fixedFlag$sample263(fixed);
-                system$c.set$fixedFlag$sample278(fixed);
-                system$c.set$fixedFlag$sample293(fixed);
-                system$c.set$fixedFlag$sample308(fixed);
+                system$c.set$fixedFlag$sample233(fixed, allocated);
+                system$c.set$fixedFlag$sample248(fixed, allocated);
+                system$c.set$fixedFlag$sample263(fixed, allocated);
+                system$c.set$fixedFlag$sample278(fixed, allocated);
+                system$c.set$fixedFlag$sample293(fixed, allocated);
+                system$c.set$fixedFlag$sample308(fixed, allocated);
             }
         }
 
@@ -416,29 +416,29 @@ public final class NoisyOr extends Model {
 
         //ComputedVariables
         if($flag1.isSet())
-            newCore.set$flag1(oldCore.get$flag1());
+            newCore.set$flag1(oldCore.get$flag1(), false);
         if($flag2.isSet())
-            newCore.set$flag2(oldCore.get$flag2());
+            newCore.set$flag2(oldCore.get$flag2(), false);
         if($flag3.isSet())
-            newCore.set$flag3(oldCore.get$flag3());
+            newCore.set$flag3(oldCore.get$flag3(), false);
         if($flag4.isSet())
-            newCore.set$flag4(oldCore.get$flag4());
+            newCore.set$flag4(oldCore.get$flag4(), false);
         if($flag5.isSet())
-            newCore.set$flag5(oldCore.get$flag5());
+            newCore.set$flag5(oldCore.get$flag5(), false);
         if($flag6.isSet())
-            newCore.set$flag6(oldCore.get$flag6());
+            newCore.set$flag6(oldCore.get$flag6(), false);
         if($issues$var213.isSet())
-            newCore.set$issues$var213(oldCore.get$issues$var213());
+            newCore.set$issues$var213(oldCore.get$issues$var213(), false);
         if($issues$var383.isSet())
-            newCore.set$issues$var383(oldCore.get$issues$var383());
+            newCore.set$issues$var383(oldCore.get$issues$var383(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample12(oldCore.get$fixedFlag$sample12());
-        newCore.set$fixedFlag$sample15(oldCore.get$fixedFlag$sample15());
-        newCore.set$fixedFlag$sample18(oldCore.get$fixedFlag$sample18());
-        newCore.set$fixedFlag$sample3(oldCore.get$fixedFlag$sample3());
-        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
-        newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9());
+        newCore.set$fixedFlag$sample12(oldCore.get$fixedFlag$sample12(), false);
+        newCore.set$fixedFlag$sample15(oldCore.get$fixedFlag$sample15(), false);
+        newCore.set$fixedFlag$sample18(oldCore.get$fixedFlag$sample18(), false);
+        newCore.set$fixedFlag$sample3(oldCore.get$fixedFlag$sample3(), false);
+        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6(), false);
+        newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9(), false);
     }
 
     /**

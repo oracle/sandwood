@@ -18,8 +18,6 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$b;
 	private double logProbability$bernoulli;
 	private double logProbability$guard;
-	private double logProbability$sample13;
-	private double logProbability$sample9;
 	private double logProbability$value;
 	private boolean observedGuard;
 	private double observedValue;
@@ -98,7 +96,7 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for observedGuard.
 	@Override
-	public final void set$observedGuard(boolean cv$value) {
+	public final void set$observedGuard(boolean cv$value, boolean allocated$) {
 		observedGuard = cv$value;
 	}
 
@@ -110,7 +108,7 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for observedValue.
 	@Override
-	public final void set$observedValue(double cv$value) {
+	public final void set$observedValue(double cv$value, boolean allocated$) {
 		observedValue = cv$value;
 	}
 
@@ -183,16 +181,12 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$sample13 = cv$sampleProbability;
+			logProbability$b = cv$sampleProbability;
 			
 			// Guard to ensure that value is only updated once for this probability.
 			boolean cv$guard$value = false;
 			
-			// Update the variable probability
-			logProbability$b = (logProbability$b + cv$accumulator);
-			
-			// Add probability to constructed variables that have guards, so need per sample probabilities
-			// from the combined probability
+			// Add probability to constructed variables from the combined probability
 			{
 				{
 					if(!guard) {
@@ -202,7 +196,7 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 							cv$guard$value = true;
 							
 							// Update the variable probability
-							logProbability$value = (logProbability$value + cv$sampleProbability);
+							logProbability$value = (logProbability$value + cv$accumulator);
 						}
 					}
 				}
@@ -222,18 +216,14 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$sample13;
+			double cv$sampleValue = logProbability$b;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Guard to ensure that value is only updated once for this probability.
 			boolean cv$guard$value = false;
 			
-			// Update the variable probability
-			logProbability$b = (logProbability$b + cv$accumulator);
-			
-			// Add probability to constructed variables that have guards, so need per sample probabilities
-			// from the combined probability
+			// Add probability to constructed variables from the combined probability
 			{
 				{
 					if(!guard) {
@@ -243,7 +233,7 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 							cv$guard$value = true;
 							
 							// Update the variable probability
-							logProbability$value = (logProbability$value + cv$sampleValue);
+							logProbability$value = (logProbability$value + cv$accumulator);
 						}
 					}
 				}
@@ -406,16 +396,12 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$sample9 = cv$sampleProbability;
+			logProbability$a = cv$sampleProbability;
 			
 			// Guard to ensure that value is only updated once for this probability.
 			boolean cv$guard$value = false;
 			
-			// Update the variable probability
-			logProbability$a = (logProbability$a + cv$accumulator);
-			
-			// Add probability to constructed variables that have guards, so need per sample probabilities
-			// from the combined probability
+			// Add probability to constructed variables from the combined probability
 			{
 				{
 					if(guard) {
@@ -425,7 +411,7 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 							cv$guard$value = true;
 							
 							// Update the variable probability
-							logProbability$value = (logProbability$value + cv$sampleProbability);
+							logProbability$value = (logProbability$value + cv$accumulator);
 						}
 					}
 				}
@@ -445,18 +431,14 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$sample9;
+			double cv$sampleValue = logProbability$a;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Guard to ensure that value is only updated once for this probability.
 			boolean cv$guard$value = false;
 			
-			// Update the variable probability
-			logProbability$a = (logProbability$a + cv$accumulator);
-			
-			// Add probability to constructed variables that have guards, so need per sample probabilities
-			// from the combined probability
+			// Add probability to constructed variables from the combined probability
 			{
 				{
 					if(guard) {
@@ -466,7 +448,7 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 							cv$guard$value = true;
 							
 							// Update the variable probability
-							logProbability$value = (logProbability$value + cv$sampleValue);
+							logProbability$value = (logProbability$value + cv$accumulator);
 						}
 					}
 				}
@@ -550,13 +532,11 @@ final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample5)
 			logProbability$guard = Double.NaN;
-		logProbability$a = 0.0;
 		logProbability$value = 0.0;
 		if(!fixedProbFlag$sample9)
-			logProbability$sample9 = Double.NaN;
-		logProbability$b = 0.0;
+			logProbability$a = Double.NaN;
 		if(!fixedProbFlag$sample13)
-			logProbability$sample13 = Double.NaN;
+			logProbability$b = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference

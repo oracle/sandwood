@@ -2,10 +2,10 @@ package org.sandwood.compiler.tests.parser;
 
 interface Flip1CoinMK16$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
 	public double get$bias();
-	public void set$bias(double cv$value);
+	public void set$bias(double cv$value, boolean allocated$);
 	public boolean get$flipMeasured();
-	public void set$flipMeasured(boolean cv$value);
+	public void set$flipMeasured(boolean cv$value, boolean allocated$);
 	public double get$guard();
-	public void set$guard(double cv$value);
+	public void set$guard(double cv$value, boolean allocated$);
 	public double get$logProbability$bernoulli();
 }

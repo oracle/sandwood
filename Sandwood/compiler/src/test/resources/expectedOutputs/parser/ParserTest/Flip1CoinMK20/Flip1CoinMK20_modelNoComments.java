@@ -25,7 +25,7 @@ public final class Flip1CoinMK20 extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$bias(value);
+            system$c.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,7 +35,7 @@ public final class Flip1CoinMK20 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample8(fixed);
+                system$c.set$fixedFlag$sample8(fixed, allocated);
             }
         }
 
@@ -159,7 +159,7 @@ public final class Flip1CoinMK20 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$obs1(value); }
+        protected void setValueInternal(int value) { system$c.set$obs1(value, allocated); }
     };
 
     /**
@@ -176,7 +176,7 @@ public final class Flip1CoinMK20 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$obs2(value); }
+        protected void setValueInternal(int value) { system$c.set$obs2(value, allocated); }
     };
 
     /**
@@ -249,18 +249,19 @@ public final class Flip1CoinMK20 extends Model {
     }
 
     private void transferData(Flip1CoinMK20$CoreInterface oldCore, Flip1CoinMK20$CoreInterface newCore) {
+
         //Observed scalars
         if(obs1.isSet())
-            newCore.set$obs1(oldCore.get$obs1());
+            newCore.set$obs1(oldCore.get$obs1(), false);
         if(obs2.isSet())
-            newCore.set$obs2(oldCore.get$obs2());
+            newCore.set$obs2(oldCore.get$obs2(), false);
 
         //ComputedVariables
         if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias());
+            newCore.set$bias(oldCore.get$bias(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample8(oldCore.get$fixedFlag$sample8());
+        newCore.set$fixedFlag$sample8(oldCore.get$fixedFlag$sample8(), false);
     }
 
     /**

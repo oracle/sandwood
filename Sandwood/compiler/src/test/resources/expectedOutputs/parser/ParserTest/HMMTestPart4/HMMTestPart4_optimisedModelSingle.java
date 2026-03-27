@@ -25,7 +25,7 @@ public final class HMMTestPart4 extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$bias(value);
+            system$c.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,7 +35,7 @@ public final class HMMTestPart4 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample45(fixed);
+                system$c.set$fixedFlag$sample45(fixed, allocated);
             }
         }
 
@@ -95,7 +95,7 @@ public final class HMMTestPart4 extends Model {
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$m(value);
+            system$c.set$m(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -110,7 +110,7 @@ public final class HMMTestPart4 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample28(fixed);
+                system$c.set$fixedFlag$sample28(fixed, allocated);
             }
         }
 
@@ -134,7 +134,7 @@ public final class HMMTestPart4 extends Model {
 
         @Override
         protected void setValueInternal(int[][][] value) {
-            system$c.set$st(value);
+            system$c.set$st(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -149,8 +149,8 @@ public final class HMMTestPart4 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample124(fixed);
-                system$c.set$fixedFlag$sample84(fixed);
+                system$c.set$fixedFlag$sample124(fixed, allocated);
+                system$c.set$fixedFlag$sample84(fixed, allocated);
             }
         }
 
@@ -186,13 +186,13 @@ public final class HMMTestPart4 extends Model {
 
         @Override
         public void setValueInternal(boolean[][][] value) {
-            system$c.set$flipsMeasured(value);
-            system$c.set$length$flipsMeasured(getDims(value));
+            system$c.set$flipsMeasured(value, allocated);
+            system$c.set$length$flipsMeasured(getDims(value), allocated);
         }
 
         @Override
         public void setShapeInternal(int[][] shape) {
-            system$c.set$length$flipsMeasured(shape);
+            system$c.set$length$flipsMeasured(shape, allocated);
         }
 
         @Override
@@ -283,25 +283,25 @@ public final class HMMTestPart4 extends Model {
 
         //Observed arrays
         if(flipsMeasured.isSet()) {
-            newCore.set$flipsMeasured(oldCore.get$flipsMeasured());
-            newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured());
+            newCore.set$flipsMeasured(oldCore.get$flipsMeasured(), false);
+            newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured(), false);
         }
         else if(flipsMeasured.shapeSet())
-            newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured());
+            newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured(), false);
 
         //ComputedVariables
         if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias());
+            newCore.set$bias(oldCore.get$bias(), false);
         if($m.isSet())
-            newCore.set$m(oldCore.get$m());
+            newCore.set$m(oldCore.get$m(), false);
         if($st.isSet())
-            newCore.set$st(oldCore.get$st());
+            newCore.set$st(oldCore.get$st(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample124(oldCore.get$fixedFlag$sample124());
-        newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28());
-        newCore.set$fixedFlag$sample45(oldCore.get$fixedFlag$sample45());
-        newCore.set$fixedFlag$sample84(oldCore.get$fixedFlag$sample84());
+        newCore.set$fixedFlag$sample124(oldCore.get$fixedFlag$sample124(), false);
+        newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28(), false);
+        newCore.set$fixedFlag$sample45(oldCore.get$fixedFlag$sample45(), false);
+        newCore.set$fixedFlag$sample84(oldCore.get$fixedFlag$sample84(), false);
     }
 
     /**

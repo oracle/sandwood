@@ -9,19 +9,19 @@ interface Flip1CoinMK12b$CoreInterface extends org.sandwood.runtime.internal.mod
 	public boolean get$fixedFlag$sample16();
 
 	// Setter for fixedFlag$sample16.
-	public void set$fixedFlag$sample16(boolean cv$value);
+	public void set$fixedFlag$sample16(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample28.
 	public boolean get$fixedFlag$sample28();
 
 	// Setter for fixedFlag$sample28.
-	public void set$fixedFlag$sample28(boolean cv$value);
+	public void set$fixedFlag$sample28(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample35.
 	public boolean get$fixedFlag$sample35();
 
 	// Setter for fixedFlag$sample35.
-	public void set$fixedFlag$sample35(boolean cv$value);
+	public void set$fixedFlag$sample35(boolean cv$value, boolean allocated$);
 
 	// Getter for flips.
 	public boolean[] get$flips();
@@ -30,25 +30,25 @@ interface Flip1CoinMK12b$CoreInterface extends org.sandwood.runtime.internal.mod
 	public boolean[] get$flipsMeasured();
 
 	// Setter for flipsMeasured.
-	public void set$flipsMeasured(boolean[] cv$value);
+	public void set$flipsMeasured(boolean[] cv$value, boolean allocated$);
 
 	// Getter for guard1.
 	public boolean get$guard1();
 
 	// Setter for guard1.
-	public void set$guard1(boolean cv$value);
+	public void set$guard1(boolean cv$value, boolean allocated$);
 
 	// Getter for guard2.
 	public int get$guard2();
 
 	// Setter for guard2.
-	public void set$guard2(int cv$value);
+	public void set$guard2(int cv$value, boolean allocated$);
 
 	// Getter for length$flipsMeasured.
 	public int get$length$flipsMeasured();
 
 	// Setter for length$flipsMeasured.
-	public void set$length$flipsMeasured(int cv$value);
+	public void set$length$flipsMeasured(int cv$value, boolean allocated$);
 
 	// Getter for logProbability$bernoulli.
 	public double get$logProbability$bernoulli();
@@ -66,17 +66,17 @@ interface Flip1CoinMK12b$CoreInterface extends org.sandwood.runtime.internal.mod
 	public double get$var14();
 
 	// Setter for var14.
-	public void set$var14(double cv$value);
+	public void set$var14(double cv$value, boolean allocated$);
 
 	// Getter for var26.
 	public double get$var26();
 
 	// Setter for var26.
-	public void set$var26(double cv$value);
+	public void set$var26(double cv$value, boolean allocated$);
 
 	// Getter for var33.
 	public double get$var33();
 
 	// Setter for var33.
-	public void set$var33(double cv$value);
+	public void set$var33(double cv$value, boolean allocated$);
 }

@@ -33,8 +33,15 @@ final class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
-	public final void set$fixedFlag$sample61(boolean cv$value) {
+	public final void set$fixedFlag$sample61(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample61 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample61$1 = 0; index$constrainedFlag$sample61$1 < constrainedFlag$sample61.length; index$constrainedFlag$sample61$1 += 1) {
+				boolean[] cv$constrainedFlag$sample61$1 = constrainedFlag$sample61[index$constrainedFlag$sample61$1];
+				for(int index$constrainedFlag$sample61$2 = 0; index$constrainedFlag$sample61$2 < cv$constrainedFlag$sample61$1.length; index$constrainedFlag$sample61$2 += 1)
+					cv$constrainedFlag$sample61$1[index$constrainedFlag$sample61$2] = true;
+			}
+		}
 		fixedProbFlag$sample61 = (cv$value && fixedProbFlag$sample61);
 		fixedProbFlag$sample103 = (cv$value && fixedProbFlag$sample103);
 	}
@@ -50,7 +57,7 @@ final class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
-	public final void set$indirection1(double[][] cv$value) {
+	public final void set$indirection1(double[][] cv$value, boolean allocated$) {
 		indirection1 = cv$value;
 		fixedProbFlag$sample61 = false;
 		fixedProbFlag$sample103 = false;
@@ -67,7 +74,7 @@ final class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
-	public final void set$length$observed(int cv$value) {
+	public final void set$length$observed(int cv$value, boolean allocated$) {
 		length$observed = cv$value;
 	}
 
@@ -102,8 +109,38 @@ final class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
-	public final void set$observed(int[] cv$value) {
+	public final void set$observed(int[] cv$value, boolean allocated$) {
 		observed = cv$value;
+	}
+
+	private final void drawValueSample61(int i, int j, int threadID$cv$j, Rng RNG$) {
+		indirection1[i][j] = DistributionSampling.sampleUniform(RNG$);
+		indirection2[j][i] = indirection1[i][j];
+	}
+
+	private final void inferSample61(int i, int j, int threadID$cv$j, Rng RNG$) {
+		double cv$originalValue = indirection1[i][j];
+		double cv$originalProbability;
+		double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+		{
+			constrainedFlag$sample61[i][j] = true;
+			double[] var99 = indirection2[j];
+			cv$originalProbability = ((((((0.0 <= generated[j]) && (generated[j] < 10)) && (0.0 <= var99[generated[j]])) && (var99[generated[j]] <= 1.0))?Math.log(var99[generated[j]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$originalValue) && (cv$originalValue < 1.0))?0.0:Double.NEGATIVE_INFINITY));
+		}
+		if(constrainedFlag$sample61[i][j]) {
+			indirection1[i][j] = cv$proposedValue;
+			indirection2[j][i] = indirection1[i][j];
+			constrainedFlag$sample61[i][j] = true;
+			double[] var99 = indirection2[j];
+			double cv$ratio = (((((((0.0 <= generated[j]) && (generated[j] < 10)) && (0.0 <= var99[generated[j]])) && (var99[generated[j]] <= 1.0))?Math.log(var99[generated[j]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY)) - cv$originalProbability);
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				indirection1[i][j] = cv$originalValue;
+				indirection2[j][i] = indirection1[i][j];
+			}
+		}
 	}
 
 	private final void logProbabilityValue$sample103() {
@@ -160,31 +197,6 @@ final class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample61)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	private final void sample61(int i, int j, int threadID$cv$j, Rng RNG$) {
-		double cv$originalValue = indirection1[i][j];
-		double cv$originalProbability;
-		double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
-		if((cv$var < 0.01))
-			cv$var = 0.01;
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
-		{
-			constrainedFlag$sample61[i][j] = true;
-			double[] var99 = indirection2[j];
-			cv$originalProbability = ((((((0.0 <= generated[j]) && (generated[j] < 10)) && (0.0 <= var99[generated[j]])) && (var99[generated[j]] <= 1.0))?Math.log(var99[generated[j]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$originalValue) && (cv$originalValue < 1.0))?0.0:Double.NEGATIVE_INFINITY));
-		}
-		if(constrainedFlag$sample61[i][j]) {
-			indirection1[i][j] = cv$proposedValue;
-			indirection2[j][i] = indirection1[i][j];
-			constrainedFlag$sample61[i][j] = true;
-			double[] var99 = indirection2[j];
-			double cv$ratio = (((((((0.0 <= generated[j]) && (generated[j] < 10)) && (0.0 <= var99[generated[j]])) && (var99[generated[j]] <= 1.0))?Math.log(var99[generated[j]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY)) - cv$originalProbability);
-			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-				indirection1[i][j] = cv$originalValue;
-				indirection2[j][i] = indirection1[i][j];
-			}
 		}
 	}
 
@@ -402,7 +414,7 @@ final class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					parallelFor(RNG$, 0, length$observed, 1,
 						(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
 							for(int j = forStart$j; j < forEnd$j; j += 1)
-									sample61(i$1, j, threadID$j, RNG$1);
+									inferSample61(i$1, j, threadID$j, RNG$1);
 						}
 					);
 				}
@@ -412,13 +424,24 @@ final class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					parallelFor(RNG$, 0, length$observed, 1,
 						(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
 							for(int j = forStart$j; j < forEnd$j; j += 1)
-									sample61(i$2, j, threadID$j, RNG$1);
+									inferSample61(i$2, j, threadID$j, RNG$1);
 						}
 					);
 				}
 			}
 		}
 		system$gibbsForward = !system$gibbsForward;
+		for(int i = 0; i < 10; i += 1) {
+			int i$3 = i;
+			parallelFor(RNG$, 0, length$observed, 1,
+				(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
+					for(int j = forStart$j; j < forEnd$j; j += 1) {
+							if(!constrainedFlag$sample61[i$3][j])
+								drawValueSample61(i$3, j, threadID$j, RNG$1);
+						}
+				}
+			);
+		}
 	}
 
 	private final void initializeLogProbabilityFields() {

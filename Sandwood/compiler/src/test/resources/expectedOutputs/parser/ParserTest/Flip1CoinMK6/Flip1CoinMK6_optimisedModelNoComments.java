@@ -25,7 +25,7 @@ public final class Flip1CoinMK6 extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$bias(value);
+            system$c.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,7 +35,7 @@ public final class Flip1CoinMK6 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample9(fixed);
+                system$c.set$fixedFlag$sample9(fixed, allocated);
             }
         }
 
@@ -129,13 +129,13 @@ public final class Flip1CoinMK6 extends Model {
 
         @Override
         public void setValueInternal(boolean[] value) {
-            system$c.set$flipsMeasured1(value);
-            system$c.set$length$flipsMeasured1(value.length);
+            system$c.set$flipsMeasured1(value, allocated);
+            system$c.set$length$flipsMeasured1(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$flipsMeasured1(shape);
+            system$c.set$length$flipsMeasured1(shape, allocated);
         }
 
         @Override
@@ -159,13 +159,13 @@ public final class Flip1CoinMK6 extends Model {
 
         @Override
         public void setValueInternal(boolean[] value) {
-            system$c.set$flipsMeasured2(value);
-            system$c.set$length$flipsMeasured2(value.length);
+            system$c.set$flipsMeasured2(value, allocated);
+            system$c.set$length$flipsMeasured2(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$flipsMeasured2(shape);
+            system$c.set$length$flipsMeasured2(shape, allocated);
         }
 
         @Override
@@ -259,24 +259,24 @@ public final class Flip1CoinMK6 extends Model {
 
         //Observed arrays
         if(flipsMeasured1.isSet()) {
-            newCore.set$flipsMeasured1(oldCore.get$flipsMeasured1());
-            newCore.set$length$flipsMeasured1(oldCore.get$length$flipsMeasured1());
+            newCore.set$flipsMeasured1(oldCore.get$flipsMeasured1(), false);
+            newCore.set$length$flipsMeasured1(oldCore.get$length$flipsMeasured1(), false);
         }
         else if(flipsMeasured1.shapeSet())
-            newCore.set$length$flipsMeasured1(oldCore.get$length$flipsMeasured1());
+            newCore.set$length$flipsMeasured1(oldCore.get$length$flipsMeasured1(), false);
         if(flipsMeasured2.isSet()) {
-            newCore.set$flipsMeasured2(oldCore.get$flipsMeasured2());
-            newCore.set$length$flipsMeasured2(oldCore.get$length$flipsMeasured2());
+            newCore.set$flipsMeasured2(oldCore.get$flipsMeasured2(), false);
+            newCore.set$length$flipsMeasured2(oldCore.get$length$flipsMeasured2(), false);
         }
         else if(flipsMeasured2.shapeSet())
-            newCore.set$length$flipsMeasured2(oldCore.get$length$flipsMeasured2());
+            newCore.set$length$flipsMeasured2(oldCore.get$length$flipsMeasured2(), false);
 
         //ComputedVariables
         if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias());
+            newCore.set$bias(oldCore.get$bias(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9());
+        newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9(), false);
     }
 
     /**

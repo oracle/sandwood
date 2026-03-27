@@ -6,25 +6,25 @@ interface LinearRegressionTest$CoreInterface extends org.sandwood.runtime.intern
 	public double get$bias();
 
 	// Setter for bias.
-	public void set$bias(double cv$value);
+	public void set$bias(double cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample24.
 	public boolean get$fixedFlag$sample24();
 
 	// Setter for fixedFlag$sample24.
-	public void set$fixedFlag$sample24(boolean cv$value);
+	public void set$fixedFlag$sample24(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample31.
 	public boolean get$fixedFlag$sample31();
 
 	// Setter for fixedFlag$sample31.
-	public void set$fixedFlag$sample31(boolean cv$value);
+	public void set$fixedFlag$sample31(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample35.
 	public boolean get$fixedFlag$sample35();
 
 	// Setter for fixedFlag$sample35.
-	public void set$fixedFlag$sample35(boolean cv$value);
+	public void set$fixedFlag$sample35(boolean cv$value, boolean allocated$);
 
 	// Getter for k.
 	public int get$k();
@@ -48,19 +48,19 @@ interface LinearRegressionTest$CoreInterface extends org.sandwood.runtime.intern
 	public double get$tau();
 
 	// Setter for tau.
-	public void set$tau(double cv$value);
+	public void set$tau(double cv$value, boolean allocated$);
 
 	// Getter for weights.
 	public double[] get$weights();
 
 	// Setter for weights.
-	public void set$weights(double[] cv$value);
+	public void set$weights(double[] cv$value, boolean allocated$);
 
 	// Getter for x.
 	public double[][] get$x();
 
 	// Setter for x.
-	public void set$x(double[][] cv$value);
+	public void set$x(double[][] cv$value, boolean allocated$);
 
 	// Getter for y.
 	public double[] get$y();
@@ -69,5 +69,5 @@ interface LinearRegressionTest$CoreInterface extends org.sandwood.runtime.intern
 	public double[] get$yMeasured();
 
 	// Setter for yMeasured.
-	public void set$yMeasured(double[] cv$value);
+	public void set$yMeasured(double[] cv$value, boolean allocated$);
 }

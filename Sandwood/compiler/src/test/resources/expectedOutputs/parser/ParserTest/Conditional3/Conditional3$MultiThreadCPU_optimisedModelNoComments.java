@@ -42,8 +42,9 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$fixedFlag$sample16(boolean cv$value) {
+	public final void set$fixedFlag$sample16(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample16 = cv$value;
+		constrainedFlag$sample16 = (cv$value || constrainedFlag$sample16);
 		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
 		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
 	}
@@ -54,8 +55,9 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$fixedFlag$sample4(boolean cv$value) {
+	public final void set$fixedFlag$sample4(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample4 = cv$value;
+		constrainedFlag$sample4 = (cv$value || constrainedFlag$sample4);
 		fixedProbFlag$sample4 = (cv$value && fixedProbFlag$sample4);
 		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
 		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
@@ -67,7 +69,7 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$guard(boolean cv$value) {
+	public final void set$guard(boolean cv$value, boolean allocated$) {
 		guard = cv$value;
 		fixedProbFlag$sample4 = false;
 		fixedProbFlag$sample16 = false;
@@ -110,7 +112,7 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$observedValue(double cv$value) {
+	public final void set$observedValue(double cv$value, boolean allocated$) {
 		observedValue = cv$value;
 	}
 
@@ -125,10 +127,77 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$var14(double cv$value) {
+	public final void set$var14(double cv$value, boolean allocated$) {
 		var14 = cv$value;
 		fixedProbFlag$sample16 = false;
 		fixedProbFlag$sample20 = false;
+	}
+
+	private final void drawValueSample16() {
+		var14 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+		bias = var14;
+	}
+
+	private final void drawValueSample4() {
+		guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+		if(guard)
+			bias = 0.5;
+		else
+			bias = var14;
+	}
+
+	private final void inferSample16() {
+		constrainedFlag$sample16 = false;
+		double cv$originalValue = var14;
+		double cv$var = (((var14 < 0)?(-var14):var14) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + var14);
+		constrainedFlag$sample16 = true;
+		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(value, var14, 1.0) + (((0.0 <= var14) && (var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
+		var14 = cv$proposedValue;
+		bias = cv$proposedValue;
+		constrainedFlag$sample16 = true;
+		double cv$ratio = ((DistributionSampling.logProbabilityBeta(value, cv$proposedValue, 1.0) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY)) - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+			var14 = cv$originalValue;
+			bias = cv$originalValue;
+		}
+	}
+
+	private final void inferSample4() {
+		constrainedFlag$sample4 = false;
+		guard = false;
+		bias = var14;
+		constrainedFlag$sample4 = true;
+		cv$var4$stateProbabilityGlobal[0] = (((((0.0 <= var14) && (var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY) + DistributionSampling.logProbabilityBeta(value, var14, 1.0)) - 0.6931471805599453);
+		guard = true;
+		bias = 0.5;
+		constrainedFlag$sample4 = true;
+		cv$var4$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBeta(value, 0.5, 1.0) - 0.6931471805599453);
+		double cv$logSum;
+		double cv$lseMax = cv$var4$stateProbabilityGlobal[0];
+		double cv$lseElementValue = cv$var4$stateProbabilityGlobal[1];
+		if((cv$lseMax < cv$lseElementValue))
+			cv$lseMax = cv$lseElementValue;
+		if((cv$lseMax == Double.NEGATIVE_INFINITY))
+			cv$logSum = Double.NEGATIVE_INFINITY;
+		else
+			cv$logSum = (Math.log((Math.exp((cv$var4$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var4$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
+		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
+			cv$var4$stateProbabilityGlobal[0] = 0.5;
+			cv$var4$stateProbabilityGlobal[1] = 0.5;
+		} else {
+			cv$var4$stateProbabilityGlobal[0] = Math.exp((cv$var4$stateProbabilityGlobal[0] - cv$logSum));
+			cv$var4$stateProbabilityGlobal[1] = Math.exp((cv$var4$stateProbabilityGlobal[1] - cv$logSum));
+		}
+		for(int cv$indexName = 2; cv$indexName < cv$var4$stateProbabilityGlobal.length; cv$indexName += 1)
+			cv$var4$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+		guard = (DistributionSampling.sampleCategorical(RNG$, cv$var4$stateProbabilityGlobal, 2) == 1);
+		if(guard)
+			bias = 0.5;
+		else
+			bias = var14;
 	}
 
 	private final void logProbabilityValue$sample16() {
@@ -138,20 +207,21 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				double cv$distributionAccumulator = (((0.0 <= var14) && (var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY);
 				cv$accumulator = cv$distributionAccumulator;
 				logProbability$sample16 = cv$distributionAccumulator;
-				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			}
 			logProbability$var14 = (logProbability$var14 + cv$accumulator);
+			if(!guard)
+				logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample16)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 			fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedFlag$sample4);
 		} else {
 			double cv$accumulator = 0.0;
-			if(!guard) {
+			if(!guard)
 				cv$accumulator = logProbability$sample16;
-				logProbability$bias = (logProbability$bias + logProbability$sample16);
-			}
 			logProbability$var14 = (logProbability$var14 + cv$accumulator);
+			if(!guard)
+				logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample16)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -185,60 +255,6 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			if(fixedFlag$sample4)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$guard);
 		}
-	}
-
-	private final void sample16() {
-		constrainedFlag$sample16 = false;
-		double cv$originalValue = var14;
-		double cv$var = (((var14 < 0)?(-var14):var14) * 40.0);
-		if((cv$var < 0.01))
-			cv$var = 0.01;
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + var14);
-		constrainedFlag$sample16 = true;
-		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(value, var14, 1.0) + (((0.0 <= var14) && (var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
-		var14 = cv$proposedValue;
-		bias = cv$proposedValue;
-		constrainedFlag$sample16 = true;
-		double cv$ratio = ((DistributionSampling.logProbabilityBeta(value, cv$proposedValue, 1.0) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY)) - cv$originalProbability);
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-			var14 = cv$originalValue;
-			bias = cv$originalValue;
-		}
-	}
-
-	private final void sample4() {
-		constrainedFlag$sample4 = false;
-		guard = false;
-		bias = var14;
-		constrainedFlag$sample4 = true;
-		cv$var4$stateProbabilityGlobal[0] = (((((0.0 <= var14) && (var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY) + DistributionSampling.logProbabilityBeta(value, var14, 1.0)) - 0.6931471805599453);
-		guard = true;
-		bias = 0.5;
-		constrainedFlag$sample4 = true;
-		cv$var4$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBeta(value, 0.5, 1.0) - 0.6931471805599453);
-		double cv$logSum;
-		double cv$lseMax = cv$var4$stateProbabilityGlobal[0];
-		double cv$lseElementValue = cv$var4$stateProbabilityGlobal[1];
-		if((cv$lseMax < cv$lseElementValue))
-			cv$lseMax = cv$lseElementValue;
-		if((cv$lseMax == Double.NEGATIVE_INFINITY))
-			cv$logSum = Double.NEGATIVE_INFINITY;
-		else
-			cv$logSum = (Math.log((Math.exp((cv$var4$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var4$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
-		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			cv$var4$stateProbabilityGlobal[0] = 0.5;
-			cv$var4$stateProbabilityGlobal[1] = 0.5;
-		} else {
-			cv$var4$stateProbabilityGlobal[0] = Math.exp((cv$var4$stateProbabilityGlobal[0] - cv$logSum));
-			cv$var4$stateProbabilityGlobal[1] = Math.exp((cv$var4$stateProbabilityGlobal[1] - cv$logSum));
-		}
-		for(int cv$indexName = 2; cv$indexName < cv$var4$stateProbabilityGlobal.length; cv$indexName += 1)
-			cv$var4$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
-		guard = (DistributionSampling.sampleCategorical(RNG$, cv$var4$stateProbabilityGlobal, 2) == 1);
-		if(guard)
-			bias = 0.5;
-		else
-			bias = var14;
 	}
 
 	@Override
@@ -329,16 +345,20 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample4)
-				sample4();
+				inferSample4();
 			if((!guard && !fixedFlag$sample16))
-				sample16();
+				inferSample16();
 		} else {
 			if((!guard && !fixedFlag$sample16))
-				sample16();
+				inferSample16();
 			if(!fixedFlag$sample4)
-				sample4();
+				inferSample4();
 		}
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample4)
+			drawValueSample4();
+		if((!guard && !constrainedFlag$sample16))
+			drawValueSample16();
 	}
 
 	private final void initializeLogProbabilityFields() {

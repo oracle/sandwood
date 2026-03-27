@@ -25,7 +25,7 @@ public final class GaussianMixtureTest extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$mu(value);
+            system$c.set$mu(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,7 +35,7 @@ public final class GaussianMixtureTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample34(fixed);
+                system$c.set$fixedFlag$sample34(fixed, allocated);
             }
         }
 
@@ -59,7 +59,7 @@ public final class GaussianMixtureTest extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$phi(value);
+            system$c.set$phi(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -69,7 +69,7 @@ public final class GaussianMixtureTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample17(fixed);
+                system$c.set$fixedFlag$sample17(fixed, allocated);
             }
         }
 
@@ -93,7 +93,7 @@ public final class GaussianMixtureTest extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$sigma(value);
+            system$c.set$sigma(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -103,7 +103,7 @@ public final class GaussianMixtureTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample52(fixed);
+                system$c.set$fixedFlag$sample52(fixed, allocated);
             }
         }
 
@@ -158,7 +158,7 @@ public final class GaussianMixtureTest extends Model {
 
         @Override
         protected void setValueInternal(int[] value) {
-            system$c.set$z(value);
+            system$c.set$z(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -190,13 +190,13 @@ public final class GaussianMixtureTest extends Model {
 
         @Override
         public void setValueInternal(double[] value) {
-            system$c.set$xMeasured(value);
-            system$c.set$length$xMeasured(value.length);
+            system$c.set$xMeasured(value, allocated);
+            system$c.set$length$xMeasured(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$xMeasured(shape);
+            system$c.set$length$xMeasured(shape, allocated);
         }
 
         @Override
@@ -275,26 +275,26 @@ public final class GaussianMixtureTest extends Model {
 
         //Observed arrays
         if(xMeasured.isSet()) {
-            newCore.set$xMeasured(oldCore.get$xMeasured());
-            newCore.set$length$xMeasured(oldCore.get$length$xMeasured());
+            newCore.set$xMeasured(oldCore.get$xMeasured(), false);
+            newCore.set$length$xMeasured(oldCore.get$length$xMeasured(), false);
         }
         else if(xMeasured.shapeSet())
-            newCore.set$length$xMeasured(oldCore.get$length$xMeasured());
+            newCore.set$length$xMeasured(oldCore.get$length$xMeasured(), false);
 
         //ComputedVariables
         if($mu.isSet())
-            newCore.set$mu(oldCore.get$mu());
+            newCore.set$mu(oldCore.get$mu(), false);
         if($phi.isSet())
-            newCore.set$phi(oldCore.get$phi());
+            newCore.set$phi(oldCore.get$phi(), false);
         if($sigma.isSet())
-            newCore.set$sigma(oldCore.get$sigma());
+            newCore.set$sigma(oldCore.get$sigma(), false);
         if($z.isSet())
-            newCore.set$z(oldCore.get$z());
+            newCore.set$z(oldCore.get$z(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17());
-        newCore.set$fixedFlag$sample34(oldCore.get$fixedFlag$sample34());
-        newCore.set$fixedFlag$sample52(oldCore.get$fixedFlag$sample52());
+        newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17(), false);
+        newCore.set$fixedFlag$sample34(oldCore.get$fixedFlag$sample34(), false);
+        newCore.set$fixedFlag$sample52(oldCore.get$fixedFlag$sample52(), false);
     }
 
     /**

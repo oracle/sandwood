@@ -10,8 +10,8 @@ interface Conditional5$CoreInterface extends org.sandwood.runtime.internal.model
 	public double get$logProbability$guard();
 	public double get$logProbability$value();
 	public boolean get$observedGuard();
-	public void set$observedGuard(boolean cv$value);
+	public void set$observedGuard(boolean cv$value, boolean allocated$);
 	public double get$observedValue();
-	public void set$observedValue(double cv$value);
+	public void set$observedValue(double cv$value, boolean allocated$);
 	public double get$value();
 }

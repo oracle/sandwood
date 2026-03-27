@@ -50,6 +50,7 @@ import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
+import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
@@ -182,91 +183,149 @@ public class ProbabilityFunction {
          * and so need their own set of scope constructors for their traces, or if they can be accumulated and only have
          * a single constraint applied to them.
          * 
+         * This function is conservative in its execution, and will return true, which is always safe, but potentially
+         * less efficient, if there is doubt. A more advanced function could potentially return false for some of these
+         * cases.
+         * 
          * @param t A trace from the sample task variable to the value the probability is being constructed for.
          * @return Returns true if the probabilities need to be considered at the per sample granularity.
          */
         private static boolean perSampleValueRequired(TraceHandle t) {
             SampleTask<?, ?> sTask = (SampleTask<?, ?>) t.get(0).task;
             Set<Scope> scopes = new HashSet<>();
-            Scope s = sTask.scope();
-
-            while(s != GlobalScope.scope) {
-                if(s.iterating())
+            {
+                Scope s = sTask.scope();
+                boolean iterating = false;
+                while(s != GlobalScope.scope) {
                     scopes.add(s);
-                s = s.getEnclosingScope();
+                    iterating = iterating || s.iterating();
+                    s = s.getEnclosingScope();
+                }
+                
+                // If there is only a single sample return.
+                if(!iterating)
+                    return false;
             }
 
-            // A counter to track the dimensionality of the value that was sampled.
-            int sampleDepth = sTask.getOutputType().getDepth();
-            // A counter to track the depth of the array the sample is currently placed in.
+            // A variable to record if the variables have been placed into a single array.
+            boolean allSamplesCombined = false;
+
+            // A flag to record if the sample has been placed in an array.
+            boolean arrayEntered = false;
+
+            // A counter to track how many arrays the value has been placed into since a point was reached where all the
+            // sample values are in the same array.
             int arrayDepth = 0;
+
             for(DataflowTaskArgDesc d:t) {
                 switch(d.task.getType()) {
                     case GET: {
-                        if(d.argPos == 0) {
-                            if(arrayDepth != 0)
+                        /*
+                         * Gets can happen in other scopes, or in different iterations of other scopes, so unless this
+                         * get is looking into the sample value we cannot assume it will cover all elements of the
+                         * sampling, so individual values must be calculated.
+                         */
+                        if(arrayEntered) {
+                            if(arrayDepth == 0)
                                 return true;
+                            else
+                                arrayDepth--;
+                        }
+
+                        break;
+                    }
+                    case IF_ASSIGNMENT: {
+                        /*
+                         * A conditional may not always evaluate the same way so probabilities must be calculated on a
+                         * per sample basis
+                         */
+                        assert d.argPos > 0 : "Traces via the guard should have been filtered out.";
+                        if(!allSamplesCombined)
+                            return true;
+                        break;
+                    }
+                    case PUT: {
+                        assert d.argPos == 2 : "Traces that are not putting a value into an array should have been filtered out by this point.";
+                        // Record the sample value is now in an array
+                        arrayEntered = true;
+
+                        if(allSamplesCombined) {
+                            /*
+                             * If all the samples have already been combined record that the result is now nested deeper
+                             * in an array.
+                             */
+                            arrayDepth++;
                         } else {
-                            return false;
+                            Scope s = d.task.scope();
+                            while(s != GlobalScope.scope) {
+                                switch(s.getScopeType()) {
+                                    case FOR:
+                                    case IF:
+                                    case ELSE: {
+                                        /*
+                                         * If this is not one of the scopes that the sample task was in then it could
+                                         * filter out some of the samples.
+                                         */
+                                        if(!scopes.contains(s))
+                                            return true;
+
+                                        break;
+                                    }
+                                    case GLOBAL:
+                                    case BLOCK:
+                                    case COMMENT:
+                                    case REDUCE:
+                                        break;
+                                    default:
+                                        throw new CompilerException("Unknown scope type " + s);
+                                }
+
+                                s = s.getEnclosingScope();
+                            }
+
+                            // If the array is not in an iterating scope all the sample values have been combined.
+                            boolean iterating = false;
+                            PutTask<?> pt = (PutTask<?>) d.task;
+                            s = pt.array.scope();
+                            while(s != GlobalScope.scope) {
+                                iterating = iterating || s.iterating();
+                                s = s.getEnclosingScope();
+                            }
+
+                            allSamplesCombined = !iterating;
                         }
                         break;
                     }
-                    case GET_LENGTH: {
-                        return false;
-                    }
-                    case IF_ASSIGNMENT: {
-                        assert d.argPos > 0 : "Traces via the guard should have been filtered out.";
-                        return true;
-                    }
-                    case PUT: {
-                        if(d.argPos == 2) {
-                            if(arrayDepth == 0) {
-                                boolean iterating = false;
-                                s = d.task.scope();
-                                while(s != GlobalScope.scope) {
-                                    if(scopes.contains(s)) {
-                                        iterating = true;
-                                        break;
-                                    }
-                                    s = s.getEnclosingScope();
-                                }
-                                // If the first put was not in an iterating scope of the sample task,
-                                // no later put can be.
-                                if(!iterating)
-                                    return false;
-                            }
-                            arrayDepth++;
-                        } else
-                            return false;
-                        break;
-                    }
                     case REDUCE_INPUT: {
-                        if(sampleDepth > 0 && arrayDepth == 0)
-                            sampleDepth--;
-                        else
-                            arrayDepth--;
+                        if(arrayEntered) {
+                            /*
+                             * Reductions can filter based on their index, and so if the sample has been placed into an
+                             * array then potentially per sample values are required if the samples are in an array.
+                             */
+                            if(!allSamplesCombined)
+                                return true;
+                            /*
+                             * If the array holding all the samples has been placed into another array this can be
+                             * reduced, but it reduces the number of gets until we break the atomicity of the
+                             * constructed array.
+                             */
+                            if(arrayDepth > 0)
+                                arrayDepth--;
+                        }
                         break;
                     }
                     default:
                         break;
 
                 }
-
-                if(d.task.getType() == DFType.PUT && d.argPos == 2)
-                    arrayDepth++;
-                else if(d.task.getType() == DFType.IF_ASSIGNMENT && d.argPos != 0) {
-                    s = d.task.scope();
-                    while(s != GlobalScope.scope) {
-                        if(scopes.contains(s))
-                            return true;
-                        s = s.getEnclosingScope();
-                    }
-                    // If the first put was not in an iterating scope of the sample task,
-                    // no later put can be.
-                    return false;
-                }
             }
+
+            /*
+             * If a condition has not been found that forces per sample probability recording then per sample recording
+             * is not required.
+             */
             return false;
+
         }
 
         public Variable<?> getSampleVariable() {
@@ -307,7 +366,6 @@ public class ProbabilityFunction {
         final Variable<?> sampleVariable;
         final TraceHandle traceToSampleVariable;
         final VariableDescription<A> sampleVariableName;
-        final VariableDescription<?> sampleTaskName;
         final boolean sampleSkipable;
 
         // Store the code for initialising intermediate variable probabilities.
@@ -359,7 +417,6 @@ public class ProbabilityFunction {
             traceToSampleVariable = sampleVarDesc.traceToSampleVariable;
             sampleVariableName = VariableNames.calcVarName("sampleValue", sampleTask.getOutputType(), true);
             conditionalTraces = compilationCtx.traces.getTracesToConditionals(sampleTask);
-            sampleTaskName = sampleTask.getUniqueVarDesc();
             sampleSkipable = DAGUtils.skipableTask(sampleTask);
             consumers = randomVariable.getConsumers();
 
@@ -755,14 +812,13 @@ public class ProbabilityFunction {
         }
 
         // And place the subtree in a void function.
-        FunctionName functionName = FunctionName.createFunctionName(
-                funcData.useDistributions ? VariableNames.logProbabilityDistributionName(funcData.sampleTaskName)
-                        : VariableNames.logProbabilityValueName(funcData.sampleTaskName));
-        String comment = "Calculate the probability of the samples represented by " + funcData.sampleTaskName
-                + (funcData.useDistributions ? " using probability distributions." : " using sampled values.");
         SampleFunctionClass functionClass = funcData.useDistributions
                 ? SampleFunctionClass.LOG_PROBABILITY_DISTRIBUTIONS
                 : SampleFunctionClass.LOG_PROBABILITY_VALUE;
+        FunctionName functionName = FunctionName.createFunctionName(functionClass, funcData.sampleTask);
+        String comment = "Calculate the probability of the samples represented by "
+                + funcData.sampleTask.getUniqueVarDesc()
+                + (funcData.useDistributions ? " using probability distributions." : " using sampled values.");
         funcData.compilationCtx.addFunction(functionClass, funcData.sampleTask, voidFunction(Visibility.PRIVATE,
                 functionName, new ArgDesc<?>[0], funcData.compilationCtx.getOutermostScopeTree(), comment));
     }

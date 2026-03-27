@@ -39,7 +39,7 @@ final class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.in
 	}
 
 	@Override
-	public final void set$b0(double cv$value) {
+	public final void set$b0(double cv$value, boolean allocated$) {
 		b0 = cv$value;
 		fixedProbFlag$sample7 = false;
 		fixedProbFlag$sample31 = false;
@@ -51,7 +51,7 @@ final class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.in
 	}
 
 	@Override
-	public final void set$b1(double cv$value) {
+	public final void set$b1(double cv$value, boolean allocated$) {
 		b1 = cv$value;
 		fixedProbFlag$sample11 = false;
 		fixedProbFlag$sample31 = false;
@@ -63,8 +63,9 @@ final class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.in
 	}
 
 	@Override
-	public final void set$fixedFlag$sample11(boolean cv$value) {
+	public final void set$fixedFlag$sample11(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample11 = cv$value;
+		constrainedFlag$sample11 = (fixedFlag$sample11 || constrainedFlag$sample11);
 		fixedProbFlag$sample11 = (fixedFlag$sample11 && fixedProbFlag$sample11);
 		fixedProbFlag$sample31 = (fixedFlag$sample11 && fixedProbFlag$sample31);
 	}
@@ -75,8 +76,9 @@ final class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.in
 	}
 
 	@Override
-	public final void set$fixedFlag$sample15(boolean cv$value) {
+	public final void set$fixedFlag$sample15(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample15 = cv$value;
+		constrainedFlag$sample15 = (fixedFlag$sample15 || constrainedFlag$sample15);
 		fixedProbFlag$sample15 = (fixedFlag$sample15 && fixedProbFlag$sample15);
 		fixedProbFlag$sample31 = (fixedFlag$sample15 && fixedProbFlag$sample31);
 	}
@@ -87,8 +89,9 @@ final class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.in
 	}
 
 	@Override
-	public final void set$fixedFlag$sample7(boolean cv$value) {
+	public final void set$fixedFlag$sample7(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample7 = cv$value;
+		constrainedFlag$sample7 = (fixedFlag$sample7 || constrainedFlag$sample7);
 		fixedProbFlag$sample7 = (fixedFlag$sample7 && fixedProbFlag$sample7);
 		fixedProbFlag$sample31 = (fixedFlag$sample7 && fixedProbFlag$sample31);
 	}
@@ -134,7 +137,7 @@ final class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.in
 	}
 
 	@Override
-	public final void set$variance(double cv$value) {
+	public final void set$variance(double cv$value, boolean allocated$) {
 		variance = cv$value;
 		fixedProbFlag$sample15 = false;
 		fixedProbFlag$sample31 = false;
@@ -146,7 +149,7 @@ final class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.in
 	}
 
 	@Override
-	public final void set$x(double[] cv$value) {
+	public final void set$x(double[] cv$value, boolean allocated$) {
 		x = cv$value;
 	}
 
@@ -161,8 +164,150 @@ final class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.in
 	}
 
 	@Override
-	public final void set$yMeasured(double[] cv$value) {
+	public final void set$yMeasured(double[] cv$value, boolean allocated$) {
 		yMeasured = cv$value;
+	}
+
+	private final void drawValueSample11() {
+		b1 = ((Math.sqrt(5.0) * DistributionSampling.sampleGaussian(RNG$)) + 1.0);
+	}
+
+	private final void drawValueSample15() {
+		variance = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+	}
+
+	private final void drawValueSample7() {
+		b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+	}
+
+	private final void inferSample11() {
+		if(true) {
+			constrainedFlag$sample11 = false;
+			double cv$sum = 0.0;
+			double cv$denominatorSquareSum = 0.0;
+			boolean cv$sigmaNotFound = true;
+			double cv$sigmaValue = 1.0;
+			{
+				{
+					{
+						{
+							for(int i = 0; i < noSamples; i += 1) {
+								boolean cv$sampleConstrained = true;
+								if(cv$sampleConstrained) {
+									constrainedFlag$sample11 = true;
+									{
+										{
+											{
+												{
+													{
+														double cv$denominator = 1.0;
+														double cv$numerator = 0.0;
+														cv$numerator = (cv$numerator * x[i]);
+														cv$denominator = (cv$denominator * x[i]);
+														cv$numerator = (b0 + cv$numerator);
+														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+														cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
+														if(cv$sigmaNotFound) {
+															cv$sigmaValue = variance;
+															cv$sigmaNotFound = false;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample11)
+				b1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 1.0, 5.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		}
+	}
+
+	private final void inferSample15() {
+		if(true) {
+			constrainedFlag$sample15 = false;
+			double cv$sum = 0.0;
+			int cv$count = 0;
+			{
+				{
+					{
+						{
+							for(int i = 0; i < noSamples; i += 1) {
+								boolean cv$sampleConstrained = true;
+								if(cv$sampleConstrained) {
+									constrainedFlag$sample15 = true;
+									{
+										{
+											{
+												{
+													{
+														double cv$var30$mu = (b0 + (b1 * x[i]));
+														double cv$var30$diff = (cv$var30$mu - y[i]);
+														cv$sum = (cv$sum + (cv$var30$diff * cv$var30$diff));
+														cv$count = (cv$count + 1);
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample15)
+				variance = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		}
+	}
+
+	private final void inferSample7() {
+		if(true) {
+			constrainedFlag$sample7 = false;
+			double cv$sum = 0.0;
+			double cv$denominatorSquareSum = 0.0;
+			boolean cv$sigmaNotFound = true;
+			double cv$sigmaValue = 1.0;
+			{
+				{
+					{
+						{
+							for(int i = 0; i < noSamples; i += 1) {
+								boolean cv$sampleConstrained = true;
+								if(cv$sampleConstrained) {
+									constrainedFlag$sample7 = true;
+									{
+										{
+											{
+												{
+													{
+														double cv$denominator = 1.0;
+														double cv$numerator = 0.0;
+														cv$numerator = (cv$numerator + (b1 * x[i]));
+														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+														cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
+														if(cv$sigmaNotFound) {
+															cv$sigmaValue = variance;
+															cv$sigmaNotFound = false;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample7)
+				b0 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 2.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		}
 	}
 
 	private final void logProbabilityValue$sample11() {
@@ -376,136 +521,6 @@ final class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.in
 		}
 	}
 
-	private final void sample11() {
-		if(true) {
-			constrainedFlag$sample11 = false;
-			double cv$sum = 0.0;
-			double cv$denominatorSquareSum = 0.0;
-			boolean cv$sigmaNotFound = true;
-			double cv$sigmaValue = 1.0;
-			{
-				{
-					{
-						{
-							for(int i = 0; i < noSamples; i += 1) {
-								boolean cv$sampleConstrained = true;
-								if(cv$sampleConstrained) {
-									constrainedFlag$sample11 = true;
-									{
-										{
-											{
-												{
-													{
-														double cv$denominator = 1.0;
-														double cv$numerator = 0.0;
-														cv$numerator = (cv$numerator * x[i]);
-														cv$denominator = (cv$denominator * x[i]);
-														cv$numerator = (b0 + cv$numerator);
-														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-														cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
-														if(cv$sigmaNotFound) {
-															cv$sigmaValue = variance;
-															cv$sigmaNotFound = false;
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(constrainedFlag$sample11)
-				b1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 1.0, 5.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-		}
-	}
-
-	private final void sample15() {
-		if(true) {
-			constrainedFlag$sample15 = false;
-			double cv$sum = 0.0;
-			int cv$count = 0;
-			{
-				{
-					{
-						{
-							for(int i = 0; i < noSamples; i += 1) {
-								boolean cv$sampleConstrained = true;
-								if(cv$sampleConstrained) {
-									constrainedFlag$sample15 = true;
-									{
-										{
-											{
-												{
-													{
-														double cv$var30$mu = (b0 + (b1 * x[i]));
-														double cv$var30$diff = (cv$var30$mu - y[i]);
-														cv$sum = (cv$sum + (cv$var30$diff * cv$var30$diff));
-														cv$count = (cv$count + 1);
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(constrainedFlag$sample15)
-				variance = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		}
-	}
-
-	private final void sample7() {
-		if(true) {
-			constrainedFlag$sample7 = false;
-			double cv$sum = 0.0;
-			double cv$denominatorSquareSum = 0.0;
-			boolean cv$sigmaNotFound = true;
-			double cv$sigmaValue = 1.0;
-			{
-				{
-					{
-						{
-							for(int i = 0; i < noSamples; i += 1) {
-								boolean cv$sampleConstrained = true;
-								if(cv$sampleConstrained) {
-									constrainedFlag$sample7 = true;
-									{
-										{
-											{
-												{
-													{
-														double cv$denominator = 1.0;
-														double cv$numerator = 0.0;
-														cv$numerator = (cv$numerator + (b1 * x[i]));
-														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-														cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
-														if(cv$sigmaNotFound) {
-															cv$sigmaValue = variance;
-															cv$sigmaNotFound = false;
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(constrainedFlag$sample7)
-				b0 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 2.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-		}
-	}
-
 	@Override
 	public final void allocateScratch() {}
 
@@ -585,20 +600,26 @@ final class LinearRegression2Fail$MultiThreadCPU extends org.sandwood.runtime.in
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample7)
-				sample7();
+				inferSample7();
 			if(!fixedFlag$sample11)
-				sample11();
+				inferSample11();
 			if(!fixedFlag$sample15)
-				sample15();
+				inferSample15();
 		} else {
 			if(!fixedFlag$sample15)
-				sample15();
+				inferSample15();
 			if(!fixedFlag$sample11)
-				sample11();
+				inferSample11();
 			if(!fixedFlag$sample7)
-				sample7();
+				inferSample7();
 		}
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample7)
+			drawValueSample7();
+		if(!constrainedFlag$sample11)
+			drawValueSample11();
+		if(!constrainedFlag$sample15)
+			drawValueSample15();
 	}
 
 	private final void initializeLogProbabilityFields() {

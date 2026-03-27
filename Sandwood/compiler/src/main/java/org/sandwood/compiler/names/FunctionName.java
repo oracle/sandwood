@@ -1,13 +1,15 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
 package org.sandwood.compiler.names;
 
+import org.sandwood.compiler.compilation.CompilationContext.SampleFunctionClass;
+import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.exceptions.CompilerException;
@@ -52,8 +54,22 @@ public class FunctionName extends Name {
         return new FunctionName(name.getName());
     }
 
-    public static FunctionName createFunctionName(VariableDescription<?> desc) {
-        return new FunctionName(desc.name.getName());
+    private static String logProbabilityDistributionName(VariableDescription<?> varDesc) {
+        return "logProbabilityDistribution" + Name.prefix + varDesc;
+    }
+
+    public static String logProbabilityValueName(VariableDescription<?> varDesc) {
+        return "logProbabilityValue" + Name.prefix + varDesc;
+    }
+
+    public static FunctionName createFunctionName(SampleFunctionClass functionClass, SampleTask<?, ?> sample) {
+        return switch(functionClass) {
+            case INFERENCE -> new FunctionName("inferSample" + sample.id());
+            case LOG_PROBABILITY_DISTRIBUTIONS -> new FunctionName(
+                    logProbabilityDistributionName(sample.getUniqueVarDesc()));
+            case LOG_PROBABILITY_VALUE -> new FunctionName(logProbabilityValueName(sample.getUniqueVarDesc()));
+            case SAMPLE -> new FunctionName("drawValueSample" + sample.id());
+        };
     }
 
     public static FunctionName getConstructorName(ClassName className) {

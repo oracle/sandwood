@@ -6,13 +6,13 @@ interface Flip1CoinMK5$CoreInterface extends org.sandwood.runtime.internal.model
 	public double get$bias();
 
 	// Setter for bias.
-	public void set$bias(double cv$value);
+	public void set$bias(double cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample9.
 	public boolean get$fixedFlag$sample9();
 
 	// Setter for fixedFlag$sample9.
-	public void set$fixedFlag$sample9(boolean cv$value);
+	public void set$fixedFlag$sample9(boolean cv$value, boolean allocated$);
 
 	// Getter for flips1.
 	public boolean[] get$flips1();
@@ -24,25 +24,25 @@ interface Flip1CoinMK5$CoreInterface extends org.sandwood.runtime.internal.model
 	public boolean[] get$flipsMeasured1();
 
 	// Setter for flipsMeasured1.
-	public void set$flipsMeasured1(boolean[] cv$value);
+	public void set$flipsMeasured1(boolean[] cv$value, boolean allocated$);
 
 	// Getter for flipsMeasured2.
 	public boolean[] get$flipsMeasured2();
 
 	// Setter for flipsMeasured2.
-	public void set$flipsMeasured2(boolean[] cv$value);
+	public void set$flipsMeasured2(boolean[] cv$value, boolean allocated$);
 
 	// Getter for length$flipsMeasured1.
 	public int get$length$flipsMeasured1();
 
 	// Setter for length$flipsMeasured1.
-	public void set$length$flipsMeasured1(int cv$value);
+	public void set$length$flipsMeasured1(int cv$value, boolean allocated$);
 
 	// Getter for length$flipsMeasured2.
 	public int get$length$flipsMeasured2();
 
 	// Setter for length$flipsMeasured2.
-	public void set$length$flipsMeasured2(int cv$value);
+	public void set$length$flipsMeasured2(int cv$value, boolean allocated$);
 
 	// Getter for logProbability$bernoulli1.
 	public double get$logProbability$bernoulli1();

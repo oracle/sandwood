@@ -6,6 +6,7 @@ import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
+import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public final class InjectionAttackTest extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$bias(value);
+            system$c.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -33,7 +34,7 @@ public final class InjectionAttackTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample6(fixed);
+                system$c.set$fixedFlag$sample6(fixed, allocated);
             }
         }
 
@@ -66,7 +67,7 @@ public final class InjectionAttackTest extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            throw new SandwoodException("Variables that are fixed by observing other variables cannot be directly fixed. Please change the observed variable instead.");
+            throw new SandwoodException("An observed variables can only have the value fixed to the observed value if the value is consumed by another random variable.");
         }
 
         @Override
@@ -91,7 +92,7 @@ public final class InjectionAttackTest extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$observedSampleCount(value); }
+        protected void setValueInternal(int value) { system$c.set$observedSampleCount(value, allocated); }
     };
 
     /** The number of observed samples " + new java.util.Random().nextDouble() + "*/
@@ -108,7 +109,7 @@ public final class InjectionAttackTest extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$observedPositiveCount(value); }
+        protected void setValueInternal(int value) { system$c.set$observedPositiveCount(value, allocated); }
     };
 
     /**
@@ -192,17 +193,18 @@ public final class InjectionAttackTest extends Model {
     private void transferData(InjectionAttackTest$CoreInterface oldCore, InjectionAttackTest$CoreInterface newCore) {
         //Model inputs
         if(observedSampleCount.isSet())
-            newCore.set$observedSampleCount(oldCore.get$observedSampleCount());
+            newCore.set$observedSampleCount(oldCore.get$observedSampleCount(), false);
+
         //Observed scalars
         if(observedPositiveCount.isSet())
-            newCore.set$observedPositiveCount(oldCore.get$observedPositiveCount());
+            newCore.set$observedPositiveCount(oldCore.get$observedPositiveCount(), false);
 
         //ComputedVariables
         if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias());
+            newCore.set$bias(oldCore.get$bias(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
+        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6(), false);
     }
 
     /**

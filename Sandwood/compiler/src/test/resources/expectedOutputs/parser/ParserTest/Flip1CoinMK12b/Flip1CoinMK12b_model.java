@@ -37,9 +37,9 @@ public final class Flip1CoinMK12b extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample16(fixed);
-                system$c.set$fixedFlag$sample28(fixed);
-                system$c.set$fixedFlag$sample35(fixed);
+                system$c.set$fixedFlag$sample16(fixed, allocated);
+                system$c.set$fixedFlag$sample28(fixed, allocated);
+                system$c.set$fixedFlag$sample35(fixed, allocated);
             }
         }
 
@@ -99,7 +99,7 @@ public final class Flip1CoinMK12b extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$var14(value);
+            system$c.set$var14(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -123,7 +123,7 @@ public final class Flip1CoinMK12b extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$var26(value);
+            system$c.set$var26(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -147,7 +147,7 @@ public final class Flip1CoinMK12b extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$var33(value);
+            system$c.set$var33(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -176,7 +176,7 @@ public final class Flip1CoinMK12b extends Model {
         }
 
         @Override
-        protected void setValueInternal(boolean value) { system$c.set$guard1(value); }
+        protected void setValueInternal(boolean value) { system$c.set$guard1(value, allocated); }
     };
 
     /**
@@ -193,7 +193,7 @@ public final class Flip1CoinMK12b extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$guard2(value); }
+        protected void setValueInternal(int value) { system$c.set$guard2(value, allocated); }
     };
 
     /**
@@ -213,13 +213,13 @@ public final class Flip1CoinMK12b extends Model {
 
         @Override
         public void setValueInternal(boolean[] value) {
-            system$c.set$flipsMeasured(value);
-            system$c.set$length$flipsMeasured(value.length);
+            system$c.set$flipsMeasured(value, allocated);
+            system$c.set$length$flipsMeasured(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$flipsMeasured(shape);
+            system$c.set$length$flipsMeasured(shape, allocated);
         }
 
         @Override
@@ -321,25 +321,25 @@ public final class Flip1CoinMK12b extends Model {
     private void transferData(Flip1CoinMK12b$CoreInterface oldCore, Flip1CoinMK12b$CoreInterface newCore) {
         //Model inputs
         if(guard1.isSet())
-            newCore.set$guard1(oldCore.get$guard1());
+            newCore.set$guard1(oldCore.get$guard1(), false);
         if(guard2.isSet())
-            newCore.set$guard2(oldCore.get$guard2());
+            newCore.set$guard2(oldCore.get$guard2(), false);
 
         //Observed arrays
         if(flipsMeasured.isSet()) {
-            newCore.set$flipsMeasured(oldCore.get$flipsMeasured());
-            newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured());
+            newCore.set$flipsMeasured(oldCore.get$flipsMeasured(), false);
+            newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured(), false);
         }
         else if(flipsMeasured.shapeSet())
-            newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured());
+            newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured(), false);
 
         //ComputedVariables
         if($var14.isSet())
-            newCore.set$var14(oldCore.get$var14());
+            newCore.set$var14(oldCore.get$var14(), false);
         if($var26.isSet())
-            newCore.set$var26(oldCore.get$var26());
+            newCore.set$var26(oldCore.get$var26(), false);
         if($var33.isSet())
-            newCore.set$var33(oldCore.get$var33());
+            newCore.set$var33(oldCore.get$var33(), false);
     }
 
     /**

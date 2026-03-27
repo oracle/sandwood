@@ -40,8 +40,9 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 	}
 
 	@Override
-	public final void set$fixedFlag$sample5(boolean cv$value) {
+	public final void set$fixedFlag$sample5(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample5 = cv$value;
+		constrainedFlag$sample5 = (cv$value || constrainedFlag$sample5);
 		fixedProbFlag$sample5 = (cv$value && fixedProbFlag$sample5);
 		fixedProbFlag$sample19 = (cv$value && fixedProbFlag$sample19);
 	}
@@ -52,7 +53,7 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 	}
 
 	@Override
-	public final void set$length$observed(int cv$value) {
+	public final void set$length$observed(int cv$value, boolean allocated$) {
 		length$observed = cv$value;
 	}
 
@@ -87,7 +88,7 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 	}
 
 	@Override
-	public final void set$observed(boolean[] cv$value) {
+	public final void set$observed(boolean[] cv$value, boolean allocated$) {
 		observed = cv$value;
 	}
 
@@ -102,10 +103,43 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 	}
 
 	@Override
-	public final void set$prior(double cv$value) {
+	public final void set$prior(double cv$value, boolean allocated$) {
 		prior = cv$value;
 		fixedProbFlag$sample5 = false;
 		fixedProbFlag$sample19 = false;
+	}
+
+	private final void drawValueSample5() {
+		prior = DistributionSampling.sampleUniform(RNG$);
+	}
+
+	private final void inferSample5() {
+		constrainedFlag$sample5 = false;
+		double cv$originalValue = prior;
+		double cv$originalProbability;
+		double cv$var = (((prior < 0)?(-prior):prior) * 40.0);
+		if((cv$var < 0.01))
+			cv$var = 0.01;
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + prior);
+		{
+			double cv$accumulatedProbabilities = (((0.0 <= prior) && (prior < 1.0))?0.0:Double.NEGATIVE_INFINITY);
+			for(int var18 = 0; var18 < length$observed; var18 += 1) {
+				constrainedFlag$sample5 = true;
+				cv$accumulatedProbabilities = ((((0.0 <= prior) && (prior <= 1.0))?Math.log((output[var18]?prior:(1.0 - prior))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			cv$originalProbability = cv$accumulatedProbabilities;
+		}
+		if(constrainedFlag$sample5) {
+			prior = cv$proposedValue;
+			double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
+			for(int var18 = 0; var18 < length$observed; var18 += 1) {
+				constrainedFlag$sample5 = true;
+				cv$accumulatedProbabilities = ((((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?Math.log((output[var18]?cv$proposedValue:(1.0 - cv$proposedValue))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+				prior = cv$originalValue;
+		}
 	}
 
 	private final void logProbabilityValue$sample19() {
@@ -139,35 +173,6 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 			logProbability$$model = (logProbability$$model + logProbability$prior);
 			if(fixedFlag$sample5)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$prior);
-		}
-	}
-
-	private final void sample5() {
-		constrainedFlag$sample5 = false;
-		double cv$originalValue = prior;
-		double cv$originalProbability;
-		double cv$var = (((prior < 0)?(-prior):prior) * 40.0);
-		if((cv$var < 0.01))
-			cv$var = 0.01;
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + prior);
-		{
-			double cv$accumulatedProbabilities = (((0.0 <= prior) && (prior < 1.0))?0.0:Double.NEGATIVE_INFINITY);
-			for(int var18 = 0; var18 < length$observed; var18 += 1) {
-				constrainedFlag$sample5 = true;
-				cv$accumulatedProbabilities = ((((0.0 <= prior) && (prior <= 1.0))?Math.log((output[var18]?prior:(1.0 - prior))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
-			}
-			cv$originalProbability = cv$accumulatedProbabilities;
-		}
-		if(constrainedFlag$sample5) {
-			prior = cv$proposedValue;
-			double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
-			for(int var18 = 0; var18 < length$observed; var18 += 1) {
-				constrainedFlag$sample5 = true;
-				cv$accumulatedProbabilities = ((((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?Math.log((output[var18]?cv$proposedValue:(1.0 - cv$proposedValue))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
-			}
-			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
-				prior = cv$originalValue;
 		}
 	}
 
@@ -224,8 +229,10 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 	@Override
 	public final void gibbsRound() {
 		if(!fixedFlag$sample5)
-			sample5();
+			inferSample5();
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample5)
+			drawValueSample5();
 	}
 
 	private final void initializeLogProbabilityFields() {

@@ -38,7 +38,7 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 
 	// Setter for a.
 	@Override
-	public final void set$a(double cv$value) {
+	public final void set$a(double cv$value, boolean allocated$) {
 		a = cv$value;
 	}
 
@@ -50,7 +50,7 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 
 	// Setter for b.
 	@Override
-	public final void set$b(double cv$value) {
+	public final void set$b(double cv$value, boolean allocated$) {
 		b = cv$value;
 	}
 
@@ -68,8 +68,7 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 
 	// Setter for decayDetected.
 	@Override
-	public final void set$decayDetected(int[] cv$value) {
-		// Set decayDetected
+	public final void set$decayDetected(int[] cv$value, boolean allocated$) {
 		decayDetected = cv$value;
 	}
 
@@ -81,10 +80,13 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 
 	// Setter for fixedFlag$sample6.
 	@Override
-	public final void set$fixedFlag$sample6(boolean cv$value) {
+	public final void set$fixedFlag$sample6(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample6 including if probabilities
 		// need to be updated.
 		fixedFlag$sample6 = cv$value;
+		
+		// Substituted "fixedFlag$sample6" with its value "cv$value".
+		constrainedFlag$sample6 = (cv$value || constrainedFlag$sample6);
 		
 		// Should the probability of sample 6 be set to fixed. This will only every change
 		// the flag to false.
@@ -107,7 +109,7 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 
 	// Setter for length$decayDetected.
 	@Override
-	public final void set$length$decayDetected(int cv$value) {
+	public final void set$length$decayDetected(int cv$value, boolean allocated$) {
 		length$decayDetected = cv$value;
 	}
 
@@ -149,7 +151,7 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 
 	// Setter for rate.
 	@Override
-	public final void set$rate(double cv$value) {
+	public final void set$rate(double cv$value, boolean allocated$) {
 		// Set flags for all the side effects of rate including if probabilities need to be
 		// updated.
 		rate = cv$value;
@@ -165,6 +167,40 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 	@Override
 	public final int get$samples() {
 		return samples;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample6
+	private final void drawValueSample6() {
+		rate = DistributionSampling.sampleGamma(RNG$, a, b);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 6 drawn from Gamma 5. Inference was performed using a Gamma to Poisson
+	// conjugate prior.
+	private final void inferSample6() {
+		constrainedFlag$sample6 = false;
+		
+		// Variable to store the sum of all the samples from consuming random variables.
+		double cv$sum = 0.0;
+		
+		// Variable to record the number of samples from consuming random variables.
+		int cv$count = 0;
+		
+		// Processing random variable 7.
+		// 
+		// Processing sample task 19 of consumer random variable poisson.
+		for(int var18 = 0; var18 < samples; var18 += 1) {
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample6 = true;
+			
+			// Add the value of a sample from consuming random variable poisson to the inference
+			// state.
+			cv$sum = (cv$sum + decay[var18]);
+			cv$count = (cv$count + 1);
+		}
+		if(constrainedFlag$sample6)
+			// Write out the new value of the sample.
+			rate = Conjugates.sampleConjugateGammaPoisson(RNG$, a, b, cv$sum, cv$count);
 	}
 
 	// Calculate the probability of the samples represented by sample19 using sampled
@@ -350,35 +386,6 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 		}
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 6 drawn from Gamma 5. Inference was performed using a Gamma to Poisson
-	// conjugate prior.
-	private final void sample6() {
-		constrainedFlag$sample6 = false;
-		
-		// Variable to store the sum of all the samples from consuming random variables.
-		double cv$sum = 0.0;
-		
-		// Variable to record the number of samples from consuming random variables.
-		int cv$count = 0;
-		
-		// Processing random variable 7.
-		// 
-		// Processing sample task 19 of consumer random variable poisson.
-		for(int var18 = 0; var18 < samples; var18 += 1) {
-			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample6 = true;
-			
-			// Add the value of a sample from consuming random variable poisson to the inference
-			// state.
-			cv$sum = (cv$sum + decay[var18]);
-			cv$count = (cv$count + 1);
-		}
-		if(constrainedFlag$sample6)
-			// Write out the new value of the sample.
-			rate = Conjugates.sampleConjugateGammaPoisson(RNG$, a, b, cv$sum, cv$count);
-	}
-
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -442,10 +449,12 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 	public final void gibbsRound() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample6)
-			sample6();
+			inferSample6();
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample6)
+			drawValueSample6();
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for

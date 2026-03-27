@@ -16,7 +16,6 @@ import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
@@ -41,8 +40,6 @@ public abstract class SampleDesc<A extends Variable<A>, B extends RandomVariable
     public final List<IntVariable> variableIndexes;
     /** The id of the sample task */
     public final int id;
-    /** The name to use for variables representing the output of the sample task. */
-    public final VariableDescription<A> uniqueName;
 
     // Shorthand to keep dereferencing more readable
     /**
@@ -65,7 +62,6 @@ public abstract class SampleDesc<A extends Variable<A>, B extends RandomVariable
         // These are here as shorthand to make the using code more
         // readable.
         id = sample.id();
-        uniqueName = sample.getUniqueVarDesc();
 
         // For convenience copy the state of the intermediate description.
         output = sample.getOutput();

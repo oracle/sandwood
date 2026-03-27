@@ -8,6 +8,7 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean constrainedFlag$sample6 = true;
 	private boolean fixedFlag$sample6 = false;
 	private boolean fixedProbFlag$sample6 = false;
 	private boolean fixedProbFlag$sample8 = false;
@@ -33,7 +34,7 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 
 	// Setter for bias.
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
 		bias = cv$value;
@@ -53,10 +54,13 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 
 	// Setter for fixedFlag$sample6.
 	@Override
-	public final void set$fixedFlag$sample6(boolean cv$value) {
+	public final void set$fixedFlag$sample6(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample6 including if probabilities
 		// need to be updated.
 		fixedFlag$sample6 = cv$value;
+		
+		// Substituted "fixedFlag$sample6" with its value "cv$value".
+		constrainedFlag$sample6 = (cv$value || constrainedFlag$sample6);
 		
 		// Should the probability of sample 6 be set to fixed. This will only every change
 		// the flag to false.
@@ -109,7 +113,7 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 
 	// Setter for observedPositiveCount.
 	@Override
-	public final void set$observedPositiveCount(int cv$value) {
+	public final void set$observedPositiveCount(int cv$value, boolean allocated$) {
 		observedPositiveCount = cv$value;
 	}
 
@@ -121,7 +125,7 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 
 	// Setter for observedSampleCount.
 	@Override
-	public final void set$observedSampleCount(int cv$value) {
+	public final void set$observedSampleCount(int cv$value, boolean allocated$) {
 		observedSampleCount = cv$value;
 	}
 
@@ -129,6 +133,30 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	@Override
 	public final int get$positiveCount() {
 		return positiveCount;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample6
+	private final void drawValueSample6() {
+		bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 6 drawn from Beta 5. Inference was performed using a Beta to Bernoulli/Binomial
+	// conjugate prior.
+	private final void inferSample6() {
+		constrainedFlag$sample6 = false;
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample6 = true;
+		
+		// Write out the new value of the sample.
+		// 
+		// Include the value sampled by task 8 from random variable binomial.
+		// 
+		// Increment the number of booleans sampled.
+		// 
+		// Local variable to record the number of samples.
+		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, positiveCount, observedSampleCount);
 	}
 
 	// Calculate the probability of the samples represented by sample6 using sampled values.
@@ -308,24 +336,6 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		}
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 6 drawn from Beta 5. Inference was performed using a Beta to Bernoulli/Binomial
-	// conjugate prior.
-	private final void sample6() {
-		// Write out the new value of the sample.
-		// 
-		// Processing random variable 7.
-		// 
-		// Processing sample task 8 of consumer random variable binomial.
-		// 
-		// Include the value sampled by task 8 from random variable binomial.
-		// 
-		// Increment the number of booleans sampled.
-		// 
-		// Local variable to record the number of samples.
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, positiveCount, observedSampleCount);
-	}
-
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -345,11 +355,21 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are calculated and stored.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationDistributionsNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		if(!fixedFlag$sample6)
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample6)
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -360,21 +380,27 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 	}
 
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		if(!fixedFlag$sample6)
+			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
 	// Method to execute one round of Gibbs sampling.
 	@Override
 	public final void gibbsRound() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample6)
-			sample6();
+			inferSample6();
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample6)
+			drawValueSample6();
 	}
-
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
@@ -387,25 +413,20 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
 		if(!fixedProbFlag$sample6)
-			logProbability$bias = 0.0;
+			logProbability$bias = Double.NaN;
 		logProbability$binomial = 0.0;
 		if(!fixedProbFlag$sample8)
-			logProbability$positiveCount = 0.0;
+			logProbability$positiveCount = Double.NaN;
 	}
 
-	// Method to generate a new random state for the model excluding any fixed values
-	// and then calculate its probability.
+	// Method for initialising the model into a valid state before commencing inference
+	// etc.
 	@Override
-	public final void logEvidenceGeneration() {
-		// Generate values for all the samples in the model that were not fixed or observed.
-		forwardGenerationValuesNoOutputs();
-		
-		// Calculate the probability for the resulting model.
-		logEvidenceProbabilities();
-	}
+	public final void initializeModel() {}
 
 	// Construct the evidence probabilities.
-	private final void logEvidenceProbabilities() {
+	@Override
+	public final void logEvidenceProbabilities() {
 		// Reset all the non-fixed probabilities ready to calculate the new values.
 		initializeLogProbabilityFields();
 		
@@ -450,20 +471,6 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		// for the random variables and whole model in the process using values only.
 		logProbabilityValue$sample6();
 		logProbabilityValue$sample8();
-	}
-
-	// Method to generate a random state of the model including random outputs, and then
-	// to calculate the probability of this random state.
-	@Override
-	public final void logProbabilityGeneration() {
-		// Generate sample values for every call to sample in the model.
-		if(!fixedFlag$sample6)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		
-		// Calculate the probabilities for every sample task in the model. These values are
-		// then used to calculate the probabilities of random variables and the model as a
-		// whole.
-		logModelProbabilitiesVal();
 	}
 
 	// Method to propagate observed values back into the model.

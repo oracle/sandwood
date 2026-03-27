@@ -44,7 +44,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 
 	// Setter for bias.
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
 		bias = cv$value;
@@ -64,10 +64,17 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 
 	// Setter for fixedFlag$sample35.
 	@Override
-	public final void set$fixedFlag$sample35(boolean cv$value) {
+	public final void set$fixedFlag$sample35(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample35 including if probabilities
 		// need to be updated.
 		fixedFlag$sample35 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample35$1 = 0; index$constrainedFlag$sample35$1 < constrainedFlag$sample35.length; index$constrainedFlag$sample35$1 += 1)
+				constrainedFlag$sample35[index$constrainedFlag$sample35$1] = true;
+		}
 		
 		// Should the probability of sample 35 be set to fixed. This will only every change
 		// the flag to false.
@@ -90,10 +97,13 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 
 	// Setter for fixedFlag$sample42.
 	@Override
-	public final void set$fixedFlag$sample42(boolean cv$value) {
+	public final void set$fixedFlag$sample42(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample42 including if probabilities
 		// need to be updated.
 		fixedFlag$sample42 = cv$value;
+		
+		// Substituted "fixedFlag$sample42" with its value "cv$value".
+		constrainedFlag$sample42 = (cv$value || constrainedFlag$sample42);
 		
 		// Should the probability of sample 42 be set to fixed. This will only every change
 		// the flag to false.
@@ -158,10 +168,9 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 
 	// Setter for weights.
 	@Override
-	public final void set$weights(double[] cv$value) {
+	public final void set$weights(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of weights including if probabilities need to
 		// be updated.
-		// Set weights
 		weights = cv$value;
 		
 		// Unset the fixed probability flag for sample 35 as it depends on weights.
@@ -179,8 +188,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 
 	// Setter for x.
 	@Override
-	public final void set$x(double[][] cv$value) {
-		// Set x
+	public final void set$x(double[][] cv$value, boolean allocated$) {
 		x = cv$value;
 	}
 
@@ -198,374 +206,346 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 
 	// Setter for yMeasured.
 	@Override
-	public final void set$yMeasured(boolean[][] cv$value) {
-		// Set yMeasured
+	public final void set$yMeasured(boolean[][] cv$value, boolean allocated$) {
 		yMeasured = cv$value;
 	}
 
-	// Calculate the probability of the samples represented by sample35 using sampled
-	// values.
-	private final void logProbabilityValue$sample35() {
-		// Determine if we need to calculate the values for sample task 35 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample35) {
-			// Generating probabilities for sample task
-			// This value is not used before it is set again, so removing the value declaration.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator;
-			{
-				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
-				double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[0] / 3.1622776601683795)) - 1.151292546497023);
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				cv$sampleAccumulator = cv$weightedProbability;
-				
-				// Store the sample task probability
-				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				logProbability$sample35[0] = cv$weightedProbability;
-			}
-			{
-				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
-				double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[1] / 3.1622776601683795)) - 1.151292546497023);
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$weightedProbability);
-				
-				// Store the sample task probability
-				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				logProbability$sample35[1] = cv$weightedProbability;
-			}
-			
-			// Store the value of the function call, so the function call is only made once.
-			// 
-			// The sample value to calculate the probability of generating
-			double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[2] / 3.1622776601683795)) - 1.151292546497023);
-			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Scale the probability relative to the observed distribution space.
-			// 
-			// Add the probability of this distribution configuration to the accumulator.
-			// 
-			// An accumulator for the distributed probability space covered.
-			cv$sampleAccumulator = (cv$sampleAccumulator + cv$weightedProbability);
-			
-			// Store the sample task probability
-			// 
-			// Scale the probability relative to the observed distribution space.
-			// 
-			// Add the probability of this distribution configuration to the accumulator.
-			// 
-			// An accumulator for the distributed probability space covered.
-			logProbability$sample35[2] = cv$weightedProbability;
-			
-			// Update the variable probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$weights = (logProbability$weights + cv$sampleAccumulator);
-			
-			// Add probability to model
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample35)
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample35 = fixedFlag$sample35;
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			// Variable declaration of cv$rvAccumulator moved.
-			// Declaration comment was:
-			// Variable declaration of cv$rvAccumulator moved.
-			// Declaration comment was:
-			// Variable declaration of cv$rvAccumulator moved.
-			// Declaration comment was:
-			// This value is not used before it is set again, so removing the value declaration.
-			double cv$rvAccumulator = ((logProbability$sample35[0] + logProbability$sample35[1]) + logProbability$sample35[2]);
-			
-			// Update the variable probability
-			logProbability$weights = (logProbability$weights + cv$rvAccumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample35)
-				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
+	// Pick a value from the distribution for the unconditioned variable from sample35
+	private final void drawValueSample35(int var33) {
+		weights[var33] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		
+		// Guards to ensure that indicator is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 35 and consumer double[] 67.
+		// 
+		// Unrolled loop
+		// 
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((var33 == 0)) {
+			for(int i = 0; i < n; i += 1)
+				// Substituted "j$var61" with its value "0".
+				indicator[i][0] = Math.exp((weights[0] * x[i][0]));
 		}
-	}
-
-	// Calculate the probability of the samples represented by sample42 using sampled
-	// values.
-	private final void logProbabilityValue$sample42() {
-		// Determine if we need to calculate the values for sample task 42 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample42) {
-			// Generating probabilities for sample task
-			// Variable declaration of cv$distributionAccumulator moved.
-			// Declaration comment was:
-			// Variable declaration of cv$distributionAccumulator moved.
-			// Declaration comment was:
-			// An accumulator for log probabilities.
-			// 
-			// Store the value of the function call, so the function call is only made once.
-			// 
-			// The sample value to calculate the probability of generating
-			// 
-			// Scale the probability relative to the observed distribution space.
-			// 
-			// Add the probability of this distribution configuration to the accumulator.
-			// 
-			// An accumulator for the distributed probability space covered.
-			// 
-			// Variable declaration of cv$distributionAccumulator moved.
-			// Declaration comment was:
-			// An accumulator for log probabilities.
-			// 
-			// Store the value of the function call, so the function call is only made once.
-			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((bias / 3.1622776601683795)) - 1.151292546497023);
-			
-			// Store the sample task probability
-			logProbability$bias = cv$distributionAccumulator;
-			
-			// Add probability to model
-			// 
-			// Variable declaration of cv$accumulator moved.
-			// Declaration comment was:
-			// Accumulator for probabilities of instances of the random variable
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			// 
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample42)
-				// Variable declaration of cv$accumulator moved.
-				// Declaration comment was:
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample42 = fixedFlag$sample42;
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			// Add probability to model
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$bias);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample42)
-				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((var33 == 1)) {
+			for(int i = 0; i < n; i += 1)
+				// Substituted "j$var61" with its value "1".
+				indicator[i][1] = Math.exp((weights[1] * x[i][1]));
 		}
-	}
-
-	// Calculate the probability of the samples represented by sample94 using sampled
-	// values.
-	private final void logProbabilityValue$sample94() {
-		// Determine if we need to calculate the values for sample task 94 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample94) {
-			// Generating probabilities for sample task
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((var33 == 2)) {
+			for(int i = 0; i < n; i += 1)
+				// Substituted "j$var61" with its value "2".
+				indicator[i][2] = Math.exp((weights[2] * x[i][2]));
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((var33 == 0)) {
+			// Unrolled loop
 			for(int i = 0; i < n; i += 1) {
 				// Unrolled loop
-				{
-					// Substituted "j$var85" with its value "0".
-					double var91 = (p[i][0] + bias);
-					
-					// Add the probability of this sample task to the sample task accumulator.
-					// 
-					// Scale the probability relative to the observed distribution space.
-					// 
-					// Add the probability of this distribution configuration to the accumulator.
-					// 
-					// An accumulator for the distributed probability space covered.
-					// 
-					// Store the value of the function call, so the function call is only made once.
-					// 
-					// The sample value to calculate the probability of generating
-					// 
-					// Substituted "j$var85" with its value "0".
-					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
-				}
-				{
-					// Substituted "j$var85" with its value "1".
-					double var91 = (p[i][1] + bias);
-					
-					// Add the probability of this sample task to the sample task accumulator.
-					// 
-					// Scale the probability relative to the observed distribution space.
-					// 
-					// Add the probability of this distribution configuration to the accumulator.
-					// 
-					// An accumulator for the distributed probability space covered.
-					// 
-					// Store the value of the function call, so the function call is only made once.
-					// 
-					// The sample value to calculate the probability of generating
-					// 
-					// Substituted "j$var85" with its value "1".
-					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
-				}
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample35put89$global[i][0] = false;
 				
-				// Substituted "j$var85" with its value "2".
-				double var91 = (p[i][2] + bias);
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample35put89$global[i][1] = false;
 				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
-				// Add the probability of this sample task to the sample task accumulator.
+				// Set the flags to false
 				// 
-				// Scale the probability relative to the observed distribution space.
-				// 
-				// Add the probability of this distribution configuration to the accumulator.
-				// 
-				// An accumulator for the distributed probability space covered.
-				// 
-				// Store the value of the function call, so the function call is only made once.
-				// 
-				// The sample value to calculate the probability of generating
-				// 
-				// Substituted "j$var85" with its value "2".
-				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample35put89$global[i][2] = false;
 			}
-			
-			// Only update the sample if it was reached, otherwise the NaN will be
-			// erroneously over written.
-			if(cv$sampleReached)
-				// Store the random variable instance probability
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				logProbability$var93 = cv$sampleAccumulator;
-			
-			// Update the variable probability
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$y = (logProbability$y + cv$sampleAccumulator);
-			
-			// Add probability to model
-			// 
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			// 
-			// Accumulator for probabilities of instances of the random variable
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample94 = (fixedFlag$sample35 && fixedFlag$sample42);
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			// Update the variable probability
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$y = (logProbability$y + logProbability$var93);
-			
-			// Add probability to model
-			// 
-			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var93);
-			
-			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var93);
 		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((var33 == 1)) {
+			// Unrolled loop
+			for(int i = 0; i < n; i += 1) {
+				// Unrolled loop
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample35put89$global[i][0] = false;
+				
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample35put89$global[i][1] = false;
+				
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample35put89$global[i][2] = false;
+			}
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((var33 == 2)) {
+			// Unrolled loop
+			for(int i = 0; i < n; i += 1) {
+				// Unrolled loop
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample35put89$global[i][0] = false;
+				
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample35put89$global[i][1] = false;
+				
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample35put89$global[i][2] = false;
+			}
+		}
+		
+		// Unrolled loop
+		// 
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((var33 == 0)) {
+			// Unrolled loop
+			for(int i = 0; i < n; i += 1)
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample35put89$global[i][0] = false;
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((var33 == 1)) {
+			// Unrolled loop
+			for(int i = 0; i < n; i += 1)
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample35put89$global[i][1] = false;
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((var33 == 2)) {
+			// Unrolled loop
+			for(int i = 0; i < n; i += 1)
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample35put89$global[i][2] = false;
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((var33 == 0)) {
+			// Unrolled loop
+			for(int i = 0; i < n; i += 1) {
+				// Unrolled loop
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!guard$sample35put89$global[i][0]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample35put89$global[i][0] = true;
+					
+					// Substituted "j$var85" with its value "0".
+					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+				
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!guard$sample35put89$global[i][1]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample35put89$global[i][1] = true;
+					
+					// Substituted "j$var85" with its value "1".
+					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+				
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!guard$sample35put89$global[i][2]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample35put89$global[i][2] = true;
+					
+					// Substituted "j$var85" with its value "2".
+					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+			}
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((var33 == 1)) {
+			// Unrolled loop
+			for(int i = 0; i < n; i += 1) {
+				// Unrolled loop
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!guard$sample35put89$global[i][0]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample35put89$global[i][0] = true;
+					
+					// Substituted "j$var85" with its value "0".
+					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+				
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!guard$sample35put89$global[i][1]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample35put89$global[i][1] = true;
+					
+					// Substituted "j$var85" with its value "1".
+					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+				
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!guard$sample35put89$global[i][2]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample35put89$global[i][2] = true;
+					
+					// Substituted "j$var85" with its value "2".
+					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+			}
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((var33 == 2)) {
+			// Unrolled loop
+			for(int i = 0; i < n; i += 1) {
+				// Unrolled loop
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!guard$sample35put89$global[i][0]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample35put89$global[i][0] = true;
+					
+					// Substituted "j$var85" with its value "0".
+					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+				
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!guard$sample35put89$global[i][1]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample35put89$global[i][1] = true;
+					
+					// Substituted "j$var85" with its value "1".
+					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+				
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!guard$sample35put89$global[i][2]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample35put89$global[i][2] = true;
+					
+					// Substituted "j$var85" with its value "2".
+					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+			}
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((var33 == 0)) {
+			// Unrolled loop
+			for(int i = 0; i < n; i += 1) {
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				if(!guard$sample35put89$global[i][0]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample35put89$global[i][0] = true;
+					
+					// Substituted "j$var85" with its value "0".
+					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+			}
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((var33 == 1)) {
+			// Unrolled loop
+			for(int i = 0; i < n; i += 1) {
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				if(!guard$sample35put89$global[i][1]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample35put89$global[i][1] = true;
+					
+					// Substituted "j$var85" with its value "1".
+					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+			}
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((var33 == 2)) {
+			// Unrolled loop
+			for(int i = 0; i < n; i += 1) {
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				if(!guard$sample35put89$global[i][2]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample35put89$global[i][2] = true;
+					
+					// Substituted "j$var85" with its value "2".
+					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				}
+			}
+		}
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample42
+	private final void drawValueSample42() {
+		bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 35 drawn from Gaussian 22. Inference was performed using Metropolis-Hastings.
-	private final void sample35(int var33) {
+	private final void inferSample35(int var33) {
 		constrainedFlag$sample35[var33] = false;
 		
 		// The original value of the sample
@@ -2380,7 +2360,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 42 drawn from Gaussian 40. Inference was performed using Metropolis-Hastings.
-	private final void sample42() {
+	private final void inferSample42() {
 		constrainedFlag$sample42 = false;
 		
 		// The original value of the sample
@@ -2623,6 +2603,366 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				// 
 				// Write out the new value of the sample.
 				bias = cv$originalValue;
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample35 using sampled
+	// values.
+	private final void logProbabilityValue$sample35() {
+		// Determine if we need to calculate the values for sample task 35 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample35) {
+			// Generating probabilities for sample task
+			// This value is not used before it is set again, so removing the value declaration.
+			// 
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator;
+			{
+				// Store the value of the function call, so the function call is only made once.
+				// 
+				// The sample value to calculate the probability of generating
+				double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[0] / 3.1622776601683795)) - 1.151292546497023);
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Accumulator for sample probabilities for a specific instance of the random variable.
+				// 
+				// Scale the probability relative to the observed distribution space.
+				// 
+				// Add the probability of this distribution configuration to the accumulator.
+				// 
+				// An accumulator for the distributed probability space covered.
+				cv$sampleAccumulator = cv$weightedProbability;
+				
+				// Store the sample task probability
+				// 
+				// Scale the probability relative to the observed distribution space.
+				// 
+				// Add the probability of this distribution configuration to the accumulator.
+				// 
+				// An accumulator for the distributed probability space covered.
+				logProbability$sample35[0] = cv$weightedProbability;
+			}
+			{
+				// Store the value of the function call, so the function call is only made once.
+				// 
+				// The sample value to calculate the probability of generating
+				double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[1] / 3.1622776601683795)) - 1.151292546497023);
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Scale the probability relative to the observed distribution space.
+				// 
+				// Add the probability of this distribution configuration to the accumulator.
+				// 
+				// An accumulator for the distributed probability space covered.
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$weightedProbability);
+				
+				// Store the sample task probability
+				// 
+				// Scale the probability relative to the observed distribution space.
+				// 
+				// Add the probability of this distribution configuration to the accumulator.
+				// 
+				// An accumulator for the distributed probability space covered.
+				logProbability$sample35[1] = cv$weightedProbability;
+			}
+			
+			// Store the value of the function call, so the function call is only made once.
+			// 
+			// The sample value to calculate the probability of generating
+			double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[2] / 3.1622776601683795)) - 1.151292546497023);
+			
+			// Add the probability of this sample task to the sample task accumulator.
+			// 
+			// Scale the probability relative to the observed distribution space.
+			// 
+			// Add the probability of this distribution configuration to the accumulator.
+			// 
+			// An accumulator for the distributed probability space covered.
+			cv$sampleAccumulator = (cv$sampleAccumulator + cv$weightedProbability);
+			
+			// Store the sample task probability
+			// 
+			// Scale the probability relative to the observed distribution space.
+			// 
+			// Add the probability of this distribution configuration to the accumulator.
+			// 
+			// An accumulator for the distributed probability space covered.
+			logProbability$sample35[2] = cv$weightedProbability;
+			
+			// Update the variable probability
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$weights = (logProbability$weights + cv$sampleAccumulator);
+			
+			// Add probability to model
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample35)
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample35 = fixedFlag$sample35;
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			// Variable declaration of cv$rvAccumulator moved.
+			// Declaration comment was:
+			// Variable declaration of cv$rvAccumulator moved.
+			// Declaration comment was:
+			// Variable declaration of cv$rvAccumulator moved.
+			// Declaration comment was:
+			// This value is not used before it is set again, so removing the value declaration.
+			double cv$rvAccumulator = ((logProbability$sample35[0] + logProbability$sample35[1]) + logProbability$sample35[2]);
+			
+			// Update the variable probability
+			logProbability$weights = (logProbability$weights + cv$rvAccumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample35)
+				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample42 using sampled
+	// values.
+	private final void logProbabilityValue$sample42() {
+		// Determine if we need to calculate the values for sample task 42 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample42) {
+			// Generating probabilities for sample task
+			// Variable declaration of cv$distributionAccumulator moved.
+			// Declaration comment was:
+			// Variable declaration of cv$distributionAccumulator moved.
+			// Declaration comment was:
+			// An accumulator for log probabilities.
+			// 
+			// Store the value of the function call, so the function call is only made once.
+			// 
+			// The sample value to calculate the probability of generating
+			// 
+			// Scale the probability relative to the observed distribution space.
+			// 
+			// Add the probability of this distribution configuration to the accumulator.
+			// 
+			// An accumulator for the distributed probability space covered.
+			// 
+			// Variable declaration of cv$distributionAccumulator moved.
+			// Declaration comment was:
+			// An accumulator for log probabilities.
+			// 
+			// Store the value of the function call, so the function call is only made once.
+			// 
+			// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((bias / 3.1622776601683795)) - 1.151292546497023);
+			
+			// Store the sample task probability
+			logProbability$bias = cv$distributionAccumulator;
+			
+			// Add probability to model
+			// 
+			// Variable declaration of cv$accumulator moved.
+			// Declaration comment was:
+			// Accumulator for probabilities of instances of the random variable
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			// 
+			// Add the probability of this sample task to the sample task accumulator.
+			// 
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample42)
+				// Variable declaration of cv$accumulator moved.
+				// Declaration comment was:
+				// Accumulator for probabilities of instances of the random variable
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				// 
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Accumulator for sample probabilities for a specific instance of the random variable.
+				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample42 = fixedFlag$sample42;
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			// Add probability to model
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$model = (logProbability$$model + logProbability$bias);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample42)
+				// Variable declaration of cv$accumulator moved.
+				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample94 using sampled
+	// values.
+	private final void logProbabilityValue$sample94() {
+		// Determine if we need to calculate the values for sample task 94 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample94) {
+			// Generating probabilities for sample task
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int i = 0; i < n; i += 1) {
+				// Unrolled loop
+				{
+					// Substituted "j$var85" with its value "0".
+					double var91 = (p[i][0] + bias);
+					
+					// Add the probability of this sample task to the sample task accumulator.
+					// 
+					// Scale the probability relative to the observed distribution space.
+					// 
+					// Add the probability of this distribution configuration to the accumulator.
+					// 
+					// An accumulator for the distributed probability space covered.
+					// 
+					// Store the value of the function call, so the function call is only made once.
+					// 
+					// The sample value to calculate the probability of generating
+					// 
+					// Substituted "j$var85" with its value "0".
+					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
+				}
+				{
+					// Substituted "j$var85" with its value "1".
+					double var91 = (p[i][1] + bias);
+					
+					// Add the probability of this sample task to the sample task accumulator.
+					// 
+					// Scale the probability relative to the observed distribution space.
+					// 
+					// Add the probability of this distribution configuration to the accumulator.
+					// 
+					// An accumulator for the distributed probability space covered.
+					// 
+					// Store the value of the function call, so the function call is only made once.
+					// 
+					// The sample value to calculate the probability of generating
+					// 
+					// Substituted "j$var85" with its value "1".
+					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
+				}
+				
+				// Substituted "j$var85" with its value "2".
+				double var91 = (p[i][2] + bias);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Scale the probability relative to the observed distribution space.
+				// 
+				// Add the probability of this distribution configuration to the accumulator.
+				// 
+				// An accumulator for the distributed probability space covered.
+				// 
+				// Store the value of the function call, so the function call is only made once.
+				// 
+				// The sample value to calculate the probability of generating
+				// 
+				// Substituted "j$var85" with its value "2".
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
+			}
+			
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				// 
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				// 
+				// Accumulator for probabilities of instances of the random variable
+				logProbability$var93 = cv$sampleAccumulator;
+			
+			// Update the variable probability
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$y = (logProbability$y + cv$sampleAccumulator);
+			
+			// Add probability to model
+			// 
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			// 
+			// Accumulator for probabilities of instances of the random variable
+			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample94 = (fixedFlag$sample35 && fixedFlag$sample42);
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			// Update the variable probability
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$y = (logProbability$y + logProbability$var93);
+			
+			// Add probability to model
+			// 
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$model = (logProbability$$model + logProbability$var93);
+			
+			// Variable declaration of cv$accumulator moved.
+			logProbability$$evidence = (logProbability$$evidence + logProbability$var93);
 		}
 	}
 
@@ -2990,28 +3330,42 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		if(system$gibbsForward) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(!fixedFlag$sample35) {
-				sample35(0);
-				sample35(1);
-				sample35(2);
+				inferSample35(0);
+				inferSample35(1);
+				inferSample35(2);
 			}
 			if(!fixedFlag$sample42)
-				sample42();
+				inferSample42();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			if(!fixedFlag$sample42)
-				sample42();
+				inferSample42();
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(!fixedFlag$sample35) {
-				sample35(2);
-				sample35(1);
-				sample35(0);
+				inferSample35(2);
+				inferSample35(1);
+				inferSample35(0);
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!constrainedFlag$sample35[0])
+			drawValueSample35(0);
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!constrainedFlag$sample35[1])
+			drawValueSample35(1);
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!constrainedFlag$sample35[2])
+			drawValueSample35(2);
+		if(!constrainedFlag$sample42)
+			drawValueSample42();
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for

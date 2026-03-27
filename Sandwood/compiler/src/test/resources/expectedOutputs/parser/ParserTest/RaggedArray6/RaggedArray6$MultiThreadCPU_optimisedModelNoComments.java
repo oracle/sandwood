@@ -47,7 +47,7 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$d(double[] cv$value) {
+	public final void set$d(double[] cv$value, boolean allocated$) {
 		d = cv$value;
 		fixedProbFlag$sample50 = false;
 		fixedProbFlag$sample65 = false;
@@ -59,8 +59,9 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$fixedFlag$sample47(boolean cv$value) {
+	public final void set$fixedFlag$sample47(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample47 = cv$value;
+		constrainedFlag$sample47 = (cv$value || constrainedFlag$sample47);
 		fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
 		fixedProbFlag$sample50 = (cv$value && fixedProbFlag$sample50);
 		fixedProbFlag$sample65 = (cv$value && fixedProbFlag$sample65);
@@ -72,8 +73,9 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$fixedFlag$sample50(boolean cv$value) {
+	public final void set$fixedFlag$sample50(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample50 = cv$value;
+		constrainedFlag$sample50 = (cv$value || constrainedFlag$sample50);
 		fixedProbFlag$sample50 = (cv$value && fixedProbFlag$sample50);
 		fixedProbFlag$sample65 = (cv$value && fixedProbFlag$sample65);
 	}
@@ -84,7 +86,7 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$length$obs_measured(int cv$value) {
+	public final void set$length$obs_measured(int cv$value, boolean allocated$) {
 		length$obs_measured = cv$value;
 	}
 
@@ -124,7 +126,7 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$obs_measured(boolean[] cv$value) {
+	public final void set$obs_measured(boolean[] cv$value, boolean allocated$) {
 		obs_measured = cv$value;
 	}
 
@@ -134,68 +136,27 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$y(int cv$value) {
+	public final void set$y(int cv$value, boolean allocated$) {
 		y = cv$value;
 		fixedProbFlag$sample47 = false;
 		fixedProbFlag$sample50 = false;
 		fixedProbFlag$sample65 = false;
 	}
 
-	private final void logProbabilityValue$sample47() {
-		if(!fixedProbFlag$sample47) {
-			double cv$distributionAccumulator = (((((0.0 <= y) && (y < 2)) && (0.0 <= b[y])) && (b[y] <= 1.0))?Math.log(b[y]):Double.NEGATIVE_INFINITY);
-			logProbability$y = cv$distributionAccumulator;
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			if(fixedFlag$sample47)
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample47 = fixedFlag$sample47;
-		} else {
-			logProbability$$model = (logProbability$$model + logProbability$y);
-			if(fixedFlag$sample47)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$y);
-		}
+	private final void drawValueSample47() {
+		y = DistributionSampling.sampleCategorical(RNG$, b, 2);
 	}
 
-	private final void logProbabilityValue$sample50() {
-		if(!fixedProbFlag$sample50) {
-			int lengthCV$a$48_14 = -1;
-			if((0 == y))
-				lengthCV$a$48_14 = 2;
-			if((1 == y))
-				lengthCV$a$48_14 = 3;
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_14);
-			logProbability$d = cv$distributionAccumulator;
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			if(fixedFlag$sample50)
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample50 = (fixedFlag$sample50 && fixedFlag$sample47);
-		} else {
-			logProbability$$model = (logProbability$$model + logProbability$d);
-			if(fixedFlag$sample50)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$d);
-		}
+	private final void drawValueSample50() {
+		int lengthCV$a$48_15 = -1;
+		if((0 == y))
+			lengthCV$a$48_15 = 2;
+		if((1 == y))
+			lengthCV$a$48_15 = 3;
+		DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_15, d);
 	}
 
-	private final void logProbabilityValue$sample65() {
-		if(!fixedProbFlag$sample65) {
-			double cv$sampleAccumulator = 0.0;
-			for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
-				double var49 = d[y];
-				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var49) && (var49 <= 1.0))?Math.log((obs[var62]?var49:(1.0 - var49))):Double.NEGATIVE_INFINITY));
-			}
-			logProbability$var63 = cv$sampleAccumulator;
-			logProbability$obs = (logProbability$obs + cv$sampleAccumulator);
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample65 = (fixedFlag$sample47 && fixedFlag$sample50);
-		} else {
-			logProbability$obs = (logProbability$obs + logProbability$var63);
-			logProbability$$model = (logProbability$$model + logProbability$var63);
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var63);
-		}
-	}
-
-	private final void sample47() {
+	private final void inferSample47() {
 		constrainedFlag$sample47 = false;
 		{
 			y = 0;
@@ -246,15 +207,15 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		}
 	}
 
-	private final void sample50() {
+	private final void inferSample50() {
 		constrainedFlag$sample50 = false;
 		double cv$originalProbability;
-		int lengthCV$a$48_12 = -1;
+		int lengthCV$a$48_13 = -1;
 		if((0 == y))
-			lengthCV$a$48_12 = 2;
+			lengthCV$a$48_13 = 2;
 		if((1 == y))
-			lengthCV$a$48_12 = 3;
-		int cv$indexToChange = (int)((double)lengthCV$a$48_12 * DistributionSampling.sampleUniform(RNG$));
+			lengthCV$a$48_13 = 3;
+		int cv$indexToChange = (int)((double)lengthCV$a$48_13 * DistributionSampling.sampleUniform(RNG$));
 		double cv$movementRatio = ((DistributionSampling.sampleBeta(RNG$, 5, 5) * 1.9999) - 1);
 		double cv$proposedDifference;
 		if((cv$movementRatio < 0))
@@ -262,25 +223,25 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		else {
 			cv$proposedDifference = (1.0 - d[cv$indexToChange]);
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1) {
-				double cv$temp = (d[cv$loopIndex] * (lengthCV$a$48_12 - 1));
+				double cv$temp = (d[cv$loopIndex] * (lengthCV$a$48_13 - 1));
 				if((cv$temp < cv$proposedDifference))
 					cv$proposedDifference = cv$temp;
 			}
-			for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$48_12; cv$loopIndex += 1) {
-				double cv$temp = (d[cv$loopIndex] * (lengthCV$a$48_12 - 1));
+			for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$48_13; cv$loopIndex += 1) {
+				double cv$temp = (d[cv$loopIndex] * (lengthCV$a$48_13 - 1));
 				if((cv$temp < cv$proposedDifference))
 					cv$proposedDifference = cv$temp;
 			}
 		}
 		cv$proposedDifference = (cv$movementRatio * cv$proposedDifference);
-		double cv$rebalanceValue = (cv$proposedDifference / (lengthCV$a$48_12 - 1));
+		double cv$rebalanceValue = (cv$proposedDifference / (lengthCV$a$48_13 - 1));
 		{
-			int lengthCV$a$48_13 = -1;
+			int lengthCV$a$48_14 = -1;
 			if((0 == y))
-				lengthCV$a$48_13 = 2;
+				lengthCV$a$48_14 = 2;
 			if((1 == y))
-				lengthCV$a$48_13 = 3;
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_13);
+				lengthCV$a$48_14 = 3;
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_14);
 			for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
 				constrainedFlag$sample50 = true;
 				double var49 = d[y];
@@ -292,14 +253,14 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
 				d[cv$loopIndex] = (d[cv$loopIndex] - cv$rebalanceValue);
 			d[cv$indexToChange] = (d[cv$indexToChange] + cv$proposedDifference);
-			for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$48_12; cv$loopIndex += 1)
+			for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$48_13; cv$loopIndex += 1)
 				d[cv$loopIndex] = (d[cv$loopIndex] - cv$rebalanceValue);
-			int lengthCV$a$48_13 = -1;
+			int lengthCV$a$48_14 = -1;
 			if((0 == y))
-				lengthCV$a$48_13 = 2;
+				lengthCV$a$48_14 = 2;
 			if((1 == y))
-				lengthCV$a$48_13 = 3;
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_13);
+				lengthCV$a$48_14 = 3;
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_14);
 			for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
 				constrainedFlag$sample50 = true;
 				double var49 = d[y];
@@ -310,9 +271,63 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
 					d[cv$loopIndex] = (d[cv$loopIndex] + cv$rebalanceValue);
 				d[cv$indexToChange] = (d[cv$indexToChange] - cv$proposedDifference);
-				for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$48_12; cv$loopIndex += 1)
+				for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$48_13; cv$loopIndex += 1)
 					d[cv$loopIndex] = (d[cv$loopIndex] + cv$rebalanceValue);
 			}
+		}
+	}
+
+	private final void logProbabilityValue$sample47() {
+		if(!fixedProbFlag$sample47) {
+			double cv$distributionAccumulator = (((((0.0 <= y) && (y < 2)) && (0.0 <= b[y])) && (b[y] <= 1.0))?Math.log(b[y]):Double.NEGATIVE_INFINITY);
+			logProbability$y = cv$distributionAccumulator;
+			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			if(fixedFlag$sample47)
+				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+			fixedProbFlag$sample47 = fixedFlag$sample47;
+		} else {
+			logProbability$$model = (logProbability$$model + logProbability$y);
+			if(fixedFlag$sample47)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$y);
+		}
+	}
+
+	private final void logProbabilityValue$sample50() {
+		if(!fixedProbFlag$sample50) {
+			int lengthCV$a$48_16 = -1;
+			if((0 == y))
+				lengthCV$a$48_16 = 2;
+			if((1 == y))
+				lengthCV$a$48_16 = 3;
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_16);
+			logProbability$d = cv$distributionAccumulator;
+			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			if(fixedFlag$sample50)
+				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+			fixedProbFlag$sample50 = (fixedFlag$sample50 && fixedFlag$sample47);
+		} else {
+			logProbability$$model = (logProbability$$model + logProbability$d);
+			if(fixedFlag$sample50)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$d);
+		}
+	}
+
+	private final void logProbabilityValue$sample65() {
+		if(!fixedProbFlag$sample65) {
+			double cv$sampleAccumulator = 0.0;
+			for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
+				double var49 = d[y];
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var49) && (var49 <= 1.0))?Math.log((obs[var62]?var49:(1.0 - var49))):Double.NEGATIVE_INFINITY));
+			}
+			logProbability$var63 = cv$sampleAccumulator;
+			logProbability$obs = (logProbability$obs + cv$sampleAccumulator);
+			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			fixedProbFlag$sample65 = (fixedFlag$sample47 && fixedFlag$sample50);
+		} else {
+			logProbability$obs = (logProbability$obs + logProbability$var63);
+			logProbability$$model = (logProbability$$model + logProbability$var63);
+			logProbability$$evidence = (logProbability$$evidence + logProbability$var63);
 		}
 	}
 
@@ -328,12 +343,12 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		a[1] = new double[3];
 		b = new double[2];
 		if(!fixedFlag$sample50) {
-			int lengthCV$a$48_10 = -1;
+			int lengthCV$a$48_11 = -1;
 			if((0 == y))
-				lengthCV$a$48_10 = 2;
+				lengthCV$a$48_11 = 2;
 			if((1 == y))
-				lengthCV$a$48_10 = 3;
-			d = new double[lengthCV$a$48_10];
+				lengthCV$a$48_11 = 3;
+			d = new double[lengthCV$a$48_11];
 		}
 		obs = new boolean[length$obs_measured];
 		allocateScratch();
@@ -344,12 +359,12 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		if(!fixedFlag$sample47)
 			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
 		if(!fixedFlag$sample50) {
-			int lengthCV$a$48_15 = -1;
+			int lengthCV$a$48_17 = -1;
 			if((0 == y))
-				lengthCV$a$48_15 = 2;
+				lengthCV$a$48_17 = 2;
 			if((1 == y))
-				lengthCV$a$48_15 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_15, d);
+				lengthCV$a$48_17 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_17, d);
 		}
 		parallelFor(RNG$, 0, length$obs_measured, 1,
 			(int forStart$var62, int forEnd$var62, int threadID$var62, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -364,12 +379,12 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		if(!fixedFlag$sample47)
 			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
 		if(!fixedFlag$sample50) {
-			int lengthCV$a$48_19 = -1;
+			int lengthCV$a$48_21 = -1;
 			if((0 == y))
-				lengthCV$a$48_19 = 2;
+				lengthCV$a$48_21 = 2;
 			if((1 == y))
-				lengthCV$a$48_19 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_19, d);
+				lengthCV$a$48_21 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_21, d);
 		}
 	}
 
@@ -378,12 +393,12 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		if(!fixedFlag$sample47)
 			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
 		if(!fixedFlag$sample50) {
-			int lengthCV$a$48_16 = -1;
+			int lengthCV$a$48_18 = -1;
 			if((0 == y))
-				lengthCV$a$48_16 = 2;
+				lengthCV$a$48_18 = 2;
 			if((1 == y))
-				lengthCV$a$48_16 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_16, d);
+				lengthCV$a$48_18 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_18, d);
 		}
 		parallelFor(RNG$, 0, length$obs_measured, 1,
 			(int forStart$var62, int forEnd$var62, int threadID$var62, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -398,12 +413,12 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		if(!fixedFlag$sample47)
 			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
 		if(!fixedFlag$sample50) {
-			int lengthCV$a$48_17 = -1;
+			int lengthCV$a$48_19 = -1;
 			if((0 == y))
-				lengthCV$a$48_17 = 2;
+				lengthCV$a$48_19 = 2;
 			if((1 == y))
-				lengthCV$a$48_17 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_17, d);
+				lengthCV$a$48_19 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_19, d);
 		}
 	}
 
@@ -412,12 +427,12 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		if(!fixedFlag$sample47)
 			y = DistributionSampling.sampleCategorical(RNG$, b, 2);
 		if(!fixedFlag$sample50) {
-			int lengthCV$a$48_18 = -1;
+			int lengthCV$a$48_20 = -1;
 			if((0 == y))
-				lengthCV$a$48_18 = 2;
+				lengthCV$a$48_20 = 2;
 			if((1 == y))
-				lengthCV$a$48_18 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_18, d);
+				lengthCV$a$48_20 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_20, d);
 		}
 	}
 
@@ -425,16 +440,20 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample47)
-				sample47();
+				inferSample47();
 			if(!fixedFlag$sample50)
-				sample50();
+				inferSample50();
 		} else {
 			if(!fixedFlag$sample50)
-				sample50();
+				inferSample50();
 			if(!fixedFlag$sample47)
-				sample47();
+				inferSample47();
 		}
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample47)
+			drawValueSample47();
+		if(!constrainedFlag$sample50)
+			drawValueSample50();
 	}
 
 	private final void initializeLogProbabilityFields() {

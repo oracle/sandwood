@@ -37,7 +37,7 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$ObsArr(int[][] cv$value) {
+	public final void set$ObsArr(int[][] cv$value, boolean allocated$) {
 		ObsArr = cv$value;
 	}
 
@@ -47,7 +47,7 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$T(int cv$value) {
+	public final void set$T(int cv$value, boolean allocated$) {
 		T = cv$value;
 	}
 
@@ -57,7 +57,7 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$TimeFeat(double[][] cv$value) {
+	public final void set$TimeFeat(double[][] cv$value, boolean allocated$) {
 		TimeFeat = cv$value;
 	}
 
@@ -72,8 +72,15 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$fixedFlag$sample101(boolean cv$value) {
+	public final void set$fixedFlag$sample101(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample101 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample101$1 = 0; index$constrainedFlag$sample101$1 < constrainedFlag$sample101.length; index$constrainedFlag$sample101$1 += 1) {
+				boolean[] cv$constrainedFlag$sample101$1 = constrainedFlag$sample101[index$constrainedFlag$sample101$1];
+				for(int index$constrainedFlag$sample101$2 = 0; index$constrainedFlag$sample101$2 < cv$constrainedFlag$sample101$1.length; index$constrainedFlag$sample101$2 += 1)
+					cv$constrainedFlag$sample101$1[index$constrainedFlag$sample101$2] = true;
+			}
+		}
 		fixedProbFlag$sample101 = (fixedFlag$sample101 && fixedProbFlag$sample101);
 		fixedProbFlag$sample165 = (fixedFlag$sample101 && fixedProbFlag$sample165);
 	}
@@ -114,7 +121,7 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$n_ac(int cv$value) {
+	public final void set$n_ac(int cv$value, boolean allocated$) {
 		n_ac = cv$value;
 	}
 
@@ -129,7 +136,7 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$time_coeff(double[][] cv$value) {
+	public final void set$time_coeff(double[][] cv$value, boolean allocated$) {
 		time_coeff = cv$value;
 		fixedProbFlag$sample101 = false;
 		fixedProbFlag$sample165 = false;
@@ -145,82 +152,47 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 		return time_impact;
 	}
 
-	private final void logProbabilityValue$sample101() {
-		if(!fixedProbFlag$sample101) {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-				double cv$sampleAccumulator = 0.0;
-				for(int var95 = 0; var95 < time_dim; var95 += 1) {
-					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					double cv$probabilityReached = 0.0;
-					{
-						{
-							double cv$sampleValue = time_coeff[i$var80][var95];
-							{
-								{
-									double var83 = 0.0;
-									double var84 = 1.0;
-									double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var84)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var83) / Math.sqrt(var84))) - (0.5 * Math.log(var84))):Double.NEGATIVE_INFINITY));
-									if((cv$weightedProbability < cv$distributionAccumulator))
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-									else {
-										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-											cv$distributionAccumulator = cv$weightedProbability;
-										else
-											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-									}
-									cv$probabilityReached = (cv$probabilityReached + 1.0);
+	private final void drawValueSample101(int i$var80, int var95) {
+		double[] var86 = time_coeff[i$var80];
+		var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		{
+			{
+				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+					if((i$var80 == i$var119)) {
+						for(int j = 0; j < time_dim; j += 1) {
+							if((var95 == j)) {
+								for(int t = (0 + 1); t < T; t += 1) {
+									double[][] var129 = time_impact[t];
+									double[] var130 = var129[i$var119];
+									var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
 								}
 							}
 						}
 					}
-					if((cv$probabilityReached == 0.0))
-						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					else
-						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-					double cv$sampleProbability = cv$distributionAccumulator;
-					cv$sampleReached = true;
-					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-					logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = cv$sampleProbability;
-					boolean cv$guard$time_impact = false;
-					boolean cv$guard$sum_t = false;
-					{
-						{
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
-										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												if(!cv$guard$time_impact) {
-													cv$guard$time_impact = true;
-													logProbability$time_impact = (logProbability$time_impact + cv$sampleProbability);
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					{
-						{
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
-										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												for(int index$t$3_4 = (0 + 1); index$t$3_4 < T; index$t$3_4 += 1) {
-													if((t == index$t$3_4)) {
-														for(int index$i$3_5 = 0; index$i$3_5 < n_ac; index$i$3_5 += 1) {
-															if((i$var119 == index$i$3_5)) {
-																if(((0 <= j) && (j < time_dim))) {
-																	if(!cv$guard$sum_t) {
-																		cv$guard$sum_t = true;
-																		logProbability$sum_t = (logProbability$sum_t + cv$sampleProbability);
-																	}
-																}
+				}
+			}
+		}
+		{
+			{
+				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+					if((i$var80 == i$var119)) {
+						for(int j = 0; j < time_dim; j += 1) {
+							if((var95 == j)) {
+								for(int t = (0 + 1); t < T; t += 1) {
+									for(int index$t$2_4 = (0 + 1); index$t$2_4 < T; index$t$2_4 += 1) {
+										if((t == index$t$2_4)) {
+											for(int index$i$2_5 = 0; index$i$2_5 < n_ac; index$i$2_5 += 1) {
+												if((i$var119 == index$i$2_5)) {
+													if(((0 <= j) && (j < time_dim))) {
+														{
+															double[] var139 = sum_t[index$t$2_4];
+															double reduceVar$var151$3 = 0.0;
+															for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+																double x = reduceVar$var151$3;
+																double y = time_impact[index$t$2_4][index$i$2_5][cv$reduction152Index];
+																reduceVar$var151$3 = (x + y);
 															}
+															var139[index$i$2_5] = reduceVar$var151$3;
 														}
 													}
 												}
@@ -232,143 +204,11 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 						}
 					}
 				}
-				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			}
-			logProbability$time_coeff = (logProbability$time_coeff + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample101)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample101 = fixedFlag$sample101;
-		} else {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-				double cv$rvAccumulator = 0.0;
-				for(int var95 = 0; var95 < time_dim; var95 += 1) {
-					double cv$sampleValue = logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)];
-					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-					cv$sampleReached = true;
-					boolean cv$guard$time_impact = false;
-					boolean cv$guard$sum_t = false;
-					{
-						{
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
-										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												if(!cv$guard$time_impact) {
-													cv$guard$time_impact = true;
-													logProbability$time_impact = (logProbability$time_impact + cv$sampleValue);
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					{
-						{
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
-										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												for(int index$t$5_4 = (0 + 1); index$t$5_4 < T; index$t$5_4 += 1) {
-													if((t == index$t$5_4)) {
-														for(int index$i$5_5 = 0; index$i$5_5 < n_ac; index$i$5_5 += 1) {
-															if((i$var119 == index$i$5_5)) {
-																if(((0 <= j) && (j < time_dim))) {
-																	if(!cv$guard$sum_t) {
-																		cv$guard$sum_t = true;
-																		logProbability$sum_t = (logProbability$sum_t + cv$sampleValue);
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			}
-			logProbability$time_coeff = (logProbability$time_coeff + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample101)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
-	private final void logProbabilityValue$sample165() {
-		if(!fixedProbFlag$sample165) {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int t = (0 + 1); t < T; t += 1) {
-				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-					double cv$sampleAccumulator = 0.0;
-					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					double cv$probabilityReached = 0.0;
-					{
-						{
-							int cv$sampleValue = arr[t][i$var119];
-							{
-								{
-									double var156 = sum_t[t][i$var119];
-									double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(cv$sampleValue, var156));
-									if((cv$weightedProbability < cv$distributionAccumulator))
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-									else {
-										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-											cv$distributionAccumulator = cv$weightedProbability;
-										else
-											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-									}
-									cv$probabilityReached = (cv$probabilityReached + 1.0);
-								}
-							}
-						}
-					}
-					if((cv$probabilityReached == 0.0))
-						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					else
-						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-					double cv$sampleProbability = cv$distributionAccumulator;
-					cv$sampleReached = true;
-					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$sample165[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = cv$sampleProbability;
-				}
-			}
-			logProbability$arr = (logProbability$arr + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample165 = fixedFlag$sample101;
-		} else {
-			double cv$accumulator = 0.0;
-			boolean cv$sampleReached = false;
-			for(int t = (0 + 1); t < T; t += 1) {
-				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-					double cv$rvAccumulator = 0.0;
-					double cv$sampleValue = logProbability$sample165[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)];
-					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-					cv$sampleReached = true;
-					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				}
-			}
-			logProbability$arr = (logProbability$arr + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	private final void sample101(int i$var80, int var95) {
+	private final void inferSample101(int i$var80, int var95) {
 		if(true) {
 			constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = false;
 			int cv$numStates = 0;
@@ -630,6 +470,229 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 		}
 	}
 
+	private final void logProbabilityValue$sample101() {
+		if(!fixedProbFlag$sample101) {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
+				double cv$sampleAccumulator = 0.0;
+				for(int var95 = 0; var95 < time_dim; var95 += 1) {
+					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					double cv$probabilityReached = 0.0;
+					{
+						{
+							double cv$sampleValue = time_coeff[i$var80][var95];
+							{
+								{
+									double var83 = 0.0;
+									double var84 = 1.0;
+									double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var84)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var83) / Math.sqrt(var84))) - (0.5 * Math.log(var84))):Double.NEGATIVE_INFINITY));
+									if((cv$weightedProbability < cv$distributionAccumulator))
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+									else {
+										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+											cv$distributionAccumulator = cv$weightedProbability;
+										else
+											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+									}
+									cv$probabilityReached = (cv$probabilityReached + 1.0);
+								}
+							}
+						}
+					}
+					if((cv$probabilityReached == 0.0))
+						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					else
+						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+					double cv$sampleProbability = cv$distributionAccumulator;
+					cv$sampleReached = true;
+					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+					logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = cv$sampleProbability;
+					boolean cv$guard$time_impact = false;
+					boolean cv$guard$sum_t = false;
+					{
+						{
+							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+								if((i$var80 == i$var119)) {
+									for(int j = 0; j < time_dim; j += 1) {
+										if((var95 == j)) {
+											for(int t = (0 + 1); t < T; t += 1) {
+												if(!cv$guard$time_impact) {
+													cv$guard$time_impact = true;
+													logProbability$time_impact = (logProbability$time_impact + cv$sampleProbability);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					{
+						{
+							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+								if((i$var80 == i$var119)) {
+									for(int j = 0; j < time_dim; j += 1) {
+										if((var95 == j)) {
+											for(int t = (0 + 1); t < T; t += 1) {
+												for(int index$t$3_4 = (0 + 1); index$t$3_4 < T; index$t$3_4 += 1) {
+													if((t == index$t$3_4)) {
+														for(int index$i$3_5 = 0; index$i$3_5 < n_ac; index$i$3_5 += 1) {
+															if((i$var119 == index$i$3_5)) {
+																if(((0 <= j) && (j < time_dim))) {
+																	if(!cv$guard$sum_t) {
+																		cv$guard$sum_t = true;
+																		logProbability$sum_t = (logProbability$sum_t + cv$sampleProbability);
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			}
+			logProbability$time_coeff = (logProbability$time_coeff + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample101)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample101 = fixedFlag$sample101;
+		} else {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
+				double cv$rvAccumulator = 0.0;
+				for(int var95 = 0; var95 < time_dim; var95 += 1) {
+					double cv$sampleValue = logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)];
+					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+					cv$sampleReached = true;
+					boolean cv$guard$time_impact = false;
+					boolean cv$guard$sum_t = false;
+					{
+						{
+							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+								if((i$var80 == i$var119)) {
+									for(int j = 0; j < time_dim; j += 1) {
+										if((var95 == j)) {
+											for(int t = (0 + 1); t < T; t += 1) {
+												if(!cv$guard$time_impact) {
+													cv$guard$time_impact = true;
+													logProbability$time_impact = (logProbability$time_impact + cv$sampleValue);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					{
+						{
+							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+								if((i$var80 == i$var119)) {
+									for(int j = 0; j < time_dim; j += 1) {
+										if((var95 == j)) {
+											for(int t = (0 + 1); t < T; t += 1) {
+												for(int index$t$5_4 = (0 + 1); index$t$5_4 < T; index$t$5_4 += 1) {
+													if((t == index$t$5_4)) {
+														for(int index$i$5_5 = 0; index$i$5_5 < n_ac; index$i$5_5 += 1) {
+															if((i$var119 == index$i$5_5)) {
+																if(((0 <= j) && (j < time_dim))) {
+																	if(!cv$guard$sum_t) {
+																		cv$guard$sum_t = true;
+																		logProbability$sum_t = (logProbability$sum_t + cv$sampleValue);
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			}
+			logProbability$time_coeff = (logProbability$time_coeff + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			if(fixedFlag$sample101)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	private final void logProbabilityValue$sample165() {
+		if(!fixedProbFlag$sample165) {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int t = (0 + 1); t < T; t += 1) {
+				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+					double cv$sampleAccumulator = 0.0;
+					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					double cv$probabilityReached = 0.0;
+					{
+						{
+							int cv$sampleValue = arr[t][i$var119];
+							{
+								{
+									double var156 = sum_t[t][i$var119];
+									double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(cv$sampleValue, var156));
+									if((cv$weightedProbability < cv$distributionAccumulator))
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+									else {
+										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+											cv$distributionAccumulator = cv$weightedProbability;
+										else
+											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+									}
+									cv$probabilityReached = (cv$probabilityReached + 1.0);
+								}
+							}
+						}
+					}
+					if((cv$probabilityReached == 0.0))
+						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					else
+						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+					double cv$sampleProbability = cv$distributionAccumulator;
+					cv$sampleReached = true;
+					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+					logProbability$sample165[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = cv$sampleProbability;
+				}
+			}
+			logProbability$arr = (logProbability$arr + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			fixedProbFlag$sample165 = fixedFlag$sample101;
+		} else {
+			double cv$accumulator = 0.0;
+			boolean cv$sampleReached = false;
+			for(int t = (0 + 1); t < T; t += 1) {
+				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+					double cv$rvAccumulator = 0.0;
+					double cv$sampleValue = logProbability$sample165[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)];
+					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+					cv$sampleReached = true;
+					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+				}
+			}
+			logProbability$arr = (logProbability$arr + cv$accumulator);
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
 	@Override
 	public final void allocateScratch() {}
 
@@ -699,15 +762,15 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 					if(!fixedFlag$sample101)
 						var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
 				}
-				double reduceVar$var151$3 = 0.0;
+				double reduceVar$var151$4 = 0.0;
 				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-					double x = reduceVar$var151$3;
+					double x = reduceVar$var151$4;
 					double y = time_impact[t][i$var119][cv$reduction152Index];
 					if(!fixedFlag$sample101)
-						reduceVar$var151$3 = (x + y);
+						reduceVar$var151$4 = (x + y);
 				}
 				if(!fixedFlag$sample101)
-					var139[i$var119] = reduceVar$var151$3;
+					var139[i$var119] = reduceVar$var151$4;
 				var154[i$var119] = DistributionSampling.samplePoisson(RNG$, sum_t[t][i$var119]);
 			}
 		}
@@ -715,6 +778,95 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
+			double[] var86 = time_coeff[i$var80];
+			for(int var95 = 0; var95 < time_dim; var95 += 1) {
+				if(!fixedFlag$sample101)
+					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+			}
+		}
+		for(int t = (0 + 1); t < T; t += 1) {
+			double[][] var129 = time_impact[t];
+			double[] var139 = sum_t[t];
+			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+				for(int j = 0; j < time_dim; j += 1) {
+					double[] var130 = var129[i$var119];
+					var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+				}
+				double reduceVar$var151$8 = 0.0;
+				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+					double x = reduceVar$var151$8;
+					double y = time_impact[t][i$var119][cv$reduction152Index];
+					reduceVar$var151$8 = (x + y);
+				}
+				var139[i$var119] = reduceVar$var151$8;
+			}
+		}
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
+		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
+			double[] var86 = time_coeff[i$var80];
+			for(int var95 = 0; var95 < time_dim; var95 += 1) {
+				if(!fixedFlag$sample101)
+					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+			}
+		}
+		for(int t = (0 + 1); t < T; t += 1) {
+			double[][] var129 = time_impact[t];
+			double[] var139 = sum_t[t];
+			int[] var154 = arr[t];
+			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+				for(int j = 0; j < time_dim; j += 1) {
+					double[] var130 = var129[i$var119];
+					var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+				}
+				double reduceVar$var151$5 = 0.0;
+				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+					double x = reduceVar$var151$5;
+					double y = time_impact[t][i$var119][cv$reduction152Index];
+					reduceVar$var151$5 = (x + y);
+				}
+				var139[i$var119] = reduceVar$var151$5;
+				var154[i$var119] = DistributionSampling.samplePoisson(RNG$, sum_t[t][i$var119]);
+			}
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
+		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
+			double[] var86 = time_coeff[i$var80];
+			for(int var95 = 0; var95 < time_dim; var95 += 1) {
+				if(!fixedFlag$sample101)
+					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+			}
+		}
+		for(int t = (0 + 1); t < T; t += 1) {
+			double[][] var129 = time_impact[t];
+			double[] var139 = sum_t[t];
+			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+				for(int j = 0; j < time_dim; j += 1) {
+					double[] var130 = var129[i$var119];
+					if(!fixedFlag$sample101)
+						var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+				}
+				double reduceVar$var151$6 = 0.0;
+				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+					double x = reduceVar$var151$6;
+					double y = time_impact[t][i$var119][cv$reduction152Index];
+					if(!fixedFlag$sample101)
+						reduceVar$var151$6 = (x + y);
+				}
+				if(!fixedFlag$sample101)
+					var139[i$var119] = reduceVar$var151$6;
+			}
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
 			double[] var86 = time_coeff[i$var80];
 			for(int var95 = 0; var95 < time_dim; var95 += 1) {
@@ -742,112 +894,29 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void forwardGenerationPrime() {
-		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-			double[] var86 = time_coeff[i$var80];
-			for(int var95 = 0; var95 < time_dim; var95 += 1) {
-				if(!fixedFlag$sample101)
-					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-			}
-		}
-		for(int t = (0 + 1); t < T; t += 1) {
-			double[][] var129 = time_impact[t];
-			double[] var139 = sum_t[t];
-			int[] var154 = arr[t];
-			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-				for(int j = 0; j < time_dim; j += 1) {
-					double[] var130 = var129[i$var119];
-					var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
-				}
-				double reduceVar$var151$4 = 0.0;
-				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-					double x = reduceVar$var151$4;
-					double y = time_impact[t][i$var119][cv$reduction152Index];
-					reduceVar$var151$4 = (x + y);
-				}
-				var139[i$var119] = reduceVar$var151$4;
-				var154[i$var119] = DistributionSampling.samplePoisson(RNG$, sum_t[t][i$var119]);
-			}
-		}
-	}
-
-	@Override
-	public final void forwardGenerationValuesNoOutputs() {
-		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-			double[] var86 = time_coeff[i$var80];
-			for(int var95 = 0; var95 < time_dim; var95 += 1) {
-				if(!fixedFlag$sample101)
-					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-			}
-		}
-		for(int t = (0 + 1); t < T; t += 1) {
-			double[][] var129 = time_impact[t];
-			double[] var139 = sum_t[t];
-			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-				for(int j = 0; j < time_dim; j += 1) {
-					double[] var130 = var129[i$var119];
-					if(!fixedFlag$sample101)
-						var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
-				}
-				double reduceVar$var151$5 = 0.0;
-				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-					double x = reduceVar$var151$5;
-					double y = time_impact[t][i$var119][cv$reduction152Index];
-					if(!fixedFlag$sample101)
-						reduceVar$var151$5 = (x + y);
-				}
-				if(!fixedFlag$sample101)
-					var139[i$var119] = reduceVar$var151$5;
-			}
-		}
-	}
-
-	@Override
-	public final void forwardGenerationValuesNoOutputsPrime() {
-		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-			double[] var86 = time_coeff[i$var80];
-			for(int var95 = 0; var95 < time_dim; var95 += 1) {
-				if(!fixedFlag$sample101)
-					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-			}
-		}
-		for(int t = (0 + 1); t < T; t += 1) {
-			double[][] var129 = time_impact[t];
-			double[] var139 = sum_t[t];
-			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-				for(int j = 0; j < time_dim; j += 1) {
-					double[] var130 = var129[i$var119];
-					var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
-				}
-				double reduceVar$var151$6 = 0.0;
-				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-					double x = reduceVar$var151$6;
-					double y = time_impact[t][i$var119][cv$reduction152Index];
-					reduceVar$var151$6 = (x + y);
-				}
-				var139[i$var119] = reduceVar$var151$6;
-			}
-		}
-	}
-
-	@Override
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
 			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
 				for(int var95 = 0; var95 < time_dim; var95 += 1) {
 					if(!fixedFlag$sample101)
-						sample101(i$var80, var95);
+						inferSample101(i$var80, var95);
 				}
 			}
 		} else {
 			for(int i$var80 = (n_ac - ((((n_ac - 1) - 0) % 1) + 1)); i$var80 >= ((0 - 1) + 1); i$var80 -= 1) {
 				for(int var95 = (time_dim - ((((time_dim - 1) - 0) % 1) + 1)); var95 >= ((0 - 1) + 1); var95 -= 1) {
 					if(!fixedFlag$sample101)
-						sample101(i$var80, var95);
+						inferSample101(i$var80, var95);
 				}
 			}
 		}
 		system$gibbsForward = !system$gibbsForward;
+		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
+			for(int var95 = 0; var95 < time_dim; var95 += 1) {
+				if(!constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)])
+					drawValueSample101(i$var80, var95);
+			}
+		}
 	}
 
 	private final void initializeLogProbabilityFields() {
@@ -927,13 +996,13 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 					double[] var130 = var129[i$var119];
 					var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
 				}
-				double reduceVar$var151$8 = 0.0;
+				double reduceVar$var151$9 = 0.0;
 				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-					double x = reduceVar$var151$8;
+					double x = reduceVar$var151$9;
 					double y = time_impact[t][i$var119][cv$reduction152Index];
-					reduceVar$var151$8 = (x + y);
+					reduceVar$var151$9 = (x + y);
 				}
-				var139[i$var119] = reduceVar$var151$8;
+				var139[i$var119] = reduceVar$var151$9;
 			}
 		}
 	}

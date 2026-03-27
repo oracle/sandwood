@@ -41,8 +41,7 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 
 	// Setter for ObsArr.
 	@Override
-	public final void set$ObsArr(int[][] cv$value) {
-		// Set ObsArr
+	public final void set$ObsArr(int[][] cv$value, boolean allocated$) {
 		ObsArr = cv$value;
 	}
 
@@ -54,7 +53,7 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 
 	// Setter for T.
 	@Override
-	public final void set$T(int cv$value) {
+	public final void set$T(int cv$value, boolean allocated$) {
 		T = cv$value;
 	}
 
@@ -66,8 +65,7 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 
 	// Setter for TimeFeat.
 	@Override
-	public final void set$TimeFeat(double[][] cv$value) {
-		// Set TimeFeat
+	public final void set$TimeFeat(double[][] cv$value, boolean allocated$) {
 		TimeFeat = cv$value;
 	}
 
@@ -85,10 +83,20 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 
 	// Setter for fixedFlag$sample101.
 	@Override
-	public final void set$fixedFlag$sample101(boolean cv$value) {
+	public final void set$fixedFlag$sample101(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample101 including if probabilities
 		// need to be updated.
 		fixedFlag$sample101 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample101$1 = 0; index$constrainedFlag$sample101$1 < constrainedFlag$sample101.length; index$constrainedFlag$sample101$1 += 1) {
+				boolean[] cv$constrainedFlag$sample101$1 = constrainedFlag$sample101[index$constrainedFlag$sample101$1];
+				for(int index$constrainedFlag$sample101$2 = 0; index$constrainedFlag$sample101$2 < cv$constrainedFlag$sample101$1.length; index$constrainedFlag$sample101$2 += 1)
+					cv$constrainedFlag$sample101$1[index$constrainedFlag$sample101$2] = true;
+			}
+		}
 		
 		// Should the probability of sample 101 be set to fixed. This will only every change
 		// the flag to false.
@@ -143,7 +151,7 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 
 	// Setter for n_ac.
 	@Override
-	public final void set$n_ac(int cv$value) {
+	public final void set$n_ac(int cv$value, boolean allocated$) {
 		n_ac = cv$value;
 	}
 
@@ -161,10 +169,9 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 
 	// Setter for time_coeff.
 	@Override
-	public final void set$time_coeff(double[][] cv$value) {
+	public final void set$time_coeff(double[][] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of time_coeff including if probabilities need
 		// to be updated.
-		// Set time_coeff
 		time_coeff = cv$value;
 		
 		// Unset the fixed probability flag for sample 101 as it depends on time_coeff.
@@ -186,382 +193,89 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 		return time_impact;
 	}
 
-	// Calculate the probability of the samples represented by sample101 using sampled
-	// values.
-	private final void logProbabilityValue$sample101() {
-		// Determine if we need to calculate the values for sample task 101 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample101) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-				for(int var95 = 0; var95 < time_dim; var95 += 1) {
-					// An accumulator for log probabilities.
-					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					
-					// An accumulator for the distributed probability space covered.
-					double cv$probabilityReached = 0.0;
-					{
-						{
-							// The sample value to calculate the probability of generating
-							double cv$sampleValue = time_coeff[i$var80][var95];
-							{
-								{
-									double var83 = 0.0;
-									double var84 = 1.0;
-									
-									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var84)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var83) / Math.sqrt(var84))) - (0.5 * Math.log(var84))):Double.NEGATIVE_INFINITY));
-									
-									// Add the probability of this sample task to the distribution accumulator.
-									if((cv$weightedProbability < cv$distributionAccumulator))
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-									else {
-										// If the second value is -infinity.
-										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-											cv$distributionAccumulator = cv$weightedProbability;
-										else
-											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-									}
-									
-									// Add the probability of this distribution configuration to the accumulator.
-									cv$probabilityReached = (cv$probabilityReached + 1.0);
-								}
-							}
-						}
-					}
-					if((cv$probabilityReached == 0.0))
-						// Return negative infinity if no distribution probability space is reached.
-						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					else
-						// Scale the probability relative to the observed distribution space.
-						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-					double cv$sampleProbability = cv$distributionAccumulator;
-					
-					// Record that the sample was reached.
-					cv$sampleReached = true;
-					
-					// Add the probability of this sample task to the sample task accumulator.
-					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-					
-					// Only update the sample if it was reached, otherwise the NaN will be
-					// erroneously over written.
-					if(cv$sampleReached)
-						// Store the sample task probability
-						logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = cv$sampleProbability;
-					
-					// Guard to ensure that time_impact is only updated once for this probability.
-					boolean cv$guard$time_impact = false;
-					
-					// Guard to ensure that sum_t is only updated once for this probability.
-					boolean cv$guard$sum_t = false;
-					
-					// Add probability to constructed variables that have guards, so need per sample probabilities
-					// from the combined probability
-					// 
-					// Looking for a path between Sample 101 and consumer double[][][] 138.
-					{
-						{
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
-										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												// If the probability of the variable has not already been updated
-												if(!cv$guard$time_impact) {
-													// Set the guard so the update is only applied once.
-													cv$guard$time_impact = true;
-													
-													// Update the variable probability
-													logProbability$time_impact = (logProbability$time_impact + cv$sampleProbability);
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					
-					// Looking for a path between Sample 101 and consumer double[][] 153.
-					{
-						{
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
-										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												for(int index$t$3_4 = (0 + 1); index$t$3_4 < T; index$t$3_4 += 1) {
-													if((t == index$t$3_4)) {
-														for(int index$i$3_5 = 0; index$i$3_5 < n_ac; index$i$3_5 += 1) {
-															if((i$var119 == index$i$3_5)) {
-																if(((0 <= j) && (j < time_dim))) {
-																	// If the probability of the variable has not already been updated
-																	if(!cv$guard$sum_t) {
-																		// Set the guard so the update is only applied once.
-																		cv$guard$sum_t = true;
-																		
-																		// Update the variable probability
-																		logProbability$sum_t = (logProbability$sum_t + cv$sampleProbability);
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			
-			// Update the variable probability
-			logProbability$time_coeff = (logProbability$time_coeff + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample101)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample101 = fixedFlag$sample101;
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-				for(int var95 = 0; var95 < time_dim; var95 += 1) {
-					double cv$sampleValue = logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)];
-					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-					
-					// Record that the sample was reached.
-					cv$sampleReached = true;
-					
-					// Guard to ensure that time_impact is only updated once for this probability.
-					boolean cv$guard$time_impact = false;
-					
-					// Guard to ensure that sum_t is only updated once for this probability.
-					boolean cv$guard$sum_t = false;
-					
-					// Add probability to constructed variables that have guards, so need per sample probabilities
-					// from the combined probability
-					// 
-					// Looking for a path between Sample 101 and consumer double[][][] 138.
-					{
-						{
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
-										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												// If the probability of the variable has not already been updated
-												if(!cv$guard$time_impact) {
-													// Set the guard so the update is only applied once.
-													cv$guard$time_impact = true;
-													
-													// Update the variable probability
-													logProbability$time_impact = (logProbability$time_impact + cv$sampleValue);
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					
-					// Looking for a path between Sample 101 and consumer double[][] 153.
-					{
-						{
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
-										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												for(int index$t$5_4 = (0 + 1); index$t$5_4 < T; index$t$5_4 += 1) {
-													if((t == index$t$5_4)) {
-														for(int index$i$5_5 = 0; index$i$5_5 < n_ac; index$i$5_5 += 1) {
-															if((i$var119 == index$i$5_5)) {
-																if(((0 <= j) && (j < time_dim))) {
-																	// If the probability of the variable has not already been updated
-																	if(!cv$guard$sum_t) {
-																		// Set the guard so the update is only applied once.
-																		cv$guard$sum_t = true;
-																		
-																		// Update the variable probability
-																		logProbability$sum_t = (logProbability$sum_t + cv$sampleValue);
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			
-			// Update the variable probability
-			logProbability$time_coeff = (logProbability$time_coeff + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample101)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Calculate the probability of the samples represented by sample165 using sampled
-	// values.
-	private final void logProbabilityValue$sample165() {
-		// Determine if we need to calculate the values for sample task 165 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample165) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int t = (0 + 1); t < T; t += 1) {
+	// Pick a value from the distribution for the unconditioned variable from sample101
+	private final void drawValueSample101(int i$var80, int var95) {
+		double[] var86 = time_coeff[i$var80];
+		var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		
+		// Guards to ensure that time_impact is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 101 and consumer double[][][] 138.
+		{
+			{
 				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-					// An accumulator for log probabilities.
-					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					
-					// An accumulator for the distributed probability space covered.
-					double cv$probabilityReached = 0.0;
-					{
-						{
-							// The sample value to calculate the probability of generating
-							int cv$sampleValue = arr[t][i$var119];
-							{
-								{
-									double var156 = sum_t[t][i$var119];
-									
-									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(cv$sampleValue, var156));
-									
-									// Add the probability of this sample task to the distribution accumulator.
-									if((cv$weightedProbability < cv$distributionAccumulator))
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-									else {
-										// If the second value is -infinity.
-										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-											cv$distributionAccumulator = cv$weightedProbability;
-										else
-											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-									}
-									
-									// Add the probability of this distribution configuration to the accumulator.
-									cv$probabilityReached = (cv$probabilityReached + 1.0);
+					if((i$var80 == i$var119)) {
+						for(int j = 0; j < time_dim; j += 1) {
+							if((var95 == j)) {
+								for(int t = (0 + 1); t < T; t += 1) {
+									double[][] var129 = time_impact[t];
+									double[] var130 = var129[i$var119];
+									var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
 								}
 							}
 						}
 					}
-					if((cv$probabilityReached == 0.0))
-						// Return negative infinity if no distribution probability space is reached.
-						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					else
-						// Scale the probability relative to the observed distribution space.
-						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-					double cv$sampleProbability = cv$distributionAccumulator;
-					
-					// Record that the sample was reached.
-					cv$sampleReached = true;
-					
-					// Add the probability of this sample task to the sample task accumulator.
-					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				}
 			}
-			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			
-			// Only update the sample if it was reached, otherwise the NaN will be
-			// erroneously over written.
-			if(cv$sampleReached)
-				// Store the random variable instance probability
-				logProbability$var158 = cv$accumulator;
-			
-			// Update the variable probability
-			logProbability$arr = (logProbability$arr + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample165 = fixedFlag$sample101;
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int t = (0 + 1); t < T; t += 1) {
-				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1)
-					// Record that the sample was reached.
-					cv$sampleReached = true;
+		}
+		
+		// Guards to ensure that sum_t is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 101 and consumer double[][] 153.
+		{
+			{
+				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+					if((i$var80 == i$var119)) {
+						for(int j = 0; j < time_dim; j += 1) {
+							if((var95 == j)) {
+								for(int t = (0 + 1); t < T; t += 1) {
+									for(int index$t$2_4 = (0 + 1); index$t$2_4 < T; index$t$2_4 += 1) {
+										if((t == index$t$2_4)) {
+											for(int index$i$2_5 = 0; index$i$2_5 < n_ac; index$i$2_5 += 1) {
+												if((i$var119 == index$i$2_5)) {
+													if(((0 <= j) && (j < time_dim))) {
+														{
+															double[] var139 = sum_t[index$t$2_4];
+															
+															// Reduction of array null
+															// 
+															// A generated name to prevent name collisions if the reduction is implemented more
+															// than once in inference and probability code. Initialize the variable to the unit
+															// value
+															double reduceVar$var151$3 = 0.0;
+															
+															// For each index in the array to be reduced
+															for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+																// Set the left hand term of the reduction function to the return variable value.
+																double x = reduceVar$var151$3;
+																
+																// Set the right hand term to a value from the array var141
+																double y = time_impact[index$t$2_4][index$i$2_5][cv$reduction152Index];
+																
+																// Execute the reduction function, saving the result into the return value.
+																// 
+																// Copy the result of the reduction into the variable returned by the reduction.
+																reduceVar$var151$3 = (x + y);
+															}
+															var139[index$i$2_5] = reduceVar$var151$3;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			}
-			double cv$sampleValue = logProbability$var158;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			
-			// Update the variable probability
-			logProbability$arr = (logProbability$arr + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 101 drawn from Gaussian 85. Inference was performed using Metropolis-Hastings.
-	private final void sample101(int i$var80, int var95) {
+	private final void inferSample101(int i$var80, int var95) {
 		if(true) {
 			constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = false;
 			
@@ -971,6 +685,379 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 		}
 	}
 
+	// Calculate the probability of the samples represented by sample101 using sampled
+	// values.
+	private final void logProbabilityValue$sample101() {
+		// Determine if we need to calculate the values for sample task 101 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample101) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
+				for(int var95 = 0; var95 < time_dim; var95 += 1) {
+					// An accumulator for log probabilities.
+					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					
+					// An accumulator for the distributed probability space covered.
+					double cv$probabilityReached = 0.0;
+					{
+						{
+							// The sample value to calculate the probability of generating
+							double cv$sampleValue = time_coeff[i$var80][var95];
+							{
+								{
+									double var83 = 0.0;
+									double var84 = 1.0;
+									
+									// Store the value of the function call, so the function call is only made once.
+									double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var84)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var83) / Math.sqrt(var84))) - (0.5 * Math.log(var84))):Double.NEGATIVE_INFINITY));
+									
+									// Add the probability of this sample task to the distribution accumulator.
+									if((cv$weightedProbability < cv$distributionAccumulator))
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+									else {
+										// If the second value is -infinity.
+										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+											cv$distributionAccumulator = cv$weightedProbability;
+										else
+											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+									}
+									
+									// Add the probability of this distribution configuration to the accumulator.
+									cv$probabilityReached = (cv$probabilityReached + 1.0);
+								}
+							}
+						}
+					}
+					if((cv$probabilityReached == 0.0))
+						// Return negative infinity if no distribution probability space is reached.
+						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					else
+						// Scale the probability relative to the observed distribution space.
+						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+					double cv$sampleProbability = cv$distributionAccumulator;
+					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+					
+					// Add the probability of this sample task to the sample task accumulator.
+					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+					
+					// Only update the sample if it was reached, otherwise the NaN will be
+					// erroneously over written.
+					if(cv$sampleReached)
+						// Store the sample task probability
+						logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = cv$sampleProbability;
+					
+					// Guard to ensure that time_impact is only updated once for this probability.
+					boolean cv$guard$time_impact = false;
+					
+					// Guard to ensure that sum_t is only updated once for this probability.
+					boolean cv$guard$sum_t = false;
+					
+					// Add probability to constructed variables that have guards, so need per sample probabilities
+					// from the combined probability
+					// 
+					// Looking for a path between Sample 101 and consumer double[][][] 138.
+					{
+						{
+							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+								if((i$var80 == i$var119)) {
+									for(int j = 0; j < time_dim; j += 1) {
+										if((var95 == j)) {
+											for(int t = (0 + 1); t < T; t += 1) {
+												// If the probability of the variable has not already been updated
+												if(!cv$guard$time_impact) {
+													// Set the guard so the update is only applied once.
+													cv$guard$time_impact = true;
+													
+													// Update the variable probability
+													logProbability$time_impact = (logProbability$time_impact + cv$sampleProbability);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					
+					// Looking for a path between Sample 101 and consumer double[][] 153.
+					{
+						{
+							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+								if((i$var80 == i$var119)) {
+									for(int j = 0; j < time_dim; j += 1) {
+										if((var95 == j)) {
+											for(int t = (0 + 1); t < T; t += 1) {
+												for(int index$t$3_4 = (0 + 1); index$t$3_4 < T; index$t$3_4 += 1) {
+													if((t == index$t$3_4)) {
+														for(int index$i$3_5 = 0; index$i$3_5 < n_ac; index$i$3_5 += 1) {
+															if((i$var119 == index$i$3_5)) {
+																if(((0 <= j) && (j < time_dim))) {
+																	// If the probability of the variable has not already been updated
+																	if(!cv$guard$sum_t) {
+																		// Set the guard so the update is only applied once.
+																		cv$guard$sum_t = true;
+																		
+																		// Update the variable probability
+																		logProbability$sum_t = (logProbability$sum_t + cv$sampleProbability);
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			
+			// Update the variable probability
+			logProbability$time_coeff = (logProbability$time_coeff + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample101)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample101 = fixedFlag$sample101;
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
+				for(int var95 = 0; var95 < time_dim; var95 += 1) {
+					double cv$sampleValue = logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)];
+					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+					
+					// Guard to ensure that time_impact is only updated once for this probability.
+					boolean cv$guard$time_impact = false;
+					
+					// Guard to ensure that sum_t is only updated once for this probability.
+					boolean cv$guard$sum_t = false;
+					
+					// Add probability to constructed variables that have guards, so need per sample probabilities
+					// from the combined probability
+					// 
+					// Looking for a path between Sample 101 and consumer double[][][] 138.
+					{
+						{
+							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+								if((i$var80 == i$var119)) {
+									for(int j = 0; j < time_dim; j += 1) {
+										if((var95 == j)) {
+											for(int t = (0 + 1); t < T; t += 1) {
+												// If the probability of the variable has not already been updated
+												if(!cv$guard$time_impact) {
+													// Set the guard so the update is only applied once.
+													cv$guard$time_impact = true;
+													
+													// Update the variable probability
+													logProbability$time_impact = (logProbability$time_impact + cv$sampleValue);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					
+					// Looking for a path between Sample 101 and consumer double[][] 153.
+					{
+						{
+							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+								if((i$var80 == i$var119)) {
+									for(int j = 0; j < time_dim; j += 1) {
+										if((var95 == j)) {
+											for(int t = (0 + 1); t < T; t += 1) {
+												for(int index$t$5_4 = (0 + 1); index$t$5_4 < T; index$t$5_4 += 1) {
+													if((t == index$t$5_4)) {
+														for(int index$i$5_5 = 0; index$i$5_5 < n_ac; index$i$5_5 += 1) {
+															if((i$var119 == index$i$5_5)) {
+																if(((0 <= j) && (j < time_dim))) {
+																	// If the probability of the variable has not already been updated
+																	if(!cv$guard$sum_t) {
+																		// Set the guard so the update is only applied once.
+																		cv$guard$sum_t = true;
+																		
+																		// Update the variable probability
+																		logProbability$sum_t = (logProbability$sum_t + cv$sampleValue);
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			
+			// Update the variable probability
+			logProbability$time_coeff = (logProbability$time_coeff + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample101)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample165 using sampled
+	// values.
+	private final void logProbabilityValue$sample165() {
+		// Determine if we need to calculate the values for sample task 165 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample165) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int t = (0 + 1); t < T; t += 1) {
+				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+					// An accumulator for log probabilities.
+					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					
+					// An accumulator for the distributed probability space covered.
+					double cv$probabilityReached = 0.0;
+					{
+						{
+							// The sample value to calculate the probability of generating
+							int cv$sampleValue = arr[t][i$var119];
+							{
+								{
+									double var156 = sum_t[t][i$var119];
+									
+									// Store the value of the function call, so the function call is only made once.
+									double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(cv$sampleValue, var156));
+									
+									// Add the probability of this sample task to the distribution accumulator.
+									if((cv$weightedProbability < cv$distributionAccumulator))
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+									else {
+										// If the second value is -infinity.
+										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+											cv$distributionAccumulator = cv$weightedProbability;
+										else
+											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+									}
+									
+									// Add the probability of this distribution configuration to the accumulator.
+									cv$probabilityReached = (cv$probabilityReached + 1.0);
+								}
+							}
+						}
+					}
+					if((cv$probabilityReached == 0.0))
+						// Return negative infinity if no distribution probability space is reached.
+						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					else
+						// Scale the probability relative to the observed distribution space.
+						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+					double cv$sampleProbability = cv$distributionAccumulator;
+					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+					
+					// Add the probability of this sample task to the sample task accumulator.
+					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+				}
+			}
+			
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
+				// Store the random variable instance probability
+				logProbability$var158 = cv$accumulator;
+			
+			// Update the variable probability
+			logProbability$arr = (logProbability$arr + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample165 = fixedFlag$sample101;
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int t = (0 + 1); t < T; t += 1) {
+				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1)
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+			}
+			double cv$sampleValue = logProbability$var158;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			
+			// Update the variable probability
+			logProbability$arr = (logProbability$arr + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -1058,12 +1145,12 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 				// A generated name to prevent name collisions if the reduction is implemented more
 				// than once in inference and probability code. Initialize the variable to the unit
 				// value
-				double reduceVar$var151$3 = 0.0;
+				double reduceVar$var151$4 = 0.0;
 				
 				// For each index in the array to be reduced
 				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
 					// Set the left hand term of the reduction function to the return variable value.
-					double x = reduceVar$var151$3;
+					double x = reduceVar$var151$4;
 					
 					// Set the right hand term to a value from the array var141
 					double y = time_impact[t][i$var119][cv$reduction152Index];
@@ -1071,10 +1158,10 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 					// Execute the reduction function, saving the result into the return value.
 					if(!fixedFlag$sample101)
 						// Copy the result of the reduction into the variable returned by the reduction.
-						reduceVar$var151$3 = (x + y);
+						reduceVar$var151$4 = (x + y);
 				}
 				if(!fixedFlag$sample101)
-					var139[i$var119] = reduceVar$var151$3;
+					var139[i$var119] = reduceVar$var151$4;
 				var154[i$var119] = DistributionSampling.samplePoisson(RNG$, sum_t[t][i$var119]);
 			}
 		}
@@ -1085,6 +1172,146 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
+			double[] var86 = time_coeff[i$var80];
+			for(int var95 = 0; var95 < time_dim; var95 += 1) {
+				if(!fixedFlag$sample101)
+					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+			}
+		}
+		for(int t = (0 + 1); t < T; t += 1) {
+			double[][] var129 = time_impact[t];
+			double[] var139 = sum_t[t];
+			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+				for(int j = 0; j < time_dim; j += 1) {
+					double[] var130 = var129[i$var119];
+					var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+				}
+				
+				// Reduction of array null
+				// 
+				// A generated name to prevent name collisions if the reduction is implemented more
+				// than once in inference and probability code. Initialize the variable to the unit
+				// value
+				double reduceVar$var151$8 = 0.0;
+				
+				// For each index in the array to be reduced
+				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+					// Set the left hand term of the reduction function to the return variable value.
+					double x = reduceVar$var151$8;
+					
+					// Set the right hand term to a value from the array var141
+					double y = time_impact[t][i$var119][cv$reduction152Index];
+					
+					// Execute the reduction function, saving the result into the return value.
+					// 
+					// Copy the result of the reduction into the variable returned by the reduction.
+					reduceVar$var151$8 = (x + y);
+				}
+				var139[i$var119] = reduceVar$var151$8;
+			}
+		}
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
+			double[] var86 = time_coeff[i$var80];
+			for(int var95 = 0; var95 < time_dim; var95 += 1) {
+				if(!fixedFlag$sample101)
+					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+			}
+		}
+		for(int t = (0 + 1); t < T; t += 1) {
+			double[][] var129 = time_impact[t];
+			double[] var139 = sum_t[t];
+			int[] var154 = arr[t];
+			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+				for(int j = 0; j < time_dim; j += 1) {
+					double[] var130 = var129[i$var119];
+					var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+				}
+				
+				// Reduction of array null
+				// 
+				// A generated name to prevent name collisions if the reduction is implemented more
+				// than once in inference and probability code. Initialize the variable to the unit
+				// value
+				double reduceVar$var151$5 = 0.0;
+				
+				// For each index in the array to be reduced
+				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+					// Set the left hand term of the reduction function to the return variable value.
+					double x = reduceVar$var151$5;
+					
+					// Set the right hand term to a value from the array var141
+					double y = time_impact[t][i$var119][cv$reduction152Index];
+					
+					// Execute the reduction function, saving the result into the return value.
+					// 
+					// Copy the result of the reduction into the variable returned by the reduction.
+					reduceVar$var151$5 = (x + y);
+				}
+				var139[i$var119] = reduceVar$var151$5;
+				var154[i$var119] = DistributionSampling.samplePoisson(RNG$, sum_t[t][i$var119]);
+			}
+		}
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
+		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
+			double[] var86 = time_coeff[i$var80];
+			for(int var95 = 0; var95 < time_dim; var95 += 1) {
+				if(!fixedFlag$sample101)
+					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+			}
+		}
+		for(int t = (0 + 1); t < T; t += 1) {
+			double[][] var129 = time_impact[t];
+			double[] var139 = sum_t[t];
+			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+				for(int j = 0; j < time_dim; j += 1) {
+					double[] var130 = var129[i$var119];
+					if(!fixedFlag$sample101)
+						var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+				}
+				
+				// Reduction of array null
+				// 
+				// A generated name to prevent name collisions if the reduction is implemented more
+				// than once in inference and probability code. Initialize the variable to the unit
+				// value
+				double reduceVar$var151$6 = 0.0;
+				
+				// For each index in the array to be reduced
+				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+					// Set the left hand term of the reduction function to the return variable value.
+					double x = reduceVar$var151$6;
+					
+					// Set the right hand term to a value from the array var141
+					double y = time_impact[t][i$var119][cv$reduction152Index];
+					
+					// Execute the reduction function, saving the result into the return value.
+					if(!fixedFlag$sample101)
+						// Copy the result of the reduction into the variable returned by the reduction.
+						reduceVar$var151$6 = (x + y);
+				}
+				if(!fixedFlag$sample101)
+					var139[i$var119] = reduceVar$var151$6;
+			}
+		}
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
 			double[] var86 = time_coeff[i$var80];
 			for(int var95 = 0; var95 < time_dim; var95 += 1) {
@@ -1126,146 +1353,6 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 		}
 	}
 
-	// Method to execute the model code conventionally with priming of fixed intermediate
-	// variables.
-	@Override
-	public final void forwardGenerationPrime() {
-		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-			double[] var86 = time_coeff[i$var80];
-			for(int var95 = 0; var95 < time_dim; var95 += 1) {
-				if(!fixedFlag$sample101)
-					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-			}
-		}
-		for(int t = (0 + 1); t < T; t += 1) {
-			double[][] var129 = time_impact[t];
-			double[] var139 = sum_t[t];
-			int[] var154 = arr[t];
-			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-				for(int j = 0; j < time_dim; j += 1) {
-					double[] var130 = var129[i$var119];
-					var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
-				}
-				
-				// Reduction of array null
-				// 
-				// A generated name to prevent name collisions if the reduction is implemented more
-				// than once in inference and probability code. Initialize the variable to the unit
-				// value
-				double reduceVar$var151$4 = 0.0;
-				
-				// For each index in the array to be reduced
-				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-					// Set the left hand term of the reduction function to the return variable value.
-					double x = reduceVar$var151$4;
-					
-					// Set the right hand term to a value from the array var141
-					double y = time_impact[t][i$var119][cv$reduction152Index];
-					
-					// Execute the reduction function, saving the result into the return value.
-					// 
-					// Copy the result of the reduction into the variable returned by the reduction.
-					reduceVar$var151$4 = (x + y);
-				}
-				var139[i$var119] = reduceVar$var151$4;
-				var154[i$var119] = DistributionSampling.samplePoisson(RNG$, sum_t[t][i$var119]);
-			}
-		}
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
-	@Override
-	public final void forwardGenerationValuesNoOutputs() {
-		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-			double[] var86 = time_coeff[i$var80];
-			for(int var95 = 0; var95 < time_dim; var95 += 1) {
-				if(!fixedFlag$sample101)
-					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-			}
-		}
-		for(int t = (0 + 1); t < T; t += 1) {
-			double[][] var129 = time_impact[t];
-			double[] var139 = sum_t[t];
-			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-				for(int j = 0; j < time_dim; j += 1) {
-					double[] var130 = var129[i$var119];
-					if(!fixedFlag$sample101)
-						var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
-				}
-				
-				// Reduction of array null
-				// 
-				// A generated name to prevent name collisions if the reduction is implemented more
-				// than once in inference and probability code. Initialize the variable to the unit
-				// value
-				double reduceVar$var151$5 = 0.0;
-				
-				// For each index in the array to be reduced
-				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-					// Set the left hand term of the reduction function to the return variable value.
-					double x = reduceVar$var151$5;
-					
-					// Set the right hand term to a value from the array var141
-					double y = time_impact[t][i$var119][cv$reduction152Index];
-					
-					// Execute the reduction function, saving the result into the return value.
-					if(!fixedFlag$sample101)
-						// Copy the result of the reduction into the variable returned by the reduction.
-						reduceVar$var151$5 = (x + y);
-				}
-				if(!fixedFlag$sample101)
-					var139[i$var119] = reduceVar$var151$5;
-			}
-		}
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
-	// to single values.
-	@Override
-	public final void forwardGenerationValuesNoOutputsPrime() {
-		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-			double[] var86 = time_coeff[i$var80];
-			for(int var95 = 0; var95 < time_dim; var95 += 1) {
-				if(!fixedFlag$sample101)
-					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-			}
-		}
-		for(int t = (0 + 1); t < T; t += 1) {
-			double[][] var129 = time_impact[t];
-			double[] var139 = sum_t[t];
-			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-				for(int j = 0; j < time_dim; j += 1) {
-					double[] var130 = var129[i$var119];
-					var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
-				}
-				
-				// Reduction of array null
-				// 
-				// A generated name to prevent name collisions if the reduction is implemented more
-				// than once in inference and probability code. Initialize the variable to the unit
-				// value
-				double reduceVar$var151$6 = 0.0;
-				
-				// For each index in the array to be reduced
-				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-					// Set the left hand term of the reduction function to the return variable value.
-					double x = reduceVar$var151$6;
-					
-					// Set the right hand term to a value from the array var141
-					double y = time_impact[t][i$var119][cv$reduction152Index];
-					
-					// Execute the reduction function, saving the result into the return value.
-					// 
-					// Copy the result of the reduction into the variable returned by the reduction.
-					reduceVar$var151$6 = (x + y);
-				}
-				var139[i$var119] = reduceVar$var151$6;
-			}
-		}
-	}
-
 	// Method to execute one round of Gibbs sampling.
 	@Override
 	public final void gibbsRound() {
@@ -1274,7 +1361,7 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
 				for(int var95 = 0; var95 < time_dim; var95 += 1) {
 					if(!fixedFlag$sample101)
-						sample101(i$var80, var95);
+						inferSample101(i$var80, var95);
 				}
 			}
 		}
@@ -1283,13 +1370,19 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 			for(int i$var80 = (n_ac - ((((n_ac - 1) - 0) % 1) + 1)); i$var80 >= ((0 - 1) + 1); i$var80 -= 1) {
 				for(int var95 = (time_dim - ((((time_dim - 1) - 0) % 1) + 1)); var95 >= ((0 - 1) + 1); var95 -= 1) {
 					if(!fixedFlag$sample101)
-						sample101(i$var80, var95);
+						inferSample101(i$var80, var95);
 				}
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
+			for(int var95 = 0; var95 < time_dim; var95 += 1) {
+				if(!constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)])
+					drawValueSample101(i$var80, var95);
+			}
+		}
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
@@ -1415,12 +1508,12 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 				// A generated name to prevent name collisions if the reduction is implemented more
 				// than once in inference and probability code. Initialize the variable to the unit
 				// value
-				double reduceVar$var151$8 = 0.0;
+				double reduceVar$var151$9 = 0.0;
 				
 				// For each index in the array to be reduced
 				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
 					// Set the left hand term of the reduction function to the return variable value.
-					double x = reduceVar$var151$8;
+					double x = reduceVar$var151$9;
 					
 					// Set the right hand term to a value from the array var141
 					double y = time_impact[t][i$var119][cv$reduction152Index];
@@ -1428,9 +1521,9 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 					// Execute the reduction function, saving the result into the return value.
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
-					reduceVar$var151$8 = (x + y);
+					reduceVar$var151$9 = (x + y);
 				}
-				var139[i$var119] = reduceVar$var151$8;
+				var139[i$var119] = reduceVar$var151$9;
 			}
 		}
 	}

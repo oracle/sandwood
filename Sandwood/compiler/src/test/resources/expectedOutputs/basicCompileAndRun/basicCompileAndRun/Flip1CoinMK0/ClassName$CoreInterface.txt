@@ -10,13 +10,13 @@ interface ClassName$CoreInterface extends org.sandwood.runtime.internal.model.Co
 	public double get$bias();
 
 	// Setter for bias.
-	public void set$bias(double cv$value);
+	public void set$bias(double cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample4.
 	public boolean get$fixedFlag$sample4();
 
 	// Setter for fixedFlag$sample4.
-	public void set$fixedFlag$sample4(boolean cv$value);
+	public void set$fixedFlag$sample4(boolean cv$value, boolean allocated$);
 
 	// Getter for flip.
 	public boolean get$flip();
@@ -25,7 +25,7 @@ interface ClassName$CoreInterface extends org.sandwood.runtime.internal.model.Co
 	public boolean get$flipMeasured();
 
 	// Setter for flipMeasured.
-	public void set$flipMeasured(boolean cv$value);
+	public void set$flipMeasured(boolean cv$value, boolean allocated$);
 
 	// Getter for logProbability$bernoulli.
 	public double get$logProbability$bernoulli();

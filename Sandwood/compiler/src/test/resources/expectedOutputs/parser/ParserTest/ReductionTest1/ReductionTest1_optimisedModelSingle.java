@@ -78,7 +78,7 @@ public final class ReductionTest1 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample101(fixed);
+                system$c.set$fixedFlag$sample101(fixed, allocated);
             }
         }
 
@@ -102,7 +102,7 @@ public final class ReductionTest1 extends Model {
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$time_coeff(value);
+            system$c.set$time_coeff(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -117,7 +117,7 @@ public final class ReductionTest1 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample101(fixed);
+                system$c.set$fixedFlag$sample101(fixed, allocated);
             }
         }
 
@@ -158,7 +158,7 @@ public final class ReductionTest1 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample101(fixed);
+                system$c.set$fixedFlag$sample101(fixed, allocated);
             }
         }
 
@@ -187,7 +187,7 @@ public final class ReductionTest1 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$T(value); }
+        protected void setValueInternal(int value) { system$c.set$T(value, allocated); }
     };
 
     /**
@@ -204,7 +204,7 @@ public final class ReductionTest1 extends Model {
         }
 
         @Override
-        protected void setValueInternal(double[][] value) { system$c.set$TimeFeat(value); }
+        protected void setValueInternal(double[][] value) { system$c.set$TimeFeat(value, allocated); }
     };
 
     /**
@@ -221,7 +221,7 @@ public final class ReductionTest1 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$n_ac(value); }
+        protected void setValueInternal(int value) { system$c.set$n_ac(value, allocated); }
     };
 
     /**
@@ -240,7 +240,7 @@ public final class ReductionTest1 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int[][] value) { system$c.set$ObsArr(value); }
+        protected void setValueInternal(int[][] value) { system$c.set$ObsArr(value, allocated); }
     };
 
     /**
@@ -326,21 +326,22 @@ public final class ReductionTest1 extends Model {
     private void transferData(ReductionTest1$CoreInterface oldCore, ReductionTest1$CoreInterface newCore) {
         //Model inputs
         if(T.isSet())
-            newCore.set$T(oldCore.get$T());
+            newCore.set$T(oldCore.get$T(), false);
         if(TimeFeat.isSet())
-            newCore.set$TimeFeat(oldCore.get$TimeFeat());
+            newCore.set$TimeFeat(oldCore.get$TimeFeat(), false);
         if(n_ac.isSet())
-            newCore.set$n_ac(oldCore.get$n_ac());
+            newCore.set$n_ac(oldCore.get$n_ac(), false);
+
         //Observed scalars
         if(ObsArr.isSet())
-            newCore.set$ObsArr(oldCore.get$ObsArr());
+            newCore.set$ObsArr(oldCore.get$ObsArr(), false);
 
         //ComputedVariables
         if($time_coeff.isSet())
-            newCore.set$time_coeff(oldCore.get$time_coeff());
+            newCore.set$time_coeff(oldCore.get$time_coeff(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample101(oldCore.get$fixedFlag$sample101());
+        newCore.set$fixedFlag$sample101(oldCore.get$fixedFlag$sample101(), false);
     }
 
     /**

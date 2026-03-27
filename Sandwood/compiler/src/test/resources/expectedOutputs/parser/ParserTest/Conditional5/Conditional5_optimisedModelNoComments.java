@@ -156,7 +156,7 @@ public final class Conditional5 extends Model {
         }
 
         @Override
-        protected void setValueInternal(boolean value) { system$c.set$observedGuard(value); }
+        protected void setValueInternal(boolean value) { system$c.set$observedGuard(value, allocated); }
     };
 
     /**
@@ -173,7 +173,7 @@ public final class Conditional5 extends Model {
         }
 
         @Override
-        protected void setValueInternal(double value) { system$c.set$observedValue(value); }
+        protected void setValueInternal(double value) { system$c.set$observedValue(value, allocated); }
     };
 
     /**
@@ -246,11 +246,12 @@ public final class Conditional5 extends Model {
     }
 
     private void transferData(Conditional5$CoreInterface oldCore, Conditional5$CoreInterface newCore) {
+
         //Observed scalars
         if(observedGuard.isSet())
-            newCore.set$observedGuard(oldCore.get$observedGuard());
+            newCore.set$observedGuard(oldCore.get$observedGuard(), false);
         if(observedValue.isSet())
-            newCore.set$observedValue(oldCore.get$observedValue());
+            newCore.set$observedValue(oldCore.get$observedValue(), false);
     }
 
     /**

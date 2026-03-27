@@ -89,8 +89,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for distribution$sample104.
 	@Override
-	public final void set$distribution$sample104(double[][] cv$value) {
-		// Set distribution$sample104
+	public final void set$distribution$sample104(double[][] cv$value, boolean allocated$) {
 		distribution$sample104 = cv$value;
 	}
 
@@ -102,8 +101,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for distribution$sample123.
 	@Override
-	public final void set$distribution$sample123(double[][][] cv$value) {
-		// Set distribution$sample123
+	public final void set$distribution$sample123(double[][][] cv$value, boolean allocated$) {
 		distribution$sample123 = cv$value;
 	}
 
@@ -115,10 +113,17 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for fixedFlag$sample104.
 	@Override
-	public final void set$fixedFlag$sample104(boolean cv$value) {
+	public final void set$fixedFlag$sample104(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample104 including if probabilities
 		// need to be updated.
 		fixedFlag$sample104 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample104$1 = 0; index$constrainedFlag$sample104$1 < constrainedFlag$sample104.length; index$constrainedFlag$sample104$1 += 1)
+				constrainedFlag$sample104[index$constrainedFlag$sample104$1] = true;
+		}
 		
 		// Should the probability of sample 104 be set to fixed. This will only every change
 		// the flag to false.
@@ -145,10 +150,20 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for fixedFlag$sample123.
 	@Override
-	public final void set$fixedFlag$sample123(boolean cv$value) {
+	public final void set$fixedFlag$sample123(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample123 including if probabilities
 		// need to be updated.
 		fixedFlag$sample123 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample123$1 = 0; index$constrainedFlag$sample123$1 < constrainedFlag$sample123.length; index$constrainedFlag$sample123$1 += 1) {
+				boolean[] cv$constrainedFlag$sample123$1 = constrainedFlag$sample123[index$constrainedFlag$sample123$1];
+				for(int index$constrainedFlag$sample123$2 = 0; index$constrainedFlag$sample123$2 < cv$constrainedFlag$sample123$1.length; index$constrainedFlag$sample123$2 += 1)
+					cv$constrainedFlag$sample123$1[index$constrainedFlag$sample123$2] = true;
+			}
+		}
 		
 		// Should the probability of sample 123 be set to fixed. This will only every change
 		// the flag to false.
@@ -171,7 +186,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for fixedFlag$sample157.
 	@Override
-	public final void set$fixedFlag$sample157(boolean cv$value) {
+	public final void set$fixedFlag$sample157(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample157 = cv$value;
 	}
 
@@ -183,10 +198,11 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for fixedFlag$sample19.
 	@Override
-	public final void set$fixedFlag$sample19(boolean cv$value) {
+	public final void set$fixedFlag$sample19(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample19 including if probabilities
 		// need to be updated.
 		fixedFlag$sample19 = cv$value;
+		constrainedFlag$sample19 = (fixedFlag$sample19 || constrainedFlag$sample19);
 		
 		// Should the probability of sample 19 be set to fixed. This will only every change
 		// the flag to false.
@@ -205,10 +221,17 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for fixedFlag$sample32.
 	@Override
-	public final void set$fixedFlag$sample32(boolean cv$value) {
+	public final void set$fixedFlag$sample32(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample32 including if probabilities
 		// need to be updated.
 		fixedFlag$sample32 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample32$1 = 0; index$constrainedFlag$sample32$1 < constrainedFlag$sample32.length; index$constrainedFlag$sample32$1 += 1)
+				constrainedFlag$sample32[index$constrainedFlag$sample32$1] = true;
+		}
 		
 		// Should the probability of sample 32 be set to fixed. This will only every change
 		// the flag to false.
@@ -227,10 +250,17 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for fixedFlag$sample52.
 	@Override
-	public final void set$fixedFlag$sample52(boolean cv$value) {
+	public final void set$fixedFlag$sample52(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample52 including if probabilities
 		// need to be updated.
 		fixedFlag$sample52 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample52$1 = 0; index$constrainedFlag$sample52$1 < constrainedFlag$sample52.length; index$constrainedFlag$sample52$1 += 1)
+				constrainedFlag$sample52[index$constrainedFlag$sample52$1] = true;
+		}
 		
 		// Should the probability of sample 52 be set to fixed. This will only every change
 		// the flag to false.
@@ -249,10 +279,17 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for fixedFlag$sample68.
 	@Override
-	public final void set$fixedFlag$sample68(boolean cv$value) {
+	public final void set$fixedFlag$sample68(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample68 including if probabilities
 		// need to be updated.
 		fixedFlag$sample68 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample68$1 = 0; index$constrainedFlag$sample68$1 < constrainedFlag$sample68.length; index$constrainedFlag$sample68$1 += 1)
+				constrainedFlag$sample68[index$constrainedFlag$sample68$1] = true;
+		}
 		
 		// Should the probability of sample 68 be set to fixed. This will only every change
 		// the flag to false.
@@ -271,10 +308,17 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for fixedFlag$sample84.
 	@Override
-	public final void set$fixedFlag$sample84(boolean cv$value) {
+	public final void set$fixedFlag$sample84(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample84 including if probabilities
 		// need to be updated.
 		fixedFlag$sample84 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample84$1 = 0; index$constrainedFlag$sample84$1 < constrainedFlag$sample84.length; index$constrainedFlag$sample84$1 += 1)
+				constrainedFlag$sample84[index$constrainedFlag$sample84$1] = true;
+		}
 		
 		// Should the probability of sample 84 be set to fixed. This will only every change
 		// the flag to false.
@@ -293,10 +337,9 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for initialStateDistribution.
 	@Override
-	public final void set$initialStateDistribution(double[] cv$value) {
+	public final void set$initialStateDistribution(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of initialStateDistribution including if probabilities
 		// need to be updated.
-		// Set initialStateDistribution
 		initialStateDistribution = cv$value;
 		
 		// Unset the fixed probability flag for sample 19 as it depends on initialStateDistribution.
@@ -314,8 +357,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for length$metric.
 	@Override
-	public final void set$length$metric(int[] cv$value) {
-		// Set length$metric
+	public final void set$length$metric(int[] cv$value, boolean allocated$) {
 		length$metric = cv$value;
 	}
 
@@ -387,9 +429,8 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for m.
 	@Override
-	public final void set$m(double[][] cv$value) {
+	public final void set$m(double[][] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of m including if probabilities need to be updated.
-		// Set m
 		m = cv$value;
 		
 		// Unset the fixed probability flag for sample 32 as it depends on m.
@@ -407,8 +448,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for metric.
 	@Override
-	public final void set$metric(double[][] cv$value) {
-		// Set metric
+	public final void set$metric(double[][] cv$value, boolean allocated$) {
 		metric = cv$value;
 	}
 
@@ -426,10 +466,9 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for metric_mean.
 	@Override
-	public final void set$metric_mean(double[] cv$value) {
+	public final void set$metric_mean(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of metric_mean including if probabilities need
 		// to be updated.
-		// Set metric_mean
 		metric_mean = cv$value;
 		
 		// Unset the fixed probability flag for sample 52 as it depends on metric_mean.
@@ -447,8 +486,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for metric_valid.
 	@Override
-	public final void set$metric_valid(boolean[][] cv$value) {
-		// Set metric_valid
+	public final void set$metric_valid(boolean[][] cv$value, boolean allocated$) {
 		metric_valid = cv$value;
 	}
 
@@ -460,10 +498,9 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for metric_valid_bias.
 	@Override
-	public final void set$metric_valid_bias(double[] cv$value) {
+	public final void set$metric_valid_bias(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of metric_valid_bias including if probabilities
 		// need to be updated.
-		// Set metric_valid_bias
 		metric_valid_bias = cv$value;
 		
 		// Unset the fixed probability flag for sample 84 as it depends on metric_valid_bias.
@@ -487,10 +524,9 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for metric_var.
 	@Override
-	public final void set$metric_var(double[] cv$value) {
+	public final void set$metric_var(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of metric_var including if probabilities need
 		// to be updated.
-		// Set metric_var
 		metric_var = cv$value;
 		
 		// Unset the fixed probability flag for sample 68 as it depends on metric_var.
@@ -514,7 +550,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for noStates.
 	@Override
-	public final void set$noStates(int cv$value) {
+	public final void set$noStates(int cv$value, boolean allocated$) {
 		noStates = cv$value;
 	}
 
@@ -526,10 +562,9 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for st.
 	@Override
-	public final void set$st(int[][] cv$value) {
+	public final void set$st(int[][] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of st including if probabilities need to be
 		// updated.
-		// Set st
 		st = cv$value;
 		
 		// Unset the fixed probability flag for sample 104 as it depends on st.
@@ -551,2735 +586,55 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		return v;
 	}
 
-	// Calculate the probability of the samples represented by sample104 using probability
-	// distributions.
-	private final void logProbabilityDistribution$sample104() {
-		// Determine if we need to calculate the values for sample task 104 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample104) {
-			// Update the probability if the distribution is fixed to a specific value. If it
-			// is not the value is implicitly log(1.0) so has no effect.
-			if(fixedFlag$sample104) {
-				// Generating probabilities for sample task
-				// Accumulator for probabilities of instances of the random variable
-				double cv$accumulator = 0.0;
-				
-				// A guard to check if the sample value is ever reached.
-				boolean cv$sampleReached = false;
-				for(int sample = 0; sample < noSamples; sample += 1) {
-					// Accumulator for sample probabilities for a specific instance of the random variable.
-					double cv$sampleAccumulator = 0.0;
-					
-					// An accumulator for log probabilities.
-					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					
-					// An accumulator for the distributed probability space covered.
-					double cv$probabilityReached = 0.0;
-					
-					// Copy of index so that its values can be safely substituted
-					int index$sample$1 = sample;
-					{
-						{
-							// The sample value to calculate the probability of generating
-							int cv$sampleValue = st[sample][0];
-							{
-								{
-									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$sampleValue])) && (initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-									
-									// Add the probability of this sample task to the distribution accumulator.
-									if((cv$weightedProbability < cv$distributionAccumulator))
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-									else {
-										// If the second value is -infinity.
-										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-											cv$distributionAccumulator = cv$weightedProbability;
-										else
-											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-									}
-									
-									// Add the probability of this distribution configuration to the accumulator.
-									cv$probabilityReached = (cv$probabilityReached + 1.0);
-								}
-							}
-						}
-					}
-					if((cv$probabilityReached == 0.0))
-						// Return negative infinity if no distribution probability space is reached.
-						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					else
-						// Scale the probability relative to the observed distribution space.
-						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-					double cv$sampleProbability = cv$distributionAccumulator;
-					
-					// Record that the sample was reached.
-					cv$sampleReached = true;
-					
-					// Add the probability of this sample task to the sample task accumulator.
-					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-					
-					// Add the probability of this instance of the random variable to the probability
-					// of all instances of the random variable.
-					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					
-					// Store the sample task probability
-					logProbability$sample104[((sample - 0) / 1)] = cv$sampleProbability;
-				}
-				
-				// Make sure all the inputs have been fixed so the variable is not a distribution.
-				if(fixedFlag$sample104)
-					// Update the variable probability
-					logProbability$st = (logProbability$st + cv$accumulator);
-				
-				// Add probability to model
-				logProbability$$model = (logProbability$$model + cv$accumulator);
-				
-				// If this value is fixed, add it to the probability of this model producing the fixed
-				// values
-				if(fixedFlag$sample104)
-					logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-				
-				// Now the probability is calculated store if it can be cached or if it needs to be
-				// recalculated next time.
-				fixedProbFlag$sample104 = (fixedFlag$sample104 && fixedFlag$sample19);
-			}
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample = 0; sample < noSamples; sample += 1) {
-				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample104[((sample - 0) / 1)];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			}
-			
-			// Make sure all the inputs have been fixed so the variable is not a distribution.
-			if(fixedFlag$sample104)
-				// Update the variable probability
-				logProbability$st = (logProbability$st + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample104)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+	// Pick a value from the distribution for the unconditioned variable from sample104
+	private final void drawValueSample104(int sample) {
+		// Copy of index so that its values can be safely substituted
+		int index$sample$1 = sample;
+		int[] var99 = st[sample];
+		var99[0] = DistributionSampling.sampleCategorical(RNG$, initialStateDistribution, noStates);
 	}
 
-	// Calculate the probability of the samples represented by sample123 using probability
-	// distributions.
-	private final void logProbabilityDistribution$sample123() {
-		// Determine if we need to calculate the values for sample task 123 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample123) {
-			// Update the probability if the distribution is fixed to a specific value. If it
-			// is not the value is implicitly log(1.0) so has no effect.
-			if(fixedFlag$sample123) {
-				// Generating probabilities for sample task
-				// Accumulator for probabilities of instances of the random variable
-				double cv$accumulator = 0.0;
-				
-				// A guard to check if the sample value is ever reached.
-				boolean cv$sampleReached = false;
-				for(int sample = 0; sample < noSamples; sample += 1) {
-					for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1) {
-						// Accumulator for sample probabilities for a specific instance of the random variable.
-						double cv$sampleAccumulator = 0.0;
-						
-						// An accumulator for log probabilities.
-						double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-						
-						// An accumulator for the distributed probability space covered.
-						double cv$probabilityReached = 0.0;
-						
-						// Look for paths between the variable and the sample task 123 including any distribution
-						// values.
-						// 
-						// Copy of index so that its values can be safely substituted
-						int index$timeStep$1 = timeStep$var113;
-						
-						// Copy of index so that its values can be safely substituted
-						int index$sample$2 = sample;
-						{
-							{
-								// The sample value to calculate the probability of generating
-								int cv$sampleValue = st[sample][timeStep$var113];
-								
-								// Enumerating the possible arguments for Categorical 120.
-								if(fixedFlag$sample104) {
-									{
-										for(int index$sample$4_1 = 0; index$sample$4_1 < noSamples; index$sample$4_1 += 1) {
-											if((index$sample$4_1 == sample)) {
-												if((0 == (timeStep$var113 - 1))) {
-													{
-														for(int var31 = 0; var31 < noStates; var31 += 1) {
-															if((var31 == st[sample][(timeStep$var113 - 1)])) {
-																{
-																	double[] var119 = m[st[sample][(timeStep$var113 - 1)]];
-																	
-																	// Store the value of the function call, so the function call is only made once.
-																	double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var119[cv$sampleValue])) && (var119[cv$sampleValue] <= 1.0))?Math.log(var119[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-																	
-																	// Add the probability of this sample task to the distribution accumulator.
-																	if((cv$weightedProbability < cv$distributionAccumulator))
-																		cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																	else {
-																		// If the second value is -infinity.
-																		if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																			cv$distributionAccumulator = cv$weightedProbability;
-																		else
-																			cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																	}
-																	
-																	// Add the probability of this distribution configuration to the accumulator.
-																	cv$probabilityReached = (cv$probabilityReached + 1.0);
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								} else {
-									for(int index$sample$5 = 0; index$sample$5 < noSamples; index$sample$5 += 1) {
-										if(true) {
-											// Enumerating the possible outputs of Categorical 101.
-											for(int index$sample104$6 = 0; index$sample104$6 < noStates; index$sample104$6 += 1) {
-												int distributionTempVariable$var102$8 = index$sample104$6;
-												
-												// Update the probability of sampling this value from the distribution value.
-												double cv$probabilitySample104Value7 = (1.0 * distribution$sample104[((index$sample$5 - 0) / 1)][index$sample104$6]);
-												{
-													int traceTempVariable$var118$9_1 = distributionTempVariable$var102$8;
-													if((index$sample$5 == sample)) {
-														if((0 == (timeStep$var113 - 1))) {
-															{
-																for(int var31 = 0; var31 < noStates; var31 += 1) {
-																	if((var31 == traceTempVariable$var118$9_1)) {
-																		{
-																			double[] var119 = m[traceTempVariable$var118$9_1];
-																			
-																			// Store the value of the function call, so the function call is only made once.
-																			double cv$weightedProbability = (Math.log(cv$probabilitySample104Value7) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var119[cv$sampleValue])) && (var119[cv$sampleValue] <= 1.0))?Math.log(var119[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-																			
-																			// Add the probability of this sample task to the distribution accumulator.
-																			if((cv$weightedProbability < cv$distributionAccumulator))
-																				cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																			else {
-																				// If the second value is -infinity.
-																				if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																					cv$distributionAccumulator = cv$weightedProbability;
-																				else
-																					cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																			}
-																			
-																			// Add the probability of this distribution configuration to the accumulator.
-																			cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value7);
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								
-								// Enumerating the possible arguments for Categorical 120.
-								{
-									if((index$sample$2 == sample)) {
-										if((index$timeStep$1 == (timeStep$var113 - 1))) {
-											{
-												for(int var31 = 0; var31 < noStates; var31 += 1) {
-													if((var31 == st[sample][(timeStep$var113 - 1)])) {
-														{
-															double[] var119 = m[st[sample][(timeStep$var113 - 1)]];
-															
-															// Store the value of the function call, so the function call is only made once.
-															double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var119[cv$sampleValue])) && (var119[cv$sampleValue] <= 1.0))?Math.log(var119[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-															
-															// Add the probability of this sample task to the distribution accumulator.
-															if((cv$weightedProbability < cv$distributionAccumulator))
-																cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-															else {
-																// If the second value is -infinity.
-																if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																	cv$distributionAccumulator = cv$weightedProbability;
-																else
-																	cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-															}
-															
-															// Add the probability of this distribution configuration to the accumulator.
-															cv$probabilityReached = (cv$probabilityReached + 1.0);
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								if(fixedFlag$sample123) {
-									{
-										for(int index$sample$13_1 = 0; index$sample$13_1 < noSamples; index$sample$13_1 += 1) {
-											for(int index$timeStep$13_2 = 1; index$timeStep$13_2 < length$metric[index$sample$13_1]; index$timeStep$13_2 += 1) {
-												if((index$sample$13_1 == sample)) {
-													if((index$timeStep$13_2 == (timeStep$var113 - 1))) {
-														{
-															for(int var31 = 0; var31 < noStates; var31 += 1) {
-																if((var31 == st[sample][(timeStep$var113 - 1)])) {
-																	{
-																		double[] var119 = m[st[sample][(timeStep$var113 - 1)]];
-																		
-																		// Store the value of the function call, so the function call is only made once.
-																		double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var119[cv$sampleValue])) && (var119[cv$sampleValue] <= 1.0))?Math.log(var119[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-																		
-																		// Add the probability of this sample task to the distribution accumulator.
-																		if((cv$weightedProbability < cv$distributionAccumulator))
-																			cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																		else {
-																			// If the second value is -infinity.
-																			if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																				cv$distributionAccumulator = cv$weightedProbability;
-																			else
-																				cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																		}
-																		
-																		// Add the probability of this distribution configuration to the accumulator.
-																		cv$probabilityReached = (cv$probabilityReached + 1.0);
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								} else {
-									for(int index$sample$14 = 0; index$sample$14 < noSamples; index$sample$14 += 1) {
-										for(int index$timeStep$15 = 1; index$timeStep$15 < length$metric[index$sample$14]; index$timeStep$15 += 1) {
-											if(!((index$timeStep$15 == index$timeStep$1) && (index$sample$14 == index$sample$2))) {
-												// Enumerating the possible outputs of Categorical 120.
-												for(int index$sample123$16 = 0; index$sample123$16 < noStates; index$sample123$16 += 1) {
-													int distributionTempVariable$var121$18 = index$sample123$16;
-													
-													// Update the probability of sampling this value from the distribution value.
-													double cv$probabilitySample123Value17 = (1.0 * distribution$sample123[((index$sample$14 - 0) / 1)][((index$timeStep$15 - 1) / 1)][index$sample123$16]);
-													{
-														int traceTempVariable$var118$19_1 = distributionTempVariable$var121$18;
-														if((index$sample$14 == sample)) {
-															if((index$timeStep$15 == (timeStep$var113 - 1))) {
-																{
-																	for(int var31 = 0; var31 < noStates; var31 += 1) {
-																		if((var31 == traceTempVariable$var118$19_1)) {
-																			{
-																				double[] var119 = m[traceTempVariable$var118$19_1];
-																				
-																				// Store the value of the function call, so the function call is only made once.
-																				double cv$weightedProbability = (Math.log(cv$probabilitySample123Value17) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var119[cv$sampleValue])) && (var119[cv$sampleValue] <= 1.0))?Math.log(var119[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-																				
-																				// Add the probability of this sample task to the distribution accumulator.
-																				if((cv$weightedProbability < cv$distributionAccumulator))
-																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																				else {
-																					// If the second value is -infinity.
-																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																						cv$distributionAccumulator = cv$weightedProbability;
-																					else
-																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																				}
-																				
-																				// Add the probability of this distribution configuration to the accumulator.
-																				cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value17);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						if((cv$probabilityReached == 0.0))
-							// Return negative infinity if no distribution probability space is reached.
-							cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-						else
-							// Scale the probability relative to the observed distribution space.
-							cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-						double cv$sampleProbability = cv$distributionAccumulator;
-						
-						// Record that the sample was reached.
-						cv$sampleReached = true;
-						
-						// Add the probability of this sample task to the sample task accumulator.
-						cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-						
-						// Add the probability of this instance of the random variable to the probability
-						// of all instances of the random variable.
-						cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-						
-						// Store the sample task probability
-						logProbability$sample123[((sample - 0) / 1)][((timeStep$var113 - 1) / 1)] = cv$sampleProbability;
-					}
-				}
-				
-				// Make sure all the inputs have been fixed so the variable is not a distribution.
-				if(fixedFlag$sample123)
-					// Update the variable probability
-					logProbability$st = (logProbability$st + cv$accumulator);
-				
-				// Add probability to model
-				logProbability$$model = (logProbability$$model + cv$accumulator);
-				
-				// If this value is fixed, add it to the probability of this model producing the fixed
-				// values
-				if(fixedFlag$sample123)
-					logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-				
-				// Now the probability is calculated store if it can be cached or if it needs to be
-				// recalculated next time.
-				fixedProbFlag$sample123 = ((fixedFlag$sample123 && fixedFlag$sample32) && fixedFlag$sample104);
-			}
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample = 0; sample < noSamples; sample += 1) {
-				for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1) {
-					double cv$rvAccumulator = 0.0;
-					double cv$sampleValue = logProbability$sample123[((sample - 0) / 1)][((timeStep$var113 - 1) / 1)];
-					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-					
-					// Record that the sample was reached.
-					cv$sampleReached = true;
-					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				}
-			}
-			
-			// Make sure all the inputs have been fixed so the variable is not a distribution.
-			if(fixedFlag$sample123)
-				// Update the variable probability
-				logProbability$st = (logProbability$st + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample123)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+	// Pick a value from the distribution for the unconditioned variable from sample123
+	private final void drawValueSample123(int sample, int timeStep$var113) {
+		// Copy of index so that its values can be safely substituted
+		int index$timeStep$1 = timeStep$var113;
+		
+		// Copy of index so that its values can be safely substituted
+		int index$sample$2 = sample;
+		int[] var114 = st[sample];
+		var114[timeStep$var113] = DistributionSampling.sampleCategorical(RNG$, m[st[sample][(timeStep$var113 - 1)]], noStates);
 	}
 
-	// Calculate the probability of the samples represented by sample145 using probability
-	// distributions.
-	private final void logProbabilityDistribution$sample145() {
-		// Determine if we need to calculate the values for sample task 145 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample145) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample = 0; sample < noSamples; sample += 1) {
-				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-					// Accumulator for sample probabilities for a specific instance of the random variable.
-					double cv$sampleAccumulator = 0.0;
-					
-					// An accumulator for log probabilities.
-					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					
-					// An accumulator for the distributed probability space covered.
-					double cv$probabilityReached = 0.0;
-					
-					// Look for paths between the variable and the sample task 145 including any distribution
-					// values.
-					{
-						{
-							// The sample value to calculate the probability of generating
-							boolean cv$sampleValue = metric_valid_g[sample][timeStep$var136];
-							
-							// Enumerating the possible arguments for Bernoulli 140.
-							if(fixedFlag$sample104) {
-								{
-									for(int index$sample$2_1 = 0; index$sample$2_1 < noSamples; index$sample$2_1 += 1) {
-										if((index$sample$2_1 == sample)) {
-											if((0 == timeStep$var136)) {
-												{
-													for(int var82 = 0; var82 < noStates; var82 += 1) {
-														if((var82 == st[sample][timeStep$var136])) {
-															{
-																double var139 = metric_valid_bias[st[sample][timeStep$var136]];
-																
-																// Store the value of the function call, so the function call is only made once.
-																double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var139) && (var139 <= 1.0))?Math.log((cv$sampleValue?var139:(1.0 - var139))):Double.NEGATIVE_INFINITY));
-																
-																// Add the probability of this sample task to the distribution accumulator.
-																if((cv$weightedProbability < cv$distributionAccumulator))
-																	cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																else {
-																	// If the second value is -infinity.
-																	if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																		cv$distributionAccumulator = cv$weightedProbability;
-																	else
-																		cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																}
-																
-																// Add the probability of this distribution configuration to the accumulator.
-																cv$probabilityReached = (cv$probabilityReached + 1.0);
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							} else {
-								for(int index$sample$3 = 0; index$sample$3 < noSamples; index$sample$3 += 1) {
-									if(true) {
-										// Enumerating the possible outputs of Categorical 101.
-										for(int index$sample104$4 = 0; index$sample104$4 < noStates; index$sample104$4 += 1) {
-											int distributionTempVariable$var102$6 = index$sample104$4;
-											
-											// Update the probability of sampling this value from the distribution value.
-											double cv$probabilitySample104Value5 = (1.0 * distribution$sample104[((index$sample$3 - 0) / 1)][index$sample104$4]);
-											{
-												int traceTempVariable$currentState$7_1 = distributionTempVariable$var102$6;
-												if((index$sample$3 == sample)) {
-													if((0 == timeStep$var136)) {
-														{
-															for(int var82 = 0; var82 < noStates; var82 += 1) {
-																if((var82 == traceTempVariable$currentState$7_1)) {
-																	{
-																		double var139 = metric_valid_bias[traceTempVariable$currentState$7_1];
-																		
-																		// Store the value of the function call, so the function call is only made once.
-																		double cv$weightedProbability = (Math.log(cv$probabilitySample104Value5) + (((0.0 <= var139) && (var139 <= 1.0))?Math.log((cv$sampleValue?var139:(1.0 - var139))):Double.NEGATIVE_INFINITY));
-																		
-																		// Add the probability of this sample task to the distribution accumulator.
-																		if((cv$weightedProbability < cv$distributionAccumulator))
-																			cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																		else {
-																			// If the second value is -infinity.
-																			if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																				cv$distributionAccumulator = cv$weightedProbability;
-																			else
-																				cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																		}
-																		
-																		// Add the probability of this distribution configuration to the accumulator.
-																		cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value5);
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							
-							// Enumerating the possible arguments for Bernoulli 140.
-							if(fixedFlag$sample123) {
-								{
-									for(int index$sample$10_1 = 0; index$sample$10_1 < noSamples; index$sample$10_1 += 1) {
-										for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$10_1]; timeStep$var113 += 1) {
-											if((index$sample$10_1 == sample)) {
-												if((timeStep$var113 == timeStep$var136)) {
-													{
-														for(int var82 = 0; var82 < noStates; var82 += 1) {
-															if((var82 == st[sample][timeStep$var136])) {
-																{
-																	double var139 = metric_valid_bias[st[sample][timeStep$var136]];
-																	
-																	// Store the value of the function call, so the function call is only made once.
-																	double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var139) && (var139 <= 1.0))?Math.log((cv$sampleValue?var139:(1.0 - var139))):Double.NEGATIVE_INFINITY));
-																	
-																	// Add the probability of this sample task to the distribution accumulator.
-																	if((cv$weightedProbability < cv$distributionAccumulator))
-																		cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																	else {
-																		// If the second value is -infinity.
-																		if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																			cv$distributionAccumulator = cv$weightedProbability;
-																		else
-																			cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																	}
-																	
-																	// Add the probability of this distribution configuration to the accumulator.
-																	cv$probabilityReached = (cv$probabilityReached + 1.0);
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							} else {
-								for(int index$sample$11 = 0; index$sample$11 < noSamples; index$sample$11 += 1) {
-									for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$11]; timeStep$var113 += 1) {
-										if(true) {
-											// Enumerating the possible outputs of Categorical 120.
-											for(int index$sample123$13 = 0; index$sample123$13 < noStates; index$sample123$13 += 1) {
-												int distributionTempVariable$var121$15 = index$sample123$13;
-												
-												// Update the probability of sampling this value from the distribution value.
-												double cv$probabilitySample123Value14 = (1.0 * distribution$sample123[((index$sample$11 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$13]);
-												{
-													int traceTempVariable$currentState$16_1 = distributionTempVariable$var121$15;
-													if((index$sample$11 == sample)) {
-														if((timeStep$var113 == timeStep$var136)) {
-															{
-																for(int var82 = 0; var82 < noStates; var82 += 1) {
-																	if((var82 == traceTempVariable$currentState$16_1)) {
-																		{
-																			double var139 = metric_valid_bias[traceTempVariable$currentState$16_1];
-																			
-																			// Store the value of the function call, so the function call is only made once.
-																			double cv$weightedProbability = (Math.log(cv$probabilitySample123Value14) + (((0.0 <= var139) && (var139 <= 1.0))?Math.log((cv$sampleValue?var139:(1.0 - var139))):Double.NEGATIVE_INFINITY));
-																			
-																			// Add the probability of this sample task to the distribution accumulator.
-																			if((cv$weightedProbability < cv$distributionAccumulator))
-																				cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																			else {
-																				// If the second value is -infinity.
-																				if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																					cv$distributionAccumulator = cv$weightedProbability;
-																				else
-																					cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																			}
-																			
-																			// Add the probability of this distribution configuration to the accumulator.
-																			cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value14);
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					if((cv$probabilityReached == 0.0))
-						// Return negative infinity if no distribution probability space is reached.
-						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					else
-						// Scale the probability relative to the observed distribution space.
-						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-					double cv$sampleProbability = cv$distributionAccumulator;
-					
-					// Record that the sample was reached.
-					cv$sampleReached = true;
-					
-					// Add the probability of this sample task to the sample task accumulator.
-					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-					
-					// Add the probability of this instance of the random variable to the probability
-					// of all instances of the random variable.
-					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					
-					// Store the sample task probability
-					logProbability$sample145[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$sampleProbability;
-				}
-			}
-			
-			// Guard to ensure that metric_valid_g is only updated once for this probability.
-			boolean cv$guard$metric_valid_g = false;
-			
-			// Update the variable probability
-			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				{
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$metric_valid_g) {
-						// Set the guard so the update is only applied once.
-						cv$guard$metric_valid_g = true;
-						
-						// Update the variable probability
-						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
-					}
-				}
-			}
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample145 = ((fixedFlag$sample84 && fixedFlag$sample104) && fixedFlag$sample123);
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample = 0; sample < noSamples; sample += 1) {
-				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-					double cv$rvAccumulator = 0.0;
-					double cv$sampleValue = logProbability$sample145[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)];
-					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-					
-					// Record that the sample was reached.
-					cv$sampleReached = true;
-					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				}
-			}
-			
-			// Guard to ensure that metric_valid_g is only updated once for this probability.
-			boolean cv$guard$metric_valid_g = false;
-			
-			// Update the variable probability
-			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				{
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$metric_valid_g) {
-						// Set the guard so the update is only applied once.
-						cv$guard$metric_valid_g = true;
-						
-						// Update the variable probability
-						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
-					}
-				}
-			}
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+	// Pick a value from the distribution for the unconditioned variable from sample19
+	private final void drawValueSample19() {
+		DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
 	}
 
-	// Calculate the probability of the samples represented by sample157 using probability
-	// distributions.
-	private final void logProbabilityDistribution$sample157() {
-		// Determine if we need to calculate the values for sample task 157 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample157) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample = 0; sample < noSamples; sample += 1) {
-				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-					if(metric_valid_g[sample][timeStep$var136]) {
-						// Accumulator for sample probabilities for a specific instance of the random variable.
-						double cv$sampleAccumulator = 0.0;
-						
-						// An accumulator for log probabilities.
-						double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-						
-						// An accumulator for the distributed probability space covered.
-						double cv$probabilityReached = 0.0;
-						
-						// Look for paths between the variable and the sample task 157 including any distribution
-						// values.
-						{
-							{
-								// The sample value to calculate the probability of generating
-								double cv$sampleValue = var151[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)];
-								
-								// Enumerating the possible arguments for Gaussian 150.
-								if(fixedFlag$sample104) {
-									{
-										for(int index$sample$2_1 = 0; index$sample$2_1 < noSamples; index$sample$2_1 += 1) {
-											if((index$sample$2_1 == sample)) {
-												if((0 == timeStep$var136)) {
-													{
-														for(int var50 = 0; var50 < noStates; var50 += 1) {
-															if((var50 == st[sample][timeStep$var136])) {
-																{
-																	for(int index$sample$10_1 = 0; index$sample$10_1 < noSamples; index$sample$10_1 += 1) {
-																		if((index$sample$10_1 == sample)) {
-																			if((0 == timeStep$var136)) {
-																				{
-																					for(int var66 = 0; var66 < noStates; var66 += 1) {
-																						if((var66 == st[sample][timeStep$var136])) {
-																							{
-																								double var148 = metric_mean[st[sample][timeStep$var136]];
-																								double var149 = metric_var[st[sample][timeStep$var136]];
-																								
-																								// Store the value of the function call, so the function call is only made once.
-																								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
-																								
-																								// Add the probability of this sample task to the distribution accumulator.
-																								if((cv$weightedProbability < cv$distributionAccumulator))
-																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																								else {
-																									// If the second value is -infinity.
-																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																										cv$distributionAccumulator = cv$weightedProbability;
-																									else
-																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																								}
-																								
-																								// Add the probability of this distribution configuration to the accumulator.
-																								cv$probabilityReached = (cv$probabilityReached + 1.0);
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								} else {
-									for(int index$sample$3 = 0; index$sample$3 < noSamples; index$sample$3 += 1) {
-										if(true) {
-											// Enumerating the possible outputs of Categorical 101.
-											for(int index$sample104$4 = 0; index$sample104$4 < noStates; index$sample104$4 += 1) {
-												int distributionTempVariable$var102$6 = index$sample104$4;
-												
-												// Update the probability of sampling this value from the distribution value.
-												double cv$probabilitySample104Value5 = (1.0 * distribution$sample104[((index$sample$3 - 0) / 1)][index$sample104$4]);
-												{
-													int traceTempVariable$currentState$7_1 = distributionTempVariable$var102$6;
-													if((index$sample$3 == sample)) {
-														if((0 == timeStep$var136)) {
-															{
-																for(int var50 = 0; var50 < noStates; var50 += 1) {
-																	if((var50 == traceTempVariable$currentState$7_1)) {
-																		{
-																			int traceTempVariable$currentState$11_1 = distributionTempVariable$var102$6;
-																			if((index$sample$3 == sample)) {
-																				if((0 == timeStep$var136)) {
-																					{
-																						for(int var66 = 0; var66 < noStates; var66 += 1) {
-																							if((var66 == traceTempVariable$currentState$11_1)) {
-																								{
-																									double var148 = metric_mean[traceTempVariable$currentState$11_1];
-																									double var149 = metric_var[traceTempVariable$currentState$11_1];
-																									
-																									// Store the value of the function call, so the function call is only made once.
-																									double cv$weightedProbability = (Math.log(cv$probabilitySample104Value5) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
-																									
-																									// Add the probability of this sample task to the distribution accumulator.
-																									if((cv$weightedProbability < cv$distributionAccumulator))
-																										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																									else {
-																										// If the second value is -infinity.
-																										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																											cv$distributionAccumulator = cv$weightedProbability;
-																										else
-																											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																									}
-																									
-																									// Add the probability of this distribution configuration to the accumulator.
-																									cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value5);
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																		for(int index$sample$12 = 0; index$sample$12 < noSamples; index$sample$12 += 1) {
-																			if(!(index$sample$12 == index$sample$3)) {
-																				// Enumerating the possible outputs of Categorical 101.
-																				for(int index$sample104$13 = 0; index$sample104$13 < noStates; index$sample104$13 += 1) {
-																					int distributionTempVariable$var102$15 = index$sample104$13;
-																					
-																					// Update the probability of sampling this value from the distribution value.
-																					double cv$probabilitySample104Value14 = (cv$probabilitySample104Value5 * distribution$sample104[((index$sample$12 - 0) / 1)][index$sample104$13]);
-																					{
-																						int traceTempVariable$currentState$16_1 = distributionTempVariable$var102$15;
-																						if((index$sample$12 == sample)) {
-																							if((0 == timeStep$var136)) {
-																								{
-																									for(int var66 = 0; var66 < noStates; var66 += 1) {
-																										if((var66 == traceTempVariable$currentState$16_1)) {
-																											{
-																												double var148 = metric_mean[traceTempVariable$currentState$16_1];
-																												double var149 = metric_var[traceTempVariable$currentState$16_1];
-																												
-																												// Store the value of the function call, so the function call is only made once.
-																												double cv$weightedProbability = (Math.log(cv$probabilitySample104Value14) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
-																												
-																												// Add the probability of this sample task to the distribution accumulator.
-																												if((cv$weightedProbability < cv$distributionAccumulator))
-																													cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																												else {
-																													// If the second value is -infinity.
-																													if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																														cv$distributionAccumulator = cv$weightedProbability;
-																													else
-																														cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																												}
-																												
-																												// Add the probability of this distribution configuration to the accumulator.
-																												cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value14);
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								
-								// Enumerating the possible arguments for Gaussian 150.
-								if(fixedFlag$sample104) {
-									{
-										for(int index$sample$20_1 = 0; index$sample$20_1 < noSamples; index$sample$20_1 += 1) {
-											if((index$sample$20_1 == sample)) {
-												if((0 == timeStep$var136)) {
-													{
-														for(int var50 = 0; var50 < noStates; var50 += 1) {
-															if((var50 == st[sample][timeStep$var136])) {
-																if(fixedFlag$sample123) {
-																	{
-																		for(int index$sample$28_1 = 0; index$sample$28_1 < noSamples; index$sample$28_1 += 1) {
-																			for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$28_1]; timeStep$var113 += 1) {
-																				if((index$sample$28_1 == sample)) {
-																					if((timeStep$var113 == timeStep$var136)) {
-																						{
-																							for(int var66 = 0; var66 < noStates; var66 += 1) {
-																								if((var66 == st[sample][timeStep$var136])) {
-																									{
-																										double var148 = metric_mean[st[sample][timeStep$var136]];
-																										double var149 = metric_var[st[sample][timeStep$var136]];
-																										
-																										// Store the value of the function call, so the function call is only made once.
-																										double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
-																										
-																										// Add the probability of this sample task to the distribution accumulator.
-																										if((cv$weightedProbability < cv$distributionAccumulator))
-																											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																										else {
-																											// If the second value is -infinity.
-																											if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																												cv$distributionAccumulator = cv$weightedProbability;
-																											else
-																												cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																										}
-																										
-																										// Add the probability of this distribution configuration to the accumulator.
-																										cv$probabilityReached = (cv$probabilityReached + 1.0);
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																} else {
-																	for(int index$sample$29 = 0; index$sample$29 < noSamples; index$sample$29 += 1) {
-																		for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$29]; timeStep$var113 += 1) {
-																			if(true) {
-																				// Enumerating the possible outputs of Categorical 120.
-																				for(int index$sample123$31 = 0; index$sample123$31 < noStates; index$sample123$31 += 1) {
-																					int distributionTempVariable$var121$33 = index$sample123$31;
-																					
-																					// Update the probability of sampling this value from the distribution value.
-																					double cv$probabilitySample123Value32 = (1.0 * distribution$sample123[((index$sample$29 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$31]);
-																					{
-																						int traceTempVariable$currentState$34_1 = distributionTempVariable$var121$33;
-																						if((index$sample$29 == sample)) {
-																							if((timeStep$var113 == timeStep$var136)) {
-																								{
-																									for(int var66 = 0; var66 < noStates; var66 += 1) {
-																										if((var66 == traceTempVariable$currentState$34_1)) {
-																											{
-																												double var148 = metric_mean[traceTempVariable$currentState$34_1];
-																												double var149 = metric_var[traceTempVariable$currentState$34_1];
-																												
-																												// Store the value of the function call, so the function call is only made once.
-																												double cv$weightedProbability = (Math.log(cv$probabilitySample123Value32) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
-																												
-																												// Add the probability of this sample task to the distribution accumulator.
-																												if((cv$weightedProbability < cv$distributionAccumulator))
-																													cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																												else {
-																													// If the second value is -infinity.
-																													if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																														cv$distributionAccumulator = cv$weightedProbability;
-																													else
-																														cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																												}
-																												
-																												// Add the probability of this distribution configuration to the accumulator.
-																												cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value32);
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								} else {
-									for(int index$sample$21 = 0; index$sample$21 < noSamples; index$sample$21 += 1) {
-										if(true) {
-											// Enumerating the possible outputs of Categorical 101.
-											for(int index$sample104$22 = 0; index$sample104$22 < noStates; index$sample104$22 += 1) {
-												int distributionTempVariable$var102$24 = index$sample104$22;
-												
-												// Update the probability of sampling this value from the distribution value.
-												double cv$probabilitySample104Value23 = (1.0 * distribution$sample104[((index$sample$21 - 0) / 1)][index$sample104$22]);
-												{
-													int traceTempVariable$currentState$25_1 = distributionTempVariable$var102$24;
-													if((index$sample$21 == sample)) {
-														if((0 == timeStep$var136)) {
-															{
-																for(int var50 = 0; var50 < noStates; var50 += 1) {
-																	if((var50 == traceTempVariable$currentState$25_1)) {
-																		if(fixedFlag$sample123) {
-																			{
-																				for(int index$sample$35_1 = 0; index$sample$35_1 < noSamples; index$sample$35_1 += 1) {
-																					for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$35_1]; timeStep$var113 += 1) {
-																						if((index$sample$35_1 == sample)) {
-																							if((timeStep$var113 == timeStep$var136)) {
-																								{
-																									for(int var66 = 0; var66 < noStates; var66 += 1) {
-																										if((var66 == traceTempVariable$currentState$25_1)) {
-																											{
-																												double var148 = metric_mean[traceTempVariable$currentState$25_1];
-																												double var149 = metric_var[traceTempVariable$currentState$25_1];
-																												
-																												// Store the value of the function call, so the function call is only made once.
-																												double cv$weightedProbability = (Math.log(cv$probabilitySample104Value23) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
-																												
-																												// Add the probability of this sample task to the distribution accumulator.
-																												if((cv$weightedProbability < cv$distributionAccumulator))
-																													cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																												else {
-																													// If the second value is -infinity.
-																													if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																														cv$distributionAccumulator = cv$weightedProbability;
-																													else
-																														cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																												}
-																												
-																												// Add the probability of this distribution configuration to the accumulator.
-																												cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value23);
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		} else {
-																			for(int index$sample$36 = 0; index$sample$36 < noSamples; index$sample$36 += 1) {
-																				for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$36]; timeStep$var113 += 1) {
-																					if(true) {
-																						// Enumerating the possible outputs of Categorical 120.
-																						for(int index$sample123$38 = 0; index$sample123$38 < noStates; index$sample123$38 += 1) {
-																							int distributionTempVariable$var121$40 = index$sample123$38;
-																							
-																							// Update the probability of sampling this value from the distribution value.
-																							double cv$probabilitySample123Value39 = (cv$probabilitySample104Value23 * distribution$sample123[((index$sample$36 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$38]);
-																							{
-																								int traceTempVariable$currentState$41_1 = distributionTempVariable$var121$40;
-																								if((index$sample$36 == sample)) {
-																									if((timeStep$var113 == timeStep$var136)) {
-																										{
-																											for(int var66 = 0; var66 < noStates; var66 += 1) {
-																												if((var66 == traceTempVariable$currentState$41_1)) {
-																													{
-																														double var148 = metric_mean[traceTempVariable$currentState$41_1];
-																														double var149 = metric_var[traceTempVariable$currentState$41_1];
-																														
-																														// Store the value of the function call, so the function call is only made once.
-																														double cv$weightedProbability = (Math.log(cv$probabilitySample123Value39) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
-																														
-																														// Add the probability of this sample task to the distribution accumulator.
-																														if((cv$weightedProbability < cv$distributionAccumulator))
-																															cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																														else {
-																															// If the second value is -infinity.
-																															if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																																cv$distributionAccumulator = cv$weightedProbability;
-																															else
-																																cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																														}
-																														
-																														// Add the probability of this distribution configuration to the accumulator.
-																														cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value39);
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								
-								// Enumerating the possible arguments for Gaussian 150.
-								if(fixedFlag$sample123) {
-									{
-										for(int index$sample$46_1 = 0; index$sample$46_1 < noSamples; index$sample$46_1 += 1) {
-											for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$46_1]; timeStep$var113 += 1) {
-												if((index$sample$46_1 == sample)) {
-													if((timeStep$var113 == timeStep$var136)) {
-														{
-															for(int var50 = 0; var50 < noStates; var50 += 1) {
-																if((var50 == st[sample][timeStep$var136])) {
-																	{
-																		for(int index$sample$55_1 = 0; index$sample$55_1 < noSamples; index$sample$55_1 += 1) {
-																			for(int index$timeStep$55_2 = 1; index$timeStep$55_2 < length$metric[index$sample$55_1]; index$timeStep$55_2 += 1) {
-																				if((index$sample$55_1 == sample)) {
-																					if((index$timeStep$55_2 == timeStep$var136)) {
-																						{
-																							for(int var66 = 0; var66 < noStates; var66 += 1) {
-																								if((var66 == st[sample][timeStep$var136])) {
-																									{
-																										double var148 = metric_mean[st[sample][timeStep$var136]];
-																										double var149 = metric_var[st[sample][timeStep$var136]];
-																										
-																										// Store the value of the function call, so the function call is only made once.
-																										double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
-																										
-																										// Add the probability of this sample task to the distribution accumulator.
-																										if((cv$weightedProbability < cv$distributionAccumulator))
-																											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																										else {
-																											// If the second value is -infinity.
-																											if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																												cv$distributionAccumulator = cv$weightedProbability;
-																											else
-																												cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																										}
-																										
-																										// Add the probability of this distribution configuration to the accumulator.
-																										cv$probabilityReached = (cv$probabilityReached + 1.0);
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								} else {
-									for(int index$sample$47 = 0; index$sample$47 < noSamples; index$sample$47 += 1) {
-										for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$47]; timeStep$var113 += 1) {
-											if(true) {
-												// Enumerating the possible outputs of Categorical 120.
-												for(int index$sample123$49 = 0; index$sample123$49 < noStates; index$sample123$49 += 1) {
-													int distributionTempVariable$var121$51 = index$sample123$49;
-													
-													// Update the probability of sampling this value from the distribution value.
-													double cv$probabilitySample123Value50 = (1.0 * distribution$sample123[((index$sample$47 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$49]);
-													{
-														int traceTempVariable$currentState$52_1 = distributionTempVariable$var121$51;
-														if((index$sample$47 == sample)) {
-															if((timeStep$var113 == timeStep$var136)) {
-																{
-																	for(int var50 = 0; var50 < noStates; var50 += 1) {
-																		if((var50 == traceTempVariable$currentState$52_1)) {
-																			{
-																				int traceTempVariable$currentState$56_1 = distributionTempVariable$var121$51;
-																				if((index$sample$47 == sample)) {
-																					if((timeStep$var113 == timeStep$var136)) {
-																						{
-																							for(int var66 = 0; var66 < noStates; var66 += 1) {
-																								if((var66 == traceTempVariable$currentState$56_1)) {
-																									{
-																										double var148 = metric_mean[traceTempVariable$currentState$56_1];
-																										double var149 = metric_var[traceTempVariable$currentState$56_1];
-																										
-																										// Store the value of the function call, so the function call is only made once.
-																										double cv$weightedProbability = (Math.log(cv$probabilitySample123Value50) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
-																										
-																										// Add the probability of this sample task to the distribution accumulator.
-																										if((cv$weightedProbability < cv$distributionAccumulator))
-																											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																										else {
-																											// If the second value is -infinity.
-																											if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																												cv$distributionAccumulator = cv$weightedProbability;
-																											else
-																												cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																										}
-																										
-																										// Add the probability of this distribution configuration to the accumulator.
-																										cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value50);
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																			for(int index$sample$57 = 0; index$sample$57 < noSamples; index$sample$57 += 1) {
-																				for(int index$timeStep$58 = 1; index$timeStep$58 < length$metric[index$sample$57]; index$timeStep$58 += 1) {
-																					if(!((index$timeStep$58 == timeStep$var113) && (index$sample$57 == index$sample$47))) {
-																						// Enumerating the possible outputs of Categorical 120.
-																						for(int index$sample123$59 = 0; index$sample123$59 < noStates; index$sample123$59 += 1) {
-																							int distributionTempVariable$var121$61 = index$sample123$59;
-																							
-																							// Update the probability of sampling this value from the distribution value.
-																							double cv$probabilitySample123Value60 = (cv$probabilitySample123Value50 * distribution$sample123[((index$sample$57 - 0) / 1)][((index$timeStep$58 - 1) / 1)][index$sample123$59]);
-																							{
-																								int traceTempVariable$currentState$62_1 = distributionTempVariable$var121$61;
-																								if((index$sample$57 == sample)) {
-																									if((index$timeStep$58 == timeStep$var136)) {
-																										{
-																											for(int var66 = 0; var66 < noStates; var66 += 1) {
-																												if((var66 == traceTempVariable$currentState$62_1)) {
-																													{
-																														double var148 = metric_mean[traceTempVariable$currentState$62_1];
-																														double var149 = metric_var[traceTempVariable$currentState$62_1];
-																														
-																														// Store the value of the function call, so the function call is only made once.
-																														double cv$weightedProbability = (Math.log(cv$probabilitySample123Value60) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
-																														
-																														// Add the probability of this sample task to the distribution accumulator.
-																														if((cv$weightedProbability < cv$distributionAccumulator))
-																															cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																														else {
-																															// If the second value is -infinity.
-																															if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																																cv$distributionAccumulator = cv$weightedProbability;
-																															else
-																																cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																														}
-																														
-																														// Add the probability of this distribution configuration to the accumulator.
-																														cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value60);
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								
-								// Enumerating the possible arguments for Gaussian 150.
-								if(fixedFlag$sample123) {
-									{
-										for(int index$sample$66_1 = 0; index$sample$66_1 < noSamples; index$sample$66_1 += 1) {
-											for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$66_1]; timeStep$var113 += 1) {
-												if((index$sample$66_1 == sample)) {
-													if((timeStep$var113 == timeStep$var136)) {
-														{
-															for(int var50 = 0; var50 < noStates; var50 += 1) {
-																if((var50 == st[sample][timeStep$var136])) {
-																	if(fixedFlag$sample104) {
-																		{
-																			for(int index$sample$75_1 = 0; index$sample$75_1 < noSamples; index$sample$75_1 += 1) {
-																				if((index$sample$75_1 == sample)) {
-																					if((0 == timeStep$var136)) {
-																						{
-																							for(int var66 = 0; var66 < noStates; var66 += 1) {
-																								if((var66 == st[sample][timeStep$var136])) {
-																									{
-																										double var148 = metric_mean[st[sample][timeStep$var136]];
-																										double var149 = metric_var[st[sample][timeStep$var136]];
-																										
-																										// Store the value of the function call, so the function call is only made once.
-																										double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
-																										
-																										// Add the probability of this sample task to the distribution accumulator.
-																										if((cv$weightedProbability < cv$distributionAccumulator))
-																											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																										else {
-																											// If the second value is -infinity.
-																											if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																												cv$distributionAccumulator = cv$weightedProbability;
-																											else
-																												cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																										}
-																										
-																										// Add the probability of this distribution configuration to the accumulator.
-																										cv$probabilityReached = (cv$probabilityReached + 1.0);
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	} else {
-																		for(int index$sample$76 = 0; index$sample$76 < noSamples; index$sample$76 += 1) {
-																			if(true) {
-																				// Enumerating the possible outputs of Categorical 101.
-																				for(int index$sample104$77 = 0; index$sample104$77 < noStates; index$sample104$77 += 1) {
-																					int distributionTempVariable$var102$79 = index$sample104$77;
-																					
-																					// Update the probability of sampling this value from the distribution value.
-																					double cv$probabilitySample104Value78 = (1.0 * distribution$sample104[((index$sample$76 - 0) / 1)][index$sample104$77]);
-																					{
-																						int traceTempVariable$currentState$80_1 = distributionTempVariable$var102$79;
-																						if((index$sample$76 == sample)) {
-																							if((0 == timeStep$var136)) {
-																								{
-																									for(int var66 = 0; var66 < noStates; var66 += 1) {
-																										if((var66 == traceTempVariable$currentState$80_1)) {
-																											{
-																												double var148 = metric_mean[traceTempVariable$currentState$80_1];
-																												double var149 = metric_var[traceTempVariable$currentState$80_1];
-																												
-																												// Store the value of the function call, so the function call is only made once.
-																												double cv$weightedProbability = (Math.log(cv$probabilitySample104Value78) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
-																												
-																												// Add the probability of this sample task to the distribution accumulator.
-																												if((cv$weightedProbability < cv$distributionAccumulator))
-																													cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																												else {
-																													// If the second value is -infinity.
-																													if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																														cv$distributionAccumulator = cv$weightedProbability;
-																													else
-																														cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																												}
-																												
-																												// Add the probability of this distribution configuration to the accumulator.
-																												cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value78);
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								} else {
-									for(int index$sample$67 = 0; index$sample$67 < noSamples; index$sample$67 += 1) {
-										for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$67]; timeStep$var113 += 1) {
-											if(true) {
-												// Enumerating the possible outputs of Categorical 120.
-												for(int index$sample123$69 = 0; index$sample123$69 < noStates; index$sample123$69 += 1) {
-													int distributionTempVariable$var121$71 = index$sample123$69;
-													
-													// Update the probability of sampling this value from the distribution value.
-													double cv$probabilitySample123Value70 = (1.0 * distribution$sample123[((index$sample$67 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$69]);
-													{
-														int traceTempVariable$currentState$72_1 = distributionTempVariable$var121$71;
-														if((index$sample$67 == sample)) {
-															if((timeStep$var113 == timeStep$var136)) {
-																{
-																	for(int var50 = 0; var50 < noStates; var50 += 1) {
-																		if((var50 == traceTempVariable$currentState$72_1)) {
-																			if(fixedFlag$sample104) {
-																				{
-																					for(int index$sample$81_1 = 0; index$sample$81_1 < noSamples; index$sample$81_1 += 1) {
-																						if((index$sample$81_1 == sample)) {
-																							if((0 == timeStep$var136)) {
-																								{
-																									for(int var66 = 0; var66 < noStates; var66 += 1) {
-																										if((var66 == traceTempVariable$currentState$72_1)) {
-																											{
-																												double var148 = metric_mean[traceTempVariable$currentState$72_1];
-																												double var149 = metric_var[traceTempVariable$currentState$72_1];
-																												
-																												// Store the value of the function call, so the function call is only made once.
-																												double cv$weightedProbability = (Math.log(cv$probabilitySample123Value70) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
-																												
-																												// Add the probability of this sample task to the distribution accumulator.
-																												if((cv$weightedProbability < cv$distributionAccumulator))
-																													cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																												else {
-																													// If the second value is -infinity.
-																													if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																														cv$distributionAccumulator = cv$weightedProbability;
-																													else
-																														cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																												}
-																												
-																												// Add the probability of this distribution configuration to the accumulator.
-																												cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value70);
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			} else {
-																				for(int index$sample$82 = 0; index$sample$82 < noSamples; index$sample$82 += 1) {
-																					if(true) {
-																						// Enumerating the possible outputs of Categorical 101.
-																						for(int index$sample104$83 = 0; index$sample104$83 < noStates; index$sample104$83 += 1) {
-																							int distributionTempVariable$var102$85 = index$sample104$83;
-																							
-																							// Update the probability of sampling this value from the distribution value.
-																							double cv$probabilitySample104Value84 = (cv$probabilitySample123Value70 * distribution$sample104[((index$sample$82 - 0) / 1)][index$sample104$83]);
-																							{
-																								int traceTempVariable$currentState$86_1 = distributionTempVariable$var102$85;
-																								if((index$sample$82 == sample)) {
-																									if((0 == timeStep$var136)) {
-																										{
-																											for(int var66 = 0; var66 < noStates; var66 += 1) {
-																												if((var66 == traceTempVariable$currentState$86_1)) {
-																													{
-																														double var148 = metric_mean[traceTempVariable$currentState$86_1];
-																														double var149 = metric_var[traceTempVariable$currentState$86_1];
-																														
-																														// Store the value of the function call, so the function call is only made once.
-																														double cv$weightedProbability = (Math.log(cv$probabilitySample104Value84) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
-																														
-																														// Add the probability of this sample task to the distribution accumulator.
-																														if((cv$weightedProbability < cv$distributionAccumulator))
-																															cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-																														else {
-																															// If the second value is -infinity.
-																															if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-																																cv$distributionAccumulator = cv$weightedProbability;
-																															else
-																																cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-																														}
-																														
-																														// Add the probability of this distribution configuration to the accumulator.
-																														cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value84);
-																													}
-																												}
-																											}
-																										}
-																									}
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						if((cv$probabilityReached == 0.0))
-							// Return negative infinity if no distribution probability space is reached.
-							cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-						else
-							// Scale the probability relative to the observed distribution space.
-							cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-						double cv$sampleProbability = cv$distributionAccumulator;
-						
-						// Record that the sample was reached.
-						cv$sampleReached = true;
-						
-						// Add the probability of this sample task to the sample task accumulator.
-						cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-						
-						// Add the probability of this instance of the random variable to the probability
-						// of all instances of the random variable.
-						cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-						
-						// Store the sample task probability
-						logProbability$sample157[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$sampleProbability;
-					}
-				}
-			}
-			
-			// Guard to ensure that metric_g is only updated once for this probability.
-			boolean cv$guard$metric_g = false;
-			
-			// Update the variable probability
-			logProbability$var151 = (logProbability$var151 + cv$accumulator);
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				{
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$metric_g) {
-						// Set the guard so the update is only applied once.
-						cv$guard$metric_g = true;
-						
-						// Update the variable probability
-						logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
-					}
-				}
-			}
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample157 = (((fixedFlag$sample52 && fixedFlag$sample68) && fixedFlag$sample104) && fixedFlag$sample123);
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample = 0; sample < noSamples; sample += 1) {
-				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-					if(metric_valid_g[sample][timeStep$var136]) {
-						double cv$rvAccumulator = 0.0;
-						double cv$sampleValue = logProbability$sample157[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)];
-						cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-						
-						// Record that the sample was reached.
-						cv$sampleReached = true;
-						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					}
-				}
-			}
-			
-			// Guard to ensure that metric_g is only updated once for this probability.
-			boolean cv$guard$metric_g = false;
-			
-			// Update the variable probability
-			logProbability$var151 = (logProbability$var151 + cv$accumulator);
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				{
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$metric_g) {
-						// Set the guard so the update is only applied once.
-						cv$guard$metric_g = true;
-						
-						// Update the variable probability
-						logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
-					}
-				}
-			}
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+	// Pick a value from the distribution for the unconditioned variable from sample32
+	private final void drawValueSample32(int var31) {
+		double[] var32 = m[var31];
+		DistributionSampling.sampleDirichlet(RNG$, v, noStates, var32);
 	}
 
-	// Calculate the probability of the samples represented by sample104 using sampled
-	// values.
-	private final void logProbabilityValue$sample104() {
-		// Determine if we need to calculate the values for sample task 104 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample104) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample = 0; sample < noSamples; sample += 1) {
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				double cv$sampleAccumulator = 0.0;
-				
-				// An accumulator for log probabilities.
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				
-				// An accumulator for the distributed probability space covered.
-				double cv$probabilityReached = 0.0;
-				
-				// Copy of index so that its values can be safely substituted
-				int index$sample$1 = sample;
-				{
-					{
-						// The sample value to calculate the probability of generating
-						int cv$sampleValue = st[sample][0];
-						{
-							{
-								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$sampleValue])) && (initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-								
-								// Add the probability of this sample task to the distribution accumulator.
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									// If the second value is -infinity.
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								
-								// Add the probability of this distribution configuration to the accumulator.
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					// Return negative infinity if no distribution probability space is reached.
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					// Scale the probability relative to the observed distribution space.
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				
-				// Store the sample task probability
-				logProbability$sample104[((sample - 0) / 1)] = cv$sampleProbability;
-			}
-			
-			// Update the variable probability
-			logProbability$st = (logProbability$st + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample104)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample104 = (fixedFlag$sample104 && fixedFlag$sample19);
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample = 0; sample < noSamples; sample += 1) {
-				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample104[((sample - 0) / 1)];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			}
-			
-			// Update the variable probability
-			logProbability$st = (logProbability$st + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample104)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+	// Pick a value from the distribution for the unconditioned variable from sample52
+	private final void drawValueSample52(int var50) {
+		metric_mean[var50] = (0.0 + ((100.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
 	}
 
-	// Calculate the probability of the samples represented by sample123 using sampled
-	// values.
-	private final void logProbabilityValue$sample123() {
-		// Determine if we need to calculate the values for sample task 123 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample123) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample = 0; sample < noSamples; sample += 1) {
-				for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1) {
-					// Accumulator for sample probabilities for a specific instance of the random variable.
-					double cv$sampleAccumulator = 0.0;
-					
-					// An accumulator for log probabilities.
-					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					
-					// An accumulator for the distributed probability space covered.
-					double cv$probabilityReached = 0.0;
-					
-					// Copy of index so that its values can be safely substituted
-					int index$timeStep$1 = timeStep$var113;
-					
-					// Copy of index so that its values can be safely substituted
-					int index$sample$2 = sample;
-					{
-						{
-							// The sample value to calculate the probability of generating
-							int cv$sampleValue = st[sample][timeStep$var113];
-							{
-								{
-									double[] var119 = m[st[sample][(timeStep$var113 - 1)]];
-									
-									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var119[cv$sampleValue])) && (var119[cv$sampleValue] <= 1.0))?Math.log(var119[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-									
-									// Add the probability of this sample task to the distribution accumulator.
-									if((cv$weightedProbability < cv$distributionAccumulator))
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-									else {
-										// If the second value is -infinity.
-										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-											cv$distributionAccumulator = cv$weightedProbability;
-										else
-											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-									}
-									
-									// Add the probability of this distribution configuration to the accumulator.
-									cv$probabilityReached = (cv$probabilityReached + 1.0);
-								}
-							}
-						}
-					}
-					if((cv$probabilityReached == 0.0))
-						// Return negative infinity if no distribution probability space is reached.
-						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					else
-						// Scale the probability relative to the observed distribution space.
-						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-					double cv$sampleProbability = cv$distributionAccumulator;
-					
-					// Record that the sample was reached.
-					cv$sampleReached = true;
-					
-					// Add the probability of this sample task to the sample task accumulator.
-					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-					
-					// Add the probability of this instance of the random variable to the probability
-					// of all instances of the random variable.
-					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					
-					// Store the sample task probability
-					logProbability$sample123[((sample - 0) / 1)][((timeStep$var113 - 1) / 1)] = cv$sampleProbability;
-				}
-			}
-			
-			// Update the variable probability
-			logProbability$st = (logProbability$st + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample123)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample123 = ((fixedFlag$sample123 && fixedFlag$sample32) && fixedFlag$sample104);
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample = 0; sample < noSamples; sample += 1) {
-				for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1) {
-					double cv$rvAccumulator = 0.0;
-					double cv$sampleValue = logProbability$sample123[((sample - 0) / 1)][((timeStep$var113 - 1) / 1)];
-					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-					
-					// Record that the sample was reached.
-					cv$sampleReached = true;
-					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				}
-			}
-			
-			// Update the variable probability
-			logProbability$st = (logProbability$st + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample123)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+	// Pick a value from the distribution for the unconditioned variable from sample68
+	private final void drawValueSample68(int var66) {
+		metric_var[var66] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 	}
 
-	// Calculate the probability of the samples represented by sample145 using sampled
-	// values.
-	private final void logProbabilityValue$sample145() {
-		// Determine if we need to calculate the values for sample task 145 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample145) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample = 0; sample < noSamples; sample += 1) {
-				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-					// Accumulator for sample probabilities for a specific instance of the random variable.
-					double cv$sampleAccumulator = 0.0;
-					
-					// An accumulator for log probabilities.
-					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					
-					// An accumulator for the distributed probability space covered.
-					double cv$probabilityReached = 0.0;
-					{
-						{
-							// The sample value to calculate the probability of generating
-							boolean cv$sampleValue = metric_valid_g[sample][timeStep$var136];
-							{
-								{
-									double var139 = metric_valid_bias[st[sample][timeStep$var136]];
-									
-									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var139) && (var139 <= 1.0))?Math.log((cv$sampleValue?var139:(1.0 - var139))):Double.NEGATIVE_INFINITY));
-									
-									// Add the probability of this sample task to the distribution accumulator.
-									if((cv$weightedProbability < cv$distributionAccumulator))
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-									else {
-										// If the second value is -infinity.
-										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-											cv$distributionAccumulator = cv$weightedProbability;
-										else
-											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-									}
-									
-									// Add the probability of this distribution configuration to the accumulator.
-									cv$probabilityReached = (cv$probabilityReached + 1.0);
-								}
-							}
-						}
-					}
-					if((cv$probabilityReached == 0.0))
-						// Return negative infinity if no distribution probability space is reached.
-						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-					else
-						// Scale the probability relative to the observed distribution space.
-						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-					double cv$sampleProbability = cv$distributionAccumulator;
-					
-					// Record that the sample was reached.
-					cv$sampleReached = true;
-					
-					// Add the probability of this sample task to the sample task accumulator.
-					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-					
-					// Add the probability of this instance of the random variable to the probability
-					// of all instances of the random variable.
-					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					
-					// Store the sample task probability
-					logProbability$sample145[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$sampleProbability;
-				}
-			}
-			
-			// Guard to ensure that metric_valid_g is only updated once for this probability.
-			boolean cv$guard$metric_valid_g = false;
-			
-			// Update the variable probability
-			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				{
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$metric_valid_g) {
-						// Set the guard so the update is only applied once.
-						cv$guard$metric_valid_g = true;
-						
-						// Update the variable probability
-						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
-					}
-				}
-			}
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample145 = ((fixedFlag$sample84 && fixedFlag$sample104) && fixedFlag$sample123);
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample = 0; sample < noSamples; sample += 1) {
-				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-					double cv$rvAccumulator = 0.0;
-					double cv$sampleValue = logProbability$sample145[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)];
-					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-					
-					// Record that the sample was reached.
-					cv$sampleReached = true;
-					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				}
-			}
-			
-			// Guard to ensure that metric_valid_g is only updated once for this probability.
-			boolean cv$guard$metric_valid_g = false;
-			
-			// Update the variable probability
-			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				{
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$metric_valid_g) {
-						// Set the guard so the update is only applied once.
-						cv$guard$metric_valid_g = true;
-						
-						// Update the variable probability
-						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
-					}
-				}
-			}
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Calculate the probability of the samples represented by sample157 using sampled
-	// values.
-	private final void logProbabilityValue$sample157() {
-		// Determine if we need to calculate the values for sample task 157 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample157) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample = 0; sample < noSamples; sample += 1) {
-				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-					if(metric_valid_g[sample][timeStep$var136]) {
-						// Accumulator for sample probabilities for a specific instance of the random variable.
-						double cv$sampleAccumulator = 0.0;
-						
-						// An accumulator for log probabilities.
-						double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-						
-						// An accumulator for the distributed probability space covered.
-						double cv$probabilityReached = 0.0;
-						{
-							{
-								// The sample value to calculate the probability of generating
-								double cv$sampleValue = var151[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)];
-								{
-									{
-										double var148 = metric_mean[st[sample][timeStep$var136]];
-										double var149 = metric_var[st[sample][timeStep$var136]];
-										
-										// Store the value of the function call, so the function call is only made once.
-										double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
-										
-										// Add the probability of this sample task to the distribution accumulator.
-										if((cv$weightedProbability < cv$distributionAccumulator))
-											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-										else {
-											// If the second value is -infinity.
-											if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-												cv$distributionAccumulator = cv$weightedProbability;
-											else
-												cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-										}
-										
-										// Add the probability of this distribution configuration to the accumulator.
-										cv$probabilityReached = (cv$probabilityReached + 1.0);
-									}
-								}
-							}
-						}
-						if((cv$probabilityReached == 0.0))
-							// Return negative infinity if no distribution probability space is reached.
-							cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-						else
-							// Scale the probability relative to the observed distribution space.
-							cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-						double cv$sampleProbability = cv$distributionAccumulator;
-						
-						// Record that the sample was reached.
-						cv$sampleReached = true;
-						
-						// Add the probability of this sample task to the sample task accumulator.
-						cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-						
-						// Add the probability of this instance of the random variable to the probability
-						// of all instances of the random variable.
-						cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-						
-						// Store the sample task probability
-						logProbability$sample157[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$sampleProbability;
-					}
-				}
-			}
-			
-			// Guard to ensure that metric_g is only updated once for this probability.
-			boolean cv$guard$metric_g = false;
-			
-			// Update the variable probability
-			logProbability$var151 = (logProbability$var151 + cv$accumulator);
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				{
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$metric_g) {
-						// Set the guard so the update is only applied once.
-						cv$guard$metric_g = true;
-						
-						// Update the variable probability
-						logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
-					}
-				}
-			}
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample157 = (((fixedFlag$sample52 && fixedFlag$sample68) && fixedFlag$sample104) && fixedFlag$sample123);
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int sample = 0; sample < noSamples; sample += 1) {
-				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
-					if(metric_valid_g[sample][timeStep$var136]) {
-						double cv$rvAccumulator = 0.0;
-						double cv$sampleValue = logProbability$sample157[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)];
-						cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-						
-						// Record that the sample was reached.
-						cv$sampleReached = true;
-						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					}
-				}
-			}
-			
-			// Guard to ensure that metric_g is only updated once for this probability.
-			boolean cv$guard$metric_g = false;
-			
-			// Update the variable probability
-			logProbability$var151 = (logProbability$var151 + cv$accumulator);
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				{
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$metric_g) {
-						// Set the guard so the update is only applied once.
-						cv$guard$metric_g = true;
-						
-						// Update the variable probability
-						logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
-					}
-				}
-			}
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Calculate the probability of the samples represented by sample19 using sampled
-	// values.
-	private final void logProbabilityValue$sample19() {
-		// Determine if we need to calculate the values for sample task 19 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample19) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			
-			// An accumulator for log probabilities.
-			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-			
-			// An accumulator for the distributed probability space covered.
-			double cv$probabilityReached = 0.0;
-			{
-				{
-					// The sample value to calculate the probability of generating
-					double[] cv$sampleValue = initialStateDistribution;
-					{
-						{
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, noStates));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
-						}
-					}
-				}
-			}
-			if((cv$probabilityReached == 0.0))
-				// Return negative infinity if no distribution probability space is reached.
-				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-			else
-				// Scale the probability relative to the observed distribution space.
-				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-			double cv$sampleProbability = cv$distributionAccumulator;
-			
-			// Add the probability of this sample task to the sample task accumulator.
-			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			
-			// Store the sample task probability
-			logProbability$initialStateDistribution = cv$sampleProbability;
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample19)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample19 = fixedFlag$sample19;
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$initialStateDistribution;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample19)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Calculate the probability of the samples represented by sample32 using sampled
-	// values.
-	private final void logProbabilityValue$sample32() {
-		// Determine if we need to calculate the values for sample task 32 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample32) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int var31 = 0; var31 < noStates; var31 += 1) {
-				// An accumulator for log probabilities.
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				
-				// An accumulator for the distributed probability space covered.
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						// The sample value to calculate the probability of generating
-						double[] cv$sampleValue = m[var31];
-						{
-							{
-								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, noStates));
-								
-								// Add the probability of this sample task to the distribution accumulator.
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									// If the second value is -infinity.
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								
-								// Add the probability of this distribution configuration to the accumulator.
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					// Return negative infinity if no distribution probability space is reached.
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					// Scale the probability relative to the observed distribution space.
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			}
-			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			
-			// Store the random variable instance probability
-			logProbability$var32 = cv$sampleAccumulator;
-			
-			// Update the variable probability
-			logProbability$m = (logProbability$m + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample32)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample32 = fixedFlag$sample32;
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int var31 = 0; var31 < noStates; var31 += 1)
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var32;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			
-			// Update the variable probability
-			logProbability$m = (logProbability$m + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample32)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Calculate the probability of the samples represented by sample52 using sampled
-	// values.
-	private final void logProbabilityValue$sample52() {
-		// Determine if we need to calculate the values for sample task 52 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample52) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int var50 = 0; var50 < noStates; var50 += 1) {
-				// An accumulator for log probabilities.
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				
-				// An accumulator for the distributed probability space covered.
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						// The sample value to calculate the probability of generating
-						double cv$sampleValue = metric_mean[var50];
-						{
-							{
-								double var37 = 0.0;
-								double var38 = 100.0;
-								
-								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (((var37 <= cv$sampleValue) && (cv$sampleValue < var38))?(-Math.log((var38 - var37))):Double.NEGATIVE_INFINITY));
-								
-								// Add the probability of this sample task to the distribution accumulator.
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									// If the second value is -infinity.
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								
-								// Add the probability of this distribution configuration to the accumulator.
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					// Return negative infinity if no distribution probability space is reached.
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					// Scale the probability relative to the observed distribution space.
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			}
-			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			
-			// Store the random variable instance probability
-			logProbability$var51 = cv$sampleAccumulator;
-			
-			// Update the variable probability
-			logProbability$metric_mean = (logProbability$metric_mean + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample52)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample52 = fixedFlag$sample52;
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int var50 = 0; var50 < noStates; var50 += 1)
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var51;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			
-			// Update the variable probability
-			logProbability$metric_mean = (logProbability$metric_mean + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample52)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Calculate the probability of the samples represented by sample68 using sampled
-	// values.
-	private final void logProbabilityValue$sample68() {
-		// Determine if we need to calculate the values for sample task 68 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample68) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int var66 = 0; var66 < noStates; var66 += 1) {
-				// An accumulator for log probabilities.
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				
-				// An accumulator for the distributed probability space covered.
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						// The sample value to calculate the probability of generating
-						double cv$sampleValue = metric_var[var66];
-						{
-							{
-								double var53 = 1.0;
-								double var54 = 1.0;
-								
-								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityInverseGamma(cv$sampleValue, var53, var54));
-								
-								// Add the probability of this sample task to the distribution accumulator.
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									// If the second value is -infinity.
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								
-								// Add the probability of this distribution configuration to the accumulator.
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					// Return negative infinity if no distribution probability space is reached.
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					// Scale the probability relative to the observed distribution space.
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			}
-			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			
-			// Store the random variable instance probability
-			logProbability$var67 = cv$sampleAccumulator;
-			
-			// Update the variable probability
-			logProbability$metric_var = (logProbability$metric_var + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample68)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample68 = fixedFlag$sample68;
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int var66 = 0; var66 < noStates; var66 += 1)
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var67;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			
-			// Update the variable probability
-			logProbability$metric_var = (logProbability$metric_var + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample68)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Calculate the probability of the samples represented by sample84 using sampled
-	// values.
-	private final void logProbabilityValue$sample84() {
-		// Determine if we need to calculate the values for sample task 84 or if we should
-		// just use cached values.
-		if(!fixedProbFlag$sample84) {
-			// Generating probabilities for sample task
-			// Accumulator for probabilities of instances of the random variable
-			double cv$accumulator = 0.0;
-			
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			double cv$sampleAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int var82 = 0; var82 < noStates; var82 += 1) {
-				// An accumulator for log probabilities.
-				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				
-				// An accumulator for the distributed probability space covered.
-				double cv$probabilityReached = 0.0;
-				{
-					{
-						// The sample value to calculate the probability of generating
-						double cv$sampleValue = metric_valid_bias[var82];
-						{
-							{
-								double var69 = 1.0;
-								double var70 = 1.0;
-								
-								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var69, var70));
-								
-								// Add the probability of this sample task to the distribution accumulator.
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									// If the second value is -infinity.
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-								}
-								
-								// Add the probability of this distribution configuration to the accumulator.
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
-							}
-						}
-					}
-				}
-				if((cv$probabilityReached == 0.0))
-					// Return negative infinity if no distribution probability space is reached.
-					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
-				else
-					// Scale the probability relative to the observed distribution space.
-					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
-				double cv$sampleProbability = cv$distributionAccumulator;
-				
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-				
-				// Add the probability of this sample task to the sample task accumulator.
-				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-			}
-			
-			// Add the probability of this instance of the random variable to the probability
-			// of all instances of the random variable.
-			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			
-			// Store the random variable instance probability
-			logProbability$var83 = cv$sampleAccumulator;
-			
-			// Update the variable probability
-			logProbability$metric_valid_bias = (logProbability$metric_valid_bias + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample84)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			
-			// Now the probability is calculated store if it can be cached or if it needs to be
-			// recalculated next time.
-			fixedProbFlag$sample84 = fixedFlag$sample84;
-		} else {
-			// Using cached values.
-			// 
-			// Updating random variable and model probabilities using cached probabilities for
-			// this sample
-			double cv$accumulator = 0.0;
-			double cv$rvAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			for(int var82 = 0; var82 < noStates; var82 += 1)
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var83;
-			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			
-			// Update the variable probability
-			logProbability$metric_valid_bias = (logProbability$metric_valid_bias + cv$accumulator);
-			
-			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			
-			// If this value is fixed, add it to the probability of this model producing the fixed
-			// values
-			if(fixedFlag$sample84)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
+	// Pick a value from the distribution for the unconditioned variable from sample84
+	private final void drawValueSample84(int var82) {
+		metric_valid_bias[var82] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 104 drawn from Categorical 101. Inference was performed using variable
 	// marginalization.
-	private final void sample104(int sample) {
+	private final void inferSample104(int sample) {
 		// Copy of index so that its values can be safely substituted
 		int index$sample$1 = sample;
 		if(true) {
@@ -4225,7 +1580,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 123 drawn from Categorical 120. Inference was performed using variable
 	// marginalization.
-	private final void sample123(int sample, int timeStep$var113) {
+	private final void inferSample123(int sample, int timeStep$var113) {
 		// Copy of index so that its values can be safely substituted
 		int index$timeStep$1 = timeStep$var113;
 		
@@ -7309,7 +4664,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 19 drawn from Dirichlet 18. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
-	private final void sample19() {
+	private final void inferSample19() {
 		if(true) {
 			constrainedFlag$sample19 = false;
 			
@@ -7412,7 +4767,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 32 drawn from Dirichlet 20. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
-	private final void sample32(int var31) {
+	private final void inferSample32(int var31) {
 		if(true) {
 			constrainedFlag$sample32[((var31 - 0) / 1)] = false;
 			
@@ -7869,7 +5224,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 52 drawn from Uniform 39. Inference was performed using Metropolis-Hastings.
-	private final void sample52(int var50) {
+	private final void inferSample52(int var50) {
 		if(true) {
 			constrainedFlag$sample52[((var50 - 0) / 1)] = false;
 			
@@ -8849,7 +6204,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 68 drawn from InverseGamma 55. Inference was performed using Metropolis-Hastings.
-	private final void sample68(int var66) {
+	private final void inferSample68(int var66) {
 		if(true) {
 			constrainedFlag$sample68[((var66 - 0) / 1)] = false;
 			
@@ -9830,7 +7185,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 84 drawn from Beta 71. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
-	private final void sample84(int var82) {
+	private final void inferSample84(int var82) {
 		if(true) {
 			constrainedFlag$sample84[((var82 - 0) / 1)] = false;
 			
@@ -10059,6 +7414,2731 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					}
 				}
 			}
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample104 using probability
+	// distributions.
+	private final void logProbabilityDistribution$sample104() {
+		// Determine if we need to calculate the values for sample task 104 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample104) {
+			// Update the probability if the distribution is fixed to a specific value. If it
+			// is not the value is implicitly log(1.0) so has no effect.
+			if(fixedFlag$sample104) {
+				// Generating probabilities for sample task
+				// Accumulator for probabilities of instances of the random variable
+				double cv$accumulator = 0.0;
+				
+				// A guard to check if the sample value is ever reached.
+				boolean cv$sampleReached = false;
+				for(int sample = 0; sample < noSamples; sample += 1) {
+					// Accumulator for sample probabilities for a specific instance of the random variable.
+					double cv$sampleAccumulator = 0.0;
+					
+					// An accumulator for log probabilities.
+					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					
+					// An accumulator for the distributed probability space covered.
+					double cv$probabilityReached = 0.0;
+					
+					// Copy of index so that its values can be safely substituted
+					int index$sample$1 = sample;
+					{
+						{
+							// The sample value to calculate the probability of generating
+							int cv$sampleValue = st[sample][0];
+							{
+								{
+									// Store the value of the function call, so the function call is only made once.
+									double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$sampleValue])) && (initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+									
+									// Add the probability of this sample task to the distribution accumulator.
+									if((cv$weightedProbability < cv$distributionAccumulator))
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+									else {
+										// If the second value is -infinity.
+										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+											cv$distributionAccumulator = cv$weightedProbability;
+										else
+											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+									}
+									
+									// Add the probability of this distribution configuration to the accumulator.
+									cv$probabilityReached = (cv$probabilityReached + 1.0);
+								}
+							}
+						}
+					}
+					if((cv$probabilityReached == 0.0))
+						// Return negative infinity if no distribution probability space is reached.
+						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					else
+						// Scale the probability relative to the observed distribution space.
+						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+					double cv$sampleProbability = cv$distributionAccumulator;
+					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+					
+					// Add the probability of this sample task to the sample task accumulator.
+					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+					
+					// Add the probability of this instance of the random variable to the probability
+					// of all instances of the random variable.
+					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+					
+					// Store the sample task probability
+					logProbability$sample104[((sample - 0) / 1)] = cv$sampleProbability;
+				}
+				
+				// Make sure all the inputs have been fixed so the variable is not a distribution.
+				if(fixedFlag$sample104)
+					// Update the variable probability
+					logProbability$st = (logProbability$st + cv$accumulator);
+				
+				// Add probability to model
+				logProbability$$model = (logProbability$$model + cv$accumulator);
+				
+				// If this value is fixed, add it to the probability of this model producing the fixed
+				// values
+				if(fixedFlag$sample104)
+					logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+				
+				// Now the probability is calculated store if it can be cached or if it needs to be
+				// recalculated next time.
+				fixedProbFlag$sample104 = (fixedFlag$sample104 && fixedFlag$sample19);
+			}
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int sample = 0; sample < noSamples; sample += 1) {
+				double cv$rvAccumulator = 0.0;
+				double cv$sampleValue = logProbability$sample104[((sample - 0) / 1)];
+				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			}
+			
+			// Make sure all the inputs have been fixed so the variable is not a distribution.
+			if(fixedFlag$sample104)
+				// Update the variable probability
+				logProbability$st = (logProbability$st + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample104)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample123 using probability
+	// distributions.
+	private final void logProbabilityDistribution$sample123() {
+		// Determine if we need to calculate the values for sample task 123 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample123) {
+			// Update the probability if the distribution is fixed to a specific value. If it
+			// is not the value is implicitly log(1.0) so has no effect.
+			if(fixedFlag$sample123) {
+				// Generating probabilities for sample task
+				// Accumulator for probabilities of instances of the random variable
+				double cv$accumulator = 0.0;
+				
+				// A guard to check if the sample value is ever reached.
+				boolean cv$sampleReached = false;
+				for(int sample = 0; sample < noSamples; sample += 1) {
+					for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1) {
+						// Accumulator for sample probabilities for a specific instance of the random variable.
+						double cv$sampleAccumulator = 0.0;
+						
+						// An accumulator for log probabilities.
+						double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+						
+						// An accumulator for the distributed probability space covered.
+						double cv$probabilityReached = 0.0;
+						
+						// Look for paths between the variable and the sample task 123 including any distribution
+						// values.
+						// 
+						// Copy of index so that its values can be safely substituted
+						int index$timeStep$1 = timeStep$var113;
+						
+						// Copy of index so that its values can be safely substituted
+						int index$sample$2 = sample;
+						{
+							{
+								// The sample value to calculate the probability of generating
+								int cv$sampleValue = st[sample][timeStep$var113];
+								
+								// Enumerating the possible arguments for Categorical 120.
+								if(fixedFlag$sample104) {
+									{
+										for(int index$sample$4_1 = 0; index$sample$4_1 < noSamples; index$sample$4_1 += 1) {
+											if((index$sample$4_1 == sample)) {
+												if((0 == (timeStep$var113 - 1))) {
+													{
+														for(int var31 = 0; var31 < noStates; var31 += 1) {
+															if((var31 == st[sample][(timeStep$var113 - 1)])) {
+																{
+																	double[] var119 = m[st[sample][(timeStep$var113 - 1)]];
+																	
+																	// Store the value of the function call, so the function call is only made once.
+																	double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var119[cv$sampleValue])) && (var119[cv$sampleValue] <= 1.0))?Math.log(var119[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+																	
+																	// Add the probability of this sample task to the distribution accumulator.
+																	if((cv$weightedProbability < cv$distributionAccumulator))
+																		cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																	else {
+																		// If the second value is -infinity.
+																		if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																			cv$distributionAccumulator = cv$weightedProbability;
+																		else
+																			cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																	}
+																	
+																	// Add the probability of this distribution configuration to the accumulator.
+																	cv$probabilityReached = (cv$probabilityReached + 1.0);
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								} else {
+									for(int index$sample$5 = 0; index$sample$5 < noSamples; index$sample$5 += 1) {
+										if(true) {
+											// Enumerating the possible outputs of Categorical 101.
+											for(int index$sample104$6 = 0; index$sample104$6 < noStates; index$sample104$6 += 1) {
+												int distributionTempVariable$var102$8 = index$sample104$6;
+												
+												// Update the probability of sampling this value from the distribution value.
+												double cv$probabilitySample104Value7 = (1.0 * distribution$sample104[((index$sample$5 - 0) / 1)][index$sample104$6]);
+												{
+													int traceTempVariable$var118$9_1 = distributionTempVariable$var102$8;
+													if((index$sample$5 == sample)) {
+														if((0 == (timeStep$var113 - 1))) {
+															{
+																for(int var31 = 0; var31 < noStates; var31 += 1) {
+																	if((var31 == traceTempVariable$var118$9_1)) {
+																		{
+																			double[] var119 = m[traceTempVariable$var118$9_1];
+																			
+																			// Store the value of the function call, so the function call is only made once.
+																			double cv$weightedProbability = (Math.log(cv$probabilitySample104Value7) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var119[cv$sampleValue])) && (var119[cv$sampleValue] <= 1.0))?Math.log(var119[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+																			
+																			// Add the probability of this sample task to the distribution accumulator.
+																			if((cv$weightedProbability < cv$distributionAccumulator))
+																				cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																			else {
+																				// If the second value is -infinity.
+																				if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																					cv$distributionAccumulator = cv$weightedProbability;
+																				else
+																					cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																			}
+																			
+																			// Add the probability of this distribution configuration to the accumulator.
+																			cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value7);
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								
+								// Enumerating the possible arguments for Categorical 120.
+								{
+									if((index$sample$2 == sample)) {
+										if((index$timeStep$1 == (timeStep$var113 - 1))) {
+											{
+												for(int var31 = 0; var31 < noStates; var31 += 1) {
+													if((var31 == st[sample][(timeStep$var113 - 1)])) {
+														{
+															double[] var119 = m[st[sample][(timeStep$var113 - 1)]];
+															
+															// Store the value of the function call, so the function call is only made once.
+															double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var119[cv$sampleValue])) && (var119[cv$sampleValue] <= 1.0))?Math.log(var119[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+															
+															// Add the probability of this sample task to the distribution accumulator.
+															if((cv$weightedProbability < cv$distributionAccumulator))
+																cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+															else {
+																// If the second value is -infinity.
+																if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																	cv$distributionAccumulator = cv$weightedProbability;
+																else
+																	cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+															}
+															
+															// Add the probability of this distribution configuration to the accumulator.
+															cv$probabilityReached = (cv$probabilityReached + 1.0);
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								if(fixedFlag$sample123) {
+									{
+										for(int index$sample$13_1 = 0; index$sample$13_1 < noSamples; index$sample$13_1 += 1) {
+											for(int index$timeStep$13_2 = 1; index$timeStep$13_2 < length$metric[index$sample$13_1]; index$timeStep$13_2 += 1) {
+												if((index$sample$13_1 == sample)) {
+													if((index$timeStep$13_2 == (timeStep$var113 - 1))) {
+														{
+															for(int var31 = 0; var31 < noStates; var31 += 1) {
+																if((var31 == st[sample][(timeStep$var113 - 1)])) {
+																	{
+																		double[] var119 = m[st[sample][(timeStep$var113 - 1)]];
+																		
+																		// Store the value of the function call, so the function call is only made once.
+																		double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var119[cv$sampleValue])) && (var119[cv$sampleValue] <= 1.0))?Math.log(var119[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+																		
+																		// Add the probability of this sample task to the distribution accumulator.
+																		if((cv$weightedProbability < cv$distributionAccumulator))
+																			cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																		else {
+																			// If the second value is -infinity.
+																			if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																				cv$distributionAccumulator = cv$weightedProbability;
+																			else
+																				cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																		}
+																		
+																		// Add the probability of this distribution configuration to the accumulator.
+																		cv$probabilityReached = (cv$probabilityReached + 1.0);
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								} else {
+									for(int index$sample$14 = 0; index$sample$14 < noSamples; index$sample$14 += 1) {
+										for(int index$timeStep$15 = 1; index$timeStep$15 < length$metric[index$sample$14]; index$timeStep$15 += 1) {
+											if(!((index$timeStep$15 == index$timeStep$1) && (index$sample$14 == index$sample$2))) {
+												// Enumerating the possible outputs of Categorical 120.
+												for(int index$sample123$16 = 0; index$sample123$16 < noStates; index$sample123$16 += 1) {
+													int distributionTempVariable$var121$18 = index$sample123$16;
+													
+													// Update the probability of sampling this value from the distribution value.
+													double cv$probabilitySample123Value17 = (1.0 * distribution$sample123[((index$sample$14 - 0) / 1)][((index$timeStep$15 - 1) / 1)][index$sample123$16]);
+													{
+														int traceTempVariable$var118$19_1 = distributionTempVariable$var121$18;
+														if((index$sample$14 == sample)) {
+															if((index$timeStep$15 == (timeStep$var113 - 1))) {
+																{
+																	for(int var31 = 0; var31 < noStates; var31 += 1) {
+																		if((var31 == traceTempVariable$var118$19_1)) {
+																			{
+																				double[] var119 = m[traceTempVariable$var118$19_1];
+																				
+																				// Store the value of the function call, so the function call is only made once.
+																				double cv$weightedProbability = (Math.log(cv$probabilitySample123Value17) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var119[cv$sampleValue])) && (var119[cv$sampleValue] <= 1.0))?Math.log(var119[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+																				
+																				// Add the probability of this sample task to the distribution accumulator.
+																				if((cv$weightedProbability < cv$distributionAccumulator))
+																					cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																				else {
+																					// If the second value is -infinity.
+																					if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																						cv$distributionAccumulator = cv$weightedProbability;
+																					else
+																						cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																				}
+																				
+																				// Add the probability of this distribution configuration to the accumulator.
+																				cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value17);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						if((cv$probabilityReached == 0.0))
+							// Return negative infinity if no distribution probability space is reached.
+							cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+						else
+							// Scale the probability relative to the observed distribution space.
+							cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+						double cv$sampleProbability = cv$distributionAccumulator;
+						
+						// Record that the sample was reached.
+						cv$sampleReached = true;
+						
+						// Add the probability of this sample task to the sample task accumulator.
+						cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+						
+						// Add the probability of this instance of the random variable to the probability
+						// of all instances of the random variable.
+						cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+						
+						// Store the sample task probability
+						logProbability$sample123[((sample - 0) / 1)][((timeStep$var113 - 1) / 1)] = cv$sampleProbability;
+					}
+				}
+				
+				// Make sure all the inputs have been fixed so the variable is not a distribution.
+				if(fixedFlag$sample123)
+					// Update the variable probability
+					logProbability$st = (logProbability$st + cv$accumulator);
+				
+				// Add probability to model
+				logProbability$$model = (logProbability$$model + cv$accumulator);
+				
+				// If this value is fixed, add it to the probability of this model producing the fixed
+				// values
+				if(fixedFlag$sample123)
+					logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+				
+				// Now the probability is calculated store if it can be cached or if it needs to be
+				// recalculated next time.
+				fixedProbFlag$sample123 = ((fixedFlag$sample123 && fixedFlag$sample32) && fixedFlag$sample104);
+			}
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int sample = 0; sample < noSamples; sample += 1) {
+				for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1) {
+					double cv$rvAccumulator = 0.0;
+					double cv$sampleValue = logProbability$sample123[((sample - 0) / 1)][((timeStep$var113 - 1) / 1)];
+					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+				}
+			}
+			
+			// Make sure all the inputs have been fixed so the variable is not a distribution.
+			if(fixedFlag$sample123)
+				// Update the variable probability
+				logProbability$st = (logProbability$st + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample123)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample145 using probability
+	// distributions.
+	private final void logProbabilityDistribution$sample145() {
+		// Determine if we need to calculate the values for sample task 145 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample145) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int sample = 0; sample < noSamples; sample += 1) {
+				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
+					// Accumulator for sample probabilities for a specific instance of the random variable.
+					double cv$sampleAccumulator = 0.0;
+					
+					// An accumulator for log probabilities.
+					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					
+					// An accumulator for the distributed probability space covered.
+					double cv$probabilityReached = 0.0;
+					
+					// Look for paths between the variable and the sample task 145 including any distribution
+					// values.
+					{
+						{
+							// The sample value to calculate the probability of generating
+							boolean cv$sampleValue = metric_valid_g[sample][timeStep$var136];
+							
+							// Enumerating the possible arguments for Bernoulli 140.
+							if(fixedFlag$sample104) {
+								{
+									for(int index$sample$2_1 = 0; index$sample$2_1 < noSamples; index$sample$2_1 += 1) {
+										if((index$sample$2_1 == sample)) {
+											if((0 == timeStep$var136)) {
+												{
+													for(int var82 = 0; var82 < noStates; var82 += 1) {
+														if((var82 == st[sample][timeStep$var136])) {
+															{
+																double var139 = metric_valid_bias[st[sample][timeStep$var136]];
+																
+																// Store the value of the function call, so the function call is only made once.
+																double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var139) && (var139 <= 1.0))?Math.log((cv$sampleValue?var139:(1.0 - var139))):Double.NEGATIVE_INFINITY));
+																
+																// Add the probability of this sample task to the distribution accumulator.
+																if((cv$weightedProbability < cv$distributionAccumulator))
+																	cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																else {
+																	// If the second value is -infinity.
+																	if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																		cv$distributionAccumulator = cv$weightedProbability;
+																	else
+																		cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																}
+																
+																// Add the probability of this distribution configuration to the accumulator.
+																cv$probabilityReached = (cv$probabilityReached + 1.0);
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							} else {
+								for(int index$sample$3 = 0; index$sample$3 < noSamples; index$sample$3 += 1) {
+									if(true) {
+										// Enumerating the possible outputs of Categorical 101.
+										for(int index$sample104$4 = 0; index$sample104$4 < noStates; index$sample104$4 += 1) {
+											int distributionTempVariable$var102$6 = index$sample104$4;
+											
+											// Update the probability of sampling this value from the distribution value.
+											double cv$probabilitySample104Value5 = (1.0 * distribution$sample104[((index$sample$3 - 0) / 1)][index$sample104$4]);
+											{
+												int traceTempVariable$currentState$7_1 = distributionTempVariable$var102$6;
+												if((index$sample$3 == sample)) {
+													if((0 == timeStep$var136)) {
+														{
+															for(int var82 = 0; var82 < noStates; var82 += 1) {
+																if((var82 == traceTempVariable$currentState$7_1)) {
+																	{
+																		double var139 = metric_valid_bias[traceTempVariable$currentState$7_1];
+																		
+																		// Store the value of the function call, so the function call is only made once.
+																		double cv$weightedProbability = (Math.log(cv$probabilitySample104Value5) + (((0.0 <= var139) && (var139 <= 1.0))?Math.log((cv$sampleValue?var139:(1.0 - var139))):Double.NEGATIVE_INFINITY));
+																		
+																		// Add the probability of this sample task to the distribution accumulator.
+																		if((cv$weightedProbability < cv$distributionAccumulator))
+																			cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																		else {
+																			// If the second value is -infinity.
+																			if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																				cv$distributionAccumulator = cv$weightedProbability;
+																			else
+																				cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																		}
+																		
+																		// Add the probability of this distribution configuration to the accumulator.
+																		cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value5);
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							
+							// Enumerating the possible arguments for Bernoulli 140.
+							if(fixedFlag$sample123) {
+								{
+									for(int index$sample$10_1 = 0; index$sample$10_1 < noSamples; index$sample$10_1 += 1) {
+										for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$10_1]; timeStep$var113 += 1) {
+											if((index$sample$10_1 == sample)) {
+												if((timeStep$var113 == timeStep$var136)) {
+													{
+														for(int var82 = 0; var82 < noStates; var82 += 1) {
+															if((var82 == st[sample][timeStep$var136])) {
+																{
+																	double var139 = metric_valid_bias[st[sample][timeStep$var136]];
+																	
+																	// Store the value of the function call, so the function call is only made once.
+																	double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var139) && (var139 <= 1.0))?Math.log((cv$sampleValue?var139:(1.0 - var139))):Double.NEGATIVE_INFINITY));
+																	
+																	// Add the probability of this sample task to the distribution accumulator.
+																	if((cv$weightedProbability < cv$distributionAccumulator))
+																		cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																	else {
+																		// If the second value is -infinity.
+																		if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																			cv$distributionAccumulator = cv$weightedProbability;
+																		else
+																			cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																	}
+																	
+																	// Add the probability of this distribution configuration to the accumulator.
+																	cv$probabilityReached = (cv$probabilityReached + 1.0);
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							} else {
+								for(int index$sample$11 = 0; index$sample$11 < noSamples; index$sample$11 += 1) {
+									for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$11]; timeStep$var113 += 1) {
+										if(true) {
+											// Enumerating the possible outputs of Categorical 120.
+											for(int index$sample123$13 = 0; index$sample123$13 < noStates; index$sample123$13 += 1) {
+												int distributionTempVariable$var121$15 = index$sample123$13;
+												
+												// Update the probability of sampling this value from the distribution value.
+												double cv$probabilitySample123Value14 = (1.0 * distribution$sample123[((index$sample$11 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$13]);
+												{
+													int traceTempVariable$currentState$16_1 = distributionTempVariable$var121$15;
+													if((index$sample$11 == sample)) {
+														if((timeStep$var113 == timeStep$var136)) {
+															{
+																for(int var82 = 0; var82 < noStates; var82 += 1) {
+																	if((var82 == traceTempVariable$currentState$16_1)) {
+																		{
+																			double var139 = metric_valid_bias[traceTempVariable$currentState$16_1];
+																			
+																			// Store the value of the function call, so the function call is only made once.
+																			double cv$weightedProbability = (Math.log(cv$probabilitySample123Value14) + (((0.0 <= var139) && (var139 <= 1.0))?Math.log((cv$sampleValue?var139:(1.0 - var139))):Double.NEGATIVE_INFINITY));
+																			
+																			// Add the probability of this sample task to the distribution accumulator.
+																			if((cv$weightedProbability < cv$distributionAccumulator))
+																				cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																			else {
+																				// If the second value is -infinity.
+																				if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																					cv$distributionAccumulator = cv$weightedProbability;
+																				else
+																					cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																			}
+																			
+																			// Add the probability of this distribution configuration to the accumulator.
+																			cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value14);
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					if((cv$probabilityReached == 0.0))
+						// Return negative infinity if no distribution probability space is reached.
+						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					else
+						// Scale the probability relative to the observed distribution space.
+						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+					double cv$sampleProbability = cv$distributionAccumulator;
+					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+					
+					// Add the probability of this sample task to the sample task accumulator.
+					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+					
+					// Add the probability of this instance of the random variable to the probability
+					// of all instances of the random variable.
+					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+					
+					// Store the sample task probability
+					logProbability$sample145[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$sampleProbability;
+				}
+			}
+			
+			// Guard to ensure that metric_valid_g is only updated once for this probability.
+			boolean cv$guard$metric_valid_g = false;
+			
+			// Update the variable probability
+			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				{
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$metric_valid_g) {
+						// Set the guard so the update is only applied once.
+						cv$guard$metric_valid_g = true;
+						
+						// Update the variable probability
+						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+					}
+				}
+			}
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample145 = ((fixedFlag$sample84 && fixedFlag$sample104) && fixedFlag$sample123);
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int sample = 0; sample < noSamples; sample += 1) {
+				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
+					double cv$rvAccumulator = 0.0;
+					double cv$sampleValue = logProbability$sample145[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)];
+					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+				}
+			}
+			
+			// Guard to ensure that metric_valid_g is only updated once for this probability.
+			boolean cv$guard$metric_valid_g = false;
+			
+			// Update the variable probability
+			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				{
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$metric_valid_g) {
+						// Set the guard so the update is only applied once.
+						cv$guard$metric_valid_g = true;
+						
+						// Update the variable probability
+						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+					}
+				}
+			}
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample157 using probability
+	// distributions.
+	private final void logProbabilityDistribution$sample157() {
+		// Determine if we need to calculate the values for sample task 157 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample157) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int sample = 0; sample < noSamples; sample += 1) {
+				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
+					if(metric_valid_g[sample][timeStep$var136]) {
+						// Accumulator for sample probabilities for a specific instance of the random variable.
+						double cv$sampleAccumulator = 0.0;
+						
+						// An accumulator for log probabilities.
+						double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+						
+						// An accumulator for the distributed probability space covered.
+						double cv$probabilityReached = 0.0;
+						
+						// Look for paths between the variable and the sample task 157 including any distribution
+						// values.
+						{
+							{
+								// The sample value to calculate the probability of generating
+								double cv$sampleValue = var151[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)];
+								
+								// Enumerating the possible arguments for Gaussian 150.
+								if(fixedFlag$sample104) {
+									{
+										for(int index$sample$2_1 = 0; index$sample$2_1 < noSamples; index$sample$2_1 += 1) {
+											if((index$sample$2_1 == sample)) {
+												if((0 == timeStep$var136)) {
+													{
+														for(int var50 = 0; var50 < noStates; var50 += 1) {
+															if((var50 == st[sample][timeStep$var136])) {
+																{
+																	for(int index$sample$10_1 = 0; index$sample$10_1 < noSamples; index$sample$10_1 += 1) {
+																		if((index$sample$10_1 == sample)) {
+																			if((0 == timeStep$var136)) {
+																				{
+																					for(int var66 = 0; var66 < noStates; var66 += 1) {
+																						if((var66 == st[sample][timeStep$var136])) {
+																							{
+																								double var148 = metric_mean[st[sample][timeStep$var136]];
+																								double var149 = metric_var[st[sample][timeStep$var136]];
+																								
+																								// Store the value of the function call, so the function call is only made once.
+																								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
+																								
+																								// Add the probability of this sample task to the distribution accumulator.
+																								if((cv$weightedProbability < cv$distributionAccumulator))
+																									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																								else {
+																									// If the second value is -infinity.
+																									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																										cv$distributionAccumulator = cv$weightedProbability;
+																									else
+																										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																								}
+																								
+																								// Add the probability of this distribution configuration to the accumulator.
+																								cv$probabilityReached = (cv$probabilityReached + 1.0);
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								} else {
+									for(int index$sample$3 = 0; index$sample$3 < noSamples; index$sample$3 += 1) {
+										if(true) {
+											// Enumerating the possible outputs of Categorical 101.
+											for(int index$sample104$4 = 0; index$sample104$4 < noStates; index$sample104$4 += 1) {
+												int distributionTempVariable$var102$6 = index$sample104$4;
+												
+												// Update the probability of sampling this value from the distribution value.
+												double cv$probabilitySample104Value5 = (1.0 * distribution$sample104[((index$sample$3 - 0) / 1)][index$sample104$4]);
+												{
+													int traceTempVariable$currentState$7_1 = distributionTempVariable$var102$6;
+													if((index$sample$3 == sample)) {
+														if((0 == timeStep$var136)) {
+															{
+																for(int var50 = 0; var50 < noStates; var50 += 1) {
+																	if((var50 == traceTempVariable$currentState$7_1)) {
+																		{
+																			int traceTempVariable$currentState$11_1 = distributionTempVariable$var102$6;
+																			if((index$sample$3 == sample)) {
+																				if((0 == timeStep$var136)) {
+																					{
+																						for(int var66 = 0; var66 < noStates; var66 += 1) {
+																							if((var66 == traceTempVariable$currentState$11_1)) {
+																								{
+																									double var148 = metric_mean[traceTempVariable$currentState$11_1];
+																									double var149 = metric_var[traceTempVariable$currentState$11_1];
+																									
+																									// Store the value of the function call, so the function call is only made once.
+																									double cv$weightedProbability = (Math.log(cv$probabilitySample104Value5) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
+																									
+																									// Add the probability of this sample task to the distribution accumulator.
+																									if((cv$weightedProbability < cv$distributionAccumulator))
+																										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																									else {
+																										// If the second value is -infinity.
+																										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																											cv$distributionAccumulator = cv$weightedProbability;
+																										else
+																											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																									}
+																									
+																									// Add the probability of this distribution configuration to the accumulator.
+																									cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value5);
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																		for(int index$sample$12 = 0; index$sample$12 < noSamples; index$sample$12 += 1) {
+																			if(!(index$sample$12 == index$sample$3)) {
+																				// Enumerating the possible outputs of Categorical 101.
+																				for(int index$sample104$13 = 0; index$sample104$13 < noStates; index$sample104$13 += 1) {
+																					int distributionTempVariable$var102$15 = index$sample104$13;
+																					
+																					// Update the probability of sampling this value from the distribution value.
+																					double cv$probabilitySample104Value14 = (cv$probabilitySample104Value5 * distribution$sample104[((index$sample$12 - 0) / 1)][index$sample104$13]);
+																					{
+																						int traceTempVariable$currentState$16_1 = distributionTempVariable$var102$15;
+																						if((index$sample$12 == sample)) {
+																							if((0 == timeStep$var136)) {
+																								{
+																									for(int var66 = 0; var66 < noStates; var66 += 1) {
+																										if((var66 == traceTempVariable$currentState$16_1)) {
+																											{
+																												double var148 = metric_mean[traceTempVariable$currentState$16_1];
+																												double var149 = metric_var[traceTempVariable$currentState$16_1];
+																												
+																												// Store the value of the function call, so the function call is only made once.
+																												double cv$weightedProbability = (Math.log(cv$probabilitySample104Value14) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
+																												
+																												// Add the probability of this sample task to the distribution accumulator.
+																												if((cv$weightedProbability < cv$distributionAccumulator))
+																													cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																														cv$distributionAccumulator = cv$weightedProbability;
+																													else
+																														cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																												}
+																												
+																												// Add the probability of this distribution configuration to the accumulator.
+																												cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value14);
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								
+								// Enumerating the possible arguments for Gaussian 150.
+								if(fixedFlag$sample104) {
+									{
+										for(int index$sample$20_1 = 0; index$sample$20_1 < noSamples; index$sample$20_1 += 1) {
+											if((index$sample$20_1 == sample)) {
+												if((0 == timeStep$var136)) {
+													{
+														for(int var50 = 0; var50 < noStates; var50 += 1) {
+															if((var50 == st[sample][timeStep$var136])) {
+																if(fixedFlag$sample123) {
+																	{
+																		for(int index$sample$28_1 = 0; index$sample$28_1 < noSamples; index$sample$28_1 += 1) {
+																			for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$28_1]; timeStep$var113 += 1) {
+																				if((index$sample$28_1 == sample)) {
+																					if((timeStep$var113 == timeStep$var136)) {
+																						{
+																							for(int var66 = 0; var66 < noStates; var66 += 1) {
+																								if((var66 == st[sample][timeStep$var136])) {
+																									{
+																										double var148 = metric_mean[st[sample][timeStep$var136]];
+																										double var149 = metric_var[st[sample][timeStep$var136]];
+																										
+																										// Store the value of the function call, so the function call is only made once.
+																										double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
+																										
+																										// Add the probability of this sample task to the distribution accumulator.
+																										if((cv$weightedProbability < cv$distributionAccumulator))
+																											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																												cv$distributionAccumulator = cv$weightedProbability;
+																											else
+																												cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																										}
+																										
+																										// Add the probability of this distribution configuration to the accumulator.
+																										cv$probabilityReached = (cv$probabilityReached + 1.0);
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																} else {
+																	for(int index$sample$29 = 0; index$sample$29 < noSamples; index$sample$29 += 1) {
+																		for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$29]; timeStep$var113 += 1) {
+																			if(true) {
+																				// Enumerating the possible outputs of Categorical 120.
+																				for(int index$sample123$31 = 0; index$sample123$31 < noStates; index$sample123$31 += 1) {
+																					int distributionTempVariable$var121$33 = index$sample123$31;
+																					
+																					// Update the probability of sampling this value from the distribution value.
+																					double cv$probabilitySample123Value32 = (1.0 * distribution$sample123[((index$sample$29 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$31]);
+																					{
+																						int traceTempVariable$currentState$34_1 = distributionTempVariable$var121$33;
+																						if((index$sample$29 == sample)) {
+																							if((timeStep$var113 == timeStep$var136)) {
+																								{
+																									for(int var66 = 0; var66 < noStates; var66 += 1) {
+																										if((var66 == traceTempVariable$currentState$34_1)) {
+																											{
+																												double var148 = metric_mean[traceTempVariable$currentState$34_1];
+																												double var149 = metric_var[traceTempVariable$currentState$34_1];
+																												
+																												// Store the value of the function call, so the function call is only made once.
+																												double cv$weightedProbability = (Math.log(cv$probabilitySample123Value32) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
+																												
+																												// Add the probability of this sample task to the distribution accumulator.
+																												if((cv$weightedProbability < cv$distributionAccumulator))
+																													cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																														cv$distributionAccumulator = cv$weightedProbability;
+																													else
+																														cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																												}
+																												
+																												// Add the probability of this distribution configuration to the accumulator.
+																												cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value32);
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								} else {
+									for(int index$sample$21 = 0; index$sample$21 < noSamples; index$sample$21 += 1) {
+										if(true) {
+											// Enumerating the possible outputs of Categorical 101.
+											for(int index$sample104$22 = 0; index$sample104$22 < noStates; index$sample104$22 += 1) {
+												int distributionTempVariable$var102$24 = index$sample104$22;
+												
+												// Update the probability of sampling this value from the distribution value.
+												double cv$probabilitySample104Value23 = (1.0 * distribution$sample104[((index$sample$21 - 0) / 1)][index$sample104$22]);
+												{
+													int traceTempVariable$currentState$25_1 = distributionTempVariable$var102$24;
+													if((index$sample$21 == sample)) {
+														if((0 == timeStep$var136)) {
+															{
+																for(int var50 = 0; var50 < noStates; var50 += 1) {
+																	if((var50 == traceTempVariable$currentState$25_1)) {
+																		if(fixedFlag$sample123) {
+																			{
+																				for(int index$sample$35_1 = 0; index$sample$35_1 < noSamples; index$sample$35_1 += 1) {
+																					for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$35_1]; timeStep$var113 += 1) {
+																						if((index$sample$35_1 == sample)) {
+																							if((timeStep$var113 == timeStep$var136)) {
+																								{
+																									for(int var66 = 0; var66 < noStates; var66 += 1) {
+																										if((var66 == traceTempVariable$currentState$25_1)) {
+																											{
+																												double var148 = metric_mean[traceTempVariable$currentState$25_1];
+																												double var149 = metric_var[traceTempVariable$currentState$25_1];
+																												
+																												// Store the value of the function call, so the function call is only made once.
+																												double cv$weightedProbability = (Math.log(cv$probabilitySample104Value23) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
+																												
+																												// Add the probability of this sample task to the distribution accumulator.
+																												if((cv$weightedProbability < cv$distributionAccumulator))
+																													cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																														cv$distributionAccumulator = cv$weightedProbability;
+																													else
+																														cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																												}
+																												
+																												// Add the probability of this distribution configuration to the accumulator.
+																												cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value23);
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		} else {
+																			for(int index$sample$36 = 0; index$sample$36 < noSamples; index$sample$36 += 1) {
+																				for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$36]; timeStep$var113 += 1) {
+																					if(true) {
+																						// Enumerating the possible outputs of Categorical 120.
+																						for(int index$sample123$38 = 0; index$sample123$38 < noStates; index$sample123$38 += 1) {
+																							int distributionTempVariable$var121$40 = index$sample123$38;
+																							
+																							// Update the probability of sampling this value from the distribution value.
+																							double cv$probabilitySample123Value39 = (cv$probabilitySample104Value23 * distribution$sample123[((index$sample$36 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$38]);
+																							{
+																								int traceTempVariable$currentState$41_1 = distributionTempVariable$var121$40;
+																								if((index$sample$36 == sample)) {
+																									if((timeStep$var113 == timeStep$var136)) {
+																										{
+																											for(int var66 = 0; var66 < noStates; var66 += 1) {
+																												if((var66 == traceTempVariable$currentState$41_1)) {
+																													{
+																														double var148 = metric_mean[traceTempVariable$currentState$41_1];
+																														double var149 = metric_var[traceTempVariable$currentState$41_1];
+																														
+																														// Store the value of the function call, so the function call is only made once.
+																														double cv$weightedProbability = (Math.log(cv$probabilitySample123Value39) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
+																														
+																														// Add the probability of this sample task to the distribution accumulator.
+																														if((cv$weightedProbability < cv$distributionAccumulator))
+																															cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																																cv$distributionAccumulator = cv$weightedProbability;
+																															else
+																																cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																														}
+																														
+																														// Add the probability of this distribution configuration to the accumulator.
+																														cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value39);
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								
+								// Enumerating the possible arguments for Gaussian 150.
+								if(fixedFlag$sample123) {
+									{
+										for(int index$sample$46_1 = 0; index$sample$46_1 < noSamples; index$sample$46_1 += 1) {
+											for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$46_1]; timeStep$var113 += 1) {
+												if((index$sample$46_1 == sample)) {
+													if((timeStep$var113 == timeStep$var136)) {
+														{
+															for(int var50 = 0; var50 < noStates; var50 += 1) {
+																if((var50 == st[sample][timeStep$var136])) {
+																	{
+																		for(int index$sample$55_1 = 0; index$sample$55_1 < noSamples; index$sample$55_1 += 1) {
+																			for(int index$timeStep$55_2 = 1; index$timeStep$55_2 < length$metric[index$sample$55_1]; index$timeStep$55_2 += 1) {
+																				if((index$sample$55_1 == sample)) {
+																					if((index$timeStep$55_2 == timeStep$var136)) {
+																						{
+																							for(int var66 = 0; var66 < noStates; var66 += 1) {
+																								if((var66 == st[sample][timeStep$var136])) {
+																									{
+																										double var148 = metric_mean[st[sample][timeStep$var136]];
+																										double var149 = metric_var[st[sample][timeStep$var136]];
+																										
+																										// Store the value of the function call, so the function call is only made once.
+																										double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
+																										
+																										// Add the probability of this sample task to the distribution accumulator.
+																										if((cv$weightedProbability < cv$distributionAccumulator))
+																											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																												cv$distributionAccumulator = cv$weightedProbability;
+																											else
+																												cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																										}
+																										
+																										// Add the probability of this distribution configuration to the accumulator.
+																										cv$probabilityReached = (cv$probabilityReached + 1.0);
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								} else {
+									for(int index$sample$47 = 0; index$sample$47 < noSamples; index$sample$47 += 1) {
+										for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$47]; timeStep$var113 += 1) {
+											if(true) {
+												// Enumerating the possible outputs of Categorical 120.
+												for(int index$sample123$49 = 0; index$sample123$49 < noStates; index$sample123$49 += 1) {
+													int distributionTempVariable$var121$51 = index$sample123$49;
+													
+													// Update the probability of sampling this value from the distribution value.
+													double cv$probabilitySample123Value50 = (1.0 * distribution$sample123[((index$sample$47 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$49]);
+													{
+														int traceTempVariable$currentState$52_1 = distributionTempVariable$var121$51;
+														if((index$sample$47 == sample)) {
+															if((timeStep$var113 == timeStep$var136)) {
+																{
+																	for(int var50 = 0; var50 < noStates; var50 += 1) {
+																		if((var50 == traceTempVariable$currentState$52_1)) {
+																			{
+																				int traceTempVariable$currentState$56_1 = distributionTempVariable$var121$51;
+																				if((index$sample$47 == sample)) {
+																					if((timeStep$var113 == timeStep$var136)) {
+																						{
+																							for(int var66 = 0; var66 < noStates; var66 += 1) {
+																								if((var66 == traceTempVariable$currentState$56_1)) {
+																									{
+																										double var148 = metric_mean[traceTempVariable$currentState$56_1];
+																										double var149 = metric_var[traceTempVariable$currentState$56_1];
+																										
+																										// Store the value of the function call, so the function call is only made once.
+																										double cv$weightedProbability = (Math.log(cv$probabilitySample123Value50) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
+																										
+																										// Add the probability of this sample task to the distribution accumulator.
+																										if((cv$weightedProbability < cv$distributionAccumulator))
+																											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																												cv$distributionAccumulator = cv$weightedProbability;
+																											else
+																												cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																										}
+																										
+																										// Add the probability of this distribution configuration to the accumulator.
+																										cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value50);
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																			for(int index$sample$57 = 0; index$sample$57 < noSamples; index$sample$57 += 1) {
+																				for(int index$timeStep$58 = 1; index$timeStep$58 < length$metric[index$sample$57]; index$timeStep$58 += 1) {
+																					if(!((index$timeStep$58 == timeStep$var113) && (index$sample$57 == index$sample$47))) {
+																						// Enumerating the possible outputs of Categorical 120.
+																						for(int index$sample123$59 = 0; index$sample123$59 < noStates; index$sample123$59 += 1) {
+																							int distributionTempVariable$var121$61 = index$sample123$59;
+																							
+																							// Update the probability of sampling this value from the distribution value.
+																							double cv$probabilitySample123Value60 = (cv$probabilitySample123Value50 * distribution$sample123[((index$sample$57 - 0) / 1)][((index$timeStep$58 - 1) / 1)][index$sample123$59]);
+																							{
+																								int traceTempVariable$currentState$62_1 = distributionTempVariable$var121$61;
+																								if((index$sample$57 == sample)) {
+																									if((index$timeStep$58 == timeStep$var136)) {
+																										{
+																											for(int var66 = 0; var66 < noStates; var66 += 1) {
+																												if((var66 == traceTempVariable$currentState$62_1)) {
+																													{
+																														double var148 = metric_mean[traceTempVariable$currentState$62_1];
+																														double var149 = metric_var[traceTempVariable$currentState$62_1];
+																														
+																														// Store the value of the function call, so the function call is only made once.
+																														double cv$weightedProbability = (Math.log(cv$probabilitySample123Value60) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
+																														
+																														// Add the probability of this sample task to the distribution accumulator.
+																														if((cv$weightedProbability < cv$distributionAccumulator))
+																															cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																																cv$distributionAccumulator = cv$weightedProbability;
+																															else
+																																cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																														}
+																														
+																														// Add the probability of this distribution configuration to the accumulator.
+																														cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value60);
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								
+								// Enumerating the possible arguments for Gaussian 150.
+								if(fixedFlag$sample123) {
+									{
+										for(int index$sample$66_1 = 0; index$sample$66_1 < noSamples; index$sample$66_1 += 1) {
+											for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$66_1]; timeStep$var113 += 1) {
+												if((index$sample$66_1 == sample)) {
+													if((timeStep$var113 == timeStep$var136)) {
+														{
+															for(int var50 = 0; var50 < noStates; var50 += 1) {
+																if((var50 == st[sample][timeStep$var136])) {
+																	if(fixedFlag$sample104) {
+																		{
+																			for(int index$sample$75_1 = 0; index$sample$75_1 < noSamples; index$sample$75_1 += 1) {
+																				if((index$sample$75_1 == sample)) {
+																					if((0 == timeStep$var136)) {
+																						{
+																							for(int var66 = 0; var66 < noStates; var66 += 1) {
+																								if((var66 == st[sample][timeStep$var136])) {
+																									{
+																										double var148 = metric_mean[st[sample][timeStep$var136]];
+																										double var149 = metric_var[st[sample][timeStep$var136]];
+																										
+																										// Store the value of the function call, so the function call is only made once.
+																										double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
+																										
+																										// Add the probability of this sample task to the distribution accumulator.
+																										if((cv$weightedProbability < cv$distributionAccumulator))
+																											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																										else {
+																											// If the second value is -infinity.
+																											if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																												cv$distributionAccumulator = cv$weightedProbability;
+																											else
+																												cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																										}
+																										
+																										// Add the probability of this distribution configuration to the accumulator.
+																										cv$probabilityReached = (cv$probabilityReached + 1.0);
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	} else {
+																		for(int index$sample$76 = 0; index$sample$76 < noSamples; index$sample$76 += 1) {
+																			if(true) {
+																				// Enumerating the possible outputs of Categorical 101.
+																				for(int index$sample104$77 = 0; index$sample104$77 < noStates; index$sample104$77 += 1) {
+																					int distributionTempVariable$var102$79 = index$sample104$77;
+																					
+																					// Update the probability of sampling this value from the distribution value.
+																					double cv$probabilitySample104Value78 = (1.0 * distribution$sample104[((index$sample$76 - 0) / 1)][index$sample104$77]);
+																					{
+																						int traceTempVariable$currentState$80_1 = distributionTempVariable$var102$79;
+																						if((index$sample$76 == sample)) {
+																							if((0 == timeStep$var136)) {
+																								{
+																									for(int var66 = 0; var66 < noStates; var66 += 1) {
+																										if((var66 == traceTempVariable$currentState$80_1)) {
+																											{
+																												double var148 = metric_mean[traceTempVariable$currentState$80_1];
+																												double var149 = metric_var[traceTempVariable$currentState$80_1];
+																												
+																												// Store the value of the function call, so the function call is only made once.
+																												double cv$weightedProbability = (Math.log(cv$probabilitySample104Value78) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
+																												
+																												// Add the probability of this sample task to the distribution accumulator.
+																												if((cv$weightedProbability < cv$distributionAccumulator))
+																													cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																														cv$distributionAccumulator = cv$weightedProbability;
+																													else
+																														cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																												}
+																												
+																												// Add the probability of this distribution configuration to the accumulator.
+																												cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value78);
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								} else {
+									for(int index$sample$67 = 0; index$sample$67 < noSamples; index$sample$67 += 1) {
+										for(int timeStep$var113 = 1; timeStep$var113 < length$metric[index$sample$67]; timeStep$var113 += 1) {
+											if(true) {
+												// Enumerating the possible outputs of Categorical 120.
+												for(int index$sample123$69 = 0; index$sample123$69 < noStates; index$sample123$69 += 1) {
+													int distributionTempVariable$var121$71 = index$sample123$69;
+													
+													// Update the probability of sampling this value from the distribution value.
+													double cv$probabilitySample123Value70 = (1.0 * distribution$sample123[((index$sample$67 - 0) / 1)][((timeStep$var113 - 1) / 1)][index$sample123$69]);
+													{
+														int traceTempVariable$currentState$72_1 = distributionTempVariable$var121$71;
+														if((index$sample$67 == sample)) {
+															if((timeStep$var113 == timeStep$var136)) {
+																{
+																	for(int var50 = 0; var50 < noStates; var50 += 1) {
+																		if((var50 == traceTempVariable$currentState$72_1)) {
+																			if(fixedFlag$sample104) {
+																				{
+																					for(int index$sample$81_1 = 0; index$sample$81_1 < noSamples; index$sample$81_1 += 1) {
+																						if((index$sample$81_1 == sample)) {
+																							if((0 == timeStep$var136)) {
+																								{
+																									for(int var66 = 0; var66 < noStates; var66 += 1) {
+																										if((var66 == traceTempVariable$currentState$72_1)) {
+																											{
+																												double var148 = metric_mean[traceTempVariable$currentState$72_1];
+																												double var149 = metric_var[traceTempVariable$currentState$72_1];
+																												
+																												// Store the value of the function call, so the function call is only made once.
+																												double cv$weightedProbability = (Math.log(cv$probabilitySample123Value70) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
+																												
+																												// Add the probability of this sample task to the distribution accumulator.
+																												if((cv$weightedProbability < cv$distributionAccumulator))
+																													cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																														cv$distributionAccumulator = cv$weightedProbability;
+																													else
+																														cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																												}
+																												
+																												// Add the probability of this distribution configuration to the accumulator.
+																												cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample123Value70);
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			} else {
+																				for(int index$sample$82 = 0; index$sample$82 < noSamples; index$sample$82 += 1) {
+																					if(true) {
+																						// Enumerating the possible outputs of Categorical 101.
+																						for(int index$sample104$83 = 0; index$sample104$83 < noStates; index$sample104$83 += 1) {
+																							int distributionTempVariable$var102$85 = index$sample104$83;
+																							
+																							// Update the probability of sampling this value from the distribution value.
+																							double cv$probabilitySample104Value84 = (cv$probabilitySample123Value70 * distribution$sample104[((index$sample$82 - 0) / 1)][index$sample104$83]);
+																							{
+																								int traceTempVariable$currentState$86_1 = distributionTempVariable$var102$85;
+																								if((index$sample$82 == sample)) {
+																									if((0 == timeStep$var136)) {
+																										{
+																											for(int var66 = 0; var66 < noStates; var66 += 1) {
+																												if((var66 == traceTempVariable$currentState$86_1)) {
+																													{
+																														double var148 = metric_mean[traceTempVariable$currentState$86_1];
+																														double var149 = metric_var[traceTempVariable$currentState$86_1];
+																														
+																														// Store the value of the function call, so the function call is only made once.
+																														double cv$weightedProbability = (Math.log(cv$probabilitySample104Value84) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
+																														
+																														// Add the probability of this sample task to the distribution accumulator.
+																														if((cv$weightedProbability < cv$distributionAccumulator))
+																															cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+																														else {
+																															// If the second value is -infinity.
+																															if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+																																cv$distributionAccumulator = cv$weightedProbability;
+																															else
+																																cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+																														}
+																														
+																														// Add the probability of this distribution configuration to the accumulator.
+																														cv$probabilityReached = (cv$probabilityReached + cv$probabilitySample104Value84);
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						if((cv$probabilityReached == 0.0))
+							// Return negative infinity if no distribution probability space is reached.
+							cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+						else
+							// Scale the probability relative to the observed distribution space.
+							cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+						double cv$sampleProbability = cv$distributionAccumulator;
+						
+						// Record that the sample was reached.
+						cv$sampleReached = true;
+						
+						// Add the probability of this sample task to the sample task accumulator.
+						cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+						
+						// Add the probability of this instance of the random variable to the probability
+						// of all instances of the random variable.
+						cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+						
+						// Store the sample task probability
+						logProbability$sample157[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$sampleProbability;
+					}
+				}
+			}
+			
+			// Guard to ensure that metric_g is only updated once for this probability.
+			boolean cv$guard$metric_g = false;
+			
+			// Update the variable probability
+			logProbability$var151 = (logProbability$var151 + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				{
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$metric_g) {
+						// Set the guard so the update is only applied once.
+						cv$guard$metric_g = true;
+						
+						// Update the variable probability
+						logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
+					}
+				}
+			}
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample157 = (((fixedFlag$sample52 && fixedFlag$sample68) && fixedFlag$sample104) && fixedFlag$sample123);
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int sample = 0; sample < noSamples; sample += 1) {
+				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
+					if(metric_valid_g[sample][timeStep$var136]) {
+						double cv$rvAccumulator = 0.0;
+						double cv$sampleValue = logProbability$sample157[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)];
+						cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+						
+						// Record that the sample was reached.
+						cv$sampleReached = true;
+						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+					}
+				}
+			}
+			
+			// Guard to ensure that metric_g is only updated once for this probability.
+			boolean cv$guard$metric_g = false;
+			
+			// Update the variable probability
+			logProbability$var151 = (logProbability$var151 + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				{
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$metric_g) {
+						// Set the guard so the update is only applied once.
+						cv$guard$metric_g = true;
+						
+						// Update the variable probability
+						logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
+					}
+				}
+			}
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample104 using sampled
+	// values.
+	private final void logProbabilityValue$sample104() {
+		// Determine if we need to calculate the values for sample task 104 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample104) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int sample = 0; sample < noSamples; sample += 1) {
+				// Accumulator for sample probabilities for a specific instance of the random variable.
+				double cv$sampleAccumulator = 0.0;
+				
+				// An accumulator for log probabilities.
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				
+				// An accumulator for the distributed probability space covered.
+				double cv$probabilityReached = 0.0;
+				
+				// Copy of index so that its values can be safely substituted
+				int index$sample$1 = sample;
+				{
+					{
+						// The sample value to calculate the probability of generating
+						int cv$sampleValue = st[sample][0];
+						{
+							{
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$sampleValue])) && (initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					// Return negative infinity if no distribution probability space is reached.
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					// Scale the probability relative to the observed distribution space.
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+				
+				// Add the probability of this instance of the random variable to the probability
+				// of all instances of the random variable.
+				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+				
+				// Store the sample task probability
+				logProbability$sample104[((sample - 0) / 1)] = cv$sampleProbability;
+			}
+			
+			// Update the variable probability
+			logProbability$st = (logProbability$st + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample104)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample104 = (fixedFlag$sample104 && fixedFlag$sample19);
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int sample = 0; sample < noSamples; sample += 1) {
+				double cv$rvAccumulator = 0.0;
+				double cv$sampleValue = logProbability$sample104[((sample - 0) / 1)];
+				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			}
+			
+			// Update the variable probability
+			logProbability$st = (logProbability$st + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample104)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample123 using sampled
+	// values.
+	private final void logProbabilityValue$sample123() {
+		// Determine if we need to calculate the values for sample task 123 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample123) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int sample = 0; sample < noSamples; sample += 1) {
+				for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1) {
+					// Accumulator for sample probabilities for a specific instance of the random variable.
+					double cv$sampleAccumulator = 0.0;
+					
+					// An accumulator for log probabilities.
+					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					
+					// An accumulator for the distributed probability space covered.
+					double cv$probabilityReached = 0.0;
+					
+					// Copy of index so that its values can be safely substituted
+					int index$timeStep$1 = timeStep$var113;
+					
+					// Copy of index so that its values can be safely substituted
+					int index$sample$2 = sample;
+					{
+						{
+							// The sample value to calculate the probability of generating
+							int cv$sampleValue = st[sample][timeStep$var113];
+							{
+								{
+									double[] var119 = m[st[sample][(timeStep$var113 - 1)]];
+									
+									// Store the value of the function call, so the function call is only made once.
+									double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var119[cv$sampleValue])) && (var119[cv$sampleValue] <= 1.0))?Math.log(var119[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+									
+									// Add the probability of this sample task to the distribution accumulator.
+									if((cv$weightedProbability < cv$distributionAccumulator))
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+									else {
+										// If the second value is -infinity.
+										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+											cv$distributionAccumulator = cv$weightedProbability;
+										else
+											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+									}
+									
+									// Add the probability of this distribution configuration to the accumulator.
+									cv$probabilityReached = (cv$probabilityReached + 1.0);
+								}
+							}
+						}
+					}
+					if((cv$probabilityReached == 0.0))
+						// Return negative infinity if no distribution probability space is reached.
+						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					else
+						// Scale the probability relative to the observed distribution space.
+						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+					double cv$sampleProbability = cv$distributionAccumulator;
+					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+					
+					// Add the probability of this sample task to the sample task accumulator.
+					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+					
+					// Add the probability of this instance of the random variable to the probability
+					// of all instances of the random variable.
+					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+					
+					// Store the sample task probability
+					logProbability$sample123[((sample - 0) / 1)][((timeStep$var113 - 1) / 1)] = cv$sampleProbability;
+				}
+			}
+			
+			// Update the variable probability
+			logProbability$st = (logProbability$st + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample123)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample123 = ((fixedFlag$sample123 && fixedFlag$sample32) && fixedFlag$sample104);
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int sample = 0; sample < noSamples; sample += 1) {
+				for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1) {
+					double cv$rvAccumulator = 0.0;
+					double cv$sampleValue = logProbability$sample123[((sample - 0) / 1)][((timeStep$var113 - 1) / 1)];
+					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+				}
+			}
+			
+			// Update the variable probability
+			logProbability$st = (logProbability$st + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample123)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample145 using sampled
+	// values.
+	private final void logProbabilityValue$sample145() {
+		// Determine if we need to calculate the values for sample task 145 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample145) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int sample = 0; sample < noSamples; sample += 1) {
+				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
+					// Accumulator for sample probabilities for a specific instance of the random variable.
+					double cv$sampleAccumulator = 0.0;
+					
+					// An accumulator for log probabilities.
+					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					
+					// An accumulator for the distributed probability space covered.
+					double cv$probabilityReached = 0.0;
+					{
+						{
+							// The sample value to calculate the probability of generating
+							boolean cv$sampleValue = metric_valid_g[sample][timeStep$var136];
+							{
+								{
+									double var139 = metric_valid_bias[st[sample][timeStep$var136]];
+									
+									// Store the value of the function call, so the function call is only made once.
+									double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var139) && (var139 <= 1.0))?Math.log((cv$sampleValue?var139:(1.0 - var139))):Double.NEGATIVE_INFINITY));
+									
+									// Add the probability of this sample task to the distribution accumulator.
+									if((cv$weightedProbability < cv$distributionAccumulator))
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+									else {
+										// If the second value is -infinity.
+										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+											cv$distributionAccumulator = cv$weightedProbability;
+										else
+											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+									}
+									
+									// Add the probability of this distribution configuration to the accumulator.
+									cv$probabilityReached = (cv$probabilityReached + 1.0);
+								}
+							}
+						}
+					}
+					if((cv$probabilityReached == 0.0))
+						// Return negative infinity if no distribution probability space is reached.
+						cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+					else
+						// Scale the probability relative to the observed distribution space.
+						cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+					double cv$sampleProbability = cv$distributionAccumulator;
+					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+					
+					// Add the probability of this sample task to the sample task accumulator.
+					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+					
+					// Add the probability of this instance of the random variable to the probability
+					// of all instances of the random variable.
+					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+					
+					// Store the sample task probability
+					logProbability$sample145[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$sampleProbability;
+				}
+			}
+			
+			// Guard to ensure that metric_valid_g is only updated once for this probability.
+			boolean cv$guard$metric_valid_g = false;
+			
+			// Update the variable probability
+			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				{
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$metric_valid_g) {
+						// Set the guard so the update is only applied once.
+						cv$guard$metric_valid_g = true;
+						
+						// Update the variable probability
+						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+					}
+				}
+			}
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample145 = ((fixedFlag$sample84 && fixedFlag$sample104) && fixedFlag$sample123);
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int sample = 0; sample < noSamples; sample += 1) {
+				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
+					double cv$rvAccumulator = 0.0;
+					double cv$sampleValue = logProbability$sample145[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)];
+					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+					
+					// Record that the sample was reached.
+					cv$sampleReached = true;
+					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+				}
+			}
+			
+			// Guard to ensure that metric_valid_g is only updated once for this probability.
+			boolean cv$guard$metric_valid_g = false;
+			
+			// Update the variable probability
+			logProbability$metric_valid_1d = (logProbability$metric_valid_1d + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				{
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$metric_valid_g) {
+						// Set the guard so the update is only applied once.
+						cv$guard$metric_valid_g = true;
+						
+						// Update the variable probability
+						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+					}
+				}
+			}
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample157 using sampled
+	// values.
+	private final void logProbabilityValue$sample157() {
+		// Determine if we need to calculate the values for sample task 157 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample157) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int sample = 0; sample < noSamples; sample += 1) {
+				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
+					if(metric_valid_g[sample][timeStep$var136]) {
+						// Accumulator for sample probabilities for a specific instance of the random variable.
+						double cv$sampleAccumulator = 0.0;
+						
+						// An accumulator for log probabilities.
+						double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+						
+						// An accumulator for the distributed probability space covered.
+						double cv$probabilityReached = 0.0;
+						{
+							{
+								// The sample value to calculate the probability of generating
+								double cv$sampleValue = var151[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)];
+								{
+									{
+										double var148 = metric_mean[st[sample][timeStep$var136]];
+										double var149 = metric_var[st[sample][timeStep$var136]];
+										
+										// Store the value of the function call, so the function call is only made once.
+										double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var148) / Math.sqrt(var149))) - (0.5 * Math.log(var149))):Double.NEGATIVE_INFINITY));
+										
+										// Add the probability of this sample task to the distribution accumulator.
+										if((cv$weightedProbability < cv$distributionAccumulator))
+											cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+										else {
+											// If the second value is -infinity.
+											if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+												cv$distributionAccumulator = cv$weightedProbability;
+											else
+												cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+										}
+										
+										// Add the probability of this distribution configuration to the accumulator.
+										cv$probabilityReached = (cv$probabilityReached + 1.0);
+									}
+								}
+							}
+						}
+						if((cv$probabilityReached == 0.0))
+							// Return negative infinity if no distribution probability space is reached.
+							cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+						else
+							// Scale the probability relative to the observed distribution space.
+							cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+						double cv$sampleProbability = cv$distributionAccumulator;
+						
+						// Record that the sample was reached.
+						cv$sampleReached = true;
+						
+						// Add the probability of this sample task to the sample task accumulator.
+						cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+						
+						// Add the probability of this instance of the random variable to the probability
+						// of all instances of the random variable.
+						cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+						
+						// Store the sample task probability
+						logProbability$sample157[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$sampleProbability;
+					}
+				}
+			}
+			
+			// Guard to ensure that metric_g is only updated once for this probability.
+			boolean cv$guard$metric_g = false;
+			
+			// Update the variable probability
+			logProbability$var151 = (logProbability$var151 + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				{
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$metric_g) {
+						// Set the guard so the update is only applied once.
+						cv$guard$metric_g = true;
+						
+						// Update the variable probability
+						logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
+					}
+				}
+			}
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample157 = (((fixedFlag$sample52 && fixedFlag$sample68) && fixedFlag$sample104) && fixedFlag$sample123);
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int sample = 0; sample < noSamples; sample += 1) {
+				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1) {
+					if(metric_valid_g[sample][timeStep$var136]) {
+						double cv$rvAccumulator = 0.0;
+						double cv$sampleValue = logProbability$sample157[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)];
+						cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+						
+						// Record that the sample was reached.
+						cv$sampleReached = true;
+						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+					}
+				}
+			}
+			
+			// Guard to ensure that metric_g is only updated once for this probability.
+			boolean cv$guard$metric_g = false;
+			
+			// Update the variable probability
+			logProbability$var151 = (logProbability$var151 + cv$accumulator);
+			
+			// Add probability to constructed variables from the combined probability
+			{
+				{
+					// If the probability of the variable has not already been updated
+					if(!cv$guard$metric_g) {
+						// Set the guard so the update is only applied once.
+						cv$guard$metric_g = true;
+						
+						// Update the variable probability
+						logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
+					}
+				}
+			}
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample19 using sampled
+	// values.
+	private final void logProbabilityValue$sample19() {
+		// Determine if we need to calculate the values for sample task 19 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample19) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
+			
+			// An accumulator for log probabilities.
+			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			
+			// An accumulator for the distributed probability space covered.
+			double cv$probabilityReached = 0.0;
+			{
+				{
+					// The sample value to calculate the probability of generating
+					double[] cv$sampleValue = initialStateDistribution;
+					{
+						{
+							// Store the value of the function call, so the function call is only made once.
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, noStates));
+							
+							// Add the probability of this sample task to the distribution accumulator.
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								// If the second value is -infinity.
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							
+							// Add the probability of this distribution configuration to the accumulator.
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
+						}
+					}
+				}
+			}
+			if((cv$probabilityReached == 0.0))
+				// Return negative infinity if no distribution probability space is reached.
+				cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+			else
+				// Scale the probability relative to the observed distribution space.
+				cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+			double cv$sampleProbability = cv$distributionAccumulator;
+			
+			// Add the probability of this sample task to the sample task accumulator.
+			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			
+			// Store the sample task probability
+			logProbability$initialStateDistribution = cv$sampleProbability;
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample19)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample19 = fixedFlag$sample19;
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			double cv$sampleValue = logProbability$initialStateDistribution;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample19)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample32 using sampled
+	// values.
+	private final void logProbabilityValue$sample32() {
+		// Determine if we need to calculate the values for sample task 32 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample32) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var31 = 0; var31 < noStates; var31 += 1) {
+				// An accumulator for log probabilities.
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				
+				// An accumulator for the distributed probability space covered.
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						// The sample value to calculate the probability of generating
+						double[] cv$sampleValue = m[var31];
+						{
+							{
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, noStates));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					// Return negative infinity if no distribution probability space is reached.
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					// Scale the probability relative to the observed distribution space.
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			}
+			
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			
+			// Store the random variable instance probability
+			logProbability$var32 = cv$sampleAccumulator;
+			
+			// Update the variable probability
+			logProbability$m = (logProbability$m + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample32)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample32 = fixedFlag$sample32;
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var31 = 0; var31 < noStates; var31 += 1)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			double cv$sampleValue = logProbability$var32;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			
+			// Update the variable probability
+			logProbability$m = (logProbability$m + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample32)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample52 using sampled
+	// values.
+	private final void logProbabilityValue$sample52() {
+		// Determine if we need to calculate the values for sample task 52 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample52) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var50 = 0; var50 < noStates; var50 += 1) {
+				// An accumulator for log probabilities.
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				
+				// An accumulator for the distributed probability space covered.
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						// The sample value to calculate the probability of generating
+						double cv$sampleValue = metric_mean[var50];
+						{
+							{
+								double var37 = 0.0;
+								double var38 = 100.0;
+								
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + (((var37 <= cv$sampleValue) && (cv$sampleValue < var38))?(-Math.log((var38 - var37))):Double.NEGATIVE_INFINITY));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					// Return negative infinity if no distribution probability space is reached.
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					// Scale the probability relative to the observed distribution space.
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			}
+			
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			
+			// Store the random variable instance probability
+			logProbability$var51 = cv$sampleAccumulator;
+			
+			// Update the variable probability
+			logProbability$metric_mean = (logProbability$metric_mean + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample52)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample52 = fixedFlag$sample52;
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var50 = 0; var50 < noStates; var50 += 1)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			double cv$sampleValue = logProbability$var51;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			
+			// Update the variable probability
+			logProbability$metric_mean = (logProbability$metric_mean + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample52)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample68 using sampled
+	// values.
+	private final void logProbabilityValue$sample68() {
+		// Determine if we need to calculate the values for sample task 68 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample68) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var66 = 0; var66 < noStates; var66 += 1) {
+				// An accumulator for log probabilities.
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				
+				// An accumulator for the distributed probability space covered.
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						// The sample value to calculate the probability of generating
+						double cv$sampleValue = metric_var[var66];
+						{
+							{
+								double var53 = 1.0;
+								double var54 = 1.0;
+								
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityInverseGamma(cv$sampleValue, var53, var54));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					// Return negative infinity if no distribution probability space is reached.
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					// Scale the probability relative to the observed distribution space.
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			}
+			
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			
+			// Store the random variable instance probability
+			logProbability$var67 = cv$sampleAccumulator;
+			
+			// Update the variable probability
+			logProbability$metric_var = (logProbability$metric_var + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample68)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample68 = fixedFlag$sample68;
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var66 = 0; var66 < noStates; var66 += 1)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			double cv$sampleValue = logProbability$var67;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			
+			// Update the variable probability
+			logProbability$metric_var = (logProbability$metric_var + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample68)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		}
+	}
+
+	// Calculate the probability of the samples represented by sample84 using sampled
+	// values.
+	private final void logProbabilityValue$sample84() {
+		// Determine if we need to calculate the values for sample task 84 or if we should
+		// just use cached values.
+		if(!fixedProbFlag$sample84) {
+			// Generating probabilities for sample task
+			// Accumulator for probabilities of instances of the random variable
+			double cv$accumulator = 0.0;
+			
+			// Accumulator for sample probabilities for a specific instance of the random variable.
+			double cv$sampleAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var82 = 0; var82 < noStates; var82 += 1) {
+				// An accumulator for log probabilities.
+				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				
+				// An accumulator for the distributed probability space covered.
+				double cv$probabilityReached = 0.0;
+				{
+					{
+						// The sample value to calculate the probability of generating
+						double cv$sampleValue = metric_valid_bias[var82];
+						{
+							{
+								double var69 = 1.0;
+								double var70 = 1.0;
+								
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var69, var70));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
+							}
+						}
+					}
+				}
+				if((cv$probabilityReached == 0.0))
+					// Return negative infinity if no distribution probability space is reached.
+					cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
+				else
+					// Scale the probability relative to the observed distribution space.
+					cv$distributionAccumulator = (cv$distributionAccumulator - Math.log(cv$probabilityReached));
+				double cv$sampleProbability = cv$distributionAccumulator;
+				
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
+			}
+			
+			// Add the probability of this instance of the random variable to the probability
+			// of all instances of the random variable.
+			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
+			
+			// Store the random variable instance probability
+			logProbability$var83 = cv$sampleAccumulator;
+			
+			// Update the variable probability
+			logProbability$metric_valid_bias = (logProbability$metric_valid_bias + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample84)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			
+			// Now the probability is calculated store if it can be cached or if it needs to be
+			// recalculated next time.
+			fixedProbFlag$sample84 = fixedFlag$sample84;
+		} else {
+			// Using cached values.
+			// 
+			// Updating random variable and model probabilities using cached probabilities for
+			// this sample
+			double cv$accumulator = 0.0;
+			double cv$rvAccumulator = 0.0;
+			
+			// A guard to check if the sample value is ever reached.
+			boolean cv$sampleReached = false;
+			for(int var82 = 0; var82 < noStates; var82 += 1)
+				// Record that the sample was reached.
+				cv$sampleReached = true;
+			double cv$sampleValue = logProbability$var83;
+			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
+			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
+			
+			// Update the variable probability
+			logProbability$metric_valid_bias = (logProbability$metric_valid_bias + cv$accumulator);
+			
+			// Add probability to model
+			logProbability$$model = (logProbability$$model + cv$accumulator);
+			
+			// If this value is fixed, add it to the probability of this model producing the fixed
+			// values
+			if(fixedFlag$sample84)
+				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -10651,29 +10731,29 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample19)
-				sample19();
+				inferSample19();
 			for(int var31 = 0; var31 < noStates; var31 += 1) {
 				if(!fixedFlag$sample32)
-					sample32(var31);
+					inferSample32(var31);
 			}
 			for(int var50 = 0; var50 < noStates; var50 += 1) {
 				if(!fixedFlag$sample52)
-					sample52(var50);
+					inferSample52(var50);
 			}
 			for(int var66 = 0; var66 < noStates; var66 += 1) {
 				if(!fixedFlag$sample68)
-					sample68(var66);
+					inferSample68(var66);
 			}
 			for(int var82 = 0; var82 < noStates; var82 += 1) {
 				if(!fixedFlag$sample84)
-					sample84(var82);
+					inferSample84(var82);
 			}
 			for(int sample = 0; sample < noSamples; sample += 1) {
 				if(!fixedFlag$sample104)
-					sample104(sample);
+					inferSample104(sample);
 				for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1) {
 					if(!fixedFlag$sample123)
-						sample123(sample, timeStep$var113);
+						inferSample123(sample, timeStep$var113);
 				}
 			}
 		}
@@ -10682,33 +10762,59 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			for(int sample = (noSamples - ((((noSamples - 1) - 0) % 1) + 1)); sample >= ((0 - 1) + 1); sample -= 1) {
 				for(int timeStep$var113 = (length$metric[sample] - ((((length$metric[sample] - 1) - 1) % 1) + 1)); timeStep$var113 >= ((1 - 1) + 1); timeStep$var113 -= 1) {
 					if(!fixedFlag$sample123)
-						sample123(sample, timeStep$var113);
+						inferSample123(sample, timeStep$var113);
 				}
 				if(!fixedFlag$sample104)
-					sample104(sample);
+					inferSample104(sample);
 			}
 			for(int var82 = (noStates - ((((noStates - 1) - 0) % 1) + 1)); var82 >= ((0 - 1) + 1); var82 -= 1) {
 				if(!fixedFlag$sample84)
-					sample84(var82);
+					inferSample84(var82);
 			}
 			for(int var66 = (noStates - ((((noStates - 1) - 0) % 1) + 1)); var66 >= ((0 - 1) + 1); var66 -= 1) {
 				if(!fixedFlag$sample68)
-					sample68(var66);
+					inferSample68(var66);
 			}
 			for(int var50 = (noStates - ((((noStates - 1) - 0) % 1) + 1)); var50 >= ((0 - 1) + 1); var50 -= 1) {
 				if(!fixedFlag$sample52)
-					sample52(var50);
+					inferSample52(var50);
 			}
 			for(int var31 = (noStates - ((((noStates - 1) - 0) % 1) + 1)); var31 >= ((0 - 1) + 1); var31 -= 1) {
 				if(!fixedFlag$sample32)
-					sample32(var31);
+					inferSample32(var31);
 			}
 			if(!fixedFlag$sample19)
-				sample19();
+				inferSample19();
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample19)
+			drawValueSample19();
+		for(int var31 = 0; var31 < noStates; var31 += 1) {
+			if(!constrainedFlag$sample32[((var31 - 0) / 1)])
+				drawValueSample32(var31);
+		}
+		for(int var50 = 0; var50 < noStates; var50 += 1) {
+			if(!constrainedFlag$sample52[((var50 - 0) / 1)])
+				drawValueSample52(var50);
+		}
+		for(int var66 = 0; var66 < noStates; var66 += 1) {
+			if(!constrainedFlag$sample68[((var66 - 0) / 1)])
+				drawValueSample68(var66);
+		}
+		for(int var82 = 0; var82 < noStates; var82 += 1) {
+			if(!constrainedFlag$sample84[((var82 - 0) / 1)])
+				drawValueSample84(var82);
+		}
+		for(int sample = 0; sample < noSamples; sample += 1) {
+			if(!constrainedFlag$sample104[((sample - 0) / 1)])
+				drawValueSample104(sample);
+			for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1) {
+				if(!constrainedFlag$sample123[((sample - 0) / 1)][((timeStep$var113 - 1) / 1)])
+					drawValueSample123(sample, timeStep$var113);
+			}
+		}
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for

@@ -37,10 +37,20 @@ final class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 	// Setter for fixedFlag$sample61.
 	@Override
-	public final void set$fixedFlag$sample61(boolean cv$value) {
+	public final void set$fixedFlag$sample61(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample61 including if probabilities
 		// need to be updated.
 		fixedFlag$sample61 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample61$1 = 0; index$constrainedFlag$sample61$1 < constrainedFlag$sample61.length; index$constrainedFlag$sample61$1 += 1) {
+				boolean[] cv$constrainedFlag$sample61$1 = constrainedFlag$sample61[index$constrainedFlag$sample61$1];
+				for(int index$constrainedFlag$sample61$2 = 0; index$constrainedFlag$sample61$2 < cv$constrainedFlag$sample61$1.length; index$constrainedFlag$sample61$2 += 1)
+					cv$constrainedFlag$sample61$1[index$constrainedFlag$sample61$2] = true;
+			}
+		}
 		
 		// Should the probability of sample 61 be set to fixed. This will only every change
 		// the flag to false.
@@ -69,10 +79,9 @@ final class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 	// Setter for indirection1.
 	@Override
-	public final void set$indirection1(double[][] cv$value) {
+	public final void set$indirection1(double[][] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of indirection1 including if probabilities need
 		// to be updated.
-		// Set indirection1
 		indirection1 = cv$value;
 		
 		// Unset the fixed probability flag for sample 61 as it depends on indirection1.
@@ -96,7 +105,7 @@ final class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 	// Setter for length$observed.
 	@Override
-	public final void set$length$observed(int cv$value) {
+	public final void set$length$observed(int cv$value, boolean allocated$) {
 		length$observed = cv$value;
 	}
 
@@ -138,9 +147,131 @@ final class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 	// Setter for observed.
 	@Override
-	public final void set$observed(int[] cv$value) {
-		// Set observed
+	public final void set$observed(int[] cv$value, boolean allocated$) {
 		observed = cv$value;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample61
+	private final void drawValueSample61(int i, int j, int threadID$cv$j, Rng RNG$) {
+		indirection1[i][j] = DistributionSampling.sampleUniform(RNG$);
+		
+		// Substituted "l" with its value "i".
+		// 
+		// Substituted "k" with its value "j".
+		indirection2[j][i] = indirection1[i][j];
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 61 drawn from Uniform 58. Inference was performed using Metropolis-Hastings.
+	private final void inferSample61(int i, int j, int threadID$cv$j, Rng RNG$) {
+		// The original value of the sample
+		double cv$originalValue = indirection1[i][j];
+		
+		// This value is not used before it is set again, so removing the value declaration.
+		// 
+		// The probability of the random variable generating the originally sampled value
+		double cv$originalProbability;
+		
+		// Calculate a proposed variance.
+		double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
+		
+		// Ensure the variance is at least 0.01
+		if((cv$var < 0.01))
+			cv$var = 0.01;
+		
+		// The proposed new value for the sample
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+		{
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample61[i][j] = true;
+			
+			// Constructing a random variable input for use later.
+			// 
+			// Substituted "m" with its value "j".
+			double[] var99 = indirection2[j];
+			
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			// 
+			// A check to ensure rounding of floating point values can never result in a negative
+			// value.
+			// 
+			// Recorded the probability of reaching sample task 103 with the current configuration.
+			// 
+			// Set an accumulator to record the consumer distributions not seen. Initially set
+			// to 1 as seen values will be deducted from this value.
+			// 
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// Set the current value to the current state of the tree.
+			cv$originalProbability = ((((((0.0 <= generated[j]) && (generated[j] < 10)) && (0.0 <= var99[generated[j]])) && (var99[generated[j]] <= 1.0))?Math.log(var99[generated[j]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$originalValue) && (cv$originalValue < 1.0))?0.0:Double.NEGATIVE_INFINITY));
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(constrainedFlag$sample61[i][j]) {
+			indirection1[i][j] = cv$proposedValue;
+			
+			// Substituted "l" with its value "i".
+			// 
+			// Substituted "k" with its value "j".
+			indirection2[j][i] = indirection1[i][j];
+			
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample61[i][j] = true;
+			
+			// Constructing a random variable input for use later.
+			// 
+			// Substituted "m" with its value "j".
+			double[] var99 = indirection2[j];
+			
+			// The probability ration for the proposed value and the current value.
+			// 
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			// 
+			// Variable declaration of cv$accumulatedProbabilities moved.
+			// Declaration comment was:
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// A check to ensure rounding of floating point values can never result in a negative
+			// value.
+			// 
+			// Recorded the probability of reaching sample task 103 with the current configuration.
+			// 
+			// Set an accumulator to record the consumer distributions not seen. Initially set
+			// to 1 as seen values will be deducted from this value.
+			// 
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			double cv$ratio = (((((((0.0 <= generated[j]) && (generated[j] < 10)) && (0.0 <= var99[generated[j]])) && (var99[generated[j]] <= 1.0))?Math.log(var99[generated[j]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY)) - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				// If it is not revert the changes.
+				// 
+				// Set the sample value
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				indirection1[i][j] = cv$originalValue;
+				
+				// Substituted "l" with its value "i".
+				// 
+				// Substituted "k" with its value "j".
+				indirection2[j][i] = indirection1[i][j];
+			}
+		}
 	}
 
 	// Calculate the probability of the samples represented by sample103 using sampled
@@ -309,119 +440,6 @@ final class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// values
 			if(fixedFlag$sample61)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 61 drawn from Uniform 58. Inference was performed using Metropolis-Hastings.
-	private final void sample61(int i, int j, int threadID$cv$j, Rng RNG$) {
-		// The original value of the sample
-		double cv$originalValue = indirection1[i][j];
-		
-		// This value is not used before it is set again, so removing the value declaration.
-		// 
-		// The probability of the random variable generating the originally sampled value
-		double cv$originalProbability;
-		
-		// Calculate a proposed variance.
-		double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
-		
-		// Ensure the variance is at least 0.01
-		if((cv$var < 0.01))
-			cv$var = 0.01;
-		
-		// The proposed new value for the sample
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
-		{
-			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample61[i][j] = true;
-			
-			// Constructing a random variable input for use later.
-			// 
-			// Substituted "m" with its value "j".
-			double[] var99 = indirection2[j];
-			
-			// Initialize a log space accumulator to take the product of all the distribution
-			// probabilities.
-			// 
-			// Record the reached probability density.
-			// 
-			// Initialize a counter to track the reached distributions.
-			// 
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 103 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// An accumulator to allow the value for each distribution to be constructed before
-			// it is added to the index probabilities.
-			// 
-			// Set the current value to the current state of the tree.
-			cv$originalProbability = ((((((0.0 <= generated[j]) && (generated[j] < 10)) && (0.0 <= var99[generated[j]])) && (var99[generated[j]] <= 1.0))?Math.log(var99[generated[j]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$originalValue) && (cv$originalValue < 1.0))?0.0:Double.NEGATIVE_INFINITY));
-		}
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(constrainedFlag$sample61[i][j]) {
-			indirection1[i][j] = cv$proposedValue;
-			
-			// Substituted "l" with its value "i".
-			// 
-			// Substituted "k" with its value "j".
-			indirection2[j][i] = indirection1[i][j];
-			
-			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample61[i][j] = true;
-			
-			// Constructing a random variable input for use later.
-			// 
-			// Substituted "m" with its value "j".
-			double[] var99 = indirection2[j];
-			
-			// The probability ration for the proposed value and the current value.
-			// 
-			// Initialize a log space accumulator to take the product of all the distribution
-			// probabilities.
-			// 
-			// Record the reached probability density.
-			// 
-			// Initialize a counter to track the reached distributions.
-			// 
-			// Variable declaration of cv$accumulatedProbabilities moved.
-			// Declaration comment was:
-			// An accumulator to allow the value for each distribution to be constructed before
-			// it is added to the index probabilities.
-			// 
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 103 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// An accumulator to allow the value for each distribution to be constructed before
-			// it is added to the index probabilities.
-			double cv$ratio = (((((((0.0 <= generated[j]) && (generated[j] < 10)) && (0.0 <= var99[generated[j]])) && (var99[generated[j]] <= 1.0))?Math.log(var99[generated[j]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY)) - cv$originalProbability);
-			
-			// Test if the probability of the sample is sufficient to keep the value. This needs
-			// to be less than or equal as otherwise if the proposed value is not possible and
-			// the random value is 0 an impossible value will be accepted.
-			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-				// If it is not revert the changes.
-				// 
-				// Set the sample value
-				// Write out the value of the sample to a temporary variable prior to updating the
-				// intermediate variables.
-				indirection1[i][j] = cv$originalValue;
-				
-				// Substituted "l" with its value "i".
-				// 
-				// Substituted "k" with its value "j".
-				indirection2[j][i] = indirection1[i][j];
-			}
 		}
 	}
 
@@ -785,7 +803,7 @@ final class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								// Inner loop for running batches of iterations, each batch has its own random number
 								// generator.
 								for(int j = forStart$j; j < forEnd$j; j += 1)
-									sample61(i$1, j, threadID$j, RNG$1);
+									inferSample61(i$1, j, threadID$j, RNG$1);
 						}
 					);
 				}
@@ -803,7 +821,7 @@ final class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								// Inner loop for running batches of iterations, each batch has its own random number
 								// generator.
 								for(int j = forStart$j; j < forEnd$j; j += 1)
-									sample61(i$2, j, threadID$j, RNG$1);
+									inferSample61(i$2, j, threadID$j, RNG$1);
 						}
 					);
 				}
@@ -812,6 +830,23 @@ final class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		for(int i = 0; i < 10; i += 1) {
+			// Alternative name for i to make it effectively final.
+			int i$3 = i;
+			
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, length$observed, 1,
+				(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int j = forStart$j; j < forEnd$j; j += 1) {
+							if(!constrainedFlag$sample61[i$3][j])
+								drawValueSample61(i$3, j, threadID$j, RNG$1);
+						}
+				}
+			);
+		}
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for

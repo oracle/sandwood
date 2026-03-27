@@ -31,7 +31,7 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for bias.
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		bias = cv$value;
 	}
 
@@ -43,7 +43,7 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for flipMeasured.
 	@Override
-	public final void set$flipMeasured(boolean cv$value) {
+	public final void set$flipMeasured(boolean cv$value, boolean allocated$) {
 		flipMeasured = cv$value;
 	}
 
@@ -55,7 +55,7 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for guard.
 	@Override
-	public final void set$guard(double cv$value) {
+	public final void set$guard(double cv$value, boolean allocated$) {
 		guard = cv$value;
 	}
 
@@ -75,6 +75,66 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final double get$logProbability$bernoulli() {
 		return logProbability$bernoulli;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample14
+	private final void drawValueSample14() {
+		bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 14 drawn from Beta 11. Inference was performed using a Beta to Bernoulli/Binomial
+	// conjugate prior.
+	private final void inferSample14() {
+		if(true) {
+			constrainedFlag$sample14 = false;
+			
+			// Local variable to record the number of true samples.
+			int cv$sum = 0;
+			
+			// Local variable to record the number of samples.
+			int cv$count = 0;
+			{
+				// Processing random variable 13.
+				{
+					{
+						{
+							// Processing sample task 16 of consumer random variable bernoulli.
+							{
+								{
+									// Flag recording if this sample task of the consuming random variable is constrained.
+									boolean cv$sampleConstrained = true;
+									if(cv$sampleConstrained) {
+										// Mark that the sample has observed constrained data.
+										constrainedFlag$sample14 = true;
+										{
+											{
+												{
+													{
+														{
+															// Include the value sampled by task 16 from random variable bernoulli.
+															// Increment the number of samples.
+															cv$count = (cv$count + 1);
+															
+															// If the sample value was positive increase the count
+															if(flip)
+																cv$sum = (cv$sum + 1);
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample14)
+				// Write out the new value of the sample.
+				bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		}
 	}
 
 	// Calculate the probability of the samples represented by sample14 using sampled
@@ -222,61 +282,6 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 14 drawn from Beta 11. Inference was performed using a Beta to Bernoulli/Binomial
-	// conjugate prior.
-	private final void sample14() {
-		if(true) {
-			constrainedFlag$sample14 = false;
-			
-			// Local variable to record the number of true samples.
-			int cv$sum = 0;
-			
-			// Local variable to record the number of samples.
-			int cv$count = 0;
-			{
-				// Processing random variable 13.
-				{
-					{
-						{
-							// Processing sample task 16 of consumer random variable bernoulli.
-							{
-								{
-									// Flag recording if this sample task of the consuming random variable is constrained.
-									boolean cv$sampleConstrained = true;
-									if(cv$sampleConstrained) {
-										// Mark that the sample has observed constrained data.
-										constrainedFlag$sample14 = true;
-										{
-											{
-												{
-													{
-														{
-															// Include the value sampled by task 16 from random variable bernoulli.
-															// Increment the number of samples.
-															cv$count = (cv$count + 1);
-															
-															// If the sample value was positive increase the count
-															if(flip)
-																cv$sum = (cv$sum + 1);
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(constrainedFlag$sample14)
-				// Write out the new value of the sample.
-				bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		}
-	}
-
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -338,16 +343,20 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
 			if(Double.isNaN(guard))
-				sample14();
+				inferSample14();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			if(Double.isNaN(guard))
-				sample14();
+				inferSample14();
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		if(Double.isNaN(guard)) {
+			if(!constrainedFlag$sample14)
+				drawValueSample14();
+		}
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for

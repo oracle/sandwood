@@ -6,7 +6,7 @@ interface Flip1CoinMK20$CoreInterface extends org.sandwood.runtime.internal.mode
 	public double get$bias();
 
 	// Setter for bias.
-	public void set$bias(double cv$value);
+	public void set$bias(double cv$value, boolean allocated$);
 
 	// Getter for count1.
 	public int get$count1();
@@ -18,19 +18,19 @@ interface Flip1CoinMK20$CoreInterface extends org.sandwood.runtime.internal.mode
 	public boolean get$fixedFlag$sample11();
 
 	// Setter for fixedFlag$sample11.
-	public void set$fixedFlag$sample11(boolean cv$value);
+	public void set$fixedFlag$sample11(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample12.
 	public boolean get$fixedFlag$sample12();
 
 	// Setter for fixedFlag$sample12.
-	public void set$fixedFlag$sample12(boolean cv$value);
+	public void set$fixedFlag$sample12(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample8.
 	public boolean get$fixedFlag$sample8();
 
 	// Setter for fixedFlag$sample8.
-	public void set$fixedFlag$sample8(boolean cv$value);
+	public void set$fixedFlag$sample8(boolean cv$value, boolean allocated$);
 
 	// Getter for logProbability$bias.
 	public double get$logProbability$bias();
@@ -48,13 +48,13 @@ interface Flip1CoinMK20$CoreInterface extends org.sandwood.runtime.internal.mode
 	public int get$obs1();
 
 	// Setter for obs1.
-	public void set$obs1(int cv$value);
+	public void set$obs1(int cv$value, boolean allocated$);
 
 	// Getter for obs2.
 	public int get$obs2();
 
 	// Setter for obs2.
-	public void set$obs2(int cv$value);
+	public void set$obs2(int cv$value, boolean allocated$);
 
 	// Getter for total.
 	public int get$total();

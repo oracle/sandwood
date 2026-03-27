@@ -4,15 +4,15 @@ interface Flip1CoinMK2$CoreInterface extends org.sandwood.runtime.internal.model
 	public double get$a();
 	public double get$b();
 	public double get$bias();
-	public void set$bias(double cv$value);
+	public void set$bias(double cv$value, boolean allocated$);
 	public boolean get$fixedFlag$sample6();
-	public void set$fixedFlag$sample6(boolean cv$value);
+	public void set$fixedFlag$sample6(boolean cv$value, boolean allocated$);
 	public boolean[] get$flips();
 	public boolean[] get$flipsMeasured();
-	public void set$flipsMeasured(boolean[] cv$value);
+	public void set$flipsMeasured(boolean[] cv$value, boolean allocated$);
 	public double get$logProbability$bernoulli();
 	public double get$logProbability$bias();
 	public double get$logProbability$flips();
 	public int get$samples();
-	public void set$samples(int cv$value);
+	public void set$samples(int cv$value, boolean allocated$);
 }
