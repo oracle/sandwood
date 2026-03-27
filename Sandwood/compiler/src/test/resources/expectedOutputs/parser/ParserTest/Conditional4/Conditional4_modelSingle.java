@@ -25,7 +25,7 @@ public final class Conditional4 extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$bias(value);
+            system$c.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,8 +35,8 @@ public final class Conditional4 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample21(fixed);
-                system$c.set$fixedFlag$sample4(fixed);
+                system$c.set$fixedFlag$sample21(fixed, allocated);
+                system$c.set$fixedFlag$sample4(fixed, allocated);
             }
         }
 
@@ -64,7 +64,7 @@ public final class Conditional4 extends Model {
 
         @Override
         protected void setValueInternal(boolean value) {
-            system$c.set$guard(value);
+            system$c.set$guard(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -74,7 +74,7 @@ public final class Conditional4 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample4(fixed);
+                system$c.set$fixedFlag$sample4(fixed, allocated);
             }
         }
 
@@ -129,7 +129,7 @@ public final class Conditional4 extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$var19(value);
+            system$c.set$var19(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -160,7 +160,7 @@ public final class Conditional4 extends Model {
         }
 
         @Override
-        protected void setValueInternal(double value) { system$c.set$observedValue(value); }
+        protected void setValueInternal(double value) { system$c.set$observedValue(value, allocated); }
     };
 
     /**
@@ -230,21 +230,22 @@ public final class Conditional4 extends Model {
     }
 
     private void transferData(Conditional4$CoreInterface oldCore, Conditional4$CoreInterface newCore) {
+
         //Observed scalars
         if(observedValue.isSet())
-            newCore.set$observedValue(oldCore.get$observedValue());
+            newCore.set$observedValue(oldCore.get$observedValue(), false);
 
         //ComputedVariables
         if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias());
+            newCore.set$bias(oldCore.get$bias(), false);
         if($guard.isSet())
-            newCore.set$guard(oldCore.get$guard());
+            newCore.set$guard(oldCore.get$guard(), false);
         if($var19.isSet())
-            newCore.set$var19(oldCore.get$var19());
+            newCore.set$var19(oldCore.get$var19(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21());
-        newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
+        newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21(), false);
+        newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4(), false);
     }
 
     /**

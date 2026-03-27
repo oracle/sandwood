@@ -25,7 +25,7 @@ public final class Flip1CoinMK17 extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$bias(value);
+            system$c.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,7 +35,7 @@ public final class Flip1CoinMK17 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample7(fixed);
+                system$c.set$fixedFlag$sample7(fixed, allocated);
             }
         }
 
@@ -97,7 +97,7 @@ public final class Flip1CoinMK17 extends Model {
         }
 
         @Override
-        protected void setValueInternal(boolean value) { system$c.set$flipMeasured(value); }
+        protected void setValueInternal(boolean value) { system$c.set$flipMeasured(value, allocated); }
     };
 
     /**
@@ -165,16 +165,17 @@ public final class Flip1CoinMK17 extends Model {
     }
 
     private void transferData(Flip1CoinMK17$CoreInterface oldCore, Flip1CoinMK17$CoreInterface newCore) {
+
         //Observed scalars
         if(flipMeasured.isSet())
-            newCore.set$flipMeasured(oldCore.get$flipMeasured());
+            newCore.set$flipMeasured(oldCore.get$flipMeasured(), false);
 
         //ComputedVariables
         if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias());
+            newCore.set$bias(oldCore.get$bias(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample7(oldCore.get$fixedFlag$sample7());
+        newCore.set$fixedFlag$sample7(oldCore.get$fixedFlag$sample7(), false);
     }
 
     /**

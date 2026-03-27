@@ -50,8 +50,7 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 
 	// Setter for Avail.
 	@Override
-	public final void set$Avail(int[][] cv$value) {
-		// Set Avail
+	public final void set$Avail(int[][] cv$value, boolean allocated$) {
 		Avail = cv$value;
 	}
 
@@ -63,8 +62,7 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 
 	// Setter for ObsSales.
 	@Override
-	public final void set$ObsSales(int[][] cv$value) {
-		// Set ObsSales
+	public final void set$ObsSales(int[][] cv$value, boolean allocated$) {
 		ObsSales = cv$value;
 	}
 
@@ -82,7 +80,7 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 
 	// Setter for T.
 	@Override
-	public final void set$T(int cv$value) {
+	public final void set$T(int cv$value, boolean allocated$) {
 		T = cv$value;
 	}
 
@@ -106,10 +104,17 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 
 	// Setter for fixedFlag$sample26.
 	@Override
-	public final void set$fixedFlag$sample26(boolean cv$value) {
+	public final void set$fixedFlag$sample26(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample26 including if probabilities
 		// need to be updated.
 		fixedFlag$sample26 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample26$1 = 0; index$constrainedFlag$sample26$1 < constrainedFlag$sample26.length; index$constrainedFlag$sample26$1 += 1)
+				constrainedFlag$sample26[index$constrainedFlag$sample26$1] = true;
+		}
 		
 		// Should the probability of sample 26 be set to fixed. This will only every change
 		// the flag to false.
@@ -170,7 +175,7 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 
 	// Setter for noProducts.
 	@Override
-	public final void set$noProducts(int cv$value) {
+	public final void set$noProducts(int cv$value, boolean allocated$) {
 		noProducts = cv$value;
 	}
 
@@ -182,7 +187,7 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 
 	// Setter for r.
 	@Override
-	public final void set$r(double cv$value) {
+	public final void set$r(double cv$value, boolean allocated$) {
 		r = cv$value;
 	}
 
@@ -206,10 +211,9 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 
 	// Setter for ut.
 	@Override
-	public final void set$ut(double[] cv$value) {
+	public final void set$ut(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of ut including if probabilities need to be
 		// updated.
-		// Set ut
 		ut = cv$value;
 		
 		// Unset the fixed probability flag for sample 26 as it depends on ut.
@@ -217,6 +221,2207 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 		
 		// Unset the fixed probability flag for sample 157 as it depends on ut.
 		fixedProbFlag$sample157 = false;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample26
+	private final void drawValueSample26(int j$var20) {
+		ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		
+		// Guards to ensure that exped is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 26 and consumer double[] 41.
+		{
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						{
+							exped[j$var38] = Math.exp(ut[j$var38]);
+						}
+					}
+				}
+			}
+		}
+		
+		// Guards to ensure that sum is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 26 and consumer double 52.
+		{
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						if(((0 <= j$var38) && (j$var38 < noProducts))) {
+							{
+								// Reduction of array exped
+								// 
+								// A generated name to prevent name collisions if the reduction is implemented more
+								// than once in inference and probability code. Initialize the variable to the unit
+								// value
+								double reduceVar$sum$15 = 0.0;
+								
+								// For each index in the array to be reduced
+								for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+									// Set the left hand term of the reduction function to the return variable value.
+									double k$var49 = reduceVar$sum$15;
+									
+									// Set the right hand term to a value from the array exped
+									double l$var50 = exped[cv$reduction46Index];
+									
+									// Execute the reduction function, saving the result into the return value.
+									// 
+									// Copy the result of the reduction into the variable returned by the reduction.
+									reduceVar$sum$15 = (k$var49 + l$var50);
+								}
+								
+								// Write out the new sample value.
+								sum = reduceVar$sum$15;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		// Guards to ensure that expedNorm is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 26 and consumer double[] 67.
+		{
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			boolean[] guard$sample26put68 = guard$sample26put68$global;
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						if(((0 <= j$var38) && (j$var38 < noProducts))) {
+							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+								// Set the flags to false
+								guard$sample26put68[((j$var63 - 0) / 1)] = false;
+						}
+					}
+				}
+			}
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+							if((j$var38 == j$var63))
+								// Set the flags to false
+								guard$sample26put68[((j$var63 - 0) / 1)] = false;
+						}
+					}
+				}
+			}
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						if(((0 <= j$var38) && (j$var38 < noProducts))) {
+							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+								if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
+									// The body will execute, so should not be executed again
+									guard$sample26put68[((j$var63 - 0) / 1)] = true;
+									{
+										expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+							if((j$var38 == j$var63)) {
+								if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
+									// The body will execute, so should not be executed again
+									guard$sample26put68[((j$var63 - 0) / 1)] = true;
+									{
+										expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		// Guards to ensure that weekly_ut is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 26 and consumer double[] 128.
+		{
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			boolean[][] guard$sample26put131 = guard$sample26put131$global;
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						if(((0 <= j$var38) && (j$var38 < noProducts))) {
+							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+									if((j$var63 == j$var123)) {
+										for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+											// Set the flags to false
+											guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = false;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+							if((j$var38 == j$var63)) {
+								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+									if((j$var63 == j$var123)) {
+										for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+											// Set the flags to false
+											guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = false;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						if(((0 <= j$var38) && (j$var38 < noProducts))) {
+							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+									if((j$var63 == j$var123)) {
+										for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+											if(!guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)]) {
+												// The body will execute, so should not be executed again
+												guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = true;
+												{
+													weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+							if((j$var38 == j$var63)) {
+								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+									if((j$var63 == j$var123)) {
+										for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+											if(!guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)]) {
+												// The body will execute, so should not be executed again
+												guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = true;
+												{
+													weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		// Guards to ensure that weekly_rates is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 26 and consumer double[] 150.
+		{
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			boolean[][] guard$sample26put154 = guard$sample26put154$global;
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						if(((0 <= j$var38) && (j$var38 < noProducts))) {
+							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+									if((j$var63 == j$var123)) {
+										for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+											if(((0 <= j$var123) && (j$var123 < noProducts))) {
+												for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+													// Set the flags to false
+													guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						if(((0 <= j$var38) && (j$var38 < noProducts))) {
+							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+									if((j$var63 == j$var123)) {
+										for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+											if((j$var123 == j$var147)) {
+												for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+													// Set the flags to false
+													guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+							if((j$var38 == j$var63)) {
+								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+									if((j$var63 == j$var123)) {
+										for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+											if(((0 <= j$var123) && (j$var123 < noProducts))) {
+												for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+													// Set the flags to false
+													guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+							if((j$var38 == j$var63)) {
+								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+									if((j$var63 == j$var123)) {
+										for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+											if((j$var123 == j$var147)) {
+												for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+													// Set the flags to false
+													guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						if(((0 <= j$var38) && (j$var38 < noProducts))) {
+							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+									if((j$var63 == j$var123)) {
+										for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+											if(((0 <= j$var123) && (j$var123 < noProducts))) {
+												for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+													if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
+														// The body will execute, so should not be executed again
+														guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
+														{
+															// Reduction of array weekly_ut
+															// 
+															// A generated name to prevent name collisions if the reduction is implemented more
+															// than once in inference and probability code. Initialize the variable to the unit
+															// value
+															double reduceVar$denom$30 = 0.0;
+															
+															// For each index in the array to be reduced
+															for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																// Set the left hand term of the reduction function to the return variable value.
+																double k$var135 = reduceVar$denom$30;
+																
+																// Set the right hand term to a value from the array weekly_ut
+																double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																
+																// Execute the reduction function, saving the result into the return value.
+																// 
+																// Copy the result of the reduction into the variable returned by the reduction.
+																reduceVar$denom$30 = (k$var135 + l$var136);
+															}
+															weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$30);
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						if(((0 <= j$var38) && (j$var38 < noProducts))) {
+							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+									if((j$var63 == j$var123)) {
+										for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+											if((j$var123 == j$var147)) {
+												for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+													if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
+														// The body will execute, so should not be executed again
+														guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
+														{
+															// Reduction of array weekly_ut
+															// 
+															// A generated name to prevent name collisions if the reduction is implemented more
+															// than once in inference and probability code. Initialize the variable to the unit
+															// value
+															double reduceVar$denom$31 = 0.0;
+															
+															// For each index in the array to be reduced
+															for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																// Set the left hand term of the reduction function to the return variable value.
+																double k$var135 = reduceVar$denom$31;
+																
+																// Set the right hand term to a value from the array weekly_ut
+																double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																
+																// Execute the reduction function, saving the result into the return value.
+																// 
+																// Copy the result of the reduction into the variable returned by the reduction.
+																reduceVar$denom$31 = (k$var135 + l$var136);
+															}
+															weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$31);
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+							if((j$var38 == j$var63)) {
+								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+									if((j$var63 == j$var123)) {
+										for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+											if(((0 <= j$var123) && (j$var123 < noProducts))) {
+												for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+													if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
+														// The body will execute, so should not be executed again
+														guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
+														{
+															// Reduction of array weekly_ut
+															// 
+															// A generated name to prevent name collisions if the reduction is implemented more
+															// than once in inference and probability code. Initialize the variable to the unit
+															// value
+															double reduceVar$denom$32 = 0.0;
+															
+															// For each index in the array to be reduced
+															for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																// Set the left hand term of the reduction function to the return variable value.
+																double k$var135 = reduceVar$denom$32;
+																
+																// Set the right hand term to a value from the array weekly_ut
+																double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																
+																// Execute the reduction function, saving the result into the return value.
+																// 
+																// Copy the result of the reduction into the variable returned by the reduction.
+																reduceVar$denom$32 = (k$var135 + l$var136);
+															}
+															weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$32);
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+					if((j$var20 == j$var38)) {
+						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+							if((j$var38 == j$var63)) {
+								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+									if((j$var63 == j$var123)) {
+										for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+											if((j$var123 == j$var147)) {
+												for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+													if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
+														// The body will execute, so should not be executed again
+														guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
+														{
+															// Reduction of array weekly_ut
+															// 
+															// A generated name to prevent name collisions if the reduction is implemented more
+															// than once in inference and probability code. Initialize the variable to the unit
+															// value
+															double reduceVar$denom$33 = 0.0;
+															
+															// For each index in the array to be reduced
+															for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																// Set the left hand term of the reduction function to the return variable value.
+																double k$var135 = reduceVar$denom$33;
+																
+																// Set the right hand term to a value from the array weekly_ut
+																double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																
+																// Execute the reduction function, saving the result into the return value.
+																// 
+																// Copy the result of the reduction into the variable returned by the reduction.
+																reduceVar$denom$33 = (k$var135 + l$var136);
+															}
+															weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$33);
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 26 drawn from Gaussian 25. Inference was performed using Metropolis-Hastings.
+	private final void inferSample26(int j$var20) {
+		if(true) {
+			constrainedFlag$sample26[((j$var20 - 1) / 1)] = false;
+			
+			// Calculate the number of states to evaluate.
+			int cv$numStates = 0;
+			{
+				// Metropolis-Hastings
+				cv$numStates = Math.max(cv$numStates, 2);
+			}
+			
+			// The original value of the sample
+			double cv$originalValue = ut[j$var20];
+			
+			// The probability of the random variable generating the originally sampled value
+			double cv$originalProbability = 0.0;
+			
+			// Calculate a proposed variance.
+			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
+			
+			// Ensure the variance is at least 0.01
+			if((cv$var < (0.1 * 0.1)))
+				cv$var = (0.1 * 0.1);
+			
+			// The proposed new value for the sample
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			
+			// The probability of the random variable generating the new sample value.
+			double cv$proposedProbability = 0.0;
+			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
+				if((constrainedFlag$sample26[((j$var20 - 1) / 1)] || (cv$valuePos == 0))) {
+					// Initialize the summed probabilities to 0.
+					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
+					
+					// Initialize a counter to track the reached distributions.
+					double cv$reachedDistributionSourceRV = 0.0;
+					
+					// Initialize a log space accumulator to take the product of all the distribution
+					// probabilities.
+					double cv$accumulatedDistributionProbabilities = 0.0;
+					
+					// The value currently being tested
+					double cv$currentValue;
+					if((cv$valuePos == 0))
+						// Set the current value to the current state of the tree.
+						cv$currentValue = cv$originalValue;
+					else {
+						cv$currentValue = cv$proposedValue;
+						
+						// Update Sample and intermediate values
+						// 
+						// Write out the value of the sample to a temporary variable prior to updating the
+						// intermediate variables.
+						double var26 = cv$proposedValue;
+						
+						// Guards to ensure that ut is only updated when there is a valid path.
+						{
+							{
+								{
+									ut[j$var20] = cv$currentValue;
+								}
+							}
+						}
+						
+						// Guards to ensure that exped is only updated when there is a valid path.
+						// 
+						// Looking for a path between Sample 26 and consumer double[] 41.
+						{
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										{
+											exped[j$var38] = Math.exp(ut[j$var38]);
+										}
+									}
+								}
+							}
+						}
+						
+						// Guards to ensure that sum is only updated when there is a valid path.
+						// 
+						// Looking for a path between Sample 26 and consumer double 52.
+						{
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										if(((0 <= j$var38) && (j$var38 < noProducts))) {
+											{
+												// Reduction of array exped
+												// 
+												// A generated name to prevent name collisions if the reduction is implemented more
+												// than once in inference and probability code. Initialize the variable to the unit
+												// value
+												double reduceVar$sum$11 = 0.0;
+												
+												// For each index in the array to be reduced
+												for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+													// Set the left hand term of the reduction function to the return variable value.
+													double k$var49 = reduceVar$sum$11;
+													
+													// Set the right hand term to a value from the array exped
+													double l$var50 = exped[cv$reduction46Index];
+													
+													// Execute the reduction function, saving the result into the return value.
+													// 
+													// Copy the result of the reduction into the variable returned by the reduction.
+													reduceVar$sum$11 = (k$var49 + l$var50);
+												}
+												
+												// Write out the new sample value.
+												sum = reduceVar$sum$11;
+											}
+										}
+									}
+								}
+							}
+						}
+						
+						// Guards to ensure that expedNorm is only updated when there is a valid path.
+						// 
+						// Looking for a path between Sample 26 and consumer double[] 67.
+						{
+							// Guard to check that at most one copy of the code is executed for a given random
+							// variable instance.
+							boolean[] guard$sample26put68 = guard$sample26put68$global;
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										if(((0 <= j$var38) && (j$var38 < noProducts))) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+												// Set the flags to false
+												guard$sample26put68[((j$var63 - 0) / 1)] = false;
+										}
+									}
+								}
+							}
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											if((j$var38 == j$var63))
+												// Set the flags to false
+												guard$sample26put68[((j$var63 - 0) / 1)] = false;
+										}
+									}
+								}
+							}
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										if(((0 <= j$var38) && (j$var38 < noProducts))) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
+													// The body will execute, so should not be executed again
+													guard$sample26put68[((j$var63 - 0) / 1)] = true;
+													{
+														expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											if((j$var38 == j$var63)) {
+												if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
+													// The body will execute, so should not be executed again
+													guard$sample26put68[((j$var63 - 0) / 1)] = true;
+													{
+														expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						
+						// Guards to ensure that weekly_ut is only updated when there is a valid path.
+						// 
+						// Looking for a path between Sample 26 and consumer double[] 128.
+						{
+							// Guard to check that at most one copy of the code is executed for a given random
+							// variable instance.
+							boolean[][] guard$sample26put131 = guard$sample26put131$global;
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										if(((0 <= j$var38) && (j$var38 < noProducts))) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													if((j$var63 == j$var123)) {
+														for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+															// Set the flags to false
+															guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = false;
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											if((j$var38 == j$var63)) {
+												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													if((j$var63 == j$var123)) {
+														for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+															// Set the flags to false
+															guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = false;
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										if(((0 <= j$var38) && (j$var38 < noProducts))) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													if((j$var63 == j$var123)) {
+														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+															if(!guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)]) {
+																// The body will execute, so should not be executed again
+																guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = true;
+																{
+																	weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											if((j$var38 == j$var63)) {
+												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													if((j$var63 == j$var123)) {
+														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+															if(!guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)]) {
+																// The body will execute, so should not be executed again
+																guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = true;
+																{
+																	weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						
+						// Guards to ensure that weekly_rates is only updated when there is a valid path.
+						// 
+						// Looking for a path between Sample 26 and consumer double[] 150.
+						{
+							// Guard to check that at most one copy of the code is executed for a given random
+							// variable instance.
+							boolean[][] guard$sample26put154 = guard$sample26put154$global;
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										if(((0 <= j$var38) && (j$var38 < noProducts))) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													if((j$var63 == j$var123)) {
+														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+															if(((0 <= j$var123) && (j$var123 < noProducts))) {
+																for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+																	// Set the flags to false
+																	guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										if(((0 <= j$var38) && (j$var38 < noProducts))) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													if((j$var63 == j$var123)) {
+														for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+															if((j$var123 == j$var147)) {
+																for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+																	// Set the flags to false
+																	guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											if((j$var38 == j$var63)) {
+												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													if((j$var63 == j$var123)) {
+														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+															if(((0 <= j$var123) && (j$var123 < noProducts))) {
+																for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+																	// Set the flags to false
+																	guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											if((j$var38 == j$var63)) {
+												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													if((j$var63 == j$var123)) {
+														for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+															if((j$var123 == j$var147)) {
+																for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+																	// Set the flags to false
+																	guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										if(((0 <= j$var38) && (j$var38 < noProducts))) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													if((j$var63 == j$var123)) {
+														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+															if(((0 <= j$var123) && (j$var123 < noProducts))) {
+																for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+																	if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
+																		// The body will execute, so should not be executed again
+																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
+																		{
+																			// Reduction of array weekly_ut
+																			// 
+																			// A generated name to prevent name collisions if the reduction is implemented more
+																			// than once in inference and probability code. Initialize the variable to the unit
+																			// value
+																			double reduceVar$denom$20 = 0.0;
+																			
+																			// For each index in the array to be reduced
+																			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																				// Set the left hand term of the reduction function to the return variable value.
+																				double k$var135 = reduceVar$denom$20;
+																				
+																				// Set the right hand term to a value from the array weekly_ut
+																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																				
+																				// Execute the reduction function, saving the result into the return value.
+																				// 
+																				// Copy the result of the reduction into the variable returned by the reduction.
+																				reduceVar$denom$20 = (k$var135 + l$var136);
+																			}
+																			weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$20);
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										if(((0 <= j$var38) && (j$var38 < noProducts))) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													if((j$var63 == j$var123)) {
+														for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+															if((j$var123 == j$var147)) {
+																for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																	if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
+																		// The body will execute, so should not be executed again
+																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
+																		{
+																			// Reduction of array weekly_ut
+																			// 
+																			// A generated name to prevent name collisions if the reduction is implemented more
+																			// than once in inference and probability code. Initialize the variable to the unit
+																			// value
+																			double reduceVar$denom$21 = 0.0;
+																			
+																			// For each index in the array to be reduced
+																			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																				// Set the left hand term of the reduction function to the return variable value.
+																				double k$var135 = reduceVar$denom$21;
+																				
+																				// Set the right hand term to a value from the array weekly_ut
+																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																				
+																				// Execute the reduction function, saving the result into the return value.
+																				// 
+																				// Copy the result of the reduction into the variable returned by the reduction.
+																				reduceVar$denom$21 = (k$var135 + l$var136);
+																			}
+																			weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$21);
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											if((j$var38 == j$var63)) {
+												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													if((j$var63 == j$var123)) {
+														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+															if(((0 <= j$var123) && (j$var123 < noProducts))) {
+																for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+																	if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
+																		// The body will execute, so should not be executed again
+																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
+																		{
+																			// Reduction of array weekly_ut
+																			// 
+																			// A generated name to prevent name collisions if the reduction is implemented more
+																			// than once in inference and probability code. Initialize the variable to the unit
+																			// value
+																			double reduceVar$denom$22 = 0.0;
+																			
+																			// For each index in the array to be reduced
+																			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																				// Set the left hand term of the reduction function to the return variable value.
+																				double k$var135 = reduceVar$denom$22;
+																				
+																				// Set the right hand term to a value from the array weekly_ut
+																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																				
+																				// Execute the reduction function, saving the result into the return value.
+																				// 
+																				// Copy the result of the reduction into the variable returned by the reduction.
+																				reduceVar$denom$22 = (k$var135 + l$var136);
+																			}
+																			weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$22);
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									if((j$var20 == j$var38)) {
+										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											if((j$var38 == j$var63)) {
+												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													if((j$var63 == j$var123)) {
+														for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+															if((j$var123 == j$var147)) {
+																for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																	if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
+																		// The body will execute, so should not be executed again
+																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
+																		{
+																			// Reduction of array weekly_ut
+																			// 
+																			// A generated name to prevent name collisions if the reduction is implemented more
+																			// than once in inference and probability code. Initialize the variable to the unit
+																			// value
+																			double reduceVar$denom$23 = 0.0;
+																			
+																			// For each index in the array to be reduced
+																			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																				// Set the left hand term of the reduction function to the return variable value.
+																				double k$var135 = reduceVar$denom$23;
+																				
+																				// Set the right hand term to a value from the array weekly_ut
+																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																				
+																				// Execute the reduction function, saving the result into the return value.
+																				// 
+																				// Copy the result of the reduction into the variable returned by the reduction.
+																				reduceVar$denom$23 = (k$var135 + l$var136);
+																			}
+																			weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$23);
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					{
+						// Record the reached probability density.
+						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
+						
+						// An accumulator to allow the value for each distribution to be constructed before
+						// it is added to the index probabilities.
+						double cv$accumulatedProbabilities = (Math.log(1.0) + ((0.0 < 2.0)?(DistributionSampling.logProbabilityGaussian(((cv$currentValue - 0.0) / Math.sqrt(2.0))) - (0.5 * Math.log(2.0))):Double.NEGATIVE_INFINITY));
+						
+						// Processing random variable 152.
+						{
+							// Looking for a path between Sample 26 and consumer Multinomial 152.
+							{
+								// Guard to check that at most one copy of the code is executed for a given random
+								// variable instance.
+								boolean[] guard$sample26multinomial156 = guard$sample26multinomial156$global;
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											if(((0 <= j$var38) && (j$var38 < noProducts))) {
+												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																if(((0 <= j$var123) && (j$var123 < noProducts)))
+																	// Set the flags to false
+																	guard$sample26multinomial156[((t$var112 - 0) / 1)] = false;
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											if(((0 <= j$var38) && (j$var38 < noProducts))) {
+												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+																if((j$var123 == j$var147)) {
+																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+																		// Set the flags to false
+																		guard$sample26multinomial156[((t$var112 - 0) / 1)] = false;
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												if((j$var38 == j$var63)) {
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																if(((0 <= j$var123) && (j$var123 < noProducts)))
+																	// Set the flags to false
+																	guard$sample26multinomial156[((t$var112 - 0) / 1)] = false;
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												if((j$var38 == j$var63)) {
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+																if((j$var123 == j$var147)) {
+																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+																		// Set the flags to false
+																		guard$sample26multinomial156[((t$var112 - 0) / 1)] = false;
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									double traceTempVariable$var39$24_1 = cv$currentValue;
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											double traceTempVariable$k$24_3 = Math.exp(traceTempVariable$var39$24_1);
+											if(((0 <= j$var38) && (j$var38 < noProducts))) {
+												if((0 < noProducts)) {
+													// Reduction of array exped
+													// 
+													// A generated name to prevent name collisions if the reduction is implemented more
+													// than once in inference and probability code. Initialize the variable to the unit
+													// value
+													double reduceVar$sum$12 = 0.0;
+													
+													// Reduce for every value except a masked value which will be skipped.
+													for(int cv$reduction2508Index = 0; cv$reduction2508Index < j$var38; cv$reduction2508Index += 1) {
+														// Set the left hand term of the reduction function to the return variable value.
+														double k$var49 = reduceVar$sum$12;
+														
+														// Set the right hand term to a value from the array exped
+														double l$var50 = exped[cv$reduction2508Index];
+														
+														// Execute the reduction function, saving the result into the return value.
+														// 
+														// Copy the result of the reduction into the variable returned by the reduction.
+														reduceVar$sum$12 = (k$var49 + l$var50);
+													}
+													for(int cv$reduction2508Index = (j$var38 + 1); cv$reduction2508Index < noProducts; cv$reduction2508Index += 1) {
+														// Set the left hand term of the reduction function to the return variable value.
+														double k$var49 = reduceVar$sum$12;
+														
+														// Set the right hand term to a value from the array exped
+														double l$var50 = exped[cv$reduction2508Index];
+														
+														// Execute the reduction function, saving the result into the return value.
+														// 
+														// Copy the result of the reduction into the variable returned by the reduction.
+														reduceVar$sum$12 = (k$var49 + l$var50);
+													}
+													double cv$reduced46 = reduceVar$sum$12;
+													
+													// Copy the result of the reduction into the variable returned by the reduction.
+													reduceVar$sum$12 = (traceTempVariable$k$24_3 + cv$reduced46);
+													double traceTempVariable$sum$24_4 = reduceVar$sum$12;
+													for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+														double traceTempVariable$sum$24_6 = traceTempVariable$sum$24_4;
+														double traceTempVariable$var124$24_7 = (exped[j$var63] / (r * traceTempVariable$sum$24_6));
+														for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+															if((j$var63 == j$var123)) {
+																for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																	double traceTempVariable$k$24_10 = (traceTempVariable$var124$24_7 * Avail[t$var112][j$var123]);
+																	if(((0 <= j$var123) && (j$var123 < noProducts))) {
+																		if((0 < noProducts)) {
+																			// Reduction of array weekly_ut
+																			// 
+																			// A generated name to prevent name collisions if the reduction is implemented more
+																			// than once in inference and probability code. Initialize the variable to the unit
+																			// value
+																			double reduceVar$denom$24 = 0.0;
+																			
+																			// Reduce for every value except a masked value which will be skipped.
+																			for(int cv$reduction2542Index = 0; cv$reduction2542Index < j$var123; cv$reduction2542Index += 1) {
+																				// Set the left hand term of the reduction function to the return variable value.
+																				double k$var135 = reduceVar$denom$24;
+																				
+																				// Set the right hand term to a value from the array weekly_ut
+																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2542Index];
+																				
+																				// Execute the reduction function, saving the result into the return value.
+																				// 
+																				// Copy the result of the reduction into the variable returned by the reduction.
+																				reduceVar$denom$24 = (k$var135 + l$var136);
+																			}
+																			for(int cv$reduction2542Index = (j$var123 + 1); cv$reduction2542Index < noProducts; cv$reduction2542Index += 1) {
+																				// Set the left hand term of the reduction function to the return variable value.
+																				double k$var135 = reduceVar$denom$24;
+																				
+																				// Set the right hand term to a value from the array weekly_ut
+																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2542Index];
+																				
+																				// Execute the reduction function, saving the result into the return value.
+																				// 
+																				// Copy the result of the reduction into the variable returned by the reduction.
+																				reduceVar$denom$24 = (k$var135 + l$var136);
+																			}
+																			double cv$reduced136 = reduceVar$denom$24;
+																			
+																			// Copy the result of the reduction into the variable returned by the reduction.
+																			reduceVar$denom$24 = (traceTempVariable$k$24_10 + cv$reduced136);
+																			double traceTempVariable$denom$24_11 = reduceVar$denom$24;
+																			if(!guard$sample26multinomial156[((t$var112 - 0) / 1)]) {
+																				// The body will execute, so should not be executed again
+																				guard$sample26multinomial156[((t$var112 - 0) / 1)] = true;
+																				
+																				// Processing sample task 157 of consumer random variable null.
+																				{
+																					{
+																						// Flag recording if this sample task of the consuming random variable is constrained.
+																						boolean cv$sampleConstrained = true;
+																						if(cv$sampleConstrained) {
+																							// Mark that the sample has observed constrained data.
+																							constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
+																							
+																							// Set an accumulator to sum the probabilities for each possible configuration of
+																							// inputs.
+																							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																							
+																							// Set an accumulator to record the consumer distributions not seen. Initially set
+																							// to 1 as seen values will be deducted from this value.
+																							double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																							{
+																								{
+																									{
+																										{
+																											{
+																												// Constructing a random variable input for use later.
+																												int var151 = sales_sum[t$var112];
+																												
+																												// Record the probability of sample task 157 generating output with current configuration.
+																												if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151));
+																													else
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)));
+																												}
+																												
+																												// Recorded the probability of reaching sample task 157 with the current configuration.
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																											}
+																										}
+																									}
+																								}
+																							}
+																							
+																							// A check to ensure rounding of floating point values can never result in a negative
+																							// value.
+																							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																							
+																							// Multiply (log space add) in the probability of the sample task to the overall probability
+																							// for this configuration of the source random variable.
+																							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																							else {
+																								// If the second value is -infinity.
+																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																								else
+																									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									double traceTempVariable$var39$25_1 = cv$currentValue;
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											double traceTempVariable$k$25_3 = Math.exp(traceTempVariable$var39$25_1);
+											if(((0 <= j$var38) && (j$var38 < noProducts))) {
+												if((0 < noProducts)) {
+													// Reduction of array exped
+													// 
+													// A generated name to prevent name collisions if the reduction is implemented more
+													// than once in inference and probability code. Initialize the variable to the unit
+													// value
+													double reduceVar$sum$13 = 0.0;
+													
+													// Reduce for every value except a masked value which will be skipped.
+													for(int cv$reduction2570Index = 0; cv$reduction2570Index < j$var38; cv$reduction2570Index += 1) {
+														// Set the left hand term of the reduction function to the return variable value.
+														double k$var49 = reduceVar$sum$13;
+														
+														// Set the right hand term to a value from the array exped
+														double l$var50 = exped[cv$reduction2570Index];
+														
+														// Execute the reduction function, saving the result into the return value.
+														// 
+														// Copy the result of the reduction into the variable returned by the reduction.
+														reduceVar$sum$13 = (k$var49 + l$var50);
+													}
+													for(int cv$reduction2570Index = (j$var38 + 1); cv$reduction2570Index < noProducts; cv$reduction2570Index += 1) {
+														// Set the left hand term of the reduction function to the return variable value.
+														double k$var49 = reduceVar$sum$13;
+														
+														// Set the right hand term to a value from the array exped
+														double l$var50 = exped[cv$reduction2570Index];
+														
+														// Execute the reduction function, saving the result into the return value.
+														// 
+														// Copy the result of the reduction into the variable returned by the reduction.
+														reduceVar$sum$13 = (k$var49 + l$var50);
+													}
+													double cv$reduced46 = reduceVar$sum$13;
+													
+													// Copy the result of the reduction into the variable returned by the reduction.
+													reduceVar$sum$13 = (traceTempVariable$k$25_3 + cv$reduced46);
+													double traceTempVariable$sum$25_4 = reduceVar$sum$13;
+													for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+														double traceTempVariable$sum$25_6 = traceTempVariable$sum$25_4;
+														double traceTempVariable$var124$25_7 = (exped[j$var63] / (r * traceTempVariable$sum$25_6));
+														for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+															if((j$var63 == j$var123)) {
+																for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																	double traceTempVariable$var148$25_10 = (traceTempVariable$var124$25_7 * Avail[t$var112][j$var123]);
+																	for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+																		if((j$var123 == j$var147)) {
+																			if(!guard$sample26multinomial156[((t$var112 - 0) / 1)]) {
+																				// The body will execute, so should not be executed again
+																				guard$sample26multinomial156[((t$var112 - 0) / 1)] = true;
+																				
+																				// Processing sample task 157 of consumer random variable null.
+																				{
+																					{
+																						// Flag recording if this sample task of the consuming random variable is constrained.
+																						boolean cv$sampleConstrained = true;
+																						if(cv$sampleConstrained) {
+																							// Mark that the sample has observed constrained data.
+																							constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
+																							
+																							// Set an accumulator to sum the probabilities for each possible configuration of
+																							// inputs.
+																							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																							
+																							// Set an accumulator to record the consumer distributions not seen. Initially set
+																							// to 1 as seen values will be deducted from this value.
+																							double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																							{
+																								{
+																									{
+																										{
+																											{
+																												// Constructing a random variable input for use later.
+																												int var151 = sales_sum[t$var112];
+																												
+																												// Record the probability of sample task 157 generating output with current configuration.
+																												if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												else {
+																													// If the second value is -infinity.
+																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151));
+																													else
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)));
+																												}
+																												
+																												// Recorded the probability of reaching sample task 157 with the current configuration.
+																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																											}
+																										}
+																									}
+																								}
+																							}
+																							
+																							// A check to ensure rounding of floating point values can never result in a negative
+																							// value.
+																							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																							
+																							// Multiply (log space add) in the probability of the sample task to the overall probability
+																							// for this configuration of the source random variable.
+																							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																							else {
+																								// If the second value is -infinity.
+																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																								else
+																									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									double traceTempVariable$var39$26_1 = cv$currentValue;
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											double traceTempVariable$var64$26_3 = Math.exp(traceTempVariable$var39$26_1);
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												if((j$var38 == j$var63)) {
+													double traceTempVariable$var124$26_5 = (traceTempVariable$var64$26_3 / (r * sum));
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																double traceTempVariable$k$26_8 = (traceTempVariable$var124$26_5 * Avail[t$var112][j$var123]);
+																if(((0 <= j$var123) && (j$var123 < noProducts))) {
+																	if((0 < noProducts)) {
+																		// Reduction of array weekly_ut
+																		// 
+																		// A generated name to prevent name collisions if the reduction is implemented more
+																		// than once in inference and probability code. Initialize the variable to the unit
+																		// value
+																		double reduceVar$denom$25 = 0.0;
+																		
+																		// Reduce for every value except a masked value which will be skipped.
+																		for(int cv$reduction2626Index = 0; cv$reduction2626Index < j$var123; cv$reduction2626Index += 1) {
+																			// Set the left hand term of the reduction function to the return variable value.
+																			double k$var135 = reduceVar$denom$25;
+																			
+																			// Set the right hand term to a value from the array weekly_ut
+																			double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2626Index];
+																			
+																			// Execute the reduction function, saving the result into the return value.
+																			// 
+																			// Copy the result of the reduction into the variable returned by the reduction.
+																			reduceVar$denom$25 = (k$var135 + l$var136);
+																		}
+																		for(int cv$reduction2626Index = (j$var123 + 1); cv$reduction2626Index < noProducts; cv$reduction2626Index += 1) {
+																			// Set the left hand term of the reduction function to the return variable value.
+																			double k$var135 = reduceVar$denom$25;
+																			
+																			// Set the right hand term to a value from the array weekly_ut
+																			double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2626Index];
+																			
+																			// Execute the reduction function, saving the result into the return value.
+																			// 
+																			// Copy the result of the reduction into the variable returned by the reduction.
+																			reduceVar$denom$25 = (k$var135 + l$var136);
+																		}
+																		double cv$reduced136 = reduceVar$denom$25;
+																		
+																		// Copy the result of the reduction into the variable returned by the reduction.
+																		reduceVar$denom$25 = (traceTempVariable$k$26_8 + cv$reduced136);
+																		double traceTempVariable$denom$26_9 = reduceVar$denom$25;
+																		if(!guard$sample26multinomial156[((t$var112 - 0) / 1)]) {
+																			// The body will execute, so should not be executed again
+																			guard$sample26multinomial156[((t$var112 - 0) / 1)] = true;
+																			
+																			// Processing sample task 157 of consumer random variable null.
+																			{
+																				{
+																					// Flag recording if this sample task of the consuming random variable is constrained.
+																					boolean cv$sampleConstrained = true;
+																					if(cv$sampleConstrained) {
+																						// Mark that the sample has observed constrained data.
+																						constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
+																						
+																						// Set an accumulator to sum the probabilities for each possible configuration of
+																						// inputs.
+																						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																						
+																						// Set an accumulator to record the consumer distributions not seen. Initially set
+																						// to 1 as seen values will be deducted from this value.
+																						double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																						{
+																							{
+																								{
+																									{
+																										{
+																											// Constructing a random variable input for use later.
+																											int var151 = sales_sum[t$var112];
+																											
+																											// Record the probability of sample task 157 generating output with current configuration.
+																											if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) < cv$accumulatedConsumerProbabilities))
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																											else {
+																												// If the second value is -infinity.
+																												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151));
+																												else
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)));
+																											}
+																											
+																											// Recorded the probability of reaching sample task 157 with the current configuration.
+																											cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																										}
+																									}
+																								}
+																							}
+																						}
+																						
+																						// A check to ensure rounding of floating point values can never result in a negative
+																						// value.
+																						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																						
+																						// Multiply (log space add) in the probability of the sample task to the overall probability
+																						// for this configuration of the source random variable.
+																						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																						else {
+																							// If the second value is -infinity.
+																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																							else
+																								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									double traceTempVariable$var39$27_1 = cv$currentValue;
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											double traceTempVariable$var64$27_3 = Math.exp(traceTempVariable$var39$27_1);
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												if((j$var38 == j$var63)) {
+													double traceTempVariable$var124$27_5 = (traceTempVariable$var64$27_3 / (r * sum));
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																double traceTempVariable$var148$27_8 = (traceTempVariable$var124$27_5 * Avail[t$var112][j$var123]);
+																for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+																	if((j$var123 == j$var147)) {
+																		if(!guard$sample26multinomial156[((t$var112 - 0) / 1)]) {
+																			// The body will execute, so should not be executed again
+																			guard$sample26multinomial156[((t$var112 - 0) / 1)] = true;
+																			
+																			// Processing sample task 157 of consumer random variable null.
+																			{
+																				{
+																					// Flag recording if this sample task of the consuming random variable is constrained.
+																					boolean cv$sampleConstrained = true;
+																					if(cv$sampleConstrained) {
+																						// Mark that the sample has observed constrained data.
+																						constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
+																						
+																						// Set an accumulator to sum the probabilities for each possible configuration of
+																						// inputs.
+																						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																						
+																						// Set an accumulator to record the consumer distributions not seen. Initially set
+																						// to 1 as seen values will be deducted from this value.
+																						double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																						{
+																							{
+																								{
+																									{
+																										{
+																											// Constructing a random variable input for use later.
+																											int var151 = sales_sum[t$var112];
+																											
+																											// Record the probability of sample task 157 generating output with current configuration.
+																											if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) < cv$accumulatedConsumerProbabilities))
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																											else {
+																												// If the second value is -infinity.
+																												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151));
+																												else
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)));
+																											}
+																											
+																											// Recorded the probability of reaching sample task 157 with the current configuration.
+																											cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																										}
+																									}
+																								}
+																							}
+																						}
+																						
+																						// A check to ensure rounding of floating point values can never result in a negative
+																						// value.
+																						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																						
+																						// Multiply (log space add) in the probability of the sample task to the overall probability
+																						// for this configuration of the source random variable.
+																						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																						else {
+																							// If the second value is -infinity.
+																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																							else
+																								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						
+						// Add the values for the source and any standard consumers for this configuration
+						// of arguments to the source.
+						if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
+							cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
+						else {
+							// If the second value is -infinity.
+							if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
+								cv$stateProbabilityValue = cv$accumulatedProbabilities;
+							else
+								cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
+						}
+					}
+					
+					// Save the probability of the original value.
+					if((cv$valuePos == 0))
+						cv$originalProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+					
+					// Save the probability of the proposed value.
+					else
+						cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+					
+					// The probability ration for the proposed value and the current value.
+					double cv$ratio = (cv$proposedProbability - cv$originalProbability);
+					
+					// Test if the probability of the sample is sufficient to keep the value. This needs
+					// to be less than or equal as otherwise if the proposed value is not possible and
+					// the random value is 0 an impossible value will be accepted.
+					if((cv$valuePos == 1)) {
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
+							// If it is not revert the changes.
+							// 
+							// Set the sample value
+							// Write out the value of the sample to a temporary variable prior to updating the
+							// intermediate variables.
+							double var26 = cv$originalValue;
+							
+							// Guards to ensure that ut is only updated when there is a valid path.
+							{
+								{
+									{
+										ut[j$var20] = var26;
+									}
+								}
+							}
+							
+							// Guards to ensure that exped is only updated when there is a valid path.
+							// 
+							// Looking for a path between Sample 26 and consumer double[] 41.
+							{
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											{
+												exped[j$var38] = Math.exp(ut[j$var38]);
+											}
+										}
+									}
+								}
+							}
+							
+							// Guards to ensure that sum is only updated when there is a valid path.
+							// 
+							// Looking for a path between Sample 26 and consumer double 52.
+							{
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											if(((0 <= j$var38) && (j$var38 < noProducts))) {
+												{
+													// Reduction of array exped
+													// 
+													// A generated name to prevent name collisions if the reduction is implemented more
+													// than once in inference and probability code. Initialize the variable to the unit
+													// value
+													double reduceVar$sum$14 = 0.0;
+													
+													// For each index in the array to be reduced
+													for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+														// Set the left hand term of the reduction function to the return variable value.
+														double k$var49 = reduceVar$sum$14;
+														
+														// Set the right hand term to a value from the array exped
+														double l$var50 = exped[cv$reduction46Index];
+														
+														// Execute the reduction function, saving the result into the return value.
+														// 
+														// Copy the result of the reduction into the variable returned by the reduction.
+														reduceVar$sum$14 = (k$var49 + l$var50);
+													}
+													
+													// Write out the new sample value.
+													sum = reduceVar$sum$14;
+												}
+											}
+										}
+									}
+								}
+							}
+							
+							// Guards to ensure that expedNorm is only updated when there is a valid path.
+							// 
+							// Looking for a path between Sample 26 and consumer double[] 67.
+							{
+								// Guard to check that at most one copy of the code is executed for a given random
+								// variable instance.
+								boolean[] guard$sample26put68 = guard$sample26put68$global;
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											if(((0 <= j$var38) && (j$var38 < noProducts))) {
+												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+													// Set the flags to false
+													guard$sample26put68[((j$var63 - 0) / 1)] = false;
+											}
+										}
+									}
+								}
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												if((j$var38 == j$var63))
+													// Set the flags to false
+													guard$sample26put68[((j$var63 - 0) / 1)] = false;
+											}
+										}
+									}
+								}
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											if(((0 <= j$var38) && (j$var38 < noProducts))) {
+												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+													if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
+														// The body will execute, so should not be executed again
+														guard$sample26put68[((j$var63 - 0) / 1)] = true;
+														{
+															expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												if((j$var38 == j$var63)) {
+													if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
+														// The body will execute, so should not be executed again
+														guard$sample26put68[((j$var63 - 0) / 1)] = true;
+														{
+															expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							
+							// Guards to ensure that weekly_ut is only updated when there is a valid path.
+							// 
+							// Looking for a path between Sample 26 and consumer double[] 128.
+							{
+								// Guard to check that at most one copy of the code is executed for a given random
+								// variable instance.
+								boolean[][] guard$sample26put131 = guard$sample26put131$global;
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											if(((0 <= j$var38) && (j$var38 < noProducts))) {
+												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+																// Set the flags to false
+																guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = false;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												if((j$var38 == j$var63)) {
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+																// Set the flags to false
+																guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = false;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											if(((0 <= j$var38) && (j$var38 < noProducts))) {
+												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																if(!guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)]) {
+																	// The body will execute, so should not be executed again
+																	guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = true;
+																	{
+																		weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												if((j$var38 == j$var63)) {
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																if(!guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)]) {
+																	// The body will execute, so should not be executed again
+																	guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = true;
+																	{
+																		weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							
+							// Guards to ensure that weekly_rates is only updated when there is a valid path.
+							// 
+							// Looking for a path between Sample 26 and consumer double[] 150.
+							{
+								// Guard to check that at most one copy of the code is executed for a given random
+								// variable instance.
+								boolean[][] guard$sample26put154 = guard$sample26put154$global;
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											if(((0 <= j$var38) && (j$var38 < noProducts))) {
+												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																if(((0 <= j$var123) && (j$var123 < noProducts))) {
+																	for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+																		// Set the flags to false
+																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											if(((0 <= j$var38) && (j$var38 < noProducts))) {
+												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+																if((j$var123 == j$var147)) {
+																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+																		// Set the flags to false
+																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												if((j$var38 == j$var63)) {
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																if(((0 <= j$var123) && (j$var123 < noProducts))) {
+																	for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+																		// Set the flags to false
+																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												if((j$var38 == j$var63)) {
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+																if((j$var123 == j$var147)) {
+																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+																		// Set the flags to false
+																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											if(((0 <= j$var38) && (j$var38 < noProducts))) {
+												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																if(((0 <= j$var123) && (j$var123 < noProducts))) {
+																	for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+																		if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
+																			// The body will execute, so should not be executed again
+																			guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
+																			{
+																				// Reduction of array weekly_ut
+																				// 
+																				// A generated name to prevent name collisions if the reduction is implemented more
+																				// than once in inference and probability code. Initialize the variable to the unit
+																				// value
+																				double reduceVar$denom$26 = 0.0;
+																				
+																				// For each index in the array to be reduced
+																				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																					// Set the left hand term of the reduction function to the return variable value.
+																					double k$var135 = reduceVar$denom$26;
+																					
+																					// Set the right hand term to a value from the array weekly_ut
+																					double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																					
+																					// Execute the reduction function, saving the result into the return value.
+																					// 
+																					// Copy the result of the reduction into the variable returned by the reduction.
+																					reduceVar$denom$26 = (k$var135 + l$var136);
+																				}
+																				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$26);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											if(((0 <= j$var38) && (j$var38 < noProducts))) {
+												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+																if((j$var123 == j$var147)) {
+																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																		if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
+																			// The body will execute, so should not be executed again
+																			guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
+																			{
+																				// Reduction of array weekly_ut
+																				// 
+																				// A generated name to prevent name collisions if the reduction is implemented more
+																				// than once in inference and probability code. Initialize the variable to the unit
+																				// value
+																				double reduceVar$denom$27 = 0.0;
+																				
+																				// For each index in the array to be reduced
+																				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																					// Set the left hand term of the reduction function to the return variable value.
+																					double k$var135 = reduceVar$denom$27;
+																					
+																					// Set the right hand term to a value from the array weekly_ut
+																					double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																					
+																					// Execute the reduction function, saving the result into the return value.
+																					// 
+																					// Copy the result of the reduction into the variable returned by the reduction.
+																					reduceVar$denom$27 = (k$var135 + l$var136);
+																				}
+																				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$27);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												if((j$var38 == j$var63)) {
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																if(((0 <= j$var123) && (j$var123 < noProducts))) {
+																	for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+																		if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
+																			// The body will execute, so should not be executed again
+																			guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
+																			{
+																				// Reduction of array weekly_ut
+																				// 
+																				// A generated name to prevent name collisions if the reduction is implemented more
+																				// than once in inference and probability code. Initialize the variable to the unit
+																				// value
+																				double reduceVar$denom$28 = 0.0;
+																				
+																				// For each index in the array to be reduced
+																				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																					// Set the left hand term of the reduction function to the return variable value.
+																					double k$var135 = reduceVar$denom$28;
+																					
+																					// Set the right hand term to a value from the array weekly_ut
+																					double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																					
+																					// Execute the reduction function, saving the result into the return value.
+																					// 
+																					// Copy the result of the reduction into the variable returned by the reduction.
+																					reduceVar$denom$28 = (k$var135 + l$var136);
+																				}
+																				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$28);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+										if((j$var20 == j$var38)) {
+											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+												if((j$var38 == j$var63)) {
+													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														if((j$var63 == j$var123)) {
+															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+																if((j$var123 == j$var147)) {
+																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																		if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
+																			// The body will execute, so should not be executed again
+																			guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
+																			{
+																				// Reduction of array weekly_ut
+																				// 
+																				// A generated name to prevent name collisions if the reduction is implemented more
+																				// than once in inference and probability code. Initialize the variable to the unit
+																				// value
+																				double reduceVar$denom$29 = 0.0;
+																				
+																				// For each index in the array to be reduced
+																				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																					// Set the left hand term of the reduction function to the return variable value.
+																					double k$var135 = reduceVar$denom$29;
+																					
+																					// Set the right hand term to a value from the array weekly_ut
+																					double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																					
+																					// Execute the reduction function, saving the result into the return value.
+																					// 
+																					// Copy the result of the reduction into the variable returned by the reduction.
+																					reduceVar$denom$29 = (k$var135 + l$var136);
+																				}
+																				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$29);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	// Calculate the probability of the samples represented by sample157 using sampled
@@ -626,1713 +2831,6 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 		}
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 26 drawn from Gaussian 25. Inference was performed using Metropolis-Hastings.
-	private final void sample26(int j$var20) {
-		if(true) {
-			constrainedFlag$sample26[((j$var20 - 1) / 1)] = false;
-			
-			// Calculate the number of states to evaluate.
-			int cv$numStates = 0;
-			{
-				// Metropolis-Hastings
-				cv$numStates = Math.max(cv$numStates, 2);
-			}
-			
-			// The original value of the sample
-			double cv$originalValue = ut[j$var20];
-			
-			// The probability of the random variable generating the originally sampled value
-			double cv$originalProbability = 0.0;
-			
-			// Calculate a proposed variance.
-			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
-			
-			// Ensure the variance is at least 0.01
-			if((cv$var < (0.1 * 0.1)))
-				cv$var = (0.1 * 0.1);
-			
-			// The proposed new value for the sample
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
-			
-			// The probability of the random variable generating the new sample value.
-			double cv$proposedProbability = 0.0;
-			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample26[((j$var20 - 1) / 1)] || (cv$valuePos == 0))) {
-					// Initialize the summed probabilities to 0.
-					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
-					
-					// Initialize a counter to track the reached distributions.
-					double cv$reachedDistributionSourceRV = 0.0;
-					
-					// Initialize a log space accumulator to take the product of all the distribution
-					// probabilities.
-					double cv$accumulatedDistributionProbabilities = 0.0;
-					
-					// The value currently being tested
-					double cv$currentValue;
-					if((cv$valuePos == 0))
-						// Set the current value to the current state of the tree.
-						cv$currentValue = cv$originalValue;
-					else {
-						cv$currentValue = cv$proposedValue;
-						
-						// Update Sample and intermediate values
-						// 
-						// Write out the value of the sample to a temporary variable prior to updating the
-						// intermediate variables.
-						double var26 = cv$proposedValue;
-						
-						// Guards to ensure that ut is only updated when there is a valid path.
-						{
-							{
-								{
-									ut[j$var20] = cv$currentValue;
-								}
-							}
-						}
-						
-						// Guards to ensure that exped is only updated when there is a valid path.
-						// 
-						// Looking for a path between Sample 26 and consumer double[] 41.
-						{
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										{
-											exped[j$var38] = Math.exp(ut[j$var38]);
-										}
-									}
-								}
-							}
-						}
-						
-						// Guards to ensure that sum is only updated when there is a valid path.
-						// 
-						// Looking for a path between Sample 26 and consumer double 52.
-						{
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											{
-												// Reduction of array exped
-												// 
-												// A generated name to prevent name collisions if the reduction is implemented more
-												// than once in inference and probability code. Initialize the variable to the unit
-												// value
-												double reduceVar$sum$10 = 0.0;
-												
-												// For each index in the array to be reduced
-												for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
-													// Set the left hand term of the reduction function to the return variable value.
-													double k$var49 = reduceVar$sum$10;
-													
-													// Set the right hand term to a value from the array exped
-													double l$var50 = exped[cv$reduction46Index];
-													
-													// Execute the reduction function, saving the result into the return value.
-													// 
-													// Copy the result of the reduction into the variable returned by the reduction.
-													reduceVar$sum$10 = (k$var49 + l$var50);
-												}
-												
-												// Write out the new sample value.
-												sum = reduceVar$sum$10;
-											}
-										}
-									}
-								}
-							}
-						}
-						
-						// Guards to ensure that expedNorm is only updated when there is a valid path.
-						// 
-						// Looking for a path between Sample 26 and consumer double[] 67.
-						{
-							// Guard to check that at most one copy of the code is executed for a given random
-							// variable instance.
-							boolean[] guard$sample26put68 = guard$sample26put68$global;
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-												// Set the flags to false
-												guard$sample26put68[((j$var63 - 0) / 1)] = false;
-										}
-									}
-								}
-							}
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-											if((j$var38 == j$var63))
-												// Set the flags to false
-												guard$sample26put68[((j$var63 - 0) / 1)] = false;
-										}
-									}
-								}
-							}
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
-													// The body will execute, so should not be executed again
-													guard$sample26put68[((j$var63 - 0) / 1)] = true;
-													{
-														expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-											if((j$var38 == j$var63)) {
-												if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
-													// The body will execute, so should not be executed again
-													guard$sample26put68[((j$var63 - 0) / 1)] = true;
-													{
-														expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						
-						// Guards to ensure that weekly_ut is only updated when there is a valid path.
-						// 
-						// Looking for a path between Sample 26 and consumer double[] 128.
-						{
-							// Guard to check that at most one copy of the code is executed for a given random
-							// variable instance.
-							boolean[][] guard$sample26put131 = guard$sample26put131$global;
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-													if((j$var63 == j$var123)) {
-														for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-															// Set the flags to false
-															guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = false;
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-											if((j$var38 == j$var63)) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-													if((j$var63 == j$var123)) {
-														for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-															// Set the flags to false
-															guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = false;
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-													if((j$var63 == j$var123)) {
-														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-															if(!guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)]) {
-																// The body will execute, so should not be executed again
-																guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = true;
-																{
-																	weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-											if((j$var38 == j$var63)) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-													if((j$var63 == j$var123)) {
-														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-															if(!guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)]) {
-																// The body will execute, so should not be executed again
-																guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = true;
-																{
-																	weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						
-						// Guards to ensure that weekly_rates is only updated when there is a valid path.
-						// 
-						// Looking for a path between Sample 26 and consumer double[] 150.
-						{
-							// Guard to check that at most one copy of the code is executed for a given random
-							// variable instance.
-							boolean[][] guard$sample26put154 = guard$sample26put154$global;
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-													if((j$var63 == j$var123)) {
-														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-															if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-																	// Set the flags to false
-																	guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-													if((j$var63 == j$var123)) {
-														for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-															if((j$var123 == j$var147)) {
-																for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-																	// Set the flags to false
-																	guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-											if((j$var38 == j$var63)) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-													if((j$var63 == j$var123)) {
-														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-															if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-																	// Set the flags to false
-																	guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-											if((j$var38 == j$var63)) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-													if((j$var63 == j$var123)) {
-														for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-															if((j$var123 == j$var147)) {
-																for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-																	// Set the flags to false
-																	guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-													if((j$var63 == j$var123)) {
-														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-															if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-																	if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
-																		// The body will execute, so should not be executed again
-																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
-																		{
-																			// Reduction of array weekly_ut
-																			// 
-																			// A generated name to prevent name collisions if the reduction is implemented more
-																			// than once in inference and probability code. Initialize the variable to the unit
-																			// value
-																			double reduceVar$denom$16 = 0.0;
-																			
-																			// For each index in the array to be reduced
-																			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
-																				// Set the left hand term of the reduction function to the return variable value.
-																				double k$var135 = reduceVar$denom$16;
-																				
-																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
-																				
-																				// Execute the reduction function, saving the result into the return value.
-																				// 
-																				// Copy the result of the reduction into the variable returned by the reduction.
-																				reduceVar$denom$16 = (k$var135 + l$var136);
-																			}
-																			weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$16);
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-													if((j$var63 == j$var123)) {
-														for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-															if((j$var123 == j$var147)) {
-																for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																	if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
-																		// The body will execute, so should not be executed again
-																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
-																		{
-																			// Reduction of array weekly_ut
-																			// 
-																			// A generated name to prevent name collisions if the reduction is implemented more
-																			// than once in inference and probability code. Initialize the variable to the unit
-																			// value
-																			double reduceVar$denom$17 = 0.0;
-																			
-																			// For each index in the array to be reduced
-																			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
-																				// Set the left hand term of the reduction function to the return variable value.
-																				double k$var135 = reduceVar$denom$17;
-																				
-																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
-																				
-																				// Execute the reduction function, saving the result into the return value.
-																				// 
-																				// Copy the result of the reduction into the variable returned by the reduction.
-																				reduceVar$denom$17 = (k$var135 + l$var136);
-																			}
-																			weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$17);
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-											if((j$var38 == j$var63)) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-													if((j$var63 == j$var123)) {
-														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-															if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-																	if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
-																		// The body will execute, so should not be executed again
-																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
-																		{
-																			// Reduction of array weekly_ut
-																			// 
-																			// A generated name to prevent name collisions if the reduction is implemented more
-																			// than once in inference and probability code. Initialize the variable to the unit
-																			// value
-																			double reduceVar$denom$18 = 0.0;
-																			
-																			// For each index in the array to be reduced
-																			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
-																				// Set the left hand term of the reduction function to the return variable value.
-																				double k$var135 = reduceVar$denom$18;
-																				
-																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
-																				
-																				// Execute the reduction function, saving the result into the return value.
-																				// 
-																				// Copy the result of the reduction into the variable returned by the reduction.
-																				reduceVar$denom$18 = (k$var135 + l$var136);
-																			}
-																			weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$18);
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-											if((j$var38 == j$var63)) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-													if((j$var63 == j$var123)) {
-														for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-															if((j$var123 == j$var147)) {
-																for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																	if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
-																		// The body will execute, so should not be executed again
-																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
-																		{
-																			// Reduction of array weekly_ut
-																			// 
-																			// A generated name to prevent name collisions if the reduction is implemented more
-																			// than once in inference and probability code. Initialize the variable to the unit
-																			// value
-																			double reduceVar$denom$19 = 0.0;
-																			
-																			// For each index in the array to be reduced
-																			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
-																				// Set the left hand term of the reduction function to the return variable value.
-																				double k$var135 = reduceVar$denom$19;
-																				
-																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
-																				
-																				// Execute the reduction function, saving the result into the return value.
-																				// 
-																				// Copy the result of the reduction into the variable returned by the reduction.
-																				reduceVar$denom$19 = (k$var135 + l$var136);
-																			}
-																			weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$19);
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					{
-						// Record the reached probability density.
-						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-						
-						// An accumulator to allow the value for each distribution to be constructed before
-						// it is added to the index probabilities.
-						double cv$accumulatedProbabilities = (Math.log(1.0) + ((0.0 < 2.0)?(DistributionSampling.logProbabilityGaussian(((cv$currentValue - 0.0) / Math.sqrt(2.0))) - (0.5 * Math.log(2.0))):Double.NEGATIVE_INFINITY));
-						
-						// Processing random variable 152.
-						{
-							// Looking for a path between Sample 26 and consumer Multinomial 152.
-							{
-								// Guard to check that at most one copy of the code is executed for a given random
-								// variable instance.
-								boolean[] guard$sample26multinomial156 = guard$sample26multinomial156$global;
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																if(((0 <= j$var123) && (j$var123 < noProducts)))
-																	// Set the flags to false
-																	guard$sample26multinomial156[((t$var112 - 0) / 1)] = false;
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-																if((j$var123 == j$var147)) {
-																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-																		// Set the flags to false
-																		guard$sample26multinomial156[((t$var112 - 0) / 1)] = false;
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												if((j$var38 == j$var63)) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																if(((0 <= j$var123) && (j$var123 < noProducts)))
-																	// Set the flags to false
-																	guard$sample26multinomial156[((t$var112 - 0) / 1)] = false;
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												if((j$var38 == j$var63)) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-																if((j$var123 == j$var147)) {
-																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-																		// Set the flags to false
-																		guard$sample26multinomial156[((t$var112 - 0) / 1)] = false;
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									double traceTempVariable$var39$24_1 = cv$currentValue;
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											double traceTempVariable$k$24_3 = Math.exp(traceTempVariable$var39$24_1);
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												if((0 < noProducts)) {
-													// Reduction of array exped
-													// 
-													// A generated name to prevent name collisions if the reduction is implemented more
-													// than once in inference and probability code. Initialize the variable to the unit
-													// value
-													double reduceVar$sum$11 = 0.0;
-													
-													// Reduce for every value except a masked value which will be skipped.
-													for(int cv$reduction2061Index = 0; cv$reduction2061Index < j$var38; cv$reduction2061Index += 1) {
-														// Set the left hand term of the reduction function to the return variable value.
-														double k$var49 = reduceVar$sum$11;
-														
-														// Set the right hand term to a value from the array exped
-														double l$var50 = exped[cv$reduction2061Index];
-														
-														// Execute the reduction function, saving the result into the return value.
-														// 
-														// Copy the result of the reduction into the variable returned by the reduction.
-														reduceVar$sum$11 = (k$var49 + l$var50);
-													}
-													for(int cv$reduction2061Index = (j$var38 + 1); cv$reduction2061Index < noProducts; cv$reduction2061Index += 1) {
-														// Set the left hand term of the reduction function to the return variable value.
-														double k$var49 = reduceVar$sum$11;
-														
-														// Set the right hand term to a value from the array exped
-														double l$var50 = exped[cv$reduction2061Index];
-														
-														// Execute the reduction function, saving the result into the return value.
-														// 
-														// Copy the result of the reduction into the variable returned by the reduction.
-														reduceVar$sum$11 = (k$var49 + l$var50);
-													}
-													double cv$reduced46 = reduceVar$sum$11;
-													
-													// Copy the result of the reduction into the variable returned by the reduction.
-													reduceVar$sum$11 = (traceTempVariable$k$24_3 + cv$reduced46);
-													double traceTempVariable$sum$24_4 = reduceVar$sum$11;
-													for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-														double traceTempVariable$sum$24_6 = traceTempVariable$sum$24_4;
-														double traceTempVariable$var124$24_7 = (exped[j$var63] / (r * traceTempVariable$sum$24_6));
-														for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-															if((j$var63 == j$var123)) {
-																for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																	double traceTempVariable$k$24_10 = (traceTempVariable$var124$24_7 * Avail[t$var112][j$var123]);
-																	if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																		if((0 < noProducts)) {
-																			// Reduction of array weekly_ut
-																			// 
-																			// A generated name to prevent name collisions if the reduction is implemented more
-																			// than once in inference and probability code. Initialize the variable to the unit
-																			// value
-																			double reduceVar$denom$20 = 0.0;
-																			
-																			// Reduce for every value except a masked value which will be skipped.
-																			for(int cv$reduction2095Index = 0; cv$reduction2095Index < j$var123; cv$reduction2095Index += 1) {
-																				// Set the left hand term of the reduction function to the return variable value.
-																				double k$var135 = reduceVar$denom$20;
-																				
-																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2095Index];
-																				
-																				// Execute the reduction function, saving the result into the return value.
-																				// 
-																				// Copy the result of the reduction into the variable returned by the reduction.
-																				reduceVar$denom$20 = (k$var135 + l$var136);
-																			}
-																			for(int cv$reduction2095Index = (j$var123 + 1); cv$reduction2095Index < noProducts; cv$reduction2095Index += 1) {
-																				// Set the left hand term of the reduction function to the return variable value.
-																				double k$var135 = reduceVar$denom$20;
-																				
-																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2095Index];
-																				
-																				// Execute the reduction function, saving the result into the return value.
-																				// 
-																				// Copy the result of the reduction into the variable returned by the reduction.
-																				reduceVar$denom$20 = (k$var135 + l$var136);
-																			}
-																			double cv$reduced136 = reduceVar$denom$20;
-																			
-																			// Copy the result of the reduction into the variable returned by the reduction.
-																			reduceVar$denom$20 = (traceTempVariable$k$24_10 + cv$reduced136);
-																			double traceTempVariable$denom$24_11 = reduceVar$denom$20;
-																			if(!guard$sample26multinomial156[((t$var112 - 0) / 1)]) {
-																				// The body will execute, so should not be executed again
-																				guard$sample26multinomial156[((t$var112 - 0) / 1)] = true;
-																				
-																				// Processing sample task 157 of consumer random variable null.
-																				{
-																					{
-																						// Flag recording if this sample task of the consuming random variable is constrained.
-																						boolean cv$sampleConstrained = true;
-																						if(cv$sampleConstrained) {
-																							// Mark that the sample has observed constrained data.
-																							constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
-																							
-																							// Set an accumulator to sum the probabilities for each possible configuration of
-																							// inputs.
-																							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																							
-																							// Set an accumulator to record the consumer distributions not seen. Initially set
-																							// to 1 as seen values will be deducted from this value.
-																							double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																							{
-																								{
-																									{
-																										{
-																											{
-																												// Constructing a random variable input for use later.
-																												int var151 = sales_sum[t$var112];
-																												
-																												// Record the probability of sample task 157 generating output with current configuration.
-																												if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) < cv$accumulatedConsumerProbabilities))
-																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																												else {
-																													// If the second value is -infinity.
-																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151));
-																													else
-																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)));
-																												}
-																												
-																												// Recorded the probability of reaching sample task 157 with the current configuration.
-																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																											}
-																										}
-																									}
-																								}
-																							}
-																							
-																							// A check to ensure rounding of floating point values can never result in a negative
-																							// value.
-																							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																							
-																							// Multiply (log space add) in the probability of the sample task to the overall probability
-																							// for this configuration of the source random variable.
-																							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																							else {
-																								// If the second value is -infinity.
-																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																								else
-																									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									double traceTempVariable$var39$25_1 = cv$currentValue;
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											double traceTempVariable$k$25_3 = Math.exp(traceTempVariable$var39$25_1);
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												if((0 < noProducts)) {
-													// Reduction of array exped
-													// 
-													// A generated name to prevent name collisions if the reduction is implemented more
-													// than once in inference and probability code. Initialize the variable to the unit
-													// value
-													double reduceVar$sum$12 = 0.0;
-													
-													// Reduce for every value except a masked value which will be skipped.
-													for(int cv$reduction2123Index = 0; cv$reduction2123Index < j$var38; cv$reduction2123Index += 1) {
-														// Set the left hand term of the reduction function to the return variable value.
-														double k$var49 = reduceVar$sum$12;
-														
-														// Set the right hand term to a value from the array exped
-														double l$var50 = exped[cv$reduction2123Index];
-														
-														// Execute the reduction function, saving the result into the return value.
-														// 
-														// Copy the result of the reduction into the variable returned by the reduction.
-														reduceVar$sum$12 = (k$var49 + l$var50);
-													}
-													for(int cv$reduction2123Index = (j$var38 + 1); cv$reduction2123Index < noProducts; cv$reduction2123Index += 1) {
-														// Set the left hand term of the reduction function to the return variable value.
-														double k$var49 = reduceVar$sum$12;
-														
-														// Set the right hand term to a value from the array exped
-														double l$var50 = exped[cv$reduction2123Index];
-														
-														// Execute the reduction function, saving the result into the return value.
-														// 
-														// Copy the result of the reduction into the variable returned by the reduction.
-														reduceVar$sum$12 = (k$var49 + l$var50);
-													}
-													double cv$reduced46 = reduceVar$sum$12;
-													
-													// Copy the result of the reduction into the variable returned by the reduction.
-													reduceVar$sum$12 = (traceTempVariable$k$25_3 + cv$reduced46);
-													double traceTempVariable$sum$25_4 = reduceVar$sum$12;
-													for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-														double traceTempVariable$sum$25_6 = traceTempVariable$sum$25_4;
-														double traceTempVariable$var124$25_7 = (exped[j$var63] / (r * traceTempVariable$sum$25_6));
-														for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-															if((j$var63 == j$var123)) {
-																for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																	double traceTempVariable$var148$25_10 = (traceTempVariable$var124$25_7 * Avail[t$var112][j$var123]);
-																	for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-																		if((j$var123 == j$var147)) {
-																			if(!guard$sample26multinomial156[((t$var112 - 0) / 1)]) {
-																				// The body will execute, so should not be executed again
-																				guard$sample26multinomial156[((t$var112 - 0) / 1)] = true;
-																				
-																				// Processing sample task 157 of consumer random variable null.
-																				{
-																					{
-																						// Flag recording if this sample task of the consuming random variable is constrained.
-																						boolean cv$sampleConstrained = true;
-																						if(cv$sampleConstrained) {
-																							// Mark that the sample has observed constrained data.
-																							constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
-																							
-																							// Set an accumulator to sum the probabilities for each possible configuration of
-																							// inputs.
-																							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																							
-																							// Set an accumulator to record the consumer distributions not seen. Initially set
-																							// to 1 as seen values will be deducted from this value.
-																							double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																							{
-																								{
-																									{
-																										{
-																											{
-																												// Constructing a random variable input for use later.
-																												int var151 = sales_sum[t$var112];
-																												
-																												// Record the probability of sample task 157 generating output with current configuration.
-																												if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) < cv$accumulatedConsumerProbabilities))
-																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																												else {
-																													// If the second value is -infinity.
-																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151));
-																													else
-																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)));
-																												}
-																												
-																												// Recorded the probability of reaching sample task 157 with the current configuration.
-																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																											}
-																										}
-																									}
-																								}
-																							}
-																							
-																							// A check to ensure rounding of floating point values can never result in a negative
-																							// value.
-																							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																							
-																							// Multiply (log space add) in the probability of the sample task to the overall probability
-																							// for this configuration of the source random variable.
-																							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																							else {
-																								// If the second value is -infinity.
-																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																								else
-																									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									double traceTempVariable$var39$26_1 = cv$currentValue;
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											double traceTempVariable$var64$26_3 = Math.exp(traceTempVariable$var39$26_1);
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												if((j$var38 == j$var63)) {
-													double traceTempVariable$var124$26_5 = (traceTempVariable$var64$26_3 / (r * sum));
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																double traceTempVariable$k$26_8 = (traceTempVariable$var124$26_5 * Avail[t$var112][j$var123]);
-																if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																	if((0 < noProducts)) {
-																		// Reduction of array weekly_ut
-																		// 
-																		// A generated name to prevent name collisions if the reduction is implemented more
-																		// than once in inference and probability code. Initialize the variable to the unit
-																		// value
-																		double reduceVar$denom$21 = 0.0;
-																		
-																		// Reduce for every value except a masked value which will be skipped.
-																		for(int cv$reduction2179Index = 0; cv$reduction2179Index < j$var123; cv$reduction2179Index += 1) {
-																			// Set the left hand term of the reduction function to the return variable value.
-																			double k$var135 = reduceVar$denom$21;
-																			
-																			// Set the right hand term to a value from the array weekly_ut
-																			double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2179Index];
-																			
-																			// Execute the reduction function, saving the result into the return value.
-																			// 
-																			// Copy the result of the reduction into the variable returned by the reduction.
-																			reduceVar$denom$21 = (k$var135 + l$var136);
-																		}
-																		for(int cv$reduction2179Index = (j$var123 + 1); cv$reduction2179Index < noProducts; cv$reduction2179Index += 1) {
-																			// Set the left hand term of the reduction function to the return variable value.
-																			double k$var135 = reduceVar$denom$21;
-																			
-																			// Set the right hand term to a value from the array weekly_ut
-																			double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2179Index];
-																			
-																			// Execute the reduction function, saving the result into the return value.
-																			// 
-																			// Copy the result of the reduction into the variable returned by the reduction.
-																			reduceVar$denom$21 = (k$var135 + l$var136);
-																		}
-																		double cv$reduced136 = reduceVar$denom$21;
-																		
-																		// Copy the result of the reduction into the variable returned by the reduction.
-																		reduceVar$denom$21 = (traceTempVariable$k$26_8 + cv$reduced136);
-																		double traceTempVariable$denom$26_9 = reduceVar$denom$21;
-																		if(!guard$sample26multinomial156[((t$var112 - 0) / 1)]) {
-																			// The body will execute, so should not be executed again
-																			guard$sample26multinomial156[((t$var112 - 0) / 1)] = true;
-																			
-																			// Processing sample task 157 of consumer random variable null.
-																			{
-																				{
-																					// Flag recording if this sample task of the consuming random variable is constrained.
-																					boolean cv$sampleConstrained = true;
-																					if(cv$sampleConstrained) {
-																						// Mark that the sample has observed constrained data.
-																						constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
-																						
-																						// Set an accumulator to sum the probabilities for each possible configuration of
-																						// inputs.
-																						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																						
-																						// Set an accumulator to record the consumer distributions not seen. Initially set
-																						// to 1 as seen values will be deducted from this value.
-																						double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																						{
-																							{
-																								{
-																									{
-																										{
-																											// Constructing a random variable input for use later.
-																											int var151 = sales_sum[t$var112];
-																											
-																											// Record the probability of sample task 157 generating output with current configuration.
-																											if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) < cv$accumulatedConsumerProbabilities))
-																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																											else {
-																												// If the second value is -infinity.
-																												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151));
-																												else
-																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)));
-																											}
-																											
-																											// Recorded the probability of reaching sample task 157 with the current configuration.
-																											cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																										}
-																									}
-																								}
-																							}
-																						}
-																						
-																						// A check to ensure rounding of floating point values can never result in a negative
-																						// value.
-																						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																						
-																						// Multiply (log space add) in the probability of the sample task to the overall probability
-																						// for this configuration of the source random variable.
-																						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																						else {
-																							// If the second value is -infinity.
-																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																							else
-																								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									double traceTempVariable$var39$27_1 = cv$currentValue;
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											double traceTempVariable$var64$27_3 = Math.exp(traceTempVariable$var39$27_1);
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												if((j$var38 == j$var63)) {
-													double traceTempVariable$var124$27_5 = (traceTempVariable$var64$27_3 / (r * sum));
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																double traceTempVariable$var148$27_8 = (traceTempVariable$var124$27_5 * Avail[t$var112][j$var123]);
-																for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-																	if((j$var123 == j$var147)) {
-																		if(!guard$sample26multinomial156[((t$var112 - 0) / 1)]) {
-																			// The body will execute, so should not be executed again
-																			guard$sample26multinomial156[((t$var112 - 0) / 1)] = true;
-																			
-																			// Processing sample task 157 of consumer random variable null.
-																			{
-																				{
-																					// Flag recording if this sample task of the consuming random variable is constrained.
-																					boolean cv$sampleConstrained = true;
-																					if(cv$sampleConstrained) {
-																						// Mark that the sample has observed constrained data.
-																						constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
-																						
-																						// Set an accumulator to sum the probabilities for each possible configuration of
-																						// inputs.
-																						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																						
-																						// Set an accumulator to record the consumer distributions not seen. Initially set
-																						// to 1 as seen values will be deducted from this value.
-																						double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																						{
-																							{
-																								{
-																									{
-																										{
-																											// Constructing a random variable input for use later.
-																											int var151 = sales_sum[t$var112];
-																											
-																											// Record the probability of sample task 157 generating output with current configuration.
-																											if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) < cv$accumulatedConsumerProbabilities))
-																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																											else {
-																												// If the second value is -infinity.
-																												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151));
-																												else
-																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)));
-																											}
-																											
-																											// Recorded the probability of reaching sample task 157 with the current configuration.
-																											cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																										}
-																									}
-																								}
-																							}
-																						}
-																						
-																						// A check to ensure rounding of floating point values can never result in a negative
-																						// value.
-																						cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																						
-																						// Multiply (log space add) in the probability of the sample task to the overall probability
-																						// for this configuration of the source random variable.
-																						if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																							cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																						else {
-																							// If the second value is -infinity.
-																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																							else
-																								cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						
-						// Add the values for the source and any standard consumers for this configuration
-						// of arguments to the source.
-						if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
-							cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
-						else {
-							// If the second value is -infinity.
-							if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
-								cv$stateProbabilityValue = cv$accumulatedProbabilities;
-							else
-								cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
-						}
-					}
-					
-					// Save the probability of the original value.
-					if((cv$valuePos == 0))
-						cv$originalProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-					
-					// Save the probability of the proposed value.
-					else
-						cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-					
-					// The probability ration for the proposed value and the current value.
-					double cv$ratio = (cv$proposedProbability - cv$originalProbability);
-					
-					// Test if the probability of the sample is sufficient to keep the value. This needs
-					// to be less than or equal as otherwise if the proposed value is not possible and
-					// the random value is 0 an impossible value will be accepted.
-					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
-							// If it is not revert the changes.
-							// 
-							// Set the sample value
-							// Write out the value of the sample to a temporary variable prior to updating the
-							// intermediate variables.
-							double var26 = cv$originalValue;
-							
-							// Guards to ensure that ut is only updated when there is a valid path.
-							{
-								{
-									{
-										ut[j$var20] = var26;
-									}
-								}
-							}
-							
-							// Guards to ensure that exped is only updated when there is a valid path.
-							// 
-							// Looking for a path between Sample 26 and consumer double[] 41.
-							{
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											{
-												exped[j$var38] = Math.exp(ut[j$var38]);
-											}
-										}
-									}
-								}
-							}
-							
-							// Guards to ensure that sum is only updated when there is a valid path.
-							// 
-							// Looking for a path between Sample 26 and consumer double 52.
-							{
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												{
-													// Reduction of array exped
-													// 
-													// A generated name to prevent name collisions if the reduction is implemented more
-													// than once in inference and probability code. Initialize the variable to the unit
-													// value
-													double reduceVar$sum$13 = 0.0;
-													
-													// For each index in the array to be reduced
-													for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
-														// Set the left hand term of the reduction function to the return variable value.
-														double k$var49 = reduceVar$sum$13;
-														
-														// Set the right hand term to a value from the array exped
-														double l$var50 = exped[cv$reduction46Index];
-														
-														// Execute the reduction function, saving the result into the return value.
-														// 
-														// Copy the result of the reduction into the variable returned by the reduction.
-														reduceVar$sum$13 = (k$var49 + l$var50);
-													}
-													
-													// Write out the new sample value.
-													sum = reduceVar$sum$13;
-												}
-											}
-										}
-									}
-								}
-							}
-							
-							// Guards to ensure that expedNorm is only updated when there is a valid path.
-							// 
-							// Looking for a path between Sample 26 and consumer double[] 67.
-							{
-								// Guard to check that at most one copy of the code is executed for a given random
-								// variable instance.
-								boolean[] guard$sample26put68 = guard$sample26put68$global;
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-													// Set the flags to false
-													guard$sample26put68[((j$var63 - 0) / 1)] = false;
-											}
-										}
-									}
-								}
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												if((j$var38 == j$var63))
-													// Set the flags to false
-													guard$sample26put68[((j$var63 - 0) / 1)] = false;
-											}
-										}
-									}
-								}
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
-														// The body will execute, so should not be executed again
-														guard$sample26put68[((j$var63 - 0) / 1)] = true;
-														{
-															expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												if((j$var38 == j$var63)) {
-													if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
-														// The body will execute, so should not be executed again
-														guard$sample26put68[((j$var63 - 0) / 1)] = true;
-														{
-															expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							
-							// Guards to ensure that weekly_ut is only updated when there is a valid path.
-							// 
-							// Looking for a path between Sample 26 and consumer double[] 128.
-							{
-								// Guard to check that at most one copy of the code is executed for a given random
-								// variable instance.
-								boolean[][] guard$sample26put131 = guard$sample26put131$global;
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-																// Set the flags to false
-																guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = false;
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												if((j$var38 == j$var63)) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-																// Set the flags to false
-																guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = false;
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																if(!guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)]) {
-																	// The body will execute, so should not be executed again
-																	guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = true;
-																	{
-																		weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												if((j$var38 == j$var63)) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																if(!guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)]) {
-																	// The body will execute, so should not be executed again
-																	guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = true;
-																	{
-																		weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							
-							// Guards to ensure that weekly_rates is only updated when there is a valid path.
-							// 
-							// Looking for a path between Sample 26 and consumer double[] 150.
-							{
-								// Guard to check that at most one copy of the code is executed for a given random
-								// variable instance.
-								boolean[][] guard$sample26put154 = guard$sample26put154$global;
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																	for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-																		// Set the flags to false
-																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-																if((j$var123 == j$var147)) {
-																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-																		// Set the flags to false
-																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												if((j$var38 == j$var63)) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																	for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-																		// Set the flags to false
-																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												if((j$var38 == j$var63)) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-																if((j$var123 == j$var147)) {
-																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-																		// Set the flags to false
-																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																	for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-																		if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
-																			// The body will execute, so should not be executed again
-																			guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
-																			{
-																				// Reduction of array weekly_ut
-																				// 
-																				// A generated name to prevent name collisions if the reduction is implemented more
-																				// than once in inference and probability code. Initialize the variable to the unit
-																				// value
-																				double reduceVar$denom$22 = 0.0;
-																				
-																				// For each index in the array to be reduced
-																				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
-																					// Set the left hand term of the reduction function to the return variable value.
-																					double k$var135 = reduceVar$denom$22;
-																					
-																					// Set the right hand term to a value from the array weekly_ut
-																					double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
-																					
-																					// Execute the reduction function, saving the result into the return value.
-																					// 
-																					// Copy the result of the reduction into the variable returned by the reduction.
-																					reduceVar$denom$22 = (k$var135 + l$var136);
-																				}
-																				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$22);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-																if((j$var123 == j$var147)) {
-																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																		if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
-																			// The body will execute, so should not be executed again
-																			guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
-																			{
-																				// Reduction of array weekly_ut
-																				// 
-																				// A generated name to prevent name collisions if the reduction is implemented more
-																				// than once in inference and probability code. Initialize the variable to the unit
-																				// value
-																				double reduceVar$denom$23 = 0.0;
-																				
-																				// For each index in the array to be reduced
-																				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
-																					// Set the left hand term of the reduction function to the return variable value.
-																					double k$var135 = reduceVar$denom$23;
-																					
-																					// Set the right hand term to a value from the array weekly_ut
-																					double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
-																					
-																					// Execute the reduction function, saving the result into the return value.
-																					// 
-																					// Copy the result of the reduction into the variable returned by the reduction.
-																					reduceVar$denom$23 = (k$var135 + l$var136);
-																				}
-																				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$23);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												if((j$var38 == j$var63)) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																	for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-																		if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
-																			// The body will execute, so should not be executed again
-																			guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
-																			{
-																				// Reduction of array weekly_ut
-																				// 
-																				// A generated name to prevent name collisions if the reduction is implemented more
-																				// than once in inference and probability code. Initialize the variable to the unit
-																				// value
-																				double reduceVar$denom$24 = 0.0;
-																				
-																				// For each index in the array to be reduced
-																				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
-																					// Set the left hand term of the reduction function to the return variable value.
-																					double k$var135 = reduceVar$denom$24;
-																					
-																					// Set the right hand term to a value from the array weekly_ut
-																					double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
-																					
-																					// Execute the reduction function, saving the result into the return value.
-																					// 
-																					// Copy the result of the reduction into the variable returned by the reduction.
-																					reduceVar$denom$24 = (k$var135 + l$var136);
-																				}
-																				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$24);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												if((j$var38 == j$var63)) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-														if((j$var63 == j$var123)) {
-															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-																if((j$var123 == j$var147)) {
-																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																		if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
-																			// The body will execute, so should not be executed again
-																			guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
-																			{
-																				// Reduction of array weekly_ut
-																				// 
-																				// A generated name to prevent name collisions if the reduction is implemented more
-																				// than once in inference and probability code. Initialize the variable to the unit
-																				// value
-																				double reduceVar$denom$25 = 0.0;
-																				
-																				// For each index in the array to be reduced
-																				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
-																					// Set the left hand term of the reduction function to the return variable value.
-																					double k$var135 = reduceVar$denom$25;
-																					
-																					// Set the right hand term to a value from the array weekly_ut
-																					double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
-																					
-																					// Execute the reduction function, saving the result into the return value.
-																					// 
-																					// Copy the result of the reduction into the variable returned by the reduction.
-																					reduceVar$denom$25 = (k$var135 + l$var136);
-																				}
-																				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$25);
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -2498,383 +2996,6 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 		// A generated name to prevent name collisions if the reduction is implemented more
 		// than once in inference and probability code. Initialize the variable to the unit
 		// value
-		double reduceVar$sum$14 = 0.0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
-			// Set the left hand term of the reduction function to the return variable value.
-			double k$var49 = reduceVar$sum$14;
-			
-			// Set the right hand term to a value from the array exped
-			double l$var50 = exped[cv$reduction46Index];
-			
-			// Execute the reduction function, saving the result into the return value.
-			if(!fixedFlag$sample26)
-				// Copy the result of the reduction into the variable returned by the reduction.
-				reduceVar$sum$14 = (k$var49 + l$var50);
-		}
-		if(!fixedFlag$sample26)
-			sum = reduceVar$sum$14;
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noProducts, 1,
-			(int forStart$j$var63, int forEnd$j$var63, int threadID$j$var63, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int j$var63 = forStart$j$var63; j$var63 < forEnd$j$var63; j$var63 += 1) {
-						if(!fixedFlag$sample26)
-							expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-					}
-			}
-		);
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, T, 1,
-			(int forStart$index$t$var112, int forEnd$index$t$var112, int threadID$index$t$var112, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int index$t$var112 = forStart$index$t$var112; index$t$var112 < forEnd$index$t$var112; index$t$var112 += 1) {
-						int t$var112 = index$t$var112;
-						int threadID$t$var112 = threadID$index$t$var112;
-						
-						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noProducts, 1,
-							(int forStart$j$var123, int forEnd$j$var123, int threadID$j$var123, org.sandwood.random.internal.Rng RNG$2) -> { 
-								
-									// Inner loop for running batches of iterations, each batch has its own random number
-									// generator.
-									for(int j$var123 = forStart$j$var123; j$var123 < forEnd$j$var123; j$var123 += 1) {
-										if(!fixedFlag$sample26)
-											weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-									}
-							}
-						);
-						
-						// Reduction of array weekly_ut
-						// 
-						// A generated name to prevent name collisions if the reduction is implemented more
-						// than once in inference and probability code. Initialize the variable to the unit
-						// value
-						double reduceVar$denom$26 = 0.0;
-						
-						// For each index in the array to be reduced
-						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
-							// Set the left hand term of the reduction function to the return variable value.
-							double k$var135 = reduceVar$denom$26;
-							
-							// Set the right hand term to a value from the array weekly_ut
-							double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
-							
-							// Execute the reduction function, saving the result into the return value.
-							if(!fixedFlag$sample26)
-								// Copy the result of the reduction into the variable returned by the reduction.
-								reduceVar$denom$26 = (k$var135 + l$var136);
-						}
-						
-						// Alternative name for reduceVar$denom$26 to make it effectively final.
-						double reduceVar$denom$26$1 = reduceVar$denom$26;
-						
-						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noProducts, 1,
-							(int forStart$j$var147, int forEnd$j$var147, int threadID$j$var147, org.sandwood.random.internal.Rng RNG$2) -> { 
-								
-									// Inner loop for running batches of iterations, each batch has its own random number
-									// generator.
-									for(int j$var147 = forStart$j$var147; j$var147 < forEnd$j$var147; j$var147 += 1) {
-										if(!fixedFlag$sample26)
-											weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$26$1);
-									}
-							}
-						);
-						int[] weekly_sales = Sales[t$var112];
-						DistributionSampling.sampleMultinomial(RNG$1, weekly_rates[((t$var112 - 0) / 1)], noProducts, sales_sum[t$var112], weekly_sales);
-					}
-			}
-		);
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Fixed intermediate variables are primed. Distributions are calculated
-	// and stored.
-	@Override
-	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 1, noProducts, 1,
-			(int forStart$j$var20, int forEnd$j$var20, int threadID$j$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int j$var20 = forStart$j$var20; j$var20 < forEnd$j$var20; j$var20 += 1) {
-						if(!fixedFlag$sample26)
-							ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
-					}
-			}
-		);
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noProducts, 1,
-			(int forStart$j$var38, int forEnd$j$var38, int threadID$j$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int j$var38 = forStart$j$var38; j$var38 < forEnd$j$var38; j$var38 += 1)
-						exped[j$var38] = Math.exp(ut[j$var38]);
-			}
-		);
-		
-		// Reduction of array exped
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
-		double reduceVar$sum$18 = 0.0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
-			// Set the left hand term of the reduction function to the return variable value.
-			double k$var49 = reduceVar$sum$18;
-			
-			// Set the right hand term to a value from the array exped
-			double l$var50 = exped[cv$reduction46Index];
-			
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			reduceVar$sum$18 = (k$var49 + l$var50);
-		}
-		sum = reduceVar$sum$18;
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noProducts, 1,
-			(int forStart$j$var63, int forEnd$j$var63, int threadID$j$var63, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int j$var63 = forStart$j$var63; j$var63 < forEnd$j$var63; j$var63 += 1)
-						expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-			}
-		);
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, T, 1,
-			(int forStart$index$t$var112, int forEnd$index$t$var112, int threadID$index$t$var112, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int index$t$var112 = forStart$index$t$var112; index$t$var112 < forEnd$index$t$var112; index$t$var112 += 1) {
-						int t$var112 = index$t$var112;
-						int threadID$t$var112 = threadID$index$t$var112;
-						
-						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noProducts, 1,
-							(int forStart$j$var123, int forEnd$j$var123, int threadID$j$var123, org.sandwood.random.internal.Rng RNG$2) -> { 
-								
-									// Inner loop for running batches of iterations, each batch has its own random number
-									// generator.
-									for(int j$var123 = forStart$j$var123; j$var123 < forEnd$j$var123; j$var123 += 1)
-										weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-							}
-						);
-						
-						// Reduction of array weekly_ut
-						// 
-						// A generated name to prevent name collisions if the reduction is implemented more
-						// than once in inference and probability code. Initialize the variable to the unit
-						// value
-						double reduceVar$denom$30 = 0.0;
-						
-						// For each index in the array to be reduced
-						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
-							// Set the left hand term of the reduction function to the return variable value.
-							double k$var135 = reduceVar$denom$30;
-							
-							// Set the right hand term to a value from the array weekly_ut
-							double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
-							
-							// Execute the reduction function, saving the result into the return value.
-							// 
-							// Copy the result of the reduction into the variable returned by the reduction.
-							reduceVar$denom$30 = (k$var135 + l$var136);
-						}
-						
-						// Alternative name for reduceVar$denom$30 to make it effectively final.
-						double reduceVar$denom$30$1 = reduceVar$denom$30;
-						
-						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noProducts, 1,
-							(int forStart$j$var147, int forEnd$j$var147, int threadID$j$var147, org.sandwood.random.internal.Rng RNG$2) -> { 
-								
-									// Inner loop for running batches of iterations, each batch has its own random number
-									// generator.
-									for(int j$var147 = forStart$j$var147; j$var147 < forEnd$j$var147; j$var147 += 1)
-										weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$30$1);
-							}
-						);
-					}
-			}
-		);
-	}
-
-	// Method to execute the model code conventionally with priming of fixed intermediate
-	// variables.
-	@Override
-	public final void forwardGenerationPrime() {
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 1, noProducts, 1,
-			(int forStart$j$var20, int forEnd$j$var20, int threadID$j$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int j$var20 = forStart$j$var20; j$var20 < forEnd$j$var20; j$var20 += 1) {
-						if(!fixedFlag$sample26)
-							ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
-					}
-			}
-		);
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noProducts, 1,
-			(int forStart$j$var38, int forEnd$j$var38, int threadID$j$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int j$var38 = forStart$j$var38; j$var38 < forEnd$j$var38; j$var38 += 1)
-						exped[j$var38] = Math.exp(ut[j$var38]);
-			}
-		);
-		
-		// Reduction of array exped
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
-		double reduceVar$sum$15 = 0.0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
-			// Set the left hand term of the reduction function to the return variable value.
-			double k$var49 = reduceVar$sum$15;
-			
-			// Set the right hand term to a value from the array exped
-			double l$var50 = exped[cv$reduction46Index];
-			
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			reduceVar$sum$15 = (k$var49 + l$var50);
-		}
-		sum = reduceVar$sum$15;
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noProducts, 1,
-			(int forStart$j$var63, int forEnd$j$var63, int threadID$j$var63, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int j$var63 = forStart$j$var63; j$var63 < forEnd$j$var63; j$var63 += 1)
-						expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-			}
-		);
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, T, 1,
-			(int forStart$index$t$var112, int forEnd$index$t$var112, int threadID$index$t$var112, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int index$t$var112 = forStart$index$t$var112; index$t$var112 < forEnd$index$t$var112; index$t$var112 += 1) {
-						int t$var112 = index$t$var112;
-						int threadID$t$var112 = threadID$index$t$var112;
-						
-						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noProducts, 1,
-							(int forStart$j$var123, int forEnd$j$var123, int threadID$j$var123, org.sandwood.random.internal.Rng RNG$2) -> { 
-								
-									// Inner loop for running batches of iterations, each batch has its own random number
-									// generator.
-									for(int j$var123 = forStart$j$var123; j$var123 < forEnd$j$var123; j$var123 += 1)
-										weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-							}
-						);
-						
-						// Reduction of array weekly_ut
-						// 
-						// A generated name to prevent name collisions if the reduction is implemented more
-						// than once in inference and probability code. Initialize the variable to the unit
-						// value
-						double reduceVar$denom$27 = 0.0;
-						
-						// For each index in the array to be reduced
-						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
-							// Set the left hand term of the reduction function to the return variable value.
-							double k$var135 = reduceVar$denom$27;
-							
-							// Set the right hand term to a value from the array weekly_ut
-							double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
-							
-							// Execute the reduction function, saving the result into the return value.
-							// 
-							// Copy the result of the reduction into the variable returned by the reduction.
-							reduceVar$denom$27 = (k$var135 + l$var136);
-						}
-						
-						// Alternative name for reduceVar$denom$27 to make it effectively final.
-						double reduceVar$denom$27$1 = reduceVar$denom$27;
-						
-						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noProducts, 1,
-							(int forStart$j$var147, int forEnd$j$var147, int threadID$j$var147, org.sandwood.random.internal.Rng RNG$2) -> { 
-								
-									// Inner loop for running batches of iterations, each batch has its own random number
-									// generator.
-									for(int j$var147 = forStart$j$var147; j$var147 < forEnd$j$var147; j$var147 += 1)
-										weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$27$1);
-							}
-						);
-						int[] weekly_sales = Sales[t$var112];
-						DistributionSampling.sampleMultinomial(RNG$1, weekly_rates[((t$var112 - 0) / 1)], noProducts, sales_sum[t$var112], weekly_sales);
-					}
-			}
-		);
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
-	@Override
-	public final void forwardGenerationValuesNoOutputs() {
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 1, noProducts, 1,
-			(int forStart$j$var20, int forEnd$j$var20, int threadID$j$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int j$var20 = forStart$j$var20; j$var20 < forEnd$j$var20; j$var20 += 1) {
-						if(!fixedFlag$sample26)
-							ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
-					}
-			}
-		);
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noProducts, 1,
-			(int forStart$j$var38, int forEnd$j$var38, int threadID$j$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int j$var38 = forStart$j$var38; j$var38 < forEnd$j$var38; j$var38 += 1) {
-						if(!fixedFlag$sample26)
-							exped[j$var38] = Math.exp(ut[j$var38]);
-					}
-			}
-		);
-		
-		// Reduction of array exped
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
 		double reduceVar$sum$16 = 0.0;
 		
 		// For each index in the array to be reduced
@@ -2934,12 +3055,12 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 						// A generated name to prevent name collisions if the reduction is implemented more
 						// than once in inference and probability code. Initialize the variable to the unit
 						// value
-						double reduceVar$denom$28 = 0.0;
+						double reduceVar$denom$34 = 0.0;
 						
 						// For each index in the array to be reduced
 						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
 							// Set the left hand term of the reduction function to the return variable value.
-							double k$var135 = reduceVar$denom$28;
+							double k$var135 = reduceVar$denom$34;
 							
 							// Set the right hand term to a value from the array weekly_ut
 							double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
@@ -2947,11 +3068,11 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 							// Execute the reduction function, saving the result into the return value.
 							if(!fixedFlag$sample26)
 								// Copy the result of the reduction into the variable returned by the reduction.
-								reduceVar$denom$28 = (k$var135 + l$var136);
+								reduceVar$denom$34 = (k$var135 + l$var136);
 						}
 						
-						// Alternative name for reduceVar$denom$28 to make it effectively final.
-						double reduceVar$denom$28$1 = reduceVar$denom$28;
+						// Alternative name for reduceVar$denom$34 to make it effectively final.
+						double reduceVar$denom$34$1 = reduceVar$denom$34;
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 						parallelFor(RNG$1, 0, noProducts, 1,
@@ -2961,8 +3082,132 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 									// generator.
 									for(int j$var147 = forStart$j$var147; j$var147 < forEnd$j$var147; j$var147 += 1) {
 										if(!fixedFlag$sample26)
-											weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$28$1);
+											weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$34$1);
 									}
+							}
+						);
+						int[] weekly_sales = Sales[t$var112];
+						DistributionSampling.sampleMultinomial(RNG$1, weekly_rates[((t$var112 - 0) / 1)], noProducts, sales_sum[t$var112], weekly_sales);
+					}
+			}
+		);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
+	@Override
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 1, noProducts, 1,
+			(int forStart$j$var20, int forEnd$j$var20, int threadID$j$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var20 = forStart$j$var20; j$var20 < forEnd$j$var20; j$var20 += 1) {
+						if(!fixedFlag$sample26)
+							ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
+					}
+			}
+		);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$j$var38, int forEnd$j$var38, int threadID$j$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var38 = forStart$j$var38; j$var38 < forEnd$j$var38; j$var38 += 1)
+						exped[j$var38] = Math.exp(ut[j$var38]);
+			}
+		);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$20 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+			// Set the left hand term of the reduction function to the return variable value.
+			double k$var49 = reduceVar$sum$20;
+			
+			// Set the right hand term to a value from the array exped
+			double l$var50 = exped[cv$reduction46Index];
+			
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			reduceVar$sum$20 = (k$var49 + l$var50);
+		}
+		sum = reduceVar$sum$20;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$j$var63, int forEnd$j$var63, int threadID$j$var63, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var63 = forStart$j$var63; j$var63 < forEnd$j$var63; j$var63 += 1)
+						expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+			}
+		);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, T, 1,
+			(int forStart$index$t$var112, int forEnd$index$t$var112, int threadID$index$t$var112, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int index$t$var112 = forStart$index$t$var112; index$t$var112 < forEnd$index$t$var112; index$t$var112 += 1) {
+						int t$var112 = index$t$var112;
+						int threadID$t$var112 = threadID$index$t$var112;
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, noProducts, 1,
+							(int forStart$j$var123, int forEnd$j$var123, int threadID$j$var123, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var123 = forStart$j$var123; j$var123 < forEnd$j$var123; j$var123 += 1)
+										weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+							}
+						);
+						
+						// Reduction of array weekly_ut
+						// 
+						// A generated name to prevent name collisions if the reduction is implemented more
+						// than once in inference and probability code. Initialize the variable to the unit
+						// value
+						double reduceVar$denom$38 = 0.0;
+						
+						// For each index in the array to be reduced
+						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+							// Set the left hand term of the reduction function to the return variable value.
+							double k$var135 = reduceVar$denom$38;
+							
+							// Set the right hand term to a value from the array weekly_ut
+							double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+							
+							// Execute the reduction function, saving the result into the return value.
+							// 
+							// Copy the result of the reduction into the variable returned by the reduction.
+							reduceVar$denom$38 = (k$var135 + l$var136);
+						}
+						
+						// Alternative name for reduceVar$denom$38 to make it effectively final.
+						double reduceVar$denom$38$1 = reduceVar$denom$38;
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, noProducts, 1,
+							(int forStart$j$var147, int forEnd$j$var147, int threadID$j$var147, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var147 = forStart$j$var147; j$var147 < forEnd$j$var147; j$var147 += 1)
+										weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$38$1);
 							}
 						);
 					}
@@ -2970,11 +3215,10 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 		);
 	}
 
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
-	// to single values.
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
 	@Override
-	public final void forwardGenerationValuesNoOutputsPrime() {
+	public final void forwardGenerationPrime() {
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 		parallelFor(RNG$, 1, noProducts, 1,
 			(int forStart$j$var20, int forEnd$j$var20, int threadID$j$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
@@ -3058,12 +3302,12 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 						// A generated name to prevent name collisions if the reduction is implemented more
 						// than once in inference and probability code. Initialize the variable to the unit
 						// value
-						double reduceVar$denom$29 = 0.0;
+						double reduceVar$denom$35 = 0.0;
 						
 						// For each index in the array to be reduced
 						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
 							// Set the left hand term of the reduction function to the return variable value.
-							double k$var135 = reduceVar$denom$29;
+							double k$var135 = reduceVar$denom$35;
 							
 							// Set the right hand term to a value from the array weekly_ut
 							double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
@@ -3071,11 +3315,11 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
-							reduceVar$denom$29 = (k$var135 + l$var136);
+							reduceVar$denom$35 = (k$var135 + l$var136);
 						}
 						
-						// Alternative name for reduceVar$denom$29 to make it effectively final.
-						double reduceVar$denom$29$1 = reduceVar$denom$29;
+						// Alternative name for reduceVar$denom$35 to make it effectively final.
+						double reduceVar$denom$35$1 = reduceVar$denom$35;
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 						parallelFor(RNG$1, 0, noProducts, 1,
@@ -3084,7 +3328,261 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int j$var147 = forStart$j$var147; j$var147 < forEnd$j$var147; j$var147 += 1)
-										weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$29$1);
+										weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$35$1);
+							}
+						);
+						int[] weekly_sales = Sales[t$var112];
+						DistributionSampling.sampleMultinomial(RNG$1, weekly_rates[((t$var112 - 0) / 1)], noProducts, sales_sum[t$var112], weekly_sales);
+					}
+			}
+		);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 1, noProducts, 1,
+			(int forStart$j$var20, int forEnd$j$var20, int threadID$j$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var20 = forStart$j$var20; j$var20 < forEnd$j$var20; j$var20 += 1) {
+						if(!fixedFlag$sample26)
+							ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
+					}
+			}
+		);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$j$var38, int forEnd$j$var38, int threadID$j$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var38 = forStart$j$var38; j$var38 < forEnd$j$var38; j$var38 += 1) {
+						if(!fixedFlag$sample26)
+							exped[j$var38] = Math.exp(ut[j$var38]);
+					}
+			}
+		);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$18 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+			// Set the left hand term of the reduction function to the return variable value.
+			double k$var49 = reduceVar$sum$18;
+			
+			// Set the right hand term to a value from the array exped
+			double l$var50 = exped[cv$reduction46Index];
+			
+			// Execute the reduction function, saving the result into the return value.
+			if(!fixedFlag$sample26)
+				// Copy the result of the reduction into the variable returned by the reduction.
+				reduceVar$sum$18 = (k$var49 + l$var50);
+		}
+		if(!fixedFlag$sample26)
+			sum = reduceVar$sum$18;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$j$var63, int forEnd$j$var63, int threadID$j$var63, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var63 = forStart$j$var63; j$var63 < forEnd$j$var63; j$var63 += 1) {
+						if(!fixedFlag$sample26)
+							expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+					}
+			}
+		);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, T, 1,
+			(int forStart$index$t$var112, int forEnd$index$t$var112, int threadID$index$t$var112, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int index$t$var112 = forStart$index$t$var112; index$t$var112 < forEnd$index$t$var112; index$t$var112 += 1) {
+						int t$var112 = index$t$var112;
+						int threadID$t$var112 = threadID$index$t$var112;
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, noProducts, 1,
+							(int forStart$j$var123, int forEnd$j$var123, int threadID$j$var123, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var123 = forStart$j$var123; j$var123 < forEnd$j$var123; j$var123 += 1) {
+										if(!fixedFlag$sample26)
+											weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+									}
+							}
+						);
+						
+						// Reduction of array weekly_ut
+						// 
+						// A generated name to prevent name collisions if the reduction is implemented more
+						// than once in inference and probability code. Initialize the variable to the unit
+						// value
+						double reduceVar$denom$36 = 0.0;
+						
+						// For each index in the array to be reduced
+						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+							// Set the left hand term of the reduction function to the return variable value.
+							double k$var135 = reduceVar$denom$36;
+							
+							// Set the right hand term to a value from the array weekly_ut
+							double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+							
+							// Execute the reduction function, saving the result into the return value.
+							if(!fixedFlag$sample26)
+								// Copy the result of the reduction into the variable returned by the reduction.
+								reduceVar$denom$36 = (k$var135 + l$var136);
+						}
+						
+						// Alternative name for reduceVar$denom$36 to make it effectively final.
+						double reduceVar$denom$36$1 = reduceVar$denom$36;
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, noProducts, 1,
+							(int forStart$j$var147, int forEnd$j$var147, int threadID$j$var147, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var147 = forStart$j$var147; j$var147 < forEnd$j$var147; j$var147 += 1) {
+										if(!fixedFlag$sample26)
+											weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$36$1);
+									}
+							}
+						);
+					}
+			}
+		);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 1, noProducts, 1,
+			(int forStart$j$var20, int forEnd$j$var20, int threadID$j$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var20 = forStart$j$var20; j$var20 < forEnd$j$var20; j$var20 += 1) {
+						if(!fixedFlag$sample26)
+							ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
+					}
+			}
+		);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$j$var38, int forEnd$j$var38, int threadID$j$var38, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var38 = forStart$j$var38; j$var38 < forEnd$j$var38; j$var38 += 1)
+						exped[j$var38] = Math.exp(ut[j$var38]);
+			}
+		);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$19 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+			// Set the left hand term of the reduction function to the return variable value.
+			double k$var49 = reduceVar$sum$19;
+			
+			// Set the right hand term to a value from the array exped
+			double l$var50 = exped[cv$reduction46Index];
+			
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			reduceVar$sum$19 = (k$var49 + l$var50);
+		}
+		sum = reduceVar$sum$19;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$j$var63, int forEnd$j$var63, int threadID$j$var63, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j$var63 = forStart$j$var63; j$var63 < forEnd$j$var63; j$var63 += 1)
+						expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+			}
+		);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, T, 1,
+			(int forStart$index$t$var112, int forEnd$index$t$var112, int threadID$index$t$var112, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int index$t$var112 = forStart$index$t$var112; index$t$var112 < forEnd$index$t$var112; index$t$var112 += 1) {
+						int t$var112 = index$t$var112;
+						int threadID$t$var112 = threadID$index$t$var112;
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, noProducts, 1,
+							(int forStart$j$var123, int forEnd$j$var123, int threadID$j$var123, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var123 = forStart$j$var123; j$var123 < forEnd$j$var123; j$var123 += 1)
+										weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+							}
+						);
+						
+						// Reduction of array weekly_ut
+						// 
+						// A generated name to prevent name collisions if the reduction is implemented more
+						// than once in inference and probability code. Initialize the variable to the unit
+						// value
+						double reduceVar$denom$37 = 0.0;
+						
+						// For each index in the array to be reduced
+						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+							// Set the left hand term of the reduction function to the return variable value.
+							double k$var135 = reduceVar$denom$37;
+							
+							// Set the right hand term to a value from the array weekly_ut
+							double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+							
+							// Execute the reduction function, saving the result into the return value.
+							// 
+							// Copy the result of the reduction into the variable returned by the reduction.
+							reduceVar$denom$37 = (k$var135 + l$var136);
+						}
+						
+						// Alternative name for reduceVar$denom$37 to make it effectively final.
+						double reduceVar$denom$37$1 = reduceVar$denom$37;
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, noProducts, 1,
+							(int forStart$j$var147, int forEnd$j$var147, int threadID$j$var147, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j$var147 = forStart$j$var147; j$var147 < forEnd$j$var147; j$var147 += 1)
+										weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$37$1);
 							}
 						);
 					}
@@ -3099,19 +3597,23 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 		if(system$gibbsForward) {
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
 				if(!fixedFlag$sample26)
-					sample26(j$var20);
+					inferSample26(j$var20);
 			}
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			for(int j$var20 = (noProducts - ((((noProducts - 1) - 1) % 1) + 1)); j$var20 >= ((1 - 1) + 1); j$var20 -= 1) {
 				if(!fixedFlag$sample26)
-					sample26(j$var20);
+					inferSample26(j$var20);
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
+			if(!constrainedFlag$sample26[((j$var20 - 1) / 1)])
+				drawValueSample26(j$var20);
+		}
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
@@ -3260,12 +3762,12 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 		// A generated name to prevent name collisions if the reduction is implemented more
 		// than once in inference and probability code. Initialize the variable to the unit
 		// value
-		double reduceVar$sum$19 = 0.0;
+		double reduceVar$sum$21 = 0.0;
 		
 		// For each index in the array to be reduced
 		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
-			double k$var49 = reduceVar$sum$19;
+			double k$var49 = reduceVar$sum$21;
 			
 			// Set the right hand term to a value from the array exped
 			double l$var50 = exped[cv$reduction46Index];
@@ -3273,9 +3775,9 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
-			reduceVar$sum$19 = (k$var49 + l$var50);
+			reduceVar$sum$21 = (k$var49 + l$var50);
 		}
-		sum = reduceVar$sum$19;
+		sum = reduceVar$sum$21;
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 		parallelFor(RNG$, 0, noProducts, 1,
@@ -3314,12 +3816,12 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 						// A generated name to prevent name collisions if the reduction is implemented more
 						// than once in inference and probability code. Initialize the variable to the unit
 						// value
-						double reduceVar$denom$31 = 0.0;
+						double reduceVar$denom$39 = 0.0;
 						
 						// For each index in the array to be reduced
 						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
 							// Set the left hand term of the reduction function to the return variable value.
-							double k$var135 = reduceVar$denom$31;
+							double k$var135 = reduceVar$denom$39;
 							
 							// Set the right hand term to a value from the array weekly_ut
 							double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
@@ -3327,11 +3829,11 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
-							reduceVar$denom$31 = (k$var135 + l$var136);
+							reduceVar$denom$39 = (k$var135 + l$var136);
 						}
 						
-						// Alternative name for reduceVar$denom$31 to make it effectively final.
-						double reduceVar$denom$31$1 = reduceVar$denom$31;
+						// Alternative name for reduceVar$denom$39 to make it effectively final.
+						double reduceVar$denom$39$1 = reduceVar$denom$39;
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 						parallelFor(RNG$1, 0, noProducts, 1,
@@ -3340,7 +3842,7 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int j$var147 = forStart$j$var147; j$var147 < forEnd$j$var147; j$var147 += 1)
-										weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$31$1);
+										weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$39$1);
 							}
 						);
 					}

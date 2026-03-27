@@ -63,10 +63,11 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 
 	// Setter for fixedFlag$sample15.
 	@Override
-	public final void set$fixedFlag$sample15(boolean cv$value) {
+	public final void set$fixedFlag$sample15(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample15 including if probabilities
 		// need to be updated.
 		fixedFlag$sample15 = cv$value;
+		constrainedFlag$sample15 = (fixedFlag$sample15 || constrainedFlag$sample15);
 		
 		// Should the probability of sample 15 be set to fixed. This will only every change
 		// the flag to false.
@@ -85,10 +86,11 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 
 	// Setter for fixedFlag$sample21.
 	@Override
-	public final void set$fixedFlag$sample21(boolean cv$value) {
+	public final void set$fixedFlag$sample21(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample21 including if probabilities
 		// need to be updated.
 		fixedFlag$sample21 = cv$value;
+		constrainedFlag$sample21 = (fixedFlag$sample21 || constrainedFlag$sample21);
 		
 		// Should the probability of sample 21 be set to fixed. This will only every change
 		// the flag to false.
@@ -107,10 +109,11 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 
 	// Setter for fixedFlag$sample9.
 	@Override
-	public final void set$fixedFlag$sample9(boolean cv$value) {
+	public final void set$fixedFlag$sample9(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample9 including if probabilities
 		// need to be updated.
 		fixedFlag$sample9 = cv$value;
+		constrainedFlag$sample9 = (fixedFlag$sample9 || constrainedFlag$sample9);
 		
 		// Should the probability of sample 9 be set to fixed. This will only every change
 		// the flag to false.
@@ -133,7 +136,7 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 
 	// Setter for length$obsAmounts1.
 	@Override
-	public final void set$length$obsAmounts1(int cv$value) {
+	public final void set$length$obsAmounts1(int cv$value, boolean allocated$) {
 		length$obsAmounts1 = cv$value;
 	}
 
@@ -187,7 +190,7 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 
 	// Setter for mean1.
 	@Override
-	public final void set$mean1(double cv$value) {
+	public final void set$mean1(double cv$value, boolean allocated$) {
 		// Set flags for all the side effects of mean1 including if probabilities need to
 		// be updated.
 		mean1 = cv$value;
@@ -207,7 +210,7 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 
 	// Setter for mean2.
 	@Override
-	public final void set$mean2(double cv$value) {
+	public final void set$mean2(double cv$value, boolean allocated$) {
 		// Set flags for all the side effects of mean2 including if probabilities need to
 		// be updated.
 		mean2 = cv$value;
@@ -233,8 +236,7 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 
 	// Setter for obsAmounts1.
 	@Override
-	public final void set$obsAmounts1(double[] cv$value) {
-		// Set obsAmounts1
+	public final void set$obsAmounts1(double[] cv$value, boolean allocated$) {
 		obsAmounts1 = cv$value;
 	}
 
@@ -246,8 +248,7 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 
 	// Setter for obsAmounts2.
 	@Override
-	public final void set$obsAmounts2(double[] cv$value) {
-		// Set obsAmounts2
+	public final void set$obsAmounts2(double[] cv$value, boolean allocated$) {
 		obsAmounts2 = cv$value;
 	}
 
@@ -259,7 +260,7 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 
 	// Setter for priorSigma2.
 	@Override
-	public final void set$priorSigma2(double cv$value) {
+	public final void set$priorSigma2(double cv$value, boolean allocated$) {
 		// Set flags for all the side effects of priorSigma2 including if probabilities need
 		// to be updated.
 		priorSigma2 = cv$value;
@@ -272,6 +273,410 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 		
 		// Unset the fixed probability flag for sample 39 as it depends on priorSigma2.
 		fixedProbFlag$sample39 = false;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample15
+	private final void drawValueSample15() {
+		mean1 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample21
+	private final void drawValueSample21() {
+		mean2 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample9
+	private final void drawValueSample9() {
+		priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(RNG$)) + 10000.0);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 15 drawn from Gaussian 14. Inference was performed using a Gaussian
+	// to Gaussian conjugate prior.
+	private final void inferSample15() {
+		if(true) {
+			constrainedFlag$sample15 = false;
+			
+			// State to record the weighting of each sample that is consumed. This is the:
+			// sum of the sample denominator*(the sample value - the sample nominator).
+			double cv$sum = 0.0;
+			
+			// State for storing the sum of the squares of the sample denominators.
+			double cv$denominatorSquareSum = 0.0;
+			
+			// Flag to record if we have a value for Sigma.
+			boolean cv$sigmaNotFound = true;
+			
+			// State for the value of sigma once we find it.
+			double cv$sigmaValue = 1.0;
+			{
+				// Processing random variable 34.
+				{
+					{
+						{
+							for(int i = 0; i < n; i += 1) {
+								// Flag recording if this sample task of the consuming random variable is constrained.
+								boolean cv$sampleConstrained = true;
+								if(cv$sampleConstrained) {
+									// Mark that the sample has observed constrained data.
+									constrainedFlag$sample15 = true;
+									{
+										{
+											{
+												{
+													{
+														// State for tracking the changes that happen to the sampled value between it being
+														// consumed and it being produced.
+														double cv$denominator = 1.0;
+														double cv$numerator = 0.0;
+														
+														// Record the value of a sample generated by a consuming sample 35 of random variable
+														// var34.
+														// 
+														// Add the denominator squared to the sample denominator
+														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+														
+														// Add the weighting of the sample to the sum.
+														cv$sum = (cv$sum + (cv$denominator * (amounts1[i] - cv$numerator)));
+														
+														// If we have not got the value of sigma yet record it and set a flag so it is not
+														// recorded again.
+														if(cv$sigmaNotFound) {
+															cv$sigmaValue = priorSigma2;
+															cv$sigmaNotFound = false;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample15)
+				// Write out the new value of the sample.
+				mean1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		}
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 21 drawn from Gaussian 20. Inference was performed using a Gaussian
+	// to Gaussian conjugate prior.
+	private final void inferSample21() {
+		if(true) {
+			constrainedFlag$sample21 = false;
+			
+			// State to record the weighting of each sample that is consumed. This is the:
+			// sum of the sample denominator*(the sample value - the sample nominator).
+			double cv$sum = 0.0;
+			
+			// State for storing the sum of the squares of the sample denominators.
+			double cv$denominatorSquareSum = 0.0;
+			
+			// Flag to record if we have a value for Sigma.
+			boolean cv$sigmaNotFound = true;
+			
+			// State for the value of sigma once we find it.
+			double cv$sigmaValue = 1.0;
+			{
+				// Processing random variable 38.
+				{
+					{
+						{
+							for(int i = 0; i < n; i += 1) {
+								// Flag recording if this sample task of the consuming random variable is constrained.
+								boolean cv$sampleConstrained = true;
+								if(cv$sampleConstrained) {
+									// Mark that the sample has observed constrained data.
+									constrainedFlag$sample21 = true;
+									{
+										{
+											{
+												{
+													{
+														// State for tracking the changes that happen to the sampled value between it being
+														// consumed and it being produced.
+														double cv$denominator = 1.0;
+														double cv$numerator = 0.0;
+														
+														// Record the value of a sample generated by a consuming sample 39 of random variable
+														// var38.
+														// 
+														// Add the denominator squared to the sample denominator
+														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+														
+														// Add the weighting of the sample to the sum.
+														cv$sum = (cv$sum + (cv$denominator * (var39[((i - 0) / 1)] - cv$numerator)));
+														
+														// If we have not got the value of sigma yet record it and set a flag so it is not
+														// recorded again.
+														if(cv$sigmaNotFound) {
+															cv$sigmaValue = priorSigma2;
+															cv$sigmaNotFound = false;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample21)
+				// Write out the new value of the sample.
+				mean2 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		}
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 9 drawn from Gaussian 8. Inference was performed using Metropolis-Hastings.
+	private final void inferSample9() {
+		if(true) {
+			constrainedFlag$sample9 = false;
+			
+			// Calculate the number of states to evaluate.
+			int cv$numStates = 0;
+			{
+				// Metropolis-Hastings
+				cv$numStates = Math.max(cv$numStates, 2);
+			}
+			
+			// The original value of the sample
+			double cv$originalValue = priorSigma2;
+			
+			// The probability of the random variable generating the originally sampled value
+			double cv$originalProbability = 0.0;
+			
+			// Calculate a proposed variance.
+			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
+			
+			// Ensure the variance is at least 0.01
+			if((cv$var < (0.1 * 0.1)))
+				cv$var = (0.1 * 0.1);
+			
+			// The proposed new value for the sample
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			
+			// The probability of the random variable generating the new sample value.
+			double cv$proposedProbability = 0.0;
+			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
+				if((constrainedFlag$sample9 || (cv$valuePos == 0))) {
+					// Initialize the summed probabilities to 0.
+					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
+					
+					// Initialize a counter to track the reached distributions.
+					double cv$reachedDistributionSourceRV = 0.0;
+					
+					// Initialize a log space accumulator to take the product of all the distribution
+					// probabilities.
+					double cv$accumulatedDistributionProbabilities = 0.0;
+					
+					// The value currently being tested
+					double cv$currentValue;
+					if((cv$valuePos == 0))
+						// Set the current value to the current state of the tree.
+						cv$currentValue = cv$originalValue;
+					else {
+						cv$currentValue = cv$proposedValue;
+						
+						// Update Sample and intermediate values
+						// 
+						// Write out the new value of the sample.
+						priorSigma2 = cv$proposedValue;
+					}
+					{
+						// Record the reached probability density.
+						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
+						
+						// An accumulator to allow the value for each distribution to be constructed before
+						// it is added to the index probabilities.
+						double cv$accumulatedProbabilities = (Math.log(1.0) + ((0.0 < 900.0)?(DistributionSampling.logProbabilityGaussian(((cv$currentValue - 10000.0) / Math.sqrt(900.0))) - (0.5 * Math.log(900.0))):Double.NEGATIVE_INFINITY));
+						
+						// Processing random variable 34.
+						{
+							{
+								{
+									for(int i = 0; i < n; i += 1) {
+										double traceTempVariable$priorSigma2$1_2 = cv$currentValue;
+										
+										// Processing sample task 35 of consumer random variable null.
+										{
+											{
+												// Flag recording if this sample task of the consuming random variable is constrained.
+												boolean cv$sampleConstrained = true;
+												if(cv$sampleConstrained) {
+													// Mark that the sample has observed constrained data.
+													constrainedFlag$sample9 = true;
+													
+													// Set an accumulator to sum the probabilities for each possible configuration of
+													// inputs.
+													double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+													
+													// Set an accumulator to record the consumer distributions not seen. Initially set
+													// to 1 as seen values will be deducted from this value.
+													double cv$consumerDistributionProbabilityAccumulator = 1.0;
+													{
+														{
+															{
+																{
+																	{
+																		// Record the probability of sample task 35 generating output with current configuration.
+																		if(((Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		else {
+																			// If the second value is -infinity.
+																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY));
+																			else
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY)));
+																		}
+																		
+																		// Recorded the probability of reaching sample task 35 with the current configuration.
+																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																	}
+																}
+															}
+														}
+													}
+													
+													// A check to ensure rounding of floating point values can never result in a negative
+													// value.
+													cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+													
+													// Multiply (log space add) in the probability of the sample task to the overall probability
+													// for this configuration of the source random variable.
+													if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+													else {
+														// If the second value is -infinity.
+														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+															cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+														else
+															cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						
+						// Processing random variable 38.
+						{
+							{
+								{
+									for(int i = 0; i < n; i += 1) {
+										double traceTempVariable$priorSigma2$4_2 = cv$currentValue;
+										
+										// Processing sample task 39 of consumer random variable null.
+										{
+											{
+												// Flag recording if this sample task of the consuming random variable is constrained.
+												boolean cv$sampleConstrained = true;
+												if(cv$sampleConstrained) {
+													// Mark that the sample has observed constrained data.
+													constrainedFlag$sample9 = true;
+													
+													// Set an accumulator to sum the probabilities for each possible configuration of
+													// inputs.
+													double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+													
+													// Set an accumulator to record the consumer distributions not seen. Initially set
+													// to 1 as seen values will be deducted from this value.
+													double cv$consumerDistributionProbabilityAccumulator = 1.0;
+													{
+														{
+															{
+																{
+																	{
+																		// Record the probability of sample task 39 generating output with current configuration.
+																		if(((Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((var39[((i - 0) / 1)] - mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((var39[((i - 0) / 1)] - mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		else {
+																			// If the second value is -infinity.
+																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((var39[((i - 0) / 1)] - mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY));
+																			else
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((var39[((i - 0) / 1)] - mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((var39[((i - 0) / 1)] - mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY)));
+																		}
+																		
+																		// Recorded the probability of reaching sample task 39 with the current configuration.
+																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																	}
+																}
+															}
+														}
+													}
+													
+													// A check to ensure rounding of floating point values can never result in a negative
+													// value.
+													cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+													
+													// Multiply (log space add) in the probability of the sample task to the overall probability
+													// for this configuration of the source random variable.
+													if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+														cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+													else {
+														// If the second value is -infinity.
+														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+															cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+														else
+															cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						
+						// Add the values for the source and any standard consumers for this configuration
+						// of arguments to the source.
+						if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
+							cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
+						else {
+							// If the second value is -infinity.
+							if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
+								cv$stateProbabilityValue = cv$accumulatedProbabilities;
+							else
+								cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
+						}
+					}
+					
+					// Save the probability of the original value.
+					if((cv$valuePos == 0))
+						cv$originalProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+					
+					// Save the probability of the proposed value.
+					else
+						cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+					
+					// The probability ration for the proposed value and the current value.
+					double cv$ratio = (cv$proposedProbability - cv$originalProbability);
+					
+					// Test if the probability of the sample is sufficient to keep the value. This needs
+					// to be less than or equal as otherwise if the proposed value is not possible and
+					// the random value is 0 an impossible value will be accepted.
+					if((cv$valuePos == 1)) {
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio)))
+							// If it is not revert the changes.
+							// 
+							// Set the sample value
+							// 
+							// Write out the new value of the sample.
+							priorSigma2 = cv$originalValue;
+					}
+				}
+			}
+		}
 	}
 
 	// Calculate the probability of the samples represented by sample15 using sampled
@@ -808,395 +1213,6 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 		}
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 15 drawn from Gaussian 14. Inference was performed using a Gaussian
-	// to Gaussian conjugate prior.
-	private final void sample15() {
-		if(true) {
-			constrainedFlag$sample15 = false;
-			
-			// State to record the weighting of each sample that is consumed. This is the:
-			// sum of the sample denominator*(the sample value - the sample nominator).
-			double cv$sum = 0.0;
-			
-			// State for storing the sum of the squares of the sample denominators.
-			double cv$denominatorSquareSum = 0.0;
-			
-			// Flag to record if we have a value for Sigma.
-			boolean cv$sigmaNotFound = true;
-			
-			// State for the value of sigma once we find it.
-			double cv$sigmaValue = 1.0;
-			{
-				// Processing random variable 34.
-				{
-					{
-						{
-							for(int i = 0; i < n; i += 1) {
-								// Flag recording if this sample task of the consuming random variable is constrained.
-								boolean cv$sampleConstrained = true;
-								if(cv$sampleConstrained) {
-									// Mark that the sample has observed constrained data.
-									constrainedFlag$sample15 = true;
-									{
-										{
-											{
-												{
-													{
-														// State for tracking the changes that happen to the sampled value between it being
-														// consumed and it being produced.
-														double cv$denominator = 1.0;
-														double cv$numerator = 0.0;
-														
-														// Record the value of a sample generated by a consuming sample 35 of random variable
-														// var34.
-														// 
-														// Add the denominator squared to the sample denominator
-														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-														
-														// Add the weighting of the sample to the sum.
-														cv$sum = (cv$sum + (cv$denominator * (amounts1[i] - cv$numerator)));
-														
-														// If we have not got the value of sigma yet record it and set a flag so it is not
-														// recorded again.
-														if(cv$sigmaNotFound) {
-															cv$sigmaValue = priorSigma2;
-															cv$sigmaNotFound = false;
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(constrainedFlag$sample15)
-				// Write out the new value of the sample.
-				mean1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-		}
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 21 drawn from Gaussian 20. Inference was performed using a Gaussian
-	// to Gaussian conjugate prior.
-	private final void sample21() {
-		if(true) {
-			constrainedFlag$sample21 = false;
-			
-			// State to record the weighting of each sample that is consumed. This is the:
-			// sum of the sample denominator*(the sample value - the sample nominator).
-			double cv$sum = 0.0;
-			
-			// State for storing the sum of the squares of the sample denominators.
-			double cv$denominatorSquareSum = 0.0;
-			
-			// Flag to record if we have a value for Sigma.
-			boolean cv$sigmaNotFound = true;
-			
-			// State for the value of sigma once we find it.
-			double cv$sigmaValue = 1.0;
-			{
-				// Processing random variable 38.
-				{
-					{
-						{
-							for(int i = 0; i < n; i += 1) {
-								// Flag recording if this sample task of the consuming random variable is constrained.
-								boolean cv$sampleConstrained = true;
-								if(cv$sampleConstrained) {
-									// Mark that the sample has observed constrained data.
-									constrainedFlag$sample21 = true;
-									{
-										{
-											{
-												{
-													{
-														// State for tracking the changes that happen to the sampled value between it being
-														// consumed and it being produced.
-														double cv$denominator = 1.0;
-														double cv$numerator = 0.0;
-														
-														// Record the value of a sample generated by a consuming sample 39 of random variable
-														// var38.
-														// 
-														// Add the denominator squared to the sample denominator
-														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-														
-														// Add the weighting of the sample to the sum.
-														cv$sum = (cv$sum + (cv$denominator * (var39[((i - 0) / 1)] - cv$numerator)));
-														
-														// If we have not got the value of sigma yet record it and set a flag so it is not
-														// recorded again.
-														if(cv$sigmaNotFound) {
-															cv$sigmaValue = priorSigma2;
-															cv$sigmaNotFound = false;
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(constrainedFlag$sample21)
-				// Write out the new value of the sample.
-				mean2 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-		}
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 9 drawn from Gaussian 8. Inference was performed using Metropolis-Hastings.
-	private final void sample9() {
-		if(true) {
-			constrainedFlag$sample9 = false;
-			
-			// Calculate the number of states to evaluate.
-			int cv$numStates = 0;
-			{
-				// Metropolis-Hastings
-				cv$numStates = Math.max(cv$numStates, 2);
-			}
-			
-			// The original value of the sample
-			double cv$originalValue = priorSigma2;
-			
-			// The probability of the random variable generating the originally sampled value
-			double cv$originalProbability = 0.0;
-			
-			// Calculate a proposed variance.
-			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
-			
-			// Ensure the variance is at least 0.01
-			if((cv$var < (0.1 * 0.1)))
-				cv$var = (0.1 * 0.1);
-			
-			// The proposed new value for the sample
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
-			
-			// The probability of the random variable generating the new sample value.
-			double cv$proposedProbability = 0.0;
-			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample9 || (cv$valuePos == 0))) {
-					// Initialize the summed probabilities to 0.
-					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
-					
-					// Initialize a counter to track the reached distributions.
-					double cv$reachedDistributionSourceRV = 0.0;
-					
-					// Initialize a log space accumulator to take the product of all the distribution
-					// probabilities.
-					double cv$accumulatedDistributionProbabilities = 0.0;
-					
-					// The value currently being tested
-					double cv$currentValue;
-					if((cv$valuePos == 0))
-						// Set the current value to the current state of the tree.
-						cv$currentValue = cv$originalValue;
-					else {
-						cv$currentValue = cv$proposedValue;
-						
-						// Update Sample and intermediate values
-						// 
-						// Write out the new value of the sample.
-						priorSigma2 = cv$proposedValue;
-					}
-					{
-						// Record the reached probability density.
-						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-						
-						// An accumulator to allow the value for each distribution to be constructed before
-						// it is added to the index probabilities.
-						double cv$accumulatedProbabilities = (Math.log(1.0) + ((0.0 < 900.0)?(DistributionSampling.logProbabilityGaussian(((cv$currentValue - 10000.0) / Math.sqrt(900.0))) - (0.5 * Math.log(900.0))):Double.NEGATIVE_INFINITY));
-						
-						// Processing random variable 34.
-						{
-							{
-								{
-									for(int i = 0; i < n; i += 1) {
-										double traceTempVariable$priorSigma2$1_2 = cv$currentValue;
-										
-										// Processing sample task 35 of consumer random variable null.
-										{
-											{
-												// Flag recording if this sample task of the consuming random variable is constrained.
-												boolean cv$sampleConstrained = true;
-												if(cv$sampleConstrained) {
-													// Mark that the sample has observed constrained data.
-													constrainedFlag$sample9 = true;
-													
-													// Set an accumulator to sum the probabilities for each possible configuration of
-													// inputs.
-													double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-													
-													// Set an accumulator to record the consumer distributions not seen. Initially set
-													// to 1 as seen values will be deducted from this value.
-													double cv$consumerDistributionProbabilityAccumulator = 1.0;
-													{
-														{
-															{
-																{
-																	{
-																		// Record the probability of sample task 35 generating output with current configuration.
-																		if(((Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																		else {
-																			// If the second value is -infinity.
-																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY));
-																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY)));
-																		}
-																		
-																		// Recorded the probability of reaching sample task 35 with the current configuration.
-																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																	}
-																}
-															}
-														}
-													}
-													
-													// A check to ensure rounding of floating point values can never result in a negative
-													// value.
-													cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-													
-													// Multiply (log space add) in the probability of the sample task to the overall probability
-													// for this configuration of the source random variable.
-													if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-													else {
-														// If the second value is -infinity.
-														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-														else
-															cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						
-						// Processing random variable 38.
-						{
-							{
-								{
-									for(int i = 0; i < n; i += 1) {
-										double traceTempVariable$priorSigma2$4_2 = cv$currentValue;
-										
-										// Processing sample task 39 of consumer random variable null.
-										{
-											{
-												// Flag recording if this sample task of the consuming random variable is constrained.
-												boolean cv$sampleConstrained = true;
-												if(cv$sampleConstrained) {
-													// Mark that the sample has observed constrained data.
-													constrainedFlag$sample9 = true;
-													
-													// Set an accumulator to sum the probabilities for each possible configuration of
-													// inputs.
-													double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-													
-													// Set an accumulator to record the consumer distributions not seen. Initially set
-													// to 1 as seen values will be deducted from this value.
-													double cv$consumerDistributionProbabilityAccumulator = 1.0;
-													{
-														{
-															{
-																{
-																	{
-																		// Record the probability of sample task 39 generating output with current configuration.
-																		if(((Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((var39[((i - 0) / 1)] - mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((var39[((i - 0) / 1)] - mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																		else {
-																			// If the second value is -infinity.
-																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((var39[((i - 0) / 1)] - mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY));
-																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((var39[((i - 0) / 1)] - mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((var39[((i - 0) / 1)] - mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY)));
-																		}
-																		
-																		// Recorded the probability of reaching sample task 39 with the current configuration.
-																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																	}
-																}
-															}
-														}
-													}
-													
-													// A check to ensure rounding of floating point values can never result in a negative
-													// value.
-													cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-													
-													// Multiply (log space add) in the probability of the sample task to the overall probability
-													// for this configuration of the source random variable.
-													if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-													else {
-														// If the second value is -infinity.
-														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-														else
-															cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						
-						// Add the values for the source and any standard consumers for this configuration
-						// of arguments to the source.
-						if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
-							cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
-						else {
-							// If the second value is -infinity.
-							if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
-								cv$stateProbabilityValue = cv$accumulatedProbabilities;
-							else
-								cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
-						}
-					}
-					
-					// Save the probability of the original value.
-					if((cv$valuePos == 0))
-						cv$originalProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-					
-					// Save the probability of the proposed value.
-					else
-						cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-					
-					// The probability ration for the proposed value and the current value.
-					double cv$ratio = (cv$proposedProbability - cv$originalProbability);
-					
-					// Test if the probability of the sample is sufficient to keep the value. This needs
-					// to be less than or equal as otherwise if the proposed value is not possible and
-					// the random value is 0 an impossible value will be accepted.
-					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio)))
-							// If it is not revert the changes.
-							// 
-							// Set the sample value
-							// 
-							// Write out the new value of the sample.
-							priorSigma2 = cv$originalValue;
-					}
-				}
-			}
-		}
-	}
-
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -1317,24 +1333,30 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample9)
-				sample9();
+				inferSample9();
 			if(!fixedFlag$sample15)
-				sample15();
+				inferSample15();
 			if(!fixedFlag$sample21)
-				sample21();
+				inferSample21();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			if(!fixedFlag$sample21)
-				sample21();
+				inferSample21();
 			if(!fixedFlag$sample15)
-				sample15();
+				inferSample15();
 			if(!fixedFlag$sample9)
-				sample9();
+				inferSample9();
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample9)
+			drawValueSample9();
+		if(!constrainedFlag$sample15)
+			drawValueSample15();
+		if(!constrainedFlag$sample21)
+			drawValueSample21();
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for

@@ -25,7 +25,7 @@ public final class AlternativeModelMK3 extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$bias(value);
+            system$c.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,7 +35,7 @@ public final class AlternativeModelMK3 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample6(fixed);
+                system$c.set$fixedFlag$sample6(fixed, allocated);
             }
         }
 
@@ -95,7 +95,7 @@ public final class AlternativeModelMK3 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$observedSampleCount(value); }
+        protected void setValueInternal(int value) { system$c.set$observedSampleCount(value, allocated); }
     };
 
     /**
@@ -114,7 +114,7 @@ public final class AlternativeModelMK3 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$observedPositiveCount(value); }
+        protected void setValueInternal(int value) { system$c.set$observedPositiveCount(value, allocated); }
     };
 
     /**
@@ -200,17 +200,18 @@ public final class AlternativeModelMK3 extends Model {
     private void transferData(AlternativeModelMK3$CoreInterface oldCore, AlternativeModelMK3$CoreInterface newCore) {
         //Model inputs
         if(observedSampleCount.isSet())
-            newCore.set$observedSampleCount(oldCore.get$observedSampleCount());
+            newCore.set$observedSampleCount(oldCore.get$observedSampleCount(), false);
+
         //Observed scalars
         if(observedPositiveCount.isSet())
-            newCore.set$observedPositiveCount(oldCore.get$observedPositiveCount());
+            newCore.set$observedPositiveCount(oldCore.get$observedPositiveCount(), false);
 
         //ComputedVariables
         if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias());
+            newCore.set$bias(oldCore.get$bias(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
+        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6(), false);
     }
 
     /**

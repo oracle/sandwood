@@ -6,37 +6,37 @@ interface HMM_Paper$CoreInterface extends org.sandwood.runtime.internal.model.Co
 	public double[] get$bias();
 
 	// Setter for bias.
-	public void set$bias(double[] cv$value);
+	public void set$bias(double[] cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample28.
 	public boolean get$fixedFlag$sample28();
 
 	// Setter for fixedFlag$sample28.
-	public void set$fixedFlag$sample28(boolean cv$value);
+	public void set$fixedFlag$sample28(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample32.
 	public boolean get$fixedFlag$sample32();
 
 	// Setter for fixedFlag$sample32.
-	public void set$fixedFlag$sample32(boolean cv$value);
+	public void set$fixedFlag$sample32(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample47.
 	public boolean get$fixedFlag$sample47();
 
 	// Setter for fixedFlag$sample47.
-	public void set$fixedFlag$sample47(boolean cv$value);
+	public void set$fixedFlag$sample47(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample53.
 	public boolean get$fixedFlag$sample53();
 
 	// Setter for fixedFlag$sample53.
-	public void set$fixedFlag$sample53(boolean cv$value);
+	public void set$fixedFlag$sample53(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample71.
 	public boolean get$fixedFlag$sample71();
 
 	// Setter for fixedFlag$sample71.
-	public void set$fixedFlag$sample71(boolean cv$value);
+	public void set$fixedFlag$sample71(boolean cv$value, boolean allocated$);
 
 	// Getter for flips.
 	public boolean[] get$flips();
@@ -45,13 +45,13 @@ interface HMM_Paper$CoreInterface extends org.sandwood.runtime.internal.model.Co
 	public double[] get$initialCoin();
 
 	// Setter for initialCoin.
-	public void set$initialCoin(double[] cv$value);
+	public void set$initialCoin(double[] cv$value, boolean allocated$);
 
 	// Getter for length$measured.
 	public int get$length$measured();
 
 	// Setter for length$measured.
-	public void set$length$measured(int cv$value);
+	public void set$length$measured(int cv$value, boolean allocated$);
 
 	// Getter for logProbability$bias.
 	public double get$logProbability$bias();
@@ -72,19 +72,19 @@ interface HMM_Paper$CoreInterface extends org.sandwood.runtime.internal.model.Co
 	public double[][] get$m();
 
 	// Setter for m.
-	public void set$m(double[][] cv$value);
+	public void set$m(double[][] cv$value, boolean allocated$);
 
 	// Getter for measured.
 	public boolean[] get$measured();
 
 	// Setter for measured.
-	public void set$measured(boolean[] cv$value);
+	public void set$measured(boolean[] cv$value, boolean allocated$);
 
 	// Getter for nCoins.
 	public int get$nCoins();
 
 	// Setter for nCoins.
-	public void set$nCoins(int cv$value);
+	public void set$nCoins(int cv$value, boolean allocated$);
 
 	// Getter for nFlips.
 	public int get$nFlips();
@@ -93,7 +93,7 @@ interface HMM_Paper$CoreInterface extends org.sandwood.runtime.internal.model.Co
 	public int[] get$st();
 
 	// Setter for st.
-	public void set$st(int[] cv$value);
+	public void set$st(int[] cv$value, boolean allocated$);
 
 	// Getter for v.
 	public double[] get$v();

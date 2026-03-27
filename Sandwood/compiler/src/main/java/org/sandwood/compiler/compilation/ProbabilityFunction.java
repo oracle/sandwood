@@ -324,6 +324,7 @@ public class ProbabilityFunction {
              * is not required.
              */
             return false;
+
         }
 
         public Variable<?> getSampleVariable() {
@@ -364,7 +365,6 @@ public class ProbabilityFunction {
         final Variable<?> sampleVariable;
         final TraceHandle traceToSampleVariable;
         final VariableDescription<A> sampleVariableName;
-        final VariableDescription<?> sampleTaskName;
         final boolean sampleSkippable;
 
         // Store the code for initialising intermediate variable probabilities.
@@ -416,7 +416,6 @@ public class ProbabilityFunction {
             traceToSampleVariable = sampleVarDesc.traceToSampleVariable;
             sampleVariableName = VariableNames.calcVarName("sampleValue", sampleTask.getOutputType(), true);
             conditionalTraces = compilationCtx.traces.getTracesToConditionals(sampleTask);
-            sampleTaskName = sampleTask.getUniqueVarDesc();
             sampleSkippable = DAGUtils.skippableTask(sampleTask);
             consumers = randomVariable.getConsumers();
 
@@ -810,14 +809,13 @@ public class ProbabilityFunction {
         }
 
         // And place the subtree in a void function.
-        FunctionName functionName = FunctionName.createFunctionName(
-                funcData.useDistributions ? VariableNames.logProbabilityDistributionName(funcData.sampleTaskName)
-                        : VariableNames.logProbabilityValueName(funcData.sampleTaskName));
-        String comment = "Calculate the probability of the samples represented by " + funcData.sampleTaskName
-                + (funcData.useDistributions ? " using probability distributions." : " using sampled values.");
         SampleFunctionClass functionClass = funcData.useDistributions
                 ? SampleFunctionClass.LOG_PROBABILITY_DISTRIBUTIONS
                 : SampleFunctionClass.LOG_PROBABILITY_VALUE;
+        FunctionName functionName = FunctionName.createFunctionName(functionClass, funcData.sampleTask);
+        String comment = "Calculate the probability of the samples represented by "
+                + funcData.sampleTask.getUniqueVarDesc()
+                + (funcData.useDistributions ? " using probability distributions." : " using sampled values.");
         funcData.compilationCtx.addFunction(functionClass, funcData.sampleTask, voidFunction(Visibility.PRIVATE,
                 functionName, new ArgDesc<?>[0], funcData.compilationCtx.getOutermostScopeTree(), comment));
     }

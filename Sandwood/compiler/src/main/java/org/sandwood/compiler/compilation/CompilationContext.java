@@ -92,7 +92,6 @@ public class CompilationContext {
         INFERENCE,
         LOG_PROBABILITY_VALUE,
         LOG_PROBABILITY_DISTRIBUTIONS,
-        FIXED_SAMPLE_PROBABILITY,
         SAMPLE
     }
 
@@ -160,7 +159,6 @@ public class CompilationContext {
         PRIVATE_PROBABILITY(Getter.NONE, Setter.NONE, false, Visibility.PRIVATE, Observed.FREE),
         PUBLIC_PROBABILITY(Getter.REQUIRED, Setter.NONE, false, Visibility.PUBLIC, Observed.FREE),
         USER_FLAG(Getter.REQUIRED, Setter.REQUIRED, false, Visibility.PUBLIC, Observed.FREE),
-
         INPUT(Getter.REQUIRED, Setter.REQUIRED, false, Visibility.PUBLIC, Observed.FREE),
 
         PRIVATE_FREE_INTERMEDIATE(Getter.NONE, Setter.NONE, false, Visibility.PRIVATE, Observed.FREE),
@@ -610,7 +608,7 @@ public class CompilationContext {
      * A stack to track the distribution samples that have already been explored by outer scope constructors.
      */
     private final Stack<Map<DistributionSampleTask<?, ?>, List<DistSampleDesc<?>>>> exploredDistSamples = new Stack<>();
-    
+
     private final List<IRTreeVoid> arrayInitialisations = new ArrayList<>();
 
     public CompilationContext(CompilationOptions options, Traces traces, ExecutionType target) {
@@ -1113,7 +1111,7 @@ public class CompilationContext {
     public void addArrayInitilisation(IRTreeVoid t) {
         arrayInitialisations.add(t);
     }
-    
+
     public List<IRTreeVoid> getArrayInitilisations() {
         return arrayInitialisations;
     }

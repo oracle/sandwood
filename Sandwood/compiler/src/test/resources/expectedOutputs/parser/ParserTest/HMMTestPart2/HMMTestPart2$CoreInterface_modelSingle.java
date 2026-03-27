@@ -6,25 +6,25 @@ interface HMMTestPart2$CoreInterface extends org.sandwood.runtime.internal.model
 	public double[] get$bias();
 
 	// Setter for bias.
-	public void set$bias(double[] cv$value);
+	public void set$bias(double[] cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample28.
 	public boolean get$fixedFlag$sample28();
 
 	// Setter for fixedFlag$sample28.
-	public void set$fixedFlag$sample28(boolean cv$value);
+	public void set$fixedFlag$sample28(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample45.
 	public boolean get$fixedFlag$sample45();
 
 	// Setter for fixedFlag$sample45.
-	public void set$fixedFlag$sample45(boolean cv$value);
+	public void set$fixedFlag$sample45(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample69.
 	public boolean get$fixedFlag$sample69();
 
 	// Setter for fixedFlag$sample69.
-	public void set$fixedFlag$sample69(boolean cv$value);
+	public void set$fixedFlag$sample69(boolean cv$value, boolean allocated$);
 
 	// Getter for flips.
 	public boolean[] get$flips();
@@ -33,13 +33,13 @@ interface HMMTestPart2$CoreInterface extends org.sandwood.runtime.internal.model
 	public boolean[] get$flipsMeasured();
 
 	// Setter for flipsMeasured.
-	public void set$flipsMeasured(boolean[] cv$value);
+	public void set$flipsMeasured(boolean[] cv$value, boolean allocated$);
 
 	// Getter for length$flipsMeasured.
 	public int get$length$flipsMeasured();
 
 	// Setter for length$flipsMeasured.
-	public void set$length$flipsMeasured(int cv$value);
+	public void set$length$flipsMeasured(int cv$value, boolean allocated$);
 
 	// Getter for logProbability$bias.
 	public double get$logProbability$bias();
@@ -57,7 +57,7 @@ interface HMMTestPart2$CoreInterface extends org.sandwood.runtime.internal.model
 	public double[][] get$m();
 
 	// Setter for m.
-	public void set$m(double[][] cv$value);
+	public void set$m(double[][] cv$value, boolean allocated$);
 
 	// Getter for samples.
 	public int get$samples();
@@ -66,7 +66,7 @@ interface HMMTestPart2$CoreInterface extends org.sandwood.runtime.internal.model
 	public int[] get$st();
 
 	// Setter for st.
-	public void set$st(int[] cv$value);
+	public void set$st(int[] cv$value, boolean allocated$);
 
 	// Getter for states.
 	public int get$states();

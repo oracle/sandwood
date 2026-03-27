@@ -6,7 +6,7 @@ interface DiscreteChoiceAlt$CoreInterface extends org.sandwood.runtime.internal.
 	public int[] get$ObsChoices();
 
 	// Setter for ObsChoices.
-	public void set$ObsChoices(int[] cv$value);
+	public void set$ObsChoices(int[] cv$value, boolean allocated$);
 
 	// Getter for choices.
 	public int[] get$choices();
@@ -18,7 +18,7 @@ interface DiscreteChoiceAlt$CoreInterface extends org.sandwood.runtime.internal.
 	public boolean get$fixedFlag$sample24();
 
 	// Setter for fixedFlag$sample24.
-	public void set$fixedFlag$sample24(boolean cv$value);
+	public void set$fixedFlag$sample24(boolean cv$value, boolean allocated$);
 
 	// Getter for logProbability$choices.
 	public double get$logProbability$choices();
@@ -39,13 +39,13 @@ interface DiscreteChoiceAlt$CoreInterface extends org.sandwood.runtime.internal.
 	public int get$noObs();
 
 	// Setter for noObs.
-	public void set$noObs(int cv$value);
+	public void set$noObs(int cv$value, boolean allocated$);
 
 	// Getter for noProducts.
 	public int get$noProducts();
 
 	// Setter for noProducts.
-	public void set$noProducts(int cv$value);
+	public void set$noProducts(int cv$value, boolean allocated$);
 
 	// Getter for prob.
 	public double[] get$prob();
@@ -57,5 +57,5 @@ interface DiscreteChoiceAlt$CoreInterface extends org.sandwood.runtime.internal.
 	public double[] get$ut();
 
 	// Setter for ut.
-	public void set$ut(double[] cv$value);
+	public void set$ut(double[] cv$value, boolean allocated$);
 }

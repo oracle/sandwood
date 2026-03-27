@@ -6,13 +6,13 @@ interface Vulcano2012basic2$CoreInterface extends org.sandwood.runtime.internal.
 	public int[][] get$Avail();
 
 	// Setter for Avail.
-	public void set$Avail(int[][] cv$value);
+	public void set$Avail(int[][] cv$value, boolean allocated$);
 
 	// Getter for ObsSales.
 	public int[][] get$ObsSales();
 
 	// Setter for ObsSales.
-	public void set$ObsSales(int[][] cv$value);
+	public void set$ObsSales(int[][] cv$value, boolean allocated$);
 
 	// Getter for Sales.
 	public int[][] get$Sales();
@@ -21,7 +21,7 @@ interface Vulcano2012basic2$CoreInterface extends org.sandwood.runtime.internal.
 	public int get$T();
 
 	// Setter for T.
-	public void set$T(int cv$value);
+	public void set$T(int cv$value, boolean allocated$);
 
 	// Getter for exped.
 	public double[] get$exped();
@@ -33,13 +33,13 @@ interface Vulcano2012basic2$CoreInterface extends org.sandwood.runtime.internal.
 	public boolean get$fixedFlag$sample26();
 
 	// Setter for fixedFlag$sample26.
-	public void set$fixedFlag$sample26(boolean cv$value);
+	public void set$fixedFlag$sample26(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample82.
 	public boolean get$fixedFlag$sample82();
 
 	// Setter for fixedFlag$sample82.
-	public void set$fixedFlag$sample82(boolean cv$value);
+	public void set$fixedFlag$sample82(boolean cv$value, boolean allocated$);
 
 	// Getter for logProbability$Sales.
 	public double get$logProbability$Sales();
@@ -63,13 +63,13 @@ interface Vulcano2012basic2$CoreInterface extends org.sandwood.runtime.internal.
 	public int get$noProducts();
 
 	// Setter for noProducts.
-	public void set$noProducts(int cv$value);
+	public void set$noProducts(int cv$value, boolean allocated$);
 
 	// Getter for r.
 	public double get$r();
 
 	// Setter for r.
-	public void set$r(double cv$value);
+	public void set$r(double cv$value, boolean allocated$);
 
 	// Getter for sales_sum.
 	public int[] get$sales_sum();
@@ -81,5 +81,5 @@ interface Vulcano2012basic2$CoreInterface extends org.sandwood.runtime.internal.
 	public double[] get$ut();
 
 	// Setter for ut.
-	public void set$ut(double[] cv$value);
+	public void set$ut(double[] cv$value, boolean allocated$);
 }

@@ -6,7 +6,7 @@ interface DirichletBernoulli$CoreInterface extends org.sandwood.runtime.internal
 	public boolean get$fixedFlag$sample17();
 
 	// Setter for fixedFlag$sample17.
-	public void set$fixedFlag$sample17(boolean cv$value);
+	public void set$fixedFlag$sample17(boolean cv$value, boolean allocated$);
 
 	// Getter for length.
 	public int get$length();
@@ -15,7 +15,7 @@ interface DirichletBernoulli$CoreInterface extends org.sandwood.runtime.internal
 	public int get$length$observed();
 
 	// Setter for length$observed.
-	public void set$length$observed(int cv$value);
+	public void set$length$observed(int cv$value, boolean allocated$);
 
 	// Getter for logProbability$b1.
 	public double get$logProbability$b1();
@@ -33,7 +33,7 @@ interface DirichletBernoulli$CoreInterface extends org.sandwood.runtime.internal
 	public boolean[] get$observed();
 
 	// Setter for observed.
-	public void set$observed(boolean[] cv$value);
+	public void set$observed(boolean[] cv$value, boolean allocated$);
 
 	// Getter for output.
 	public boolean[] get$output();
@@ -42,7 +42,7 @@ interface DirichletBernoulli$CoreInterface extends org.sandwood.runtime.internal
 	public double[] get$prior();
 
 	// Setter for prior.
-	public void set$prior(double[] cv$value);
+	public void set$prior(double[] cv$value, boolean allocated$);
 
 	// Getter for v.
 	public double[] get$v();

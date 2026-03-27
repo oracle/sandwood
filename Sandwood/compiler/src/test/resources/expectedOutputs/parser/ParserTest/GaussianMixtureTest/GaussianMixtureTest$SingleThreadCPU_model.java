@@ -58,10 +58,11 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for fixedFlag$sample17.
 	@Override
-	public final void set$fixedFlag$sample17(boolean cv$value) {
+	public final void set$fixedFlag$sample17(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample17 including if probabilities
 		// need to be updated.
 		fixedFlag$sample17 = cv$value;
+		constrainedFlag$sample17 = (fixedFlag$sample17 || constrainedFlag$sample17);
 		
 		// Should the probability of sample 17 be set to fixed. This will only every change
 		// the flag to false.
@@ -76,10 +77,17 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for fixedFlag$sample34.
 	@Override
-	public final void set$fixedFlag$sample34(boolean cv$value) {
+	public final void set$fixedFlag$sample34(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample34 including if probabilities
 		// need to be updated.
 		fixedFlag$sample34 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample34$1 = 0; index$constrainedFlag$sample34$1 < constrainedFlag$sample34.length; index$constrainedFlag$sample34$1 += 1)
+				constrainedFlag$sample34[index$constrainedFlag$sample34$1] = true;
+		}
 		
 		// Should the probability of sample 34 be set to fixed. This will only every change
 		// the flag to false.
@@ -94,10 +102,17 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for fixedFlag$sample52.
 	@Override
-	public final void set$fixedFlag$sample52(boolean cv$value) {
+	public final void set$fixedFlag$sample52(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample52 including if probabilities
 		// need to be updated.
 		fixedFlag$sample52 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample52$1 = 0; index$constrainedFlag$sample52$1 < constrainedFlag$sample52.length; index$constrainedFlag$sample52$1 += 1)
+				constrainedFlag$sample52[index$constrainedFlag$sample52$1] = true;
+		}
 		
 		// Should the probability of sample 52 be set to fixed. This will only every change
 		// the flag to false.
@@ -118,7 +133,7 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for length$xMeasured.
 	@Override
-	public final void set$length$xMeasured(int cv$value) {
+	public final void set$length$xMeasured(int cv$value, boolean allocated$) {
 		length$xMeasured = cv$value;
 	}
 
@@ -166,10 +181,9 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for mu.
 	@Override
-	public final void set$mu(double[] cv$value) {
+	public final void set$mu(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of mu including if probabilities need to be
 		// updated.
-		// Set mu
 		mu = cv$value;
 		
 		// Unset the fixed probability flag for sample 34 as it depends on mu.
@@ -184,10 +198,9 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for phi.
 	@Override
-	public final void set$phi(double[] cv$value) {
+	public final void set$phi(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of phi including if probabilities need to be
 		// updated.
-		// Set phi
 		phi = cv$value;
 		
 		// Unset the fixed probability flag for sample 17 as it depends on phi.
@@ -202,10 +215,9 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for sigma.
 	@Override
-	public final void set$sigma(double[] cv$value) {
+	public final void set$sigma(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of sigma including if probabilities need to
 		// be updated.
-		// Set sigma
 		sigma = cv$value;
 		
 		// Unset the fixed probability flag for sample 52 as it depends on sigma.
@@ -226,8 +238,7 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for xMeasured.
 	@Override
-	public final void set$xMeasured(double[] cv$value) {
-		// Set xMeasured
+	public final void set$xMeasured(double[] cv$value, boolean allocated$) {
 		xMeasured = cv$value;
 	}
 
@@ -239,9 +250,519 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for z.
 	@Override
-	public final void set$z(int[] cv$value) {
-		// Set z
+	public final void set$z(int[] cv$value, boolean allocated$) {
 		z = cv$value;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample17
+	private final void drawValueSample17() {
+		DistributionSampling.sampleDirichlet(RNG$, alpha, k, phi);
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample34
+	private final void drawValueSample34(int var33) {
+		mu[var33] = ((Math.sqrt(20.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample52
+	private final void drawValueSample52(int var51) {
+		sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample68
+	private final void drawValueSample68(int i$var66) {
+		z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, phi, k);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 17 drawn from Dirichlet 16. Inference was performed using a Dirichlet
+	// to Categorical conjugate prior.
+	private final void inferSample17() {
+		if(true) {
+			constrainedFlag$sample17 = false;
+			
+			// A reference local to the function for the sample variable.
+			double[] cv$targetLocal = phi;
+			
+			// A local reference to the scratch space.
+			double[] cv$countLocal = cv$var17$countGlobal;
+			
+			// Get the length of the array
+			int cv$arrayLength = k;
+			
+			// Initialize the array values to 0.
+			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
+				cv$countLocal[cv$loopIndex] = 0.0;
+			{
+				// Processing random variable 67.
+				{
+					{
+						{
+							for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
+								// Flag recording if this sample task of the consuming random variable is constrained.
+								boolean cv$sampleConstrained = constrainedFlag$sample68[((i$var66 - 0) / 1)];
+								if(cv$sampleConstrained) {
+									// Mark that the sample has observed constrained data.
+									constrainedFlag$sample17 = true;
+									{
+										{
+											{
+												{
+													{
+														// Increment the sample counter with the value sampled by sample task 68 of random
+														// variable var67
+														cv$countLocal[z[((i$var66 - 0) / 1)]] = (cv$countLocal[z[((i$var66 - 0) / 1)]] + 1.0);
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample17)
+				// Calculate the new sample value
+				// 
+				// Calculate a new sample value and write it into cv$targetLocal.
+				Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$countLocal, cv$targetLocal, k);
+		}
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 34 drawn from Gaussian 22. Inference was performed using a Gaussian
+	// to Gaussian conjugate prior.
+	private final void inferSample34(int var33) {
+		if(true) {
+			constrainedFlag$sample34[((var33 - 0) / 1)] = false;
+			
+			// State to record the weighting of each sample that is consumed. This is the:
+			// sum of the sample denominator*(the sample value - the sample nominator).
+			double cv$sum = 0.0;
+			
+			// State for storing the sum of the squares of the sample denominators.
+			double cv$denominatorSquareSum = 0.0;
+			
+			// Flag to record if we have a value for Sigma.
+			boolean cv$sigmaNotFound = true;
+			
+			// State for the value of sigma once we find it.
+			double cv$sigmaValue = 1.0;
+			{
+				// Processing random variable 71.
+				{
+					// Looking for a path between Sample 34 and consumer Gaussian 71.
+					{
+						{
+							for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
+								if((var33 == z[((i$var66 - 0) / 1)])) {
+									// Processing sample task 72 of consumer random variable null.
+									{
+										{
+											// Flag recording if this sample task of the consuming random variable is constrained.
+											boolean cv$sampleConstrained = true;
+											if(cv$sampleConstrained) {
+												// Mark that the sample has observed constrained data.
+												constrainedFlag$sample34[((var33 - 0) / 1)] = true;
+												{
+													{
+														{
+															{
+																{
+																	// State for tracking the changes that happen to the sampled value between it being
+																	// consumed and it being produced.
+																	double cv$denominator = 1.0;
+																	double cv$numerator = 0.0;
+																	
+																	// Record the value of a sample generated by a consuming sample 72 of random variable
+																	// var71.
+																	// 
+																	// Add the denominator squared to the sample denominator
+																	cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+																	
+																	// Add the weighting of the sample to the sum.
+																	cv$sum = (cv$sum + (cv$denominator * (x[i$var66] - cv$numerator)));
+																	
+																	// If we have not got the value of sigma yet record it and set a flag so it is not
+																	// recorded again.
+																	if(cv$sigmaNotFound) {
+																		cv$sigmaValue = sigma[z[((i$var66 - 0) / 1)]];
+																		cv$sigmaNotFound = false;
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample34[((var33 - 0) / 1)]) {
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				double var34 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 20.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+				
+				// Guards to ensure that mu is only updated when there is a valid path.
+				{
+					{
+						{
+							mu[var33] = var34;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 52 drawn from InverseGamma 40. Inference was performed using a Inverse
+	// Gamma to Gaussian conjugate prior.
+	private final void inferSample52(int var51) {
+		if(true) {
+			constrainedFlag$sample52[((var51 - 0) / 1)] = false;
+			
+			// Variable to track the sum of the difference between the samples and the random
+			// variables mean squared.
+			double cv$sum = 0.0;
+			
+			// Variable to record the number of samples from consuming random variables.
+			int cv$count = 0;
+			{
+				// Processing random variable 71.
+				{
+					// Looking for a path between Sample 52 and consumer Gaussian 71.
+					{
+						{
+							for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
+								if((var51 == z[((i$var66 - 0) / 1)])) {
+									// Processing sample task 72 of consumer random variable null.
+									{
+										{
+											// Flag recording if this sample task of the consuming random variable is constrained.
+											boolean cv$sampleConstrained = true;
+											if(cv$sampleConstrained) {
+												// Mark that the sample has observed constrained data.
+												constrainedFlag$sample52[((var51 - 0) / 1)] = true;
+												{
+													{
+														{
+															{
+																{
+																	// The mean parameter for Gaussian var71.
+																	double cv$var71$mu = mu[z[((i$var66 - 0) / 1)]];
+																	
+																	// Consume sample task 72 from random variable var71.
+																	// 
+																	// The difference between the mean parameter and the value sampled from the Gaussian.
+																	double cv$var71$diff = (cv$var71$mu - x[i$var66]);
+																	
+																	// Include this sample by adding the square of the difference to the sum.
+																	cv$sum = (cv$sum + (cv$var71$diff * cv$var71$diff));
+																	
+																	// Increment the number of samples in the calculation.
+																	cv$count = (cv$count + 1);
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample52[((var51 - 0) / 1)]) {
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				double var52 = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
+				
+				// Guards to ensure that sigma is only updated when there is a valid path.
+				{
+					{
+						{
+							sigma[var51] = var52;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 68 drawn from Categorical 67. Inference was performed using variable
+	// marginalization.
+	private final void inferSample68(int i$var66) {
+		if(true) {
+			constrainedFlag$sample68[((i$var66 - 0) / 1)] = false;
+			
+			// Calculate the number of states to evaluate.
+			int cv$numStates = 0;
+			{
+				// variable marginalization
+				cv$numStates = Math.max(cv$numStates, k);
+			}
+			
+			// Get a local reference to the scratch space.
+			double[] cv$stateProbabilityLocal = cv$var68$stateProbabilityGlobal;
+			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
+				// Initialize the summed probabilities to 0.
+				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
+				
+				// Initialize a counter to track the reached distributions.
+				double cv$reachedDistributionSourceRV = 0.0;
+				
+				// Initialize a log space accumulator to take the product of all the distribution
+				// probabilities.
+				double cv$accumulatedDistributionProbabilities = 0.0;
+				
+				// The value currently being tested
+				int cv$currentValue;
+				
+				// Value of the variable at this index
+				cv$currentValue = cv$valuePos;
+				
+				// Write out the new value of the sample.
+				z[((i$var66 - 0) / 1)] = cv$currentValue;
+				{
+					// Record the reached probability density.
+					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
+					
+					// An accumulator to allow the value for each distribution to be constructed before
+					// it is added to the index probabilities.
+					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < k)) && (0 < k)) && (0.0 <= phi[cv$currentValue])) && (phi[cv$currentValue] <= 1.0))?Math.log(phi[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					
+					// Processing random variable 71.
+					{
+						{
+							// Guard to check that at most one copy of the code is executed for a given set of
+							// loop iterations.
+							boolean guard$sample68gaussian71 = false;
+							{
+								if(!guard$sample68gaussian71) {
+									// The body will execute, so should not be executed again
+									guard$sample68gaussian71 = true;
+									
+									// Processing sample task 72 of consumer random variable null.
+									{
+										{
+											// Flag recording if this sample task of the consuming random variable is constrained.
+											boolean cv$sampleConstrained = true;
+											if(cv$sampleConstrained) {
+												// Mark that the sample has observed constrained data.
+												constrainedFlag$sample68[((i$var66 - 0) / 1)] = true;
+												
+												// Set an accumulator to sum the probabilities for each possible configuration of
+												// inputs.
+												double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+												
+												// Set an accumulator to record the consumer distributions not seen. Initially set
+												// to 1 as seen values will be deducted from this value.
+												double cv$consumerDistributionProbabilityAccumulator = 1.0;
+												{
+													{
+														{
+															{
+																{
+																	// Constructing a random variable input for use later.
+																	double var69 = mu[cv$currentValue];
+																	
+																	// Constructing a random variable input for use later.
+																	double var70 = sigma[cv$currentValue];
+																	
+																	// Record the probability of sample task 72 generating output with current configuration.
+																	if(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																	else {
+																		// If the second value is -infinity.
+																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY));
+																		else
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)));
+																	}
+																	
+																	// Recorded the probability of reaching sample task 72 with the current configuration.
+																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																}
+															}
+														}
+													}
+												}
+												
+												// A check to ensure rounding of floating point values can never result in a negative
+												// value.
+												cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+												
+												// Multiply (log space add) in the probability of the sample task to the overall probability
+												// for this configuration of the source random variable.
+												if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+												else {
+													// If the second value is -infinity.
+													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+														cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+													else
+														cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								if(!guard$sample68gaussian71) {
+									// The body will execute, so should not be executed again
+									guard$sample68gaussian71 = true;
+									
+									// Processing sample task 72 of consumer random variable null.
+									{
+										{
+											// Flag recording if this sample task of the consuming random variable is constrained.
+											boolean cv$sampleConstrained = true;
+											if(cv$sampleConstrained) {
+												// Mark that the sample has observed constrained data.
+												constrainedFlag$sample68[((i$var66 - 0) / 1)] = true;
+												
+												// Set an accumulator to sum the probabilities for each possible configuration of
+												// inputs.
+												double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+												
+												// Set an accumulator to record the consumer distributions not seen. Initially set
+												// to 1 as seen values will be deducted from this value.
+												double cv$consumerDistributionProbabilityAccumulator = 1.0;
+												{
+													{
+														{
+															{
+																{
+																	// Constructing a random variable input for use later.
+																	double var69 = mu[cv$currentValue];
+																	
+																	// Constructing a random variable input for use later.
+																	double var70 = sigma[cv$currentValue];
+																	
+																	// Record the probability of sample task 72 generating output with current configuration.
+																	if(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																	else {
+																		// If the second value is -infinity.
+																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY));
+																		else
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)));
+																	}
+																	
+																	// Recorded the probability of reaching sample task 72 with the current configuration.
+																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																}
+															}
+														}
+													}
+												}
+												
+												// A check to ensure rounding of floating point values can never result in a negative
+												// value.
+												cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+												
+												// Multiply (log space add) in the probability of the sample task to the overall probability
+												// for this configuration of the source random variable.
+												if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+												else {
+													// If the second value is -infinity.
+													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+														cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+													else
+														cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					
+					// Add the values for the source and any standard consumers for this configuration
+					// of arguments to the source.
+					if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
+						cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
+					else {
+						// If the second value is -infinity.
+						if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
+							cv$stateProbabilityValue = cv$accumulatedProbabilities;
+						else
+							cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
+					}
+				}
+				
+				// Save the calculated index value into the array of index value probabilities
+				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+			}
+			if(constrainedFlag$sample68[((i$var66 - 0) / 1)]) {
+				// The sum of all the probabilities in log space
+				double cv$logSum = 0.0;
+				
+				// Sum all the values
+				{
+					// Initialize the max to the first element.
+					double cv$lseMax = cv$stateProbabilityLocal[0];
+					
+					// Find max value.
+					for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
+						double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
+						if((cv$lseMax < cv$lseElementValue))
+							cv$lseMax = cv$lseElementValue;
+					}
+					
+					// If the maximum value is -infinity return -infinity.
+					if((cv$lseMax == Double.NEGATIVE_INFINITY))
+						cv$logSum = Double.NEGATIVE_INFINITY;
+					
+					// Sum the values in the array.
+					else {
+						// Initialize the sum of the array elements
+						double cv$lseSum = 0.0;
+						
+						// Offset values, move to normal space, and sum.
+						for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
+							cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
+						
+						// Increment the value of the target, moving the value back into log space.
+						cv$logSum = (cv$logSum + (Math.log(cv$lseSum) + cv$lseMax));
+					}
+				}
+				
+				// If all the sum is zero, just share the probability evenly.
+				if((cv$logSum == Double.NEGATIVE_INFINITY)) {
+					// Normalize log space values and move to normal space
+					for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+						cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numStates);
+				} else {
+					// Normalize log space values and move to normal space
+					for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+						cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
+				}
+				
+				// Set array values that are not computed for the input to negative infinity.
+				for(int cv$indexName = cv$numStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+					cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
+				
+				// Write out the new value of the sample.
+				z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
+			}
+		}
 	}
 
 	// Calculate the probability of the samples represented by sample17 using sampled
@@ -717,497 +1238,6 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 17 drawn from Dirichlet 16. Inference was performed using a Dirichlet
-	// to Categorical conjugate prior.
-	private final void sample17() {
-		if(true) {
-			constrainedFlag$sample17 = false;
-			
-			// A reference local to the function for the sample variable.
-			double[] cv$targetLocal = phi;
-			
-			// A local reference to the scratch space.
-			double[] cv$countLocal = cv$var17$countGlobal;
-			
-			// Get the length of the array
-			int cv$arrayLength = k;
-			
-			// Initialize the array values to 0.
-			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-				cv$countLocal[cv$loopIndex] = 0.0;
-			{
-				// Processing random variable 67.
-				{
-					{
-						{
-							for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
-								// Flag recording if this sample task of the consuming random variable is constrained.
-								boolean cv$sampleConstrained = constrainedFlag$sample68[((i$var66 - 0) / 1)];
-								if(cv$sampleConstrained) {
-									// Mark that the sample has observed constrained data.
-									constrainedFlag$sample17 = true;
-									{
-										{
-											{
-												{
-													{
-														// Increment the sample counter with the value sampled by sample task 68 of random
-														// variable var67
-														cv$countLocal[z[((i$var66 - 0) / 1)]] = (cv$countLocal[z[((i$var66 - 0) / 1)]] + 1.0);
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(constrainedFlag$sample17)
-				// Calculate the new sample value
-				// 
-				// Calculate a new sample value and write it into cv$targetLocal.
-				Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$countLocal, cv$targetLocal, k);
-		}
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 34 drawn from Gaussian 22. Inference was performed using a Gaussian
-	// to Gaussian conjugate prior.
-	private final void sample34(int var33) {
-		if(true) {
-			constrainedFlag$sample34[((var33 - 0) / 1)] = false;
-			
-			// State to record the weighting of each sample that is consumed. This is the:
-			// sum of the sample denominator*(the sample value - the sample nominator).
-			double cv$sum = 0.0;
-			
-			// State for storing the sum of the squares of the sample denominators.
-			double cv$denominatorSquareSum = 0.0;
-			
-			// Flag to record if we have a value for Sigma.
-			boolean cv$sigmaNotFound = true;
-			
-			// State for the value of sigma once we find it.
-			double cv$sigmaValue = 1.0;
-			{
-				// Processing random variable 71.
-				{
-					// Looking for a path between Sample 34 and consumer Gaussian 71.
-					{
-						{
-							for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
-								if((var33 == z[((i$var66 - 0) / 1)])) {
-									// Processing sample task 72 of consumer random variable null.
-									{
-										{
-											// Flag recording if this sample task of the consuming random variable is constrained.
-											boolean cv$sampleConstrained = true;
-											if(cv$sampleConstrained) {
-												// Mark that the sample has observed constrained data.
-												constrainedFlag$sample34[((var33 - 0) / 1)] = true;
-												{
-													{
-														{
-															{
-																{
-																	// State for tracking the changes that happen to the sampled value between it being
-																	// consumed and it being produced.
-																	double cv$denominator = 1.0;
-																	double cv$numerator = 0.0;
-																	
-																	// Record the value of a sample generated by a consuming sample 72 of random variable
-																	// var71.
-																	// 
-																	// Add the denominator squared to the sample denominator
-																	cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-																	
-																	// Add the weighting of the sample to the sum.
-																	cv$sum = (cv$sum + (cv$denominator * (x[i$var66] - cv$numerator)));
-																	
-																	// If we have not got the value of sigma yet record it and set a flag so it is not
-																	// recorded again.
-																	if(cv$sigmaNotFound) {
-																		cv$sigmaValue = sigma[z[((i$var66 - 0) / 1)]];
-																		cv$sigmaNotFound = false;
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(constrainedFlag$sample34[((var33 - 0) / 1)]) {
-				// Write out the value of the sample to a temporary variable prior to updating the
-				// intermediate variables.
-				double var34 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 20.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-				
-				// Guards to ensure that mu is only updated when there is a valid path.
-				{
-					{
-						{
-							mu[var33] = var34;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 52 drawn from InverseGamma 40. Inference was performed using a Inverse
-	// Gamma to Gaussian conjugate prior.
-	private final void sample52(int var51) {
-		if(true) {
-			constrainedFlag$sample52[((var51 - 0) / 1)] = false;
-			
-			// Variable to track the sum of the difference between the samples and the random
-			// variables mean squared.
-			double cv$sum = 0.0;
-			
-			// Variable to record the number of samples from consuming random variables.
-			int cv$count = 0;
-			{
-				// Processing random variable 71.
-				{
-					// Looking for a path between Sample 52 and consumer Gaussian 71.
-					{
-						{
-							for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
-								if((var51 == z[((i$var66 - 0) / 1)])) {
-									// Processing sample task 72 of consumer random variable null.
-									{
-										{
-											// Flag recording if this sample task of the consuming random variable is constrained.
-											boolean cv$sampleConstrained = true;
-											if(cv$sampleConstrained) {
-												// Mark that the sample has observed constrained data.
-												constrainedFlag$sample52[((var51 - 0) / 1)] = true;
-												{
-													{
-														{
-															{
-																{
-																	// The mean parameter for Gaussian var71.
-																	double cv$var71$mu = mu[z[((i$var66 - 0) / 1)]];
-																	
-																	// Consume sample task 72 from random variable var71.
-																	// 
-																	// The difference between the mean parameter and the value sampled from the Gaussian.
-																	double cv$var71$diff = (cv$var71$mu - x[i$var66]);
-																	
-																	// Include this sample by adding the square of the difference to the sum.
-																	cv$sum = (cv$sum + (cv$var71$diff * cv$var71$diff));
-																	
-																	// Increment the number of samples in the calculation.
-																	cv$count = (cv$count + 1);
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(constrainedFlag$sample52[((var51 - 0) / 1)]) {
-				// Write out the value of the sample to a temporary variable prior to updating the
-				// intermediate variables.
-				double var52 = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
-				
-				// Guards to ensure that sigma is only updated when there is a valid path.
-				{
-					{
-						{
-							sigma[var51] = var52;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 68 drawn from Categorical 67. Inference was performed using variable
-	// marginalization.
-	private final void sample68(int i$var66) {
-		if(true) {
-			constrainedFlag$sample68[((i$var66 - 0) / 1)] = false;
-			
-			// Calculate the number of states to evaluate.
-			int cv$numStates = 0;
-			{
-				// variable marginalization
-				cv$numStates = Math.max(cv$numStates, k);
-			}
-			
-			// Get a local reference to the scratch space.
-			double[] cv$stateProbabilityLocal = cv$var68$stateProbabilityGlobal;
-			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				// Initialize the summed probabilities to 0.
-				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
-				
-				// Initialize a counter to track the reached distributions.
-				double cv$reachedDistributionSourceRV = 0.0;
-				
-				// Initialize a log space accumulator to take the product of all the distribution
-				// probabilities.
-				double cv$accumulatedDistributionProbabilities = 0.0;
-				
-				// The value currently being tested
-				int cv$currentValue;
-				
-				// Value of the variable at this index
-				cv$currentValue = cv$valuePos;
-				
-				// Write out the new value of the sample.
-				z[((i$var66 - 0) / 1)] = cv$currentValue;
-				{
-					// Record the reached probability density.
-					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-					
-					// An accumulator to allow the value for each distribution to be constructed before
-					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < k)) && (0 < k)) && (0.0 <= phi[cv$currentValue])) && (phi[cv$currentValue] <= 1.0))?Math.log(phi[cv$currentValue]):Double.NEGATIVE_INFINITY));
-					
-					// Processing random variable 71.
-					{
-						{
-							// Guard to check that at most one copy of the code is executed for a given set of
-							// loop iterations.
-							boolean guard$sample68gaussian71 = false;
-							{
-								if(!guard$sample68gaussian71) {
-									// The body will execute, so should not be executed again
-									guard$sample68gaussian71 = true;
-									
-									// Processing sample task 72 of consumer random variable null.
-									{
-										{
-											// Flag recording if this sample task of the consuming random variable is constrained.
-											boolean cv$sampleConstrained = true;
-											if(cv$sampleConstrained) {
-												// Mark that the sample has observed constrained data.
-												constrainedFlag$sample68[((i$var66 - 0) / 1)] = true;
-												
-												// Set an accumulator to sum the probabilities for each possible configuration of
-												// inputs.
-												double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-												
-												// Set an accumulator to record the consumer distributions not seen. Initially set
-												// to 1 as seen values will be deducted from this value.
-												double cv$consumerDistributionProbabilityAccumulator = 1.0;
-												{
-													{
-														{
-															{
-																{
-																	// Constructing a random variable input for use later.
-																	double var69 = mu[cv$currentValue];
-																	
-																	// Constructing a random variable input for use later.
-																	double var70 = sigma[cv$currentValue];
-																	
-																	// Record the probability of sample task 72 generating output with current configuration.
-																	if(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																	else {
-																		// If the second value is -infinity.
-																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY));
-																		else
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)));
-																	}
-																	
-																	// Recorded the probability of reaching sample task 72 with the current configuration.
-																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																}
-															}
-														}
-													}
-												}
-												
-												// A check to ensure rounding of floating point values can never result in a negative
-												// value.
-												cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-												
-												// Multiply (log space add) in the probability of the sample task to the overall probability
-												// for this configuration of the source random variable.
-												if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-												else {
-													// If the second value is -infinity.
-													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-													else
-														cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								if(!guard$sample68gaussian71) {
-									// The body will execute, so should not be executed again
-									guard$sample68gaussian71 = true;
-									
-									// Processing sample task 72 of consumer random variable null.
-									{
-										{
-											// Flag recording if this sample task of the consuming random variable is constrained.
-											boolean cv$sampleConstrained = true;
-											if(cv$sampleConstrained) {
-												// Mark that the sample has observed constrained data.
-												constrainedFlag$sample68[((i$var66 - 0) / 1)] = true;
-												
-												// Set an accumulator to sum the probabilities for each possible configuration of
-												// inputs.
-												double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-												
-												// Set an accumulator to record the consumer distributions not seen. Initially set
-												// to 1 as seen values will be deducted from this value.
-												double cv$consumerDistributionProbabilityAccumulator = 1.0;
-												{
-													{
-														{
-															{
-																{
-																	// Constructing a random variable input for use later.
-																	double var69 = mu[cv$currentValue];
-																	
-																	// Constructing a random variable input for use later.
-																	double var70 = sigma[cv$currentValue];
-																	
-																	// Record the probability of sample task 72 generating output with current configuration.
-																	if(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																	else {
-																		// If the second value is -infinity.
-																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY));
-																		else
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)));
-																	}
-																	
-																	// Recorded the probability of reaching sample task 72 with the current configuration.
-																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																}
-															}
-														}
-													}
-												}
-												
-												// A check to ensure rounding of floating point values can never result in a negative
-												// value.
-												cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-												
-												// Multiply (log space add) in the probability of the sample task to the overall probability
-												// for this configuration of the source random variable.
-												if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-												else {
-													// If the second value is -infinity.
-													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-													else
-														cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					
-					// Add the values for the source and any standard consumers for this configuration
-					// of arguments to the source.
-					if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
-						cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
-					else {
-						// If the second value is -infinity.
-						if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
-							cv$stateProbabilityValue = cv$accumulatedProbabilities;
-						else
-							cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
-					}
-				}
-				
-				// Save the calculated index value into the array of index value probabilities
-				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-			}
-			if(constrainedFlag$sample68[((i$var66 - 0) / 1)]) {
-				// The sum of all the probabilities in log space
-				double cv$logSum = 0.0;
-				
-				// Sum all the values
-				{
-					// Initialize the max to the first element.
-					double cv$lseMax = cv$stateProbabilityLocal[0];
-					
-					// Find max value.
-					for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
-						double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
-						if((cv$lseMax < cv$lseElementValue))
-							cv$lseMax = cv$lseElementValue;
-					}
-					
-					// If the maximum value is -infinity return -infinity.
-					if((cv$lseMax == Double.NEGATIVE_INFINITY))
-						cv$logSum = Double.NEGATIVE_INFINITY;
-					
-					// Sum the values in the array.
-					else {
-						// Initialize the sum of the array elements
-						double cv$lseSum = 0.0;
-						
-						// Offset values, move to normal space, and sum.
-						for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
-							cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
-						
-						// Increment the value of the target, moving the value back into log space.
-						cv$logSum = (cv$logSum + (Math.log(cv$lseSum) + cv$lseMax));
-					}
-				}
-				
-				// If all the sum is zero, just share the probability evenly.
-				if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-					// Normalize log space values and move to normal space
-					for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-						cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numStates);
-				} else {
-					// Normalize log space values and move to normal space
-					for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-						cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
-				}
-				
-				// Set array values that are not computed for the input to negative infinity.
-				for(int cv$indexName = cv$numStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
-					cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
-				
-				// Write out the new value of the sample.
-				z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
-			}
-		}
-	}
-
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -1399,36 +1429,50 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample17)
-				sample17();
+				inferSample17();
 			for(int var33 = 0; var33 < k; var33 += 1) {
 				if(!fixedFlag$sample34)
-					sample34(var33);
+					inferSample34(var33);
 			}
 			for(int var51 = 0; var51 < k; var51 += 1) {
 				if(!fixedFlag$sample52)
-					sample52(var51);
+					inferSample52(var51);
 			}
 			for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-				sample68(i$var66);
+				inferSample68(i$var66);
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			for(int i$var66 = (length$xMeasured - ((((length$xMeasured - 1) - 0) % 1) + 1)); i$var66 >= ((0 - 1) + 1); i$var66 -= 1)
-				sample68(i$var66);
+				inferSample68(i$var66);
 			for(int var51 = (k - ((((k - 1) - 0) % 1) + 1)); var51 >= ((0 - 1) + 1); var51 -= 1) {
 				if(!fixedFlag$sample52)
-					sample52(var51);
+					inferSample52(var51);
 			}
 			for(int var33 = (k - ((((k - 1) - 0) % 1) + 1)); var33 >= ((0 - 1) + 1); var33 -= 1) {
 				if(!fixedFlag$sample34)
-					sample34(var33);
+					inferSample34(var33);
 			}
 			if(!fixedFlag$sample17)
-				sample17();
+				inferSample17();
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample17)
+			drawValueSample17();
+		for(int var33 = 0; var33 < k; var33 += 1) {
+			if(!constrainedFlag$sample34[((var33 - 0) / 1)])
+				drawValueSample34(var33);
+		}
+		for(int var51 = 0; var51 < k; var51 += 1) {
+			if(!constrainedFlag$sample52[((var51 - 0) / 1)])
+				drawValueSample52(var51);
+		}
+		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
+			if(!constrainedFlag$sample68[((i$var66 - 0) / 1)])
+				drawValueSample68(i$var66);
+		}
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for

@@ -43,7 +43,7 @@ final class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model
 
 	// Setter for bias.
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
 		bias = cv$value;
@@ -63,10 +63,13 @@ final class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model
 
 	// Setter for fixedFlag$sample4.
 	@Override
-	public final void set$fixedFlag$sample4(boolean cv$value) {
+	public final void set$fixedFlag$sample4(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample4 including if probabilities
 		// need to be updated.
 		fixedFlag$sample4 = cv$value;
+		
+		// Substituted "fixedFlag$sample4" with its value "cv$value".
+		constrainedFlag$sample4 = (cv$value || constrainedFlag$sample4);
 		
 		// Should the probability of sample 4 be set to fixed. This will only every change
 		// the flag to false.
@@ -95,7 +98,7 @@ final class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model
 
 	// Setter for flipMeasured.
 	@Override
-	public final void set$flipMeasured(boolean cv$value) {
+	public final void set$flipMeasured(boolean cv$value, boolean allocated$) {
 		flipMeasured = cv$value;
 	}
 
@@ -127,6 +130,38 @@ final class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model
 	@Override
 	public final double get$logProbability$flip() {
 		return logProbability$flip;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample4
+	private final void drawValueSample4() {
+		bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 4 drawn from Beta 3. Inference was performed using a Beta to Bernoulli/Binomial
+	// conjugate prior.
+	private final void inferSample4() {
+		constrainedFlag$sample4 = false;
+		
+		// Local variable to record the number of true samples.
+		int cv$sum = 0;
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample4 = true;
+		
+		// If the sample value was positive increase the count
+		if(flip)
+			// Local variable to record the number of true samples.
+			cv$sum = 1;
+		
+		// Write out the new value of the sample.
+		// 
+		// Include the value sampled by task 6 from random variable bernoulli.
+		// 
+		// Increment the number of samples.
+		// 
+		// Local variable to record the number of samples.
+		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, 1);
 	}
 
 	// Calculate the probability of the samples represented by sample4 using sampled values.
@@ -306,33 +341,6 @@ final class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		}
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 4 drawn from Beta 3. Inference was performed using a Beta to Bernoulli/Binomial
-	// conjugate prior.
-	private final void sample4() {
-		constrainedFlag$sample4 = false;
-		
-		// Local variable to record the number of true samples.
-		int cv$sum = 0;
-		
-		// Mark that the sample has observed constrained data.
-		constrainedFlag$sample4 = true;
-		
-		// If the sample value was positive increase the count
-		if(flip)
-			// Local variable to record the number of true samples.
-			cv$sum = 1;
-		
-		// Write out the new value of the sample.
-		// 
-		// Include the value sampled by task 6 from random variable bernoulli.
-		// 
-		// Increment the number of samples.
-		// 
-		// Local variable to record the number of samples.
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, 1);
-	}
-
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -391,10 +399,12 @@ final class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model
 	public final void gibbsRound() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample4)
-			sample4();
+			inferSample4();
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample4)
+			drawValueSample4();
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for

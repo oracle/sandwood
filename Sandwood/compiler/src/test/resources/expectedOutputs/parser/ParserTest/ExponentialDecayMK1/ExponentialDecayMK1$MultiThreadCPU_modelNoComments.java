@@ -34,7 +34,7 @@ final class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void set$a(double cv$value) {
+	public final void set$a(double cv$value, boolean allocated$) {
 		a = cv$value;
 	}
 
@@ -44,7 +44,7 @@ final class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void set$b(double cv$value) {
+	public final void set$b(double cv$value, boolean allocated$) {
 		b = cv$value;
 	}
 
@@ -59,7 +59,7 @@ final class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void set$decayDetected(double[] cv$value) {
+	public final void set$decayDetected(double[] cv$value, boolean allocated$) {
 		decayDetected = cv$value;
 	}
 
@@ -69,8 +69,9 @@ final class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void set$fixedFlag$sample6(boolean cv$value) {
+	public final void set$fixedFlag$sample6(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample6 = cv$value;
+		constrainedFlag$sample6 = (fixedFlag$sample6 || constrainedFlag$sample6);
 		fixedProbFlag$sample6 = (fixedFlag$sample6 && fixedProbFlag$sample6);
 		fixedProbFlag$sample19 = (fixedFlag$sample6 && fixedProbFlag$sample19);
 	}
@@ -81,7 +82,7 @@ final class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void set$length$decayDetected(int cv$value) {
+	public final void set$length$decayDetected(int cv$value, boolean allocated$) {
 		length$decayDetected = cv$value;
 	}
 
@@ -116,7 +117,7 @@ final class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void set$rate(double cv$value) {
+	public final void set$rate(double cv$value, boolean allocated$) {
 		rate = cv$value;
 		fixedProbFlag$sample6 = false;
 		fixedProbFlag$sample19 = false;
@@ -125,6 +126,50 @@ final class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.inte
 	@Override
 	public final int get$samples() {
 		return samples;
+	}
+
+	private final void drawValueSample6() {
+		rate = DistributionSampling.sampleGamma(RNG$, a, b);
+	}
+
+	private final void inferSample6() {
+		if(true) {
+			constrainedFlag$sample6 = false;
+			double cv$sum = 0.0;
+			int cv$count = 0;
+			{
+				{
+					{
+						{
+							{
+								{
+									for(int var18 = 0; var18 < samples; var18 += 1) {
+										boolean cv$sampleConstrained = true;
+										if(cv$sampleConstrained) {
+											constrainedFlag$sample6 = true;
+											{
+												{
+													{
+														{
+															{
+																cv$sum = (cv$sum + decay[var18]);
+																cv$count = (cv$count + 1);
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample6)
+				rate = Conjugates.sampleConjugateGammaExponential(RNG$, a, b, cv$sum, cv$count);
+		}
 	}
 
 	private final void logProbabilityValue$sample19() {
@@ -234,46 +279,6 @@ final class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.inte
 		}
 	}
 
-	private final void sample6() {
-		if(true) {
-			constrainedFlag$sample6 = false;
-			double cv$sum = 0.0;
-			int cv$count = 0;
-			{
-				{
-					{
-						{
-							{
-								{
-									for(int var18 = 0; var18 < samples; var18 += 1) {
-										boolean cv$sampleConstrained = true;
-										if(cv$sampleConstrained) {
-											constrainedFlag$sample6 = true;
-											{
-												{
-													{
-														{
-															{
-																cv$sum = (cv$sum + decay[var18]);
-																cv$count = (cv$count + 1);
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(constrainedFlag$sample6)
-				rate = Conjugates.sampleConjugateGammaExponential(RNG$, a, b, cv$sum, cv$count);
-		}
-	}
-
 	@Override
 	public final void allocateScratch() {}
 
@@ -328,12 +333,14 @@ final class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.inte
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample6)
-				sample6();
+				inferSample6();
 		} else {
 			if(!fixedFlag$sample6)
-				sample6();
+				inferSample6();
 		}
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample6)
+			drawValueSample6();
 	}
 
 	private final void initializeLogProbabilityFields() {

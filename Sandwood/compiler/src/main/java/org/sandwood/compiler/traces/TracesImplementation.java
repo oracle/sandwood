@@ -2419,6 +2419,11 @@ public class TracesImplementation extends Traces {
     }
 
     @Override
+    public boolean isFixableTask(SampleTask<?, ?> task) {
+        return fixableTasks.contains(task);
+    }
+
+    @Override
     public Set<SampleTask<?, ?>> getAllTerminalSamples() {
         return terminalSampleTasks;
     }

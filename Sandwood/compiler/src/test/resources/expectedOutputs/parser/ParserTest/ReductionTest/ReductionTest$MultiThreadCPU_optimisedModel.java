@@ -54,10 +54,9 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for bias.
 	@Override
-	public final void set$bias(double[] cv$value) {
+	public final void set$bias(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
-		// Set bias
 		bias = cv$value;
 		
 		// Unset the fixed probability flag for sample 47 as it depends on bias.
@@ -75,10 +74,17 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for fixedFlag$sample30.
 	@Override
-	public final void set$fixedFlag$sample30(boolean cv$value) {
+	public final void set$fixedFlag$sample30(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample30 including if probabilities
 		// need to be updated.
 		fixedFlag$sample30 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample30$1 = 0; index$constrainedFlag$sample30$1 < constrainedFlag$sample30.length; index$constrainedFlag$sample30$1 += 1)
+				constrainedFlag$sample30[index$constrainedFlag$sample30$1] = true;
+		}
 		
 		// Should the probability of sample 30 be set to fixed. This will only every change
 		// the flag to false.
@@ -101,10 +107,17 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for fixedFlag$sample47.
 	@Override
-	public final void set$fixedFlag$sample47(boolean cv$value) {
+	public final void set$fixedFlag$sample47(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample47 including if probabilities
 		// need to be updated.
 		fixedFlag$sample47 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
+				constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
+		}
 		
 		// Should the probability of sample 47 be set to fixed. This will only every change
 		// the flag to false.
@@ -127,10 +140,17 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for fixedFlag$sample62.
 	@Override
-	public final void set$fixedFlag$sample62(boolean cv$value) {
+	public final void set$fixedFlag$sample62(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample62 including if probabilities
 		// need to be updated.
 		fixedFlag$sample62 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample62$1 = 0; index$constrainedFlag$sample62$1 < constrainedFlag$sample62.length; index$constrainedFlag$sample62$1 += 1)
+				constrainedFlag$sample62[index$constrainedFlag$sample62$1] = true;
+		}
 		
 		// Should the probability of sample 62 be set to fixed. This will only every change
 		// the flag to false.
@@ -159,8 +179,7 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for flipsMeasured.
 	@Override
-	public final void set$flipsMeasured(boolean[] cv$value) {
-		// Set flipsMeasured
+	public final void set$flipsMeasured(boolean[] cv$value, boolean allocated$) {
 		flipsMeasured = cv$value;
 	}
 
@@ -172,7 +191,7 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for length$flipsMeasured.
 	@Override
-	public final void set$length$flipsMeasured(int cv$value) {
+	public final void set$length$flipsMeasured(int cv$value, boolean allocated$) {
 		length$flipsMeasured = cv$value;
 	}
 
@@ -220,9 +239,8 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for m.
 	@Override
-	public final void set$m(double[][] cv$value) {
+	public final void set$m(double[][] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of m including if probabilities need to be updated.
-		// Set m
 		m = cv$value;
 		
 		// Unset the fixed probability flag for sample 30 as it depends on m.
@@ -240,7 +258,7 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for noCats.
 	@Override
-	public final void set$noCats(int cv$value) {
+	public final void set$noCats(int cv$value, boolean allocated$) {
 		noCats = cv$value;
 	}
 
@@ -264,10 +282,9 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for st.
 	@Override
-	public final void set$st(int[] cv$value) {
+	public final void set$st(int[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of st including if probabilities need to be
 		// updated.
-		// Set st
 		st = cv$value;
 		
 		// Unset the fixed probability flag for sample 62 as it depends on st.
@@ -281,6 +298,280 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final double[] get$v() {
 		return v;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample30
+	private final void drawValueSample30(int var29, int threadID$cv$var29, Rng RNG$) {
+		DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var29]);
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample47
+	private final void drawValueSample47(int var45, int threadID$cv$var45, Rng RNG$) {
+		bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample62
+	private final void drawValueSample62(int i$var58) {
+		st[i$var58] = DistributionSampling.sampleCategorical(RNG$, m[i$var58], noStates);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 30 drawn from Dirichlet 18. Inference was performed using a Dirichlet
+	// to Categorical conjugate prior.
+	private final void inferSample30(int var29, int threadID$cv$var29, Rng RNG$) {
+		constrainedFlag$sample30[var29] = false;
+		
+		// A local reference to the scratch space.
+		double[] cv$countLocal = cv$var30$countGlobal[threadID$cv$var29];
+		
+		// Initialize the array values to 0.
+		// 
+		// Get the length of the array
+		for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
+			cv$countLocal[cv$loopIndex] = 0.0;
+		
+		// Processing sample task 62 of consumer random variable null.
+		// 
+		// Flag recording if this sample task of the consuming random variable is constrained.
+		// 
+		// Substituted "i$var58" with its value "var29".
+		if((fixedFlag$sample62 || constrainedFlag$sample62[var29])) {
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample30[var29] = true;
+			
+			// Increment the sample counter with the value sampled by sample task 62 of random
+			// variable var60
+			// 
+			// Substituted "i$var58" with its value "var29".
+			cv$countLocal[st[var29]] = (cv$countLocal[st[var29]] + 1.0);
+		}
+		if(constrainedFlag$sample30[var29])
+			// Calculate the new sample value
+			// 
+			// Calculate a new sample value and write it into cv$targetLocal.
+			// 
+			// A reference local to the function for the sample variable.
+			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, m[var29], noStates);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 47 drawn from Beta 34. Inference was performed using a Beta to Bernoulli/Binomial
+	// conjugate prior.
+	private final void inferSample47(int var45, int threadID$cv$var45, Rng RNG$) {
+		constrainedFlag$sample47[var45] = false;
+		
+		// Local variable to record the number of true samples.
+		int cv$sum = 0;
+		
+		// Local variable to record the number of samples.
+		int cv$count = 0;
+		
+		// Processing random variable 84.
+		// 
+		// Looking for a path between Sample 47 and consumer Bernoulli 84.
+		// 
+		// Reduction of array st
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		int reduceVar$var82$5 = 0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// j$var80's comment
+			// Set the right hand term to a value from the array st
+			reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction78Index]);
+		if((var45 == reduceVar$var82$5)) {
+			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
+				// Processing sample task 87 of consumer random variable null.
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample47[var45] = true;
+				
+				// Include the value sampled by task 87 from random variable var84.
+				// 
+				// Increment the number of samples.
+				cv$count = (cv$count + 1);
+				
+				// If the sample value was positive increase the count
+				if(flips[j$var73])
+					cv$sum = (cv$sum + 1);
+			}
+		}
+		if(constrainedFlag$sample47[var45])
+			// Guards to ensure that bias is only updated when there is a valid path.
+			// 
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			bias[var45] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 62 drawn from Categorical 60. Inference was performed using variable
+	// marginalization.
+	private final void inferSample62(int i$var58) {
+		constrainedFlag$sample62[i$var58] = false;
+		
+		// Variable declaration of cv$numStates moved.
+		// Declaration comment was:
+		// Calculate the number of states to evaluate.
+		// 
+		// variable marginalization
+		// 
+		// cv$numStates's comment
+		// Calculate the number of states to evaluate.
+		int cv$numStates = Math.max(0, noStates);
+		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
+			// Guards to ensure that st is only updated when there is a valid path.
+			// 
+			// Value of the variable at this index
+			st[i$var58] = cv$valuePos;
+			
+			// Constructing a random variable input for use later.
+			double[] var59 = m[i$var58];
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// Value of the variable at this index
+			double cv$accumulatedProbabilities = (((((cv$valuePos < noStates) && (0 < noStates)) && (0.0 <= var59[cv$valuePos])) && (var59[cv$valuePos] <= 1.0))?Math.log(var59[cv$valuePos]):Double.NEGATIVE_INFINITY);
+			
+			// Reduction of array st
+			// 
+			// A generated name to prevent name collisions if the reduction is implemented more
+			// than once in inference and probability code. Initialize the variable to the unit
+			// value
+			int reduceVar$var82$6 = 0;
+			
+			// Reduce for every value except a masked value which will be skipped.
+			for(int cv$reduction543Index = 0; cv$reduction543Index < i$var58; cv$reduction543Index += 1)
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// j$var80's comment
+				// Set the right hand term to a value from the array st
+				reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction543Index]);
+			for(int cv$reduction543Index = (i$var58 + 1); cv$reduction543Index < noCats; cv$reduction543Index += 1)
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// j$var80's comment
+				// Set the right hand term to a value from the array st
+				reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction543Index]);
+			
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// Processing random variable 84.
+			// 
+			// Value of the variable at this index
+			reduceVar$var82$6 = (cv$valuePos + reduceVar$var82$6);
+			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
+				// Processing sample task 87 of consumer random variable null.
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample62[i$var58] = true;
+				
+				// Constructing a random variable input for use later.
+				double var83 = bias[reduceVar$var82$6];
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 87 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				cv$accumulatedProbabilities = ((((0.0 <= var83) && (var83 <= 1.0))?Math.log((flips[j$var73]?var83:(1.0 - var83))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			
+			// Save the calculated index value into the array of index value probabilities
+			// 
+			// Get a local reference to the scratch space.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			cv$var61$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
+		}
+		if(constrainedFlag$sample62[i$var58]) {
+			// This value is not used before it is set again, so removing the value declaration.
+			// 
+			// The sum of all the probabilities in log space
+			double cv$logSum;
+			
+			// Sum all the values
+			// 
+			// Initialize the max to the first element.
+			// 
+			// Get a local reference to the scratch space.
+			double cv$lseMax = cv$var61$stateProbabilityGlobal[0];
+			
+			// Find max value.
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
+				// Get a local reference to the scratch space.
+				double cv$lseElementValue = cv$var61$stateProbabilityGlobal[cv$lseIndex];
+				if((cv$lseMax < cv$lseElementValue))
+					cv$lseMax = cv$lseElementValue;
+			}
+			
+			// If the maximum value is -infinity return -infinity.
+			if((cv$lseMax == Double.NEGATIVE_INFINITY))
+				cv$logSum = Double.NEGATIVE_INFINITY;
+			
+			// Sum the values in the array.
+			else {
+				// Initialize the sum of the array elements
+				double cv$lseSum = 0.0;
+				
+				// Offset values, move to normal space, and sum.
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
+					// Get a local reference to the scratch space.
+					cv$lseSum = (cv$lseSum + Math.exp((cv$var61$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
+				
+				// Increment the value of the target, moving the value back into log space.
+				// 
+				// The sum of all the probabilities in log space
+				cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
+			}
+			
+			// If all the sum is zero, just share the probability evenly.
+			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
+				// Normalize log space values and move to normal space
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					// Get a local reference to the scratch space.
+					cv$var61$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
+			} else {
+				// Normalize log space values and move to normal space
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					// Get a local reference to the scratch space.
+					cv$var61$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var61$stateProbabilityGlobal[cv$indexName] - cv$logSum));
+			}
+			
+			// Set array values that are not computed for the input to negative infinity.
+			// 
+			// Get a local reference to the scratch space.
+			for(int cv$indexName = cv$numStates; cv$indexName < cv$var61$stateProbabilityGlobal.length; cv$indexName += 1)
+				// Get a local reference to the scratch space.
+				cv$var61$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+			
+			// Guards to ensure that st is only updated when there is a valid path.
+			// 
+			// Write out the value of the sample to a temporary variable prior to updating the
+			// intermediate variables.
+			// 
+			// Get a local reference to the scratch space.
+			st[i$var58] = DistributionSampling.sampleCategorical(RNG$, cv$var61$stateProbabilityGlobal, cv$numStates);
+		}
 	}
 
 	// Calculate the probability of the samples represented by sample30 using sampled
@@ -618,265 +909,6 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 30 drawn from Dirichlet 18. Inference was performed using a Dirichlet
-	// to Categorical conjugate prior.
-	private final void sample30(int var29, int threadID$cv$var29, Rng RNG$) {
-		constrainedFlag$sample30[var29] = false;
-		
-		// A local reference to the scratch space.
-		double[] cv$countLocal = cv$var30$countGlobal[threadID$cv$var29];
-		
-		// Initialize the array values to 0.
-		// 
-		// Get the length of the array
-		for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
-			cv$countLocal[cv$loopIndex] = 0.0;
-		
-		// Processing sample task 62 of consumer random variable null.
-		// 
-		// Flag recording if this sample task of the consuming random variable is constrained.
-		// 
-		// Substituted "i$var58" with its value "var29".
-		if((fixedFlag$sample62 || constrainedFlag$sample62[var29])) {
-			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample30[var29] = true;
-			
-			// Increment the sample counter with the value sampled by sample task 62 of random
-			// variable var60
-			// 
-			// Substituted "i$var58" with its value "var29".
-			cv$countLocal[st[var29]] = (cv$countLocal[st[var29]] + 1.0);
-		}
-		if(constrainedFlag$sample30[var29])
-			// Calculate the new sample value
-			// 
-			// Calculate a new sample value and write it into cv$targetLocal.
-			// 
-			// A reference local to the function for the sample variable.
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, m[var29], noStates);
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 47 drawn from Beta 34. Inference was performed using a Beta to Bernoulli/Binomial
-	// conjugate prior.
-	private final void sample47(int var45, int threadID$cv$var45, Rng RNG$) {
-		constrainedFlag$sample47[var45] = false;
-		
-		// Local variable to record the number of true samples.
-		int cv$sum = 0;
-		
-		// Local variable to record the number of samples.
-		int cv$count = 0;
-		
-		// Processing random variable 84.
-		// 
-		// Looking for a path between Sample 47 and consumer Bernoulli 84.
-		// 
-		// Reduction of array st
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
-		int reduceVar$var82$5 = 0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// j$var80's comment
-			// Set the right hand term to a value from the array st
-			reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction78Index]);
-		if((var45 == reduceVar$var82$5)) {
-			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
-				// Processing sample task 87 of consumer random variable null.
-				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample47[var45] = true;
-				
-				// Include the value sampled by task 87 from random variable var84.
-				// 
-				// Increment the number of samples.
-				cv$count = (cv$count + 1);
-				
-				// If the sample value was positive increase the count
-				if(flips[j$var73])
-					cv$sum = (cv$sum + 1);
-			}
-		}
-		if(constrainedFlag$sample47[var45])
-			// Guards to ensure that bias is only updated when there is a valid path.
-			// 
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
-			bias[var45] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 62 drawn from Categorical 60. Inference was performed using variable
-	// marginalization.
-	private final void sample62(int i$var58) {
-		constrainedFlag$sample62[i$var58] = false;
-		
-		// Variable declaration of cv$numStates moved.
-		// Declaration comment was:
-		// Calculate the number of states to evaluate.
-		// 
-		// variable marginalization
-		// 
-		// cv$numStates's comment
-		// Calculate the number of states to evaluate.
-		int cv$numStates = Math.max(0, noStates);
-		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-			// Guards to ensure that st is only updated when there is a valid path.
-			// 
-			// Value of the variable at this index
-			st[i$var58] = cv$valuePos;
-			
-			// Constructing a random variable input for use later.
-			double[] var59 = m[i$var58];
-			
-			// An accumulator to allow the value for each distribution to be constructed before
-			// it is added to the index probabilities.
-			// 
-			// Value of the variable at this index
-			double cv$accumulatedProbabilities = (((((cv$valuePos < noStates) && (0 < noStates)) && (0.0 <= var59[cv$valuePos])) && (var59[cv$valuePos] <= 1.0))?Math.log(var59[cv$valuePos]):Double.NEGATIVE_INFINITY);
-			
-			// Reduction of array st
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			int reduceVar$var82$6 = 0;
-			
-			// Reduce for every value except a masked value which will be skipped.
-			for(int cv$reduction534Index = 0; cv$reduction534Index < i$var58; cv$reduction534Index += 1)
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// j$var80's comment
-				// Set the right hand term to a value from the array st
-				reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction534Index]);
-			for(int cv$reduction534Index = (i$var58 + 1); cv$reduction534Index < noCats; cv$reduction534Index += 1)
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// j$var80's comment
-				// Set the right hand term to a value from the array st
-				reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction534Index]);
-			
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// Processing random variable 84.
-			// 
-			// Value of the variable at this index
-			reduceVar$var82$6 = (cv$valuePos + reduceVar$var82$6);
-			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
-				// Processing sample task 87 of consumer random variable null.
-				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample62[i$var58] = true;
-				
-				// Constructing a random variable input for use later.
-				double var83 = bias[reduceVar$var82$6];
-				
-				// A check to ensure rounding of floating point values can never result in a negative
-				// value.
-				// 
-				// Recorded the probability of reaching sample task 87 with the current configuration.
-				// 
-				// Set an accumulator to record the consumer distributions not seen. Initially set
-				// to 1 as seen values will be deducted from this value.
-				// 
-				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-				// Declaration comment was:
-				// Set an accumulator to sum the probabilities for each possible configuration of
-				// inputs.
-				cv$accumulatedProbabilities = ((((0.0 <= var83) && (var83 <= 1.0))?Math.log((flips[j$var73]?var83:(1.0 - var83))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
-			}
-			
-			// Save the calculated index value into the array of index value probabilities
-			// 
-			// Get a local reference to the scratch space.
-			// 
-			// Record the reached probability density.
-			// 
-			// Initialize a counter to track the reached distributions.
-			cv$var61$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
-		}
-		if(constrainedFlag$sample62[i$var58]) {
-			// This value is not used before it is set again, so removing the value declaration.
-			// 
-			// The sum of all the probabilities in log space
-			double cv$logSum;
-			
-			// Sum all the values
-			// 
-			// Initialize the max to the first element.
-			// 
-			// Get a local reference to the scratch space.
-			double cv$lseMax = cv$var61$stateProbabilityGlobal[0];
-			
-			// Find max value.
-			for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
-				// Get a local reference to the scratch space.
-				double cv$lseElementValue = cv$var61$stateProbabilityGlobal[cv$lseIndex];
-				if((cv$lseMax < cv$lseElementValue))
-					cv$lseMax = cv$lseElementValue;
-			}
-			
-			// If the maximum value is -infinity return -infinity.
-			if((cv$lseMax == Double.NEGATIVE_INFINITY))
-				cv$logSum = Double.NEGATIVE_INFINITY;
-			
-			// Sum the values in the array.
-			else {
-				// Initialize the sum of the array elements
-				double cv$lseSum = 0.0;
-				
-				// Offset values, move to normal space, and sum.
-				for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
-					// Get a local reference to the scratch space.
-					cv$lseSum = (cv$lseSum + Math.exp((cv$var61$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
-				
-				// Increment the value of the target, moving the value back into log space.
-				// 
-				// The sum of all the probabilities in log space
-				cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
-			}
-			
-			// If all the sum is zero, just share the probability evenly.
-			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-				// Normalize log space values and move to normal space
-				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					// Get a local reference to the scratch space.
-					cv$var61$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
-			} else {
-				// Normalize log space values and move to normal space
-				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					// Get a local reference to the scratch space.
-					cv$var61$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var61$stateProbabilityGlobal[cv$indexName] - cv$logSum));
-			}
-			
-			// Set array values that are not computed for the input to negative infinity.
-			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = cv$numStates; cv$indexName < cv$var61$stateProbabilityGlobal.length; cv$indexName += 1)
-				// Get a local reference to the scratch space.
-				cv$var61$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
-			
-			// Guards to ensure that st is only updated when there is a valid path.
-			// 
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
-			// 
-			// Get a local reference to the scratch space.
-			st[i$var58] = DistributionSampling.sampleCategorical(RNG$, cv$var61$stateProbabilityGlobal, cv$numStates);
 		}
 	}
 
@@ -1259,7 +1291,7 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							// Inner loop for running batches of iterations, each batch has its own random number
 							// generator.
 							for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1)
-								sample30(var29, threadID$var29, RNG$1);
+								inferSample30(var29, threadID$var29, RNG$1);
 					}
 				);
 
@@ -1273,7 +1305,7 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							// Inner loop for running batches of iterations, each batch has its own random number
 							// generator.
 							for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
-								sample47(var45, threadID$var45, RNG$1);
+								inferSample47(var45, threadID$var45, RNG$1);
 					}
 				);
 
@@ -1281,7 +1313,7 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(!fixedFlag$sample62) {
 				for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
-					sample62(i$var58);
+					inferSample62(i$var58);
 			}
 		}
 		// Infer the samples in reverse chronological order.
@@ -1289,7 +1321,7 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(!fixedFlag$sample62) {
 				for(int i$var58 = (noCats - 1); i$var58 >= 0; i$var58 -= 1)
-					sample62(i$var58);
+					inferSample62(i$var58);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1301,7 +1333,7 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							// Inner loop for running batches of iterations, each batch has its own random number
 							// generator.
 							for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
-								sample47(var45, threadID$var45, RNG$1);
+								inferSample47(var45, threadID$var45, RNG$1);
 					}
 				);
 
@@ -1315,7 +1347,7 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							// Inner loop for running batches of iterations, each batch has its own random number
 							// generator.
 							for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1)
-								sample30(var29, threadID$var29, RNG$1);
+								inferSample30(var29, threadID$var29, RNG$1);
 					}
 				);
 
@@ -1323,6 +1355,36 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noCats, 1,
+			(int forStart$var29, int forEnd$var29, int threadID$var29, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var29 = forStart$var29; var29 < forEnd$var29; var29 += 1) {
+						if(!constrainedFlag$sample30[var29])
+							drawValueSample30(var29, threadID$var29, RNG$1);
+					}
+			}
+		);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noFlips, 1,
+			(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1) {
+						if(!constrainedFlag$sample47[var45])
+							drawValueSample47(var45, threadID$var45, RNG$1);
+					}
+			}
+		);
+		for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1) {
+			if(!constrainedFlag$sample62[i$var58])
+				drawValueSample62(i$var58);
+		}
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for

@@ -56,7 +56,7 @@ public final class DistributionTest1b extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$v1(value);
+            system$c.set$v1(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -66,7 +66,7 @@ public final class DistributionTest1b extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample4(fixed);
+                system$c.set$fixedFlag$sample4(fixed, allocated);
             }
         }
 
@@ -90,7 +90,7 @@ public final class DistributionTest1b extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$v2(value);
+            system$c.set$v2(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -100,7 +100,7 @@ public final class DistributionTest1b extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample6(fixed);
+                system$c.set$fixedFlag$sample6(fixed, allocated);
             }
         }
 
@@ -124,7 +124,7 @@ public final class DistributionTest1b extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$v3(value);
+            system$c.set$v3(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -134,7 +134,7 @@ public final class DistributionTest1b extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample7(fixed);
+                system$c.set$fixedFlag$sample7(fixed, allocated);
             }
         }
 
@@ -163,7 +163,7 @@ public final class DistributionTest1b extends Model {
         }
 
         @Override
-        protected void setValueInternal(double[] value) { system$c.set$weightings(value); }
+        protected void setValueInternal(double[] value) { system$c.set$weightings(value, allocated); }
     };
 
     /**
@@ -182,7 +182,7 @@ public final class DistributionTest1b extends Model {
         }
 
         @Override
-        protected void setValueInternal(boolean value) { system$c.set$value(value); }
+        protected void setValueInternal(boolean value) { system$c.set$value(value, allocated); }
     };
 
     /**
@@ -270,23 +270,24 @@ public final class DistributionTest1b extends Model {
     private void transferData(DistributionTest1b$CoreInterface oldCore, DistributionTest1b$CoreInterface newCore) {
         //Model inputs
         if(weightings.isSet())
-            newCore.set$weightings(oldCore.get$weightings());
+            newCore.set$weightings(oldCore.get$weightings(), false);
+
         //Observed scalars
         if(value.isSet())
-            newCore.set$value(oldCore.get$value());
+            newCore.set$value(oldCore.get$value(), false);
 
         //ComputedVariables
         if($v1.isSet())
-            newCore.set$v1(oldCore.get$v1());
+            newCore.set$v1(oldCore.get$v1(), false);
         if($v2.isSet())
-            newCore.set$v2(oldCore.get$v2());
+            newCore.set$v2(oldCore.get$v2(), false);
         if($v3.isSet())
-            newCore.set$v3(oldCore.get$v3());
+            newCore.set$v3(oldCore.get$v3(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4());
-        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6());
-        newCore.set$fixedFlag$sample7(oldCore.get$fixedFlag$sample7());
+        newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4(), false);
+        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6(), false);
+        newCore.set$fixedFlag$sample7(oldCore.get$fixedFlag$sample7(), false);
     }
 
     /**

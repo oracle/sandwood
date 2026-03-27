@@ -25,7 +25,7 @@ public final class NullModelMK2 extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$bias(value);
+            system$c.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,7 +35,7 @@ public final class NullModelMK2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample10(fixed);
+                system$c.set$fixedFlag$sample10(fixed, allocated);
             }
         }
 
@@ -95,7 +95,7 @@ public final class NullModelMK2 extends Model {
         }
 
         @Override
-        protected void setValueInternal(double value) { system$c.set$eta(value); }
+        protected void setValueInternal(double value) { system$c.set$eta(value, allocated); }
     };
 
     /**
@@ -112,7 +112,7 @@ public final class NullModelMK2 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$observedSampleCount(value); }
+        protected void setValueInternal(int value) { system$c.set$observedSampleCount(value, allocated); }
     };
 
     /**
@@ -131,7 +131,7 @@ public final class NullModelMK2 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$observedPositiveCount(value); }
+        protected void setValueInternal(int value) { system$c.set$observedPositiveCount(value, allocated); }
     };
 
     /**
@@ -222,19 +222,20 @@ public final class NullModelMK2 extends Model {
     private void transferData(NullModelMK2$CoreInterface oldCore, NullModelMK2$CoreInterface newCore) {
         //Model inputs
         if(eta.isSet())
-            newCore.set$eta(oldCore.get$eta());
+            newCore.set$eta(oldCore.get$eta(), false);
         if(observedSampleCount.isSet())
-            newCore.set$observedSampleCount(oldCore.get$observedSampleCount());
+            newCore.set$observedSampleCount(oldCore.get$observedSampleCount(), false);
+
         //Observed scalars
         if(observedPositiveCount.isSet())
-            newCore.set$observedPositiveCount(oldCore.get$observedPositiveCount());
+            newCore.set$observedPositiveCount(oldCore.get$observedPositiveCount(), false);
 
         //ComputedVariables
         if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias());
+            newCore.set$bias(oldCore.get$bias(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample10(oldCore.get$fixedFlag$sample10());
+        newCore.set$fixedFlag$sample10(oldCore.get$fixedFlag$sample10(), false);
     }
 
     /**

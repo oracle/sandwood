@@ -6,25 +6,25 @@ interface DistributionsTest$CoreInterface extends org.sandwood.runtime.internal.
 	public double get$b0();
 
 	// Setter for b0.
-	public void set$b0(double cv$value);
+	public void set$b0(double cv$value, boolean allocated$);
 
 	// Getter for b1.
 	public double get$b1();
 
 	// Setter for b1.
-	public void set$b1(double cv$value);
+	public void set$b1(double cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample11.
 	public boolean get$fixedFlag$sample11();
 
 	// Setter for fixedFlag$sample11.
-	public void set$fixedFlag$sample11(boolean cv$value);
+	public void set$fixedFlag$sample11(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample7.
 	public boolean get$fixedFlag$sample7();
 
 	// Setter for fixedFlag$sample7.
-	public void set$fixedFlag$sample7(boolean cv$value);
+	public void set$fixedFlag$sample7(boolean cv$value, boolean allocated$);
 
 	// Getter for logProbability$b0.
 	public double get$logProbability$b0();
@@ -42,7 +42,7 @@ interface DistributionsTest$CoreInterface extends org.sandwood.runtime.internal.
 	public double[] get$x();
 
 	// Setter for x.
-	public void set$x(double[] cv$value);
+	public void set$x(double[] cv$value, boolean allocated$);
 
 	// Getter for y.
 	public double[] get$y();
@@ -51,5 +51,5 @@ interface DistributionsTest$CoreInterface extends org.sandwood.runtime.internal.
 	public double[] get$yMeasured();
 
 	// Setter for yMeasured.
-	public void set$yMeasured(double[] cv$value);
+	public void set$yMeasured(double[] cv$value, boolean allocated$);
 }

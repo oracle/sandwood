@@ -25,7 +25,7 @@ public final class Flip2CoinsMK6 extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$bias(value);
+            system$c.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,7 +35,7 @@ public final class Flip2CoinsMK6 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample18(fixed);
+                system$c.set$fixedFlag$sample18(fixed, allocated);
             }
         }
 
@@ -100,7 +100,7 @@ public final class Flip2CoinsMK6 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int[] value) { system$c.set$shape(value); }
+        protected void setValueInternal(int[] value) { system$c.set$shape(value, allocated); }
     };
 
     /**
@@ -119,7 +119,7 @@ public final class Flip2CoinsMK6 extends Model {
         }
 
         @Override
-        protected void setValueInternal(boolean[][] value) { system$c.set$flipsMeasured(value); }
+        protected void setValueInternal(boolean[][] value) { system$c.set$flipsMeasured(value, allocated); }
     };
 
     /**
@@ -217,17 +217,18 @@ public final class Flip2CoinsMK6 extends Model {
     private void transferData(Flip2CoinsMK6$CoreInterface oldCore, Flip2CoinsMK6$CoreInterface newCore) {
         //Model inputs
         if(shape.isSet())
-            newCore.set$shape(oldCore.get$shape());
+            newCore.set$shape(oldCore.get$shape(), false);
+
         //Observed scalars
         if(flipsMeasured.isSet())
-            newCore.set$flipsMeasured(oldCore.get$flipsMeasured());
+            newCore.set$flipsMeasured(oldCore.get$flipsMeasured(), false);
 
         //ComputedVariables
         if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias());
+            newCore.set$bias(oldCore.get$bias(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample18(oldCore.get$fixedFlag$sample18());
+        newCore.set$fixedFlag$sample18(oldCore.get$fixedFlag$sample18(), false);
     }
 
     /**

@@ -70,20 +70,6 @@ public final class VariableNames {
         return new VariableDescription<>(logProbability + name, VariableType.DoubleVariable, name.comment);
     }
 
-    private static final String logProbabilityValue = "logProbabilityValue" + Name.prefix;
-
-    public static VariableDescription<DoubleVariable> logProbabilityValueName(VariableDescription<?> varDesc) {
-        return new VariableDescription<>(logProbabilityValue + varDesc, VariableType.DoubleVariable,
-                varDesc.name.comment);
-    }
-
-    private static final String logProbabilityDistribution = "logProbabilityDistribution" + Name.prefix;
-
-    public static VariableDescription<DoubleVariable> logProbabilityDistributionName(VariableDescription<?> varDesc) {
-        return new VariableDescription<>(logProbabilityDistribution + varDesc, VariableType.DoubleVariable,
-                varDesc.name.comment);
-    }
-
     private static final String fixedSampleProbability = "fixedSampleDistProbability" + Name.prefix;
 
     public static VariableName fixedSampleProbabilityName(VariableName name) {
@@ -326,5 +312,12 @@ public final class VariableNames {
     public static VariableDescription<BooleanVariable> observedGuard(Variable<?> v) {
         return new VariableDescription<>("observationGuard" + Name.prefix + v.getUniqueVarDesc().name,
                 VariableType.BooleanVariable, true);
+    }
+
+    private static final VariableDescription<BooleanVariable> allocatedFlag = new VariableDescription<>(
+            "allocated" + Name.prefix, VariableType.BooleanVariable, true);
+
+    public static VariableDescription<BooleanVariable> allocatedFlag() {
+        return allocatedFlag;
     }
 }

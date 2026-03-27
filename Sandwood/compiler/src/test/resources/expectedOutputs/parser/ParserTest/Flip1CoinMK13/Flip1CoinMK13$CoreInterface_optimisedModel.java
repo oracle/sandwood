@@ -6,7 +6,7 @@ interface Flip1CoinMK13$CoreInterface extends org.sandwood.runtime.internal.mode
 	public double get$b();
 
 	// Setter for b.
-	public void set$b(double cv$value);
+	public void set$b(double cv$value, boolean allocated$);
 
 	// Getter for bias.
 	public double get$bias();
@@ -15,7 +15,7 @@ interface Flip1CoinMK13$CoreInterface extends org.sandwood.runtime.internal.mode
 	public boolean get$fixedFlag$sample9();
 
 	// Setter for fixedFlag$sample9.
-	public void set$fixedFlag$sample9(boolean cv$value);
+	public void set$fixedFlag$sample9(boolean cv$value, boolean allocated$);
 
 	// Getter for flips.
 	public boolean[] get$flips();
@@ -24,25 +24,25 @@ interface Flip1CoinMK13$CoreInterface extends org.sandwood.runtime.internal.mode
 	public boolean[] get$flipsMeasured();
 
 	// Setter for flipsMeasured.
-	public void set$flipsMeasured(boolean[] cv$value);
+	public void set$flipsMeasured(boolean[] cv$value, boolean allocated$);
 
 	// Getter for guard1.
 	public boolean get$guard1();
 
 	// Setter for guard1.
-	public void set$guard1(boolean cv$value);
+	public void set$guard1(boolean cv$value, boolean allocated$);
 
 	// Getter for guard2.
 	public boolean get$guard2();
 
 	// Setter for guard2.
-	public void set$guard2(boolean cv$value);
+	public void set$guard2(boolean cv$value, boolean allocated$);
 
 	// Getter for length$flipsMeasured.
 	public int get$length$flipsMeasured();
 
 	// Setter for length$flipsMeasured.
-	public void set$length$flipsMeasured(int cv$value);
+	public void set$length$flipsMeasured(int cv$value, boolean allocated$);
 
 	// Getter for logProbability$b.
 	public double get$logProbability$b();

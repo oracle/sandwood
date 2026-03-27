@@ -30,13 +30,13 @@ interface Conditional5$CoreInterface extends org.sandwood.runtime.internal.model
 	public boolean get$observedGuard();
 
 	// Setter for observedGuard.
-	public void set$observedGuard(boolean cv$value);
+	public void set$observedGuard(boolean cv$value, boolean allocated$);
 
 	// Getter for observedValue.
 	public double get$observedValue();
 
 	// Setter for observedValue.
-	public void set$observedValue(double cv$value);
+	public void set$observedValue(double cv$value, boolean allocated$);
 
 	// Getter for value.
 	public double get$value();

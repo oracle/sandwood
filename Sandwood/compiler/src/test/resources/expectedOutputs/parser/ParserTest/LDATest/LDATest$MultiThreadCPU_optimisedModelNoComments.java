@@ -57,7 +57,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void set$documents(int[][] cv$value) {
+	public final void set$documents(int[][] cv$value, boolean allocated$) {
 		documents = cv$value;
 	}
 
@@ -67,8 +67,12 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void set$fixedFlag$sample42(boolean cv$value) {
+	public final void set$fixedFlag$sample42(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample42 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample42$1 = 0; index$constrainedFlag$sample42$1 < constrainedFlag$sample42.length; index$constrainedFlag$sample42$1 += 1)
+				constrainedFlag$sample42[index$constrainedFlag$sample42$1] = true;
+		}
 		fixedProbFlag$sample42 = (cv$value && fixedProbFlag$sample42);
 	}
 
@@ -78,8 +82,12 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void set$fixedFlag$sample58(boolean cv$value) {
+	public final void set$fixedFlag$sample58(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample58 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample58$1 = 0; index$constrainedFlag$sample58$1 < constrainedFlag$sample58.length; index$constrainedFlag$sample58$1 += 1)
+				constrainedFlag$sample58[index$constrainedFlag$sample58$1] = true;
+		}
 		fixedProbFlag$sample58 = (cv$value && fixedProbFlag$sample58);
 	}
 
@@ -89,7 +97,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void set$length$documents(int[] cv$value) {
+	public final void set$length$documents(int[] cv$value, boolean allocated$) {
 		length$documents = cv$value;
 	}
 
@@ -124,7 +132,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void set$noTopics(int cv$value) {
+	public final void set$noTopics(int cv$value, boolean allocated$) {
 		noTopics = cv$value;
 	}
 
@@ -134,7 +142,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void set$phi(double[][] cv$value) {
+	public final void set$phi(double[][] cv$value, boolean allocated$) {
 		phi = cv$value;
 		fixedProbFlag$sample42 = false;
 	}
@@ -145,7 +153,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void set$theta(double[][] cv$value) {
+	public final void set$theta(double[][] cv$value, boolean allocated$) {
 		theta = cv$value;
 		fixedProbFlag$sample58 = false;
 	}
@@ -156,7 +164,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void set$vocabSize(int cv$value) {
+	public final void set$vocabSize(int cv$value, boolean allocated$) {
 		vocabSize = cv$value;
 	}
 
@@ -171,8 +179,92 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void set$z(int[][] cv$value) {
+	public final void set$z(int[][] cv$value, boolean allocated$) {
 		z = cv$value;
+	}
+
+	private final void drawValueSample42(int var41, int threadID$cv$var41, Rng RNG$) {
+		DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, phi[var41]);
+	}
+
+	private final void drawValueSample58(int var56, int threadID$cv$var56, Rng RNG$) {
+		DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, theta[var56]);
+	}
+
+	private final void drawValueSample90(int i$var71, int j, int threadID$cv$j, Rng RNG$) {
+		z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
+	}
+
+	private final void inferSample42(int var41, int threadID$cv$var41, Rng RNG$) {
+		constrainedFlag$sample42[var41] = false;
+		double[] cv$countLocal = cv$var42$countGlobal[threadID$cv$var41];
+		for(int cv$loopIndex = 0; cv$loopIndex < vocabSize; cv$loopIndex += 1)
+			cv$countLocal[cv$loopIndex] = 0.0;
+		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < length$documents[i$var71]; j += 1) {
+				if((var41 == z[i$var71][j])) {
+					constrainedFlag$sample42[var41] = true;
+					cv$countLocal[w[i$var71][j]] = (cv$countLocal[w[i$var71][j]] + 1.0);
+				}
+			}
+		}
+		if(constrainedFlag$sample42[var41])
+			Conjugates.sampleConjugateDirichletCategorical(RNG$, beta, cv$countLocal, phi[var41], vocabSize);
+	}
+
+	private final void inferSample58(int var56, int threadID$cv$var56, Rng RNG$) {
+		constrainedFlag$sample58[var56] = false;
+		double[] cv$countLocal = cv$var57$countGlobal[threadID$cv$var56];
+		for(int cv$loopIndex = 0; cv$loopIndex < noTopics; cv$loopIndex += 1)
+			cv$countLocal[cv$loopIndex] = 0.0;
+		for(int j = 0; j < length$documents[var56]; j += 1) {
+			if(constrainedFlag$sample90[var56][j]) {
+				constrainedFlag$sample58[var56] = true;
+				cv$countLocal[z[var56][j]] = (cv$countLocal[z[var56][j]] + 1.0);
+			}
+		}
+		if(constrainedFlag$sample58[var56])
+			Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$countLocal, theta[var56], noTopics);
+	}
+
+	private final void inferSample90(int i$var71, int j, int threadID$cv$j, Rng RNG$) {
+		constrainedFlag$sample90[i$var71][j] = false;
+		int cv$numStates = Math.max(0, noTopics);
+		double[] cv$stateProbabilityLocal = cv$var88$stateProbabilityGlobal[threadID$cv$j];
+		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
+			z[i$var71][j] = cv$valuePos;
+			double[] var86 = theta[i$var71];
+			constrainedFlag$sample90[i$var71][j] = true;
+			double[] var89 = phi[cv$valuePos];
+			cv$stateProbabilityLocal[cv$valuePos] = (((((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[w[i$var71][j]])) && (var89[w[i$var71][j]] <= 1.0))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY) + (((((cv$valuePos < noTopics) && (0 < noTopics)) && (0.0 <= var86[cv$valuePos])) && (var86[cv$valuePos] <= 1.0))?Math.log(var86[cv$valuePos]):Double.NEGATIVE_INFINITY));
+		}
+		if(constrainedFlag$sample90[i$var71][j]) {
+			double cv$logSum;
+			double cv$lseMax = cv$stateProbabilityLocal[0];
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
+				double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
+				if((cv$lseMax < cv$lseElementValue))
+					cv$lseMax = cv$lseElementValue;
+			}
+			if((cv$lseMax == Double.NEGATIVE_INFINITY))
+				cv$logSum = Double.NEGATIVE_INFINITY;
+			else {
+				double cv$lseSum = 0.0;
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
+					cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
+				cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
+			}
+			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numStates);
+			} else {
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
+			}
+			for(int cv$indexName = cv$numStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+				cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
+			z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
+		}
 	}
 
 	private final void logProbabilityValue$sample42() {
@@ -241,78 +333,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$w = (logProbability$w + cv$accumulator);
 		logProbability$$model = (logProbability$$model + cv$accumulator);
 		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-	}
-
-	private final void sample42(int var41, int threadID$cv$var41, Rng RNG$) {
-		constrainedFlag$sample42[var41] = false;
-		double[] cv$countLocal = cv$var42$countGlobal[threadID$cv$var41];
-		for(int cv$loopIndex = 0; cv$loopIndex < vocabSize; cv$loopIndex += 1)
-			cv$countLocal[cv$loopIndex] = 0.0;
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1) {
-				if((var41 == z[i$var71][j])) {
-					constrainedFlag$sample42[var41] = true;
-					cv$countLocal[w[i$var71][j]] = (cv$countLocal[w[i$var71][j]] + 1.0);
-				}
-			}
-		}
-		if(constrainedFlag$sample42[var41])
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, beta, cv$countLocal, phi[var41], vocabSize);
-	}
-
-	private final void sample58(int var56, int threadID$cv$var56, Rng RNG$) {
-		constrainedFlag$sample58[var56] = false;
-		double[] cv$countLocal = cv$var57$countGlobal[threadID$cv$var56];
-		for(int cv$loopIndex = 0; cv$loopIndex < noTopics; cv$loopIndex += 1)
-			cv$countLocal[cv$loopIndex] = 0.0;
-		for(int j = 0; j < length$documents[var56]; j += 1) {
-			if(constrainedFlag$sample90[var56][j]) {
-				constrainedFlag$sample58[var56] = true;
-				cv$countLocal[z[var56][j]] = (cv$countLocal[z[var56][j]] + 1.0);
-			}
-		}
-		if(constrainedFlag$sample58[var56])
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$countLocal, theta[var56], noTopics);
-	}
-
-	private final void sample90(int i$var71, int j, int threadID$cv$j, Rng RNG$) {
-		constrainedFlag$sample90[i$var71][j] = false;
-		int cv$numStates = Math.max(0, noTopics);
-		double[] cv$stateProbabilityLocal = cv$var88$stateProbabilityGlobal[threadID$cv$j];
-		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-			z[i$var71][j] = cv$valuePos;
-			double[] var86 = theta[i$var71];
-			constrainedFlag$sample90[i$var71][j] = true;
-			double[] var89 = phi[cv$valuePos];
-			cv$stateProbabilityLocal[cv$valuePos] = (((((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[w[i$var71][j]])) && (var89[w[i$var71][j]] <= 1.0))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY) + (((((cv$valuePos < noTopics) && (0 < noTopics)) && (0.0 <= var86[cv$valuePos])) && (var86[cv$valuePos] <= 1.0))?Math.log(var86[cv$valuePos]):Double.NEGATIVE_INFINITY));
-		}
-		if(constrainedFlag$sample90[i$var71][j]) {
-			double cv$logSum;
-			double cv$lseMax = cv$stateProbabilityLocal[0];
-			for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
-				double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
-				if((cv$lseMax < cv$lseElementValue))
-					cv$lseMax = cv$lseElementValue;
-			}
-			if((cv$lseMax == Double.NEGATIVE_INFINITY))
-				cv$logSum = Double.NEGATIVE_INFINITY;
-			else {
-				double cv$lseSum = 0.0;
-				for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
-					cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
-				cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
-			}
-			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numStates);
-			} else {
-				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
-			}
-			for(int cv$indexName = cv$numStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
-				cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
-			z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
-		}
 	}
 
 	@Override
@@ -552,7 +572,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				parallelFor(RNG$, 0, noTopics, 1,
 					(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
 						for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1)
-								sample42(var41, threadID$var41, RNG$1);
+								inferSample42(var41, threadID$var41, RNG$1);
 					}
 				);
 
@@ -560,7 +580,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				parallelFor(RNG$, 0, length$documents.length, 1,
 					(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
 						for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1)
-								sample58(var56, threadID$var56, RNG$1);
+								inferSample58(var56, threadID$var56, RNG$1);
 					}
 				);
 
@@ -572,7 +592,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							parallelFor(RNG$1, 0, length$documents[i$var71], 1,
 								(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 									for(int j = forStart$j; j < forEnd$j; j += 1)
-											sample90(i$var71, j, threadID$j, RNG$2);
+											inferSample90(i$var71, j, threadID$j, RNG$2);
 								}
 							);
 						}
@@ -587,7 +607,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							parallelFor(RNG$1, 0, length$documents[i$var71], 1,
 								(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 									for(int j = forStart$j; j < forEnd$j; j += 1)
-											sample90(i$var71, j, threadID$j, RNG$2);
+											inferSample90(i$var71, j, threadID$j, RNG$2);
 								}
 							);
 						}
@@ -597,7 +617,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				parallelFor(RNG$, 0, length$documents.length, 1,
 					(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
 						for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1)
-								sample58(var56, threadID$var56, RNG$1);
+								inferSample58(var56, threadID$var56, RNG$1);
 					}
 				);
 
@@ -605,12 +625,44 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				parallelFor(RNG$, 0, noTopics, 1,
 					(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
 						for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1)
-								sample42(var41, threadID$var41, RNG$1);
+								inferSample42(var41, threadID$var41, RNG$1);
 					}
 				);
 
 		}
 		system$gibbsForward = !system$gibbsForward;
+		parallelFor(RNG$, 0, noTopics, 1,
+			(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1) {
+						if(!constrainedFlag$sample42[var41])
+							drawValueSample42(var41, threadID$var41, RNG$1);
+					}
+			}
+		);
+		parallelFor(RNG$, 0, length$documents.length, 1,
+			(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1) {
+						if(!constrainedFlag$sample58[var56])
+							drawValueSample58(var56, threadID$var56, RNG$1);
+					}
+			}
+		);
+		parallelFor(RNG$, 0, length$documents.length, 1,
+			(int forStart$index$i$var71, int forEnd$index$i$var71, int threadID$index$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
+				for(int index$i$var71 = forStart$index$i$var71; index$i$var71 < forEnd$index$i$var71; index$i$var71 += 1) {
+						int i$var71 = index$i$var71;
+						int threadID$i$var71 = threadID$index$i$var71;
+						parallelFor(RNG$1, 0, length$documents[i$var71], 1,
+							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
+								for(int j = forStart$j; j < forEnd$j; j += 1) {
+										if(!constrainedFlag$sample90[i$var71][j])
+											drawValueSample90(i$var71, j, threadID$j, RNG$2);
+									}
+							}
+						);
+					}
+			}
+		);
 	}
 
 	private final void initializeLogProbabilityFields() {

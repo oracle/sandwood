@@ -6,25 +6,25 @@ interface Conditional4$CoreInterface extends org.sandwood.runtime.internal.model
 	public double[] get$bias();
 
 	// Setter for bias.
-	public void set$bias(double[] cv$value);
+	public void set$bias(double[] cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample21.
 	public boolean get$fixedFlag$sample21();
 
 	// Setter for fixedFlag$sample21.
-	public void set$fixedFlag$sample21(boolean cv$value);
+	public void set$fixedFlag$sample21(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample4.
 	public boolean get$fixedFlag$sample4();
 
 	// Setter for fixedFlag$sample4.
-	public void set$fixedFlag$sample4(boolean cv$value);
+	public void set$fixedFlag$sample4(boolean cv$value, boolean allocated$);
 
 	// Getter for guard.
 	public boolean get$guard();
 
 	// Setter for guard.
-	public void set$guard(boolean cv$value);
+	public void set$guard(boolean cv$value, boolean allocated$);
 
 	// Getter for logProbability$bernoulli.
 	public double get$logProbability$bernoulli();
@@ -42,7 +42,7 @@ interface Conditional4$CoreInterface extends org.sandwood.runtime.internal.model
 	public double get$observedValue();
 
 	// Setter for observedValue.
-	public void set$observedValue(double cv$value);
+	public void set$observedValue(double cv$value, boolean allocated$);
 
 	// Getter for value.
 	public double get$value();
@@ -51,5 +51,5 @@ interface Conditional4$CoreInterface extends org.sandwood.runtime.internal.model
 	public double get$var19();
 
 	// Setter for var19.
-	public void set$var19(double cv$value);
+	public void set$var19(double cv$value, boolean allocated$);
 }

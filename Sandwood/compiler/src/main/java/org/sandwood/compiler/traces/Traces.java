@@ -430,6 +430,8 @@ public abstract class Traces {
      */
     public abstract Set<SampleTask<?, ?>> getFixableTasks();
 
+    public abstract boolean isFixableTask(SampleTask<?, ?> task);
+
     /**
      * Method to get all the sample tasks that a variable depends on without a trace going via a random variable or
      * observed variable.

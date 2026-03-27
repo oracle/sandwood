@@ -6,13 +6,13 @@ interface Flip1CoinMK18$CoreInterface extends org.sandwood.runtime.internal.mode
 	public int get$a();
 
 	// Setter for a.
-	public void set$a(int cv$value);
+	public void set$a(int cv$value, boolean allocated$);
 
 	// Getter for b.
 	public int get$b();
 
 	// Setter for b.
-	public void set$b(int cv$value);
+	public void set$b(int cv$value, boolean allocated$);
 
 	// Getter for bias.
 	public double[][][] get$bias();
@@ -21,19 +21,19 @@ interface Flip1CoinMK18$CoreInterface extends org.sandwood.runtime.internal.mode
 	public int get$c();
 
 	// Setter for c.
-	public void set$c(int cv$value);
+	public void set$c(int cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample11.
 	public boolean get$fixedFlag$sample11();
 
 	// Setter for fixedFlag$sample11.
-	public void set$fixedFlag$sample11(boolean cv$value);
+	public void set$fixedFlag$sample11(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample17.
 	public boolean get$fixedFlag$sample17();
 
 	// Setter for fixedFlag$sample17.
-	public void set$fixedFlag$sample17(boolean cv$value);
+	public void set$fixedFlag$sample17(boolean cv$value, boolean allocated$);
 
 	// Getter for flips.
 	public boolean[] get$flips();
@@ -42,7 +42,7 @@ interface Flip1CoinMK18$CoreInterface extends org.sandwood.runtime.internal.mode
 	public boolean[] get$flipsMeasured();
 
 	// Setter for flipsMeasured.
-	public void set$flipsMeasured(boolean[] cv$value);
+	public void set$flipsMeasured(boolean[] cv$value, boolean allocated$);
 
 	// Getter for logProbability$bernoulli.
 	public double get$logProbability$bernoulli();
@@ -63,17 +63,17 @@ interface Flip1CoinMK18$CoreInterface extends org.sandwood.runtime.internal.mode
 	public double get$q();
 
 	// Setter for q.
-	public void set$q(double cv$value);
+	public void set$q(double cv$value, boolean allocated$);
 
 	// Getter for samples.
 	public int get$samples();
 
 	// Setter for samples.
-	public void set$samples(int cv$value);
+	public void set$samples(int cv$value, boolean allocated$);
 
 	// Getter for t.
 	public double get$t();
 
 	// Setter for t.
-	public void set$t(double cv$value);
+	public void set$t(double cv$value, boolean allocated$);
 }

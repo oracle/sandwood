@@ -50,7 +50,7 @@ import org.sandwood.runtime.model.variables.ObservedVariableShapeable;
 public abstract class Model implements HasProbability, AutoCloseable {
     // Has space been allocated. This can only occur after the observed parameters
     // that any array sizes depend on have been set.
-    private boolean allocated = false;
+    protected boolean allocated = false;
     // Was the model last run forwards or with inference.
     private boolean lastForward = true;
     // Are the observed values propagated into the model. TODO can we merge this into existing flags.

@@ -44,8 +44,9 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$fixedFlag$sample73(boolean cv$value) {
+	public final void set$fixedFlag$sample73(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample73 = cv$value;
+		constrainedFlag$sample73 = (cv$value || constrainedFlag$sample73);
 		fixedProbFlag$sample73 = (cv$value && fixedProbFlag$sample73);
 		fixedProbFlag$sample89 = (cv$value && fixedProbFlag$sample89);
 	}
@@ -56,7 +57,7 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$i(int cv$value) {
+	public final void set$i(int cv$value, boolean allocated$) {
 		i = cv$value;
 		fixedProbFlag$sample73 = false;
 		fixedProbFlag$sample89 = false;
@@ -68,7 +69,7 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$length$obs_measured(int cv$value) {
+	public final void set$length$obs_measured(int cv$value, boolean allocated$) {
 		length$obs_measured = cv$value;
 	}
 
@@ -103,7 +104,7 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$obs_measured(boolean[] cv$value) {
+	public final void set$obs_measured(boolean[] cv$value, boolean allocated$) {
 		obs_measured = cv$value;
 	}
 
@@ -118,49 +119,21 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$y(int cv$value) {
+	public final void set$y(int cv$value, boolean allocated$) {
 		y = cv$value;
 	}
 
-	private final void logProbabilityValue$sample73() {
-		if(!fixedProbFlag$sample73) {
-			double[] var67 = a[y];
-			int lengthCV$a$71_2 = -1;
-			if((0 == y))
-				lengthCV$a$71_2 = 2;
-			if((1 == y))
-				lengthCV$a$71_2 = 3;
-			double cv$distributionAccumulator = ((((((0.0 <= i) && (i < lengthCV$a$71_2)) && (0 < lengthCV$a$71_2)) && (0.0 <= var67[i])) && (var67[i] <= 1.0))?Math.log(var67[i]):Double.NEGATIVE_INFINITY);
-			logProbability$i = cv$distributionAccumulator;
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			if(fixedFlag$sample73)
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample73 = fixedFlag$sample73;
-		} else {
-			logProbability$$model = (logProbability$$model + logProbability$i);
-			if(fixedFlag$sample73)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$i);
-		}
+	private final void drawValueSample73() {
+		int lengthCV$a$71_2 = -1;
+		if((0 == y))
+			lengthCV$a$71_2 = 2;
+		if((1 == y))
+			lengthCV$a$71_2 = 3;
+		i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_2);
+		p = b[y][i];
 	}
 
-	private final void logProbabilityValue$sample89() {
-		if(!fixedProbFlag$sample89) {
-			double cv$sampleAccumulator = 0.0;
-			for(int var84 = 0; var84 < length$obs_measured; var84 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= p) && (p <= 1.0))?Math.log((obs[var84]?p:(1.0 - p))):Double.NEGATIVE_INFINITY));
-			logProbability$var85 = cv$sampleAccumulator;
-			logProbability$obs = (logProbability$obs + cv$sampleAccumulator);
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample89 = fixedFlag$sample73;
-		} else {
-			logProbability$obs = (logProbability$obs + logProbability$var85);
-			logProbability$$model = (logProbability$$model + logProbability$var85);
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var85);
-		}
-	}
-
-	private final void sample73() {
+	private final void inferSample73() {
 		constrainedFlag$sample73 = false;
 		int lengthCV$a$71_0 = -1;
 		if((0 == y))
@@ -214,6 +187,44 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		}
 	}
 
+	private final void logProbabilityValue$sample73() {
+		if(!fixedProbFlag$sample73) {
+			double[] var67 = a[y];
+			int lengthCV$a$71_3 = -1;
+			if((0 == y))
+				lengthCV$a$71_3 = 2;
+			if((1 == y))
+				lengthCV$a$71_3 = 3;
+			double cv$distributionAccumulator = ((((((0.0 <= i) && (i < lengthCV$a$71_3)) && (0 < lengthCV$a$71_3)) && (0.0 <= var67[i])) && (var67[i] <= 1.0))?Math.log(var67[i]):Double.NEGATIVE_INFINITY);
+			logProbability$i = cv$distributionAccumulator;
+			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			if(fixedFlag$sample73)
+				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+			fixedProbFlag$sample73 = fixedFlag$sample73;
+		} else {
+			logProbability$$model = (logProbability$$model + logProbability$i);
+			if(fixedFlag$sample73)
+				logProbability$$evidence = (logProbability$$evidence + logProbability$i);
+		}
+	}
+
+	private final void logProbabilityValue$sample89() {
+		if(!fixedProbFlag$sample89) {
+			double cv$sampleAccumulator = 0.0;
+			for(int var84 = 0; var84 < length$obs_measured; var84 += 1)
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= p) && (p <= 1.0))?Math.log((obs[var84]?p:(1.0 - p))):Double.NEGATIVE_INFINITY));
+			logProbability$var85 = cv$sampleAccumulator;
+			logProbability$obs = (logProbability$obs + cv$sampleAccumulator);
+			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			fixedProbFlag$sample89 = fixedFlag$sample73;
+		} else {
+			logProbability$obs = (logProbability$obs + logProbability$var85);
+			logProbability$$model = (logProbability$$model + logProbability$var85);
+			logProbability$$evidence = (logProbability$$evidence + logProbability$var85);
+		}
+	}
+
 	@Override
 	public final void allocateScratch() {
 		cv$var69$stateProbabilityGlobal = new double[3];
@@ -234,12 +245,12 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample73) {
-			int lengthCV$a$71_3 = -1;
+			int lengthCV$a$71_4 = -1;
 			if((0 == y))
-				lengthCV$a$71_3 = 2;
+				lengthCV$a$71_4 = 2;
 			if((1 == y))
-				lengthCV$a$71_3 = 3;
-			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_3);
+				lengthCV$a$71_4 = 3;
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_4);
 			p = b[y][i];
 		}
 		for(int var84 = 0; var84 < length$obs_measured; var84 += 1)
@@ -248,6 +259,47 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		if(!fixedFlag$sample73) {
+			int lengthCV$a$71_8 = -1;
+			if((0 == y))
+				lengthCV$a$71_8 = 2;
+			if((1 == y))
+				lengthCV$a$71_8 = 3;
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_8);
+		}
+		p = b[y][i];
+	}
+
+	@Override
+	public final void forwardGenerationPrime() {
+		if(!fixedFlag$sample73) {
+			int lengthCV$a$71_5 = -1;
+			if((0 == y))
+				lengthCV$a$71_5 = 2;
+			if((1 == y))
+				lengthCV$a$71_5 = 3;
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_5);
+		}
+		p = b[y][i];
+		for(int var84 = 0; var84 < length$obs_measured; var84 += 1)
+			obs[var84] = DistributionSampling.sampleBernoulli(RNG$, p);
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
+		if(!fixedFlag$sample73) {
+			int lengthCV$a$71_6 = -1;
+			if((0 == y))
+				lengthCV$a$71_6 = 2;
+			if((1 == y))
+				lengthCV$a$71_6 = 3;
+			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_6);
+			p = b[y][i];
+		}
+	}
+
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		if(!fixedFlag$sample73) {
 			int lengthCV$a$71_7 = -1;
 			if((0 == y))
@@ -260,51 +312,12 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample73) {
-			int lengthCV$a$71_4 = -1;
-			if((0 == y))
-				lengthCV$a$71_4 = 2;
-			if((1 == y))
-				lengthCV$a$71_4 = 3;
-			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_4);
-		}
-		p = b[y][i];
-		for(int var84 = 0; var84 < length$obs_measured; var84 += 1)
-			obs[var84] = DistributionSampling.sampleBernoulli(RNG$, p);
-	}
-
-	@Override
-	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample73) {
-			int lengthCV$a$71_5 = -1;
-			if((0 == y))
-				lengthCV$a$71_5 = 2;
-			if((1 == y))
-				lengthCV$a$71_5 = 3;
-			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_5);
-			p = b[y][i];
-		}
-	}
-
-	@Override
-	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample73) {
-			int lengthCV$a$71_6 = -1;
-			if((0 == y))
-				lengthCV$a$71_6 = 2;
-			if((1 == y))
-				lengthCV$a$71_6 = 3;
-			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$71_6);
-		}
-		p = b[y][i];
-	}
-
-	@Override
 	public final void gibbsRound() {
 		if(!fixedFlag$sample73)
-			sample73();
+			inferSample73();
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample73)
+			drawValueSample73();
 	}
 
 	private final void initializeLogProbabilityFields() {

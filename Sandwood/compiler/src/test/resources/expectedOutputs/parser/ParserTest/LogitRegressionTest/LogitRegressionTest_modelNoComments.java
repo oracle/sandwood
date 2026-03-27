@@ -25,7 +25,7 @@ public final class LogitRegressionTest extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$bias(value);
+            system$c.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,7 +35,7 @@ public final class LogitRegressionTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample42(fixed);
+                system$c.set$fixedFlag$sample42(fixed, allocated);
             }
         }
 
@@ -59,7 +59,7 @@ public final class LogitRegressionTest extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$weights(value);
+            system$c.set$weights(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -69,7 +69,7 @@ public final class LogitRegressionTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample35(fixed);
+                system$c.set$fixedFlag$sample35(fixed, allocated);
             }
         }
 
@@ -134,7 +134,7 @@ public final class LogitRegressionTest extends Model {
         }
 
         @Override
-        protected void setValueInternal(double[][] value) { system$c.set$x(value); }
+        protected void setValueInternal(double[][] value) { system$c.set$x(value, allocated); }
     };
 
     /**
@@ -153,7 +153,7 @@ public final class LogitRegressionTest extends Model {
         }
 
         @Override
-        protected void setValueInternal(boolean[][] value) { system$c.set$yMeasured(value); }
+        protected void setValueInternal(boolean[][] value) { system$c.set$yMeasured(value, allocated); }
     };
 
     /**
@@ -228,20 +228,21 @@ public final class LogitRegressionTest extends Model {
     private void transferData(LogitRegressionTest$CoreInterface oldCore, LogitRegressionTest$CoreInterface newCore) {
         //Model inputs
         if(x.isSet())
-            newCore.set$x(oldCore.get$x());
+            newCore.set$x(oldCore.get$x(), false);
+
         //Observed scalars
         if(yMeasured.isSet())
-            newCore.set$yMeasured(oldCore.get$yMeasured());
+            newCore.set$yMeasured(oldCore.get$yMeasured(), false);
 
         //ComputedVariables
         if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias());
+            newCore.set$bias(oldCore.get$bias(), false);
         if($weights.isSet())
-            newCore.set$weights(oldCore.get$weights());
+            newCore.set$weights(oldCore.get$weights(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample35(oldCore.get$fixedFlag$sample35());
-        newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42());
+        newCore.set$fixedFlag$sample35(oldCore.get$fixedFlag$sample35(), false);
+        newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42(), false);
     }
 
     /**

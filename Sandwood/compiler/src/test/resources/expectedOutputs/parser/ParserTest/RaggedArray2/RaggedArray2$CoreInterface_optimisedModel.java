@@ -15,25 +15,25 @@ interface RaggedArray2$CoreInterface extends org.sandwood.runtime.internal.model
 	public boolean get$fixedFlag$sample81();
 
 	// Setter for fixedFlag$sample81.
-	public void set$fixedFlag$sample81(boolean cv$value);
+	public void set$fixedFlag$sample81(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample84.
 	public boolean get$fixedFlag$sample84();
 
 	// Setter for fixedFlag$sample84.
-	public void set$fixedFlag$sample84(boolean cv$value);
+	public void set$fixedFlag$sample84(boolean cv$value, boolean allocated$);
 
 	// Getter for i.
 	public int get$i();
 
 	// Setter for i.
-	public void set$i(int cv$value);
+	public void set$i(int cv$value, boolean allocated$);
 
 	// Getter for length$obs_measured.
 	public int get$length$obs_measured();
 
 	// Setter for length$obs_measured.
-	public void set$length$obs_measured(int cv$value);
+	public void set$length$obs_measured(int cv$value, boolean allocated$);
 
 	// Getter for logProbability$i.
 	public double get$logProbability$i();
@@ -51,7 +51,7 @@ interface RaggedArray2$CoreInterface extends org.sandwood.runtime.internal.model
 	public boolean[] get$obs_measured();
 
 	// Setter for obs_measured.
-	public void set$obs_measured(boolean[] cv$value);
+	public void set$obs_measured(boolean[] cv$value, boolean allocated$);
 
 	// Getter for p.
 	public double get$p();
@@ -60,5 +60,5 @@ interface RaggedArray2$CoreInterface extends org.sandwood.runtime.internal.model
 	public int get$y();
 
 	// Setter for y.
-	public void set$y(int cv$value);
+	public void set$y(int cv$value, boolean allocated$);
 }

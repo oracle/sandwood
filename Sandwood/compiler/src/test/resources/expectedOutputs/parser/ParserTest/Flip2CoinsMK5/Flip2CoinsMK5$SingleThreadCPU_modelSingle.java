@@ -37,10 +37,9 @@ final class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.
 
 	// Setter for bias.
 	@Override
-	public final void set$bias(double[] cv$value) {
+	public final void set$bias(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
-		// Set bias
 		bias = cv$value;
 		
 		// Unset the fixed probability flag for sample 18 as it depends on bias.
@@ -64,10 +63,17 @@ final class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.
 
 	// Setter for fixedFlag$sample18.
 	@Override
-	public final void set$fixedFlag$sample18(boolean cv$value) {
+	public final void set$fixedFlag$sample18(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample18 including if probabilities
 		// need to be updated.
 		fixedFlag$sample18 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample18$1 = 0; index$constrainedFlag$sample18$1 < constrainedFlag$sample18.length; index$constrainedFlag$sample18$1 += 1)
+				constrainedFlag$sample18[index$constrainedFlag$sample18$1] = true;
+		}
 		
 		// Should the probability of sample 18 be set to fixed. This will only every change
 		// the flag to false.
@@ -92,8 +98,7 @@ final class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.
 
 	// Setter for flipsMeasured.
 	@Override
-	public final void set$flipsMeasured(boolean[][] cv$value) {
-		// Set flipsMeasured
+	public final void set$flipsMeasured(boolean[][] cv$value, boolean allocated$) {
 		flipsMeasured = cv$value;
 	}
 
@@ -135,9 +140,86 @@ final class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.
 
 	// Setter for shape.
 	@Override
-	public final void set$shape(int[] cv$value) {
-		// Set shape
+	public final void set$shape(int[] cv$value, boolean allocated$) {
 		shape = cv$value;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample18
+	private final void drawValueSample18(int var17) {
+		bias[var17] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 18 drawn from Beta 6. Inference was performed using a Beta to Bernoulli/Binomial
+	// conjugate prior.
+	private final void inferSample18(int var17) {
+		if(true) {
+			constrainedFlag$sample18[((var17 - 0) / 1)] = false;
+			
+			// Local variable to record the number of true samples.
+			int cv$sum = 0;
+			
+			// Local variable to record the number of samples.
+			int cv$count = 0;
+			{
+				// Processing random variable 33.
+				{
+					// Looking for a path between Sample 18 and consumer Bernoulli 33.
+					{
+						{
+							for(int j = 0; j < coins; j += 1) {
+								if((var17 == j)) {
+									// Processing sample task 44 of consumer random variable bernoulli.
+									{
+										{
+											for(int var43 = 0; var43 < shape[j]; var43 += 1) {
+												// Flag recording if this sample task of the consuming random variable is constrained.
+												boolean cv$sampleConstrained = true;
+												if(cv$sampleConstrained) {
+													// Mark that the sample has observed constrained data.
+													constrainedFlag$sample18[((var17 - 0) / 1)] = true;
+													{
+														{
+															{
+																{
+																	{
+																		// Include the value sampled by task 44 from random variable bernoulli.
+																		// Increment the number of samples.
+																		cv$count = (cv$count + 1);
+																		
+																		// If the sample value was positive increase the count
+																		if(flips[j][var43])
+																			cv$sum = (cv$sum + 1);
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample18[((var17 - 0) / 1)]) {
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				double var18 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+				
+				// Guards to ensure that bias is only updated when there is a valid path.
+				{
+					{
+						{
+							bias[var17] = var18;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	// Calculate the probability of the samples represented by sample18 using sampled
@@ -377,79 +459,6 @@ final class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 18 drawn from Beta 6. Inference was performed using a Beta to Bernoulli/Binomial
-	// conjugate prior.
-	private final void sample18(int var17) {
-		if(true) {
-			constrainedFlag$sample18[((var17 - 0) / 1)] = false;
-			
-			// Local variable to record the number of true samples.
-			int cv$sum = 0;
-			
-			// Local variable to record the number of samples.
-			int cv$count = 0;
-			{
-				// Processing random variable 33.
-				{
-					// Looking for a path between Sample 18 and consumer Bernoulli 33.
-					{
-						{
-							for(int j = 0; j < coins; j += 1) {
-								if((var17 == j)) {
-									// Processing sample task 44 of consumer random variable bernoulli.
-									{
-										{
-											for(int var43 = 0; var43 < shape[j]; var43 += 1) {
-												// Flag recording if this sample task of the consuming random variable is constrained.
-												boolean cv$sampleConstrained = true;
-												if(cv$sampleConstrained) {
-													// Mark that the sample has observed constrained data.
-													constrainedFlag$sample18[((var17 - 0) / 1)] = true;
-													{
-														{
-															{
-																{
-																	{
-																		// Include the value sampled by task 44 from random variable bernoulli.
-																		// Increment the number of samples.
-																		cv$count = (cv$count + 1);
-																		
-																		// If the sample value was positive increase the count
-																		if(flips[j][var43])
-																			cv$sum = (cv$sum + 1);
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(constrainedFlag$sample18[((var17 - 0) / 1)]) {
-				// Write out the value of the sample to a temporary variable prior to updating the
-				// intermediate variables.
-				double var18 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-				
-				// Guards to ensure that bias is only updated when there is a valid path.
-				{
-					{
-						{
-							bias[var17] = var18;
-						}
-					}
-				}
-			}
-		}
-	}
-
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -548,19 +557,23 @@ final class Flip2CoinsMK5$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(system$gibbsForward) {
 			for(int var17 = 0; var17 < coins; var17 += 1) {
 				if(!fixedFlag$sample18)
-					sample18(var17);
+					inferSample18(var17);
 			}
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			for(int var17 = (coins - ((((coins - 1) - 0) % 1) + 1)); var17 >= ((0 - 1) + 1); var17 -= 1) {
 				if(!fixedFlag$sample18)
-					sample18(var17);
+					inferSample18(var17);
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		for(int var17 = 0; var17 < coins; var17 += 1) {
+			if(!constrainedFlag$sample18[((var17 - 0) / 1)])
+				drawValueSample18(var17);
+		}
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for

@@ -46,7 +46,7 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 
 	// Setter for b0.
 	@Override
-	public final void set$b0(double cv$value) {
+	public final void set$b0(double cv$value, boolean allocated$) {
 		// Set flags for all the side effects of b0 including if probabilities need to be
 		// updated.
 		b0 = cv$value;
@@ -66,7 +66,7 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 
 	// Setter for b1.
 	@Override
-	public final void set$b1(double cv$value) {
+	public final void set$b1(double cv$value, boolean allocated$) {
 		// Set flags for all the side effects of b1 including if probabilities need to be
 		// updated.
 		b1 = cv$value;
@@ -86,10 +86,11 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 
 	// Setter for fixedFlag$sample11.
 	@Override
-	public final void set$fixedFlag$sample11(boolean cv$value) {
+	public final void set$fixedFlag$sample11(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample11 including if probabilities
 		// need to be updated.
 		fixedFlag$sample11 = cv$value;
+		constrainedFlag$sample11 = (fixedFlag$sample11 || constrainedFlag$sample11);
 		
 		// Should the probability of sample 11 be set to fixed. This will only every change
 		// the flag to false.
@@ -108,10 +109,11 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 
 	// Setter for fixedFlag$sample16.
 	@Override
-	public final void set$fixedFlag$sample16(boolean cv$value) {
+	public final void set$fixedFlag$sample16(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample16 including if probabilities
 		// need to be updated.
 		fixedFlag$sample16 = cv$value;
+		constrainedFlag$sample16 = (fixedFlag$sample16 || constrainedFlag$sample16);
 		
 		// Should the probability of sample 16 be set to fixed. This will only every change
 		// the flag to false.
@@ -130,10 +132,11 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 
 	// Setter for fixedFlag$sample7.
 	@Override
-	public final void set$fixedFlag$sample7(boolean cv$value) {
+	public final void set$fixedFlag$sample7(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample7 including if probabilities
 		// need to be updated.
 		fixedFlag$sample7 = cv$value;
+		constrainedFlag$sample7 = (fixedFlag$sample7 || constrainedFlag$sample7);
 		
 		// Should the probability of sample 7 be set to fixed. This will only every change
 		// the flag to false.
@@ -194,7 +197,7 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 
 	// Setter for variance.
 	@Override
-	public final void set$variance(double cv$value) {
+	public final void set$variance(double cv$value, boolean allocated$) {
 		// Set flags for all the side effects of variance including if probabilities need
 		// to be updated.
 		variance = cv$value;
@@ -214,8 +217,7 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 
 	// Setter for x.
 	@Override
-	public final void set$x(double[] cv$value) {
-		// Set x
+	public final void set$x(double[] cv$value, boolean allocated$) {
 		x = cv$value;
 	}
 
@@ -233,9 +235,242 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 
 	// Setter for yMeasured.
 	@Override
-	public final void set$yMeasured(double[] cv$value) {
-		// Set yMeasured
+	public final void set$yMeasured(double[] cv$value, boolean allocated$) {
 		yMeasured = cv$value;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample11
+	private final void drawValueSample11() {
+		b1 = ((Math.sqrt(5.0) * DistributionSampling.sampleGaussian(RNG$)) + 1.0);
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample16
+	private final void drawValueSample16() {
+		variance = (1 / DistributionSampling.sampleGamma(RNG$, 1.0, 1.0));
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample7
+	private final void drawValueSample7() {
+		b0 = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 11 drawn from Gaussian 10. Inference was performed using a Gaussian
+	// to Gaussian conjugate prior.
+	private final void inferSample11() {
+		if(true) {
+			constrainedFlag$sample11 = false;
+			
+			// State to record the weighting of each sample that is consumed. This is the:
+			// sum of the sample denominator*(the sample value - the sample nominator).
+			double cv$sum = 0.0;
+			
+			// State for storing the sum of the squares of the sample denominators.
+			double cv$denominatorSquareSum = 0.0;
+			
+			// Flag to record if we have a value for Sigma.
+			boolean cv$sigmaNotFound = true;
+			
+			// State for the value of sigma once we find it.
+			double cv$sigmaValue = 1.0;
+			{
+				// Processing random variable 32.
+				{
+					{
+						{
+							for(int i = 0; i < noSamples; i += 1) {
+								// Flag recording if this sample task of the consuming random variable is constrained.
+								boolean cv$sampleConstrained = true;
+								if(cv$sampleConstrained) {
+									// Mark that the sample has observed constrained data.
+									constrainedFlag$sample11 = true;
+									{
+										{
+											{
+												{
+													{
+														// State for tracking the changes that happen to the sampled value between it being
+														// consumed and it being produced.
+														double cv$denominator = 1.0;
+														double cv$numerator = 0.0;
+														cv$numerator = (cv$numerator * x[i]);
+														cv$denominator = (cv$denominator * x[i]);
+														cv$numerator = (b0 + cv$numerator);
+														
+														// Record the value of a sample generated by a consuming sample 33 of random variable
+														// var32.
+														// 
+														// Add the denominator squared to the sample denominator
+														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+														
+														// Add the weighting of the sample to the sum.
+														cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
+														
+														// If we have not got the value of sigma yet record it and set a flag so it is not
+														// recorded again.
+														if(cv$sigmaNotFound) {
+															cv$sigmaValue = variance;
+															cv$sigmaNotFound = false;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample11)
+				// Write out the new value of the sample.
+				b1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 1.0, 5.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		}
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 16 drawn from Gamma 15. Inference was performed using a Gamma to
+	// Gaussian conjugate prior.
+	private final void inferSample16() {
+		if(true) {
+			constrainedFlag$sample16 = false;
+			
+			// Variable to track the sum of the difference between the samples and the random
+			// variables mean squared.
+			double cv$sum = 0.0;
+			
+			// Variable to record how many samples have been included in this calculation.
+			int cv$count = 0;
+			{
+				// Processing random variable 32.
+				{
+					{
+						{
+							for(int i = 0; i < noSamples; i += 1) {
+								// Flag recording if this sample task of the consuming random variable is constrained.
+								boolean cv$sampleConstrained = true;
+								if(cv$sampleConstrained) {
+									// Mark that the sample has observed constrained data.
+									constrainedFlag$sample16 = true;
+									{
+										{
+											{
+												{
+													{
+														// The mean parameter for Gaussian var32.
+														double cv$var32$mu = (b0 + (b1 * x[i]));
+														
+														// Consume sample task 33 from random variable var32.
+														// 
+														// The difference between the mean parameter and the value sampled from the Gaussian.
+														double cv$var32$diff = (cv$var32$mu - y[i]);
+														
+														// Include this sample by adding the square of the difference to the sum.
+														cv$sum = (cv$sum + (cv$var32$diff * cv$var32$diff));
+														
+														// Increment the number of samples in the calculation.
+														cv$count = (cv$count + 1);
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample16) {
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				double var16 = Conjugates.sampleConjugateGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
+				
+				// Guards to ensure that variance is only updated when there is a valid path.
+				{
+					{
+						{
+							// Write out the new sample value.
+							variance = (1 / var16);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 7 drawn from Gaussian 6. Inference was performed using a Gaussian
+	// to Gaussian conjugate prior.
+	private final void inferSample7() {
+		if(true) {
+			constrainedFlag$sample7 = false;
+			
+			// State to record the weighting of each sample that is consumed. This is the:
+			// sum of the sample denominator*(the sample value - the sample nominator).
+			double cv$sum = 0.0;
+			
+			// State for storing the sum of the squares of the sample denominators.
+			double cv$denominatorSquareSum = 0.0;
+			
+			// Flag to record if we have a value for Sigma.
+			boolean cv$sigmaNotFound = true;
+			
+			// State for the value of sigma once we find it.
+			double cv$sigmaValue = 1.0;
+			{
+				// Processing random variable 32.
+				{
+					{
+						{
+							for(int i = 0; i < noSamples; i += 1) {
+								// Flag recording if this sample task of the consuming random variable is constrained.
+								boolean cv$sampleConstrained = true;
+								if(cv$sampleConstrained) {
+									// Mark that the sample has observed constrained data.
+									constrainedFlag$sample7 = true;
+									{
+										{
+											{
+												{
+													{
+														// State for tracking the changes that happen to the sampled value between it being
+														// consumed and it being produced.
+														double cv$denominator = 1.0;
+														double cv$numerator = 0.0;
+														cv$numerator = (cv$numerator + (b1 * x[i]));
+														
+														// Record the value of a sample generated by a consuming sample 33 of random variable
+														// var32.
+														// 
+														// Add the denominator squared to the sample denominator
+														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+														
+														// Add the weighting of the sample to the sum.
+														cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
+														
+														// If we have not got the value of sigma yet record it and set a flag so it is not
+														// recorded again.
+														if(cv$sigmaNotFound) {
+															cv$sigmaValue = variance;
+															cv$sigmaNotFound = false;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample7)
+				// Write out the new value of the sample.
+				b0 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 2.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		}
 	}
 
 	// Calculate the probability of the samples represented by sample11 using sampled
@@ -643,225 +878,6 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 		}
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 11 drawn from Gaussian 10. Inference was performed using a Gaussian
-	// to Gaussian conjugate prior.
-	private final void sample11() {
-		if(true) {
-			constrainedFlag$sample11 = false;
-			
-			// State to record the weighting of each sample that is consumed. This is the:
-			// sum of the sample denominator*(the sample value - the sample nominator).
-			double cv$sum = 0.0;
-			
-			// State for storing the sum of the squares of the sample denominators.
-			double cv$denominatorSquareSum = 0.0;
-			
-			// Flag to record if we have a value for Sigma.
-			boolean cv$sigmaNotFound = true;
-			
-			// State for the value of sigma once we find it.
-			double cv$sigmaValue = 1.0;
-			{
-				// Processing random variable 32.
-				{
-					{
-						{
-							for(int i = 0; i < noSamples; i += 1) {
-								// Flag recording if this sample task of the consuming random variable is constrained.
-								boolean cv$sampleConstrained = true;
-								if(cv$sampleConstrained) {
-									// Mark that the sample has observed constrained data.
-									constrainedFlag$sample11 = true;
-									{
-										{
-											{
-												{
-													{
-														// State for tracking the changes that happen to the sampled value between it being
-														// consumed and it being produced.
-														double cv$denominator = 1.0;
-														double cv$numerator = 0.0;
-														cv$numerator = (cv$numerator * x[i]);
-														cv$denominator = (cv$denominator * x[i]);
-														cv$numerator = (b0 + cv$numerator);
-														
-														// Record the value of a sample generated by a consuming sample 33 of random variable
-														// var32.
-														// 
-														// Add the denominator squared to the sample denominator
-														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-														
-														// Add the weighting of the sample to the sum.
-														cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
-														
-														// If we have not got the value of sigma yet record it and set a flag so it is not
-														// recorded again.
-														if(cv$sigmaNotFound) {
-															cv$sigmaValue = variance;
-															cv$sigmaNotFound = false;
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(constrainedFlag$sample11)
-				// Write out the new value of the sample.
-				b1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 1.0, 5.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-		}
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 16 drawn from Gamma 15. Inference was performed using a Gamma to
-	// Gaussian conjugate prior.
-	private final void sample16() {
-		if(true) {
-			constrainedFlag$sample16 = false;
-			
-			// Variable to track the sum of the difference between the samples and the random
-			// variables mean squared.
-			double cv$sum = 0.0;
-			
-			// Variable to record how many samples have been included in this calculation.
-			int cv$count = 0;
-			{
-				// Processing random variable 32.
-				{
-					{
-						{
-							for(int i = 0; i < noSamples; i += 1) {
-								// Flag recording if this sample task of the consuming random variable is constrained.
-								boolean cv$sampleConstrained = true;
-								if(cv$sampleConstrained) {
-									// Mark that the sample has observed constrained data.
-									constrainedFlag$sample16 = true;
-									{
-										{
-											{
-												{
-													{
-														// The mean parameter for Gaussian var32.
-														double cv$var32$mu = (b0 + (b1 * x[i]));
-														
-														// Consume sample task 33 from random variable var32.
-														// 
-														// The difference between the mean parameter and the value sampled from the Gaussian.
-														double cv$var32$diff = (cv$var32$mu - y[i]);
-														
-														// Include this sample by adding the square of the difference to the sum.
-														cv$sum = (cv$sum + (cv$var32$diff * cv$var32$diff));
-														
-														// Increment the number of samples in the calculation.
-														cv$count = (cv$count + 1);
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(constrainedFlag$sample16) {
-				// Write out the value of the sample to a temporary variable prior to updating the
-				// intermediate variables.
-				double var16 = Conjugates.sampleConjugateGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
-				
-				// Guards to ensure that variance is only updated when there is a valid path.
-				{
-					{
-						{
-							// Write out the new sample value.
-							variance = (1 / var16);
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 7 drawn from Gaussian 6. Inference was performed using a Gaussian
-	// to Gaussian conjugate prior.
-	private final void sample7() {
-		if(true) {
-			constrainedFlag$sample7 = false;
-			
-			// State to record the weighting of each sample that is consumed. This is the:
-			// sum of the sample denominator*(the sample value - the sample nominator).
-			double cv$sum = 0.0;
-			
-			// State for storing the sum of the squares of the sample denominators.
-			double cv$denominatorSquareSum = 0.0;
-			
-			// Flag to record if we have a value for Sigma.
-			boolean cv$sigmaNotFound = true;
-			
-			// State for the value of sigma once we find it.
-			double cv$sigmaValue = 1.0;
-			{
-				// Processing random variable 32.
-				{
-					{
-						{
-							for(int i = 0; i < noSamples; i += 1) {
-								// Flag recording if this sample task of the consuming random variable is constrained.
-								boolean cv$sampleConstrained = true;
-								if(cv$sampleConstrained) {
-									// Mark that the sample has observed constrained data.
-									constrainedFlag$sample7 = true;
-									{
-										{
-											{
-												{
-													{
-														// State for tracking the changes that happen to the sampled value between it being
-														// consumed and it being produced.
-														double cv$denominator = 1.0;
-														double cv$numerator = 0.0;
-														cv$numerator = (cv$numerator + (b1 * x[i]));
-														
-														// Record the value of a sample generated by a consuming sample 33 of random variable
-														// var32.
-														// 
-														// Add the denominator squared to the sample denominator
-														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-														
-														// Add the weighting of the sample to the sum.
-														cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
-														
-														// If we have not got the value of sigma yet record it and set a flag so it is not
-														// recorded again.
-														if(cv$sigmaNotFound) {
-															cv$sigmaValue = variance;
-															cv$sigmaNotFound = false;
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if(constrainedFlag$sample7)
-				// Write out the new value of the sample.
-				b0 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 2.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-		}
-	}
-
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -971,24 +987,30 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample7)
-				sample7();
+				inferSample7();
 			if(!fixedFlag$sample11)
-				sample11();
+				inferSample11();
 			if(!fixedFlag$sample16)
-				sample16();
+				inferSample16();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			if(!fixedFlag$sample16)
-				sample16();
+				inferSample16();
 			if(!fixedFlag$sample11)
-				sample11();
+				inferSample11();
 			if(!fixedFlag$sample7)
-				sample7();
+				inferSample7();
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample7)
+			drawValueSample7();
+		if(!constrainedFlag$sample11)
+			drawValueSample11();
+		if(!constrainedFlag$sample16)
+			drawValueSample16();
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for

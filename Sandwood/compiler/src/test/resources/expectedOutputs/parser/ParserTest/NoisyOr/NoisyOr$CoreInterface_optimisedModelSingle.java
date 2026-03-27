@@ -6,127 +6,127 @@ interface NoisyOr$CoreInterface extends org.sandwood.runtime.internal.model.Core
 	public boolean get$fixedFlag$sample12();
 
 	// Setter for fixedFlag$sample12.
-	public void set$fixedFlag$sample12(boolean cv$value);
+	public void set$fixedFlag$sample12(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample15.
 	public boolean get$fixedFlag$sample15();
 
 	// Setter for fixedFlag$sample15.
-	public void set$fixedFlag$sample15(boolean cv$value);
+	public void set$fixedFlag$sample15(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample18.
 	public boolean get$fixedFlag$sample18();
 
 	// Setter for fixedFlag$sample18.
-	public void set$fixedFlag$sample18(boolean cv$value);
+	public void set$fixedFlag$sample18(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample233.
 	public boolean get$fixedFlag$sample233();
 
 	// Setter for fixedFlag$sample233.
-	public void set$fixedFlag$sample233(boolean cv$value);
+	public void set$fixedFlag$sample233(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample248.
 	public boolean get$fixedFlag$sample248();
 
 	// Setter for fixedFlag$sample248.
-	public void set$fixedFlag$sample248(boolean cv$value);
+	public void set$fixedFlag$sample248(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample263.
 	public boolean get$fixedFlag$sample263();
 
 	// Setter for fixedFlag$sample263.
-	public void set$fixedFlag$sample263(boolean cv$value);
+	public void set$fixedFlag$sample263(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample278.
 	public boolean get$fixedFlag$sample278();
 
 	// Setter for fixedFlag$sample278.
-	public void set$fixedFlag$sample278(boolean cv$value);
+	public void set$fixedFlag$sample278(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample293.
 	public boolean get$fixedFlag$sample293();
 
 	// Setter for fixedFlag$sample293.
-	public void set$fixedFlag$sample293(boolean cv$value);
+	public void set$fixedFlag$sample293(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample3.
 	public boolean get$fixedFlag$sample3();
 
 	// Setter for fixedFlag$sample3.
-	public void set$fixedFlag$sample3(boolean cv$value);
+	public void set$fixedFlag$sample3(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample308.
 	public boolean get$fixedFlag$sample308();
 
 	// Setter for fixedFlag$sample308.
-	public void set$fixedFlag$sample308(boolean cv$value);
+	public void set$fixedFlag$sample308(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample430.
 	public boolean get$fixedFlag$sample430();
 
 	// Setter for fixedFlag$sample430.
-	public void set$fixedFlag$sample430(boolean cv$value);
+	public void set$fixedFlag$sample430(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample6.
 	public boolean get$fixedFlag$sample6();
 
 	// Setter for fixedFlag$sample6.
-	public void set$fixedFlag$sample6(boolean cv$value);
+	public void set$fixedFlag$sample6(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample9.
 	public boolean get$fixedFlag$sample9();
 
 	// Setter for fixedFlag$sample9.
-	public void set$fixedFlag$sample9(boolean cv$value);
+	public void set$fixedFlag$sample9(boolean cv$value, boolean allocated$);
 
 	// Getter for flag1.
 	public boolean get$flag1();
 
 	// Setter for flag1.
-	public void set$flag1(boolean cv$value);
+	public void set$flag1(boolean cv$value, boolean allocated$);
 
 	// Getter for flag2.
 	public boolean get$flag2();
 
 	// Setter for flag2.
-	public void set$flag2(boolean cv$value);
+	public void set$flag2(boolean cv$value, boolean allocated$);
 
 	// Getter for flag3.
 	public boolean get$flag3();
 
 	// Setter for flag3.
-	public void set$flag3(boolean cv$value);
+	public void set$flag3(boolean cv$value, boolean allocated$);
 
 	// Getter for flag4.
 	public boolean get$flag4();
 
 	// Setter for flag4.
-	public void set$flag4(boolean cv$value);
+	public void set$flag4(boolean cv$value, boolean allocated$);
 
 	// Getter for flag5.
 	public boolean get$flag5();
 
 	// Setter for flag5.
-	public void set$flag5(boolean cv$value);
+	public void set$flag5(boolean cv$value, boolean allocated$);
 
 	// Getter for flag6.
 	public boolean get$flag6();
 
 	// Setter for flag6.
-	public void set$flag6(boolean cv$value);
+	public void set$flag6(boolean cv$value, boolean allocated$);
 
 	// Getter for issues$var213.
 	public boolean[][] get$issues$var213();
 
 	// Setter for issues$var213.
-	public void set$issues$var213(boolean[][] cv$value);
+	public void set$issues$var213(boolean[][] cv$value, boolean allocated$);
 
 	// Getter for issues$var383.
 	public boolean[][] get$issues$var383();
 
 	// Setter for issues$var383.
-	public void set$issues$var383(boolean[][] cv$value);
+	public void set$issues$var383(boolean[][] cv$value, boolean allocated$);
 
 	// Getter for logProbability$flag1.
 	public double get$logProbability$flag1();

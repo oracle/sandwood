@@ -25,7 +25,7 @@ public final class TerminalVariables extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$c1(value);
+            system$c.set$c1(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,7 +35,7 @@ public final class TerminalVariables extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample47(fixed);
+                system$c.set$fixedFlag$sample47(fixed, allocated);
             }
         }
 
@@ -59,7 +59,7 @@ public final class TerminalVariables extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$c10(value);
+            system$c.set$c10(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -69,7 +69,7 @@ public final class TerminalVariables extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample70(fixed);
+                system$c.set$fixedFlag$sample70(fixed, allocated);
             }
         }
 
@@ -93,7 +93,7 @@ public final class TerminalVariables extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$c11(value);
+            system$c.set$c11(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -103,7 +103,7 @@ public final class TerminalVariables extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample72(fixed);
+                system$c.set$fixedFlag$sample72(fixed, allocated);
             }
         }
 
@@ -127,7 +127,7 @@ public final class TerminalVariables extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$c12(value);
+            system$c.set$c12(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -137,7 +137,7 @@ public final class TerminalVariables extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample75(fixed);
+                system$c.set$fixedFlag$sample75(fixed, allocated);
             }
         }
 
@@ -192,7 +192,7 @@ public final class TerminalVariables extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$c3(value);
+            system$c.set$c3(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -202,7 +202,7 @@ public final class TerminalVariables extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample52(fixed);
+                system$c.set$fixedFlag$sample52(fixed, allocated);
             }
         }
 
@@ -226,7 +226,7 @@ public final class TerminalVariables extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$c4(value);
+            system$c.set$c4(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -236,7 +236,7 @@ public final class TerminalVariables extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample55(fixed);
+                system$c.set$fixedFlag$sample55(fixed, allocated);
             }
         }
 
@@ -260,7 +260,7 @@ public final class TerminalVariables extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$c5(value);
+            system$c.set$c5(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -270,7 +270,7 @@ public final class TerminalVariables extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample57(fixed);
+                system$c.set$fixedFlag$sample57(fixed, allocated);
             }
         }
 
@@ -294,7 +294,7 @@ public final class TerminalVariables extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$c6(value);
+            system$c.set$c6(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -304,7 +304,7 @@ public final class TerminalVariables extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample60(fixed);
+                system$c.set$fixedFlag$sample60(fixed, allocated);
             }
         }
 
@@ -328,7 +328,7 @@ public final class TerminalVariables extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$c7(value);
+            system$c.set$c7(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -338,7 +338,7 @@ public final class TerminalVariables extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample62(fixed);
+                system$c.set$fixedFlag$sample62(fixed, allocated);
             }
         }
 
@@ -362,7 +362,7 @@ public final class TerminalVariables extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$c8(value);
+            system$c.set$c8(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -372,7 +372,7 @@ public final class TerminalVariables extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample65(fixed);
+                system$c.set$fixedFlag$sample65(fixed, allocated);
             }
         }
 
@@ -396,7 +396,7 @@ public final class TerminalVariables extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$c9(value);
+            system$c.set$c9(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -406,7 +406,7 @@ public final class TerminalVariables extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample67(fixed);
+                system$c.set$fixedFlag$sample67(fixed, allocated);
             }
         }
 
@@ -430,7 +430,7 @@ public final class TerminalVariables extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$terminalVariable(value);
+            system$c.set$terminalVariable(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -440,7 +440,7 @@ public final class TerminalVariables extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample636(fixed);
+                system$c.set$fixedFlag$sample636(fixed, allocated);
             }
         }
 
@@ -471,7 +471,7 @@ public final class TerminalVariables extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$evidence(value); }
+        protected void setValueInternal(int value) { system$c.set$evidence(value, allocated); }
     };
 
     /**
@@ -538,49 +538,50 @@ public final class TerminalVariables extends Model {
     }
 
     private void transferData(TerminalVariables$CoreInterface oldCore, TerminalVariables$CoreInterface newCore) {
+
         //Observed scalars
         if(evidence.isSet())
-            newCore.set$evidence(oldCore.get$evidence());
+            newCore.set$evidence(oldCore.get$evidence(), false);
 
         //ComputedVariables
         if($c1.isSet())
-            newCore.set$c1(oldCore.get$c1());
+            newCore.set$c1(oldCore.get$c1(), false);
         if($c10.isSet())
-            newCore.set$c10(oldCore.get$c10());
+            newCore.set$c10(oldCore.get$c10(), false);
         if($c11.isSet())
-            newCore.set$c11(oldCore.get$c11());
+            newCore.set$c11(oldCore.get$c11(), false);
         if($c12.isSet())
-            newCore.set$c12(oldCore.get$c12());
+            newCore.set$c12(oldCore.get$c12(), false);
         if($c3.isSet())
-            newCore.set$c3(oldCore.get$c3());
+            newCore.set$c3(oldCore.get$c3(), false);
         if($c4.isSet())
-            newCore.set$c4(oldCore.get$c4());
+            newCore.set$c4(oldCore.get$c4(), false);
         if($c5.isSet())
-            newCore.set$c5(oldCore.get$c5());
+            newCore.set$c5(oldCore.get$c5(), false);
         if($c6.isSet())
-            newCore.set$c6(oldCore.get$c6());
+            newCore.set$c6(oldCore.get$c6(), false);
         if($c7.isSet())
-            newCore.set$c7(oldCore.get$c7());
+            newCore.set$c7(oldCore.get$c7(), false);
         if($c8.isSet())
-            newCore.set$c8(oldCore.get$c8());
+            newCore.set$c8(oldCore.get$c8(), false);
         if($c9.isSet())
-            newCore.set$c9(oldCore.get$c9());
+            newCore.set$c9(oldCore.get$c9(), false);
         if($terminalVariable.isSet())
-            newCore.set$terminalVariable(oldCore.get$terminalVariable());
+            newCore.set$terminalVariable(oldCore.get$terminalVariable(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47());
-        newCore.set$fixedFlag$sample52(oldCore.get$fixedFlag$sample52());
-        newCore.set$fixedFlag$sample55(oldCore.get$fixedFlag$sample55());
-        newCore.set$fixedFlag$sample57(oldCore.get$fixedFlag$sample57());
-        newCore.set$fixedFlag$sample60(oldCore.get$fixedFlag$sample60());
-        newCore.set$fixedFlag$sample62(oldCore.get$fixedFlag$sample62());
-        newCore.set$fixedFlag$sample636(oldCore.get$fixedFlag$sample636());
-        newCore.set$fixedFlag$sample65(oldCore.get$fixedFlag$sample65());
-        newCore.set$fixedFlag$sample67(oldCore.get$fixedFlag$sample67());
-        newCore.set$fixedFlag$sample70(oldCore.get$fixedFlag$sample70());
-        newCore.set$fixedFlag$sample72(oldCore.get$fixedFlag$sample72());
-        newCore.set$fixedFlag$sample75(oldCore.get$fixedFlag$sample75());
+        newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47(), false);
+        newCore.set$fixedFlag$sample52(oldCore.get$fixedFlag$sample52(), false);
+        newCore.set$fixedFlag$sample55(oldCore.get$fixedFlag$sample55(), false);
+        newCore.set$fixedFlag$sample57(oldCore.get$fixedFlag$sample57(), false);
+        newCore.set$fixedFlag$sample60(oldCore.get$fixedFlag$sample60(), false);
+        newCore.set$fixedFlag$sample62(oldCore.get$fixedFlag$sample62(), false);
+        newCore.set$fixedFlag$sample636(oldCore.get$fixedFlag$sample636(), false);
+        newCore.set$fixedFlag$sample65(oldCore.get$fixedFlag$sample65(), false);
+        newCore.set$fixedFlag$sample67(oldCore.get$fixedFlag$sample67(), false);
+        newCore.set$fixedFlag$sample70(oldCore.get$fixedFlag$sample70(), false);
+        newCore.set$fixedFlag$sample72(oldCore.get$fixedFlag$sample72(), false);
+        newCore.set$fixedFlag$sample75(oldCore.get$fixedFlag$sample75(), false);
     }
 
     /**

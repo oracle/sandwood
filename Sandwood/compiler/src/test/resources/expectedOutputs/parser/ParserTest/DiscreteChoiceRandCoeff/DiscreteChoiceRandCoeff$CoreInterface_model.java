@@ -6,25 +6,25 @@ interface DiscreteChoiceRandCoeff$CoreInterface extends org.sandwood.runtime.int
 	public int[] get$ObsChoices();
 
 	// Setter for ObsChoices.
-	public void set$ObsChoices(int[] cv$value);
+	public void set$ObsChoices(int[] cv$value, boolean allocated$);
 
 	// Getter for Prices.
 	public int[][] get$Prices();
 
 	// Setter for Prices.
-	public void set$Prices(int[][] cv$value);
+	public void set$Prices(int[][] cv$value, boolean allocated$);
 
 	// Getter for b.
 	public double get$b();
 
 	// Setter for b.
-	public void set$b(double cv$value);
+	public void set$b(double cv$value, boolean allocated$);
 
 	// Getter for beta.
 	public double[] get$beta();
 
 	// Setter for beta.
-	public void set$beta(double[] cv$value);
+	public void set$beta(double[] cv$value, boolean allocated$);
 
 	// Getter for choices.
 	public int[] get$choices();
@@ -33,25 +33,25 @@ interface DiscreteChoiceRandCoeff$CoreInterface extends org.sandwood.runtime.int
 	public boolean get$fixedFlag$sample21();
 
 	// Setter for fixedFlag$sample21.
-	public void set$fixedFlag$sample21(boolean cv$value);
+	public void set$fixedFlag$sample21(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample28.
 	public boolean get$fixedFlag$sample28();
 
 	// Setter for fixedFlag$sample28.
-	public void set$fixedFlag$sample28(boolean cv$value);
+	public void set$fixedFlag$sample28(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample34.
 	public boolean get$fixedFlag$sample34();
 
 	// Setter for fixedFlag$sample34.
-	public void set$fixedFlag$sample34(boolean cv$value);
+	public void set$fixedFlag$sample34(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample47.
 	public boolean get$fixedFlag$sample47();
 
 	// Setter for fixedFlag$sample47.
-	public void set$fixedFlag$sample47(boolean cv$value);
+	public void set$fixedFlag$sample47(boolean cv$value, boolean allocated$);
 
 	// Getter for logProbability$b.
 	public double get$logProbability$b();
@@ -75,13 +75,13 @@ interface DiscreteChoiceRandCoeff$CoreInterface extends org.sandwood.runtime.int
 	public int get$noObs();
 
 	// Setter for noObs.
-	public void set$noObs(int cv$value);
+	public void set$noObs(int cv$value, boolean allocated$);
 
 	// Getter for noProducts.
 	public int get$noProducts();
 
 	// Setter for noProducts.
-	public void set$noProducts(int cv$value);
+	public void set$noProducts(int cv$value, boolean allocated$);
 
 	// Getter for prob.
 	public double[][] get$prob();
@@ -90,11 +90,11 @@ interface DiscreteChoiceRandCoeff$CoreInterface extends org.sandwood.runtime.int
 	public double get$sigma();
 
 	// Setter for sigma.
-	public void set$sigma(double cv$value);
+	public void set$sigma(double cv$value, boolean allocated$);
 
 	// Getter for ut.
 	public double[] get$ut();
 
 	// Setter for ut.
-	public void set$ut(double[] cv$value);
+	public void set$ut(double[] cv$value, boolean allocated$);
 }

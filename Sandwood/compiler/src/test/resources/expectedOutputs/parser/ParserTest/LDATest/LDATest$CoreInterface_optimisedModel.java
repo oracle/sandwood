@@ -12,25 +12,25 @@ interface LDATest$CoreInterface extends org.sandwood.runtime.internal.model.Core
 	public int[][] get$documents();
 
 	// Setter for documents.
-	public void set$documents(int[][] cv$value);
+	public void set$documents(int[][] cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample42.
 	public boolean get$fixedFlag$sample42();
 
 	// Setter for fixedFlag$sample42.
-	public void set$fixedFlag$sample42(boolean cv$value);
+	public void set$fixedFlag$sample42(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample58.
 	public boolean get$fixedFlag$sample58();
 
 	// Setter for fixedFlag$sample58.
-	public void set$fixedFlag$sample58(boolean cv$value);
+	public void set$fixedFlag$sample58(boolean cv$value, boolean allocated$);
 
 	// Getter for length$documents.
 	public int[] get$length$documents();
 
 	// Setter for length$documents.
-	public void set$length$documents(int[] cv$value);
+	public void set$length$documents(int[] cv$value, boolean allocated$);
 
 	// Getter for logProbability$phi.
 	public double get$logProbability$phi();
@@ -45,25 +45,25 @@ interface LDATest$CoreInterface extends org.sandwood.runtime.internal.model.Core
 	public int get$noTopics();
 
 	// Setter for noTopics.
-	public void set$noTopics(int cv$value);
+	public void set$noTopics(int cv$value, boolean allocated$);
 
 	// Getter for phi.
 	public double[][] get$phi();
 
 	// Setter for phi.
-	public void set$phi(double[][] cv$value);
+	public void set$phi(double[][] cv$value, boolean allocated$);
 
 	// Getter for theta.
 	public double[][] get$theta();
 
 	// Setter for theta.
-	public void set$theta(double[][] cv$value);
+	public void set$theta(double[][] cv$value, boolean allocated$);
 
 	// Getter for vocabSize.
 	public int get$vocabSize();
 
 	// Setter for vocabSize.
-	public void set$vocabSize(int cv$value);
+	public void set$vocabSize(int cv$value, boolean allocated$);
 
 	// Getter for w.
 	public int[][] get$w();
@@ -72,5 +72,5 @@ interface LDATest$CoreInterface extends org.sandwood.runtime.internal.model.Core
 	public int[][] get$z();
 
 	// Setter for z.
-	public void set$z(int[][] cv$value);
+	public void set$z(int[][] cv$value, boolean allocated$);
 }

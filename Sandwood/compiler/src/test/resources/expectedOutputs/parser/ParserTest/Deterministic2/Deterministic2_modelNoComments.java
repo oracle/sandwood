@@ -24,7 +24,7 @@ public final class Deterministic2 extends Model {
 
         @Override
         protected void setValueInternal(int[] value) {
-            system$c.set$a(value);
+            system$c.set$a(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -34,7 +34,7 @@ public final class Deterministic2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample55(fixed);
+                system$c.set$fixedFlag$sample55(fixed, allocated);
             }
         }
 
@@ -70,7 +70,7 @@ public final class Deterministic2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample55(fixed);
+                system$c.set$fixedFlag$sample55(fixed, allocated);
             }
         }
 
@@ -125,7 +125,7 @@ public final class Deterministic2 extends Model {
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$m(value);
+            system$c.set$m(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -140,7 +140,7 @@ public final class Deterministic2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample29(fixed);
+                system$c.set$fixedFlag$sample29(fixed, allocated);
             }
         }
 
@@ -169,7 +169,7 @@ public final class Deterministic2 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$n(value); }
+        protected void setValueInternal(int value) { system$c.set$n(value, allocated); }
     };
 
     /**
@@ -188,7 +188,7 @@ public final class Deterministic2 extends Model {
         }
 
         @Override
-        protected void setValueInternal(boolean[] value) { system$c.set$flipsMeasured(value); }
+        protected void setValueInternal(boolean[] value) { system$c.set$flipsMeasured(value, allocated); }
     };
 
     /**
@@ -264,20 +264,21 @@ public final class Deterministic2 extends Model {
     private void transferData(Deterministic2$CoreInterface oldCore, Deterministic2$CoreInterface newCore) {
         //Model inputs
         if(n.isSet())
-            newCore.set$n(oldCore.get$n());
+            newCore.set$n(oldCore.get$n(), false);
+
         //Observed scalars
         if(flipsMeasured.isSet())
-            newCore.set$flipsMeasured(oldCore.get$flipsMeasured());
+            newCore.set$flipsMeasured(oldCore.get$flipsMeasured(), false);
 
         //ComputedVariables
         if($a.isSet())
-            newCore.set$a(oldCore.get$a());
+            newCore.set$a(oldCore.get$a(), false);
         if($m.isSet())
-            newCore.set$m(oldCore.get$m());
+            newCore.set$m(oldCore.get$m(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample29(oldCore.get$fixedFlag$sample29());
-        newCore.set$fixedFlag$sample55(oldCore.get$fixedFlag$sample55());
+        newCore.set$fixedFlag$sample29(oldCore.get$fixedFlag$sample29(), false);
+        newCore.set$fixedFlag$sample55(oldCore.get$fixedFlag$sample55(), false);
     }
 
     /**

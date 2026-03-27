@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.compilation.CompilationContext.SampleFunctionClass;
 import org.sandwood.compiler.compilation.util.FunctionUtils;
 import org.sandwood.compiler.compilation.util.SampleDesc;
 import org.sandwood.compiler.compilation.util.TreeUtils;
@@ -561,7 +562,8 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         compilationCtx.setInInference(false);
 
         // And place the subtree in a void function.
-        return voidFunction(Visibility.PRIVATE, FunctionName.createFunctionName(funcData.sampleDesc.uniqueName),
+        return voidFunction(Visibility.PRIVATE,
+                FunctionName.createFunctionName(SampleFunctionClass.INFERENCE, funcData.sampleDesc.sample),
                 functionArgs, result, comment, knownValues);
     }
 

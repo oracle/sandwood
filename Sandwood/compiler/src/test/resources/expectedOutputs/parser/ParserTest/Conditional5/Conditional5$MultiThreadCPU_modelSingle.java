@@ -96,7 +96,7 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for observedGuard.
 	@Override
-	public final void set$observedGuard(boolean cv$value) {
+	public final void set$observedGuard(boolean cv$value, boolean allocated$) {
 		observedGuard = cv$value;
 	}
 
@@ -108,7 +108,7 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for observedValue.
 	@Override
-	public final void set$observedValue(double cv$value) {
+	public final void set$observedValue(double cv$value, boolean allocated$) {
 		observedValue = cv$value;
 	}
 

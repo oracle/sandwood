@@ -56,7 +56,7 @@ public final class UniformBernoulli extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$prior(value);
+            system$c.set$prior(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -66,7 +66,7 @@ public final class UniformBernoulli extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample5(fixed);
+                system$c.set$fixedFlag$sample5(fixed, allocated);
             }
         }
 
@@ -98,13 +98,13 @@ public final class UniformBernoulli extends Model {
 
         @Override
         public void setValueInternal(boolean[] value) {
-            system$c.set$observed(value);
-            system$c.set$length$observed(value.length);
+            system$c.set$observed(value, allocated);
+            system$c.set$length$observed(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$observed(shape);
+            system$c.set$length$observed(shape, allocated);
         }
 
         @Override
@@ -192,18 +192,18 @@ public final class UniformBernoulli extends Model {
 
         //Observed arrays
         if(observed.isSet()) {
-            newCore.set$observed(oldCore.get$observed());
-            newCore.set$length$observed(oldCore.get$length$observed());
+            newCore.set$observed(oldCore.get$observed(), false);
+            newCore.set$length$observed(oldCore.get$length$observed(), false);
         }
         else if(observed.shapeSet())
-            newCore.set$length$observed(oldCore.get$length$observed());
+            newCore.set$length$observed(oldCore.get$length$observed(), false);
 
         //ComputedVariables
         if($prior.isSet())
-            newCore.set$prior(oldCore.get$prior());
+            newCore.set$prior(oldCore.get$prior(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample5(oldCore.get$fixedFlag$sample5());
+        newCore.set$fixedFlag$sample5(oldCore.get$fixedFlag$sample5(), false);
     }
 
     /**

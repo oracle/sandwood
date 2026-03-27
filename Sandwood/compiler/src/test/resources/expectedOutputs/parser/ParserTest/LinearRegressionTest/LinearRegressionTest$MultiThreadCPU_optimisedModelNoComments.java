@@ -44,7 +44,7 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		bias = cv$value;
 		fixedProbFlag$sample31 = false;
 		fixedProbFlag$sample74 = false;
@@ -56,8 +56,12 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$fixedFlag$sample24(boolean cv$value) {
+	public final void set$fixedFlag$sample24(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample24 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample24$1 = 0; index$constrainedFlag$sample24$1 < constrainedFlag$sample24.length; index$constrainedFlag$sample24$1 += 1)
+				constrainedFlag$sample24[index$constrainedFlag$sample24$1] = true;
+		}
 		fixedProbFlag$sample24 = (cv$value && fixedProbFlag$sample24);
 		fixedProbFlag$sample74 = (cv$value && fixedProbFlag$sample74);
 	}
@@ -68,8 +72,9 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$fixedFlag$sample31(boolean cv$value) {
+	public final void set$fixedFlag$sample31(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample31 = cv$value;
+		constrainedFlag$sample31 = (cv$value || constrainedFlag$sample31);
 		fixedProbFlag$sample31 = (cv$value && fixedProbFlag$sample31);
 		fixedProbFlag$sample74 = (cv$value && fixedProbFlag$sample74);
 	}
@@ -80,8 +85,9 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$fixedFlag$sample35(boolean cv$value) {
+	public final void set$fixedFlag$sample35(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample35 = cv$value;
+		constrainedFlag$sample35 = (cv$value || constrainedFlag$sample35);
 		fixedProbFlag$sample35 = (cv$value && fixedProbFlag$sample35);
 		fixedProbFlag$sample74 = (cv$value && fixedProbFlag$sample74);
 	}
@@ -132,7 +138,7 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$tau(double cv$value) {
+	public final void set$tau(double cv$value, boolean allocated$) {
 		tau = cv$value;
 		fixedProbFlag$sample35 = false;
 		fixedProbFlag$sample74 = false;
@@ -144,7 +150,7 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$weights(double[] cv$value) {
+	public final void set$weights(double[] cv$value, boolean allocated$) {
 		weights = cv$value;
 		fixedProbFlag$sample24 = false;
 		fixedProbFlag$sample74 = false;
@@ -156,7 +162,7 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$x(double[][] cv$value) {
+	public final void set$x(double[][] cv$value, boolean allocated$) {
 		x = cv$value;
 	}
 
@@ -171,8 +177,89 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$yMeasured(double[] cv$value) {
+	public final void set$yMeasured(double[] cv$value, boolean allocated$) {
 		yMeasured = cv$value;
+	}
+
+	private final void drawValueSample24(int var23) {
+		weights[var23] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
+			phi[i$var45][var23] = (weights[var23] * x[i$var45][var23]);
+	}
+
+	private final void drawValueSample31() {
+		bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+	}
+
+	private final void drawValueSample35() {
+		tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
+	}
+
+	private final void inferSample24(int var23) {
+		constrainedFlag$sample24[var23] = false;
+		double cv$sum = 0.0;
+		double cv$denominatorSquareSum = 0.0;
+		boolean cv$sigmaNotFound = true;
+		double cv$sigmaValue = 1.0;
+		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+			constrainedFlag$sample24[var23] = true;
+			double cv$denominator = x[i$var45][var23];
+			double reduceVar$var70$6 = 0.0;
+			for(int cv$reduction436Index = 0; cv$reduction436Index < var23; cv$reduction436Index += 1)
+				reduceVar$var70$6 = (reduceVar$var70$6 + phi[i$var45][cv$reduction436Index]);
+			for(int cv$reduction436Index = (var23 + 1); cv$reduction436Index < k; cv$reduction436Index += 1)
+				reduceVar$var70$6 = (reduceVar$var70$6 + phi[i$var45][cv$reduction436Index]);
+			cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+			cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - (reduceVar$var70$6 + bias))));
+			if(cv$sigmaNotFound) {
+				cv$sigmaValue = tau;
+				cv$sigmaNotFound = false;
+			}
+		}
+		if(constrainedFlag$sample24[var23]) {
+			weights[var23] = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+			for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
+				phi[i$var45][var23] = (weights[var23] * x[i$var45][var23]);
+		}
+	}
+
+	private final void inferSample31() {
+		constrainedFlag$sample31 = false;
+		double cv$sum = 0.0;
+		double cv$denominatorSquareSum = 0.0;
+		boolean cv$sigmaNotFound = true;
+		double cv$sigmaValue = 1.0;
+		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+			constrainedFlag$sample31 = true;
+			double reduceVar$var70$7 = 0.0;
+			for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1)
+				reduceVar$var70$7 = (reduceVar$var70$7 + phi[i$var45][cv$reduction65Index]);
+			cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
+			cv$sum = ((cv$sum + y[i$var45]) - reduceVar$var70$7);
+			if(cv$sigmaNotFound) {
+				cv$sigmaValue = tau;
+				cv$sigmaNotFound = false;
+			}
+		}
+		if(constrainedFlag$sample31)
+			bias = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+	}
+
+	private final void inferSample35() {
+		constrainedFlag$sample35 = false;
+		double cv$sum = 0.0;
+		int cv$count = 0;
+		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+			constrainedFlag$sample35 = true;
+			double reduceVar$var70$8 = 0.0;
+			for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1)
+				reduceVar$var70$8 = (reduceVar$var70$8 + phi[i$var45][cv$reduction65Index]);
+			double cv$var72$diff = ((reduceVar$var70$8 + bias) - y[i$var45]);
+			cv$sum = (cv$sum + (cv$var72$diff * cv$var72$diff));
+			cv$count = (cv$count + 1);
+		}
+		if(constrainedFlag$sample35)
+			tau = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 3.0, 1.0, cv$sum, cv$count);
 	}
 
 	private final void logProbabilityValue$sample24() {
@@ -252,73 +339,6 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
-	}
-
-	private final void sample24(int var23) {
-		constrainedFlag$sample24[var23] = false;
-		double cv$sum = 0.0;
-		double cv$denominatorSquareSum = 0.0;
-		boolean cv$sigmaNotFound = true;
-		double cv$sigmaValue = 1.0;
-		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-			constrainedFlag$sample24[var23] = true;
-			double cv$denominator = x[i$var45][var23];
-			double reduceVar$var70$6 = 0.0;
-			for(int cv$reduction413Index = 0; cv$reduction413Index < var23; cv$reduction413Index += 1)
-				reduceVar$var70$6 = (reduceVar$var70$6 + phi[i$var45][cv$reduction413Index]);
-			for(int cv$reduction413Index = (var23 + 1); cv$reduction413Index < k; cv$reduction413Index += 1)
-				reduceVar$var70$6 = (reduceVar$var70$6 + phi[i$var45][cv$reduction413Index]);
-			cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-			cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - (reduceVar$var70$6 + bias))));
-			if(cv$sigmaNotFound) {
-				cv$sigmaValue = tau;
-				cv$sigmaNotFound = false;
-			}
-		}
-		if(constrainedFlag$sample24[var23]) {
-			weights[var23] = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-			for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
-				phi[i$var45][var23] = (weights[var23] * x[i$var45][var23]);
-		}
-	}
-
-	private final void sample31() {
-		constrainedFlag$sample31 = false;
-		double cv$sum = 0.0;
-		double cv$denominatorSquareSum = 0.0;
-		boolean cv$sigmaNotFound = true;
-		double cv$sigmaValue = 1.0;
-		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-			constrainedFlag$sample31 = true;
-			double reduceVar$var70$7 = 0.0;
-			for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1)
-				reduceVar$var70$7 = (reduceVar$var70$7 + phi[i$var45][cv$reduction65Index]);
-			cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
-			cv$sum = ((cv$sum + y[i$var45]) - reduceVar$var70$7);
-			if(cv$sigmaNotFound) {
-				cv$sigmaValue = tau;
-				cv$sigmaNotFound = false;
-			}
-		}
-		if(constrainedFlag$sample31)
-			bias = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-	}
-
-	private final void sample35() {
-		constrainedFlag$sample35 = false;
-		double cv$sum = 0.0;
-		int cv$count = 0;
-		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-			constrainedFlag$sample35 = true;
-			double reduceVar$var70$8 = 0.0;
-			for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1)
-				reduceVar$var70$8 = (reduceVar$var70$8 + phi[i$var45][cv$reduction65Index]);
-			double cv$var72$diff = ((reduceVar$var70$8 + bias) - y[i$var45]);
-			cv$sum = (cv$sum + (cv$var72$diff * cv$var72$diff));
-			cv$count = (cv$count + 1);
-		}
-		if(constrainedFlag$sample35)
-			tau = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 3.0, 1.0, cv$sum, cv$count);
 	}
 
 	@Override
@@ -504,23 +524,31 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample24) {
 				for(int var23 = 0; var23 < k; var23 += 1)
-					sample24(var23);
+					inferSample24(var23);
 			}
 			if(!fixedFlag$sample31)
-				sample31();
+				inferSample31();
 			if(!fixedFlag$sample35)
-				sample35();
+				inferSample35();
 		} else {
 			if(!fixedFlag$sample35)
-				sample35();
+				inferSample35();
 			if(!fixedFlag$sample31)
-				sample31();
+				inferSample31();
 			if(!fixedFlag$sample24) {
 				for(int var23 = (k - 1); var23 >= 0; var23 -= 1)
-					sample24(var23);
+					inferSample24(var23);
 			}
 		}
 		system$gibbsForward = !system$gibbsForward;
+		for(int var23 = 0; var23 < k; var23 += 1) {
+			if(!constrainedFlag$sample24[var23])
+				drawValueSample24(var23);
+		}
+		if(!constrainedFlag$sample31)
+			drawValueSample31();
+		if(!constrainedFlag$sample35)
+			drawValueSample35();
 	}
 
 	private final void initializeLogProbabilityFields() {

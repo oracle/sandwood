@@ -9,103 +9,103 @@ interface HMMMetrics$CoreInterface extends org.sandwood.runtime.internal.model.C
 	public double[] get$cpuMean();
 
 	// Setter for cpuMean.
-	public void set$cpuMean(double[] cv$value);
+	public void set$cpuMean(double[] cv$value, boolean allocated$);
 
 	// Getter for cpuVar.
 	public double[] get$cpuVar();
 
 	// Setter for cpuVar.
-	public void set$cpuVar(double[] cv$value);
+	public void set$cpuVar(double[] cv$value, boolean allocated$);
 
 	// Getter for cpu_measured.
 	public double[] get$cpu_measured();
 
 	// Setter for cpu_measured.
-	public void set$cpu_measured(double[] cv$value);
+	public void set$cpu_measured(double[] cv$value, boolean allocated$);
 
 	// Getter for distribution$sample39.
 	public double[] get$distribution$sample39();
 
 	// Setter for distribution$sample39.
-	public void set$distribution$sample39(double[] cv$value);
+	public void set$distribution$sample39(double[] cv$value, boolean allocated$);
 
 	// Getter for distribution$sample57.
 	public double[][] get$distribution$sample57();
 
 	// Setter for distribution$sample57.
-	public void set$distribution$sample57(double[][] cv$value);
+	public void set$distribution$sample57(double[][] cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample113.
 	public boolean get$fixedFlag$sample113();
 
 	// Setter for fixedFlag$sample113.
-	public void set$fixedFlag$sample113(boolean cv$value);
+	public void set$fixedFlag$sample113(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample130.
 	public boolean get$fixedFlag$sample130();
 
 	// Setter for fixedFlag$sample130.
-	public void set$fixedFlag$sample130(boolean cv$value);
+	public void set$fixedFlag$sample130(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample147.
 	public boolean get$fixedFlag$sample147();
 
 	// Setter for fixedFlag$sample147.
-	public void set$fixedFlag$sample147(boolean cv$value);
+	public void set$fixedFlag$sample147(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample164.
 	public boolean get$fixedFlag$sample164();
 
 	// Setter for fixedFlag$sample164.
-	public void set$fixedFlag$sample164(boolean cv$value);
+	public void set$fixedFlag$sample164(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample30.
 	public boolean get$fixedFlag$sample30();
 
 	// Setter for fixedFlag$sample30.
-	public void set$fixedFlag$sample30(boolean cv$value);
+	public void set$fixedFlag$sample30(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample36.
 	public boolean get$fixedFlag$sample36();
 
 	// Setter for fixedFlag$sample36.
-	public void set$fixedFlag$sample36(boolean cv$value);
+	public void set$fixedFlag$sample36(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample39.
 	public boolean get$fixedFlag$sample39();
 
 	// Setter for fixedFlag$sample39.
-	public void set$fixedFlag$sample39(boolean cv$value);
+	public void set$fixedFlag$sample39(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample57.
 	public boolean get$fixedFlag$sample57();
 
 	// Setter for fixedFlag$sample57.
-	public void set$fixedFlag$sample57(boolean cv$value);
+	public void set$fixedFlag$sample57(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample77.
 	public boolean get$fixedFlag$sample77();
 
 	// Setter for fixedFlag$sample77.
-	public void set$fixedFlag$sample77(boolean cv$value);
+	public void set$fixedFlag$sample77(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample95.
 	public boolean get$fixedFlag$sample95();
 
 	// Setter for fixedFlag$sample95.
-	public void set$fixedFlag$sample95(boolean cv$value);
+	public void set$fixedFlag$sample95(boolean cv$value, boolean allocated$);
 
 	// Getter for initialStateDistribution.
 	public double[] get$initialStateDistribution();
 
 	// Setter for initialStateDistribution.
-	public void set$initialStateDistribution(double[] cv$value);
+	public void set$initialStateDistribution(double[] cv$value, boolean allocated$);
 
 	// Getter for length$cpu_measured.
 	public int get$length$cpu_measured();
 
 	// Setter for length$cpu_measured.
-	public void set$length$cpu_measured(int cv$value);
+	public void set$length$cpu_measured(int cv$value, boolean allocated$);
 
 	// Getter for logProbability$cpu.
 	public double get$logProbability$cpu();
@@ -147,7 +147,7 @@ interface HMMMetrics$CoreInterface extends org.sandwood.runtime.internal.model.C
 	public double[][] get$m();
 
 	// Setter for m.
-	public void set$m(double[][] cv$value);
+	public void set$m(double[][] cv$value, boolean allocated$);
 
 	// Getter for mem.
 	public double[] get$mem();
@@ -156,25 +156,25 @@ interface HMMMetrics$CoreInterface extends org.sandwood.runtime.internal.model.C
 	public double[] get$memMean();
 
 	// Setter for memMean.
-	public void set$memMean(double[] cv$value);
+	public void set$memMean(double[] cv$value, boolean allocated$);
 
 	// Getter for memVar.
 	public double[] get$memVar();
 
 	// Setter for memVar.
-	public void set$memVar(double[] cv$value);
+	public void set$memVar(double[] cv$value, boolean allocated$);
 
 	// Getter for mem_measured.
 	public double[] get$mem_measured();
 
 	// Setter for mem_measured.
-	public void set$mem_measured(double[] cv$value);
+	public void set$mem_measured(double[] cv$value, boolean allocated$);
 
 	// Getter for noStates.
 	public int get$noStates();
 
 	// Setter for noStates.
-	public void set$noStates(int cv$value);
+	public void set$noStates(int cv$value, boolean allocated$);
 
 	// Getter for pageFaults.
 	public double[] get$pageFaults();
@@ -183,19 +183,19 @@ interface HMMMetrics$CoreInterface extends org.sandwood.runtime.internal.model.C
 	public double[] get$pageFaultsMean();
 
 	// Setter for pageFaultsMean.
-	public void set$pageFaultsMean(double[] cv$value);
+	public void set$pageFaultsMean(double[] cv$value, boolean allocated$);
 
 	// Getter for pageFaultsVar.
 	public double[] get$pageFaultsVar();
 
 	// Setter for pageFaultsVar.
-	public void set$pageFaultsVar(double[] cv$value);
+	public void set$pageFaultsVar(double[] cv$value, boolean allocated$);
 
 	// Getter for pageFaults_measured.
 	public double[] get$pageFaults_measured();
 
 	// Setter for pageFaults_measured.
-	public void set$pageFaults_measured(double[] cv$value);
+	public void set$pageFaults_measured(double[] cv$value, boolean allocated$);
 
 	// Getter for samples.
 	public int get$samples();
@@ -204,7 +204,7 @@ interface HMMMetrics$CoreInterface extends org.sandwood.runtime.internal.model.C
 	public int[] get$st();
 
 	// Setter for st.
-	public void set$st(int[] cv$value);
+	public void set$st(int[] cv$value, boolean allocated$);
 
 	// Getter for v.
 	public double[] get$v();

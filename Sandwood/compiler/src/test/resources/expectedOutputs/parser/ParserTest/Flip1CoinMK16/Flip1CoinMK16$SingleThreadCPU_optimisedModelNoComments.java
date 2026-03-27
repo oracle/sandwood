@@ -27,7 +27,7 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		bias = cv$value;
 	}
 
@@ -37,7 +37,7 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$flipMeasured(boolean cv$value) {
+	public final void set$flipMeasured(boolean cv$value, boolean allocated$) {
 		flipMeasured = cv$value;
 	}
 
@@ -47,7 +47,7 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$guard(double cv$value) {
+	public final void set$guard(double cv$value, boolean allocated$) {
 		guard = cv$value;
 	}
 
@@ -64,6 +64,19 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final double get$logProbability$bernoulli() {
 		return logProbability$bernoulli;
+	}
+
+	private final void drawValueSample14() {
+		bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	private final void inferSample14() {
+		constrainedFlag$sample14 = false;
+		int cv$sum = 0;
+		constrainedFlag$sample14 = true;
+		if(flip)
+			cv$sum = 1;
+		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, 1);
 	}
 
 	private final void logProbabilityValue$sample14() {
@@ -86,15 +99,6 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 		logProbability$$model = (logProbability$$model + cv$accumulator);
 		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-	}
-
-	private final void sample14() {
-		constrainedFlag$sample14 = false;
-		int cv$sum = 0;
-		constrainedFlag$sample14 = true;
-		if(flip)
-			cv$sum = 1;
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, 1);
 	}
 
 	@Override
@@ -140,8 +144,10 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void gibbsRound() {
 		if(Double.isNaN(guard))
-			sample14();
+			inferSample14();
 		system$gibbsForward = !system$gibbsForward;
+		if((Double.isNaN(guard) && !constrainedFlag$sample14))
+			drawValueSample14();
 	}
 
 	private final void initializeLogProbabilityFields() {
