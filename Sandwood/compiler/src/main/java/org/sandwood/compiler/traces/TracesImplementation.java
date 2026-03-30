@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -183,8 +183,7 @@ public class TracesImplementation extends Traces {
             Variable<?> v = toProcess.remove();
             if(!allVariables.contains(v)) {
                 allVariables.add(v);
-                // if(v.getEnclosingScope()==GlobalScope.scope) TODO come back and revisit this.
-                namedVariables.put(v.getVarDesc().name, v.instanceHandle());
+                namedVariables.put(v.getUniqueVarDesc().name, v.instanceHandle());
 
                 // Add all the inputs to the parent task.
                 toProcess.addAll(v.getParent().getInputs());
@@ -1216,7 +1215,11 @@ public class TracesImplementation extends Traces {
     }
 
     private <A extends Variable<A>> void setUniqueName(Variable<A> v) {
-        v.setUniqueVarDesc(v.getVarDesc());
+        VariableDescription<A> oldName = v.getUniqueVarDesc();
+        VariableDescription<A> newName = v.getVarDesc();
+        v.setUniqueVarDesc(newName);
+        if(namedVariables.containsKey(oldName.name))
+            namedVariables.put(newName.name, namedVariables.remove(oldName.name));
     }
 
     /**
