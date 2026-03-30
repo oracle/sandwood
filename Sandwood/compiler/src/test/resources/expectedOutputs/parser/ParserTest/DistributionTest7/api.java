@@ -33,23 +33,23 @@ public class DistributionTest7 extends GeneratedAPIBuilder {
         //Allocating initial observed parameters
         DoubleVariable observedData = observeDouble("observedData", location(11, 32, 11, 50));
 
-        ArrayVariable<DoubleVariable> bias = Variable.arrayVariable(location(13, 21, 13, 35), VariableType.DoubleVariable, 3);
-        {
-            bias.put(intVariable(0), doubleVariable(0.2, location(13, 22, 13, 24)), location(13, 21, 13, 24));
-            bias.put(intVariable(1, location(13, 21, 13, 21)), doubleVariable(0.3, location(13, 27, 13, 29)), location(13, 21, 13, 29));
-            bias.put(intVariable(2, location(13, 21, 13, 21)), doubleVariable(0.5, location(13, 32, 13, 34)), location(13, 21, 13, 34));
-        }
-
+        ArrayVariable<DoubleVariable> bias = ArrayVariable.getArrayVariable(() -> {
+                ArrayVariable<DoubleVariable> bias$ = Variable.arrayVariable(location(13, 21, 13, 35), VariableType.DoubleVariable, 3);
+                bias$.put(intVariable(0, location(13, 21, 13, 21)), doubleVariable(0.2, location(13, 22, 13, 24)), location(13, 21, 13, 24));
+                bias$.put(intVariable(1, location(13, 21, 13, 21)), doubleVariable(0.3, location(13, 27, 13, 29)), location(13, 21, 13, 29));
+                bias$.put(intVariable(2, location(13, 21, 13, 21)), doubleVariable(0.5, location(13, 32, 13, 34)), location(13, 21, 13, 34));
+                return bias$;
+            });
         bias.setAlias("bias");
         bias.setLocation(location(13, 14, 13, 17));
 
-        ArrayVariable<DoubleVariable> prob = Variable.arrayVariable(location(14, 21, 14, 35), VariableType.DoubleVariable, 3);
-        {
-            prob.put(intVariable(0), doubleVariable(0.2, location(14, 22, 14, 24)), location(14, 21, 14, 24));
-            prob.put(intVariable(1, location(14, 21, 14, 21)), doubleVariable(0.4, location(14, 27, 14, 29)), location(14, 21, 14, 29));
-            prob.put(intVariable(2, location(14, 21, 14, 21)), doubleVariable(0.4, location(14, 32, 14, 34)), location(14, 21, 14, 34));
-        }
-
+        ArrayVariable<DoubleVariable> prob = ArrayVariable.getArrayVariable(() -> {
+                ArrayVariable<DoubleVariable> prob$ = Variable.arrayVariable(location(14, 21, 14, 35), VariableType.DoubleVariable, 3);
+                prob$.put(intVariable(0, location(14, 21, 14, 21)), doubleVariable(0.2, location(14, 22, 14, 24)), location(14, 21, 14, 24));
+                prob$.put(intVariable(1, location(14, 21, 14, 21)), doubleVariable(0.4, location(14, 27, 14, 29)), location(14, 21, 14, 29));
+                prob$.put(intVariable(2, location(14, 21, 14, 21)), doubleVariable(0.4, location(14, 32, 14, 34)), location(14, 21, 14, 34));
+                return prob$;
+            });
         prob.setAlias("prob");
         prob.setLocation(location(14, 14, 14, 17));
 

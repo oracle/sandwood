@@ -28,33 +28,35 @@ public class RaggedArray6 extends GeneratedAPIBuilder {
         //Allocating initial observed parameters
         ArrayVariable<BooleanVariable> obs_measured = observeArray("obs_measured", VariableType.arrayType(VariableType.BooleanVariable), location(11, 27, 11, 48));
 
-        ArrayVariable<ArrayVariable<DoubleVariable>> a = Variable.arrayVariable(location(12, 20, 12, 48), VariableType.arrayType(VariableType.DoubleVariable), 2);
-        {
-            ArrayVariable<DoubleVariable> a$0 = Variable.arrayVariable(location(12, 21, 12, 30), VariableType.DoubleVariable, 2);
-            {
-                a$0.put(intVariable(0), doubleVariable(0.4, location(12, 22, 12, 24)), location(12, 21, 12, 24));
-                a$0.put(intVariable(1, location(12, 21, 12, 21)), doubleVariable(0.6, location(12, 27, 12, 29)), location(12, 21, 12, 29));
-            }
-            a.put(intVariable(0, location(12, 20, 12, 21)), a$0);
+        ArrayVariable<ArrayVariable<DoubleVariable>> a = ArrayVariable.getArrayVariable(() -> {
+                ArrayVariable<ArrayVariable<DoubleVariable>> a$ = Variable.arrayVariable(location(12, 20, 12, 48), VariableType.arrayType(VariableType.DoubleVariable), 2);
+                ArrayVariable<DoubleVariable> a$0 = ArrayVariable.getArrayVariable(() -> {
+                        ArrayVariable<DoubleVariable> a$0$ = Variable.arrayVariable(location(12, 21, 12, 30), VariableType.DoubleVariable, 2);
+                        a$0$.put(intVariable(0, location(12, 21, 12, 21)), doubleVariable(0.4, location(12, 22, 12, 24)), location(12, 21, 12, 24));
+                        a$0$.put(intVariable(1, location(12, 21, 12, 21)), doubleVariable(0.6, location(12, 27, 12, 29)), location(12, 21, 12, 29));
+                        return a$0$;
+                    });
+                a$.put(intVariable(0, location(12, 20, 12, 20)), a$0);
 
-            ArrayVariable<DoubleVariable> a$1 = Variable.arrayVariable(location(12, 33, 12, 47), VariableType.DoubleVariable, 3);
-            {
-                a$1.put(intVariable(0), doubleVariable(0.2, location(12, 34, 12, 36)), location(12, 33, 12, 36));
-                a$1.put(intVariable(1, location(12, 33, 12, 33)), doubleVariable(0.3, location(12, 39, 12, 41)), location(12, 33, 12, 41));
-                a$1.put(intVariable(2, location(12, 33, 12, 33)), doubleVariable(0.5, location(12, 44, 12, 46)), location(12, 33, 12, 46));
-            }
-            a.put(intVariable(1), a$1);
-        }
-
+                ArrayVariable<DoubleVariable> a$$1 = ArrayVariable.getArrayVariable(() -> {
+                        ArrayVariable<DoubleVariable> a$$1$ = Variable.arrayVariable(location(12, 33, 12, 47), VariableType.DoubleVariable, 3);
+                        a$$1$.put(intVariable(0, location(12, 33, 12, 33)), doubleVariable(0.2, location(12, 34, 12, 36)), location(12, 33, 12, 36));
+                        a$$1$.put(intVariable(1, location(12, 33, 12, 33)), doubleVariable(0.3, location(12, 39, 12, 41)), location(12, 33, 12, 41));
+                        a$$1$.put(intVariable(2, location(12, 33, 12, 33)), doubleVariable(0.5, location(12, 44, 12, 46)), location(12, 33, 12, 46));
+                        return a$$1$;
+                    });
+                a$.put(intVariable(1), a$$1);
+                return a$;
+            });
         a.setAlias("a");
         a.setLocation(location(12, 16, 12, 16));
 
-        ArrayVariable<DoubleVariable> b = Variable.arrayVariable(location(13, 18, 13, 31), VariableType.DoubleVariable, 2);
-        {
-            b.put(intVariable(0), doubleVariable(0.35, location(13, 20, 13, 23)), location(13, 18, 13, 23));
-            b.put(intVariable(1, location(13, 18, 13, 18)), doubleVariable(0.65, location(13, 26, 13, 29)), location(13, 18, 13, 29));
-        }
-
+        ArrayVariable<DoubleVariable> b = ArrayVariable.getArrayVariable(() -> {
+                ArrayVariable<DoubleVariable> b$ = Variable.arrayVariable(location(13, 18, 13, 31), VariableType.DoubleVariable, 2);
+                b$.put(intVariable(0, location(13, 18, 13, 18)), doubleVariable(0.35, location(13, 20, 13, 23)), location(13, 18, 13, 23));
+                b$.put(intVariable(1, location(13, 18, 13, 18)), doubleVariable(0.65, location(13, 26, 13, 29)), location(13, 18, 13, 29));
+                return b$;
+            });
         b.setAlias("b");
         b.setLocation(location(13, 14, 13, 14));
 
