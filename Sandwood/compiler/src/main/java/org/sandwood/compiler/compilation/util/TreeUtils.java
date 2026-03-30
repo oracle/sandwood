@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -1234,10 +1234,8 @@ public class TreeUtils {
 
         ForTask newNoStates = null;
         try {
-            newNoStates = Sandwood.forLoop(start, end, Variable.intVariable(1), true, (i) -> { // TODO work out is we
-                // need a test here to
-                // consider making the
-                // for parallel?
+            newNoStates = Sandwood.forLoop(start, end, Variable.intVariable(1), true, (i) -> {
+                // TODO work out if we need a test here to consider marking the for parallel?
                 i.setUniqueVarDesc(f.getIndex().getUniqueVarDesc());
             });
         } catch(SandwoodException e) {
