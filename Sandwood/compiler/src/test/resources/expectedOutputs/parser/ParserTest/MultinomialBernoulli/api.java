@@ -28,13 +28,13 @@ public class MultinomialBernoulli extends GeneratedAPIBuilder {
         //Allocating initial observed parameters
         ArrayVariable<BooleanVariable> observed = observeArray("observed", VariableType.arrayType(VariableType.BooleanVariable), location(11, 35, 11, 52));
 
-        ArrayVariable<DoubleVariable> beta = Variable.arrayVariable(location(12, 21, 12, 35), VariableType.DoubleVariable, 3);
-        {
-            beta.put(intVariable(0), doubleVariable(0.1, location(12, 22, 12, 24)), location(12, 21, 12, 24));
-            beta.put(intVariable(1, location(12, 21, 12, 21)), doubleVariable(0.1, location(12, 27, 12, 29)), location(12, 21, 12, 29));
-            beta.put(intVariable(2, location(12, 21, 12, 21)), doubleVariable(0.1, location(12, 32, 12, 34)), location(12, 21, 12, 34));
-        }
-
+        ArrayVariable<DoubleVariable> beta = ArrayVariable.getArrayVariable(() -> {
+                ArrayVariable<DoubleVariable> beta$ = Variable.arrayVariable(location(12, 21, 12, 35), VariableType.DoubleVariable, 3);
+                beta$.put(intVariable(0, location(12, 21, 12, 21)), doubleVariable(0.1, location(12, 22, 12, 24)), location(12, 21, 12, 24));
+                beta$.put(intVariable(1, location(12, 21, 12, 21)), doubleVariable(0.1, location(12, 27, 12, 29)), location(12, 21, 12, 29));
+                beta$.put(intVariable(2, location(12, 21, 12, 21)), doubleVariable(0.1, location(12, 32, 12, 34)), location(12, 21, 12, 34));
+                return beta$;
+            });
         beta.setAlias("beta");
         beta.setLocation(location(12, 14, 12, 17));
 

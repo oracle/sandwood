@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  * 
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -1514,7 +1514,6 @@ void VariableDeclarator(List<TokenMap> sb, Type<?> type, List<Token> typeTokens,
 {
   Token id, value;
   Token t;
-  boolean semiColonRequired;
 }
 {
   { sb.add(tokenMap(type.getAPIType() + " ", typeTokens)); }
@@ -1537,13 +1536,9 @@ void VariableDeclarator(List<TokenMap> sb, Type<?> type, List<Token> typeTokens,
           sb.add(tokenMap("\n"));
         }
     |
-      semiColonRequired = VariableInitializer(sb, type, id.image)
+      VariableInitializer(sb, type, id.image)
       {
-        if(semiColonRequired)
-          sb.add(tokenMap(";\n"));
-        else
-          sb.add(tokenMap("\n"));
-
+        sb.add(tokenMap(";\n"));
         setProperties(sb, id, permissionsToken); 
         sb.add(tokenMap("\n"));
       }
@@ -1563,11 +1558,10 @@ void VariableDeclarator(List<TokenMap> sb, Type<?> type, List<Token> typeTokens,
   )
 }
 
-boolean VariableInitializer(List<TokenMap> sb, Type <?> type, String name):
+void VariableInitializer(List<TokenMap> sb, Type <?> type, String name):
 {}
 {
   ArrayInitializer(sb, type, name)
-  { return false; }
 | 
   AllocationExpression(sb)
   [
@@ -1578,10 +1572,8 @@ boolean VariableInitializer(List<TokenMap> sb, Type <?> type, String name):
       PrimarySuffixReturn(sb)
     )*
   ]
-  { return true; }
 | 
   Expression(sb)
-  { return true; }
 }
 
 void ObservedValue(List<TokenMap> sb):
@@ -1597,34 +1589,32 @@ void ObservedValue(List<TokenMap> sb):
     }
 }
 
-
-
 void ArrayInitializer(List <TokenMap> sb, Type <?> type, String name) :
 {
   int i = 0;
+  name = name + "$";
   List < TokenMap > arrayInitalize = new ArrayList <TokenMap> ();
   Type <? > elementType = ((ArrayType <?>) type).getElementType();
   boolean subarray = elementType.isArray();
-  boolean semiColonRequired;
   Token ob, cb;
 }
 {
   ob = "{"
   [
     {
-	  arrayInitalize.add(tokenMap(indent() + "{\n", ob));
-	  indent++;
-      String subarrayName = name + "$" + i;
+      sb.add(tokenMap("ArrayVariable.getArrayVariable(() -> {\n", ob));
+      indent+=2;
+      String subarrayName = name + i;
       if (subarray) 
         arrayInitalize.add(tokenMap(indent() + elementType.getAPIType() + " " + subarrayName + " = ", ob));
       else 
-        arrayInitalize.add(tokenMap(indent() + name + ".put(intVariable(" + i + "), ", ob));
+        arrayInitalize.add(tokenMap(indent() + name + ".put(intVariable(" + i + ", " + 
+            location(ob) + "), ", ob));
     }
-	    semiColonRequired = VariableInitializer(arrayInitalize, elementType, subarrayName)
+	    VariableInitializer(arrayInitalize, elementType, subarrayName)
     {
       if (subarray) {
-        if(semiColonRequired)
-          arrayInitalize.add(tokenMap(";\n", ob));
+        arrayInitalize.add(tokenMap(";\n", ob));
         arrayInitalize.add(tokenMap(indent() + name + ".put(intVariable(" + i + ", " + 
           location(arrayInitalize.get(0), arrayInitalize.get(arrayInitalize.size()-1)) + "), " + subarrayName + ");\n", ob));
       } else
@@ -1639,26 +1629,28 @@ void ArrayInitializer(List <TokenMap> sb, Type <?> type, String name) :
           arrayInitalize.add(tokenMap(indent() + name + ".put(intVariable(" + i + ", " + 
             location(arrayInitalize.get(0), arrayInitalize.get(arrayInitalize.size()-1)) + "), ", ob));
       }
-      "," semiColonRequired = VariableInitializer(arrayInitalize, elementType, subarrayName)
+      "," VariableInitializer(arrayInitalize, elementType, subarrayName)
       {
         if (subarray) {
-          if(semiColonRequired)
-            arrayInitalize.add(tokenMap(";\n", ob));
+          arrayInitalize.add(tokenMap(";\n", ob));
           arrayInitalize.add(tokenMap(indent() + name + ".put(intVariable(" + i + "), " + subarrayName + ");\n", ob));
         } else
           arrayInitalize.add(tokenMap(", " + location(arrayInitalize.get(0), arrayInitalize.get(arrayInitalize.size()-1)) + ");\n", ob));
       }
     )*
     {
+      arrayInitalize.add(tokenMap(indent() + "return " + name + ";\n", ob));
       indent--;
-      arrayInitalize.add(tokenMap(indent() + "}\n", ob));
+      arrayInitalize.add(tokenMap(indent() + "})", ob));
     }
   ]
   cb = "}"
   {
-    sb.add(tokenMap("Variable.arrayVariable(" + location(ob, cb) + ", " + 
+    indent++;
+    sb.add(tokenMap(indent() + type.getAPIType() + " " + name + " = Variable.arrayVariable(" + location(ob, cb) + ", " +
     getTypeConstructor(elementType) + ", " + (i + 1) + ");\n", ob, cb));
-    sb.addAll(arrayInitalize);
+    sb.addAll(arrayInitalize); 
+    indent-=2;
   }
 }
 
@@ -2274,56 +2266,76 @@ void ArrayDimsAndInits(List<TokenMap> sb, Type<?> type, List<Token> typeTokens):
   List<TokenMap> subExp = new ArrayList<TokenMap>();
   List<TokenMap> valueExp = new ArrayList<TokenMap>();
   Token start, t, t1;
+
 }
 {
-  start = "[" Expression(subExp) t1 = "]"
-  {
-    typeTokens.add(start);
-    typeTokens.add(t1);
-  }
+  start = "["
   (
-    LOOKAHEAD(2)
+    Expression(subExp) t1 = "]"
     {
-      type = VariableType.arrayType(type);
-      subExp.add(tokenMap(", ", t1));
-    }
-    t = "[" Expression(subExp) t1 = "]"
-    {
-      typeTokens.add(t);
+      typeTokens.add(start);
       typeTokens.add(t1);
     }
-  )*
-  [
     (
-      t = "<~"
-      { 
-        valueExp.add(tokenMap("() -> { return ", t));
+      LOOKAHEAD(2)
+      {
+        type = VariableType.arrayType(type);
+        subExp.add(tokenMap(", ", t1));
       }
-      Expression(valueExp)
-      { 
-        valueExp.add(tokenMap("; }, ", t));
+      t = "[" Expression(subExp) t1 = "]"
+      {
+        typeTokens.add(t);
+        typeTokens.add(t1);
       }
-     )
-   |
-     (
-       LOOKAHEAD(2)
-       t = "[" t1 = "]"
-       {
-         type = VariableType.arrayType(type);
-         typeTokens.add(t);
-         typeTokens.add(t1);
-       }
-     )+
-   ]
-  {
-    sb.add(tokenMap("Variable.arrayVariable(" + location(start, t1) + ", " +
+    )*
+    [
+      (
+        t = "<~"
+        { 
+          valueExp.add(tokenMap("() -> { return ", t));
+        }
+        Expression(valueExp)
+        { 
+          valueExp.add(tokenMap("; }, ", t));
+        }
+      )
+    |
+      (
+        LOOKAHEAD(2)
+        t = "[" t1 = "]"
+        {
+          type = VariableType.arrayType(type);
+          typeTokens.add(t);
+          typeTokens.add(t1);
+        }
+      )+
+    ]
+    {
+      sb.add(tokenMap("Variable.arrayVariable(" + location(start, t1) + ", " +
              getTypeConstructor(type) + ", ",
-    typeTokens.toArray(new Token[typeTokens.size()])));
+      typeTokens.toArray(new Token[typeTokens.size()])));
              
-    sb.addAll(valueExp);
-    sb.addAll(subExp);
-    sb.add(tokenMap(")", t1));
-  }
+      sb.addAll(valueExp);
+      sb.addAll(subExp);
+      sb.add(tokenMap(")", t1));
+    }
+  |
+    t1 = "]"
+    {
+      typeTokens.add(start);
+      typeTokens.add(t1);
+      type = VariableType.arrayType(type);
+    }
+    (
+      t = "[" t1 = "]"
+      {
+        typeTokens.add(t);
+        typeTokens.add(t1);
+        type = VariableType.arrayType(type);
+      }
+    )*
+    ArrayInitializer(sb, type, "tempArray")
+  )
 }
 
 void ReductionExpression(List<TokenMap> sb):

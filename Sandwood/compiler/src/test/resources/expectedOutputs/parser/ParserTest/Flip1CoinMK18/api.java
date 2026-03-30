@@ -40,45 +40,51 @@ public class Flip1CoinMK18 extends GeneratedAPIBuilder {
         t.setAlias("t");
         t.setLocation(location(14, 12, 14, 12));
 
-        ArrayVariable<ArrayVariable<ArrayVariable<DoubleVariable>>> bias = Variable.arrayVariable(location(15, 25, 15, 65), VariableType.arrayType(VariableType.arrayType(VariableType.DoubleVariable)), 2);
-        {
-            ArrayVariable<ArrayVariable<DoubleVariable>> bias$0 = Variable.arrayVariable(location(15, 26, 15, 44), VariableType.arrayType(VariableType.DoubleVariable), 2);
-            {
-                ArrayVariable<DoubleVariable> bias$0$0 = Variable.arrayVariable(location(15, 27, 15, 34), VariableType.DoubleVariable, 2);
-                {
-                    bias$0$0.put(intVariable(0), t, location(15, 27, 15, 28));
-                    bias$0$0.put(intVariable(1, location(15, 27, 15, 27)), intVariable(1, location(15, 31, 15, 31)).subtract(t, location(15, 32, 15, 32)), location(15, 27, 15, 32));
-                }
-                bias$0.put(intVariable(0, location(15, 26, 15, 27)), bias$0$0);
+        ArrayVariable<ArrayVariable<ArrayVariable<DoubleVariable>>> bias = ArrayVariable.getArrayVariable(() -> {
+                ArrayVariable<ArrayVariable<ArrayVariable<DoubleVariable>>> bias$ = Variable.arrayVariable(location(15, 25, 15, 65), VariableType.arrayType(VariableType.arrayType(VariableType.DoubleVariable)), 2);
+                ArrayVariable<ArrayVariable<DoubleVariable>> bias$0 = ArrayVariable.getArrayVariable(() -> {
+                        ArrayVariable<ArrayVariable<DoubleVariable>> bias$0$ = Variable.arrayVariable(location(15, 26, 15, 44), VariableType.arrayType(VariableType.DoubleVariable), 2);
+                        ArrayVariable<DoubleVariable> bias$0$0 = ArrayVariable.getArrayVariable(() -> {
+                                ArrayVariable<DoubleVariable> bias$0$0$ = Variable.arrayVariable(location(15, 27, 15, 34), VariableType.DoubleVariable, 2);
+                                bias$0$0$.put(intVariable(0, location(15, 27, 15, 27)), t, location(15, 27, 15, 28));
+                                bias$0$0$.put(intVariable(1, location(15, 27, 15, 27)), intVariable(1, location(15, 31, 15, 31)).subtract(t, location(15, 32, 15, 32)), location(15, 27, 15, 32));
+                                return bias$0$0$;
+                            });
+                        bias$0$.put(intVariable(0, location(15, 26, 15, 26)), bias$0$0);
 
-                ArrayVariable<DoubleVariable> bias$0$1 = Variable.arrayVariable(location(15, 36, 15, 43), VariableType.DoubleVariable, 2);
-                {
-                    bias$0$1.put(intVariable(0), intVariable(1, location(15, 37, 15, 37)).subtract(q, location(15, 38, 15, 38)), location(15, 36, 15, 38));
-                    bias$0$1.put(intVariable(1, location(15, 36, 15, 36)), t, location(15, 36, 15, 42));
-                }
-                bias$0.put(intVariable(1), bias$0$1);
-            }
-            bias.put(intVariable(0, location(15, 25, 15, 26)), bias$0);
+                        ArrayVariable<DoubleVariable> bias$0$$1 = ArrayVariable.getArrayVariable(() -> {
+                                ArrayVariable<DoubleVariable> bias$0$$1$ = Variable.arrayVariable(location(15, 36, 15, 43), VariableType.DoubleVariable, 2);
+                                bias$0$$1$.put(intVariable(0, location(15, 36, 15, 36)), intVariable(1, location(15, 37, 15, 37)).subtract(q, location(15, 38, 15, 38)), location(15, 36, 15, 38));
+                                bias$0$$1$.put(intVariable(1, location(15, 36, 15, 36)), t, location(15, 36, 15, 42));
+                                return bias$0$$1$;
+                            });
+                        bias$0$.put(intVariable(1), bias$0$$1);
+                        return bias$0$;
+                    });
+                bias$.put(intVariable(0, location(15, 25, 15, 25)), bias$0);
 
-            ArrayVariable<ArrayVariable<DoubleVariable>> bias$1 = Variable.arrayVariable(location(15, 46, 15, 64), VariableType.arrayType(VariableType.DoubleVariable), 2);
-            {
-                ArrayVariable<DoubleVariable> bias$1$0 = Variable.arrayVariable(location(15, 47, 15, 54), VariableType.DoubleVariable, 2);
-                {
-                    bias$1$0.put(intVariable(0), t, location(15, 47, 15, 48));
-                    bias$1$0.put(intVariable(1, location(15, 47, 15, 47)), intVariable(1, location(15, 51, 15, 51)).subtract(q, location(15, 52, 15, 52)), location(15, 47, 15, 52));
-                }
-                bias$1.put(intVariable(0, location(15, 46, 15, 47)), bias$1$0);
+                ArrayVariable<ArrayVariable<DoubleVariable>> bias$$1 = ArrayVariable.getArrayVariable(() -> {
+                        ArrayVariable<ArrayVariable<DoubleVariable>> bias$$1$ = Variable.arrayVariable(location(15, 46, 15, 64), VariableType.arrayType(VariableType.DoubleVariable), 2);
+                        ArrayVariable<DoubleVariable> bias$$1$0 = ArrayVariable.getArrayVariable(() -> {
+                                ArrayVariable<DoubleVariable> bias$$1$0$ = Variable.arrayVariable(location(15, 47, 15, 54), VariableType.DoubleVariable, 2);
+                                bias$$1$0$.put(intVariable(0, location(15, 47, 15, 47)), t, location(15, 47, 15, 48));
+                                bias$$1$0$.put(intVariable(1, location(15, 47, 15, 47)), intVariable(1, location(15, 51, 15, 51)).subtract(q, location(15, 52, 15, 52)), location(15, 47, 15, 52));
+                                return bias$$1$0$;
+                            });
+                        bias$$1$.put(intVariable(0, location(15, 46, 15, 46)), bias$$1$0);
 
-                ArrayVariable<DoubleVariable> bias$1$1 = Variable.arrayVariable(location(15, 56, 15, 63), VariableType.DoubleVariable, 2);
-                {
-                    bias$1$1.put(intVariable(0), intVariable(1, location(15, 57, 15, 57)).subtract(q, location(15, 58, 15, 58)), location(15, 56, 15, 58));
-                    bias$1$1.put(intVariable(1, location(15, 56, 15, 56)), q, location(15, 56, 15, 62));
-                }
-                bias$1.put(intVariable(1), bias$1$1);
-            }
-            bias.put(intVariable(1), bias$1);
-        }
-
+                        ArrayVariable<DoubleVariable> bias$$1$$1 = ArrayVariable.getArrayVariable(() -> {
+                                ArrayVariable<DoubleVariable> bias$$1$$1$ = Variable.arrayVariable(location(15, 56, 15, 63), VariableType.DoubleVariable, 2);
+                                bias$$1$$1$.put(intVariable(0, location(15, 56, 15, 56)), intVariable(1, location(15, 57, 15, 57)).subtract(q, location(15, 58, 15, 58)), location(15, 56, 15, 58));
+                                bias$$1$$1$.put(intVariable(1, location(15, 56, 15, 56)), q, location(15, 56, 15, 62));
+                                return bias$$1$$1$;
+                            });
+                        bias$$1$.put(intVariable(1), bias$$1$$1);
+                        return bias$$1$;
+                    });
+                bias$.put(intVariable(1), bias$$1);
+                return bias$;
+            });
         bias.setAlias("bias");
         bias.setLocation(location(15, 18, 15, 21));
 
