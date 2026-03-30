@@ -253,13 +253,13 @@ public class ForwardExecutionBuilder {
 
         VariableDescription<BooleanVariable> guardName = VariableNames.observedGuard(v);
         sc.addTree((TreeBuilderInfo info) -> {
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(guardName,
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(guardName,
                     IRTree.constant(false), "Track if it is possible to reach an observed variable"));
         });
 
         ScopeConstructor obs = sc.addConstraints(obsTraces, Guards.NO_GUARDS);
         obs.addTree((TreeBuilderInfo info) -> {
-            compilationCtx.addTreeToScope(GlobalScope.scope,
+            info.compilationCtx.addTreeToScope(GlobalScope.scope,
                     IRTree.store(guardName, IRTree.constant(true), "Observation reached"));
         });
 
@@ -367,13 +367,13 @@ public class ForwardExecutionBuilder {
                 ScopeStack.popScope(rvScope);
 
                 IRTreeReturn<ArrayVariable<DoubleVariable>> array = load(localNames.get(0));
-                IRTreeReturn<IntVariable> index = newScope.getIndex().getForwardIR(compilationCtx);
+                IRTreeReturn<IntVariable> index = newScope.getIndex().getForwardIR(info.compilationCtx);
                 IRTreeReturn<DoubleVariable> value = arrayGet(array, index);
                 IRTreeReturn<DoubleVariable> prob = multiplyDD(info.probability,
-                        getProbability(rv, newScope, compilationCtx));
+                        getProbability(rv, newScope, info.compilationCtx));
                 value = addDD(value, prob);
                 IRTreeVoid storeValue = arrayPut(array, index, value, "Save the probability of each value");
-                compilationCtx.addTreeToScope(newScope, storeValue);
+                info.compilationCtx.addTreeToScope(newScope, storeValue);
             });
 
             // sum and normalise values

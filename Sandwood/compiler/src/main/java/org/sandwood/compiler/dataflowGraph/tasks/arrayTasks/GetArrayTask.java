@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -205,9 +205,9 @@ public class GetArrayTask<A extends Variable<A>> extends GetTask<ArrayVariable<A
 
             for(Set<TraceHandle> ts:ld.toPutTraces.values()) {
                 ScopeConstructor sci = sc.addBackConstraints(ts, Guards.NO_GUARDS, Traces.noDistributionTraces);
-                sci.addTree((TreeBuilderInfo t) -> {
-                    ArrayVariable<?> a = (ArrayVariable<?>) ((PutTask<?>) t.getTrace().get(0).task).value;
-                    compilationCtx.addTreeToScope(GlobalScope.scope,
+                sci.addTree((TreeBuilderInfo info) -> {
+                    ArrayVariable<?> a = (ArrayVariable<?>) ((PutTask<?>) info.getTrace().get(0).task).value;
+                    info.compilationCtx.addTreeToScope(GlobalScope.scope,
                             IRTree.store(lengthName, a.getLength(compilationCtx), Tree.NoComment));
                 });
             }

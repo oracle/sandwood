@@ -49,17 +49,17 @@ public class GammaToExponential
         extends InferenceGeneratorScalar<DoubleVariable, Gamma, GammaToExponential.GammaToExponentialData> {
     protected static class GammaToExponentialData
             extends InferenceGeneratorScalar.ScalarFunctionData<DoubleVariable, Gamma> {
-        // Names for the different variables that will be needed to construct for this
-        // function.
-        final VariableDescription<DoubleVariable> sumName;
-        final VariableDescription<IntVariable> countName;
-
         protected GammaToExponentialData(SampleTask<DoubleVariable, Gamma> sample, CompilationContext compilationCtx) {
             super(sample, false, compilationCtx);
-            sumName = VariableNames.calcVarName("sum", VariableType.DoubleVariable, true);
-            countName = VariableNames.calcVarName("count", VariableType.IntVariable, true);
         }
     }
+
+    // Names for the different variables that will be needed to construct for this
+    // function.
+    private final VariableDescription<DoubleVariable> sumName = VariableNames.calcVarName("sum",
+            VariableType.DoubleVariable, true);
+    private final VariableDescription<IntVariable> countName = VariableNames.calcVarName("count",
+            VariableType.IntVariable, true);
 
     private GammaToExponential() {}
 
@@ -78,19 +78,18 @@ public class GammaToExponential
      * @return The function call to generate a sample value for this function data.
      */
     @Override
-    protected IRTreeReturn<DoubleVariable> calculateSampleValue(CompilationContext compilationCtx,
-            GammaToExponentialData funcData) {
+    protected IRTreeReturn<DoubleVariable> calculateSampleValue(GammaToExponentialData funcData) {
         /*
          * TODO adjust this so it traces back to find the constructor, and get the values from them. This will allow
          * arrays of random variables. Get the arguments constructed
          */
-        IRTreeReturn<DoubleVariable> alpha = funcData.sourceRandom.alpha.getForwardIR(compilationCtx);
-        IRTreeReturn<DoubleVariable> beta = funcData.sourceRandom.beta.getForwardIR(compilationCtx);
+        IRTreeReturn<DoubleVariable> alpha = funcData.sourceRandom.alpha.getForwardIR(funcData.compilationCtx);
+        IRTreeReturn<DoubleVariable> beta = funcData.sourceRandom.beta.getForwardIR(funcData.compilationCtx);
 
         // Construct a tree to construct the sample variable.
         IRTreeReturn<DoubleVariable> mean = IRTree.functionCallReturn(FunctionType.CONJUGATE_SAMPLE,
-                VariableType.DoubleVariable, VariableType.Gamma, VariableType.Exponential, alpha, beta,
-                load(funcData.sumName), load(funcData.countName));
+                VariableType.DoubleVariable, VariableType.Gamma, VariableType.Exponential, alpha, beta, load(sumName),
+                load(countName));
         return mean;
     }
 
@@ -101,13 +100,13 @@ public class GammaToExponential
      * @param funcData       The function data for this inference function.
      */
     @Override
-    protected void constructFunctionVariables(GammaToExponentialData funcData, CompilationContext compilationCtx) {
+    protected void constructFunctionVariables(GammaToExponentialData funcData) {
         // add a trees to initialize the temporary variables.
         funcData.targetScope.addTree((TreeBuilderInfo info) -> {
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sumName, constant(0.0),
-                    "Variable to track the sum of the samples."));
+            info.compilationCtx.addTreeToScope(GlobalScope.scope,
+                    IRTree.initializeVariable(sumName, constant(0.0), "Variable to track the sum of the samples."));
 
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countName, constant(0),
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(countName, constant(0),
                     "Variable to record how many samples have been included in this calculation."));
         });
     }
@@ -115,16 +114,16 @@ public class GammaToExponential
     @SuppressWarnings("unchecked")
     @Override
     protected void getObservationToSampleIR(SampleTask<?, ?> task, IRTreeReturn<?> current,
-            GammaToExponentialData funcData, TreeBuilderInfo info, CompilationContext compilationCtx) {
+            GammaToExponentialData funcData, TreeBuilderInfo info) {
 
         List<IRTreeVoid> trees = new ArrayList<>();
-        trees.add(store(funcData.sumName, addDD(load(funcData.sumName), (IRTreeReturn<DoubleVariable>) current),
+        trees.add(store(sumName, addDD(load(sumName), (IRTreeReturn<DoubleVariable>) current),
                 "Include this sample by adding the value to the sum."));
 
-        trees.add(store(funcData.countName, addII(load(funcData.countName), constant(1)),
+        trees.add(store(countName, addII(load(countName), constant(1)),
                 "Increment the number of samples in the calculation."));
 
-        compilationCtx.addTreeToScope(task.scope(), sequential(trees, "Consume sample task " + task.id()
+        info.compilationCtx.addTreeToScope(task.scope(), sequential(trees, "Consume sample task " + task.id()
                 + " from random variable " + task.randomVariable.getVarDesc() + "."));
     }
 
@@ -189,37 +188,32 @@ public class GammaToExponential
     }
 
     @Override // No global state, so nothing to do here.
-    protected void allocateGlobalState(CompilationContext compilationCtx, GammaToExponentialData funcData) {}
+    protected void allocateGlobalState(GammaToExponentialData funcData) {}
 
     @Override
     protected void getDistributionSampleIR(DistributionSampleTask<?, ?> s,
-            IRTreeReturn<DoubleVariable> sourceProbability, GammaToExponentialData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {
+            IRTreeReturn<DoubleVariable> sourceProbability, GammaToExponentialData funcData, TreeBuilderInfo info) {
         throw new CompilerException("Distribution samples are not yet supported in this inference "
                 + "technique. If this has been reached there is a bug in the compiler.");
     }
 
     @Override
-    protected void getPerSourceConfigStartIR(GammaToExponentialData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerSourceConfigStartIR(GammaToExponentialData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerSourceConfigEndIR(GammaToExponentialData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerSourceConfigEndIR(GammaToExponentialData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerConsumerStartIR(GammaToExponentialData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerConsumerStartIR(GammaToExponentialData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerConsumerEndIR(GammaToExponentialData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerConsumerEndIR(GammaToExponentialData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void finalize(GammaToExponentialData funcData, CompilationContext compilationCtx) {}
+    protected void finalize(GammaToExponentialData funcData) {}
 
     @Override
-    protected ScopeConstructor getBackTraceScope(GammaToExponentialData funcData, CompilationContext compilationCtx) {
+    protected ScopeConstructor getBackTraceScope(GammaToExponentialData funcData) {
         return funcData.targetScope;
     }
 
@@ -229,35 +223,31 @@ public class GammaToExponential
     }
 
     @Override
-    protected void addDistributionProbabilities(ScopeConstructor targetScope, GammaToExponentialData funcData,
-            CompilationContext compilationCtx) {
+    protected void addDistributionProbabilities(ScopeConstructor targetScope, GammaToExponentialData funcData) {
         throw new CompilerException("Unable to merge distributions in this inference method.");
     }
 
     @Override
-    protected void backTraceScopeStartIR(GammaToExponentialData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void backTraceScopeStartIR(GammaToExponentialData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void backTraceScopeEndIR(GammaToExponentialData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void backTraceScopeEndIR(GammaToExponentialData funcData, TreeBuilderInfo info) {}
 
     @Override
     protected void getPerDistributedSampleStartIR(GammaToExponentialData funcData, DistributionSampleTask<?, ?> s,
-            TreeBuilderInfo info, CompilationContext compilationCtx) {}
+            TreeBuilderInfo info) {}
 
     @Override
     protected void getPerDistributedSampleEndIR(GammaToExponentialData funcData, DistributionSampleTask<?, ?> s,
-            TreeBuilderInfo info, CompilationContext compilationCtx) {}
+            TreeBuilderInfo info) {}
 
     @Override
     protected void getConsumerRVInputIR(TreeBuilderInfo info, RandomVariable<?, ?> consumer,
-            GammaToExponentialData funcData, CompilationContext compilationCtx) {}
+            GammaToExponentialData funcData) {}
 
     @Override
     protected <C extends ScalarVariable<C>, D extends ScalarVariable<D>> void getDeterministicObservationToConditionalIR(
-            IRTreeReturn<C> current, ScalarVariable<D> input, GammaToExponentialData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {
+            IRTreeReturn<C> current, ScalarVariable<D> input, GammaToExponentialData funcData, TreeBuilderInfo info) {
         throw new CompilerException("Unable to infer conditional guards in a conjugate prior.");
     }
 }

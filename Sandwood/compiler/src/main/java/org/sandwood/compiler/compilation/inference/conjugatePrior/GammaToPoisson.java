@@ -86,15 +86,14 @@ public class GammaToPoisson extends InferenceGeneratorScalar<DoubleVariable, Gam
      * @return The intermediate representation tree for the function call to generate a sample with this function data.
      */
     @Override
-    protected IRTreeReturn<DoubleVariable> calculateSampleValue(CompilationContext compilationCtx,
-            GammaToPoissonData funcData) {
+    protected IRTreeReturn<DoubleVariable> calculateSampleValue(GammaToPoissonData funcData) {
         // TODO adjust this so it traces back to find the constructor, and get the
         // values
         // from them. This will allow arrays of random variables.
 
         // Get the arguments constructed
-        IRTreeReturn<DoubleVariable> alpha = funcData.sourceRandom.alpha.getForwardIR(compilationCtx);
-        IRTreeReturn<DoubleVariable> beta = funcData.sourceRandom.beta.getForwardIR(compilationCtx);
+        IRTreeReturn<DoubleVariable> alpha = funcData.sourceRandom.alpha.getForwardIR(funcData.compilationCtx);
+        IRTreeReturn<DoubleVariable> beta = funcData.sourceRandom.beta.getForwardIR(funcData.compilationCtx);
 
         // Construct a tree to construct the sample variable.
         IRTreeReturn<DoubleVariable> mean = IRTree.functionCallReturn(FunctionType.CONJUGATE_SAMPLE,
@@ -111,16 +110,16 @@ public class GammaToPoisson extends InferenceGeneratorScalar<DoubleVariable, Gam
      * @param funcData       The function data for generating this inference function.
      */
     @Override
-    protected void constructFunctionVariables(GammaToPoissonData funcData, CompilationContext compilationCtx) {
+    protected void constructFunctionVariables(GammaToPoissonData funcData) {
         // add a trees to initialize the temporary variables.
         funcData.targetScope.addTree((TreeBuilderInfo info) -> {
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sumName, constant(0.0),
-                    "Variable to store the sum of all the samples from consuming random variables."));
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sumName,
+                    constant(0.0), "Variable to store the sum of all the samples from consuming random variables."));
             if(funcData.distributedConsumers)
-                compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countNameDis,
+                info.compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countNameDis,
                         constant(0.0), "Variable to record the number of samples from consuming random variables."));
             else
-                compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countName,
+                info.compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countName,
                         constant(0), "Variable to record the number of samples from consuming random variables."));
         });
     }
@@ -128,7 +127,7 @@ public class GammaToPoisson extends InferenceGeneratorScalar<DoubleVariable, Gam
     @SuppressWarnings("unchecked")
     @Override
     protected void getObservationToSampleIR(SampleTask<?, ?> task, IRTreeReturn<?> current, GammaToPoissonData funcData,
-            TreeBuilderInfo info, CompilationContext compilationCtx) {
+            TreeBuilderInfo info) {
         List<IRTreeVoid> trees = new ArrayList<>();
         if(funcData.distributedConsumers) {
             trees.add(store(funcData.sumName,
@@ -143,7 +142,7 @@ public class GammaToPoisson extends InferenceGeneratorScalar<DoubleVariable, Gam
             trees.add(store(funcData.countName, addII(load(funcData.countName), constant(1)), Tree.NoComment));
         }
 
-        compilationCtx.addTreeToScope(task.scope(),
+        info.compilationCtx.addTreeToScope(task.scope(),
                 sequential(trees, "Add the value of a sample from consuming random variable "
                         + task.randomVariable.getVarDesc() + " to the inference state."));
     }
@@ -203,37 +202,32 @@ public class GammaToPoisson extends InferenceGeneratorScalar<DoubleVariable, Gam
     }
 
     @Override // No global state, so nothing to do here.
-    protected void allocateGlobalState(CompilationContext compilationCtx, GammaToPoissonData funcData) {}
+    protected void allocateGlobalState(GammaToPoissonData funcData) {}
 
     @Override
     protected void getDistributionSampleIR(DistributionSampleTask<?, ?> s,
-            IRTreeReturn<DoubleVariable> sourceProbability, GammaToPoissonData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {
+            IRTreeReturn<DoubleVariable> sourceProbability, GammaToPoissonData funcData, TreeBuilderInfo info) {
         throw new CompilerException("Distribution samples are not yet supported in this inference "
                 + "technique. If this has been reached there is a bug in the compiler.");
     }
 
     @Override
-    protected void getPerSourceConfigStartIR(GammaToPoissonData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerSourceConfigStartIR(GammaToPoissonData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerSourceConfigEndIR(GammaToPoissonData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerSourceConfigEndIR(GammaToPoissonData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerConsumerStartIR(GammaToPoissonData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerConsumerStartIR(GammaToPoissonData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerConsumerEndIR(GammaToPoissonData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerConsumerEndIR(GammaToPoissonData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void finalize(GammaToPoissonData funcData, CompilationContext compilationCtx) {}
+    protected void finalize(GammaToPoissonData funcData) {}
 
     @Override
-    protected ScopeConstructor getBackTraceScope(GammaToPoissonData funcData, CompilationContext compilationCtx) {
+    protected ScopeConstructor getBackTraceScope(GammaToPoissonData funcData) {
         return funcData.targetScope;
     }
 
@@ -243,35 +237,31 @@ public class GammaToPoisson extends InferenceGeneratorScalar<DoubleVariable, Gam
     }
 
     @Override
-    protected void addDistributionProbabilities(ScopeConstructor targetScope, GammaToPoissonData funcData,
-            CompilationContext compilationCtx) {
+    protected void addDistributionProbabilities(ScopeConstructor targetScope, GammaToPoissonData funcData) {
         throw new CompilerException("Unable to merge distributions in Gamma to Poisson inference method.");
     }
 
     @Override
-    protected void backTraceScopeStartIR(GammaToPoissonData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void backTraceScopeStartIR(GammaToPoissonData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void backTraceScopeEndIR(GammaToPoissonData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void backTraceScopeEndIR(GammaToPoissonData funcData, TreeBuilderInfo info) {}
 
     @Override
     protected void getPerDistributedSampleStartIR(GammaToPoissonData funcData, DistributionSampleTask<?, ?> s,
-            TreeBuilderInfo info, CompilationContext compilationCtx) {}
+            TreeBuilderInfo info) {}
 
     @Override
     protected void getPerDistributedSampleEndIR(GammaToPoissonData funcData, DistributionSampleTask<?, ?> s,
-            TreeBuilderInfo info, CompilationContext compilationCtx) {}
+            TreeBuilderInfo info) {}
 
     @Override
     protected void getConsumerRVInputIR(TreeBuilderInfo info, RandomVariable<?, ?> consumer,
-            GammaToPoissonData funcData, CompilationContext compilationCtx) {}
+            GammaToPoissonData funcData) {}
 
     @Override
     protected <C extends ScalarVariable<C>, D extends ScalarVariable<D>> void getDeterministicObservationToConditionalIR(
-            IRTreeReturn<C> current, ScalarVariable<D> input, GammaToPoissonData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {
+            IRTreeReturn<C> current, ScalarVariable<D> input, GammaToPoissonData funcData, TreeBuilderInfo info) {
         throw new CompilerException("Unable to infer conditional guards in a conjugate prior.");
     }
 }

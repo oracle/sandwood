@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -52,21 +52,21 @@ public abstract class InferenceGeneratorArray<A extends Variable<A>, B extends R
     // Methods passing through to the subclasses. this provides a point where we can add in code that should be executed
     // for all array values, but not for scalars.
     @Override
-    protected void addSampleValueTree(FuncData funcData, CompilationContext compilationCtx) {
-        IRTreeVoid sampleValue = calculateSampleValue(funcData, compilationCtx);
+    protected void addSampleValueTree(FuncData funcData) {
+        IRTreeVoid sampleValue = calculateSampleValue(funcData);
         sampleValue.prefixComment("Calculate the new sample value");
-        funcData.sampleDesc.updateSample(sampleValue, compilationCtx);
+        funcData.sampleDesc.updateSample(sampleValue, funcData.compilationCtx);
     }
 
-    protected abstract IRTreeVoid calculateSampleValue(FuncData funcData, CompilationContext compilationCtx);
+    protected abstract IRTreeVoid calculateSampleValue(FuncData funcData);
 
     @Override
-    protected void constructFunctionVariablesInternal(FuncData funcData, CompilationContext compilationCtx) {
+    protected void constructFunctionVariablesInternal(FuncData funcData) {
         // Set up a pointer for accessing local space.
         IRTreeReturn<ArrayVariable<A>> globalState;
         if(funcData.sampleDesc.targetFound()) {
             List<IRTreeReturn<IntVariable>> indexes = TreeUtils.toArgTrees(funcData.sampleDesc.targetIndexes(),
-                    compilationCtx);
+                    funcData.compilationCtx);
             // Dirty hack to keep getIndirect happy. TODO come up with a cleaner solutions.
             // Recasting the variable type so that the get indirect method can be used in
             // the same way it would be used for variables declared inside a loop.
@@ -75,26 +75,26 @@ public abstract class InferenceGeneratorArray<A extends Variable<A>, B extends R
             globalState = TreeUtils.getIndirectValue(targetName, indexes);
         } else {
             List<IRTreeReturn<IntVariable>> indexes = TreeUtils
-                    .toArgTrees(TreeUtils.getScopeArgs(funcData.sampleDesc.output), compilationCtx);
+                    .toArgTrees(TreeUtils.getScopeArgs(funcData.sampleDesc.output), funcData.compilationCtx);
             globalState = TreeUtils.getIndirectValue(funcData.sampleDesc.output.getUniqueVarDesc(), indexes);
         }
         IRTreeVoid getLocalState = initializeVariable(funcData.targetLocal, globalState,
                 "A reference local to the function for the sample variable.");
-        funcData.targetScope.addTree((TreeBuilderInfo t) -> {
-            compilationCtx.addTreeToScope(GlobalScope.scope, getLocalState);
+        funcData.targetScope.addTree((TreeBuilderInfo info) -> {
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, getLocalState);
         });
-        constructFunctionVariables(funcData, compilationCtx);
+        constructFunctionVariables(funcData);
     }
 
-    protected abstract void constructFunctionVariables(FuncData funcData, CompilationContext compilationCtx);
+    protected abstract void constructFunctionVariables(FuncData funcData);
 
     @Override
-    protected void allocateGlobalStateInternal(CompilationContext compilationCtx, FuncData funcData) {
-        CompilationPhase phase = compilationCtx.phase;
-        compilationCtx.phase = CompilationPhase.ALLOCATION;
-        allocateGlobalState(compilationCtx, funcData);
-        compilationCtx.phase = phase;
+    protected void allocateGlobalStateInternal(FuncData funcData) {
+        CompilationPhase phase = funcData.compilationCtx.phase;
+        funcData.compilationCtx.phase = CompilationPhase.ALLOCATION;
+        allocateGlobalState(funcData);
+        funcData.compilationCtx.phase = phase;
     }
 
-    protected abstract void allocateGlobalState(CompilationContext compilationCtx, FuncData funcData);
+    protected abstract void allocateGlobalState(FuncData funcData);
 }

@@ -201,7 +201,7 @@ public class ProbabilityFunction {
                     iterating = iterating || s.iterating();
                     s = s.getEnclosingScope();
                 }
-                
+
                 // If there is only a single sample return.
                 if(!iterating)
                     return false;
@@ -701,14 +701,14 @@ public class ProbabilityFunction {
                             and(load(funcData.fixedFlagName), load(funcData.fixedProbFlagName)),
                             "Should the probability of sample " + funcData.sampleTask.id()
                                     + " be set to fixed. This will only every change the flag to false.");
-                    funcData.compilationCtx.addSetSideEffect(funcData.fixedFlagName, restFixed);
+                    info.compilationCtx.addSetSideEffect(funcData.fixedFlagName, restFixed);
 
                     // Add side effect to clear the flag if a dependency is changed.
                     VariableDescription<?> sampleName = funcData.sampleVariable.getUniqueVarDesc();
                     restFixed = store(funcData.fixedProbFlagName, constant(false),
                             "Unset the fixed probability flag for sample " + funcData.sampleTask.id()
                                     + " as it depends on " + sampleName.name + ".");
-                    funcData.compilationCtx.addSetSideEffect(sampleName, restFixed);
+                    info.compilationCtx.addSetSideEffect(sampleName, restFixed);
                 }
 
                 // Construct an expression to determine if the flag should be set.
@@ -727,19 +727,19 @@ public class ProbabilityFunction {
                                     and(load(sampleFixedName), load(funcData.fixedProbFlagName)),
                                     "Should the probability of sample " + funcData.sampleTask.id()
                                             + " be set to fixed. This will only every change the flag to false.");
-                            funcData.compilationCtx.addSetSideEffect(sampleFixedName, restFixed);
+                            info.compilationCtx.addSetSideEffect(sampleFixedName, restFixed);
 
                             // Add side effect to clear the flag if a dependency is changed.
-                            SampleTraceDesc sampleDesc = funcData.compilationCtx.traces.getSampleTrace(s);
+                            SampleTraceDesc sampleDesc = info.compilationCtx.traces.getSampleTrace(s);
                             VariableDescription<?> sampleName = sampleDesc.sampleVariable.getUniqueVarDesc();
                             restFixed = store(funcData.fixedProbFlagName, constant(false),
                                     "Unset the fixed probability flag for sample " + funcData.sampleTask.id()
                                             + " as it depends on " + sampleName.name + ".");
-                            funcData.compilationCtx.addSetSideEffect(sampleName, restFixed);
+                            info.compilationCtx.addSetSideEffect(sampleName, restFixed);
                         }
                     }
                 }
-                funcData.compilationCtx.addTreeToScope(GlobalScope.scope, store(funcData.fixedProbFlagName, fixed,
+                info.compilationCtx.addTreeToScope(GlobalScope.scope, store(funcData.fixedProbFlagName, fixed,
                         "Now the probability is calculated store if it can be cached or if it needs to be recalculated next time."));
             });
 
@@ -750,35 +750,35 @@ public class ProbabilityFunction {
                     .addTree((TreeBuilderInfo info) -> {
 
                         // Initialize variables
-                        funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
+                        info.compilationCtx.addTreeToScope(GlobalScope.scope,
                                 initializeVariable(accumulatorName, constant(0.0), Tree.NoComment));
 
-                        funcData.compilationCtx.addTreeToScope(funcData.randomStoreScope,
+                        info.compilationCtx.addTreeToScope(funcData.randomStoreScope,
                                 initializeVariable(rvProbabilityName, constant(0.0), Tree.NoComment));
 
                         if(funcData.sampleSkippable) {
-                            funcData.compilationCtx.enterScope(funcData.sampleTaskScope);
-                            funcData.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(guardName,
+                            info.compilationCtx.enterScope(funcData.sampleTaskScope);
+                            info.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(guardName,
                                     IRTree.constant(false), "A guard to check if the sample value is ever reached."));
-                            funcData.compilationCtx.leaveScope(funcData.sampleTaskScope);
+                            info.compilationCtx.leaveScope(funcData.sampleTaskScope);
                         }
 
                         if(funcData.storeArgTrees.isEmpty()) // We are not in a loop.
-                            funcData.compilationCtx.addTreeToScope(funcData.sampleStoreScope,
+                            info.compilationCtx.addTreeToScope(funcData.sampleStoreScope,
                                     initializeVariable(sampleValueName, load(funcData.storedName), Tree.NoComment));
                         else
-                            funcData.compilationCtx.addTreeToScope(funcData.sampleStoreScope,
+                            info.compilationCtx.addTreeToScope(funcData.sampleStoreScope,
                                     initializeVariable(sampleValueName,
                                             TreeUtils.getIndirectValue(funcData.storedName, funcData.storeArgTrees),
                                             Tree.NoComment));
 
                         // Accumulate values
-                        funcData.compilationCtx.addTreeToScope(funcData.sampleStoreScope, store(rvProbabilityName,
+                        info.compilationCtx.addTreeToScope(funcData.sampleStoreScope, store(rvProbabilityName,
                                 addDD(load(rvProbabilityName), load(sampleValueName)), Tree.NoComment));
                         if(funcData.sampleSkippable)
-                            funcData.compilationCtx.addTreeToScope(funcData.sampleTaskScope,
+                            info.compilationCtx.addTreeToScope(funcData.sampleTaskScope,
                                     store(guardName, constant(true), "Record that the sample was reached."));
-                        funcData.compilationCtx.addTreeToScope(funcData.randomStoreScope, store(accumulatorName,
+                        info.compilationCtx.addTreeToScope(funcData.randomStoreScope, store(accumulatorName,
                                 addDD(load(accumulatorName), load(rvProbabilityName)), Tree.NoComment));
 
                         // Update the values for the random variables
@@ -906,7 +906,7 @@ public class ProbabilityFunction {
         a = a.addConstraint(funcData.traceToSampleVariable);
 
         a.addTree(0, (TreeBuilderInfo info) -> {
-            IRTreeReturn<?> current = funcData.sampleVariable.getForwardIR(funcData.compilationCtx);
+            IRTreeReturn<?> current = funcData.sampleVariable.getForwardIR(info.compilationCtx);
             int index = funcData.traceToSampleVariable.size() - 1;
             BackTraceInfo backTraceInfo = new BackTraceInfo();
             while(index >= 0) {
@@ -917,11 +917,11 @@ public class ProbabilityFunction {
                     case SAMPLE:
                         break;
                     default:
-                        current = t.getInverseIR(d.argPos, current, backTraceInfo, funcData.compilationCtx);
+                        current = t.getInverseIR(d.argPos, current, backTraceInfo, info.compilationCtx);
                 }
             }
 
-            funcData.compilationCtx.addTreeToScope(funcData.sampleTaskScope,
+            info.compilationCtx.addTreeToScope(funcData.sampleTaskScope,
                     IRTree.initializeVariable(funcData.sampleVariableName, (IRTreeReturn<A>) current,
                             "The sample value to calculate the probability of generating"));
         });
@@ -934,10 +934,10 @@ public class ProbabilityFunction {
             // Calculate the probability of the value in current. If this happens inside an
             // iterating scope this may be called many times with different values.
             IRTreeReturn<DoubleVariable> sampleProbability = getSampleProbability(funcData.randomVariable, sampleValue,
-                    true, funcData.compilationCtx);
+                    true, info.compilationCtx);
 
             // Store the value of the function call, so the function call is only made once.
-            funcData.compilationCtx.addTreeToScope(funcData.sampleTaskScope,
+            info.compilationCtx.addTreeToScope(funcData.sampleTaskScope,
                     initializeVariable(weightedProbability, addDD(log(info.probability), sampleProbability),
                             "Store the value of the function call, so the function call is only made once."));
         });
@@ -967,17 +967,17 @@ public class ProbabilityFunction {
                                 ScopeConstructor c = b.addConstraint(sinkToConditional);
 
                                 c.addTree(2, (TreeBuilderInfo info) -> {
-                                    IRTreeReturn<?> current = sink.getForwardIR(funcData.compilationCtx);
+                                    IRTreeReturn<?> current = sink.getForwardIR(info.compilationCtx);
                                     int index = sinkToConditional.size() - 1;
                                     BackTraceInfo backTraceInfo = new BackTraceInfo();
                                     while(index >= 0) {
                                         DataflowTaskArgDesc currentDesc = sinkToConditional.get(index--);
                                         current = currentDesc.task.getInverseIR(currentDesc.argPos, current,
-                                                backTraceInfo, funcData.compilationCtx);
+                                                backTraceInfo, info.compilationCtx);
                                     }
 
                                     constructObservationTest(weightedProbability, taskDesc, current,
-                                            funcData.compilationCtx);
+                                            info.compilationCtx);
                                 });
                             }
                         }
@@ -988,12 +988,12 @@ public class ProbabilityFunction {
 
         // Merge the resulting weighted probability into the accumulators.
         a.addTree(0, (TreeBuilderInfo info) -> {
-            funcData.compilationCtx.addTreeToScope(funcData.sampleTaskScope,
+            info.compilationCtx.addTreeToScope(funcData.sampleTaskScope,
                     TreeUtils.lseAdd(load(disAccumulator), load(weightedProbability), disAccumulator,
                             "Add the probability of this sample task to the distribution accumulator."));
 
             // Update the probability space seen
-            funcData.compilationCtx.addTreeToScope(funcData.sampleTaskScope,
+            info.compilationCtx.addTreeToScope(funcData.sampleTaskScope,
                     store(probabilityReached, addDD(load(probabilityReached), info.probability),
                             "Add the probability of this distribution configuration to the accumulator."));
         });
@@ -1119,9 +1119,8 @@ public class ProbabilityFunction {
 
                     // Add variables that require per variable values
                     ScopeConstructor perVarScopes = sPerSample.addConstraints(traces, NO_GUARDS);
-                    perVarScopes
-                            .addTree((TreeBuilderInfo info) -> funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
-                                    setValueProbability(sampleProbability, v, guardName, funcData)));
+                    perVarScopes.addTree((TreeBuilderInfo info) -> info.compilationCtx.addTreeToScope(GlobalScope.scope,
+                            setValueProbability(sampleProbability, v, guardName, funcData)));
                 }
             }
 
@@ -1142,9 +1141,8 @@ public class ProbabilityFunction {
 
                     // Add variables that require per variable values
                     ScopeConstructor perVarScopes = sAccumulator.addConstraints(traces, NO_GUARDS);
-                    perVarScopes
-                            .addTree((TreeBuilderInfo info) -> funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
-                                    setValueProbability(accumulatedProbability, v, guardName, funcData)));
+                    perVarScopes.addTree((TreeBuilderInfo info) -> info.compilationCtx.addTreeToScope(GlobalScope.scope,
+                            setValueProbability(accumulatedProbability, v, guardName, funcData)));
 
                 }
             }

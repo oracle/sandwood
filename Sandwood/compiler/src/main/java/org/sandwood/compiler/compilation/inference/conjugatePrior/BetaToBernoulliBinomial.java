@@ -103,14 +103,13 @@ public class BetaToBernoulliBinomial
      * @return The intermediate tree representation of the method to infer a sample value.
      */
     @Override
-    protected IRTreeReturn<DoubleVariable> calculateSampleValue(CompilationContext compilationCtx,
-            BetaToBernoulliBinomialData funcData) {
+    protected IRTreeReturn<DoubleVariable> calculateSampleValue(BetaToBernoulliBinomialData funcData) {
         // TODO adjust this so it traces back to find the constructor, and get the
         // values
         // from them. This will allow arrays of random variables to be constructed.
         // Get the arguments constructed
-        IRTreeReturn<DoubleVariable> alphaArg = funcData.sourceRandom.alpha.getForwardIR(compilationCtx);
-        IRTreeReturn<DoubleVariable> betaArg = funcData.sourceRandom.beta.getForwardIR(compilationCtx);
+        IRTreeReturn<DoubleVariable> alphaArg = funcData.sourceRandom.alpha.getForwardIR(funcData.compilationCtx);
+        IRTreeReturn<DoubleVariable> betaArg = funcData.sourceRandom.beta.getForwardIR(funcData.compilationCtx);
 
         // Construct a tree to construct the sample variable.
         if(funcData.distributedConsumers)
@@ -130,20 +129,20 @@ public class BetaToBernoulliBinomial
      * @param funcData       The function data for this inference method constructor.
      */
     @Override
-    protected void constructFunctionVariables(BetaToBernoulliBinomialData funcData, CompilationContext compilationCtx) {
+    protected void constructFunctionVariables(BetaToBernoulliBinomialData funcData) {
         // add a trees to initialize the temporary variables.
         funcData.targetScope.addTree((TreeBuilderInfo info) -> {
             if(funcData.distributedConsumers) {
-                compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.noTrueNameDis,
+                info.compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.noTrueNameDis,
                         constant(0.0), "Local variable to record the number of true samples."));
 
-                compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.noTrialsNameDis,
-                        constant(0.0), "Local variable to record the number of samples."));
+                info.compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(
+                        funcData.noTrialsNameDis, constant(0.0), "Local variable to record the number of samples."));
             } else {
-                compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.noTrueName,
+                info.compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.noTrueName,
                         constant(0), "Local variable to record the number of true samples."));
 
-                compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.noTrialsName,
+                info.compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.noTrialsName,
                         constant(0), "Local variable to record the number of samples."));
             }
         });
@@ -151,12 +150,12 @@ public class BetaToBernoulliBinomial
 
     @Override
     protected void getConsumerRVInputIR(TreeBuilderInfo info, RandomVariable<?, ?> consumer,
-            BetaToBernoulliBinomialData funcData, CompilationContext compilationCtx) {}
+            BetaToBernoulliBinomialData funcData) {}
 
     @SuppressWarnings("unchecked")
     @Override
     protected void getObservationToSampleIR(SampleTask<?, ?> task, IRTreeReturn<?> current,
-            BetaToBernoulliBinomialData funcData, TreeBuilderInfo info, CompilationContext compilationCtx) {
+            BetaToBernoulliBinomialData funcData, TreeBuilderInfo info) {
 
         RandomVariableType<?, ?> type = task.randomVariable.getType();
         IRTreeVoid[] trees = new IRTreeVoid[2];
@@ -180,7 +179,7 @@ public class BetaToBernoulliBinomial
             if(funcData.distributedConsumers) {
                 trees[0] = store(funcData.noTrialsNameDis,
                         addDD(load(funcData.noTrialsNameDis),
-                                multiplyDI(info.probability, binomial.length.getForwardIR(compilationCtx))),
+                                multiplyDI(info.probability, binomial.length.getForwardIR(info.compilationCtx))),
                         "Increment the number of booleans sampled.");
                 trees[1] = store(funcData.noTrueNameDis,
                         addDD(load(funcData.noTrueNameDis),
@@ -188,7 +187,7 @@ public class BetaToBernoulliBinomial
                         "Add to the count the number of booleans that were true.");
             } else {
                 trees[0] = store(funcData.noTrialsName,
-                        addII(load(funcData.noTrialsName), binomial.length.getForwardIR(compilationCtx)),
+                        addII(load(funcData.noTrialsName), binomial.length.getForwardIR(info.compilationCtx)),
                         "Increment the number of booleans sampled.");
                 trees[1] = store(funcData.noTrueName,
                         addII(load(funcData.noTrueName), (IRTreeReturn<IntVariable>) current),
@@ -198,7 +197,7 @@ public class BetaToBernoulliBinomial
             throw new CompilerException(
                     "This inference technique cannot be used with this type of pairing. There is an error in the selection mechanism");
 
-        compilationCtx.addTreeToScope(GlobalScope.scope, sequential(trees, "Include the value sampled by task "
+        info.compilationCtx.addTreeToScope(GlobalScope.scope, sequential(trees, "Include the value sampled by task "
                 + task.id() + " from random variable " + task.randomVariable.getVarDesc() + "."));
     }
 
@@ -248,15 +247,15 @@ public class BetaToBernoulliBinomial
     }
 
     @Override // No global state, so nothing to do here.
-    protected void allocateGlobalState(CompilationContext compilationCtx, BetaToBernoulliBinomialData funcData) {}
+    protected void allocateGlobalState(BetaToBernoulliBinomialData funcData) {}
 
     @Override
     protected void getDistributionSampleIR(DistributionSampleTask<?, ?> task,
-            IRTreeReturn<DoubleVariable> sourceProbability, BetaToBernoulliBinomialData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {
+            IRTreeReturn<DoubleVariable> sourceProbability, BetaToBernoulliBinomialData funcData,
+            TreeBuilderInfo info) {
         VariableDescription<DoubleVariable> distributionProbability = VariableNames
                 .calcVarName("distributionProbability", VariableType.DoubleVariable, true);
-        compilationCtx.addTreeToScope(GlobalScope.scope,
+        info.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(distributionProbability, multiplyDD(sourceProbability, info.probability),
                         "The probability of reaching the consumer with this set of consumer arguments"));
         ArrayVariable<DoubleVariable> distribution = task.getProbabilitiesArray();
@@ -285,8 +284,8 @@ public class BetaToBernoulliBinomial
                     addDD(load(accumulator),
                             multiplyDI(arrayGet(load(distribution), load(indexName)), load(indexName))),
                     Tree.NoComment);
-            scopedTrees.add(IRTree.forStmt(forBody, constant(1), distribution.length().getForwardIR(compilationCtx),
-                    constant(1), indexName, true,
+            scopedTrees.add(IRTree.forStmt(forBody, constant(1),
+                    distribution.length().getForwardIR(info.compilationCtx), constant(1), indexName, true,
                     "Loop over all the possible boolean variable counts adding them to the accumulator. "
                             + "Zero is missed as it will always have the value zero."));
             scopedTrees.add(store(funcData.noTrueNameDis, multiplyDD(load(distributionProbability), load(accumulator)),
@@ -297,32 +296,28 @@ public class BetaToBernoulliBinomial
             throw new CompilerException(
                     "This inference technique cannot be used with this type of pairing. There is an error in the selection mechanism");
 
-        compilationCtx.addTreeToScope(GlobalScope.scope, sequential(trees, "Include the distribution sampled by task "
-                + task.id() + " from random variable " + task.randomVariable.getVarDesc() + "."));
+        info.compilationCtx.addTreeToScope(GlobalScope.scope,
+                sequential(trees, "Include the distribution sampled by task " + task.id() + " from random variable "
+                        + task.randomVariable.getVarDesc() + "."));
     }
 
     @Override
-    protected void getPerSourceConfigStartIR(BetaToBernoulliBinomialData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerSourceConfigStartIR(BetaToBernoulliBinomialData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerSourceConfigEndIR(BetaToBernoulliBinomialData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerSourceConfigEndIR(BetaToBernoulliBinomialData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerConsumerStartIR(BetaToBernoulliBinomialData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerConsumerStartIR(BetaToBernoulliBinomialData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerConsumerEndIR(BetaToBernoulliBinomialData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerConsumerEndIR(BetaToBernoulliBinomialData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void finalize(BetaToBernoulliBinomialData funcData, CompilationContext compilationCtx) {}
+    protected void finalize(BetaToBernoulliBinomialData funcData) {}
 
     @Override
-    protected ScopeConstructor getBackTraceScope(BetaToBernoulliBinomialData funcData,
-            CompilationContext compilationCtx) {
+    protected ScopeConstructor getBackTraceScope(BetaToBernoulliBinomialData funcData) {
         return funcData.targetScope;
     }
 
@@ -332,31 +327,28 @@ public class BetaToBernoulliBinomial
     }
 
     @Override
-    protected void addDistributionProbabilities(ScopeConstructor targetScope, BetaToBernoulliBinomialData funcData,
-            CompilationContext compilationCtx) {
+    protected void addDistributionProbabilities(ScopeConstructor targetScope, BetaToBernoulliBinomialData funcData) {
         throw new CompilerException("Unable to merge distributions in this inference method.");
     }
 
     @Override
-    protected void backTraceScopeStartIR(BetaToBernoulliBinomialData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void backTraceScopeStartIR(BetaToBernoulliBinomialData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void backTraceScopeEndIR(BetaToBernoulliBinomialData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void backTraceScopeEndIR(BetaToBernoulliBinomialData funcData, TreeBuilderInfo info) {}
 
     @Override
     protected void getPerDistributedSampleStartIR(BetaToBernoulliBinomialData funcData, DistributionSampleTask<?, ?> s,
-            TreeBuilderInfo info, CompilationContext compilationCtx) {}
+            TreeBuilderInfo info) {}
 
     @Override
     protected void getPerDistributedSampleEndIR(BetaToBernoulliBinomialData funcData, DistributionSampleTask<?, ?> s,
-            TreeBuilderInfo info, CompilationContext compilationCtx) {}
+            TreeBuilderInfo info) {}
 
     @Override
     protected <C extends ScalarVariable<C>, D extends ScalarVariable<D>> void getDeterministicObservationToConditionalIR(
             IRTreeReturn<C> current, ScalarVariable<D> input, BetaToBernoulliBinomialData funcData,
-            TreeBuilderInfo info, CompilationContext compilationCtx) {
+            TreeBuilderInfo info) {
         throw new CompilerException("Unable to infer conditional guards in a conjugate prior.");
     }
 

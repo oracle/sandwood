@@ -93,11 +93,12 @@ public class DirichletToCategoricalMultinomial extends
      * @return The intermediate representation tree for the call to construct a sample value.
      */
     @Override
-    protected IRTreeVoid calculateSampleValue(DirichletToCategoricalData funcData, CompilationContext compilationCtx) {
+    protected IRTreeVoid calculateSampleValue(DirichletToCategoricalData funcData) {
         // Construct the arguments.
-        IRTreeReturn<ArrayVariable<DoubleVariable>> betaArg = funcData.sourceRandom.beta.getForwardIR(compilationCtx);
+        IRTreeReturn<ArrayVariable<DoubleVariable>> betaArg = funcData.sourceRandom.beta
+                .getForwardIR(funcData.compilationCtx);
         IRTreeReturn<ArrayVariable<DoubleVariable>> count = load(countNameLocal);
-        IRTreeReturn<IntVariable> betaLength = funcData.sourceRandom.beta.getLength(compilationCtx);
+        IRTreeReturn<IntVariable> betaLength = funcData.sourceRandom.beta.getLength(funcData.compilationCtx);
 
         // Construct a tree to construct the sample variable for a given element.
 
@@ -113,32 +114,32 @@ public class DirichletToCategoricalMultinomial extends
      * @param funcData       The function data for this inference function.
      */
     @Override
-    protected void constructFunctionVariables(DirichletToCategoricalData funcData, CompilationContext compilationCtx) {
+    protected void constructFunctionVariables(DirichletToCategoricalData funcData) {
         funcData.targetScope.addTree((TreeBuilderInfo info) -> {
             // Set up a pointer for accessing local space.
             IRTreeReturn<ArrayVariable<DoubleVariable>> globalState = loadGlobalField(funcData.countNameGlobal,
-                    funcData, compilationCtx);
+                    funcData);
             IRTreeVoid getLocalState = initializeVariable(countNameLocal, globalState,
                     "A local reference to the scratch space.");
-            compilationCtx.addTreeToScope(GlobalScope.scope, getLocalState);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, getLocalState);
 
             IRTreeReturn<IntVariable> arrayLengthVal = funcData.sourceRandom.beta.scopedLength(null)
-                    .getForwardIR(compilationCtx);
+                    .getForwardIR(info.compilationCtx);
             IRTreeVoid arrayLengthVar = initializeVariable(arrayLength, arrayLengthVal, "Get the length of the array");
-            compilationCtx.addTreeToScope(GlobalScope.scope, arrayLengthVar);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, arrayLengthVar);
 
             IRTreeReturn<ArrayVariable<DoubleVariable>> array = load(countNameLocal);
             IRTreeVoid body = arrayPut(array, load(loopIndex), constant(0.0), Tree.NoComment);
             IRFor loop = IRTree.forStmt(body, constant(0), load(arrayLength), constant(1), loopIndex, true,
                     "Initialize the array values to 0.");
-            compilationCtx.addTreeToScope(GlobalScope.scope, loop);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, loop);
         });
     }
 
     @SuppressWarnings("unchecked")
     @Override
     protected void getObservationToSampleIR(SampleTask<?, ?> task, IRTreeReturn<?> current,
-            DirichletToCategoricalData funcData, TreeBuilderInfo info, CompilationContext compilationCtx) {
+            DirichletToCategoricalData funcData, TreeBuilderInfo info) {
 
         IRTreeReturn<ArrayVariable<DoubleVariable>> count = load(countNameLocal);
         RandomVariableType<?, ?> type = task.randomVariable.getType();
@@ -147,13 +148,13 @@ public class DirichletToCategoricalMultinomial extends
             IRTreeVoid tree = arrayPut(count, index, addDD(arrayGet(count, index), info.probability),
                     "Increment the sample counter with the value " + "sampled by sample task " + task.id()
                             + " of random variable " + task.randomVariable.getVarDesc());
-            compilationCtx.addTreeToScope(task.scope(), tree);
+            info.compilationCtx.addTreeToScope(task.scope(), tree);
         } else if(type == VariableType.Multinomial) {
             // Save the reference to the sample value for efficient access.
             IRTreeReturn<ArrayVariable<IntVariable>> sampleValue = (IRTreeReturn<ArrayVariable<IntVariable>>) current;
             VariableDescription<ArrayVariable<IntVariable>> sampleValueName = VariableNames.calcVarName("sampleValue",
                     sampleValue.getOutputType(), true);
-            compilationCtx.addTreeToScope(GlobalScope.scope,
+            info.compilationCtx.addTreeToScope(GlobalScope.scope,
                     initializeVariable(sampleValueName, sampleValue, Tree.NoComment));
 
             // Construct a body to scale and increment the value.
@@ -166,7 +167,7 @@ public class DirichletToCategoricalMultinomial extends
             // Add the body to a for loop
             IRFor loop = IRTree.forStmt(body, constant(0), load(arrayLength), constant(1), loopIndex, true,
                     "Update all the counts");
-            compilationCtx.addTreeToScope(GlobalScope.scope, loop);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, loop);
         }
 
     }
@@ -217,42 +218,41 @@ public class DirichletToCategoricalMultinomial extends
     }
 
     @Override
-    protected void allocateGlobalState(CompilationContext compilationCtx, DirichletToCategoricalData funcData) {
+    protected void allocateGlobalState(DirichletToCategoricalData funcData) {
         // Allocate space for storing the results.
-        compilationCtx.pushScopeState();
+        funcData.compilationCtx.pushScopeState();
         // Because of the reuse of max this needs to be serial. This could be overcome
         // this by taking a copy of the value of max, but as I am not sure that parallel
         // allocation is a beneficial, for now this is serial.
-        compilationCtx.pushIsSerial(true);
+        funcData.compilationCtx.pushIsSerial(true);
 
         // Update phase
-        CompilationPhase currentPhase = compilationCtx.phase;
-        compilationCtx.phase = CompilationPhase.ALLOCATION;
+        CompilationPhase currentPhase = funcData.compilationCtx.phase;
+        funcData.compilationCtx.phase = CompilationPhase.ALLOCATION;
 
         // Search for the largest possible array value.
         IRTreeReturn<IntVariable> arrayLength = ((ArrayVariable<DoubleVariable>) funcData.sampleDesc.output)
-                .getMaxLength(compilationCtx);
+                .getMaxLength(funcData.compilationCtx);
         // Allocate and store the largest value
         globalFieldAllocation(funcData.countNameGlobal,
-                newArray(arrayLength, VariableType.arrayType(VariableType.DoubleVariable)), funcData, compilationCtx);
+                newArray(arrayLength, VariableType.arrayType(VariableType.DoubleVariable)), funcData);
         // Get the allocator
-        IRTreeVoid allocator = compilationCtx.getOutermostScopeTree();
+        IRTreeVoid allocator = funcData.compilationCtx.getOutermostScopeTree();
 
-        compilationCtx.phase = currentPhase;
-        compilationCtx.popIsSerial();
-        compilationCtx.popScopeState();
+        funcData.compilationCtx.phase = currentPhase;
+        funcData.compilationCtx.popIsSerial();
+        funcData.compilationCtx.popScopeState();
 
-        createGlobalField(funcData.countNameGlobal, allocator, funcData, compilationCtx);
+        createGlobalField(funcData.countNameGlobal, allocator, funcData);
     }
 
     @Override
     protected void getDistributionSampleIR(DistributionSampleTask<?, ?> s,
-            IRTreeReturn<DoubleVariable> sourceProbability, DirichletToCategoricalData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {
+            IRTreeReturn<DoubleVariable> sourceProbability, DirichletToCategoricalData funcData, TreeBuilderInfo info) {
 
         VariableDescription<DoubleVariable> distributionProbability = VariableNames
                 .calcVarName("distributionProbability", VariableType.DoubleVariable, true);
-        compilationCtx.addTreeToScope(GlobalScope.scope,
+        info.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(distributionProbability, multiplyDD(sourceProbability, info.probability),
                         "The probability of reaching the consumer with this set of consumer arguments"));
 
@@ -260,7 +260,7 @@ public class DirichletToCategoricalMultinomial extends
         IRTreeReturn<DoubleVariable> currentValue = arrayGet(array, load(loopIndex));
 
         IRTreeReturn<ArrayVariable<DoubleVariable>> probabilityArray = s.getProbabilitiesArray()
-                .getForwardIR(compilationCtx);
+                .getForwardIR(info.compilationCtx);
         IRTreeReturn<DoubleVariable> rvProbability = arrayGet(probabilityArray, load(loopIndex));
         IRTreeReturn<DoubleVariable> mergeValue = addDD(currentValue,
                 multiplyDD(rvProbability, load(distributionProbability)));
@@ -268,35 +268,30 @@ public class DirichletToCategoricalMultinomial extends
         IRTreeVoid body = arrayPut(array, load(loopIndex), mergeValue, Tree.NoComment);
         IRFor loop = IRTree.forStmt(body, constant(0), load(arrayLength), constant(1), loopIndex, true,
                 "Merge the distribution probabilities into the count");
-        compilationCtx.addTreeToScope(GlobalScope.scope, loop);
+        info.compilationCtx.addTreeToScope(GlobalScope.scope, loop);
     }
 
     @Override
     protected void getConsumerRVInputIR(TreeBuilderInfo info, RandomVariable<?, ?> consumer,
-            DirichletToCategoricalData funcData, CompilationContext compilationCtx) {}
+            DirichletToCategoricalData funcData) {}
 
     @Override
-    protected void getPerSourceConfigStartIR(DirichletToCategoricalData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerSourceConfigStartIR(DirichletToCategoricalData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerSourceConfigEndIR(DirichletToCategoricalData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerSourceConfigEndIR(DirichletToCategoricalData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerConsumerStartIR(DirichletToCategoricalData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerConsumerStartIR(DirichletToCategoricalData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerConsumerEndIR(DirichletToCategoricalData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerConsumerEndIR(DirichletToCategoricalData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void finalize(DirichletToCategoricalData funcData, CompilationContext compilationCtx) {}
+    protected void finalize(DirichletToCategoricalData funcData) {}
 
     @Override
-    protected ScopeConstructor getBackTraceScope(DirichletToCategoricalData funcData,
-            CompilationContext compilationCtx) {
+    protected ScopeConstructor getBackTraceScope(DirichletToCategoricalData funcData) {
         return funcData.targetScope;
     }
 
@@ -306,31 +301,28 @@ public class DirichletToCategoricalMultinomial extends
     }
 
     @Override
-    protected void addDistributionProbabilities(ScopeConstructor targetScope, DirichletToCategoricalData funcData,
-            CompilationContext compilationCtx) {
+    protected void addDistributionProbabilities(ScopeConstructor targetScope, DirichletToCategoricalData funcData) {
         throw new CompilerException("Unable to merge distributions in this inference method.");
     }
 
     @Override
-    protected void backTraceScopeStartIR(DirichletToCategoricalData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void backTraceScopeStartIR(DirichletToCategoricalData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void backTraceScopeEndIR(DirichletToCategoricalData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void backTraceScopeEndIR(DirichletToCategoricalData funcData, TreeBuilderInfo info) {}
 
     @Override
     protected void getPerDistributedSampleStartIR(DirichletToCategoricalData funcData, DistributionSampleTask<?, ?> s,
-            TreeBuilderInfo info, CompilationContext compilationCtx) {}
+            TreeBuilderInfo info) {}
 
     @Override
     protected void getPerDistributedSampleEndIR(DirichletToCategoricalData funcData, DistributionSampleTask<?, ?> s,
-            TreeBuilderInfo info, CompilationContext compilationCtx) {}
+            TreeBuilderInfo info) {}
 
     @Override
     protected <C extends ScalarVariable<C>, D extends ScalarVariable<D>> void getDeterministicObservationToConditionalIR(
-            IRTreeReturn<C> current, ScalarVariable<D> input, DirichletToCategoricalData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {
+            IRTreeReturn<C> current, ScalarVariable<D> input, DirichletToCategoricalData funcData,
+            TreeBuilderInfo info) {
         throw new CompilerException("Unable to infer conditional guards in a conjugate prior.");
     }
 }
