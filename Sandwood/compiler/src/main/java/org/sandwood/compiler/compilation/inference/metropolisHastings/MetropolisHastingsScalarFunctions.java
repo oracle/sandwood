@@ -92,10 +92,10 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
      * 
      */
     @Override
-    protected ScopeConstructor getBackTraceScope(MetropolisHastingsData<A, B> funcData,
-            CompilationContext compilationCtx) {
-        ScopeConstructor targetScope = super.getBackTraceScope(funcData, compilationCtx);
-        IRTreeReturn<BooleanVariable> guard = or(TreeUtils.getIsConstrained(funcData.sampleDesc.sample, compilationCtx),
+    protected ScopeConstructor getBackTraceScope(MetropolisHastingsData<A, B> funcData) {
+        ScopeConstructor targetScope = super.getBackTraceScope(funcData);
+        IRTreeReturn<BooleanVariable> guard = or(
+                TreeUtils.getIsConstrained(funcData.sampleDesc.sample, funcData.compilationCtx),
                 eq(funcData.valuePos, constant(0)));
         targetScope = targetScope.addCondition(guard).ifScopeConstructor();
         funcData.sampleTargetScope = targetScope;
@@ -103,8 +103,7 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
     }
 
     @Override
-    protected ScopeConstructor getSampleTaskScope(MetropolisHastingsData<A, B> funcData,
-            CompilationContext compilationCtx) {
+    protected ScopeConstructor getSampleTaskScope(MetropolisHastingsData<A, B> funcData) {
         return funcData.sampleTargetScope;
     }
 
@@ -117,31 +116,30 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
      * TODO Make the parameters of the normal distribution generating the proposals user configurable.
      */
     @Override
-    protected void constructFunctionVariablesProb(CompilationContext compilationCtx,
-            MetropolisHastingsData<A, B> funcData) {
-        IRTreeReturn<A> originalValueInit = constructOriginal(funcData, compilationCtx);
+    protected void constructFunctionVariablesProb(MetropolisHastingsData<A, B> funcData) {
+        IRTreeReturn<A> originalValueInit = constructOriginal(funcData);
         IRTreeVoid originalValueTreeInit = initializeVariable(funcData.originalValueName, originalValueInit,
                 "The original value of the sample");
-        compilationCtx.addTreeToScope(GlobalScope.scope, originalValueTreeInit);
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope, originalValueTreeInit);
 
         IRTreeReturn<DoubleVariable> probOriginalValue = constant(0.0);
         IRTreeVoid originalProbability = initializeVariable(originalProbabilityName, probOriginalValue,
                 "The probability of the random variable generating the originally sampled value");
-        compilationCtx.addTreeToScope(GlobalScope.scope, originalProbability);
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope, originalProbability);
 
-        getProposedValue(funcData, compilationCtx);
+        getProposedValue(funcData);
 
         IRTreeReturn<DoubleVariable> probProposedValue = constant(0.0);
         IRTreeVoid proposedProbability = initializeVariable(proposedProbabilityName, probProposedValue,
                 "The probability of the random variable generating the new sample value.");
-        compilationCtx.addTreeToScope(GlobalScope.scope, proposedProbability);
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope, proposedProbability);
     }
 
-    protected abstract void getProposedValue(MetropolisHastingsData<A, B> funcData, CompilationContext compilationCtx);
+    protected abstract void getProposedValue(MetropolisHastingsData<A, B> funcData);
 
     // No global state is required.
     @Override
-    protected void allocateGlobalStateProb(MetropolisHastingsData<A, B> funcData, CompilationContext compilationCtx) {}
+    protected void allocateGlobalStateProb(MetropolisHastingsData<A, B> funcData) {}
 
     /**
      * Method to back track through the trace from the original stored value to the sample task to construct the value
@@ -151,8 +149,7 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
      * @param compilationCtx
      * @return
      */
-    private IRTreeReturn<A> constructOriginal(MetropolisHastingsData<A, B> funcData,
-            CompilationContext compilationCtx) {
+    private IRTreeReturn<A> constructOriginal(MetropolisHastingsData<A, B> funcData) {
         TraceHandle trace = funcData.sampleDesc.sampleVarDesc.traceToSampleVariable;
         /*
          * The trace comes from the sample value and so does not have any arithmetic performed on it, instead at most it
@@ -166,7 +163,8 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
         DataflowTaskArgDesc d = trace.get(index--);
         ProducingDataflowTask<?> t = d.task;
 
-        IRTreeReturn<?> current = funcData.sampleDesc.sampleVarDesc.sampleVariable.getForwardIR(compilationCtx);
+        IRTreeReturn<?> current = funcData.sampleDesc.sampleVarDesc.sampleVariable
+                .getForwardIR(funcData.compilationCtx);
 
         while(true) {
             switch(t.getType()) {
@@ -174,7 +172,7 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
                     return (IRTreeReturn<A>) current;
 
                 default:
-                    current = t.getInverseIR(d.argPos, current, backTraceInfo, compilationCtx);
+                    current = t.getInverseIR(d.argPos, current, backTraceInfo, funcData.compilationCtx);
                     d = trace.get(index--);
                     t = d.task;
             }
@@ -193,11 +191,11 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
      */
 
     @Override
-    protected void addSampleValueTree(MetropolisHastingsData<A, B> funcData, CompilationContext compilationCtx) {
+    protected void addSampleValueTree(MetropolisHastingsData<A, B> funcData) {
         VariableDescription<DoubleVariable> ratioName = VariableNames.calcVarName("ratio", VariableType.DoubleVariable,
                 true);
         IRTreeReturn<DoubleVariable> ratio = subtractDD(load(proposedProbabilityName), load(originalProbabilityName));
-        compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(ratioName, ratio,
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(ratioName, ratio,
                 "The probability ration for the proposed value and the current value."));
 
         IRTreeReturn<DoubleVariable> bound = log(functionCallReturn(FunctionType.SAMPLE, VariableType.DoubleVariable,
@@ -211,7 +209,7 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
                 "Test if the probability of the sample is sufficient "
                         + "to keep the value. This needs to be less than or equal as otherwise if the proposed value is not possible and "
                         + "the random value is 0 an impossible value will be accepted.",
-                compilationCtx);
+                funcData.compilationCtx);
         targetScope = targetScope.addCondition(eq(funcData.valuePos, constant(1))).ifScopeConstructor();
         targetScope = targetScope.addCondition(guard).ifScopeConstructor();
         targetScope = targetScope.addComment("If it is not revert the changes.");
@@ -220,7 +218,7 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
         // the tree to set all the intermediate variables etc.
         targetScope = targetScope.addComment("Set the sample value");
         targetScope.addTree((TreeBuilderInfo info) -> {
-            super.addSampleValueTree(funcData, compilationCtx);
+            super.addSampleValueTree(funcData);
         });
     }
 
@@ -229,44 +227,42 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
      * unsuccessful.
      */
     @Override
-    protected IRTreeReturn<A> calculateSampleValue(CompilationContext compilationCtx,
-            MetropolisHastingsData<A, B> funcData) {
+    protected IRTreeReturn<A> calculateSampleValue(MetropolisHastingsData<A, B> funcData) {
         return load(funcData.originalValueName);
     }
 
     @Override
-    protected void setSampleValue(MetropolisHastingsData<A, B> funcData, CompilationContext compilationCtx) {
-        ScopeConstructor sc = ScopeConstructor.construct(funcData.sampleDesc.sample, Tree.NoComment, compilationCtx);
+    protected void setSampleValue(MetropolisHastingsData<A, B> funcData) {
+        ScopeConstructor sc = ScopeConstructor.construct(funcData.sampleDesc.sample, Tree.NoComment,
+                funcData.compilationCtx);
         IfElseScopeConstructors ifElse = sc.addCondition(eq(funcData.valuePos, constant(0)));
         ifElse.ifScopeConstructor().addTree((TreeBuilderInfo info) -> {
             IRTreeVoid t = setCurrentValue(load(funcData.originalValueName),
                     "Set the current value to the current state of the tree.");
-            compilationCtx.addTreeToScope(GlobalScope.scope, t);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, t);
         });
 
         ScopeConstructor elseSC = ifElse.elseScopeConstructor();
         elseSC.addTree((TreeBuilderInfo info) -> {
             IRTreeVoid updateCurrent = setCurrentValue(load(funcData.proposedValueName), Tree.NoComment);
-            compilationCtx.addTreeToScope(GlobalScope.scope, updateCurrent);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, updateCurrent);
         });
 
         ScopeConstructor blockSC = elseSC.addComment("Update Sample and intermediate values");
         blockSC.addTree((TreeBuilderInfo) -> {
-            funcData.sampleDesc.updateSample(load(funcData.proposedValueName), compilationCtx);
+            funcData.sampleDesc.updateSample(load(funcData.proposedValueName), funcData.compilationCtx);
         });
     }
 
     @Override
-    protected void saveBackTraceProbability(MetropolisHastingsData<A, B> funcData, IRTreeReturn<DoubleVariable> value,
-            CompilationContext compilationCtx) {
-        compilationCtx.addTreeToScope(GlobalScope.scope, ifElse(eq(funcData.valuePos, constant(0)),
+    protected void saveBackTraceProbability(MetropolisHastingsData<A, B> funcData, IRTreeReturn<DoubleVariable> value) {
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope, ifElse(eq(funcData.valuePos, constant(0)),
                 store(originalProbabilityName, value, Tree.NoComment), "Save the probability of the original value.",
                 store(proposedProbabilityName, value, Tree.NoComment), "Save the probability of the proposed value."));
     }
 
     @Override
-    protected void addDistributionProbabilities(ScopeConstructor targetScope, MetropolisHastingsData<A, B> funcData,
-            CompilationContext compilationCtx) {
+    protected void addDistributionProbabilities(ScopeConstructor targetScope, MetropolisHastingsData<A, B> funcData) {
         throw new CompilerException("Distributions generation is not supported in Metropolis Hastings Inference.");
     }
 }

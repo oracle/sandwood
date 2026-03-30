@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -50,8 +50,7 @@ public class MetropolisHastingsDoubleFunctions<B extends RandomVariable<DoubleVa
         extends MetropolisHastingsScalarFunctions<DoubleVariable, B> {
 
     @Override
-    protected void getProposedValue(MetropolisHastingsData<DoubleVariable, B> funcData,
-            CompilationContext compilationCtx) {
+    protected void getProposedValue(MetropolisHastingsData<DoubleVariable, B> funcData) {
         VariableDescription<DoubleVariable> varName = VariableNames.calcVarName("var", VariableType.DoubleVariable,
                 true);
 
@@ -59,20 +58,20 @@ public class MetropolisHastingsDoubleFunctions<B extends RandomVariable<DoubleVa
         double fractionOfCurrentValue = 40;
         IRTreeReturn<DoubleVariable> proposedVar = multiplyDD(
                 conditionalAssignment(lessThan(load(funcData.originalValueName), constant(0)),
-                        negate(load(funcData.originalValueName)), load(funcData.originalValueName))
-                        , constant(fractionOfCurrentValue));
-        compilationCtx.addTreeToScope(GlobalScope.scope,
+                        negate(load(funcData.originalValueName)), load(funcData.originalValueName)),
+                constant(fractionOfCurrentValue));
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(varName, proposedVar, "Calculate a proposed variance."));
 
         // Ensure it is not too small
         double minVariance = 0.01;
         IRTreeReturn<BooleanVariable> guard = lessThan(load(varName), constant(minVariance));
         IRTreeVoid ifStmt = store(varName, constant(minVariance), Tree.NoComment);
-        compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.ifElse(guard, ifStmt,
-                "Ensure the variance is at least " + minVariance));
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
+                IRTree.ifElse(guard, ifStmt, "Ensure the variance is at least " + minVariance));
 
         // Sample a Gaussian distribution based on it to generate the new proposed value.
-        compilationCtx.addTreeToScope(GlobalScope.scope,
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(funcData.proposedValueName,
                         functionCallReturn(FunctionType.SAMPLE, VariableType.DoubleVariable, VariableType.Gaussian,
                                 load(funcData.originalValueName), load(varName)),

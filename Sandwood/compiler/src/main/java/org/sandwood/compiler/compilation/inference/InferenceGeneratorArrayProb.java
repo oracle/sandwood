@@ -11,7 +11,6 @@ package org.sandwood.compiler.compilation.inference;
 import static org.sandwood.compiler.trees.irTree.IRTree.addDD;
 import static org.sandwood.compiler.trees.irTree.IRTree.arrayGet;
 import static org.sandwood.compiler.trees.irTree.IRTree.arrayPut;
-import static org.sandwood.compiler.trees.irTree.IRTree.conditionalAssignment;
 import static org.sandwood.compiler.trees.irTree.IRTree.constant;
 import static org.sandwood.compiler.trees.irTree.IRTree.divideDD;
 import static org.sandwood.compiler.trees.irTree.IRTree.divideDI;
@@ -38,8 +37,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.sandwood.compiler.compilation.CompilationContext;
-import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.compilation.CompilationContext.CompilationPhase;
+import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.compilation.util.TreeUtils;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
@@ -178,7 +177,7 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
     }
 
     @Override
-    protected void constructFunctionVariables(FuncData funcData, CompilationContext compilationCtx) {
+    protected void constructFunctionVariables(FuncData funcData) {
         constructFunctionVariablesProb(funcData);
     }
 
@@ -186,39 +185,39 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
 
     @Override
     protected void getPerDistributedSampleStartIR(FuncData funcData, DistributionSampleTask<?, ?> s,
-            TreeBuilderInfo info, CompilationContext compilationCtx) {
+            TreeBuilderInfo info) {
         DistributableRandomVariable<?, ?> disRV = s.randomVariable;
-        compilationCtx.addTreeToScope(GlobalScope.scope,
+        info.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(consumerSampleDistributionAccumulator,
-                        loadGlobalField(globalDistributionScratchSpace.get(disRV), funcData, compilationCtx),
+                        loadGlobalField(globalDistributionScratchSpace.get(disRV), funcData),
                         "A local array to hold the accumulated distributions of "
                                 + "the sample tasks for each configuration of distributions."));
 
         VariableDescription<IntVariable> indexName = VariableNames.calcVarName("i", VariableType.IntVariable, true);
         IRTreeVoid body = arrayPut(load(consumerSampleDistributionAccumulator), load(indexName), constant(0.0),
                 Tree.NoComment);
-        IRTreeVoid loop = IRTree.forStmt(body, constant(0), disRV.getNumStates().getForwardIR(compilationCtx),
+        IRTreeVoid loop = IRTree.forStmt(body, constant(0), disRV.getNumStates().getForwardIR(info.compilationCtx),
                 constant(1), indexName, true, "Zero all the elements in the distribution accumulator");
-        compilationCtx.addTreeToScope(GlobalScope.scope, loop);
+        info.compilationCtx.addTreeToScope(GlobalScope.scope, loop);
 
-        compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(reachedDistributions, constant(0.0),
+        info.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(reachedDistributions, constant(0.0),
                 "Zero an accumulator to track the probabilities reached."));
     }
 
     @Override
-    protected void getPerDistributedSampleEndIR(FuncData funcData, DistributionSampleTask<?, ?> s, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {
+    protected void getPerDistributedSampleEndIR(FuncData funcData, DistributionSampleTask<?, ?> s,
+            TreeBuilderInfo info) {
         // Get a local copy of the sample distribution
         IRTreeReturn<ArrayVariable<DoubleVariable>> sampleDistribution = s.getProbabilitiesArray()
-                .getForwardIR(compilationCtx);
+                .getForwardIR(info.compilationCtx);
         VariableDescription<ArrayVariable<DoubleVariable>> sampleDescriptionName = VariableNames
                 .calcVarName("sampleDistribution", sampleDistribution.getOutputType(), true);
-        compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(sampleDescriptionName, sampleDistribution,
-                "A local copy of the samples' distribution."));
+        info.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(sampleDescriptionName,
+                sampleDistribution, "A local copy of the samples' distribution."));
 
         VariableDescription<DoubleVariable> overlapName = VariableNames.calcVarName("overlap",
                 VariableType.DoubleVariable, true);
-        compilationCtx.addTreeToScope(GlobalScope.scope,
+        info.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(overlapName, constant(0.0), "The overlap of the distributions so far."));
 
         // Start constructing the body of the for loop
@@ -249,13 +248,13 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
         // the distribution.
         IRTreeVoid body = sequential(bodyStmts, Tree.NoComment);
         IRTreeVoid loop = IRTree.forStmt(body, constant(0),
-                s.randomVariable.getNumStates().getForwardIR(compilationCtx), constant(1), indexName, true,
+                s.randomVariable.getNumStates().getForwardIR(info.compilationCtx), constant(1), indexName, true,
                 "Calculate the overlap for each element in the distribution");
-        compilationCtx.addTreeToScope(GlobalScope.scope, loop);
+        info.compilationCtx.addTreeToScope(GlobalScope.scope, loop);
 
         // Compute the ratio of the overlap that should be added with 1 being used
         // for the values that are unreachable.
-        compilationCtx.addTreeToScope(GlobalScope.scope,
+        info.compilationCtx.addTreeToScope(GlobalScope.scope,
                 store(distributionProbabilityAccumulator, addDD(load(distributionProbabilityAccumulator),
                         log(addDD(
                                 multiplyDD(load(overlapName), load(reachedDistributions)),
@@ -266,60 +265,60 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
     }
 
     @Override
-    protected void getPerConsumerStartIR(FuncData funcData, TreeBuilderInfo info, CompilationContext compilationCtx) {
-        compilationCtx.addTreeToScope(GlobalScope.scope,
+    protected void getPerConsumerStartIR(FuncData funcData, TreeBuilderInfo info) {
+        info.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(consumerSampleProbabilitiesAccumulator, constant(Double.NEGATIVE_INFINITY),
                         "Set an accumulator to sum the probabilities for each possible configuration " + "of inputs."));
-        compilationCtx.addTreeToScope(GlobalScope.scope,
+        info.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(consumerSampleDistributionProbabilityAccumulator, constant(1.0),
                         "Set an accumulator to record the consumer distributions not seen. Initially set "
                                 + "to 1 as seen values will be deducted from this value."));
     }
 
     @Override
-    protected void getPerConsumerEndIR(FuncData funcData, TreeBuilderInfo info, CompilationContext compilationCtx) {
-        compilationCtx.addTreeToScope(GlobalScope.scope,
+    protected void getPerConsumerEndIR(FuncData funcData, TreeBuilderInfo info) {
+        info.compilationCtx.addTreeToScope(GlobalScope.scope,
                 store(consumerSampleDistributionProbabilityAccumulator,
                         max(load(consumerSampleDistributionProbabilityAccumulator), constant(0.0)),
                         "A check to ensure rounding of floating point values can never result in a negative value."));
-        compilationCtx.addTreeToScope(GlobalScope.scope, TreeUtils.lseAdd(load(consumerSampleProbabilitiesAccumulator),
-                log(load(consumerSampleDistributionProbabilityAccumulator)), (IRTreeReturn<DoubleVariable> output) -> {
-                    return IRTree.store(probabilitiesAccumulator, addDD(output, load(probabilitiesAccumulator)),
-                            Tree.NoComment);
-                }, "Multiply (log space add) in the probability of the sample task to the overall "
-                        + "probability for this configuration of the source random variable."));
+        info.compilationCtx.addTreeToScope(GlobalScope.scope,
+                TreeUtils.lseAdd(load(consumerSampleProbabilitiesAccumulator),
+                        log(load(consumerSampleDistributionProbabilityAccumulator)),
+                        (IRTreeReturn<DoubleVariable> output) -> {
+                            return IRTree.store(probabilitiesAccumulator, addDD(output, load(probabilitiesAccumulator)),
+                                    Tree.NoComment);
+                        }, "Multiply (log space add) in the probability of the sample task to the overall "
+                                + "probability for this configuration of the source random variable."));
     }
 
     @Override
-    protected void backTraceScopeStartIR(FuncData funcData, TreeBuilderInfo info, CompilationContext compilationCtx) {
-        compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(statesProbabilityValue,
+    protected void backTraceScopeStartIR(FuncData funcData, TreeBuilderInfo info) {
+        info.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(statesProbabilityValue,
                 constant(Double.NEGATIVE_INFINITY), "Initialize the summed probabilities to 0 in log space."));
-        compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(reachedDistributionsSource, constant(0.0),
-                "Initialize a counter to track the reached distributions."));
-        compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(distributionProbabilityAccumulator,
+        info.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(reachedDistributionsSource,
+                constant(0.0), "Initialize a counter to track the reached distributions."));
+        info.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(distributionProbabilityAccumulator,
                 constant(0.0),
                 "Initialize an accumulator to take the product of all the distribution probabilities in log space."));
 
-        setSampleValue(funcData, compilationCtx);
+        setSampleValue(funcData);
     }
 
-    protected abstract void setSampleValue(FuncData funcData, CompilationContext compilationCtx);
+    protected abstract void setSampleValue(FuncData funcData);
 
     @Override
-    protected void backTraceScopeEndIR(FuncData funcData, TreeBuilderInfo info, CompilationContext compilationCtx) {
+    protected void backTraceScopeEndIR(FuncData funcData, TreeBuilderInfo info) {
         IRTreeReturn<DoubleVariable> value = addDD(
                 subtractDD(load(statesProbabilityValue), log(load(reachedDistributionsSource))),
                 load(distributionProbabilityAccumulator));
 
-        saveBackTraceProbability(funcData, value, compilationCtx);
+        saveBackTraceProbability(funcData, value);
     }
 
-    protected abstract void saveBackTraceProbability(FuncData funcData, IRTreeReturn<DoubleVariable> value,
-            CompilationContext compilationCtx);
+    protected abstract void saveBackTraceProbability(FuncData funcData, IRTreeReturn<DoubleVariable> value);
 
     @Override
-    protected void addDistributionProbabilities(ScopeConstructor targetScope, FuncData funcData,
-            CompilationContext compilationCtx) {
+    protected void addDistributionProbabilities(ScopeConstructor targetScope, FuncData funcData) {
         targetScope = targetScope
                 .addComment("Set the calculated probabilities to be the distribution values, and normalize");
 
@@ -329,9 +328,9 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
             // Bound for loops.
             VariableDescription<IntVariable> endBound = VariableNames.calcVarName("endOfLoop", VariableType.IntVariable,
                     true);
-            compilationCtx.addTreeToScope(GlobalScope.scope,
+            info.compilationCtx.addTreeToScope(GlobalScope.scope,
                     initializeVariable(endBound,
-                            ((ArrayVariable<?>) funcData.sampleDesc.output).getMaxLength(compilationCtx),
+                            ((ArrayVariable<?>) funcData.sampleDesc.output).getMaxLength(info.compilationCtx),
                             "End bound for loops."));
 
             VariableDescription<IntVariable> indexName = VariableNames.calcVarName("index", VariableType.IntVariable,
@@ -341,15 +340,15 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
             VariableDescription<ArrayVariable<DoubleVariable>> localProbability = VariableNames
                     .calcVarName("localProbability", VariableType.arrayType(VariableType.DoubleVariable), true);
             IRTreeReturn<ArrayVariable<DoubleVariable>> probabilityArray = ((DistributionSampleTask<?, ?>) funcData.sampleDesc.sample)
-                    .getProbabilitiesArray().getForwardIR(compilationCtx);
-            compilationCtx.addTreeToScope(GlobalScope.scope,
+                    .getProbabilitiesArray().getForwardIR(info.compilationCtx);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope,
                     initializeVariable(localProbability, probabilityArray, "Local copy of the probability array"));
             VariableDescription<DoubleVariable> sumName = VariableNames.calcVarName("probabilitySum",
                     VariableType.DoubleVariable, true);
             VariableDescription<DoubleVariable> valueName = VariableNames.calcVarName("probability",
                     VariableType.DoubleVariable, true);
 
-            compilationCtx.addTreeToScope(GlobalScope.scope,
+            info.compilationCtx.addTreeToScope(GlobalScope.scope,
                     initializeVariable(sumName, constant(0.0), Tree.NoComment));
             IRTreeVoid body = sequential(
                     "Copy all values across moving out of log space in the process, "
@@ -357,7 +356,7 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
                     initializeVariable(valueName, arrayGet(arrayValue, load(indexName)), Tree.NoComment),
                     store(sumName, addDD(load(sumName), load(valueName)), Tree.NoComment),
                     arrayPut(load(localProbability), load(indexName), load(valueName), Tree.NoComment));
-            compilationCtx.addTreeToScope(GlobalScope.scope,
+            info.compilationCtx.addTreeToScope(GlobalScope.scope,
                     forStmt(body, constant(0), load(endBound), constant(1), indexName, true,
                             "Copy all probabilities, moving out of log space in the process, "
                                     + "and summing the probabilities in the process ready to normalise them."));
@@ -374,7 +373,7 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
                     arrayPut(load(localProbability), load(indexName),
                             divideDD(arrayGet(load(localProbability), load(indexName)), load(sumName)), Tree.NoComment),
                     constant(0), load(endBound), constant(1), indexName, true, "Normalise the copied values");
-            compilationCtx.addTreeToScope(GlobalScope.scope,
+            info.compilationCtx.addTreeToScope(GlobalScope.scope,
                     ifElse(guard, ifBody, Tree.NoComment, elseBody, Tree.NoComment));
 
         });
@@ -382,14 +381,13 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
 
     @Override
     protected void getDistributionSampleIR(DistributionSampleTask<?, ?> s,
-            IRTreeReturn<DoubleVariable> sourceProbability, FuncData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {
+            IRTreeReturn<DoubleVariable> sourceProbability, FuncData funcData, TreeBuilderInfo info) {
         VariableDescription<DoubleVariable> distributionProbability = VariableNames
                 .calcVarName("distributionProbability", VariableType.DoubleVariable, true);
-        compilationCtx.addTreeToScope(GlobalScope.scope,
+        info.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(distributionProbability, multiplyDD(sourceProbability, info.probability),
                         "The probability of reaching the consumer with this set of consumer arguments"));
-        compilationCtx.addTreeToScope(GlobalScope.scope, store(reachedDistributions,
+        info.compilationCtx.addTreeToScope(GlobalScope.scope, store(reachedDistributions,
                 addDD(load(reachedDistributions), load(distributionProbability)), "Record the reached distribution."));
 
         DistributableRandomVariable<?, ?> random = s.randomVariable;
@@ -399,43 +397,41 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
         args.add(load(distributionProbability));
         args.addAll(funcData.consumerRVArgs);
 
-        compilationCtx.addTreeToScope(GlobalScope.scope, functionCall(FunctionType.ADD_DISTRIBUTION, random.getType(),
-                "Add the current distribution to the distribution accumulator.", args));
+        info.compilationCtx.addTreeToScope(GlobalScope.scope, functionCall(FunctionType.ADD_DISTRIBUTION,
+                random.getType(), "Add the current distribution to the distribution accumulator.", args));
     }
 
     @Override
-    protected void getPerSourceConfigStartIR(FuncData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {
+    protected void getPerSourceConfigStartIR(FuncData funcData, TreeBuilderInfo info) {
         IRTreeVoid updateReachable = store(reachedDistributionsSource,
                 addDD(load(reachedDistributionsSource), info.probability), "Record the reached probability density.");
-        compilationCtx.addTreeToScope(GlobalScope.scope, updateReachable);
+        info.compilationCtx.addTreeToScope(GlobalScope.scope, updateReachable);
 
         // Initialize an accumulator for the probabilities.
-        IRTreeReturn<DoubleVariable> sampleProbability = getSourceValueProbability(funcData, compilationCtx);
-        compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(probabilitiesAccumulator,
+        IRTreeReturn<DoubleVariable> sampleProbability = getSourceValueProbability(funcData);
+        info.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(probabilitiesAccumulator,
                 addDD(log(info.probability), sampleProbability),
                 "An accumulator to allow the value for each distribution to be constructed before it is added to the index probabilities."));
     }
 
-    private IRTreeReturn<DoubleVariable> getSourceValueProbability(FuncData funcData,
-            CompilationContext compilationCtx) {
-        List<IRTreeReturn<?>> args = constructArguments(funcData.sourceRandom, compilationCtx, funcData.getTarget());
+    private IRTreeReturn<DoubleVariable> getSourceValueProbability(FuncData funcData) {
+        List<IRTreeReturn<?>> args = constructArguments(funcData.sourceRandom, funcData.compilationCtx,
+                funcData.getTarget());
         IRTreeReturn<DoubleVariable> sampleProbability = functionCallReturn(FunctionType.LOG_PROBABILITY,
                 VariableType.DoubleVariable, funcData.sourceRandom.getType(), args);
         return sampleProbability;
     }
 
     @Override
-    protected void getPerSourceConfigEndIR(FuncData funcData, TreeBuilderInfo info, CompilationContext compilationCtx) {
-        compilationCtx.addTreeToScope(GlobalScope.scope, TreeUtils.lseAdd(load(statesProbabilityValue),
+    protected void getPerSourceConfigEndIR(FuncData funcData, TreeBuilderInfo info) {
+        info.compilationCtx.addTreeToScope(GlobalScope.scope, TreeUtils.lseAdd(load(statesProbabilityValue),
                 load(probabilitiesAccumulator), statesProbabilityValue,
                 "Add the values for the source and any standard consumers for this configuration of arguments to the source."));
     }
 
     @Override
-    protected void getConsumerRVInputIR(TreeBuilderInfo info, RandomVariable<?, ?> consumer, FuncData funcData,
-            CompilationContext compilationCtx) {
-        funcData.consumerRVArgs = constructArguments(consumer, compilationCtx);
+    protected void getConsumerRVInputIR(TreeBuilderInfo info, RandomVariable<?, ?> consumer, FuncData funcData) {
+        funcData.consumerRVArgs = constructArguments(consumer, info.compilationCtx);
     }
 
     protected List<IRTreeReturn<?>> constructArguments(RandomVariable<?, ?> random, CompilationContext compilationCtx,
@@ -475,7 +471,7 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
     }
 
     @Override
-    protected void finalize(FuncData funcData, CompilationContext compilationCtx) {}
+    protected void finalize(FuncData funcData) {}
 
     /**
      * Method to construct the for loop to iterate through each possible output of the random variable.
@@ -485,14 +481,14 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
      * 
      */
     @Override
-    protected ScopeConstructor getBackTraceScope(FuncData funcData, CompilationContext compilationCtx) {
+    protected ScopeConstructor getBackTraceScope(FuncData funcData) {
         return funcData.targetScope.addForLoop(Variable.intVariable(0), funcData.noStates, Variable.intVariable(1),
                 valuePosName, Tree.NoComment, true);
     }
 
     // No global state is required.
     @Override
-    protected void allocateGlobalState(CompilationContext compilationCtx, FuncData funcData) {
+    protected void allocateGlobalState(FuncData funcData) {
         for(RandomVariable<?, ?> rv:funcData.consumingRVs) {
             for(DataflowTask<?> d:rv.getConsumers()) {
                 if(((SampleTask<?, ?>) d).isDistribution()) {
@@ -502,43 +498,42 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
                     VariableDescription<ArrayVariable<DoubleVariable>> disAccumulatorName = getDistributionAccumulatorName(
                             disRV);
                     globalDistributionScratchSpace.put(disRV, disAccumulatorName);
-                    allocateGlobalArray(compilationCtx, funcData, disRV, disAccumulatorName);
+                    allocateGlobalArray(funcData, disRV, disAccumulatorName);
                     break;
                 }
             }
         }
 
-        allocateGlobalStateProb(funcData, compilationCtx);
+        allocateGlobalStateProb(funcData);
     }
 
-    protected abstract void allocateGlobalStateProb(FuncData funcData, CompilationContext compilationCtx);
+    protected abstract void allocateGlobalStateProb(FuncData funcData);
 
-    protected <C extends Variable<C>> void allocateGlobalArray(CompilationContext compilationCtx, FuncData funcData,
-            DistributableRandomVariable<?, ?> rv, VariableDescription<ArrayVariable<C>> variableDescription) {
+    protected <C extends Variable<C>> void allocateGlobalArray(FuncData funcData, DistributableRandomVariable<?, ?> rv,
+            VariableDescription<ArrayVariable<C>> variableDescription) {
         // Allocate space for storing the results.
-        compilationCtx.pushScopeState();
+        funcData.compilationCtx.pushScopeState();
         // Because of the reuse of max this needs to be serial. We could overcome this by taking a copy of the value of
         // max in a new in, but as I am not sure that parallel allocation is a beneficial, for now we will make this
         // serial and skip any overhead.
-        compilationCtx.pushIsSerial(true);
+        funcData.compilationCtx.pushIsSerial(true);
 
         // Update phase
-        CompilationPhase currentPhase = compilationCtx.phase;
-        compilationCtx.phase = CompilationPhase.ALLOCATION;
+        CompilationPhase currentPhase = funcData.compilationCtx.phase;
+        funcData.compilationCtx.phase = CompilationPhase.ALLOCATION;
 
-        IRTreeReturn<IntVariable> noStates = rv.getMaxNoStates(compilationCtx);
+        IRTreeReturn<IntVariable> noStates = rv.getMaxNoStates(funcData.compilationCtx);
 
         // Allocate and store the largest value
-        globalFieldAllocation(variableDescription, newArray(noStates, variableDescription.type), funcData,
-                compilationCtx);
+        globalFieldAllocation(variableDescription, newArray(noStates, variableDescription.type), funcData);
         // Get the allocator
-        IRTreeVoid allocator = compilationCtx.getOutermostScopeTree();
+        IRTreeVoid allocator = funcData.compilationCtx.getOutermostScopeTree();
 
-        compilationCtx.phase = currentPhase;
-        compilationCtx.popIsSerial();
-        compilationCtx.popScopeState();
+        funcData.compilationCtx.phase = currentPhase;
+        funcData.compilationCtx.popIsSerial();
+        funcData.compilationCtx.popScopeState();
 
-        createGlobalField(variableDescription, allocator, funcData, compilationCtx);
+        createGlobalField(variableDescription, allocator, funcData);
     }
 
     /**
@@ -555,7 +550,7 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
 
     @Override
     protected void getObservationToSampleIR(SampleTask<?, ?> task, IRTreeReturn<?> current, FuncData funcData,
-            TreeBuilderInfo info, CompilationContext compilationCtx) {
+            TreeBuilderInfo info) {
         List<IRTreeReturn<?>> args = new ArrayList<>();
         args.add(current);
         args.addAll(funcData.consumerRVArgs);
@@ -564,7 +559,7 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
 
         // Construct a tree to generate the probability, and save it to the sample
         // accumulator.
-        compilationCtx.addTreeToScope(task.scope(),
+        info.compilationCtx.addTreeToScope(task.scope(),
                 TreeUtils.lseAdd(load(consumerSampleProbabilitiesAccumulator),
                         addDD(log(info.probability), sampleProbability), consumerSampleProbabilitiesAccumulator,
                         "Record the probability of sample task " + task.id()
@@ -574,24 +569,23 @@ public abstract class InferenceGeneratorArrayProb<A extends Variable<A>, B exten
                 info.probability);
         IRTreeVoid sample = store(consumerSampleDistributionProbabilityAccumulator, outputValue,
                 "Recorded the probability of reaching sample task " + task.id() + " with the current configuration.");
-        compilationCtx.addTreeToScope(task.scope(), sample);
+        info.compilationCtx.addTreeToScope(task.scope(), sample);
     }
 
     @Override
     protected <C extends ScalarVariable<C>, D extends ScalarVariable<D>> void getDeterministicObservationToConditionalIR(
-            IRTreeReturn<C> current, ScalarVariable<D> input, FuncData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {
-        IRTreeReturn<D> inputValue = input.getForwardIR(compilationCtx);
+            IRTreeReturn<C> current, ScalarVariable<D> input, FuncData funcData, TreeBuilderInfo info) {
+        IRTreeReturn<D> inputValue = input.getForwardIR(funcData.compilationCtx);
         IRTreeReturn<BooleanVariable> guard = IRTree.eq(current, inputValue);
         IRTreeVoid recordValid = TreeUtils.lseAdd(load(consumerSampleProbabilitiesAccumulator), log(info.probability),
                 consumerSampleProbabilitiesAccumulator, "Record if the conditional is valid.");
         IRTreeVoid condition = IRTree.ifElse(guard, recordValid, "Check observed variable is possible");
-        compilationCtx.addTreeToScope(GlobalScope.scope, condition);
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope, condition);
 
         IRTreeReturn<DoubleVariable> outputValue = subtractDD(load(consumerSampleDistributionProbabilityAccumulator),
                 info.probability);
         IRTreeVoid sample = store(consumerSampleDistributionProbabilityAccumulator, outputValue,
                 "Recorded the probability of reaching branch with the current configuration.");
-        compilationCtx.addTreeToScope(GlobalScope.scope, sample);
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope, sample);
     }
 }

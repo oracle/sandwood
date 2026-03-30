@@ -337,8 +337,8 @@ public class ObservedValuePropagationBuilder {
                         Variable<?> start = th.peek().task.getOutput();
                         if(start.isObserved())
                             start = start.getObservation().source;
-                        IRTreeReturn<?> current = start.instanceHandle().getForwardIR(compilationCtx);
-                        processTask(th.size() - 1, th, current, info.backTraceInfo, compilationCtx);
+                            IRTreeReturn<?> current = start.instanceHandle().getForwardIR(info.compilationCtx);
+                            processTask(th.size() - 1, th, current, info.backTraceInfo, info.compilationCtx);
                     });
                 }
             }
