@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -50,8 +50,7 @@ public class MetropolisHastingsDoubleFunctions<B extends RandomVariable<DoubleVa
         extends MetropolisHastingsScalarFunctions<DoubleVariable, B> {
 
     @Override
-    protected void getProposedValue(MetropolisHastingsData<DoubleVariable, B> funcData,
-            CompilationContext compilationCtx) {
+    protected void getProposedValue(MetropolisHastingsData<DoubleVariable, B> funcData) {
         VariableDescription<DoubleVariable> varName = VariableNames.calcVarName("var", VariableType.DoubleVariable,
                 true);
 
@@ -60,7 +59,7 @@ public class MetropolisHastingsDoubleFunctions<B extends RandomVariable<DoubleVa
         IRTreeReturn<DoubleVariable> proposedVar = multiplyDD(
                 multiplyDD(load(funcData.originalValueName), load(funcData.originalValueName)),
                 multiplyDD(constant(fractionOfCurrentValue), constant(fractionOfCurrentValue)));
-        compilationCtx.addTreeToScope(GlobalScope.scope,
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(varName, proposedVar, "Calculate a proposed variance."));
 
         // Ensure it is not too small
@@ -68,11 +67,11 @@ public class MetropolisHastingsDoubleFunctions<B extends RandomVariable<DoubleVa
                 multiplyDD(constant(fractionOfCurrentValue), constant(fractionOfCurrentValue)));
         IRTreeVoid ifStmt = store(varName,
                 multiplyDD(constant(fractionOfCurrentValue), constant(fractionOfCurrentValue)), Tree.NoComment);
-        compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.ifElse(guard, ifStmt,
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.ifElse(guard, ifStmt,
                 "Ensure the variance is at least " + removeRounding(fractionOfCurrentValue * fractionOfCurrentValue)));
 
         // Sample a Gaussian distribution based on it to generate the new proposed value.
-        compilationCtx.addTreeToScope(GlobalScope.scope,
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(funcData.proposedValueName,
                         functionCallReturn(FunctionType.SAMPLE, VariableType.DoubleVariable, VariableType.Gaussian,
                                 load(funcData.originalValueName), load(varName)),

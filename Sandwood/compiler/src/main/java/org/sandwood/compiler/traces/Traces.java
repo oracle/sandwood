@@ -205,9 +205,9 @@ public abstract class Traces {
                     // phase will remove it.
                     a = a.addIsolation();
                     a.addTree((TreeBuilderInfo info) -> {
-                        compilationCtx.setRequiredArrays(getRequiredArrays(v));
-                        populateValue(v, compilationCtx);
-                        compilationCtx.clearRequiredArrays();
+                        info.compilationCtx.setRequiredArrays(getRequiredArrays(v));
+                        populateValue(v, info.compilationCtx);
+                        info.compilationCtx.clearRequiredArrays();
                     });
                 }
             }

@@ -508,8 +508,8 @@ public class APICompile {
             compilationCtx.removeScopeSubstitute(scopes.get(i));
 
         c.addTree((TreeBuilderInfo info) -> {
-            ForwardExecutionBuilder.forwardVariableBody(sampleDesc.sampleVariable, compilationCtx);
-            intermediates.setIntermediateValues(false, compilationCtx);
+            ForwardExecutionBuilder.forwardVariableBody(sampleDesc.sampleVariable, info.compilationCtx);
+            intermediates.setIntermediateValues(false, info.compilationCtx);
         });
         IRTreeVoid result = compilationCtx.getOutermostScopeTree();
 

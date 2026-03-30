@@ -99,6 +99,8 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         // TODO work out if we can make this a private variable of the parent class.
         public final ScopeConstructor targetScope;
 
+        public final CompilationContext compilationCtx;
+
         /**
          *
          * @param sampleDesc
@@ -134,6 +136,8 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
             this.sampleUpdated = sampleUpdated;
 
             targetScope = constructTargetScope(compilationCtx);
+
+            this.compilationCtx = compilationCtx;
         }
 
         private ScopeConstructor constructTargetScope(CompilationContext compilationCtx) {
@@ -192,7 +196,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
 
             // If there are no traces return the current target scope
             if(observationTraces == null) {
-                initializeConstrainedFlags(targetScope, compilationCtx);
+                initializeConstrainedFlags(targetScope);
                 return targetScope;
             }
 
@@ -221,11 +225,11 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
             return observationScopes.ifScopeConstructor();
         }
 
-        private void initializeConstrainedFlags(ScopeConstructor targetScope, CompilationContext compilationCtx) {
+        private void initializeConstrainedFlags(ScopeConstructor targetScope) {
             targetScope.addTree((TreeBuilderInfo info) -> {
                 IRTreeVoid t = TreeUtils.setIsConstrained(sampleDesc.sample, constant(false), IRTree.NoComment,
-                        compilationCtx);
-                compilationCtx.addTreeToScope(GlobalScope.scope, t);
+                        info.compilationCtx);
+                info.compilationCtx.addTreeToScope(GlobalScope.scope, t);
             });
         }
 
@@ -234,13 +238,13 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
             observationScopes.ifScopeConstructor().addTree((TreeBuilderInfo info) -> {
                 IRTreeVoid t = TreeUtils.setIsConstrained(sampleDesc.sample, constant(false), IRTree.NoComment,
                         compilationCtx);
-                compilationCtx.addTreeToScope(GlobalScope.scope, t);
+                info.compilationCtx.addTreeToScope(GlobalScope.scope, t);
             });
 
             observationScopes.elseScopeConstructor().addTree((TreeBuilderInfo info) -> {
                 IRTreeVoid t = TreeUtils.setIsConstrained(sampleDesc.sample, constant(true), IRTree.NoComment,
                         compilationCtx);
-                compilationCtx.addTreeToScope(GlobalScope.scope, t);
+                info.compilationCtx.addTreeToScope(GlobalScope.scope, t);
             });
         }
 
@@ -278,12 +282,12 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         FuncData funcData = getFunctionData(sample, compilationCtx);
 
         // Add any constructors before we start restructuring scopes.
-        allocateGlobalStateInternal(compilationCtx, funcData);
+        allocateGlobalStateInternal(funcData);
 
         // Clear the context ready to start
-        constructFunctionVariablesInternal(funcData, compilationCtx);
+        constructFunctionVariablesInternal(funcData);
 
-        getBackTraceScope(funcData, compilationCtx).addTree((TreeBuilderInfo outerInfo) -> {
+        getBackTraceScope(funcData).addTree((TreeBuilderInfo outerInfo) -> {
             ScopeConstructor a = ScopeConstructor.construct(funcData.sampleDesc.sample, GlobalScope.scope,
                     funcData.distributionTraces,
                     "Exploring all the possible distribution values for random variable "
@@ -293,12 +297,11 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
 
             a = a.addFixedFlag(funcData.sampleDesc.sample, false);
 
-            a.addTree((TreeBuilderInfo info) -> backTraceScopeStartIR(funcData, info, compilationCtx));
+            a.addTree((TreeBuilderInfo info) -> backTraceScopeStartIR(funcData, info));
 
             { // Handle all the normal samples
                 ScopeConstructor sourceDisArgs = a.applyAllDistributedArguments();
-                sourceDisArgs.addTree(0,
-                        (TreeBuilderInfo info) -> getPerSourceConfigStartIR(funcData, info, compilationCtx));
+                sourceDisArgs.addTree(0, (TreeBuilderInfo info) -> getPerSourceConfigStartIR(funcData, info));
 
                 // For each random variable that consumes the results of this sample.
                 for(RandomVariable<?, ?> consumingRV:funcData.consumingRVs) {
@@ -327,11 +330,11 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                                 else
                                     ifGuard = constant(false);
                                 IfElseScopeConstructors ifsc = b.addCondition(ifGuard);
-                                processSample(s, consumingRV, ifsc.ifScopeConstructor(), groupedTraces.get(s), funcData,
-                                        compilationCtx);
+                                processSample(s, consumingRV, ifsc.ifScopeConstructor(), groupedTraces.get(s),
+                                        funcData);
                             }
                         } else {
-                            processSample(s, consumingRV, b, groupedTraces.get(s), funcData, compilationCtx);
+                            processSample(s, consumingRV, b, groupedTraces.get(s), funcData);
                         }
                     }
                 }
@@ -352,14 +355,14 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                         Map<DataflowTaskArgDesc, Set<TraceHandle>> sinkToConditional = splitTraces.sinkToConditional
                                 .get(sinkTask);
                         if(sink.isObserved()) {
-                            c.addTree((TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info, compilationCtx));
+                            c.addTree((TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info));
                             // Handle observed outputs.
                             for(DataflowTaskArgDesc d:sinkToConditional.keySet()) {
                                 ScalarVariable<?> input = (ScalarVariable<?>) d.task.getInput(d.argPos);
                                 if(input.isDeterministic()) {
                                     // input is deterministic, so can be recovered directly.
                                     processObservedDeterministicConditional(sink, sinkToConditional.get(d), input,
-                                            funcData, c, compilationCtx);
+                                            funcData, c);
                                 } else {
                                     // Input will need to be inverted for a calculation with the source random variable
                                     // There currently can only be one random variable in this scenario.
@@ -367,7 +370,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                                             "This code is part of the feature to observe outputs from conditionals. It is not yet fully implemented.");
                                 }
                             }
-                            c.addTree((TreeBuilderInfo info) -> getPerConsumerEndIR(funcData, info, compilationCtx));
+                            c.addTree((TreeBuilderInfo info) -> getPerConsumerEndIR(funcData, info));
                         } else {
                             for(DataflowTaskArgDesc branchPointDesc:sinkToConditional.keySet()) {
                                 // Handle RV consumer
@@ -393,11 +396,10 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                                                 ifGuard = constant(false);
                                             IfElseScopeConstructors ifsc = consumerSC.addCondition(ifGuard);
                                             processSample(s, consumingRV, ifsc.ifScopeConstructor(),
-                                                    groupedTraces.get(s), funcData, compilationCtx);
+                                                    groupedTraces.get(s), funcData);
                                         }
                                     } else {
-                                        processSample(s, consumingRV, consumerSC, groupedTraces.get(s), funcData,
-                                                compilationCtx);
+                                        processSample(s, consumingRV, consumerSC, groupedTraces.get(s), funcData);
                                     }
                                 }
 
@@ -419,8 +421,8 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                                                     + " of consumer random variable " + sourceRV.getAlias() + ".")
                                             .addConstraint(sampleTrace);
 
-                                    sourceSC.addTree(2, (TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info,
-                                            compilationCtx));
+                                    sourceSC.addTree(2,
+                                            (TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info));
 
                                     ScopeConstructor dConsumerAllArgs = sourceSC.applyAllDistributedArguments();
                                     /*
@@ -439,7 +441,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                                          * expectation that the optimisation phase can move shared values out where
                                          * appropriate.
                                          */
-                                        getConsumerRVInputIR(info, sourceRV, funcData, compilationCtx);
+                                        getConsumerRVInputIR(info, sourceRV, funcData);
 
                                         Trace trace = sampleTrace.getTrace();
 
@@ -464,19 +466,17 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                                                     + end.endLine);
                                         }
 
-                                        getObservationToSampleIR(source, current, funcData, info, compilationCtx);
+                                        getObservationToSampleIR(source, current, funcData, info);
                                     });
 
-                                    sourceSC.addTree(2, (TreeBuilderInfo info) -> getPerConsumerEndIR(funcData, info,
-                                            compilationCtx));
+                                    sourceSC.addTree(2, (TreeBuilderInfo info) -> getPerConsumerEndIR(funcData, info));
                                 }
                             }
                         }
                     }
                 }
 
-                sourceDisArgs.addTree(0,
-                        (TreeBuilderInfo info) -> getPerSourceConfigEndIR(funcData, info, compilationCtx));
+                sourceDisArgs.addTree(0, (TreeBuilderInfo info) -> getPerSourceConfigEndIR(funcData, info));
             }
 
             { // Handle all the distributed samples
@@ -509,7 +509,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                         for(DistributionSampleTask<?, ?> ds:tasks) {
                             if(ds == sample) // If the distributed sample is the same as the sample we know it is not
                                 // fixed, otherwise we have to test.
-                                processDistributionSample(ds, consumingRV, b, funcData, compilationCtx);
+                                processDistributionSample(ds, consumingRV, b, funcData);
                             else {
                                 IRTreeReturn<BooleanVariable> ifGuard;
                                 if(compilationCtx.traces.getFixableTasks().contains(ds))
@@ -517,28 +517,27 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                                 else
                                     ifGuard = constant(true);
                                 IfElseScopeConstructors ifsc = b.addCondition(ifGuard);
-                                processDistributionSample(ds, consumingRV, ifsc.ifScopeConstructor(), funcData,
-                                        compilationCtx);
+                                processDistributionSample(ds, consumingRV, ifsc.ifScopeConstructor(), funcData);
                             }
                         }
                     }
                 }
             }
 
-            a.addTree((TreeBuilderInfo info) -> backTraceScopeEndIR(funcData, info, compilationCtx));
+            a.addTree((TreeBuilderInfo info) -> backTraceScopeEndIR(funcData, info));
         });
 
-        finalize(funcData, compilationCtx);
+        finalize(funcData);
 
         {
             // Construct sample value and all the intermediate variables.
-            ScopeConstructor targetScope = getSampleTaskScope(funcData, compilationCtx);
+            ScopeConstructor targetScope = getSampleTaskScope(funcData);
             if(funcData.sampleDesc.sample.isDistribution()) {
 
-                addDistributionProbabilities(targetScope, funcData, compilationCtx);
+                addDistributionProbabilities(targetScope, funcData);
             } else {
                 targetScope.addTree((TreeBuilderInfo info) -> {
-                    addSampleValueTree(funcData, compilationCtx);
+                    addSampleValueTree(funcData);
                 });
             }
         }
@@ -567,14 +566,14 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                 functionArgs, result, comment, knownValues);
     }
 
-    protected ScopeConstructor getSampleTaskScope(FuncData funcData, CompilationContext compilationCtx) {
+    protected ScopeConstructor getSampleTaskScope(FuncData funcData) {
         IRTreeReturn<BooleanVariable> constrainedGuard = TreeUtils.getIsConstrained(funcData.sampleDesc.sample,
-                compilationCtx);
+                funcData.compilationCtx);
         return funcData.targetScope.addCondition(constrainedGuard).ifScopeConstructor();
     }
 
     private void processSample(SampleTask<?, ?> s, RandomVariable<?, ?> consumer, ScopeConstructor b,
-            Set<TraceHandle> observationTraces, FuncData funcData, CompilationContext compilationCtx) {
+            Set<TraceHandle> observationTraces, FuncData funcData) {
         /*
          * Construct the trace from the RV to the sample. TODO if we go to having RVs as part of arrays then we need
          * capture this trace in the Traces object and get it by querying.
@@ -587,32 +586,32 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         // Record if the consuming sample task is constrained.
         c.addTree((TreeBuilderInfo info) -> {
             IRTreeVoid setFlag;
-            if(compilationCtx.traces.getFixableTasks().contains(s))
+            if(info.compilationCtx.traces.getFixableTasks().contains(s))
                 setFlag = initializeVariable(constrained,
-                        or(load(VariableNames.fixedFlagName(s)), TreeUtils.getIsConstrained(s, compilationCtx)),
+                        or(load(VariableNames.fixedFlagName(s)), TreeUtils.getIsConstrained(s, info.compilationCtx)),
                         "Flag recording if this sample task of the consuming random variable is constrained.");
             else
-                setFlag = initializeVariable(constrained, TreeUtils.getIsConstrained(s, compilationCtx),
+                setFlag = initializeVariable(constrained, TreeUtils.getIsConstrained(s, info.compilationCtx),
                         "Flag recording if this sample task of the consuming random variable is constrained.");
-            compilationCtx.addTreeToScope(GlobalScope.scope, setFlag);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, setFlag);
         });
 
         // Add a condition so the task is only processed if it is constrained.
         IfElseScopeConstructors constrainedCondition = c.addCondition(load(constrained));
         c = constrainedCondition.ifScopeConstructor();
 
-        processConstrainedSample(c, consumer, observationTraces, funcData, compilationCtx);
+        processConstrainedSample(c, consumer, observationTraces, funcData);
     }
 
     private void processConstrainedSample(ScopeConstructor c, RandomVariable<?, ?> consumer,
-            Set<TraceHandle> observationTraces, FuncData funcData, CompilationContext compilationCtx) {
+            Set<TraceHandle> observationTraces, FuncData funcData) {
         c.addTree(0, (TreeBuilderInfo info) -> {
             IRTreeVoid t = TreeUtils.setIsConstrained(funcData.sampleDesc.sample, constant(true),
-                    "Mark that the sample has observed constrained data.", compilationCtx);
-            compilationCtx.addTreeToScope(GlobalScope.scope, t);
+                    "Mark that the sample has observed constrained data.", info.compilationCtx);
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, t);
         });
 
-        c.addTree((TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info, compilationCtx));
+        c.addTree((TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info));
 
         ScopeConstructor dConsumerAllArgs = c.applyAllDistributedArguments();
 
@@ -622,21 +621,21 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
              * operations, or to an observed value so is not allowed to be a distribution. It does need to have a
              * constraint on the trace though to make sure the trace is valid.
              */
-            getInverseIR(h, consumer, funcData, dConsumerAllArgs, compilationCtx);
+            getInverseIR(h, consumer, funcData, dConsumerAllArgs);
 
-        c.addTree((TreeBuilderInfo info) -> getPerConsumerEndIR(funcData, info, compilationCtx));
+        c.addTree((TreeBuilderInfo info) -> getPerConsumerEndIR(funcData, info));
     }
 
     private void processObservedDeterministicConditional(Variable<?> sink, Set<TraceHandle> observationTraces,
-            ScalarVariable<?> input, FuncData funcData, ScopeConstructor b, CompilationContext compilationCtx) {
+            ScalarVariable<?> input, FuncData funcData, ScopeConstructor b) {
         ScopeConstructor c = b.addComment("Processing observed variable " + sink.getAlias());
         c = c.applyAllDistributedArguments();
         for(TraceHandle h:observationTraces)
-            getInverseIR(h, sink, input, funcData, c, compilationCtx);
+            getInverseIR(h, sink, input, funcData, c);
     }
 
     private <C extends ScalarVariable<C>> void getInverseIR(TraceHandle h, Variable<?> sink, ScalarVariable<?> input,
-            FuncData funcData, ScopeConstructor sc, CompilationContext compilationCtx) {
+            FuncData funcData, ScopeConstructor sc) {
         sc = sc.addConstraint(h);
         sc.addTree((TreeBuilderInfo info) -> {
             Trace trace = h.getTrace();
@@ -644,14 +643,14 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
             DataflowTaskArgDesc d = trace.pop();
             ProducingDataflowTask<?> t = d.task;
 
-            IRTreeReturn<?> current = sink.getForwardIR(compilationCtx);
+            IRTreeReturn<?> current = sink.getForwardIR(funcData.compilationCtx);
 
             while(!trace.isEmpty()) {
-                current = t.getInverseIR(d.argPos, current, info.backTraceInfo, compilationCtx);
+                current = t.getInverseIR(d.argPos, current, info.backTraceInfo, funcData.compilationCtx);
                 d = trace.pop();
                 t = d.task;
             }
-            current = t.getInverseIR(d.argPos, current, info.backTraceInfo, compilationCtx);
+            current = t.getInverseIR(d.argPos, current, info.backTraceInfo, funcData.compilationCtx);
 
             if(info.backTraceInfo.noGetValues() != 0) {
                 Location start = h.get(0).task.getLocation();
@@ -660,14 +659,13 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                         + start.startLine + " through to line " + end.endLine);
             }
 
-            getDeterministicObservationToConditionalIR((IRTreeReturn<C>) current, input, funcData, info,
-                    compilationCtx);
+            getDeterministicObservationToConditionalIR((IRTreeReturn<C>) current, input, funcData, info);
         });
 
     }
 
     private void processDistributionSample(DistributionSampleTask<?, ?> s, RandomVariable<?, ?> consumer,
-            ScopeConstructor b, FuncData funcData, CompilationContext compilationCtx) {
+            ScopeConstructor b, FuncData funcData) {
         /*
          * Construct the trace from the RV to the sample. TODO if we go to having RVs as part of arrays then we need
          * capture this trace in the Traces object and get it by querying.
@@ -677,18 +675,18 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                 "Processing sample task " + s.id() + " of consumer random variable " + consumer.getAlias() + ".")
                 .addConstraint(th);
 
-        c.addTree((TreeBuilderInfo info) -> getPerDistributedSampleStartIR(funcData, s, info, compilationCtx));
+        c.addTree((TreeBuilderInfo info) -> getPerDistributedSampleStartIR(funcData, s, info));
 
         ScopeConstructor dConsumerAllArgs = c.applyDistributedArguments(1).applyDistributedArguments(2);
 
         VariableDescription<DoubleVariable> reachedSourceName = VariableNames.scopeVarName("reachedSourceProbability",
                 VariableType.DoubleVariable);
-        dConsumerAllArgs.addTree((TreeBuilderInfo info) -> compilationCtx.addTreeToScope(GlobalScope.scope,
+        dConsumerAllArgs.addTree((TreeBuilderInfo info) -> info.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(reachedSourceName, constant(0.0),
                         "Declare and zero an accumulator for tracking the reached source probability space.")));
 
         ScopeConstructor dSourceAllArgs = dConsumerAllArgs.resetProbabilities().applyDistributedArguments(0);
-        dSourceAllArgs.addTree((TreeBuilderInfo info) -> compilationCtx.addTreeToScope(GlobalScope.scope,
+        dSourceAllArgs.addTree((TreeBuilderInfo info) -> info.compilationCtx.addTreeToScope(GlobalScope.scope,
                 store(reachedSourceName, addDD(load(reachedSourceName), info.probability),
                         "Add the probability of this argument configuration.")));
 
@@ -702,12 +700,12 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
              * be distributions in the sample trace that is not possible, so it is placed here with the expectation that
              * the optimisation phase can move shared values out where appropriate.
              */
-            getConsumerRVInputIR(info, consumer, funcData, compilationCtx);
+            getConsumerRVInputIR(info, consumer, funcData);
             info.changeSubstitutions(constraintCount - 1);
-            getDistributionSampleIR(s, load(reachedSourceName), funcData, info, compilationCtx);
+            getDistributionSampleIR(s, load(reachedSourceName), funcData, info);
         });
 
-        c.addTree((TreeBuilderInfo info) -> getPerDistributedSampleEndIR(funcData, s, info, compilationCtx));
+        c.addTree((TreeBuilderInfo info) -> getPerDistributedSampleEndIR(funcData, s, info));
     }
 
     private TraceHandle getTraceRVToSample(SampleTask<?, ?> s, RandomVariable<?, ?> rv) {
@@ -717,49 +715,40 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         return TraceHandle.getTraceHandle(t);
     }
 
-    protected abstract void backTraceScopeStartIR(FuncData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx);
+    protected abstract void backTraceScopeStartIR(FuncData funcData, TreeBuilderInfo info);
 
-    protected abstract void backTraceScopeEndIR(FuncData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx);
+    protected abstract void backTraceScopeEndIR(FuncData funcData, TreeBuilderInfo info);
 
-    protected abstract void finalize(FuncData funcData, CompilationContext compilationCtx);
+    protected abstract void finalize(FuncData funcData);
 
-    protected abstract void addDistributionProbabilities(ScopeConstructor targetScope, FuncData funcData,
-            CompilationContext compilationCtx);
+    protected abstract void addDistributionProbabilities(ScopeConstructor targetScope, FuncData funcData);
 
     protected abstract String getInferenceType();
 
-    protected abstract ScopeConstructor getBackTraceScope(FuncData funcData, CompilationContext compilationCtx);
+    protected abstract ScopeConstructor getBackTraceScope(FuncData funcData);
 
     protected abstract void getDistributionSampleIR(DistributionSampleTask<?, ?> s,
-            IRTreeReturn<DoubleVariable> sourceProbability, FuncData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx);
+            IRTreeReturn<DoubleVariable> sourceProbability, FuncData funcData, TreeBuilderInfo info);
 
-    protected abstract void getPerSourceConfigStartIR(FuncData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx);
+    protected abstract void getPerSourceConfigStartIR(FuncData funcData, TreeBuilderInfo info);
 
-    protected abstract void getPerSourceConfigEndIR(FuncData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx);
+    protected abstract void getPerSourceConfigEndIR(FuncData funcData, TreeBuilderInfo info);
 
-    protected abstract void getPerConsumerStartIR(FuncData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx);
+    protected abstract void getPerConsumerStartIR(FuncData funcData, TreeBuilderInfo info);
 
-    protected abstract void getPerConsumerEndIR(FuncData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx);
+    protected abstract void getPerConsumerEndIR(FuncData funcData, TreeBuilderInfo info);
 
     protected abstract void getPerDistributedSampleStartIR(FuncData funcData, DistributionSampleTask<?, ?> s,
-            TreeBuilderInfo info, CompilationContext compilationCtx);
+            TreeBuilderInfo info);
 
     protected abstract void getPerDistributedSampleEndIR(FuncData funcData, DistributionSampleTask<?, ?> s,
-            TreeBuilderInfo info, CompilationContext compilationCtx);
+            TreeBuilderInfo info);
 
-    protected abstract void getConsumerRVInputIR(TreeBuilderInfo info, RandomVariable<?, ?> consumer, FuncData funcData,
-            CompilationContext compilationCtx);
+    protected abstract void getConsumerRVInputIR(TreeBuilderInfo info, RandomVariable<?, ?> consumer,
+            FuncData funcData);
 
     protected abstract <C extends ScalarVariable<C>, D extends ScalarVariable<D>> void getDeterministicObservationToConditionalIR(
-            IRTreeReturn<C> current, ScalarVariable<D> input, FuncData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx);
+            IRTreeReturn<C> current, ScalarVariable<D> input, FuncData funcData, TreeBuilderInfo info);
 
     private void addTraces(Map<SampleTask<?, ?>, Set<TraceHandle>> groupedTraces, List<TraceHandle> traces) {
         for(TraceHandle t:traces) {
@@ -771,9 +760,9 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
 
     // This method takes a scope constructor as it might not always be applied to the target scope. In MH it will be
     // needed to both set and revert the sample value
-    protected abstract void addSampleValueTree(FuncData funcData, CompilationContext compilationCtx);
+    protected abstract void addSampleValueTree(FuncData funcData);
 
-    protected abstract void constructFunctionVariablesInternal(FuncData funcData, CompilationContext compilationCtx);
+    protected abstract void constructFunctionVariablesInternal(FuncData funcData);
 
     /**
      * Method to get the inverse intermediate representation tree.
@@ -784,7 +773,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
      * @param compilationCtx The compilation context for this compilation process.
      */
     private <X extends Variable<X>> void getInverseIR(TraceHandle traceHandle, RandomVariable<?, ?> consumer,
-            FuncData funcData, ScopeConstructor sc, CompilationContext compilationCtx) {
+            FuncData funcData, ScopeConstructor sc) {
         if(TraceArrayRestrictions.restrictionRequired(traceHandle))
             sc = sc.addComment("Check that the value can reach the sample task");
         sc = sc.addConstraint(traceHandle); // Constraint still added to maintain a predictable
@@ -803,7 +792,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
              * be distributions in the sample trace that is not possible, so, it is placed here with the expectation
              * that the optimisation phase can move shared values out where appropriate.
              */
-            getConsumerRVInputIR(info, consumer, funcData, compilationCtx);
+            getConsumerRVInputIR(info, consumer, funcData);
 
             info.changeSubstitutions(constraintCount - 1);
             Trace trace = traceHandle.getTrace();
@@ -812,10 +801,10 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
             ProducingDataflowTask<?> t = d.task;
 
             Variable<?> v = t.getOutput();
-            IRTreeReturn<?> current = v.getForwardIR(compilationCtx);
+            IRTreeReturn<?> current = v.getForwardIR(info.compilationCtx);
 
             while(t.getType() != DFType.SAMPLE) {
-                current = t.getInverseIR(d.argPos, current, info.backTraceInfo, compilationCtx);
+                current = t.getInverseIR(d.argPos, current, info.backTraceInfo, info.compilationCtx);
                 d = trace.pop();
                 t = d.task;
             }
@@ -827,32 +816,33 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                         + start.startLine + " through to line " + end.endLine);
             }
 
-            getObservationToSampleIR(sTask, current, funcData, info, compilationCtx);
+            getObservationToSampleIR(sTask, current, funcData, info);
         });
     }
 
     protected abstract void getObservationToSampleIR(SampleTask<?, ?> task, IRTreeReturn<?> current, FuncData funcData,
-            TreeBuilderInfo info, CompilationContext compilationCtx);
+            TreeBuilderInfo info);
 
-    protected abstract void allocateGlobalStateInternal(CompilationContext compilationCtx, FuncData funcData);
+    protected abstract void allocateGlobalStateInternal(FuncData funcData);
 
     protected <V extends Variable<V>> void globalFieldAllocation(VariableDescription<V> fieldName,
-            IRTreeReturn<V> localAllocation, FunctionData<A, B, S> funcData, CompilationContext compilationCtx) {
+            IRTreeReturn<V> localAllocation, FunctionData<A, B, S> funcData) {
         List<Scope> scopes = funcData.sampleDesc.scopes;
         FunctionUtils.globalFieldAllocation(fieldName, localAllocation, funcData.isSerial,
-                scopes.get(scopes.size() - 1), compilationCtx);
+                scopes.get(scopes.size() - 1), funcData.compilationCtx);
     }
 
     protected <V extends Variable<V>> void createGlobalField(VariableDescription<V> fieldName, IRTreeVoid allocator,
-            FunctionData<A, B, S> funcData, CompilationContext compilationCtx) {
+            FunctionData<A, B, S> funcData) {
         List<Scope> scopes = funcData.sampleDesc.scopes;
         FunctionUtils.createGlobalField(fieldName, allocator, funcData.isSerial, scopes.get(scopes.size() - 1),
-                compilationCtx);
+                funcData.compilationCtx);
     }
 
     protected <V extends Variable<V>> IRTreeReturn<V> loadGlobalField(VariableDescription<V> varDesc,
-            FunctionData<A, B, S> funcData, CompilationContext compilationCtx) {
+            FunctionData<A, B, S> funcData) {
         List<Scope> scopes = funcData.sampleDesc.scopes;
-        return FunctionUtils.loadGlobalField(varDesc, funcData.isSerial, scopes.get(scopes.size() - 1), compilationCtx);
+        return FunctionUtils.loadGlobalField(varDesc, funcData.isSerial, scopes.get(scopes.size() - 1),
+                funcData.compilationCtx);
     }
 }
