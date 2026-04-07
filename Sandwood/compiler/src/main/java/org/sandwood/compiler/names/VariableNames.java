@@ -82,6 +82,10 @@ public final class VariableNames {
         return name.getName().startsWith(lengthPrefix);
     }
 
+    public static String lengthName(String varName) {
+        return lengthPrefix + varName;
+    }
+
     public static VariableDescription<IntVariable> lengthName(VariableDescription<?> varDesc) {
         return new VariableDescription<>(lengthPrefix + varDesc, VariableType.IntVariable, varDesc.name.comment);
     }
