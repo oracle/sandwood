@@ -8,6 +8,8 @@
 
 package org.sandwood.compiler.dataflowGraph.variables;
 
+import java.util.Objects;
+
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 
 /**
@@ -21,7 +23,7 @@ import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
  * @author djgoodma
  *
  */
-public class VariableDescription<A extends Variable<A>> implements Comparable<VariableDescription<?>> {
+public abstract class VariableDescription<A extends Variable<A>> implements Comparable<VariableDescription<?>> {
     /**
      * The name of the variable.
      */
@@ -32,14 +34,9 @@ public class VariableDescription<A extends Variable<A>> implements Comparable<Va
      */
     public final Type<A> type;
 
-    public VariableDescription(String name, Type<A> type, boolean comment) {
-        this(new VariableName(name, comment), type);
-    }
-
     public VariableDescription(VariableName name, Type<A> type) {
         this.name = name;
-        if(type == null)
-            throw new NullPointerException();
+        Objects.requireNonNull(type);
         this.type = type;
     }
 
@@ -73,4 +70,6 @@ public class VariableDescription<A extends Variable<A>> implements Comparable<Va
     public int compareTo(VariableDescription<?> o) {
         return name.compareTo(o.name);
     }
+    
+    public abstract <B extends Variable<B>> VariableDescription<B> alternativeType(Type<B> type);
 }

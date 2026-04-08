@@ -10,7 +10,6 @@ package org.sandwood.compiler.names;
 
 import org.sandwood.compiler.compilation.CompilationContext.SampleFunctionClass;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.exceptions.CompilerException;
 
@@ -54,20 +53,20 @@ public class FunctionName extends Name {
         return new FunctionName(name.getName());
     }
 
-    private static String logProbabilityDistributionName(VariableDescription<?> varDesc) {
-        return "logProbabilityDistribution" + Name.prefix + varDesc;
+    private static String logProbabilityDistributionName(VariableName varName) {
+        return "logProbabilityDistribution" + Name.prefix + varName;
     }
 
-    public static String logProbabilityValueName(VariableDescription<?> varDesc) {
-        return "logProbabilityValue" + Name.prefix + varDesc;
+    public static String logProbabilityValueName(VariableName varName) {
+        return "logProbabilityValue" + Name.prefix + varName;
     }
 
     public static FunctionName createFunctionName(SampleFunctionClass functionClass, SampleTask<?, ?> sample) {
         return switch(functionClass) {
             case INFERENCE -> new FunctionName("inferSample" + sample.id());
             case LOG_PROBABILITY_DISTRIBUTIONS -> new FunctionName(
-                    logProbabilityDistributionName(sample.getUniqueVarDesc()));
-            case LOG_PROBABILITY_VALUE -> new FunctionName(logProbabilityValueName(sample.getUniqueVarDesc()));
+                    logProbabilityDistributionName(sample.getSampleName()));
+            case LOG_PROBABILITY_VALUE -> new FunctionName(logProbabilityValueName(sample.getSampleName()));
             case SAMPLE -> new FunctionName("drawValueSample" + sample.id());
         };
     }

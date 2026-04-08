@@ -82,10 +82,10 @@ class RemoveScopesTest {
         resultList.add(body("a", "b", "c"));
 
         treeList.add(forStmt(treeScope(body("a", "b", "c"), Tree.NoComment), constant(0), constant(100), constant(1),
-                VariableNames.variableName("index", 0, VariableType.IntVariable, false), false, true, Tree.NoComment));
+                VariableNames.localVariableName("index", 0, VariableType.IntVariable, false), false, true, Tree.NoComment));
 
         resultList.add(forStmt(body("a", "b", "c"), constant(0), constant(100), constant(1),
-                VariableNames.variableName("index", 0, VariableType.IntVariable, false), false, true, Tree.NoComment));
+                VariableNames.localVariableName("index", 0, VariableType.IntVariable, false), false, true, Tree.NoComment));
 
         treeList.add(ifElse(constant(true), treeScope(body("a", "b", "c"), Tree.NoComment), Tree.NoComment,
                 Collections.emptySet()));
@@ -112,11 +112,11 @@ class RemoveScopesTest {
     }
 
     private static TransTreeVoid body(String name1, String name2, String name3) {
-        VariableDescription<DoubleVariable> vName1 = VariableNames.variableName(name1, 0, VariableType.DoubleVariable,
+        VariableDescription<DoubleVariable> vName1 = VariableNames.localVariableName(name1, 0, VariableType.DoubleVariable,
                 false);
-        VariableDescription<DoubleVariable> vName2 = VariableNames.variableName(name2, 0, VariableType.DoubleVariable,
+        VariableDescription<DoubleVariable> vName2 = VariableNames.localVariableName(name2, 0, VariableType.DoubleVariable,
                 false);
-        VariableDescription<DoubleVariable> vName3 = VariableNames.variableName(name3, 0, VariableType.DoubleVariable,
+        VariableDescription<DoubleVariable> vName3 = VariableNames.localVariableName(name3, 0, VariableType.DoubleVariable,
                 false);
         return sequential(initializeVariable(vName1, constant(1.0), Tree.NoComment),
                 initializeVariable(vName2, constant(1.5), Tree.NoComment),

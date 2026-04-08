@@ -66,6 +66,8 @@ import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleT
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ParForTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.ScratchVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -105,28 +107,25 @@ public class ScopeConstructor {
 
     public static enum Direction {
         FORWARDS,
-        BACKWARDS;
-    }
+        BACKWARDS; }
 
     public static enum Guards {
         GUARDS,
-        NO_GUARDS;
-    }
+        NO_GUARDS; }
 
     public static enum Values {
         PASS_VALUES,
-        IGNORE_VALUES;
-    }
+        IGNORE_VALUES; }
 
     private static class GuardDesc {
         // Name for the guard that will ensure the body of this code is only executed once. If there is only 1 trace
         // there is only 1 opportunity for the code to run.
-        final VariableDescription<BooleanVariable> varDesc;
+        final LocalVariableDescription<BooleanVariable> varDesc;
         // List of scopes that the consumer is in that can change. For each combination of values from the scopes we
         // only want to execute once.
         final List<ForTask> scopes;
 
-        GuardDesc(VariableDescription<BooleanVariable> guardVarDesc, List<ForTask> scopes) {
+        GuardDesc(LocalVariableDescription<BooleanVariable> guardVarDesc, List<ForTask> scopes) {
             this.varDesc = guardVarDesc;
             this.scopes = scopes;
         }
@@ -735,7 +734,7 @@ public class ScopeConstructor {
 
         // Get a name for the value index.
         DistributableRandomVariable<A, ?> r = disSampleTask.randomVariable;
-        VariableDescription<IntVariable> indexName = VariableNames.indexName(disSampleTask.getUniqueVarDesc(),
+        VariableDescription<IntVariable> indexName = VariableNames.indexName(disSampleTask.getSampleName(),
                 Integer.toString(id.get().next()));
 
         // Get the number of states that this variable could be generating.
@@ -750,7 +749,7 @@ public class ScopeConstructor {
 
         // Calculate the probability of this sampling. Generate a unique name for the variables. This must include an id
         // element as there may be several different values drawn from any given sample task.
-        VariableDescription<DoubleVariable> probabilityName = VariableNames.calcVarName(
+        LocalVariableDescription<DoubleVariable> probabilityName = VariableNames.localCalcVarName(
                 "probabilitySample" + disSampleTask.id() + "Value" + id.get().next(), VariableType.DoubleVariable,
                 false);
 
@@ -758,7 +757,7 @@ public class ScopeConstructor {
         IRTreeReturn<IntVariable> loopIndex = IRTree.load(indexName);
 
         // Set the sample value.
-        VariableDescription<A> tempName = VariableNames.distributionTempName(
+        LocalVariableDescription<A> tempName = VariableNames.distributionTempName(
                 disSampleTask.getOutput().getVarDesc().name, id.get().next(), disSampleTask.getOutputType());
 
         forScope.addTreeToScope(initializeVariable(tempName, r.getStateValue(load(indexName)), Tree.NoComment),
@@ -968,7 +967,7 @@ public class ScopeConstructor {
                 // If it is a single boolean value add it to each distribution description, otherwise allocate a global
                 // array for it.
                 if(guardDesc.scopes.isEmpty()) {
-                    VariableDescription<BooleanVariable> varDesc = guardDesc.varDesc;
+                    LocalVariableDescription<BooleanVariable> varDesc = guardDesc.varDesc;
                     addTree((TreeBuilderInfo info) -> info.compilationCtx.addTreeToScope(GlobalScope.scope,
                             initializeVariable(varDesc, constant(false),
                                     "Guard to check that at most one copy of the code is executed for a given set of loop iterations.")));
@@ -1248,7 +1247,7 @@ public class ScopeConstructor {
                         ForTask t = (ForTask) s;
                         IntVariable index = t.getIndex();
                         VariableDescription<IntVariable> indexName = index.getVarDesc();
-                        VariableDescription<IntVariable> newIndexName = VariableNames.indexName(indexName,
+                        LocalVariableDescription<IntVariable> newIndexName = VariableNames.indexName(indexName,
                                 Integer.toString(id.get().next()));
                         d.addTreeToScope(initializeVariable(newIndexName, load(compilationCtx.getSubstitute(index)),
                                 "Copy of index so that its values can be safely substituted"), compilationCtx);
@@ -1301,8 +1300,8 @@ public class ScopeConstructor {
 
         // Allocate guards if required.
         List<Scope> changeableScopes = getChangeableScopes(guardTask, consumerToSampleTraces);
-        VariableDescription<BooleanVariable> guardName = VariableNames.guardName(traceDesc.origin, traceDesc.consumer,
-                guardNo, VariableType.BooleanVariable);
+        LocalVariableDescription<BooleanVariable> guardName = VariableNames.guardName(traceDesc.origin,
+                traceDesc.consumer, guardNo);
         return new GuardDesc(guardName, filterForTasks(changeableScopes));
     }
 
@@ -1507,7 +1506,7 @@ public class ScopeConstructor {
             Direction direction) {
         // TODO change the allocation here to use an allocator that allows guard name to have a type of boolean.
         // TODO Likewise with the loading of global.
-        VariableDescription<ArrayVariable<A>> globalGuardName = (VariableDescription<ArrayVariable<A>>) VariableNames
+        ScratchVariableDescription<ArrayVariable<A>> globalGuardName = (ScratchVariableDescription<ArrayVariable<A>>) VariableNames
                 .globalGuardName(guardDesc.varDesc,
                         VariableType.getType(VariableType.BooleanVariable, guardDesc.scopes.size()));
         // Get the parallel scope, null if this code is not executed in parallel.
@@ -1515,7 +1514,7 @@ public class ScopeConstructor {
         allocateGlobalState(guardDesc.scopes, globalGuardName, parallelScope);
 
         addTree((TreeBuilderInfo info) -> info.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(
-                VariableNames.altTypeName(guardDesc.varDesc, globalGuardName.type),
+                guardDesc.varDesc.alternativeType(globalGuardName.type),
                 loadGlobalField(globalGuardName, parallelScope),
                 "Guard to check that at most one copy of the code is executed for a given random variable instance.")));
 
@@ -1637,7 +1636,7 @@ public class ScopeConstructor {
     // TODO pull these methods out and make them static util methods that can be called by this class and
     // InferenceGenerator base.
     private <A extends Variable<A>> void allocateGlobalState(List<ForTask> scopes,
-            VariableDescription<ArrayVariable<A>> guardName, ParForTask parallelScope) {
+            ScratchVariableDescription<ArrayVariable<A>> guardName, ParForTask parallelScope) {
         Map<ForTask, IntVariable> noStates = new HashMap<>();
         for(ForTask t:scopes) {
             Scope enclosingScope = t.getEnclosingScope();
@@ -1656,8 +1655,8 @@ public class ScopeConstructor {
         compilationCtx.phase = CompilationPhase.ALLOCATION;
         List<IRTreeReturn<IntVariable>> dims = new ArrayList<>();
         for(ForTask t:scopes) {
-            VariableDescription<IntVariable> maxName = VariableNames
-                    .calcVarName("max_" + t.getIndex().getUniqueVarDesc(), VariableType.IntVariable, true);
+            LocalVariableDescription<IntVariable> maxName = VariableNames
+                    .localCalcVarName("max_" + t.getIndex().getUniqueVarDesc(), VariableType.IntVariable, true);
 
             // Set initial value for the array.
             compilationCtx.enterScope(t);
@@ -1686,22 +1685,22 @@ public class ScopeConstructor {
         compilationCtx.popIsSerial();
         compilationCtx.popScopeState();
 
-        createGlobalField(guardName, allocator, parallelScope == null);
+        createScratchClassField(guardName, allocator, parallelScope == null);
     }
 
-    private <A extends Variable<A>> void createGlobalField(VariableDescription<A> fieldName, IRTreeVoid allocator,
+    private <A extends Variable<A>> void createScratchClassField(ScratchVariableDescription<A> fieldName, IRTreeVoid allocator,
             boolean isSerial) {
         switch(compilationCtx.target) {
             case SingleThreadCPU:
-                compilationCtx.addConstructedClassField(fieldName, allocator);
+                compilationCtx.addScratchClassField(fieldName, allocator);
                 break;
             case MultiThreadCPU: {
                 if(isSerial)
-                    compilationCtx.addConstructedClassField(fieldName, allocator);
+                    compilationCtx.addScratchClassField(fieldName, allocator);
                 else {
-                    VariableDescription<ArrayVariable<A>> arrayName = VariableNames.altTypeName(fieldName,
-                            VariableType.arrayType(fieldName.type));
-                    compilationCtx.addConstructedClassField(arrayName, allocator);
+                    ScratchVariableDescription<ArrayVariable<A>> arrayName = fieldName
+                            .alternativeType(VariableType.arrayType(fieldName.type));
+                    compilationCtx.addScratchClassField(arrayName, allocator);
                 }
                 break;
             }
@@ -1720,8 +1719,8 @@ public class ScopeConstructor {
                 if(parallelScope == null) {
                     return load(varDesc);
                 } else {
-                    VariableDescription<ArrayVariable<V>> altName = VariableNames.altTypeName(varDesc,
-                            VariableType.arrayType(varDesc.type));
+                    VariableDescription<ArrayVariable<V>> altName = varDesc
+                            .alternativeType(VariableType.arrayType(varDesc.type));
                     IRTreeReturn<ArrayVariable<V>> array = load(altName);
 
                     // First we have to construct the index name used in the new target, and then we can construct the
@@ -1744,7 +1743,7 @@ public class ScopeConstructor {
         return (ParForTask) sourceScope;
     }
 
-    private <A extends Variable<A>> void globalFieldAllocation(VariableDescription<A> fieldName,
+    private <A extends Variable<A>> void globalFieldAllocation(ScratchVariableDescription<A> fieldName,
             IRTreeReturn<A> localAllocation, boolean isSerial) {
         switch(compilationCtx.target) {
             case SingleThreadCPU:
@@ -1757,15 +1756,15 @@ public class ScopeConstructor {
                 } else {
                     List<IRTreeVoid> subtrees = new ArrayList<>();
 
-                    VariableDescription<ArrayVariable<A>> arrayName = VariableNames.altTypeName(fieldName,
-                            VariableType.arrayType(fieldName.type));
-                    VariableDescription<IntVariable> threadCount = VariableNames.calcVarName("threadCount",
+                    VariableDescription<ArrayVariable<A>> arrayName = fieldName
+                            .alternativeType(VariableType.arrayType(fieldName.type));
+                    LocalVariableDescription<IntVariable> threadCount = VariableNames.localCalcVarName("threadCount",
                             VariableType.IntVariable, true);
                     subtrees.add(initializeVariable(threadCount,
                             functionCallReturn(VariableType.IntVariable, "threadCount"), "Get the thread count."));
                     subtrees.add(store(arrayName, newArray(load(threadCount), (ArrayType<A>) arrayName.type),
                             "Allocate an array to hold a copy per thread"));
-                    VariableDescription<IntVariable> index = VariableNames.calcVarName("index",
+                    LocalVariableDescription<IntVariable> index = VariableNames.localCalcVarName("index",
                             VariableType.IntVariable, true);
                     IRTreeVoid body = arrayPut(load(arrayName), load(index), localAllocation, Tree.NoComment);
                     subtrees.add(forStmt(body, constant(0), load(threadCount), constant(1), index, true,

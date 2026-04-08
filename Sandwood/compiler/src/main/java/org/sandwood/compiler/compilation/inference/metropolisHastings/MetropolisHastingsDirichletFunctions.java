@@ -37,6 +37,7 @@ import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
@@ -54,19 +55,19 @@ import org.sandwood.compiler.trees.irTree.IRTreeVoid;
  * going to zero the probabilities are generated and stored in log space.
  */
 public class MetropolisHastingsDirichletFunctions extends MetropolisHastingsArrayFunctions<DoubleVariable, Dirichlet> {
-    private static final VariableDescription<DoubleVariable> proposedDifference = VariableNames
-            .calcVarName("proposedDifference", VariableType.DoubleVariable, true);
-    private static final VariableDescription<DoubleVariable> rebalanceValue = VariableNames
-            .calcVarName("rebalanceValue", VariableType.DoubleVariable, true);
-    private static final VariableDescription<IntVariable> indexToChange = VariableNames.calcVarName("indexToChange",
+    private static final LocalVariableDescription<DoubleVariable> proposedDifference = VariableNames
+            .localCalcVarName("proposedDifference", VariableType.DoubleVariable, true);
+    private static final LocalVariableDescription<DoubleVariable> rebalanceValue = VariableNames
+            .localCalcVarName("rebalanceValue", VariableType.DoubleVariable, true);
+    private static final LocalVariableDescription<IntVariable> indexToChange = VariableNames.localCalcVarName("indexToChange",
             VariableType.IntVariable, true);
-    private static final VariableDescription<DoubleVariable> movementRatio = VariableNames.calcVarName("movementRatio",
+    private static final LocalVariableDescription<DoubleVariable> movementRatio = VariableNames.localCalcVarName("movementRatio",
             VariableType.DoubleVariable, true);
-    private static final VariableDescription<IntVariable> loopIndex = VariableNames.calcVarName("loopIndex",
+    private static final LocalVariableDescription<IntVariable> loopIndex = VariableNames.localCalcVarName("loopIndex",
             VariableType.IntVariable, true);
-    private static final VariableDescription<IntVariable> arrayLength = VariableNames.calcVarName("arrayLength",
+    private static final LocalVariableDescription<IntVariable> arrayLength = VariableNames.localCalcVarName("arrayLength",
             VariableType.IntVariable, true);
-    private static final VariableDescription<DoubleVariable> tempValue = VariableNames.calcVarName("temp",
+    private static final LocalVariableDescription<DoubleVariable> tempValue = VariableNames.localCalcVarName("temp",
             VariableType.DoubleVariable, true);
 
     /**

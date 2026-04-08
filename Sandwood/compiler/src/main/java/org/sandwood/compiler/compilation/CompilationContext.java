@@ -39,15 +39,15 @@ import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
+import org.sandwood.compiler.dataflowGraph.variables.GlobalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.ScratchVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.Variable.Observed;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.FunctionName;
-import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.Traces;
 import org.sandwood.compiler.traces.guards.DistSampleDesc;
 import org.sandwood.compiler.traces.guards.ScopeConstructor;
@@ -92,12 +92,14 @@ public class CompilationContext {
         INFERENCE,
         LOG_PROBABILITY_VALUE,
         LOG_PROBABILITY_DISTRIBUTIONS,
-        SAMPLE }
+        SAMPLE
+    }
 
     public enum CompilationPhase {
         MAIN_METHODS,
         INITIALIZATION_OF_MODEL,
-        ALLOCATION }
+        ALLOCATION
+    }
 
     /**
      * Structure to hold all the generated functions.
@@ -153,10 +155,11 @@ public class CompilationContext {
     }
 
     public enum FieldType {
-        INTERNAL(Getter.NONE, Setter.NONE, false, Visibility.PRIVATE, Observed.FREE),
         PRIVATE_PROBABILITY(Getter.NONE, Setter.NONE, false, Visibility.PRIVATE, Observed.FREE),
         PUBLIC_PROBABILITY(Getter.REQUIRED, Setter.NONE, false, Visibility.PUBLIC, Observed.FREE),
         USER_FLAG(Getter.REQUIRED, Setter.REQUIRED, false, Visibility.PUBLIC, Observed.FREE),
+        INTERNAL_FLAG(Getter.NONE, Setter.NONE, false, Visibility.PRIVATE, Observed.FREE),
+
         INPUT(Getter.REQUIRED, Setter.REQUIRED, false, Visibility.PUBLIC, Observed.FREE),
 
         PRIVATE_FREE_INTERMEDIATE(Getter.NONE, Setter.NONE, false, Visibility.PRIVATE, Observed.FREE),
@@ -177,15 +180,18 @@ public class CompilationContext {
 
         private enum Getter {
             NONE,
-            REQUIRED }
+            REQUIRED
+        }
 
         private enum Setter {
             NONE,
-            REQUIRED }
+            REQUIRED
+        }
 
         private enum Visibility {
             PUBLIC,
-            PRIVATE }
+            PRIVATE
+        }
 
         public final boolean isSample;
         public final boolean getter;
@@ -285,13 +291,13 @@ public class CompilationContext {
 
     public static class FieldDesc<A extends Variable<A>> {
 
-        public final VariableDescription<A> varDesc;
+        public final GlobalVariableDescription<A> varDesc;
         public final String comment;
         public final IRTreeReturn<A> initialValue;
-        private final static Map<VariableDescription<?>, Set<WrappedTree<IRTree, IRTreeVoid>>> setSideEffects = new HashMap<>();
+        private final static Map<GlobalVariableDescription<?>, Set<WrappedTree<IRTree, IRTreeVoid>>> setSideEffects = new HashMap<>();
         public final FieldType fieldType;
 
-        public FieldDesc(VariableDescription<A> varDesc, FieldType fieldType, IRTreeReturn<A> initialValue,
+        public FieldDesc(GlobalVariableDescription<A> varDesc, FieldType fieldType, IRTreeReturn<A> initialValue,
                 String comment) {
             this.varDesc = varDesc;
             this.comment = comment;
@@ -307,7 +313,7 @@ public class CompilationContext {
                 return s;
         }
 
-        public static void addSetSideEffects(VariableDescription<?> varDesc, IRTreeVoid sideEffect) {
+        public static void addSetSideEffects(GlobalVariableDescription<?> varDesc, IRTreeVoid sideEffect) {
             Set<WrappedTree<IRTree, IRTreeVoid>> s = setSideEffects.computeIfAbsent(varDesc,
                     k -> new LinkedHashSet<>());
 
@@ -341,15 +347,16 @@ public class CompilationContext {
         private final List<IRTreeVoid> scratchConstructors = new ArrayList<>();
         private final List<VarConstructor> orderedConstructors = new ArrayList<>();
 
-        public void addConstructor(VariableDescription<?> fieldName, Variable<?> v, IRTreeVoid constructor) {
-            if(v == null) {
-                if(VariableNames.isCalcVar(fieldName) || VariableNames.isGuardVar(fieldName))
-                    scratchConstructors.add(IRTree.treeScope(constructor, "Constructor for " + fieldName));
-                else
-                    unorderedConstructors.add(IRTree.treeScope(constructor, "Constructor for " + fieldName));
-            } else
+        public void addClassConstructor(GlobalVariableDescription<?> fieldName, Variable<?> v, IRTreeVoid constructor) {
+            if(v == null)
+                unorderedConstructors.add(IRTree.treeScope(constructor, "Constructor for " + fieldName));
+            else
                 orderedConstructors
-                        .add(new VarConstructor(v, IRTree.treeScope(constructor, "Constructor for " + fieldName)));
+                .add(new VarConstructor(v, IRTree.treeScope(constructor, "Constructor for " + fieldName)));
+        }
+
+        public void addScratchConstructor(ScratchVariableDescription<?> fieldName, IRTreeVoid constructor) {
+            scratchConstructors.add(IRTree.treeScope(constructor, "Constructor for " + fieldName));
         }
 
         public IRTreeVoid getVarTree(Map<VariableName, FieldDesc<?>> fieldDescs) {
@@ -569,6 +576,9 @@ public class CompilationContext {
     // Java class field name, class field type.
     private final Map<VariableName, FieldDesc<?>> classFields = new HashMap<>();
 
+    // Java scratch space field names.
+    private final Set<ScratchVariableDescription<?>> scratchFields = new HashSet<>();
+
     // Store the functions constructed by the compilation process.
     private final Functions functions = new Functions();
 
@@ -701,10 +711,12 @@ public class CompilationContext {
         initialize();
         classFields.clear();
         FieldDesc.setSideEffects.clear();
+        scratchFields.clear();
         allocators.clear();
     }
 
-    public <A extends Variable<A>> void addClassInputField(VariableDescription<A> varDesc, String comment) {
+    // Declare class fields for the model and its metadata
+    public <A extends Variable<A>> void addClassInputField(GlobalVariableDescription<A> varDesc, String comment) {
         if(!classFields.containsKey(varDesc.name)) {
             classFields.put(varDesc.name, new FieldDesc<>(varDesc, FieldType.INPUT, null, comment));
 
@@ -717,96 +729,85 @@ public class CompilationContext {
         }
     }
 
-    public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname,
-            IRTreeReturn<A> initialValue) {
-        addConstructedClassField(fieldname, null, null, FieldType.INTERNAL, initialValue, null);
-    }
-
-    public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname,
-            IRTreeVoid constructor) {
-        addConstructedClassField(fieldname, constructor, null, FieldType.INTERNAL, null, null);
-    }
-
-    public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname,
-            IRTreeVoid constructor, IRTreeReturn<A> initialValue) {
-        addConstructedClassField(fieldname, constructor, null, FieldType.INTERNAL, initialValue, null);
-    }
-
-    public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname,
+    public <A extends Variable<A>> void addConstructedClassField(GlobalVariableDescription<A> fieldname,
             IRTreeVoid constructor, FieldType fieldType, String comment) {
         addConstructedClassField(fieldname, constructor, null, fieldType, null, comment);
     }
 
-    public <A extends Variable<A>> void addFlagClassField(VariableDescription<A> fieldname,
+    public <A extends Variable<A>> void addFlagClassField(GlobalVariableDescription<A> fieldname,
             IRTreeReturn<A> initialValue) {
         addConstructedClassField(fieldname, null, null, FieldType.USER_FLAG, initialValue, null);
     }
 
-    public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname,
+    public <A extends Variable<A>> void addInternalFlagClassField(GlobalVariableDescription<A> fieldname,
+            IRTreeReturn<A> initialValue) {
+        addConstructedClassField(fieldname, null, null, FieldType.INTERNAL_FLAG, initialValue, null);
+    }
+
+    public <A extends Variable<A>> void addInternalFlagClassField(GlobalVariableDescription<A> fieldname,
+            IRTreeVoid constructor) {
+        addConstructedClassField(fieldname, constructor, null, FieldType.INTERNAL_FLAG, null, null);
+    }
+
+    public <A extends Variable<A>> void addConstructedClassField(GlobalVariableDescription<A> fieldname,
             FieldType fieldType) {
         addConstructedClassField(fieldname, null, null, fieldType, null, null);
     }
 
     public <A extends Variable<A>> void addConstructedClassField(Variable<A> v, CompilationContext compilationCtx) {
-        VariableDescription<A> fieldDesc = v.getUniqueVarDesc();
-        if(classFields.containsKey(fieldDesc.name)) {
-            // If the field has already been declared just pass this through to update date the getter and setter flags
-            // if required. They are a collective OR of all the passed flags.
-            addConstructedClassField(fieldDesc, null, v);
-        } else {
+        GlobalVariableDescription<A> fieldDesc = (GlobalVariableDescription<A>) v.getUniqueVarDesc();
+        if(!classFields.containsKey(fieldDesc.name)) {
             ArrayDesc<?> arrayDesc = TreeUtils.getArrayDescription(v);
-            if(arrayDesc == null) {
+            if(arrayDesc == null)
                 addConstructedClassField(fieldDesc, null, v);
-            } else {
+            else
                 addConstructedClassFieldArray(v, fieldDesc, arrayDesc, compilationCtx);
-            }
         }
     }
 
     private <A extends Variable<A>, B extends Variable<B>> void addConstructedClassFieldArray(Variable<A> v,
-            VariableDescription<A> fieldDesc, ArrayDesc<B> arrayDesc, CompilationContext compilationCtx) {
-        VariableDescription<ArrayVariable<B>> arrayName = VariableNames.altTypeName(fieldDesc, arrayDesc.type);
+            GlobalVariableDescription<A> fieldDesc, ArrayDesc<B> arrayDesc, CompilationContext compilationCtx) {
+        GlobalVariableDescription<ArrayVariable<B>> arrayName = fieldDesc.alternativeType(arrayDesc.type);
         pushIsSerial(true);
         IRTreeVoid allocator = allocate(arrayName, arrayDesc, compilationCtx);
         popIsSerial();
         addConstructedClassField(arrayName, allocator, v);
     }
 
-    private <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> fieldname,
+    private <A extends Variable<A>> void addConstructedClassField(GlobalVariableDescription<A> fieldname,
             IRTreeVoid constructor, Variable<?> v) {
         addConstructedClassField(fieldname, constructor, v, FieldType.getFieldType(v), null, v.getComment());
     }
 
-    public <A extends Variable<A>> void addConstructedClassField(VariableDescription<A> varDesc,
+    private <A extends Variable<A>> void addConstructedClassField(GlobalVariableDescription<A> varDesc,
             IRTreeVoid constructorTree, Variable<?> v, FieldType fieldType, IRTreeReturn<A> initialValue,
             String comment) {
-        // Ensure variables that did not appear in the model, and variables that have
-        // been marked private don't have getters and setters constructed.
         if(!classFields.containsKey(varDesc.name)) {
             classFields.put(varDesc.name, new FieldDesc<>(varDesc, fieldType, initialValue, comment));
             if(constructorTree != null)
-                allocators.addConstructor(varDesc, v, constructorTree);
-        } else {
-            @SuppressWarnings("unchecked")
-            FieldDesc<A> f = (FieldDesc<A>) classFields.get(varDesc.name);
-            if(initialValue == null)
-                initialValue = f.initialValue;
-            else
-                assert f.initialValue == null || (f.initialValue.equivalent(initialValue));
-            // It is important that f.varDesc is used here as only the first variable description is checked to see if
-            // it need to be converted to an array type.
-            assert fieldType == f.fieldType;
-            f = new FieldDesc<>(f.varDesc, fieldType, initialValue, f.comment);
-            classFields.put(varDesc.name, f);
+                allocators.addClassConstructor(varDesc, v, constructorTree);
         }
     }
 
-    public void addSetSideEffect(VariableDescription<?> fieldName, IRTreeVoid sideEffect) {
+    public void addSetSideEffect(GlobalVariableDescription<?> fieldName, IRTreeVoid sideEffect) {
         FieldDesc.addSetSideEffects(fieldName, sideEffect);
     }
 
     public Map<VariableName, FieldDesc<?>> getClassFields() {
         return classFields;
+    }
+
+    // Add in class fields for scratch data
+    public <A extends Variable<A>> void addScratchClassField(ScratchVariableDescription<A> field,
+            IRTreeVoid constructor) {
+        if(!scratchFields.contains(field)) {
+            scratchFields.add(field);
+            allocators.addScratchConstructor(field, constructor);
+        }
+    }
+
+    public Set<ScratchVariableDescription<?>> getScratchFields() {
+        return scratchFields;
     }
 
     // Calls initialisation tracking.

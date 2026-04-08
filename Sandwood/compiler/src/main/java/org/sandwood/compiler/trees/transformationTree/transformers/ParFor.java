@@ -26,6 +26,7 @@ import java.util.Stack;
 
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.rng.RandomNumberGenerator;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
@@ -174,7 +175,9 @@ public class ParFor extends Transformer {
                     TransTreeVoid l = TransParForLambda.getParForLambda(depth + 1, innerStartName, innerEndName,
                             VariableNames.threadIdName(t.indexDesc.name), innerFor);
 
-                    TransTreeVoid f = TransParFor.getParFor(depth, start, end, step, l,
+                    TransTreeVoid f = TransParFor.getParFor(
+                            depth == 0 ? load(VariableNames.rngName()) : load(VariableNames.rngName(depth)), start, end,
+                            step, l,
                             " Outer loop for dispatching multiple batches of iterations to execute in parallel");
 
                     stmts.add(f);
@@ -220,8 +223,11 @@ public class ParFor extends Transformer {
         switch(tree.type) {
             case LOAD: {
                 TransLoad<X> l = (TransLoad<X>) tree;
-                if(l.varDesc.equals(VariableNames.rngName(0))) {
-                    return (TransTreeReturn<X>) load(VariableNames.rngName(depth));
+                VariableDescription<RandomNumberGenerator> rngName = VariableNames.rngName();
+                if(l.varDesc.equals(rngName)) {
+                    if(depth != 0)
+                        rngName = VariableNames.rngName(depth);
+                    return (TransTreeReturn<X>) load(rngName);
                 } else
                     return load(getSubstitution(l.varDesc));
             }

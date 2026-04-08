@@ -30,6 +30,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTaskImplementation;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
@@ -394,7 +395,8 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
                  */
                 if(!compilationCtx.initializedInScope(value)) {
                     Variable<A> initValue = compilationCtx.addInitialized(value);
-                    IRTreeVoid t = initializeVariable(Visibility.DEFAULT, initValue.getUniqueVarDesc(),
+                    IRTreeVoid t = initializeVariable(Visibility.DEFAULT,
+                            (LocalVariableDescription<A>)initValue.getUniqueVarDesc(),
                             arrayGet(arrayTree, index.getForwardIR(compilationCtx)), Tree.NoComment);
                     Scope targetScope = value.aliasSet() ? value.scope()
                             : Scope.innerScope(array.scope(), index.scope());

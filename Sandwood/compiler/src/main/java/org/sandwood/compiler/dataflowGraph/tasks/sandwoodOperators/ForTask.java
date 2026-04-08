@@ -22,8 +22,8 @@ import org.sandwood.compiler.compilation.scopesState.ScopeTracking;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
@@ -180,7 +180,7 @@ public class ForTask extends ScopedNumberProducingDataflowTask<IntVariable> {
         IRTreeReturn<IntVariable> startTree = start.getForwardIR(compilationCtx);
         IRTreeReturn<IntVariable> endTree = end.getForwardIR(compilationCtx);
         IRTreeReturn<IntVariable> stepTree = step.getForwardIR(compilationCtx);
-        VariableDescription<IntVariable> indexDesc = index.getUniqueVarDesc();
+        LocalVariableDescription<IntVariable> indexDesc = (LocalVariableDescription<IntVariable>)index.getUniqueVarDesc();
         if(reverseScopes) {
             // End must be updated first as it depends on the current start value.
             endTree = updateEnd(startTree, endTree, stepTree, incrementing);

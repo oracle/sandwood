@@ -31,6 +31,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.ArrayProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ReductionReturnTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -87,7 +88,7 @@ public class GetArrayTask<A extends Variable<A>> extends GetTask<ArrayVariable<A
                 gets.push(producingGt);
                 arrayParent = producingGt.array.getParent();
             }
-            VariableDescription<IntVariable> returnLength = VariableNames.calcVarName(gt.array,
+            LocalVariableDescription<IntVariable> returnLength = VariableNames.localCalcVarName(gt.array,
                     findMax ? "max" : "min" + "Length", VariableType.IntVariable);
 
             List<IRTreeVoid> stmts = new ArrayList<>();
@@ -101,7 +102,7 @@ public class GetArrayTask<A extends Variable<A>> extends GetTask<ArrayVariable<A
             return load(returnLength);
 
         } else {
-            VariableDescription<IntVariable> returnName = VariableNames.calcVarName(array, findMax ? "max" : "min",
+            LocalVariableDescription<IntVariable> returnName = VariableNames.localCalcVarName(array, findMax ? "max" : "min",
                     VariableType.IntVariable);
 
             PriorityQueue<PutTask<ArrayVariable<A>>> p = new PriorityQueue<>(puts);
@@ -134,13 +135,13 @@ public class GetArrayTask<A extends Variable<A>> extends GetTask<ArrayVariable<A
         ArrayVariable<A> v = gt.array;
         VariableDescription<ArrayVariable<A>> parentArrayDesc = v.getUniqueVarDesc();
 
-        VariableDescription<IntVariable> length = VariableNames.calcVarName(v, "length", VariableType.IntVariable);
+        LocalVariableDescription<IntVariable> length = VariableNames.localCalcVarName(v, "length", VariableType.IntVariable);
         stmts.add(initializeVariable(length, getIntField(load(parentArrayDesc), "length"), Tree.NoComment));
 
-        VariableDescription<IntVariable> index = VariableNames.indexName(parentArrayDesc);
+        LocalVariableDescription<IntVariable> index = VariableNames.indexName(parentArrayDesc);
 
         List<IRTreeVoid> bodyStmts = new ArrayList<>();
-        VariableDescription<A> outputName = gt.getOutput().getVarDesc();
+        LocalVariableDescription<A> outputName = (LocalVariableDescription<A>)gt.getOutput().getVarDesc();
         bodyStmts.add(initializeVariable(outputName, arrayGet(load(parentArrayDesc), load(index)), Tree.NoComment));
         if(gets.isEmpty()) {
             IRTreeReturn<IntVariable> localLength = getIntField(load(outputName), "length");
@@ -196,7 +197,7 @@ public class GetArrayTask<A extends Variable<A>> extends GetTask<ArrayVariable<A
                 return tree;
             }
         } else {
-            VariableDescription<IntVariable> lengthName = VariableNames.lengthCVName(array.getVarDesc().name, id(),
+            LocalVariableDescription<IntVariable> lengthName = VariableNames.lengthCVName(array.getVarDesc().name, id(),
                     lengthId++);
             compilationCtx.enterScope(scope());
             compilationCtx.addTreeToScope(scope(), IRTree.initializeVariable(lengthName, IRTree.constant(-1),

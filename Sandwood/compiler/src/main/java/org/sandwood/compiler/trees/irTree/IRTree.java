@@ -18,6 +18,9 @@ import java.util.Set;
 import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.compilation.ExternalFunction;
 import org.sandwood.compiler.compilation.FunctionType;
+import org.sandwood.compiler.dataflowGraph.variables.ClassVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.GlobalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -256,13 +259,13 @@ public abstract class IRTree extends Tree<IRTree> {
     }
 
     public static IRFor forStmt(IRTreeVoid body, IRTreeReturn<IntVariable> start, IRTreeReturn<IntVariable> end,
-            IRTreeReturn<IntVariable> step, VariableDescription<IntVariable> indexDesc, boolean incrementing,
+            IRTreeReturn<IntVariable> step, LocalVariableDescription<IntVariable> indexDesc, boolean incrementing,
             String comment) {
         return new IRFor(body, start, end, step, indexDesc, false, incrementing, comment);
     }
 
     public static IRFor parallelForStmt(IRTreeVoid body, IRTreeReturn<IntVariable> start, IRTreeReturn<IntVariable> end,
-            IRTreeReturn<IntVariable> step, VariableDescription<IntVariable> indexDesc, boolean incrementing,
+            IRTreeReturn<IntVariable> step, LocalVariableDescription<IntVariable> indexDesc, boolean incrementing,
             String comment) {
         return new IRFor(body, start, end, step, indexDesc, true, incrementing, comment);
     }
@@ -316,31 +319,40 @@ public abstract class IRTree extends Tree<IRTree> {
     }
 
     public static <X extends Variable<X>> IRTreeVoid initializeVariable(Visibility visibility,
-            VariableDescription<X> varDesc, IRTreeReturn<X> value, String comment) {
-        if(value.type == IRTreeType.LOAD && ((IRLoad<X>) value).varDesc.equals(varDesc))
-            return nop();
-        else
+            LocalVariableDescription<X> varDesc, IRTreeReturn<X> value, String comment) {
             return new IRInitialize<>(visibility, varDesc, value, comment);
     }
 
     public static <X extends Variable<X>> IRTreeVoid initializeVariable(Variable<X> var, IRTreeReturn<X> value,
             String comment) {
-        return initializeVariable(var.getUniqueVarDesc(), value, comment);
+        return initializeVariable((LocalVariableDescription<X>)var.getUniqueVarDesc(), value, comment);
     }
 
-    public static <X extends Variable<X>> IRTreeVoid initializeVariable(VariableDescription<X> varDesc,
+    public static <X extends Variable<X>> IRTreeVoid initializeVariable(LocalVariableDescription<X> varDesc,
             IRTreeReturn<X> value, String comment) {
         return initializeVariable(Visibility.DEFAULT, varDesc, value, comment);
     }
 
     public static <X extends Variable<X>> IRInitializeUnset<X> initializeUnsetVariable(Visibility visibility,
-            VariableDescription<X> varDesc, String comment) {
+            LocalVariableDescription<X> varDesc, String comment) {
         return new IRInitializeUnset<>(visibility, varDesc, comment);
     }
 
-    public static <X extends Variable<X>> IRInitializeUnset<X> initializeUnsetVariable(VariableDescription<X> varDesc,
+    public static <X extends Variable<X>> IRInitializeUnset<X> initializeUnsetVariable(LocalVariableDescription<X> varDesc,
             String comment) {
         return initializeUnsetVariable(Visibility.DEFAULT, varDesc, comment);
+    }
+    
+
+
+    public static <X extends Variable<X>> IRInitialize<X> initializeField(Visibility visibility, ClassVariableDescription<X> varDesc,
+            IRTreeReturn<X> value, String comment) {
+        return new IRInitialize<>(visibility, varDesc, value, comment);
+    }
+
+    public static <X extends Variable<X>> IRInitializeUnset<X> initializeUnsetField(Visibility visibility, ClassVariableDescription<X> varDesc,
+            String comment) {
+        return new IRInitializeUnset<>(visibility, varDesc, comment);
     }
 
     public static <X extends Variable<X>> IRLoad<X> load(Variable<X> v) {

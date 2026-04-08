@@ -34,6 +34,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.nonReturnTasks.ObserveVariableT
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.rvConstructor.RandomVariableConstructorTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.IfElseAssignmentTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
@@ -509,7 +510,7 @@ public class ObservedValuePropagationBuilder {
                                 if(!compilationCtx.initializedInScope(value)) {
                                     Variable<B> v = compilationCtx.addInitialized(value);
                                     compilationCtx.addTreeToScope(value.scope(),
-                                            IRTree.initializeUnsetVariable(v.getUniqueVarDesc(), Tree.NoComment));
+                                            IRTree.initializeUnsetVariable((LocalVariableDescription<B>) v.getUniqueVarDesc(), Tree.NoComment));
                                     compilationCtx.addTreeToScope(pt.scope(), IRTree.store(value.getUniqueVarDesc(),
                                             IRTree.arrayGet(arrayTree, indexTree), Tree.NoComment));
 

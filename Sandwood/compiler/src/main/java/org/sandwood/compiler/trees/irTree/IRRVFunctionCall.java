@@ -129,7 +129,7 @@ public class IRRVFunctionCall extends IRTreeVoid {
         // Add the required RNG.
         if(t == FunctionType.CONJUGATE_SAMPLE || t == FunctionType.SAMPLE) {
             IRTreeReturn<?>[] newArgs = new IRTreeReturn<?>[args.length + 1];
-            newArgs[0] = IRTree.load(VariableNames.rngName(0));
+            newArgs[0] = IRTree.load(VariableNames.rngName());
             System.arraycopy(args, 0, newArgs, 1, args.length);
             args = newArgs;
         }

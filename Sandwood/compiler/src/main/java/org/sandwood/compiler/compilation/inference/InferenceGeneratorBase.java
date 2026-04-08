@@ -40,6 +40,9 @@ import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
+import org.sandwood.compiler.dataflowGraph.variables.GlobalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.ScratchVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -201,7 +204,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
             }
 
             // Otherwise create a flag to record if the observed variables are reachable
-            VariableDescription<BooleanVariable> observationGuard = VariableNames.calcVarName("varObserved",
+            LocalVariableDescription<BooleanVariable> observationGuard = VariableNames.localCalcVarName("varObserved",
                     VariableType.BooleanVariable, true);
             targetScope.addTree((TreeBuilderInfo info) -> {
                 initializeVariable(observationGuard, constant(false), "A guard to record if the variable is observed");
@@ -261,8 +264,8 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
 
     protected abstract FuncData getFunctionData(SampleTask<A, B> sample, CompilationContext compilationCtx);
 
-    private static final VariableDescription<BooleanVariable> constrained = VariableNames
-            .calcVarName("sampleConstrained", VariableType.BooleanVariable, true);
+    private static final LocalVariableDescription<BooleanVariable> constrained = VariableNames
+            .localCalcVarName("sampleConstrained", VariableType.BooleanVariable, true);
 
     /**
      * Method to generate a function calculate the result of a conjugate pairing.
@@ -679,7 +682,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
 
         ScopeConstructor dConsumerAllArgs = c.applyDistributedArguments(1).applyDistributedArguments(2);
 
-        VariableDescription<DoubleVariable> reachedSourceName = VariableNames.scopeVarName("reachedSourceProbability",
+        LocalVariableDescription<DoubleVariable> reachedSourceName = VariableNames.scopeVarName("reachedSourceProbability",
                 VariableType.DoubleVariable);
         dConsumerAllArgs.addTree((TreeBuilderInfo info) -> info.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(reachedSourceName, constant(0.0),
@@ -832,10 +835,10 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                 scopes.get(scopes.size() - 1), funcData.compilationCtx);
     }
 
-    protected <V extends Variable<V>> void createGlobalField(VariableDescription<V> fieldName, IRTreeVoid allocator,
+    protected <V extends Variable<V>> void createScratchClassField(ScratchVariableDescription<V> fieldName, IRTreeVoid allocator,
             FunctionData<A, B, S> funcData) {
         List<Scope> scopes = funcData.sampleDesc.scopes;
-        FunctionUtils.createGlobalField(fieldName, allocator, funcData.isSerial, scopes.get(scopes.size() - 1),
+        FunctionUtils.createScratchClassField(fieldName, allocator, funcData.isSerial, scopes.get(scopes.size() - 1),
                 funcData.compilationCtx);
     }
 

@@ -521,8 +521,6 @@ class ScopeDescription {
         sampleDescriptions = d.sampleDescriptions;
         this.constraintData = constraintData;
         knownFlags = d.knownFlags;
-        if(d.constraintData.size() != constraintData.size())
-            System.out.println("About to fail");
         assert d.constraintData.size() == constraintData.size();
     }
 

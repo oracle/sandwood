@@ -52,6 +52,8 @@ import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
+import org.sandwood.compiler.dataflowGraph.variables.GlobalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -365,7 +367,7 @@ public class ProbabilityFunction {
         final Scope sampleTaskScope;
         final Variable<?> sampleVariable;
         final TraceHandle traceToSampleVariable;
-        final VariableDescription<A> sampleVariableName;
+        final LocalVariableDescription<A> sampleVariableName;
         final boolean sampleSkipable;
 
         // Store the code for initialising intermediate variable probabilities.
@@ -387,12 +389,12 @@ public class ProbabilityFunction {
         final List<ScopeDesc> randomScopes;
         final Scope randomStoreScope;
         final List<IRTreeReturn<IntVariable>> randomArgTrees;
-        final VariableDescription<DoubleVariable> randomProbName;
+        final GlobalVariableDescription<DoubleVariable> randomProbName;
         final Set<DataflowTask<?>> consumers;
         final boolean randomSkipable;
 
         // Get the scopes we will use to store probabilities for samples.
-        final VariableDescription<DoubleVariable> storedName;
+        final GlobalVariableDescription<DoubleVariable> storedName;
         final List<ScopeDesc> storeScopes;
         final List<IRTreeReturn<IntVariable>> storeArgTrees;
         final boolean isPrivate;
@@ -404,8 +406,8 @@ public class ProbabilityFunction {
 
         final Set<SampleTask<?, ?>> fixable;
         final boolean fixableProb;
-        final VariableDescription<BooleanVariable> fixedFlagName;
-        final VariableDescription<BooleanVariable> fixedProbFlagName;
+        final GlobalVariableDescription<BooleanVariable> fixedFlagName;
+        final GlobalVariableDescription<BooleanVariable> fixedProbFlagName;
 
         FunctionData(SampleTask<A, ?> sampleTask, Set<WrappedTree<IRTree, IRTreeVoid>> toInitialize,
                 boolean useDistributions, CompilationContext compilationCtx) {
@@ -415,7 +417,7 @@ public class ProbabilityFunction {
             SampleTraceDesc sampleVarDesc = compilationCtx.traces.getSampleTrace(sampleTask);
             sampleVariable = sampleVarDesc.sampleVariable;
             traceToSampleVariable = sampleVarDesc.traceToSampleVariable;
-            sampleVariableName = VariableNames.calcVarName("sampleValue", sampleTask.getOutputType(), true);
+            sampleVariableName = VariableNames.localCalcVarName("sampleValue", sampleTask.getOutputType(), true);
             conditionalTraces = compilationCtx.traces.getTracesToConditionals(sampleTask);
             sampleSkipable = DAGUtils.skipableTask(sampleTask);
             consumers = randomVariable.getConsumers();
@@ -484,14 +486,14 @@ public class ProbabilityFunction {
 
             // Get the scopes we will use to store probabilities for samples.
             if(!dependentVariables.perSampleVariables.isEmpty()) {
-                storedName = VariableNames.logProbabilityName(sampleTask.getUniqueVarDesc());
+                storedName = VariableNames.logProbabilityName(sampleTask.getSampleName());
                 storeScopes = TreeUtils.getScopeDescs(sampleTask.getOutput());
                 isPrivate = true;
                 sampleStoreScope = sampleTaskScope;
                 storeArgTrees = toArgTrees(getScopeArgs(storeScopes), compilationCtx);
                 // Test if we need random variables to be stored.
             } else if(randomStoreScope != GlobalScope.scope) {
-                storedName = VariableNames.logProbabilityName(sampleTask.getUniqueVarDesc());
+                storedName = VariableNames.logProbabilityName(sampleTask.getSampleName());
                 storeScopes = randomScopes;
                 isPrivate = true;
                 sampleStoreScope = randomStoreScope;
@@ -509,34 +511,34 @@ public class ProbabilityFunction {
         }
     }
 
-    private static final VariableDescription<DoubleVariable> evidenceProbName = VariableNames
+    private static final GlobalVariableDescription<DoubleVariable> evidenceProbName = VariableNames
             .logProbabilityName(VariableNames.internalName("evidence"));
-    private static final VariableDescription<DoubleVariable> logModelProbName = VariableNames
+    private static final GlobalVariableDescription<DoubleVariable> logModelProbName = VariableNames
             .logProbabilityName(VariableNames.internalName("model"));
-    private static final VariableDescription<DoubleVariable> sampleProbName = VariableNames
-            .calcVarName("sampleProbability", VariableType.DoubleVariable, true);
-    private static final VariableDescription<DoubleVariable> accumulatorName = VariableNames.calcVarName("accumulator",
+    private static final LocalVariableDescription<DoubleVariable> sampleProbName = VariableNames
+            .localCalcVarName("sampleProbability", VariableType.DoubleVariable, true);
+    private static final LocalVariableDescription<DoubleVariable> accumulatorName = VariableNames.localCalcVarName("accumulator",
             VariableType.DoubleVariable, true);
     // Accumulator for the probabilities seen in the different distribution
     // configurations.
-    private static final VariableDescription<DoubleVariable> disAccumulator = VariableNames
-            .calcVarName("distributionAccumulator", VariableType.DoubleVariable, true);
-    private static final VariableDescription<DoubleVariable> rvProbabilityName = VariableNames
-            .calcVarName("rvAccumulator", VariableType.DoubleVariable, true);
-    private static final VariableDescription<DoubleVariable> sampleValueName = VariableNames.calcVarName("sampleValue",
+    private static final LocalVariableDescription<DoubleVariable> disAccumulator = VariableNames
+            .localCalcVarName("distributionAccumulator", VariableType.DoubleVariable, true);
+    private static final LocalVariableDescription<DoubleVariable> rvProbabilityName = VariableNames
+            .localCalcVarName("rvAccumulator", VariableType.DoubleVariable, true);
+    private static final LocalVariableDescription<DoubleVariable> sampleValueName = VariableNames.localCalcVarName("sampleValue",
             VariableType.DoubleVariable, true);
     // Name for a second accumulator in the case that the same task is inside
     // another for loop relative to the random variable
-    private static final VariableDescription<DoubleVariable> sampleAccumulatorName = VariableNames
-            .calcVarName("sampleAccumulator", VariableType.DoubleVariable, true);
+    private static final LocalVariableDescription<DoubleVariable> sampleAccumulatorName = VariableNames
+            .localCalcVarName("sampleAccumulator", VariableType.DoubleVariable, true);
     // Accumulator for the probability spaces reached through the distributions.
-    private static final VariableDescription<DoubleVariable> probabilityReached = VariableNames
-            .calcVarName("probabilityReached", VariableType.DoubleVariable, true);
-    private static final VariableDescription<DoubleVariable> weightedProbability = VariableNames
-            .calcVarName("weightedProbability", VariableType.DoubleVariable, true);
+    private static final LocalVariableDescription<DoubleVariable> probabilityReached = VariableNames
+            .localCalcVarName("probabilityReached", VariableType.DoubleVariable, true);
+    private static final LocalVariableDescription<DoubleVariable> weightedProbability = VariableNames
+            .localCalcVarName("weightedProbability", VariableType.DoubleVariable, true);
 
     // Guard to check if the value has been reached.
-    private static final VariableDescription<BooleanVariable> guardName = VariableNames.calcVarName("sampleReached",
+    private static final LocalVariableDescription<BooleanVariable> guardName = VariableNames.localCalcVarName("sampleReached",
             VariableType.BooleanVariable, true);
 
     public static void probabilityFunctions(CompilationContext compilationCtx) {
@@ -607,7 +609,7 @@ public class ProbabilityFunction {
         // random is allocated inside these scopes, so can only exist in this number of
         // dimensions.
         if(!funcData.randomVariable.isPrivate()) {
-            funcData.toInitialize.add(new WrappedTree<>(TreeUtils.constructVariable(funcData.randomProbName,
+            funcData.toInitialize.add(new WrappedTree<>(TreeUtils.constructGlobalVariable(funcData.randomProbName,
                     constant(funcData.randomSkipable ? Double.NaN : 0.0), funcData.randomScopes,
                     FieldType.PUBLIC_PROBABILITY, funcData.compilationCtx)));
         }
@@ -629,18 +631,18 @@ public class ProbabilityFunction {
         // public, or required to set probabilities if the probability is fixed
         Variable<?> sampleVar = funcData.dependentVariables.sampleVariable;
         if(sampleVar != null && (!sampleVar.isPrivate() || funcData.fixableProb)) {
-            VariableDescription<DoubleVariable> outputName = VariableNames
+            GlobalVariableDescription<DoubleVariable> outputName = VariableNames
                     .logProbabilityName(sampleVar.getUniqueVarDesc());
-            IRTreeVoid initializeIntermediate = TreeUtils.constructVariable(outputName, constant(0.0), outputScopes,
+            IRTreeVoid initializeIntermediate = TreeUtils.constructGlobalVariable(outputName, constant(0.0), outputScopes,
                     sampleVar.isPrivate() ? FieldType.PRIVATE_PROBABILITY : FieldType.PUBLIC_PROBABILITY,
-                    sampleVar.getComment(), funcData.compilationCtx);
+                            sampleVar.getComment(), funcData.compilationCtx);
             funcData.toInitialize.add(new WrappedTree<>(initializeIntermediate));
         }
         for(Variable<?> intermediate:funcData.dependentVariables) {
             if(!intermediate.isPrivate()) {
-                VariableDescription<DoubleVariable> outputName = VariableNames
+                GlobalVariableDescription<DoubleVariable> outputName = VariableNames
                         .logProbabilityName(intermediate.getUniqueVarDesc());
-                IRTreeVoid initializeIntermediate = TreeUtils.constructVariable(outputName, constant(0.0), outputScopes,
+                IRTreeVoid initializeIntermediate = TreeUtils.constructGlobalVariable(outputName, constant(0.0), outputScopes,
                         FieldType.PUBLIC_PROBABILITY, intermediate.getComment(), funcData.compilationCtx);
                 funcData.toInitialize.add(new WrappedTree<>(initializeIntermediate));
             }
@@ -652,18 +654,18 @@ public class ProbabilityFunction {
          */
 
         // Construct a space to store the probability.
-        IRTreeVoid sampleAllocation = TreeUtils.constructVariable(funcData.storedName, constant(Double.NaN),
+        IRTreeVoid sampleAllocation = TreeUtils.constructGlobalVariable(funcData.storedName, constant(Double.NaN),
                 funcData.storeScopes, funcData.isPrivate ? FieldType.PRIVATE_PROBABILITY : FieldType.PUBLIC_PROBABILITY,
-                funcData.compilationCtx);
+                        funcData.compilationCtx);
 
         // Construct a flag to determine if this probability is already calculated.
         if(funcData.fixableProb) {
-            funcData.compilationCtx.addConstructedClassField(funcData.fixedProbFlagName, constant(false));
+            funcData.compilationCtx.addInternalFlagClassField(funcData.fixedProbFlagName, constant(false));
 
             // Set the initialisation
             IRTreeReturn<BooleanVariable> guard = negateBoolean(load(funcData.fixedProbFlagName));
             funcData.toInitialize
-                    .add(new WrappedTree<IRTree, IRTreeVoid>(ifElse(guard, sampleAllocation, Tree.NoComment)));
+            .add(new WrappedTree<IRTree, IRTreeVoid>(ifElse(guard, sampleAllocation, Tree.NoComment)));
         } else {
             // Set the initialisation
             funcData.toInitialize.add(new WrappedTree<IRTree, IRTreeVoid>(sampleAllocation));
@@ -701,14 +703,14 @@ public class ProbabilityFunction {
                     IRTreeVoid restFixed = store(funcData.fixedProbFlagName,
                             and(load(funcData.fixedFlagName), load(funcData.fixedProbFlagName)),
                             "Should the probability of sample " + funcData.sampleTask.id()
-                                    + " be set to fixed. This will only every change the flag to false.");
+                            + " be set to fixed. This will only every change the flag to false.");
                     info.compilationCtx.addSetSideEffect(funcData.fixedFlagName, restFixed);
 
                     // Add side effect to clear the flag if a dependency is changed.
-                    VariableDescription<?> sampleName = funcData.sampleVariable.getUniqueVarDesc();
+                    GlobalVariableDescription<?> sampleName = (GlobalVariableDescription<?>)funcData.sampleVariable.getUniqueVarDesc();
                     restFixed = store(funcData.fixedProbFlagName, constant(false),
                             "Unset the fixed probability flag for sample " + funcData.sampleTask.id()
-                                    + " as it depends on " + sampleName.name + ".");
+                            + " as it depends on " + sampleName.name + ".");
                     info.compilationCtx.addSetSideEffect(sampleName, restFixed);
                 }
 
@@ -720,22 +722,22 @@ public class ProbabilityFunction {
                     while(!p.isEmpty()) {
                         SampleTask<?, ?> s = p.poll();
                         if(funcData.fixable.contains(s)) {
-                            VariableDescription<BooleanVariable> sampleFixedName = VariableNames.fixedFlagName(s);
+                            GlobalVariableDescription<BooleanVariable> sampleFixedName = VariableNames.fixedFlagName(s);
                             fixed = IRTree.and(fixed, load(sampleFixedName));
 
                             // Add side effect to clear the flag if a dependency given the ability to changed
                             IRTreeVoid restFixed = store(funcData.fixedProbFlagName,
                                     and(load(sampleFixedName), load(funcData.fixedProbFlagName)),
                                     "Should the probability of sample " + funcData.sampleTask.id()
-                                            + " be set to fixed. This will only every change the flag to false.");
+                                    + " be set to fixed. This will only every change the flag to false.");
                             info.compilationCtx.addSetSideEffect(sampleFixedName, restFixed);
 
                             // Add side effect to clear the flag if a dependency is changed.
                             SampleTraceDesc sampleDesc = info.compilationCtx.traces.getSampleTrace(s);
-                            VariableDescription<?> sampleName = sampleDesc.sampleVariable.getUniqueVarDesc();
+                            GlobalVariableDescription<?> sampleName = (GlobalVariableDescription<?>)sampleDesc.sampleVariable.getUniqueVarDesc();
                             restFixed = store(funcData.fixedProbFlagName, constant(false),
                                     "Unset the fixed probability flag for sample " + funcData.sampleTask.id()
-                                            + " as it depends on " + sampleName.name + ".");
+                                    + " as it depends on " + sampleName.name + ".");
                             info.compilationCtx.addSetSideEffect(sampleName, restFixed);
                         }
                     }
@@ -748,48 +750,48 @@ public class ProbabilityFunction {
             // back out.
             elseSC.addComment(
                     "Using cached values.\n\nUpdating random variable and model probabilities using cached probabilities for this sample")
-                    .addTree((TreeBuilderInfo info) -> {
+            .addTree((TreeBuilderInfo info) -> {
 
-                        // Initialize variables
-                        info.compilationCtx.addTreeToScope(GlobalScope.scope,
-                                initializeVariable(accumulatorName, constant(0.0), Tree.NoComment));
+                // Initialize variables
+                info.compilationCtx.addTreeToScope(GlobalScope.scope,
+                        initializeVariable(accumulatorName, constant(0.0), Tree.NoComment));
 
-                        info.compilationCtx.addTreeToScope(funcData.randomStoreScope,
-                                initializeVariable(rvProbabilityName, constant(0.0), Tree.NoComment));
+                info.compilationCtx.addTreeToScope(funcData.randomStoreScope,
+                        initializeVariable(rvProbabilityName, constant(0.0), Tree.NoComment));
 
-                        if(funcData.sampleSkipable) {
-                            info.compilationCtx.enterScope(funcData.sampleTaskScope);
-                            info.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(guardName,
-                                    IRTree.constant(false), "A guard to check if the sample value is ever reached."));
-                            info.compilationCtx.leaveScope(funcData.sampleTaskScope);
-                        }
+                if(funcData.sampleSkipable) {
+                    info.compilationCtx.enterScope(funcData.sampleTaskScope);
+                    info.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(guardName,
+                            IRTree.constant(false), "A guard to check if the sample value is ever reached."));
+                    info.compilationCtx.leaveScope(funcData.sampleTaskScope);
+                }
 
-                        if(funcData.storeArgTrees.isEmpty()) // We are not in a loop.
-                            info.compilationCtx.addTreeToScope(funcData.sampleStoreScope,
-                                    initializeVariable(sampleValueName, load(funcData.storedName), Tree.NoComment));
-                        else
-                            info.compilationCtx.addTreeToScope(funcData.sampleStoreScope,
-                                    initializeVariable(sampleValueName,
-                                            TreeUtils.getIndirectValue(funcData.storedName, funcData.storeArgTrees),
-                                            Tree.NoComment));
+                if(funcData.storeArgTrees.isEmpty()) // We are not in a loop.
+                    info.compilationCtx.addTreeToScope(funcData.sampleStoreScope,
+                            initializeVariable(sampleValueName, load(funcData.storedName), Tree.NoComment));
+                else
+                    info.compilationCtx.addTreeToScope(funcData.sampleStoreScope,
+                            initializeVariable(sampleValueName,
+                                    TreeUtils.getIndirectValue(funcData.storedName, funcData.storeArgTrees),
+                                    Tree.NoComment));
 
-                        // Accumulate values
-                        info.compilationCtx.addTreeToScope(funcData.sampleStoreScope, store(rvProbabilityName,
-                                addDD(load(rvProbabilityName), load(sampleValueName)), Tree.NoComment));
-                        if(funcData.sampleSkipable)
-                            info.compilationCtx.addTreeToScope(funcData.sampleTaskScope,
-                                    store(guardName, constant(true), "Record that the sample was reached."));
-                        info.compilationCtx.addTreeToScope(funcData.randomStoreScope, store(accumulatorName,
-                                addDD(load(accumulatorName), load(rvProbabilityName)), Tree.NoComment));
+                // Accumulate values
+                info.compilationCtx.addTreeToScope(funcData.sampleStoreScope, store(rvProbabilityName,
+                        addDD(load(rvProbabilityName), load(sampleValueName)), Tree.NoComment));
+                if(funcData.sampleSkipable)
+                    info.compilationCtx.addTreeToScope(funcData.sampleTaskScope,
+                            store(guardName, constant(true), "Record that the sample was reached."));
+                info.compilationCtx.addTreeToScope(funcData.randomStoreScope, store(accumulatorName,
+                        addDD(load(accumulatorName), load(rvProbabilityName)), Tree.NoComment));
 
-                        // Update the values for the random variables
-                        if(!funcData.randomVariable.isPrivate())
-                            updateRVProbabilities(funcData, load(rvProbabilityName));
-                        // If we are tracking individual values, embed in the correct set of for loops.
+                // Update the values for the random variables
+                if(!funcData.randomVariable.isPrivate())
+                    updateRVProbabilities(funcData, load(rvProbabilityName));
+                // If we are tracking individual values, embed in the correct set of for loops.
 
-                        // Update the values for the variables
-                        updateVarProbabilities(funcData, load(accumulatorName), load(sampleValueName));
-                    });
+                // Update the values for the variables
+                updateVarProbabilities(funcData, load(accumulatorName), load(sampleValueName));
+            });
         } else {
             // Join all the subtrees with a sequential block
             if(funcData.sampleTask.isDistribution() && funcData.useDistributions) {
@@ -814,10 +816,10 @@ public class ProbabilityFunction {
         // And place the subtree in a void function.
         SampleFunctionClass functionClass = funcData.useDistributions
                 ? SampleFunctionClass.LOG_PROBABILITY_DISTRIBUTIONS
-                : SampleFunctionClass.LOG_PROBABILITY_VALUE;
+                        : SampleFunctionClass.LOG_PROBABILITY_VALUE;
         FunctionName functionName = FunctionName.createFunctionName(functionClass, funcData.sampleTask);
         String comment = "Calculate the probability of the samples represented by "
-                + funcData.sampleTask.getUniqueVarDesc()
+                + funcData.sampleTask.getSampleName()
                 + (funcData.useDistributions ? " using probability distributions." : " using sampled values.");
         funcData.compilationCtx.addFunction(functionClass, funcData.sampleTask, voidFunction(Visibility.PRIVATE,
                 functionName, new ArgDesc<?>[0], funcData.compilationCtx.getOutermostScopeTree(), comment));
@@ -904,7 +906,7 @@ public class ProbabilityFunction {
         // Construct holder for new scopes.
         ScopeConstructor a = ScopeConstructor.construct(funcData.sampleTask, funcData.distributionTraces,
                 "Look for paths between the variable and the sample task " + funcData.sampleTask.id()
-                        + " including any distribution values.",
+                + " including any distribution values.",
                 Tree.NoComment, funcData.compilationCtx);
         a = a.addConstraint(funcData.traceToSampleVariable);
 
@@ -1057,7 +1059,7 @@ public class ProbabilityFunction {
     private static void updateVarProbabilities(FunctionData<?> funcData,
             IRTreeReturn<DoubleVariable> accumulatedProbability, IRTreeReturn<DoubleVariable> sampleProbability) {
         {
-            Map<Variable<?>, VariableDescription<BooleanVariable>> guards = new HashMap<>();
+            Map<Variable<?>, LocalVariableDescription<BooleanVariable>> guards = new HashMap<>();
 
             // Initialize guards
             PriorityQueue<Variable<?>> p = new PriorityQueue<>();
@@ -1068,9 +1070,9 @@ public class ProbabilityFunction {
             while(!p.isEmpty()) {
                 Variable<?> v = p.poll();
                 Variable<?> instance = v.instanceHandle();
-                VariableDescription<BooleanVariable> multisetGuardName = guards.get(instance);
+                LocalVariableDescription<BooleanVariable> multisetGuardName = guards.get(instance);
                 if(multisetGuardName == null) {
-                    multisetGuardName = VariableNames.calcVarName("guard", instance.getUniqueVarDesc().name.getName(),
+                    multisetGuardName = VariableNames.localCalcVarName("guard", instance.getUniqueVarDesc().name.getName(),
                             VariableType.BooleanVariable, true);
                     guards.put(instance, multisetGuardName);
                     funcData.compilationCtx.addTreeToScope(funcData.sampleTaskScope,
@@ -1086,9 +1088,9 @@ public class ProbabilityFunction {
             while(!p.isEmpty()) {
                 Variable<?> v = p.poll();
                 Variable<?> instance = v.instanceHandle();
-                VariableDescription<BooleanVariable> guardName = guards.get(instance);
+                LocalVariableDescription<BooleanVariable> guardName = guards.get(instance);
                 if(guardName == null) {
-                    guardName = VariableNames.calcVarName("guard", instance.getUniqueVarDesc().name.getName(),
+                    guardName = VariableNames.localCalcVarName("guard", instance.getUniqueVarDesc().name.getName(),
                             VariableType.BooleanVariable, true);
                     guards.put(instance, guardName);
                     funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
@@ -1273,8 +1275,10 @@ public class ProbabilityFunction {
             IRTreeReturn<A> pTree = p.getForwardIR(compilationCtx);
             if(!compilationCtx.initializedInScope(p)) {
                 Variable<A> pInit = compilationCtx.addInitialized(p);
-                VariableDescription<A> pName = pInit.getUniqueVarDesc();
-                compilationCtx.addTreeToScope(parent.scope(), initializeVariable(pName, pTree, Tree.NoComment));
+                if(!pInit.isIntermediate() && !(pInit.getParent().getType() == DFType.CONSTRUCT_INPUT)) {
+                    LocalVariableDescription<A> pName = (LocalVariableDescription<A>) pInit.getUniqueVarDesc();
+                    compilationCtx.addTreeToScope(parent.scope(), initializeVariable(pName, pTree, Tree.NoComment));
+                }
             }
         }
     }

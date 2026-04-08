@@ -54,8 +54,8 @@ import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Subtract;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ReductionInput;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ReductionReturnTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Gaussian;
@@ -80,25 +80,25 @@ public class GaussianToGaussian
             extends InferenceGeneratorScalar.ScalarFunctionData<DoubleVariable, Gaussian> {
         // Names for the different variables that need to be constructed for this
         // function.
-        final VariableDescription<DoubleVariable> sumName;
-        final VariableDescription<DoubleVariable> denominatorSquareSumName;
-        final VariableDescription<DoubleVariable> sigmaValueName;
-        final VariableDescription<BooleanVariable> sigmaNotFoundName;
+        final LocalVariableDescription<DoubleVariable> sumName;
+        final LocalVariableDescription<DoubleVariable> denominatorSquareSumName;
+        final LocalVariableDescription<DoubleVariable> sigmaValueName;
+        final LocalVariableDescription<BooleanVariable> sigmaNotFoundName;
 
-        final VariableDescription<DoubleVariable> denominatorName;
-        final VariableDescription<DoubleVariable> numeratorName;
+        final LocalVariableDescription<DoubleVariable> denominatorName;
+        final LocalVariableDescription<DoubleVariable> numeratorName;
 
         protected GaussianToGaussianData(SampleTask<DoubleVariable, Gaussian> sample,
                 CompilationContext compilationCtx) {
             super(sample, false, compilationCtx);
-            sumName = VariableNames.calcVarName("sum", VariableType.DoubleVariable, true);
-            denominatorSquareSumName = VariableNames.calcVarName("denominatorSquareSum", VariableType.DoubleVariable,
+            sumName = VariableNames.localCalcVarName("sum", VariableType.DoubleVariable, true);
+            denominatorSquareSumName = VariableNames.localCalcVarName("denominatorSquareSum", VariableType.DoubleVariable,
                     true);
-            sigmaValueName = VariableNames.calcVarName("sigmaValue", VariableType.DoubleVariable, true);
-            sigmaNotFoundName = VariableNames.calcVarName("sigmaNotFound", VariableType.BooleanVariable, true);
+            sigmaValueName = VariableNames.localCalcVarName("sigmaValue", VariableType.DoubleVariable, true);
+            sigmaNotFoundName = VariableNames.localCalcVarName("sigmaNotFound", VariableType.BooleanVariable, true);
 
-            denominatorName = VariableNames.calcVarName("denominator", VariableType.DoubleVariable, false);
-            numeratorName = VariableNames.calcVarName("numerator", VariableType.DoubleVariable, false);
+            denominatorName = VariableNames.localCalcVarName("denominator", VariableType.DoubleVariable, false);
+            numeratorName = VariableNames.localCalcVarName("numerator", VariableType.DoubleVariable, false);
         }
     }
 
