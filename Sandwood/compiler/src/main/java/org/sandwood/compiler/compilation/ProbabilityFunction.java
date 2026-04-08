@@ -89,10 +89,11 @@ public class ProbabilityFunction {
         public DependantVariables(SampleTask<?, ?> sTask, CompilationContext compilationCtx) {
             sampleVariable = compilationCtx.traces.getSampleTrace(sTask).sampleVariable;
             IntermediateDesc intermediateDesc = compilationCtx.traces.getIntermediates(sTask);
+            Set<Variable<?>> observedVariables = getObservedVariables(intermediateDesc);
             for(Variable<?> v:intermediateDesc.getVariables()) {
                 if(v.instanceHandle() != sampleVariable.instanceHandle()) {
                     Set<TraceHandle> traces = intermediateDesc.getTraces(v);
-                    traces = filterProbabilityTraces(traces);
+                    traces = filterProbabilityTraces(traces, observedVariables);
                     if(!traces.isEmpty()) {
                         boolean perSampleValuesRequired = false;
                         for(TraceHandle t:traces) {
@@ -111,10 +112,26 @@ public class ProbabilityFunction {
             }
         }
 
-        private Set<TraceHandle> filterProbabilityTraces(Set<TraceHandle> traces) {
+        private Set<Variable<?>> getObservedVariables(IntermediateDesc intermediateDesc) {
+            Set<Variable<?>> observedVars = new HashSet<>();
+            for(Variable<?> v:intermediateDesc.getVariables()) {
+                if(v.isObserved()) {
+                    for(TraceHandle h:intermediateDesc.getTraces(v)) {
+                        for(DataflowTaskArgDesc d:h) {
+                            Variable<?> output = d.task.getOutput();
+                            if(output.isFixed())
+                                observedVars.add(v);
+                        }
+                    }
+                }
+            }
+            return observedVars;
+        }
+
+        private Set<TraceHandle> filterProbabilityTraces(Set<TraceHandle> traces, Set<Variable<?>> observedVariables) {
             Set<TraceHandle> filtered = new HashSet<>();
             for(TraceHandle t:traces)
-                if(filterTrace(t))
+                if(filterTrace(t, observedVariables))
                     filtered.add(t);
             return filtered;
         }
@@ -124,10 +141,17 @@ public class ProbabilityFunction {
          * sampling as this variable controls the control flow, not the value of the variable.
          * 
          * @param t
+         * @param observedVariables
          * @return Returns true if the trace should be kept and false if it should be discarded.
          */
-        private boolean filterTrace(TraceHandle t) {
+        private boolean filterTrace(TraceHandle t, Set<Variable<?>> observedVariables) {
+            boolean observedTrace = t.peek().task.getOutput().isObserved();
+
             for(DataflowTaskArgDesc d:t) {
+                Variable<?> output = d.task.getOutput();
+                if(!observedTrace && observedVariables.contains(output))
+                    return false;
+
                 switch(d.task.getType()) {
                     case GET:
                         if(d.argPos != 0)
@@ -145,7 +169,6 @@ public class ProbabilityFunction {
                         break;
                     default:
                         break;
-
                 }
             }
 
