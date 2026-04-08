@@ -29,6 +29,9 @@ import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope.ScopeType;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ParForTask;
+import org.sandwood.compiler.dataflowGraph.variables.GlobalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.ScratchVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -56,16 +59,16 @@ public class FunctionUtils {
                 } else {
                     List<IRTreeVoid> subtrees = new ArrayList<>();
 
-                    VariableDescription<IntVariable> threadCount = VariableNames.calcVarName("threadCount",
+                    LocalVariableDescription<IntVariable> threadCount = VariableNames.localCalcVarName("threadCount",
                             VariableType.IntVariable, true);
-                    VariableDescription<ArrayVariable<V>> arrayFieldName = VariableNames.altTypeName(fieldName,
-                            VariableType.arrayType(fieldName.type));
+                    VariableDescription<ArrayVariable<V>> arrayFieldName = fieldName
+                            .alternativeType(VariableType.arrayType(fieldName.type));
                     ArrayType<V> arrayType = VariableType.arrayType(localAllocation.getOutputType());
                     subtrees.add(initializeVariable(threadCount,
                             functionCallReturn(VariableType.IntVariable, "threadCount"), "Get the thread count."));
                     subtrees.add(store(arrayFieldName, newArray(load(threadCount), arrayType),
                             "Allocate an array to hold a copy per thread"));
-                    VariableDescription<IntVariable> index = VariableNames.calcVarName("index",
+                    LocalVariableDescription<IntVariable> index = VariableNames.localCalcVarName("index",
                             VariableType.IntVariable, true);
                     IRTreeVoid body = arrayPut(load(arrayFieldName), load(index), localAllocation, Tree.NoComment);
                     subtrees.add(forStmt(body, constant(0), load(threadCount), constant(1), index, true,
@@ -83,18 +86,18 @@ public class FunctionUtils {
         return isSerial;
     }
 
-    public static <V extends Variable<V>> boolean createGlobalField(VariableDescription<V> fieldName,
+    public static <V extends Variable<V>> boolean createScratchClassField(ScratchVariableDescription<V> fieldName,
             IRTreeVoid allocator, boolean isSerial, Scope innerScope, CompilationContext compilationCtx) {
         isSerial = checkIsSerial(isSerial, innerScope, compilationCtx);
         switch(compilationCtx.target) {
             case SingleThreadCPU:
             case MultiThreadCPU: {
                 if(isSerial) {
-                    compilationCtx.addConstructedClassField(fieldName, allocator);
+                    compilationCtx.addScratchClassField(fieldName, allocator);
                 } else {
-                    VariableDescription<ArrayVariable<V>> arrayVariable = VariableNames.altTypeName(fieldName,
-                            VariableType.arrayType(fieldName.type));
-                    compilationCtx.addConstructedClassField(arrayVariable, allocator);
+                    ScratchVariableDescription<ArrayVariable<V>> arrayVariable = fieldName
+                            .alternativeType(VariableType.arrayType(fieldName.type));
+                    compilationCtx.addScratchClassField(arrayVariable, allocator);
                 }
                 break;
             }
@@ -115,8 +118,8 @@ public class FunctionUtils {
                 if(isSerial) {
                     return load(varDesc);
                 } else {
-                    VariableDescription<ArrayVariable<V>> arrayName = VariableNames.altTypeName(varDesc,
-                            VariableType.arrayType(varDesc.type));
+                    VariableDescription<ArrayVariable<V>> arrayName = varDesc
+                            .alternativeType(VariableType.arrayType(varDesc.type));
                     IRTreeReturn<ArrayVariable<V>> array = load(arrayName);
                     Scope s = innerScope;
                     while(s.isSerial(compilationCtx))

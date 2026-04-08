@@ -42,6 +42,10 @@ import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
+import org.sandwood.compiler.dataflowGraph.variables.ClassVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.GlobalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.ScratchVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -127,56 +131,56 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
         }
     }
 
-    private final static VariableDescription<IntVariable> valuePosName = VariableNames.calcVarName("valuePos",
+    private final static VariableDescription<IntVariable> valuePosName = VariableNames.localCalcVarName("valuePos",
             VariableType.IntVariable, false);
 
-    protected final static VariableDescription<IntVariable> numStatesName = VariableNames.calcVarName("numStates",
+    protected final static LocalVariableDescription<IntVariable> numStatesName = VariableNames.localCalcVarName("numStates",
             VariableType.IntVariable, false);
 
     // Flags for the different variables that we will need to construct for this
     // function.
-    private final static VariableDescription<DoubleVariable> statesProbabilityValue = VariableNames
-            .calcVarName("stateProbabilityValue", VariableType.DoubleVariable, true);
+    private final static LocalVariableDescription<DoubleVariable> statesProbabilityValue = VariableNames
+            .localCalcVarName("stateProbabilityValue", VariableType.DoubleVariable, true);
 
     // Log space accumulator for all the consumer sample probabilities calculated
     // so far.
-    private final static VariableDescription<DoubleVariable> consumerSampleProbabilitiesAccumulator = VariableNames
-            .calcVarName("accumulatedConsumerProbabilities", VariableType.DoubleVariable, true);
+    private final static LocalVariableDescription<DoubleVariable> consumerSampleProbabilitiesAccumulator = VariableNames
+            .localCalcVarName("accumulatedConsumerProbabilities", VariableType.DoubleVariable, true);
 
     // Normal space accumulator for the probability of reaching each consumer.
-    private final static VariableDescription<DoubleVariable> consumerSampleDistributionProbabilityAccumulator = VariableNames
-            .calcVarName("consumerDistributionProbabilityAccumulator", VariableType.DoubleVariable, true);
+    private final static LocalVariableDescription<DoubleVariable> consumerSampleDistributionProbabilityAccumulator = VariableNames
+            .localCalcVarName("consumerDistributionProbabilityAccumulator", VariableType.DoubleVariable, true);
 
     // Accumulator for all the consumer sample distributions calculated so far.
-    private final static VariableDescription<ArrayVariable<DoubleVariable>> consumerSampleDistributionAccumulator = VariableNames
-            .calcVarName("accumulatedConsumerDistributions", VariableType.arrayType(VariableType.DoubleVariable), true);
+    private final static LocalVariableDescription<ArrayVariable<DoubleVariable>> consumerSampleDistributionAccumulator = VariableNames
+            .localCalcVarName("accumulatedConsumerDistributions", VariableType.arrayType(VariableType.DoubleVariable), true);
 
     // An accumulator for the combined distribution probabilities calculated so far.
-    private final static VariableDescription<DoubleVariable> distributionProbabilityAccumulator = VariableNames
-            .calcVarName("accumulatedDistributionProbabilities", VariableType.DoubleVariable, true);
+    private final static LocalVariableDescription<DoubleVariable> distributionProbabilityAccumulator = VariableNames
+            .localCalcVarName("accumulatedDistributionProbabilities", VariableType.DoubleVariable, true);
 
     // An accumulator for the overall probabilities for a source sample paring to be
     // summed in before they are multiplied into the overall result.
-    private final static VariableDescription<DoubleVariable> probabilitiesAccumulator = VariableNames
-            .calcVarName("accumulatedProbabilities", VariableType.DoubleVariable, true);
+    private final static LocalVariableDescription<DoubleVariable> probabilitiesAccumulator = VariableNames
+            .localCalcVarName("accumulatedProbabilities", VariableType.DoubleVariable, true);
 
     // The value of the probabilities not reached when exploring the distributions
     // for the random variable.
-    private final static VariableDescription<DoubleVariable> reachedDistributionsSource = VariableNames
-            .calcVarName("reachedDistributionSourceRV", VariableType.DoubleVariable, true);
-    private final static VariableDescription<DoubleVariable> reachedDistributions = VariableNames
-            .calcVarName("reachedDistributionProbability", VariableType.DoubleVariable, true);
+    private final static LocalVariableDescription<DoubleVariable> reachedDistributionsSource = VariableNames
+            .localCalcVarName("reachedDistributionSourceRV", VariableType.DoubleVariable, true);
+    private final static LocalVariableDescription<DoubleVariable> reachedDistributions = VariableNames
+            .localCalcVarName("reachedDistributionProbability", VariableType.DoubleVariable, true);
 
     private final Map<DistributableRandomVariable<?, ?>, VariableDescription<ArrayVariable<DoubleVariable>>> globalDistributionScratchSpace = new HashMap<>();
 
-    private VariableDescription<ArrayVariable<DoubleVariable>> getDistributionAccumulatorName(
+    private ScratchVariableDescription<ArrayVariable<DoubleVariable>> getDistributionAccumulatorName(
             DistributableRandomVariable<?, ?> rv) {
-        return VariableNames.calcVarName("distributionAccumulator", rv.getUniqueVarDesc().name.getName(),
+        return VariableNames.globalScratchVarName("distributionAccumulator", rv.getUniqueVarDesc().name.getName(),
                 VariableType.arrayType(VariableType.DoubleVariable), true);
     }
 
     // The current value being considered
-    private VariableDescription<A> currentValueName;
+    private LocalVariableDescription<A> currentValueName;
     private Variable<A> currentValue;
 
     private boolean canSetCurrent = false;
@@ -207,7 +211,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
             constructFunctionVariablesProb(funcData);
         });
 
-        currentValueName = VariableNames.calcVarName("currentValue", funcData.sampleDesc.output.getType(), true);
+        currentValueName = VariableNames.localCalcVarName("currentValue", funcData.sampleDesc.output.getType(), true);
         currentValue = Variable.namedVariable(currentValueName);
         funcData.compilationCtx.addSubstitute(funcData.sampleDesc.output, currentValue);
     }
@@ -234,7 +238,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
                         "A local array to hold the accumulated distributions of "
                                 + "the sample tasks for each configuration of distributions."));
 
-        VariableDescription<IntVariable> indexName = VariableNames.calcVarName("i", VariableType.IntVariable, true);
+        LocalVariableDescription<IntVariable> indexName = VariableNames.localCalcVarName("i", VariableType.IntVariable, true);
         IRTreeVoid body = arrayPut(load(consumerSampleDistributionAccumulator), load(indexName), constant(0.0),
                 Tree.NoComment);
         IRTreeVoid loop = IRTree.forStmt(body, constant(0), disRV.getNumStates().getForwardIR(funcData.compilationCtx),
@@ -251,22 +255,22 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
         // Get a local copy of the sample distribution
         IRTreeReturn<ArrayVariable<DoubleVariable>> sampleDistribution = s.getProbabilitiesArray()
                 .getForwardIR(info.compilationCtx);
-        VariableDescription<ArrayVariable<DoubleVariable>> sampleDescriptionName = VariableNames
-                .calcVarName("sampleDistribution", sampleDistribution.getOutputType(), true);
+        LocalVariableDescription<ArrayVariable<DoubleVariable>> sampleDescriptionName = VariableNames
+                .localCalcVarName("sampleDistribution", sampleDistribution.getOutputType(), true);
         info.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(sampleDescriptionName,
                 sampleDistribution, "A local copy of the samples' distribution."));
 
-        VariableDescription<DoubleVariable> overlapName = VariableNames.calcVarName("overlap",
+        LocalVariableDescription<DoubleVariable> overlapName = VariableNames.localCalcVarName("overlap",
                 VariableType.DoubleVariable, true);
         info.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(overlapName, constant(0.0), "The overlap of the distributions so far."));
 
         // Start constructing the body of the for loop
         IRTreeVoid[] bodyStmts = new IRTreeVoid[3];
-        VariableDescription<IntVariable> indexName = VariableNames.calcVarName("i", VariableType.IntVariable, true);
+        LocalVariableDescription<IntVariable> indexName = VariableNames.localCalcVarName("i", VariableType.IntVariable, true);
 
         // Normalise the calculated distribution value.
-        VariableDescription<DoubleVariable> normalisedName = VariableNames.calcVarName("normalisedDistValue",
+        LocalVariableDescription<DoubleVariable> normalisedName = VariableNames.localCalcVarName("normalisedDistValue",
                 VariableType.DoubleVariable, true);
         bodyStmts[0] = initializeVariable(normalisedName,
                 divideDD(arrayGet(load(consumerSampleDistributionAccumulator), load(indexName)),
@@ -274,7 +278,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
                 "Normalise the values in the calculated distribution");
 
         // Recover the sample distribution value for this position.
-        VariableDescription<DoubleVariable> sampleValueName = VariableNames.calcVarName("sampleDistValue",
+        LocalVariableDescription<DoubleVariable> sampleValueName = VariableNames.localCalcVarName("sampleDistValue",
                 VariableType.DoubleVariable, true);
         bodyStmts[1] = initializeVariable(sampleValueName, arrayGet(load(sampleDescriptionName), load(indexName)),
                 "Corresponding value from the sample distribution");
@@ -365,8 +369,8 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
     @Override
     protected void getDistributionSampleIR(DistributionSampleTask<?, ?> s,
             IRTreeReturn<DoubleVariable> sourceProbability, FuncData funcData, TreeBuilderInfo info) {
-        VariableDescription<DoubleVariable> distributionProbability = VariableNames
-                .calcVarName("distributionProbability", VariableType.DoubleVariable, true);
+        LocalVariableDescription<DoubleVariable> distributionProbability = VariableNames
+                .localCalcVarName("distributionProbability", VariableType.DoubleVariable, true);
         info.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(distributionProbability, multiplyDD(sourceProbability, info.probability),
                         "The probability of reaching the consumer with this set of consumer arguments"));
@@ -447,7 +451,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
             return pTree;
 
         Variable<C> pInit = compilationCtx.addInitialized(p);
-        VariableDescription<C> pName = pInit.getUniqueVarDesc();
+        LocalVariableDescription<C> pName = (LocalVariableDescription<C>)pInit.getUniqueVarDesc();
         compilationCtx.addTreeToScope(p.scope(),
                 initializeVariable(pName, pTree, "Constructing a random variable input for use later."));
         return IRTree.load(pName);
@@ -486,10 +490,10 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
                     // TODO shrink the size of this by constructing a set of sizes, not an array for
                     // each random variable.
                     DistributableRandomVariable<?, ?> disRV = (DistributableRandomVariable<?, ?>) rv;
-                    VariableDescription<ArrayVariable<DoubleVariable>> disAccumulatorName = getDistributionAccumulatorName(
+                    ScratchVariableDescription<ArrayVariable<DoubleVariable>> disAccumulatorName = getDistributionAccumulatorName(
                             disRV);
                     globalDistributionScratchSpace.put(disRV, disAccumulatorName);
-                    allocateGlobalArray(funcData, disRV, disAccumulatorName);
+                    allocateScratchArray(funcData, disRV, disAccumulatorName);
                     break;
                 }
             }
@@ -500,8 +504,8 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
 
     protected abstract void allocateGlobalStateProb(FuncData funcData);
 
-    protected <C extends Variable<C>> void allocateGlobalArray(FuncData funcData, DistributableRandomVariable<?, ?> rv,
-            VariableDescription<ArrayVariable<C>> variableDescription) {
+    protected <C extends Variable<C>> void allocateScratchArray(FuncData funcData, DistributableRandomVariable<?, ?> rv,
+            ScratchVariableDescription<ArrayVariable<C>> variableDescription) {
         // Allocate space for storing the results.
         funcData.compilationCtx.pushScopeState();
         /*
@@ -526,7 +530,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
         funcData.compilationCtx.popIsSerial();
         funcData.compilationCtx.popScopeState();
 
-        createGlobalField(variableDescription, allocator, funcData);
+        createScratchClassField(variableDescription, allocator, funcData);
     }
 
     /**

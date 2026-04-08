@@ -32,6 +32,7 @@ import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
@@ -64,17 +65,17 @@ public class MetropolisHastingsMultinomialFunctions extends MetropolisHastingsAr
         }
     }
 
-    private static final VariableDescription<IntVariable> nonZeroCount = VariableNames.calcVarName("nonZeroCount",
+    private static final LocalVariableDescription<IntVariable> nonZeroCount = VariableNames.localCalcVarName("nonZeroCount",
             VariableType.IntVariable, true);
-    private static final VariableDescription<IntVariable> source = VariableNames.calcVarName("sourceIndex",
+    private static final LocalVariableDescription<IntVariable> source = VariableNames.localCalcVarName("sourceIndex",
             VariableType.IntVariable, true);
-    private static final VariableDescription<IntVariable> destination = VariableNames.calcVarName("destinationIndex",
+    private static final LocalVariableDescription<IntVariable> destination = VariableNames.localCalcVarName("destinationIndex",
             VariableType.IntVariable, true);
-    private static final VariableDescription<IntVariable> change = VariableNames.calcVarName("changeValue",
+    private static final LocalVariableDescription<IntVariable> change = VariableNames.localCalcVarName("changeValue",
             VariableType.IntVariable, true);
-    private static final VariableDescription<IntVariable> loopIndex = VariableNames.calcVarName("loopIndex",
+    private static final LocalVariableDescription<IntVariable> loopIndex = VariableNames.localCalcVarName("loopIndex",
             VariableType.IntVariable, true);
-    private static final VariableDescription<IntVariable> arrayLength = VariableNames.calcVarName("arrayLength",
+    private static final LocalVariableDescription<IntVariable> arrayLength = VariableNames.localCalcVarName("arrayLength",
             VariableType.IntVariable, true);
 
     @Override

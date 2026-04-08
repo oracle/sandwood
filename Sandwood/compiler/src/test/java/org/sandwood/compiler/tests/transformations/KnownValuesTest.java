@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
@@ -48,19 +48,19 @@ class KnownValuesTest {
     private final static String[] before;
     private final static String[] after;
 
-    private final static VariableDescription<IntVariable> indexName = new VariableDescription<>("index",
+    private final static LocalVariableDescription<IntVariable> indexName = new LocalVariableDescription<>("index",
             VariableType.IntVariable, true);
     private final static TransTreeReturn<IntVariable> index = load(indexName);
     private final static TransTreeReturn<IntVariable> start = load(
-            new VariableDescription<>("start", VariableType.IntVariable, true));
+            new LocalVariableDescription<>("start", VariableType.IntVariable, true));
     private final static TransTreeReturn<IntVariable> end = load(
-            new VariableDescription<>("end", VariableType.IntVariable, true));
+            new LocalVariableDescription<>("end", VariableType.IntVariable, true));
     private final static TransTreeReturn<ArrayVariable<IntVariable>> a = load(
-            new VariableDescription<>("a", VariableType.arrayType(VariableType.IntVariable), true));
+            new LocalVariableDescription<>("a", VariableType.arrayType(VariableType.IntVariable), true));
     private final static TransTreeReturn<ArrayVariable<IntVariable>> b = load(
-            new VariableDescription<>("b", VariableType.arrayType(VariableType.IntVariable), true));
+            new LocalVariableDescription<>("b", VariableType.arrayType(VariableType.IntVariable), true));
     private final static TransTreeReturn<ArrayVariable<IntVariable>> c = load(
-            new VariableDescription<>("c", VariableType.arrayType(VariableType.IntVariable), true));
+            new LocalVariableDescription<>("c", VariableType.arrayType(VariableType.IntVariable), true));
 
     private static final Set<Tag> tags = Collections.emptySet();
 

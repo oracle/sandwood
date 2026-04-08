@@ -22,6 +22,7 @@ import java.util.List;
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
@@ -95,9 +96,9 @@ public class MultinomialTask extends RandomVariableConstructorTask<ArrayVariable
     public IRTreeReturn<?> getInverseArg(IRTreeReturn<ArrayVariable<IntVariable>> current, int argPos,
             CompilationContext compilationCtx) {
         if(argPos == 1) {
-            VariableDescription<IntVariable> accName = VariableNames.calcVarName("multinomialSum" + id(),
+            LocalVariableDescription<IntVariable> accName = VariableNames.localCalcVarName("multinomialSum" + id(),
                     VariableType.IntVariable, true);
-            VariableDescription<IntVariable> indexName = VariableNames.calcVarName("multinomialIndex" + id(),
+            LocalVariableDescription<IntVariable> indexName = VariableNames.localCalcVarName("multinomialIndex" + id(),
                     VariableType.IntVariable, true);
             compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(accName, constant(0), Tree.NoComment));
             IRTreeVoid sum = store(accName, addII(arrayGet(current, load(indexName)), load(accName)), Tree.NoComment);

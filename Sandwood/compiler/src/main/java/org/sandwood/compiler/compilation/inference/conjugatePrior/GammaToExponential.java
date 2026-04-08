@@ -28,6 +28,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
@@ -56,9 +57,9 @@ public class GammaToExponential
 
     // Names for the different variables that will be needed to construct for this
     // function.
-    private final VariableDescription<DoubleVariable> sumName = VariableNames.calcVarName("sum",
+    private final LocalVariableDescription<DoubleVariable> sumName = VariableNames.localCalcVarName("sum",
             VariableType.DoubleVariable, true);
-    private final VariableDescription<IntVariable> countName = VariableNames.calcVarName("count",
+    private final LocalVariableDescription<IntVariable> countName = VariableNames.localCalcVarName("count",
             VariableType.IntVariable, true);
 
     private GammaToExponential() {}

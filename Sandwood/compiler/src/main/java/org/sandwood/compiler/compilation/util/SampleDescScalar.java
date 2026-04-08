@@ -12,6 +12,7 @@ import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
@@ -45,7 +46,8 @@ public class SampleDescScalar<A extends ScalarVariable<A>, B extends RandomVaria
                             "Write out the new value of the sample."));
         // Otherwise create a variable to hold the value.
         else {
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(output.getUniqueVarDesc(),
+            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(
+                    (LocalVariableDescription<A>)output.getUniqueVarDesc(),
                     sampleValue,
                     "Write out the value of the sample to a temporary variable prior to updating the intermediate variables."));
             Variable<A> v = (Variable<A>) sampleVarDesc.sampleVariable;

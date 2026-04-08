@@ -23,15 +23,17 @@ import java.util.List;
 import java.util.Set;
 
 import org.sandwood.compiler.compilation.CompilationContext;
-import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.compilation.CompilationContext.CompilationPhase;
+import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.compilation.inference.InferenceGenerator;
 import org.sandwood.compiler.compilation.inference.InferenceGeneratorArray;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.GlobalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.ScratchVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.RandomVariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
@@ -58,21 +60,21 @@ public class DirichletToCategoricalMultinomial extends
             extends InferenceGeneratorArray.ArrayFunctionData<DoubleVariable, Dirichlet> {
         // Names for the different variables that will be needed to construct for this
         // function.
-        final VariableDescription<ArrayVariable<DoubleVariable>> countNameGlobal;
+        final ScratchVariableDescription<ArrayVariable<DoubleVariable>> countNameGlobal;
 
         protected DirichletToCategoricalData(SampleTask<ArrayVariable<DoubleVariable>, Dirichlet> sample,
                 CompilationContext compilationCtx) {
             super(sample, false, compilationCtx);
-            countNameGlobal = VariableNames.calcVarName(sampleDesc.output, "countGlobal",
+            countNameGlobal = VariableNames.globalScratchVarName(sampleDesc.output, "countGlobal",
                     VariableType.arrayType(VariableType.DoubleVariable));
         }
     }
 
-    private static final VariableDescription<ArrayVariable<DoubleVariable>> countNameLocal = VariableNames
-            .calcVarName("countLocal", VariableType.arrayType(VariableType.DoubleVariable), true);
-    private static final VariableDescription<IntVariable> arrayLength = VariableNames.calcVarName("arrayLength",
+    private static final LocalVariableDescription<ArrayVariable<DoubleVariable>> countNameLocal = VariableNames
+            .localCalcVarName("countLocal", VariableType.arrayType(VariableType.DoubleVariable), true);
+    private static final LocalVariableDescription<IntVariable> arrayLength = VariableNames.localCalcVarName("arrayLength",
             VariableType.IntVariable, true);
-    private static final VariableDescription<IntVariable> loopIndex = VariableNames.calcVarName("loopIndex",
+    private static final LocalVariableDescription<IntVariable> loopIndex = VariableNames.localCalcVarName("loopIndex",
             VariableType.IntVariable, true);
 
     private DirichletToCategoricalMultinomial() {}
@@ -152,7 +154,7 @@ public class DirichletToCategoricalMultinomial extends
         } else if(type == VariableType.Multinomial) {
             // Save the reference to the sample value for efficient access.
             IRTreeReturn<ArrayVariable<IntVariable>> sampleValue = (IRTreeReturn<ArrayVariable<IntVariable>>) current;
-            VariableDescription<ArrayVariable<IntVariable>> sampleValueName = VariableNames.calcVarName("sampleValue",
+            LocalVariableDescription<ArrayVariable<IntVariable>> sampleValueName = VariableNames.localCalcVarName("sampleValue",
                     sampleValue.getOutputType(), true);
             info.compilationCtx.addTreeToScope(GlobalScope.scope,
                     initializeVariable(sampleValueName, sampleValue, Tree.NoComment));
@@ -243,15 +245,15 @@ public class DirichletToCategoricalMultinomial extends
         funcData.compilationCtx.popIsSerial();
         funcData.compilationCtx.popScopeState();
 
-        createGlobalField(funcData.countNameGlobal, allocator, funcData);
+        createScratchClassField(funcData.countNameGlobal, allocator, funcData);
     }
 
     @Override
     protected void getDistributionSampleIR(DistributionSampleTask<?, ?> s,
             IRTreeReturn<DoubleVariable> sourceProbability, DirichletToCategoricalData funcData, TreeBuilderInfo info) {
 
-        VariableDescription<DoubleVariable> distributionProbability = VariableNames
-                .calcVarName("distributionProbability", VariableType.DoubleVariable, true);
+        LocalVariableDescription<DoubleVariable> distributionProbability = VariableNames
+                .localCalcVarName("distributionProbability", VariableType.DoubleVariable, true);
         info.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(distributionProbability, multiplyDD(sourceProbability, info.probability),
                         "The probability of reaching the consumer with this set of consumer arguments"));

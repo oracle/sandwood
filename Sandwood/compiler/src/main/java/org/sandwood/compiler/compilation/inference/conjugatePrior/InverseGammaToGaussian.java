@@ -35,7 +35,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Divide;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.constant.ConstantDoubleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.constant.ConstantIntTask;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Gaussian;
@@ -59,17 +59,17 @@ public class InverseGammaToGaussian extends
             extends InferenceGeneratorScalar.ScalarFunctionData<DoubleVariable, InverseGamma> {
         // Names for the different variables that we will need to construct for this
         // function.
-        final VariableDescription<DoubleVariable> sumName;
-        final VariableDescription<IntVariable> countName;
-        final VariableDescription<DoubleVariable> countNameDis;
+        final LocalVariableDescription<DoubleVariable> sumName;
+        final LocalVariableDescription<IntVariable> countName;
+        final LocalVariableDescription<DoubleVariable> countNameDis;
         final boolean distributedConsumers;
 
         protected InverseGammaToGaussianData(SampleTask<DoubleVariable, InverseGamma> sample,
                 CompilationContext compilationCtx) {
             super(sample, false, compilationCtx);
-            sumName = VariableNames.calcVarName("sum", VariableType.DoubleVariable, true);
-            countName = VariableNames.calcVarName("count", VariableType.IntVariable, true);
-            countNameDis = VariableNames.calcVarName("count", VariableType.DoubleVariable, true);
+            sumName = VariableNames.localCalcVarName("sum", VariableType.DoubleVariable, true);
+            countName = VariableNames.localCalcVarName("count", VariableType.IntVariable, true);
+            countNameDis = VariableNames.localCalcVarName("count", VariableType.DoubleVariable, true);
 
             boolean distributed = false;
             for(RandomVariable<?, ?> consumingRV:consumingRVs)
@@ -137,7 +137,7 @@ public class InverseGammaToGaussian extends
     @Override
     protected void getConsumerRVInputIR(TreeBuilderInfo info, RandomVariable<?, ?> consumer,
             InverseGammaToGaussianData funcData) {
-        VariableDescription<DoubleVariable> muName = VariableNames.calcVarName(consumer, "mu",
+        LocalVariableDescription<DoubleVariable> muName = VariableNames.localCalcVarName(consumer, "mu",
                 VariableType.DoubleVariable);
 
         info.compilationCtx.addTreeToScope(consumer.getParent().scope(),
@@ -147,12 +147,12 @@ public class InverseGammaToGaussian extends
 
     @SuppressWarnings("unchecked")
     @Override
-    protected void getObservationToSampleIR(SampleTask<?, ?> task, IRTreeReturn<?> current,
+    protected void getObservationToSampleIR(SampleTask<?, ?> consumer, IRTreeReturn<?> current,
             InverseGammaToGaussianData funcData, TreeBuilderInfo info) {
 
-        VariableDescription<DoubleVariable> muName = VariableNames.calcVarName(task.randomVariable, "mu",
+        LocalVariableDescription<DoubleVariable> muName = VariableNames.localCalcVarName(consumer.randomVariable, "mu",
                 VariableType.DoubleVariable);
-        VariableDescription<DoubleVariable> diffName = VariableNames.calcVarName(task.randomVariable, "diff",
+        LocalVariableDescription<DoubleVariable> diffName = VariableNames.localCalcVarName(consumer.randomVariable, "diff",
                 VariableType.DoubleVariable);
 
         List<IRTreeVoid> trees = new ArrayList<>();
@@ -171,8 +171,8 @@ public class InverseGammaToGaussian extends
                     "Increment the number of samples in the calculation."));
         }
 
-        info.compilationCtx.addTreeToScope(task.scope(), sequential(trees, "Consume sample task " + task.id()
-                + " from random variable " + task.randomVariable.getVarDesc() + "."));
+        info.compilationCtx.addTreeToScope(consumer.scope(), sequential(trees, "Consume sample task " + consumer.id()
+                + " from random variable " + consumer.randomVariable.getVarDesc() + "."));
     }
 
     @Override

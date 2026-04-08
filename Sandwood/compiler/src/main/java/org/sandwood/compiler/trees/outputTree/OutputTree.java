@@ -22,6 +22,7 @@ import org.sandwood.compiler.dataflowGraph.variables.VariableType.ArrayType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.RandomVariableType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
+import org.sandwood.compiler.dataflowGraph.variables.rng.RandomNumberGenerator;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
@@ -367,9 +368,10 @@ public abstract class OutputTree extends Tree<OutputTree> {
         return new OutputParForLambda(parDepth, startDesc, endDesc, threadID, outputTreeInternal);
     }
 
-    public static OutputTree ForkJoinFor(int parDepth, OutputTreeReturn<IntVariable> start,
-            OutputTreeReturn<IntVariable> end, OutputTreeReturn<IntVariable> step, OutputTree body, String comment) {
-        return new OutputParFor(parDepth, start, end, step, body, comment);
+    public static OutputTree ForkJoinFor(OutputTreeReturn<RandomNumberGenerator> rng,
+            OutputTreeReturn<IntVariable> start, OutputTreeReturn<IntVariable> end, OutputTreeReturn<IntVariable> step,
+            OutputTree body, String comment) {
+        return new OutputParFor(rng, start, end, step, body, comment);
     }
 
     public static <A extends Variable<A>> OutputConditionalAssignment<A> conditionalAssignment(

@@ -15,6 +15,7 @@ import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.scopesState.ScopeTracking;
 import org.sandwood.compiler.dataflowGraph.Id;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ReductionInput;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -73,13 +74,13 @@ public abstract class ReductionScopeBase<A extends Variable<A>> extends Id imple
             CompilationContext compilationCtx) {
         List<IRTreeVoid> reduceBody = new ArrayList<>();
 
-        VariableDescription<A> returnName = getReturnName();
+        LocalVariableDescription<A> returnName = getReturnName();
 
         reduceBody.add(IRTree.initializeVariable(returnName, emptyValue.getForwardIR(compilationCtx),
                 "A generated name to prevent name collisions if the reduction is implemented more than once in "
                         + "inference and probability code. Initialize the variable to the unit value"));
 
-        VariableDescription<IntVariable> indexName = indexName();
+        LocalVariableDescription<IntVariable> indexName = indexName();
         List<IRTreeVoid> forBody = new ArrayList<>();
 
         forBody.add(IRTree.initializeVariable(i, IRTree.load(returnName),
@@ -97,16 +98,16 @@ public abstract class ReductionScopeBase<A extends Variable<A>> extends Id imple
     }
 
     protected void constructForStmt(List<IRTreeVoid> reduceBody, List<IRTreeVoid> forBody,
-            VariableDescription<IntVariable> indexName, CompilationContext compilationCtx) {
+            LocalVariableDescription<IntVariable> indexName, CompilationContext compilationCtx) {
         reduceBody.add(IRTree.forStmt(IRTree.sequential(forBody, Tree.NoComment), start.getForwardIR(compilationCtx),
                 end.getForwardIR(compilationCtx), IRTree.constant(1), indexName, true,
                 "For each index in the array to be reduced"));
     }
 
-    protected abstract VariableDescription<A> getReturnName();
+    protected abstract LocalVariableDescription<A> getReturnName();
 
-    private VariableDescription<IntVariable> indexName() {
-        return VariableNames.calcVarName("reduction" + id() + "Index", VariableType.IntVariable, false);
+    private LocalVariableDescription<IntVariable> indexName() {
+        return VariableNames.localCalcVarName("reduction" + id() + "Index", VariableType.IntVariable, false);
     }
 
     // Use the first value in the array as the empty value so that all the values in the array can be processed.
@@ -140,7 +141,7 @@ public abstract class ReductionScopeBase<A extends Variable<A>> extends Id imple
         returnVar.calculateIntermediate(true);
         IRTreeReturn<A> reduced = returnVar.getForwardIR(compilationCtx);
         returnVar.calculateIntermediate(false);
-        VariableDescription<A> reducedName = VariableNames.calcVarName("reduced" + reductionScope.id(),
+        LocalVariableDescription<A> reducedName = VariableNames.localCalcVarName("reduced" + reductionScope.id(),
                 reduced.getOutputType(), true);
         IRTreeVoid reducedStore = IRTree.initializeVariable(reducedName, reduced, Tree.NoComment);
         compilationCtx.addTreeToScope(ifScope, reducedStore);

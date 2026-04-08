@@ -28,6 +28,7 @@ import org.sandwood.compiler.compilation.util.TreeUtils;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
@@ -56,22 +57,22 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
         extends InferenceGeneratorScalarProb<A, B, MetropolisHastingsScalarFunctions.MetropolisHastingsData<A, B>> {
     protected static class MetropolisHastingsData<A extends ScalarVariable<A>, B extends RandomVariable<A, B>>
             extends InferenceGeneratorScalarProb.ScalarProbFunctionData<A, B> {
-        final VariableDescription<A> originalValueName;
-        final VariableDescription<A> proposedValueName;
+        final LocalVariableDescription<A> originalValueName;
+        final LocalVariableDescription<A> proposedValueName;
 
         public ScopeConstructor sampleTargetScope;
 
         protected MetropolisHastingsData(SampleTask<A, B> sample, CompilationContext compilationCtx) {
             super(sample, IntVariable.intVariable(2), compilationCtx);
-            originalValueName = VariableNames.calcVarName("originalValue", sample.getOutputType(), true);
-            proposedValueName = VariableNames.calcVarName("proposedValue", sample.getOutputType(), true);
+            originalValueName = VariableNames.localCalcVarName("originalValue", sample.getOutputType(), true);
+            proposedValueName = VariableNames.localCalcVarName("proposedValue", sample.getOutputType(), true);
         }
     }
 
-    private static final VariableDescription<DoubleVariable> originalProbabilityName = VariableNames
-            .calcVarName("originalProbability", VariableType.DoubleVariable, true);
-    private static final VariableDescription<DoubleVariable> proposedProbabilityName = VariableNames
-            .calcVarName("proposedProbability", VariableType.DoubleVariable, true);
+    private static final LocalVariableDescription<DoubleVariable> originalProbabilityName = VariableNames
+            .localCalcVarName("originalProbability", VariableType.DoubleVariable, true);
+    private static final LocalVariableDescription<DoubleVariable> proposedProbabilityName = VariableNames
+            .localCalcVarName("proposedProbability", VariableType.DoubleVariable, true);
 
     @Override
     protected String getInferenceType() {
@@ -192,7 +193,7 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
 
     @Override
     protected void addSampleValueTree(MetropolisHastingsData<A, B> funcData) {
-        VariableDescription<DoubleVariable> ratioName = VariableNames.calcVarName("ratio", VariableType.DoubleVariable,
+        LocalVariableDescription<DoubleVariable> ratioName = VariableNames.localCalcVarName("ratio", VariableType.DoubleVariable,
                 true);
         IRTreeReturn<DoubleVariable> ratio = subtractDD(load(proposedProbabilityName), load(originalProbabilityName));
         funcData.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(ratioName, ratio,

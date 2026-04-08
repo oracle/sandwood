@@ -11,6 +11,7 @@ package org.sandwood.compiler.dataflowGraph.scopes;
 import java.util.List;
 
 import org.sandwood.compiler.compilation.CompilationContext;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
@@ -36,13 +37,13 @@ public class ReductionScopeCopied<A extends Variable<A>> extends ReductionScopeB
 
 
     @Override
-    protected VariableDescription<A> getReturnName() {
+    protected LocalVariableDescription<A> getReturnName() {
         return original.getReturnName();
     }
 
     @Override
     protected void constructForStmt(List<IRTreeVoid> reduceBody, List<IRTreeVoid> forBody,
-            VariableDescription<IntVariable> indexName, CompilationContext compilationCtx) {
+            LocalVariableDescription<IntVariable> indexName, CompilationContext compilationCtx) {
         if(maskedValue==null) {
             super.constructForStmt(reduceBody, forBody, indexName, compilationCtx);
         } else {

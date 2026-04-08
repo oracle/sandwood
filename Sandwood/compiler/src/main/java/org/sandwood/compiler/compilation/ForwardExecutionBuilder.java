@@ -42,6 +42,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleT
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.IfElseAssignmentTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -251,7 +252,7 @@ public class ForwardExecutionBuilder {
         if(guard != null)
             sc = sc.addCondition(guard).ifScopeConstructor();
 
-        VariableDescription<BooleanVariable> guardName = VariableNames.observedGuard(v);
+        LocalVariableDescription<BooleanVariable> guardName = VariableNames.observedGuard(v);
         sc.addTree((TreeBuilderInfo info) -> {
             info.compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(guardName,
                     IRTree.constant(false), "Track if it is possible to reach an observed variable"));
@@ -302,7 +303,7 @@ public class ForwardExecutionBuilder {
         for(ArrayVariable<DoubleVariable> probabilities:probabilitiesArrays) {
             VariableDescription<ArrayVariable<DoubleVariable>> probName = probabilities.getUniqueVarDesc();
             // Get local instance of the variable.
-            VariableDescription<ArrayVariable<DoubleVariable>> localName = VariableNames.calcVarName(probName,
+            LocalVariableDescription<ArrayVariable<DoubleVariable>> localName = VariableNames.localCalcVarName(probName,
                     probName.type);
             List<IRTreeReturn<IntVariable>> indexes = TreeUtils.toArgTrees(TreeUtils.getScopeArgs(probabilities),
                     compilationCtx);
@@ -383,7 +384,7 @@ public class ForwardExecutionBuilder {
 
                 // Init sum value
                 // Sum all the values in the array.
-                VariableDescription<DoubleVariable> sum = VariableNames.calcVarName(rv.getVarDesc(), "sum",
+                LocalVariableDescription<DoubleVariable> sum = VariableNames.localCalcVarName(rv.getVarDesc(), "sum",
                         VariableType.DoubleVariable);
                 compilationCtx.addTreeToScope(rvScope,
                         initializeVariable(sum, constant(0.0), "Sum the values in the array"));
@@ -453,7 +454,7 @@ public class ForwardExecutionBuilder {
                     });
             ScopeStack.popScope(rvScope);
 
-            VariableDescription<DoubleVariable> valueName = VariableNames.calcVarName("value",
+            LocalVariableDescription<DoubleVariable> valueName = VariableNames.localCalcVarName("value",
                     VariableType.DoubleVariable, true);
             IRTreeReturn<DoubleVariable> value = getProbability(rv, newScope, compilationCtx);
             IRTreeVoid valueInit = IRTree.initializeVariable(valueName, value, "Probability for this value");

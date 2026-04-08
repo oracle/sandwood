@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
@@ -21,14 +22,14 @@ import org.sandwood.compiler.names.VariableNames;
 
 public class ReductionScope<A extends Variable<A>> extends ReductionScopeBase<A> {
     private int varId = 0;
-    private VariableDescription<A> returnName;
+    private LocalVariableDescription<A> returnName;
 
     public ReductionScope(IntVariable start, IntVariable end, ArrayVariable<A> array, Variable<A> emptyValue) {
         super(start, end, array, emptyValue);
     }
     
     @Override
-    protected VariableDescription<A> getReturnName() {
+    protected LocalVariableDescription<A> getReturnName() {
             returnName = VariableNames.reduceName(returnVar, varId++);
             return returnName;
     }

@@ -35,7 +35,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.Divide;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.constant.ConstantDoubleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.constant.ConstantIntTask;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Gamma;
@@ -59,13 +59,13 @@ public class GammaToGaussian
             extends InferenceGeneratorScalar.ScalarFunctionData<DoubleVariable, Gamma> {
         // Names for the different variables that will be needed to construct for this
         // function.
-        final VariableDescription<DoubleVariable> sumName;
-        final VariableDescription<IntVariable> countName;
+        final LocalVariableDescription<DoubleVariable> sumName;
+        final LocalVariableDescription<IntVariable> countName;
 
         protected GammaToGaussianData(SampleTask<DoubleVariable, Gamma> sample, CompilationContext compilationCtx) {
             super(sample, false, compilationCtx);
-            sumName = VariableNames.calcVarName("sum", VariableType.DoubleVariable, true);
-            countName = VariableNames.calcVarName("count", VariableType.IntVariable, true);
+            sumName = VariableNames.localCalcVarName("sum", VariableType.DoubleVariable, true);
+            countName = VariableNames.localCalcVarName("count", VariableType.IntVariable, true);
         }
     }
 
@@ -122,7 +122,7 @@ public class GammaToGaussian
     @Override
     protected void getConsumerRVInputIR(TreeBuilderInfo info, RandomVariable<?, ?> consumer,
             GammaToGaussianData funcData) {
-        VariableDescription<DoubleVariable> muName = VariableNames.calcVarName(consumer, "mu",
+        LocalVariableDescription<DoubleVariable> muName = VariableNames.localCalcVarName(consumer, "mu",
                 VariableType.DoubleVariable);
         info.compilationCtx.addTreeToScope(consumer.getParent().scope(),
                 initializeVariable(muName, ((Gaussian) consumer).mean.getForwardIR(info.compilationCtx),
@@ -133,9 +133,9 @@ public class GammaToGaussian
     @Override
     protected void getObservationToSampleIR(SampleTask<?, ?> task, IRTreeReturn<?> current,
             GammaToGaussianData funcData, TreeBuilderInfo info) {
-        VariableDescription<DoubleVariable> muName = VariableNames.calcVarName(task.randomVariable, "mu",
+        LocalVariableDescription<DoubleVariable> muName = VariableNames.localCalcVarName(task.randomVariable, "mu",
                 VariableType.DoubleVariable);
-        VariableDescription<DoubleVariable> diffName = VariableNames.calcVarName(task.randomVariable, "diff",
+        LocalVariableDescription<DoubleVariable> diffName = VariableNames.localCalcVarName(task.randomVariable, "diff",
                 VariableType.DoubleVariable);
 
         List<IRTreeVoid> trees = new ArrayList<>();
