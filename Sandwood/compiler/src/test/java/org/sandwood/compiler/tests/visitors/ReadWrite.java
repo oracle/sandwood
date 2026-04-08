@@ -30,6 +30,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
@@ -44,32 +45,32 @@ import org.sandwood.compiler.trees.transformationTree.visitors.variableTracking.
 import org.sandwood.compiler.trees.transformationTree.visitors.variableTracking.VariableTracking;
 
 public class ReadWrite {
-    private static final VariableDescription<IntVariable> a = new VariableDescription<>("a", VariableType.IntVariable,
+    private static final LocalVariableDescription<IntVariable> a = new LocalVariableDescription<>("a", VariableType.IntVariable,
             true);
-    private static final VariableDescription<IntVariable> b = new VariableDescription<>("b", VariableType.IntVariable,
+    private static final LocalVariableDescription<IntVariable> b = new LocalVariableDescription<>("b", VariableType.IntVariable,
             true);
-    private static final VariableDescription<IntVariable> c = new VariableDescription<>("c", VariableType.IntVariable,
+    private static final LocalVariableDescription<IntVariable> c = new LocalVariableDescription<>("c", VariableType.IntVariable,
             true);
-    private static final VariableDescription<IntVariable> d = new VariableDescription<>("d", VariableType.IntVariable,
+    private static final LocalVariableDescription<IntVariable> d = new LocalVariableDescription<>("d", VariableType.IntVariable,
             true);
-    private static final VariableDescription<IntVariable> e = new VariableDescription<>("e", VariableType.IntVariable,
+    private static final LocalVariableDescription<IntVariable> e = new LocalVariableDescription<>("e", VariableType.IntVariable,
             true);
 
-    private static final VariableDescription<ArrayVariable<IntVariable>> f = new VariableDescription<>("f",
+    private static final LocalVariableDescription<ArrayVariable<IntVariable>> f = new LocalVariableDescription<>("f",
             VariableType.arrayType(VariableType.IntVariable), true);
-    private static final VariableDescription<ArrayVariable<IntVariable>> g = new VariableDescription<>("g",
+    private static final LocalVariableDescription<ArrayVariable<IntVariable>> g = new LocalVariableDescription<>("g",
             VariableType.arrayType(VariableType.IntVariable), true);
-    private static final VariableDescription<ArrayVariable<IntVariable>> h = new VariableDescription<>("h",
+    private static final LocalVariableDescription<ArrayVariable<IntVariable>> h = new LocalVariableDescription<>("h",
             VariableType.arrayType(VariableType.IntVariable), true);
 
-    private static final VariableDescription<ArrayVariable<ArrayVariable<IntVariable>>> i = new VariableDescription<>(
+    private static final LocalVariableDescription<ArrayVariable<ArrayVariable<IntVariable>>> i = new LocalVariableDescription<>(
             "i", VariableType.arrayType(VariableType.arrayType(VariableType.IntVariable)), true);
-    private static final VariableDescription<ArrayVariable<ArrayVariable<IntVariable>>> j = new VariableDescription<>(
+    private static final LocalVariableDescription<ArrayVariable<ArrayVariable<IntVariable>>> j = new LocalVariableDescription<>(
             "j", VariableType.arrayType(VariableType.arrayType(VariableType.IntVariable)), true);
-    private static final VariableDescription<ArrayVariable<ArrayVariable<IntVariable>>> k = new VariableDescription<>(
+    private static final LocalVariableDescription<ArrayVariable<ArrayVariable<IntVariable>>> k = new LocalVariableDescription<>(
             "k", VariableType.arrayType(VariableType.arrayType(VariableType.IntVariable)), true);
 
-    private static final VariableDescription<BooleanVariable> guard = new VariableDescription<>("guard",
+    private static final LocalVariableDescription<BooleanVariable> guard = new LocalVariableDescription<>("guard",
             VariableType.BooleanVariable, true);
 
     @Test
@@ -1897,7 +1898,7 @@ public class ReadWrite {
         assertTrue(arraysModified.contains(i));
     }
 
-    public void testVarDef(ScopedVarSet m, VariableDescription<?> desc, TreeID declarationID,
+    public void testVarDef(ScopedVarSet m, LocalVariableDescription<?> desc, TreeID declarationID,
             TreeID... expectedWriteLocations) {
         assertTrue(m.containsVar(desc));
         VarDef v = m.getVarDef(desc);

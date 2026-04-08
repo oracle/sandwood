@@ -20,6 +20,7 @@ import org.sandwood.compiler.compilation.util.SampleDescArray;
 import org.sandwood.compiler.compilation.util.TreeUtils;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
@@ -35,13 +36,13 @@ public abstract class InferenceGeneratorArray<A extends Variable<A>, B extends R
 
     public abstract static class ArrayFunctionData<A extends Variable<A>, B extends RandomVariable<ArrayVariable<A>, B>>
             extends FunctionData<ArrayVariable<A>, B, SampleDescArray<A, B>> {
-        public final VariableDescription<ArrayVariable<A>> targetLocal;
+        public final LocalVariableDescription<ArrayVariable<A>> targetLocal;
 
         protected ArrayFunctionData(SampleTask<ArrayVariable<A>, B> sample, boolean sampleUpdated,
                 CompilationContext compilationCtx) {
             super(new SampleDescArray<>(sample, compilationCtx.traces), sampleUpdated, compilationCtx);
 
-            targetLocal = VariableNames.calcVarName("targetLocal", sample.getOutputType(), true);
+            targetLocal = VariableNames.localCalcVarName("targetLocal", sample.getOutputType(), true);
         }
 
         public IRTreeReturn<ArrayVariable<A>> getTarget() {
@@ -70,8 +71,8 @@ public abstract class InferenceGeneratorArray<A extends Variable<A>, B extends R
             // Dirty hack to keep getIndirect happy. TODO come up with a cleaner solutions.
             // Recasting the variable type so that the get indirect method can be used in
             // the same way it would be used for variables declared inside a loop.
-            VariableDescription<ArrayVariable<A>> targetName = VariableNames.altTypeName(
-                    funcData.sampleDesc.targetIntermediate().getUniqueVarDesc(), funcData.sampleDesc.output.getType());
+            VariableDescription<ArrayVariable<A>> targetName = funcData.sampleDesc.targetIntermediate()
+                    .getUniqueVarDesc().alternativeType(funcData.sampleDesc.output.getType());
             globalState = TreeUtils.getIndirectValue(targetName, indexes);
         } else {
             List<IRTreeReturn<IntVariable>> indexes = TreeUtils

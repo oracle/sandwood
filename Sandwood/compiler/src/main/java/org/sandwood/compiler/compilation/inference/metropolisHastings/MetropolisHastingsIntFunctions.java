@@ -30,6 +30,7 @@ import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
@@ -63,9 +64,9 @@ public class MetropolisHastingsIntFunctions<B extends RandomVariable<IntVariable
      */
     @Override
     protected void getProposedValue(MetropolisHastingsData<IntVariable, B> funcData) {
-        VariableDescription<DoubleVariable> varName = VariableNames.calcVarName("var", VariableType.DoubleVariable,
+        LocalVariableDescription<DoubleVariable> varName = VariableNames.localCalcVarName("var", VariableType.DoubleVariable,
                 true);
-        VariableDescription<DoubleVariable> offsetName = VariableNames.calcVarName("offset",
+        LocalVariableDescription<DoubleVariable> offsetName = VariableNames.localCalcVarName("offset",
                 VariableType.DoubleVariable, true);
 
         // Calculate the variance based on the current value.

@@ -13,7 +13,7 @@ import static org.sandwood.compiler.trees.irTree.IRTree.parallelForStmt;
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.scopesState.ScopeTracking;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.trees.Tree;
@@ -49,7 +49,7 @@ public class ParForTask extends ForTask {
             IRTreeReturn<IntVariable> startTree = start.getForwardIR(compilationCtx);
             IRTreeReturn<IntVariable> endTree = end.getForwardIR(compilationCtx);
             IRTreeReturn<IntVariable> stepTree = step.getForwardIR(compilationCtx);
-            VariableDescription<IntVariable> indexDesc = index.getUniqueVarDesc();
+            LocalVariableDescription<IntVariable> indexDesc = (LocalVariableDescription<IntVariable>)index.getUniqueVarDesc();
             if(reverseScopes) {
                 startTree = updateStart(startTree, incrementing);
                 endTree = updateEnd(startTree, endTree, stepTree, incrementing);

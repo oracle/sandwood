@@ -63,6 +63,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
+import org.sandwood.compiler.dataflowGraph.variables.GlobalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
@@ -190,7 +191,7 @@ public class APICompile {
                 ObservedValuePropagationBuilder.constructPropagateObservedValues(compilationCtx);
 
                 IRSandwoodClassGenerated irCls = new IRSandwoodClassGenerated(className.backendName(target),
-                        targetPackageName, ClassName.coreBase(target), interfaces, compilationCtx.getClassFields(),
+                        targetPackageName, ClassName.coreBase(target), interfaces, compilationCtx.getClassFields(), compilationCtx.getScratchFields(),
                         compilationCtx.getFunctions(), modelCode);
                 irClasses.put(target, irCls);
             }
@@ -296,34 +297,33 @@ public class APICompile {
 
         // Fixed sample flags
         for(SampleTask<?, ?> s:compilationCtx.traces.getFixableTasks()) {
-            VariableDescription<BooleanVariable> flagName = VariableNames.fixedFlagName(s);
+            GlobalVariableDescription<BooleanVariable> flagName = VariableNames.fixedFlagName(s);
             compilationCtx.addFlagClassField(flagName, constant(false));
         }
 
         // Constrained sample flags
         compilationCtx.pushIsSerial(true);
         for(SampleTask<?, ?> s:compilationCtx.traces.getAllIntermediateSamples()) {
-            VariableDescription<BooleanVariable> flagName = VariableNames.constrainedFlagName(s);
+            GlobalVariableDescription<BooleanVariable> flagName = VariableNames.constrainedFlagName(s);
             List<ScopeDesc> scopeDescs = TreeUtils.getScopeDescs(s);
             if(scopeDescs.size() == 1) {
-                compilationCtx.addConstructedClassField(flagName, constant(true));
+                compilationCtx.addInternalFlagClassField(flagName, constant(true));
 
                 if(compilationCtx.traces.isFixableTask(s)) {
-                    VariableDescription<BooleanVariable> fixedFlag = VariableNames.fixedFlagName(s);
+                    GlobalVariableDescription<BooleanVariable> fixedFlag = VariableNames.fixedFlagName(s);
                     compilationCtx.addSetSideEffect(fixedFlag,
                             store(flagName, or(load(fixedFlag), load(flagName)), Tree.NoComment));
                 }
             } else {
                 ArrayDesc<A> arrayDescs = TreeUtils.getArrayDescription(scopeDescs, flagName.type);
-                VariableDescription<ArrayVariable<A>> altFlagName = VariableNames.altTypeName(flagName,
-                        arrayDescs.type);
+                GlobalVariableDescription<ArrayVariable<A>> altFlagName = flagName.alternativeType(arrayDescs.type);
                 IRTreeVoid allocator = TreeUtils.allocate(altFlagName, arrayDescs, compilationCtx);
-                compilationCtx.addConstructedClassField(altFlagName, allocator);
+                compilationCtx.addInternalFlagClassField(altFlagName, allocator);
                 IRTreeVoid setter = TreeUtils.setArray(altFlagName, constant(true));
                 compilationCtx.addArrayInitilisation(setter);
 
                 if(compilationCtx.traces.isFixableTask(s)) {
-                    VariableDescription<BooleanVariable> fixedFlag = VariableNames.fixedFlagName(s);
+                    GlobalVariableDescription<BooleanVariable> fixedFlag = VariableNames.fixedFlagName(s);
                     setter = TreeUtils.setArray(altFlagName, or(load(fixedFlag), constant(true)));
                     IRTreeReturn<BooleanVariable> guard = load(VariableNames.allocatedFlag());
                     setter = ifElse(guard, setter, "If the model has been allocated update the constraints flags");
@@ -335,15 +335,15 @@ public class APICompile {
 
         // Inputs
         for(Variable<?> v:compilationCtx.traces.modelInputs())
-            compilationCtx.addClassInputField(v.getUniqueVarDesc(), v.getComment());
+            compilationCtx.addClassInputField((GlobalVariableDescription<?>)v.getUniqueVarDesc(), v.getComment());
 
         for(Variable<?> v:compilationCtx.traces.observedOnlyInputs())
-            compilationCtx.addClassInputField(v.getUniqueVarDesc(), v.getComment());
+            compilationCtx.addClassInputField((GlobalVariableDescription<?>)v.getUniqueVarDesc(), v.getComment());
 
         for(Variable<?> v:compilationCtx.traces.observedShapeableValues()) {
-            compilationCtx.addClassInputField(v.getUniqueVarDesc(), v.getComment());
+            compilationCtx.addClassInputField((GlobalVariableDescription<?>)v.getUniqueVarDesc(), v.getComment());
             Variable<?> shape = compilationCtx.traces.observedShapeVariable(v);
-            compilationCtx.addClassInputField(shape.getUniqueVarDesc(), shape.getComment());
+            compilationCtx.addClassInputField((GlobalVariableDescription<?>)shape.getUniqueVarDesc(), shape.getComment());
         }
     }
 
@@ -518,7 +518,7 @@ public class APICompile {
         FunctionName functionName = FunctionName.createFunctionName(SampleFunctionClass.SAMPLE, sample);
 
         String comment = "Pick a value from the distribution for the unconditioned variable from "
-                + sample.getUniqueVarDesc();
+                + sample.getSampleName();
 
         IRVoidFunction f = voidFunction(Visibility.PRIVATE, functionName, functionArgs, result, comment, knownValues);
         compilationCtx.addFunction(SampleFunctionClass.SAMPLE, sample, f);
@@ -760,9 +760,9 @@ public class APICompile {
         if(v.containsState)
             tree = forwardTree;
         else {
-            VariableDescription<BooleanVariable> flagName = new VariableDescription<>(
+            GlobalVariableDescription<BooleanVariable> flagName = new GlobalVariableDescription<>(
                     VariableNames.internalSystemName("gibbsForward"), VariableType.BooleanVariable);
-            compilationCtx.addConstructedClassField(flagName, constant(true));
+            compilationCtx.addInternalFlagClassField(flagName, constant(true));
             IRTreeVoid reverseTree = new ReverseTreeTransformation().transform(forwardTree);
 
             IRTreeVoid conditional = ifElse(load(flagName), forwardTree, "Infer the samples in chronological order.",
@@ -807,7 +807,7 @@ public class APICompile {
 
         if(threadID != null) {
             args.add(threadID);
-            args.add(load(VariableNames.rngName(0)));
+            args.add(load(VariableNames.rngName()));
         }
 
         IRTreeReturn<?>[] argsArray = args.toArray(new IRTreeReturn<?>[args.size()]);

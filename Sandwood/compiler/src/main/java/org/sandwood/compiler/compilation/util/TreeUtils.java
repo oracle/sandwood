@@ -51,6 +51,8 @@ import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
+import org.sandwood.compiler.dataflowGraph.variables.GlobalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
@@ -444,11 +446,11 @@ public class TreeUtils {
         Map<Scope, Map<Index, VariableDescription<?>>> declaredSubArrays = declaredArrays.computeIfAbsent(depth,
                 k -> new HashMap<>());
         Scope s = element.scope;
-        VariableDescription<ArrayVariable<ArrayVariable<A>>> name;
+        LocalVariableDescription<ArrayVariable<ArrayVariable<A>>> name;
         while(s != null) {
             Map<Index, VariableDescription<?>> d = declaredSubArrays.get(s);
             if(d != null) {
-                name = (VariableDescription<ArrayVariable<ArrayVariable<A>>>) d.get(new Index(element.index));
+                name = (LocalVariableDescription<ArrayVariable<ArrayVariable<A>>>) d.get(new Index(element.index));
                 if(name != null)
                     return name;
             }
@@ -606,7 +608,7 @@ public class TreeUtils {
             // state changes are tracked.
             Type<?> vType = VariableType.getType(value.getOutputType(), size);
             @SuppressWarnings("rawtypes")
-            IRTreeReturn t = load(VariableNames.altTypeName(variableName, vType));
+            IRTreeReturn t = load(variableName.alternativeType(vType));
             for(int i = 0; i < size - 1; i++)
                 t = arrayGet(t, args.get(i));
             return arrayPut(t, args.get(size - 1), value, comment);
@@ -674,7 +676,7 @@ public class TreeUtils {
             List<IRTreeReturn<IntVariable>> args) {
         int size = args.size();
         @SuppressWarnings("rawtypes")
-        IRTreeReturn t = load(VariableNames.altTypeName(variableDesc, VariableType.getType(variableDesc.type, size)));
+        IRTreeReturn t = load(variableDesc.alternativeType(VariableType.getType(variableDesc.type, size)));
         for(int i = 0; i < size; i++) {
             IRTreeReturn<IntVariable> arg = args.get(i);
             t = arrayGet(t, arg);
@@ -703,7 +705,7 @@ public class TreeUtils {
 
         @SuppressWarnings("rawtypes")
         IRTreeReturn result = load(
-                VariableNames.altTypeName(var.getUniqueVarDesc(), VariableType.getType(var.getType(), implicitDepth)));
+                var.getUniqueVarDesc().alternativeType(VariableType.getType(var.getType(), implicitDepth)));
         for(int i = 0; i < implicitDepth; i++) {
             IntVariable arg = args.get(i);
             result = arrayGet(result, arg.getForwardIR(compilationCtx));
@@ -1213,9 +1215,9 @@ public class TreeUtils {
      * @param compilationCtx
      * @return
      */
-    public static <X extends Variable<X>> IRTreeVoid constructVariable(VariableDescription<X> varDesc,
+    public static <X extends Variable<X>> IRTreeVoid constructGlobalVariable(GlobalVariableDescription<X> varDesc,
             IRTreeReturn<X> value, List<ScopeDesc> scopes, FieldType fieldType, CompilationContext compilationCtx) {
-        return constructVariable(varDesc, value, scopes, fieldType, null, compilationCtx);
+        return constructGlobalVariable(varDesc, value, scopes, fieldType, null, compilationCtx);
     }
 
     /**
@@ -1230,8 +1232,8 @@ public class TreeUtils {
      * @param compilationCtx
      * @return
      */
-    public static <A extends Variable<A>, X extends Variable<X>> IRTreeVoid constructVariable(
-            VariableDescription<X> varDesc, IRTreeReturn<X> value, List<ScopeDesc> scopes, FieldType fieldType,
+    public static <A extends Variable<A>, X extends Variable<X>> IRTreeVoid constructGlobalVariable(
+            GlobalVariableDescription<X> varDesc, IRTreeReturn<X> value, List<ScopeDesc> scopes, FieldType fieldType,
             String comment, CompilationContext compilationCtx) {
         int size = scopes.size() - 1;
         if(size == 0) {
@@ -1240,7 +1242,7 @@ public class TreeUtils {
         } else {
             // Construct a descriptor of the array.
             ArrayDesc<A> arrayDesc = getArrayDescription(scopes, varDesc.type);
-            VariableDescription<ArrayVariable<A>> arrayName = VariableNames.altTypeName(varDesc, arrayDesc.type);
+            GlobalVariableDescription<ArrayVariable<A>> arrayName = varDesc.alternativeType(arrayDesc.type);
             compilationCtx.addConstructedClassField(arrayName,
                     // Allocate the variable
                     allocate(arrayName, arrayDesc, compilationCtx), fieldType, comment);
@@ -1364,13 +1366,13 @@ public class TreeUtils {
 
     public static IRTreeVoid lseAdd(IRTreeReturn<ArrayVariable<DoubleVariable>> arrayValue,
             VariableDescription<DoubleVariable> targetName, IRTreeReturn<IntVariable> bound, String comment) {
-        VariableDescription<DoubleVariable> maxName = VariableNames.calcVarName("lseMax", VariableType.DoubleVariable,
+        LocalVariableDescription<DoubleVariable> maxName = VariableNames.localCalcVarName("lseMax", VariableType.DoubleVariable,
                 true);
-        VariableDescription<DoubleVariable> elementName = VariableNames.calcVarName("lseElementValue",
+        LocalVariableDescription<DoubleVariable> elementName = VariableNames.localCalcVarName("lseElementValue",
                 VariableType.DoubleVariable, true);
-        VariableDescription<IntVariable> indexName = VariableNames.calcVarName("lseIndex", VariableType.IntVariable,
+        LocalVariableDescription<IntVariable> indexName = VariableNames.localCalcVarName("lseIndex", VariableType.IntVariable,
                 true);
-        VariableDescription<DoubleVariable> sumName = VariableNames.calcVarName("lseSum", VariableType.DoubleVariable,
+        LocalVariableDescription<DoubleVariable> sumName = VariableNames.localCalcVarName("lseSum", VariableType.DoubleVariable,
                 true);
 
         List<IRTreeVoid> stmts = new ArrayList<>();
@@ -1419,13 +1421,13 @@ public class TreeUtils {
             IRTreeReturn<ArrayVariable<A>> source, IRTreeReturn<ArrayVariable<A>> target, int i) {
         List<IRTreeVoid> ts = new ArrayList<>();
 
-        VariableDescription<ArrayVariable<A>> sourceName = VariableNames.calcVarName("source" + i,
+        LocalVariableDescription<ArrayVariable<A>> sourceName = VariableNames.localCalcVarName("source" + i,
                 source.getOutputType(), true);
-        VariableDescription<ArrayVariable<A>> targetName = VariableNames.calcVarName("target" + i,
+        LocalVariableDescription<ArrayVariable<A>> targetName = VariableNames.localCalcVarName("target" + i,
                 source.getOutputType(), true);
-        VariableDescription<IntVariable> lengthName = VariableNames.calcVarName("length" + i, VariableType.IntVariable,
+        LocalVariableDescription<IntVariable> lengthName = VariableNames.localCalcVarName("length" + i, VariableType.IntVariable,
                 true);
-        VariableDescription<IntVariable> indexName = VariableNames.calcVarName("index" + i, VariableType.IntVariable,
+        LocalVariableDescription<IntVariable> indexName = VariableNames.localCalcVarName("index" + i, VariableType.IntVariable,
                 true);
 
         // Local variables for the arrays.
@@ -1483,7 +1485,7 @@ public class TreeUtils {
         // Pass in the threads random number generator.
         if(threadIdName != null) {
             args.add(new ArgDesc<>(threadIdName));
-            args.add(new ArgDesc<>(VariableNames.rngName(0)));
+            args.add(new ArgDesc<>(VariableNames.rngName()));
         }
 
         return args.toArray(new ArgDesc[args.size()]);
@@ -1501,7 +1503,7 @@ public class TreeUtils {
         IRTreeReturn<IntVariable> start = constant(0);
         IRTreeReturn<IntVariable> end = getIntField(load(subArrayName), "length");
         IRTreeReturn<IntVariable> step = constant(1);
-        VariableDescription<IntVariable> indexName = VariableNames.indexName(baseName, Integer.toString(i));
+        LocalVariableDescription<IntVariable> indexName = VariableNames.indexName(baseName, Integer.toString(i));
 
         Type<A> elementType = ((ArrayType<A>) subArrayName.type).getElementType();
         IRTreeReturn<ArrayVariable<A>> subArray = load(subArrayName);
@@ -1509,7 +1511,7 @@ public class TreeUtils {
 
         IRTreeVoid body;
         if(elementType.isArray()) {
-            VariableDescription<A> elementDesc = VariableNames.calcVarName(baseName.getName(), Integer.toString(i),
+            LocalVariableDescription<A> elementDesc = VariableNames.localCalcVarName(baseName.getName(), Integer.toString(i),
                     elementType, true);
             IRTreeVoid innerArrayGet = initializeVariable(elementDesc, arrayGet(subArray, index), IRTree.NoComment);
             IRTreeVoid innerArraySet = setArray(baseName, (VariableDescription<ArrayVariable<C>>) elementDesc, i + 1,

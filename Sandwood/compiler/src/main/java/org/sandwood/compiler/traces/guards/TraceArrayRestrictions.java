@@ -39,8 +39,8 @@ import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.IfElseAssignmentTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ReductionInput;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ReductionReturnTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
@@ -1113,7 +1113,7 @@ public class TraceArrayRestrictions {
      */
     private static <A extends Variable<A>> ScopeDescription constructVarSubstitution(Variable<A> v, IRTreeReturn<?> t,
             ScopeDescription target, RestrictionsData data, CompilationContext compilationCtx) {
-        VariableDescription<A> subName = VariableNames.traceTempName(v.getVarDesc().name, data.globalID, data.localID++,
+        LocalVariableDescription<A> subName = VariableNames.traceTempName(v.getVarDesc().name, data.globalID, data.localID++,
                 v.getType());
         IRTreeVoid init = IRTree.initializeVariable(subName, (IRTreeReturn<A>) t, Tree.NoComment);
         target = target.addSubstitution(data.position, v, target.constructVariableInScope(subName));

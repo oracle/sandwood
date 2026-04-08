@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
@@ -49,18 +49,18 @@ class ConstraintMovementTest {
     static {
         int test = 0;
 
-        VariableDescription<IntVariable> const1 = new VariableDescription<>("constant1", VariableType.IntVariable,
+        LocalVariableDescription<IntVariable> const1 = new LocalVariableDescription<>("constant1", VariableType.IntVariable,
                 false);
-        VariableDescription<IntVariable> const2 = new VariableDescription<>("constant2", VariableType.IntVariable,
+        LocalVariableDescription<IntVariable> const2 = new LocalVariableDescription<>("constant2", VariableType.IntVariable,
                 false);
-        VariableDescription<IntVariable> const3 = new VariableDescription<>("constant3", VariableType.IntVariable,
+        LocalVariableDescription<IntVariable> const3 = new LocalVariableDescription<>("constant3", VariableType.IntVariable,
                 false);
-        VariableDescription<IntVariable> i = new VariableDescription<>("i", VariableType.IntVariable, false);
-        VariableDescription<IntVariable> j = new VariableDescription<>("j", VariableType.IntVariable, false);
-        VariableDescription<IntVariable> k = new VariableDescription<>("k", VariableType.IntVariable, false);
-        VariableDescription<IntVariable> l = new VariableDescription<>("l", VariableType.IntVariable, false);
-        VariableDescription<IntVariable> m = new VariableDescription<>("m", VariableType.IntVariable, false);
-        VariableDescription<IntVariable> x = new VariableDescription<>("x", VariableType.IntVariable, false);
+        LocalVariableDescription<IntVariable> i = new LocalVariableDescription<>("i", VariableType.IntVariable, false);
+        LocalVariableDescription<IntVariable> j = new LocalVariableDescription<>("j", VariableType.IntVariable, false);
+        LocalVariableDescription<IntVariable> k = new LocalVariableDescription<>("k", VariableType.IntVariable, false);
+        LocalVariableDescription<IntVariable> l = new LocalVariableDescription<>("l", VariableType.IntVariable, false);
+        LocalVariableDescription<IntVariable> m = new LocalVariableDescription<>("m", VariableType.IntVariable, false);
+        LocalVariableDescription<IntVariable> x = new LocalVariableDescription<>("x", VariableType.IntVariable, false);
 
         {
             List<TransTreeReturn<BooleanVariable>> constraints = new ArrayList<>();

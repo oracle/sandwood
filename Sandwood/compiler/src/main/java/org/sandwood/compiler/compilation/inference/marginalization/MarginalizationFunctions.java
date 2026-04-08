@@ -31,7 +31,9 @@ import org.sandwood.compiler.compilation.util.TreeUtils;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.GlobalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.ScratchVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.DistributableRandomVariable;
@@ -96,20 +98,20 @@ public class MarginalizationFunctions<A extends ScalarVariable<A>, B extends Dis
 
         // Names for the different variables that we will need to construct for this
         // function.
-        final VariableDescription<ArrayVariable<DoubleVariable>> statesProbabilityNameGlobal;
+        final ScratchVariableDescription<ArrayVariable<DoubleVariable>> statesProbabilityNameGlobal;
 
         protected MarginalizationData(SampleTask<A, B> sample, CompilationContext compilationCtx) {
             super(sample, sample.randomVariable.getNumStates(), compilationCtx);
 
-            statesProbabilityNameGlobal = VariableNames.calcVarName(sampleDesc.output, "stateProbabilityGlobal",
+            statesProbabilityNameGlobal = VariableNames.globalScratchVarName(sampleDesc.output, "stateProbabilityGlobal",
                     VariableType.arrayType(VariableType.DoubleVariable));
         }
     }
 
     // Names for the different variables that we will need to construct for this
     // function.
-    private final static VariableDescription<ArrayVariable<DoubleVariable>> statesProbabilityNameLocal = VariableNames
-            .calcVarName("stateProbabilityLocal", VariableType.arrayType(VariableType.DoubleVariable), true);
+    private final static LocalVariableDescription<ArrayVariable<DoubleVariable>> statesProbabilityNameLocal = VariableNames
+            .localCalcVarName("stateProbabilityLocal", VariableType.arrayType(VariableType.DoubleVariable), true);
 
     @Override
     protected String getInferenceType() {
@@ -139,7 +141,7 @@ public class MarginalizationFunctions<A extends ScalarVariable<A>, B extends Dis
 
     @Override
     protected void allocateGlobalStateProb(MarginalizationData<A, B> funcData) {
-        allocateGlobalArray(funcData, funcData.sourceRandom, funcData.statesProbabilityNameGlobal);
+        allocateScratchArray(funcData, funcData.sourceRandom, funcData.statesProbabilityNameGlobal);
     }
 
     @Override
@@ -153,9 +155,9 @@ public class MarginalizationFunctions<A extends ScalarVariable<A>, B extends Dis
 
     private void normalizeArray(IRTreeReturn<ArrayVariable<DoubleVariable>> sourceArray,
             IRTreeReturn<ArrayVariable<DoubleVariable>> targetArray, CompilationContext compilationCtx) {
-        VariableDescription<DoubleVariable> sumName = VariableNames.calcVarName("logSum", VariableType.DoubleVariable,
+        LocalVariableDescription<DoubleVariable> sumName = VariableNames.localCalcVarName("logSum", VariableType.DoubleVariable,
                 true);
-        VariableDescription<IntVariable> indexName = VariableNames.calcVarName("indexName", VariableType.IntVariable,
+        LocalVariableDescription<IntVariable> indexName = VariableNames.localCalcVarName("indexName", VariableType.IntVariable,
                 true);
         compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(sumName, constant(0.0), "The sum of all the probabilities in log space"));
@@ -211,8 +213,8 @@ public class MarginalizationFunctions<A extends ScalarVariable<A>, B extends Dis
             IRTreeReturn<ArrayVariable<DoubleVariable>> arrayValue = load(statesProbabilityNameLocal);
 
             // Get the probability array
-            VariableDescription<ArrayVariable<DoubleVariable>> localProbability = VariableNames
-                    .calcVarName("localProbability", VariableType.arrayType(VariableType.DoubleVariable), true);
+            LocalVariableDescription<ArrayVariable<DoubleVariable>> localProbability = VariableNames
+                    .localCalcVarName("localProbability", VariableType.arrayType(VariableType.DoubleVariable), true);
             IRTreeReturn<ArrayVariable<DoubleVariable>> probabilityArray = ((DistributionSampleTask<?, ?>) funcData.sampleDesc.sample)
                     .getProbabilitiesArray().getForwardIR(funcData.compilationCtx);
             funcData.compilationCtx.addTreeToScope(GlobalScope.scope,

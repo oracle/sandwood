@@ -36,7 +36,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.trees.ArgDesc;
 import org.sandwood.compiler.trees.transformationTree.TransTreeReturn;
@@ -58,11 +58,11 @@ class ConstantsTest {
         beforeList.add("(0.0 + 1.5)");
         afterList.add("1.5");
 
-        treeList.add(addDD(constant(0.0), load(new VariableDescription<>("i", VariableType.DoubleVariable, false))));
+        treeList.add(addDD(constant(0.0), load(new LocalVariableDescription<>("i", VariableType.DoubleVariable, false))));
         beforeList.add("(0.0 + i)");
         afterList.add("i");
 
-        treeList.add(addDD(load(new VariableDescription<>("i", VariableType.DoubleVariable, false)), constant(0.0)));
+        treeList.add(addDD(load(new LocalVariableDescription<>("i", VariableType.DoubleVariable, false)), constant(0.0)));
         beforeList.add("(i + 0.0)");
         afterList.add("i");
 
@@ -87,12 +87,12 @@ class ConstantsTest {
         afterList.add("1.5");
 
         treeList.add(
-                multiplyDD(constant(1.0), load(new VariableDescription<>("i", VariableType.DoubleVariable, false))));
+                multiplyDD(constant(1.0), load(new LocalVariableDescription<>("i", VariableType.DoubleVariable, false))));
         beforeList.add("(1.0 * i)");
         afterList.add("i");
 
         treeList.add(
-                multiplyDD(load(new VariableDescription<>("i", VariableType.DoubleVariable, false)), constant(1.0)));
+                multiplyDD(load(new LocalVariableDescription<>("i", VariableType.DoubleVariable, false)), constant(1.0)));
         beforeList.add("(i * 1.0)");
         afterList.add("i");
 
@@ -117,12 +117,12 @@ class ConstantsTest {
         afterList.add("-1.5");
 
         treeList.add(
-                subtractDD(constant(0.0), load(new VariableDescription<>("i", VariableType.DoubleVariable, false))));
+                subtractDD(constant(0.0), load(new LocalVariableDescription<>("i", VariableType.DoubleVariable, false))));
         beforeList.add("(0.0 - i)");
         afterList.add("(-i)");
 
         treeList.add(
-                subtractDD(load(new VariableDescription<>("i", VariableType.DoubleVariable, false)), constant(0.0)));
+                subtractDD(load(new LocalVariableDescription<>("i", VariableType.DoubleVariable, false)), constant(0.0)));
         beforeList.add("(i - 0.0)");
         afterList.add("i");
 
@@ -146,11 +146,11 @@ class ConstantsTest {
         beforeList.add("(1.0 / 2.0)");
         afterList.add("0.5");
 
-        treeList.add(divideDD(constant(1.0), load(new VariableDescription<>("i", VariableType.DoubleVariable, false))));
+        treeList.add(divideDD(constant(1.0), load(new LocalVariableDescription<>("i", VariableType.DoubleVariable, false))));
         beforeList.add("(1.0 / i)");
         afterList.add("(1.0 / i)");
 
-        treeList.add(divideDD(load(new VariableDescription<>("i", VariableType.DoubleVariable, false)), constant(1.0)));
+        treeList.add(divideDD(load(new LocalVariableDescription<>("i", VariableType.DoubleVariable, false)), constant(1.0)));
         beforeList.add("(i / 1.0)");
         afterList.add("i");
 
@@ -186,19 +186,19 @@ class ConstantsTest {
         beforeList.add("false");
         afterList.add("false");
 
-        treeList.add(and(constant(true), load(new VariableDescription<>("i", VariableType.BooleanVariable, false))));
+        treeList.add(and(constant(true), load(new LocalVariableDescription<>("i", VariableType.BooleanVariable, false))));
         beforeList.add("i");
         afterList.add("i");
 
-        treeList.add(and(load(new VariableDescription<>("i", VariableType.BooleanVariable, false)), constant(true)));
+        treeList.add(and(load(new LocalVariableDescription<>("i", VariableType.BooleanVariable, false)), constant(true)));
         beforeList.add("i");
         afterList.add("i");
 
-        treeList.add(lessThan(load(new VariableDescription<>("i", VariableType.IntVariable, false)), constant(2)));
+        treeList.add(lessThan(load(new LocalVariableDescription<>("i", VariableType.IntVariable, false)), constant(2)));
         beforeList.add("(i < 2)");
         afterList.add("(i < 2)");
 
-        treeList.add(lessThan(constant(2), load(new VariableDescription<>("i", VariableType.IntVariable, false))));
+        treeList.add(lessThan(constant(2), load(new LocalVariableDescription<>("i", VariableType.IntVariable, false))));
         beforeList.add("(2 < i)");
         afterList.add("(2 < i)");
 
@@ -210,11 +210,11 @@ class ConstantsTest {
         beforeList.add("(2 < 1)");
         afterList.add("false");
 
-        treeList.add(lessThanEqual(load(new VariableDescription<>("i", VariableType.IntVariable, false)), constant(2)));
+        treeList.add(lessThanEqual(load(new LocalVariableDescription<>("i", VariableType.IntVariable, false)), constant(2)));
         beforeList.add("(i <= 2)");
         afterList.add("(i <= 2)");
 
-        treeList.add(lessThanEqual(constant(2), load(new VariableDescription<>("i", VariableType.IntVariable, false))));
+        treeList.add(lessThanEqual(constant(2), load(new LocalVariableDescription<>("i", VariableType.IntVariable, false))));
         beforeList.add("(2 <= i)");
         afterList.add("(2 <= i)");
 
@@ -226,11 +226,11 @@ class ConstantsTest {
         beforeList.add("(2 <= 1)");
         afterList.add("false");
 
-        treeList.add(eq(load(new VariableDescription<>("i", VariableType.IntVariable, false)), constant(2)));
+        treeList.add(eq(load(new LocalVariableDescription<>("i", VariableType.IntVariable, false)), constant(2)));
         beforeList.add("(i == 2)");
         afterList.add("(i == 2)");
 
-        treeList.add(eq(constant(2), load(new VariableDescription<>("i", VariableType.IntVariable, false))));
+        treeList.add(eq(constant(2), load(new LocalVariableDescription<>("i", VariableType.IntVariable, false))));
         beforeList.add("(2 == i)");
         afterList.add("(2 == i)");
 
@@ -242,15 +242,15 @@ class ConstantsTest {
         beforeList.add("(2 == 1)");
         afterList.add("false");
 
-        treeList.add(remainderII(load(new VariableDescription<>("i", VariableType.IntVariable, false)), constant(2)));
+        treeList.add(remainderII(load(new LocalVariableDescription<>("i", VariableType.IntVariable, false)), constant(2)));
         beforeList.add("(i % 2)");
         afterList.add("(i % 2)");
 
-        treeList.add(remainderII(load(new VariableDescription<>("i", VariableType.IntVariable, false)), constant(1)));
+        treeList.add(remainderII(load(new LocalVariableDescription<>("i", VariableType.IntVariable, false)), constant(1)));
         beforeList.add("(i % 1)");
         afterList.add("0");
 
-        treeList.add(remainderII(constant(1), load(new VariableDescription<>("i", VariableType.IntVariable, false))));
+        treeList.add(remainderII(constant(1), load(new LocalVariableDescription<>("i", VariableType.IntVariable, false))));
         beforeList.add("(1 % i)");
         afterList.add("(1 % i)");
 
