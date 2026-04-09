@@ -275,7 +275,7 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					{
 						cv$temp$0$var35 = a[y];
 					}
-					int cv$temp$1$$var111;
+					int cv$temp$1$$var112;
 					{
 						int lengthCV$a$37_2 = -1;
 						{
@@ -286,9 +286,9 @@ class RaggedArray5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 							if((1 == y))
 								lengthCV$a$37_2 = 3;
 						}
-						cv$temp$1$$var111 = lengthCV$a$37_2;
+						cv$temp$1$$var112 = lengthCV$a$37_2;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$var35, cv$temp$1$$var111));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$var35, cv$temp$1$$var112));
 					{
 						{
 							{

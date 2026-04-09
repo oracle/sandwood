@@ -458,12 +458,12 @@ class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						double[] var47 = m[0];
 						cv$temp$0$var47 = var47;
 					}
-					int cv$temp$1$$var149;
+					int cv$temp$1$$var150;
 					{
-						int $var149 = states;
-						cv$temp$1$$var149 = $var149;
+						int $var150 = states;
+						cv$temp$1$$var150 = $var150;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var149))?Math.log(cv$temp$0$var47[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var150))?Math.log(cv$temp$0$var47[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$st$1_1 = cv$currentValue;

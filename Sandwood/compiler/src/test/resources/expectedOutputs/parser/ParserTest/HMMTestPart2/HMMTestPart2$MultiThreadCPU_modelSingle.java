@@ -817,16 +817,16 @@ class HMMTestPart2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						double[] var66 = m[st[(i$var62 - 1)]];
 						cv$temp$0$var66 = var66;
 					}
-					int cv$temp$1$$var274;
+					int cv$temp$1$$var275;
 					{
 						// Constructing a random variable input for use later.
-						int $var274 = states;
-						cv$temp$1$$var274 = $var274;
+						int $var275 = states;
+						cv$temp$1$$var275 = $var275;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var274))?Math.log(cv$temp$0$var66[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var275))?Math.log(cv$temp$0$var66[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 67.
 					{
@@ -854,22 +854,22 @@ class HMMTestPart2$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 															double[] var66 = m[traceTempVariable$var65$2_1];
 															cv$temp$2$var66 = var66;
 														}
-														int cv$temp$3$$var283;
+														int cv$temp$3$$var284;
 														{
 															// Constructing a random variable input for use later.
-															int $var283 = states;
-															cv$temp$3$$var283 = $var283;
+															int $var284 = states;
+															cv$temp$3$$var284 = $var284;
 														}
 														
 														// Record the probability of sample task 69 generating output with current configuration.
-														if(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var283))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var283))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+														if(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var284))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var284))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 														else {
 															// If the second value is -infinity.
 															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var283))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY));
+																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var284))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY));
 															else
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var283))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var283))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)));
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var284))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var284))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)));
 														}
 														
 														// Recorded the probability of reaching sample task 69 with the current configuration.

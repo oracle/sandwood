@@ -762,24 +762,24 @@ class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.internal
 																	double reduceVar$var70$0 = 0.0;
 																	
 																	// Reduce for every value except a masked value which will be skipped.
-																	for(int cv$reduction154Index = 0; cv$reduction154Index < j$var55; cv$reduction154Index += 1) {
+																	for(int cv$reduction155Index = 0; cv$reduction155Index < j$var55; cv$reduction155Index += 1) {
 																		// Set the left hand term of the reduction function to the return variable value.
 																		double i$var67 = reduceVar$var70$0;
 																		
 																		// Set the right hand term to a value from the array phi
-																		double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction154Index];
+																		double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction155Index];
 																		
 																		// Execute the reduction function, saving the result into the return value.
 																		// 
 																		// Copy the result of the reduction into the variable returned by the reduction.
 																		reduceVar$var70$0 = (i$var67 + j$var68);
 																	}
-																	for(int cv$reduction154Index = (j$var55 + 1); cv$reduction154Index < k; cv$reduction154Index += 1) {
+																	for(int cv$reduction155Index = (j$var55 + 1); cv$reduction155Index < k; cv$reduction155Index += 1) {
 																		// Set the left hand term of the reduction function to the return variable value.
 																		double i$var67 = reduceVar$var70$0;
 																		
 																		// Set the right hand term to a value from the array phi
-																		double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction154Index];
+																		double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction155Index];
 																		
 																		// Execute the reduction function, saving the result into the return value.
 																		// 

@@ -761,15 +761,15 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			int reduceVar$var82$5 = 0;
 			
 			// Reduce for every value except a masked value which will be skipped.
-			for(int cv$reduction406Index = 0; cv$reduction406Index < i$var58; cv$reduction406Index += 1)
+			for(int cv$reduction407Index = 0; cv$reduction407Index < i$var58; cv$reduction407Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j$var80's comment
 				// Set the right hand term to a value from the array st
-				reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction406Index]);
-			for(int cv$reduction406Index = (i$var58 + 1); cv$reduction406Index < noCats; cv$reduction406Index += 1)
+				reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction407Index]);
+			for(int cv$reduction407Index = (i$var58 + 1); cv$reduction407Index < noCats; cv$reduction407Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Execute the reduction function, saving the result into the return value.
@@ -778,7 +778,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// j$var80's comment
 				// Set the right hand term to a value from the array st
-				reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction406Index]);
+				reduceVar$var82$5 = (reduceVar$var82$5 + st[cv$reduction407Index]);
 			
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 

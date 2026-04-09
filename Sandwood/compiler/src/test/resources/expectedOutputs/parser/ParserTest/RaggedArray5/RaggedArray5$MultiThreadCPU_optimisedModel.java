@@ -439,7 +439,7 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// 
 			// Substituted "cv$temp$0$var35" with its value "a[y]".
 			// 
-			// Substituted "cv$temp$1$$var175" with its value "lengthCV$a$37_10".
+			// Substituted "cv$temp$1$$var176" with its value "lengthCV$a$37_10".
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_10);
 			
 			// Processing random variable 39.
@@ -510,7 +510,7 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// 
 		// Substituted "cv$temp$0$var35" with its value "a[y]".
 		// 
-		// Substituted "cv$temp$1$$var175" with its value "lengthCV$a$37_10".
+		// Substituted "cv$temp$1$$var176" with its value "lengthCV$a$37_10".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$37_10);
 		
 		// Processing random variable 39.

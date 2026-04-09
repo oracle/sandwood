@@ -912,9 +912,9 @@ class HMM$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelS
 				// 
 				// Substituted "i" with its value "1".
 				// 
-				// cv$temp$3$$var183's comment
+				// cv$temp$3$$var184's comment
 				// 
-				// $var183's comment
+				// $var184's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var68's comment
@@ -1083,9 +1083,9 @@ class HMM$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelS
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$3$$var214's comment
+				// cv$temp$3$$var215's comment
 				// 
-				// $var214's comment
+				// $var215's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var68's comment

@@ -475,7 +475,7 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					{
 						cv$temp$0$var35 = a[y];
 					}
-					int cv$temp$1$$var175;
+					int cv$temp$1$$var176;
 					{
 						// Allocate a local variable to hold the length of the array.
 						int lengthCV$a$37_10 = -1;
@@ -493,12 +493,12 @@ class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 							if((1 == y))
 								lengthCV$a$37_10 = 3;
 						}
-						cv$temp$1$$var175 = lengthCV$a$37_10;
+						cv$temp$1$$var176 = lengthCV$a$37_10;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$var35, cv$temp$1$$var175));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$var35, cv$temp$1$$var176));
 					
 					// Processing random variable 39.
 					{

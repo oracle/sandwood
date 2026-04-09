@@ -1627,9 +1627,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$1$$var1393's comment
+						// cv$temp$1$$var1394's comment
 						// 
-						// $var1393's comment
+						// $var1394's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$0$var121's comment
@@ -1718,9 +1718,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							// 
 							// Value of the variable at this index
 							// 
-							// cv$temp$3$$var1394's comment
+							// cv$temp$3$$var1395's comment
 							// 
-							// $var1394's comment
+							// $var1395's comment
 							// Constructing a random variable input for use later.
 							// 
 							// cv$temp$2$var121's comment
@@ -1833,9 +1833,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$7$$var1396's comment
+						// cv$temp$7$$var1397's comment
 						// 
-						// $var1396's comment
+						// $var1397's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$6$var121's comment
@@ -1861,9 +1861,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						if(((0 <= var55) && (var55 < noStates))) {
 							// Substituted "i$var136" with its value "i$var104".
 							// 
-							// cv$temp$15$$var1428's comment
+							// cv$temp$15$$var1429's comment
 							// 
-							// $var1428's comment
+							// $var1429's comment
 							// Constructing a random variable input for use later.
 							// 
 							// cv$temp$14$var153's comment
@@ -2000,9 +2000,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$17$$var1466's comment
+					// cv$temp$17$$var1467's comment
 					// 
-					// $var1466's comment
+					// $var1467's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$16$var121's comment
@@ -2379,9 +2379,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// 
 			// Substituted "cv$temp$0$weights" with its value "weights".
 			// 
-			// cv$temp$1$$var1230's comment
+			// cv$temp$1$$var1231's comment
 			// 
-			// $var1230's comment
+			// $var1231's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(weights[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
@@ -2403,9 +2403,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// cv$temp$3$$var1240's comment
+					// cv$temp$3$$var1241's comment
 					// 
-					// $var1240's comment
+					// $var1241's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$2$var90's comment
@@ -2430,9 +2430,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$5$$var1251's comment
+					// cv$temp$5$$var1252's comment
 					// 
-					// $var1251's comment
+					// $var1252's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$4$var90's comment
@@ -2626,9 +2626,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					if(((0 <= var41) && (var41 < noStates))) {
 						// Substituted "i$var104" with its value "i$var87".
 						// 
-						// cv$temp$3$$var1283's comment
+						// cv$temp$3$$var1284's comment
 						// 
-						// $var1283's comment
+						// $var1284's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$2$var121's comment
@@ -2694,9 +2694,9 @@ class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 						// 
 						// The probability of reaching the consumer with this set of consumer arguments
 						// 
-						// cv$temp$7$$var1307's comment
+						// cv$temp$7$$var1308's comment
 						// 
-						// $var1307's comment
+						// $var1308's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$6$var121's comment

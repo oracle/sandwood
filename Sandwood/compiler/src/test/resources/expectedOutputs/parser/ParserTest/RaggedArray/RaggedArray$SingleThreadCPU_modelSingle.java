@@ -428,7 +428,7 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					{
 						cv$temp$0$var67 = a[y];
 					}
-					int cv$temp$1$$var158;
+					int cv$temp$1$$var159;
 					{
 						// Allocate a local variable to hold the length of the array.
 						int lengthCV$a$71_1 = -1;
@@ -446,12 +446,12 @@ class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							if((1 == y))
 								lengthCV$a$71_1 = 3;
 						}
-						cv$temp$1$$var158 = lengthCV$a$71_1;
+						cv$temp$1$$var159 = lengthCV$a$71_1;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var158))?Math.log(cv$temp$0$var67[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var159))?Math.log(cv$temp$0$var67[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 72.
 					{

@@ -437,7 +437,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$$var104" with its value "10".
+			// Substituted "cv$temp$1$$var105" with its value "10".
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(sample, v, 10);
 			for(int i = 0; i < length$observed; i += 1)
 				// Set the flags to false
@@ -550,7 +550,7 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$$var104" with its value "10".
+		// Substituted "cv$temp$1$$var105" with its value "10".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(sample, v, 10);
 		for(int i = 0; i < length$observed; i += 1)
 			// Set the flags to false

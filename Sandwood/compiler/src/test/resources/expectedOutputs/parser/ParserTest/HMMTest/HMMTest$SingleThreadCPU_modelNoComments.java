@@ -497,12 +497,12 @@ class HMMTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 						double[] var66 = m[st[(i$var62 - 1)]];
 						cv$temp$0$var66 = var66;
 					}
-					int cv$temp$1$$var171;
+					int cv$temp$1$$var172;
 					{
-						int $var171 = states;
-						cv$temp$1$$var171 = $var171;
+						int $var172 = states;
+						cv$temp$1$$var172 = $var172;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var171))?Math.log(cv$temp$0$var66[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var172))?Math.log(cv$temp$0$var66[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$var65$2_1 = cv$currentValue;
@@ -520,18 +520,18 @@ class HMMTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 															double[] var66 = m[traceTempVariable$var65$2_1];
 															cv$temp$2$var66 = var66;
 														}
-														int cv$temp$3$$var180;
+														int cv$temp$3$$var181;
 														{
-															int $var180 = states;
-															cv$temp$3$$var180 = $var180;
+															int $var181 = states;
+															cv$temp$3$$var181 = $var181;
 														}
-														if(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var180))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var180))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+														if(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var181))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var181))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 														else {
 															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var180))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY));
+																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var181))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY));
 															else
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var180))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var180))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)));
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var181))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var181))?Math.log(cv$temp$2$var66[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)));
 														}
 														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 													}

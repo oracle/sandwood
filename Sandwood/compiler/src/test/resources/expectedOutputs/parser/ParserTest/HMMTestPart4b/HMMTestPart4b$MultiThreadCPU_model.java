@@ -874,16 +874,16 @@ class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						double[] var117 = m[0];
 						cv$temp$0$var117 = var117;
 					}
-					int cv$temp$1$$var527;
+					int cv$temp$1$$var528;
 					{
 						// Constructing a random variable input for use later.
-						int $var527 = states;
-						cv$temp$1$$var527 = $var527;
+						int $var528 = states;
+						cv$temp$1$$var528 = $var528;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var527))?Math.log(cv$temp$0$var117[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var528))?Math.log(cv$temp$0$var117[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 183.
 					{
@@ -1215,16 +1215,16 @@ class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						double[] var77 = m[0];
 						cv$temp$0$var77 = var77;
 					}
-					int cv$temp$1$$var503;
+					int cv$temp$1$$var504;
 					{
 						// Constructing a random variable input for use later.
-						int $var503 = states;
-						cv$temp$1$$var503 = $var503;
+						int $var504 = states;
+						cv$temp$1$$var504 = $var504;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var503))?Math.log(cv$temp$0$var77[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var504))?Math.log(cv$temp$0$var77[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 183.
 					{

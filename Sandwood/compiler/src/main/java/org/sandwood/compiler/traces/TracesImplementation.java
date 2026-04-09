@@ -215,9 +215,20 @@ public class TracesImplementation extends Traces {
          * variables, and terminal variables this will do nothing, but by constructing it like this was can add in other
          * things we want to save just by overriding the method in the class.
          */
-
-        for(Variable<?> v:allVariables)
+        Set<Scope> scopes = new HashSet<>();
+        for(Variable<?> v:allVariables) {
             v.constructTrace(dagInfo);
+            scopes.add(v.scope());
+            ProducingDataflowTask<?> d = v.getParent();
+            if(d.getType() == DFType.IF_ASSIGNMENT) {
+                IfElseAssignmentTask<?> t = (IfElseAssignmentTask<?>) d;
+                scopes.add(t.ifScope);
+                scopes.add(t.ifScope.elseScope);
+            }
+        }
+
+        for(Scope s:scopes)
+            s.getScopeCondition().constructTrace(dagInfo::addScopeConstraint);
 
         // set non-deterministic and distribution flags.
         for(TraceSinkPair p:dagInfo.allTraces())
@@ -244,6 +255,8 @@ public class TracesImplementation extends Traces {
             addRandomChild(p);
         for(TraceSinkPair p:dagInfo.terminalVarTraces())
             addTerminalChild(p);
+        for(TraceSinkPair p:dagInfo.scopeConstraintVarTraces())
+            addScopeConstraintChild(p);
 
         constructDependencies(dagInfo);
 
@@ -2058,8 +2071,16 @@ public class TracesImplementation extends Traces {
                 addVariableSource(handle, observedVar);
                 break;
             }
-
         }
+    }
+
+    private void addScopeConstraintChild(TraceSinkPair p) {
+        TraceHandle handle = p.handle;
+        DataflowTaskArgDesc d = handle.get(0);
+        ProducingDataflowTask<?> sourceTask = d.task;
+        // Record the observed variable as a source.
+        if(sourceTask.getType() == DFType.SAMPLE)
+            addVariableSource(handle, (SampleTask<?, ?>) sourceTask);
     }
 
     private void setFlags(TraceSinkPair p) {

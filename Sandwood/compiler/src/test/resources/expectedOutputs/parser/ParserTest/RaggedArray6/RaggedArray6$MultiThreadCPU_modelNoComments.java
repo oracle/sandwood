@@ -322,11 +322,11 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					{
 						cv$temp$0$b = b;
 					}
-					int cv$temp$1$$var234;
+					int cv$temp$1$$var235;
 					{
-						cv$temp$1$$var234 = 2;
+						cv$temp$1$$var235 = 2;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var234))?Math.log(cv$temp$0$b[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var235))?Math.log(cv$temp$0$b[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$y$3_1 = cv$currentValue;
@@ -342,7 +342,7 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 													double[] var46 = a[traceTempVariable$y$3_1];
 													cv$temp$2$var46 = var46;
 												}
-												int cv$temp$3$$var236;
+												int cv$temp$3$$var237;
 												{
 													int lengthCV$a$48_10 = -1;
 													{
@@ -353,16 +353,16 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 														if((0 == traceTempVariable$y$3_1))
 															lengthCV$a$48_10 = 2;
 													}
-													int $var236 = lengthCV$a$48_10;
-													cv$temp$3$$var236 = $var236;
+													int $var237 = lengthCV$a$48_10;
+													cv$temp$3$$var237 = $var237;
 												}
-												if(((Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var236)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var236)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												if(((Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var237)) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var237)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var236));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var237));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var236)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var236)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var237)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var237)));
 												}
 												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 											}
@@ -519,7 +519,7 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						double[] var46 = a[y];
 						cv$temp$0$var46 = var46;
 					}
-					int cv$temp$1$$var256;
+					int cv$temp$1$$var257;
 					{
 						int lengthCV$a$48_12 = -1;
 						{
@@ -530,10 +530,10 @@ class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 							if((0 == y))
 								lengthCV$a$48_12 = 2;
 						}
-						int $var256 = lengthCV$a$48_12;
-						cv$temp$1$$var256 = $var256;
+						int $var257 = lengthCV$a$48_12;
+						cv$temp$1$$var257 = $var257;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$var46, cv$temp$1$$var256));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$var46, cv$temp$1$$var257));
 					{
 						{
 							{

@@ -377,15 +377,15 @@ public class CompilationContext {
                             if(v.isSample()) {
                                 // Get the requirements for the array
                                 if(guard == null)
-                                    guard = ForwardExecutionBuilder.constructGuard(v, GuardStatus.FREE, compilationCtx);
+                                    guard = ForwardExecutionBuilder.constructGuard(GuardStatus.FREE, compilationCtx, v);
                                 else
-                                    guard = IRTree.or(guard, ForwardExecutionBuilder.constructGuard(v, GuardStatus.FREE,
-                                            compilationCtx));
+                                    guard = IRTree.or(guard, ForwardExecutionBuilder.constructGuard(GuardStatus.FREE,
+                                            compilationCtx, v));
                             }
                             v = ((ArrayVariable<?>) v).getChildInstance();
                         }
                     } else if(v.isSample())
-                        guard = ForwardExecutionBuilder.constructGuard(v, GuardStatus.FREE, compilationCtx);
+                        guard = ForwardExecutionBuilder.constructGuard(GuardStatus.FREE, compilationCtx, v);
 
                     if(guard != null)
                         t = IRTree.ifElse(guard, t, "If " + name + " has not been set already allocate space.");

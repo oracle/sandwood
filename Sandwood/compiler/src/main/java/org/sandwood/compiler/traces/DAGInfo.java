@@ -72,6 +72,7 @@ public class DAGInfo {
     private final List<TraceSinkPair> observedSourceTraces = new ArrayList<>();
     private final List<TraceSinkPair> randomVarTraces = new ArrayList<>();
     private final List<TraceSinkPair> terminalVarTraces = new ArrayList<>();
+    private final List<TraceSinkPair> scopeConstraintVarTraces = new ArrayList<>();
     private final List<TraceSinkPair> allTraces = new ArrayList<>();
 
     private final Set<RandomVariable<?, ?>> randomVariables = new HashSet<>();
@@ -147,6 +148,19 @@ public class DAGInfo {
         allTraces.add(p);
     }
 
+    /**
+     * Adds a variable that is constructed as a scope constraint.
+     *
+     * @param trace The trace from a terminal variable to its source.
+     * @param sink  The variable that this trace ends at once it is reversed.
+     */
+    public void addScopeConstraint(Trace trace, Variable<?> sink) {
+        TraceHandle h = TraceHandle.getReversedTraceHandle(trace);
+        TraceSinkPair p = new TraceSinkPair(h, sink);
+        scopeConstraintVarTraces.add(p);
+        allTraces.add(p);
+    }
+
     public List<TraceSinkPair> observedVarTraces() {
         return observedVarTraces;
     }
@@ -161,6 +175,10 @@ public class DAGInfo {
 
     public List<TraceSinkPair> terminalVarTraces() {
         return terminalVarTraces;
+    }
+
+    public List<TraceSinkPair> scopeConstraintVarTraces() {
+        return scopeConstraintVarTraces;
     }
 
     public List<TraceSinkPair> allTraces() {

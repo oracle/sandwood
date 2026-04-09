@@ -923,12 +923,12 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 										double[] var52 = m[traceTempVariable$var51$15_3];
 										cv$temp$0$var52 = var52;
 									}
-									int cv$temp$1$$var829;
+									int cv$temp$1$$var830;
 									{
-										int $var829 = states;
-										cv$temp$1$$var829 = $var829;
+										int $var830 = states;
+										cv$temp$1$$var830 = $var830;
 									}
-									double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var829))?Math.log(cv$temp$0$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
+									double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var830))?Math.log(cv$temp$0$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
 									{
 										{
 											int traceTempVariable$var49$25_1 = cv$currentValue;
@@ -1009,12 +1009,12 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 										double[] var52 = m[traceTempVariable$var51$17_3];
 										cv$temp$2$var52 = var52;
 									}
-									int cv$temp$3$$var830;
+									int cv$temp$3$$var831;
 									{
-										int $var830 = states;
-										cv$temp$3$$var830 = $var830;
+										int $var831 = states;
+										cv$temp$3$$var831 = $var831;
 									}
-									double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$$var830))?Math.log(cv$temp$2$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
+									double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$$var831))?Math.log(cv$temp$2$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
 									{
 										{
 											int traceTempVariable$var49$26_1 = cv$currentValue;
@@ -1100,12 +1100,12 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 													double[] var52 = m[traceTempVariable$var51$22_3];
 													cv$temp$4$var52 = var52;
 												}
-												int cv$temp$5$$var831;
+												int cv$temp$5$$var832;
 												{
-													int $var831 = states;
-													cv$temp$5$$var831 = $var831;
+													int $var832 = states;
+													cv$temp$5$$var832 = $var832;
 												}
-												double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample55Value20) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$5$$var831))?Math.log(cv$temp$4$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
+												double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample55Value20) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$5$$var832))?Math.log(cv$temp$4$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
 												{
 													{
 														int traceTempVariable$var49$27_1 = distributionTempVariable$var54$21;
@@ -1243,14 +1243,14 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 															double[] var52 = m[traceTempVariable$var51$37_3];
 															cv$temp$9$var52 = var52;
 														}
-														int cv$temp$10$$var881;
+														int cv$temp$10$$var882;
 														{
-															int $var881 = states;
-															cv$temp$10$$var881 = $var881;
+															int $var882 = states;
+															cv$temp$10$$var882 = $var882;
 														}
 														double cv$distributionProbability = (scopeVariable$reachedSourceProbability * 1.0);
 														cv$reachedDistributionProbability = (cv$reachedDistributionProbability + cv$distributionProbability);
-														DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$9$var52, cv$temp$10$$var881);
+														DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$9$var52, cv$temp$10$$var882);
 													}
 												}
 											}

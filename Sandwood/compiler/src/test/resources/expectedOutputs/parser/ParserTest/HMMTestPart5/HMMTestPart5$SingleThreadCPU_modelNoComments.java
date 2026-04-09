@@ -587,12 +587,12 @@ class HMMTestPart5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						double[] var50 = m[0];
 						cv$temp$0$var50 = var50;
 					}
-					int cv$temp$1$$var176;
+					int cv$temp$1$$var177;
 					{
-						int $var176 = states;
-						cv$temp$1$$var176 = $var176;
+						int $var177 = states;
+						cv$temp$1$$var177 = $var177;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var176))?Math.log(cv$temp$0$var50[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var177))?Math.log(cv$temp$0$var50[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$var68$2_1 = (states * cv$currentValue);
@@ -610,18 +610,18 @@ class HMMTestPart5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 															double[] var69 = m[traceTempVariable$var68$2_1];
 															cv$temp$2$var69 = var69;
 														}
-														int cv$temp$3$$var185;
+														int cv$temp$3$$var186;
 														{
-															int $var185 = states;
-															cv$temp$3$$var185 = $var185;
+															int $var186 = states;
+															cv$temp$3$$var186 = $var186;
 														}
-														if(((Math.log(1.0) + (((0.0 <= (st[i$var65] / states)) && ((st[i$var65] / states) < cv$temp$3$$var185))?Math.log(cv$temp$2$var69[(st[i$var65] / states)]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= (st[i$var65] / states)) && ((st[i$var65] / states) < cv$temp$3$$var185))?Math.log(cv$temp$2$var69[(st[i$var65] / states)]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+														if(((Math.log(1.0) + (((0.0 <= (st[i$var65] / states)) && ((st[i$var65] / states) < cv$temp$3$$var186))?Math.log(cv$temp$2$var69[(st[i$var65] / states)]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= (st[i$var65] / states)) && ((st[i$var65] / states) < cv$temp$3$$var186))?Math.log(cv$temp$2$var69[(st[i$var65] / states)]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 														else {
 															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= (st[i$var65] / states)) && ((st[i$var65] / states) < cv$temp$3$$var185))?Math.log(cv$temp$2$var69[(st[i$var65] / states)]):Double.NEGATIVE_INFINITY));
+																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= (st[i$var65] / states)) && ((st[i$var65] / states) < cv$temp$3$$var186))?Math.log(cv$temp$2$var69[(st[i$var65] / states)]):Double.NEGATIVE_INFINITY));
 															else
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= (st[i$var65] / states)) && ((st[i$var65] / states) < cv$temp$3$$var185))?Math.log(cv$temp$2$var69[(st[i$var65] / states)]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= (st[i$var65] / states)) && ((st[i$var65] / states) < cv$temp$3$$var185))?Math.log(cv$temp$2$var69[(st[i$var65] / states)]):Double.NEGATIVE_INFINITY)));
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= (st[i$var65] / states)) && ((st[i$var65] / states) < cv$temp$3$$var186))?Math.log(cv$temp$2$var69[(st[i$var65] / states)]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= (st[i$var65] / states)) && ((st[i$var65] / states) < cv$temp$3$$var186))?Math.log(cv$temp$2$var69[(st[i$var65] / states)]):Double.NEGATIVE_INFINITY)));
 														}
 														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 													}
@@ -758,12 +758,12 @@ class HMMTestPart5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						double[] var69 = m[st[(i$var65 - 1)]];
 						cv$temp$0$var69 = var69;
 					}
-					int cv$temp$1$$var207;
+					int cv$temp$1$$var208;
 					{
-						int $var207 = states;
-						cv$temp$1$$var207 = $var207;
+						int $var208 = states;
+						cv$temp$1$$var208 = $var208;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var207))?Math.log(cv$temp$0$var69[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var208))?Math.log(cv$temp$0$var69[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$var68$2_1 = (states * cv$currentValue);
@@ -781,18 +781,18 @@ class HMMTestPart5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 															double[] var69 = m[traceTempVariable$var68$2_1];
 															cv$temp$2$var69 = var69;
 														}
-														int cv$temp$3$$var216;
+														int cv$temp$3$$var217;
 														{
-															int $var216 = states;
-															cv$temp$3$$var216 = $var216;
+															int $var217 = states;
+															cv$temp$3$$var217 = $var217;
 														}
-														if(((Math.log(1.0) + (((0.0 <= (st[index$i$2_2] / states)) && ((st[index$i$2_2] / states) < cv$temp$3$$var216))?Math.log(cv$temp$2$var69[(st[index$i$2_2] / states)]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= (st[index$i$2_2] / states)) && ((st[index$i$2_2] / states) < cv$temp$3$$var216))?Math.log(cv$temp$2$var69[(st[index$i$2_2] / states)]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+														if(((Math.log(1.0) + (((0.0 <= (st[index$i$2_2] / states)) && ((st[index$i$2_2] / states) < cv$temp$3$$var217))?Math.log(cv$temp$2$var69[(st[index$i$2_2] / states)]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= (st[index$i$2_2] / states)) && ((st[index$i$2_2] / states) < cv$temp$3$$var217))?Math.log(cv$temp$2$var69[(st[index$i$2_2] / states)]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 														else {
 															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= (st[index$i$2_2] / states)) && ((st[index$i$2_2] / states) < cv$temp$3$$var216))?Math.log(cv$temp$2$var69[(st[index$i$2_2] / states)]):Double.NEGATIVE_INFINITY));
+																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= (st[index$i$2_2] / states)) && ((st[index$i$2_2] / states) < cv$temp$3$$var217))?Math.log(cv$temp$2$var69[(st[index$i$2_2] / states)]):Double.NEGATIVE_INFINITY));
 															else
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= (st[index$i$2_2] / states)) && ((st[index$i$2_2] / states) < cv$temp$3$$var216))?Math.log(cv$temp$2$var69[(st[index$i$2_2] / states)]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= (st[index$i$2_2] / states)) && ((st[index$i$2_2] / states) < cv$temp$3$$var216))?Math.log(cv$temp$2$var69[(st[index$i$2_2] / states)]):Double.NEGATIVE_INFINITY)));
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= (st[index$i$2_2] / states)) && ((st[index$i$2_2] / states) < cv$temp$3$$var217))?Math.log(cv$temp$2$var69[(st[index$i$2_2] / states)]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= (st[index$i$2_2] / states)) && ((st[index$i$2_2] / states) < cv$temp$3$$var217))?Math.log(cv$temp$2$var69[(st[index$i$2_2] / states)]):Double.NEGATIVE_INFINITY)));
 														}
 														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 													}

@@ -1145,9 +1145,9 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 				// 
 				// Substituted "index$i$2_2" with its value "i$var104".
 				// 
-				// cv$temp$3$$var621's comment
+				// cv$temp$3$$var622's comment
 				// 
-				// $var621's comment
+				// $var622's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var121's comment
@@ -1179,9 +1179,9 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 			// 
 			// Substituted "i$var136" with its value "i$var104".
 			// 
-			// cv$temp$5$$var631's comment
+			// cv$temp$5$$var632's comment
 			// 
-			// $var631's comment
+			// $var632's comment
 			// Constructing a random variable input for use later.
 			// 
 			// cv$temp$4$var153's comment
@@ -1397,9 +1397,9 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 			// 
 			// Substituted "cv$temp$0$weights" with its value "weights".
 			// 
-			// cv$temp$1$$var554's comment
+			// cv$temp$1$$var555's comment
 			// 
-			// $var554's comment
+			// $var555's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(weights[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
@@ -1420,9 +1420,9 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$3$$var563's comment
+				// cv$temp$3$$var564's comment
 				// 
-				// $var563's comment
+				// $var564's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var90's comment
@@ -1557,9 +1557,9 @@ class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 				// 
 				// Substituted "i$var104" with its value "i$var87".
 				// 
-				// cv$temp$3$$var587's comment
+				// cv$temp$3$$var588's comment
 				// 
-				// $var587's comment
+				// $var588's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var121's comment

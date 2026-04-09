@@ -148,7 +148,8 @@ public class ForwardExecutionBuilder {
             } else {
                 // If we are using restrictions in this code construct a guard for the code
                 // generating this intermediate.
-                IRTreeReturn<BooleanVariable> guard = constructGuard(v, guardStatus, compilationCtx);
+                IRTreeReturn<BooleanVariable> guard = constructGuard(guardStatus, compilationCtx, v,
+                        s.getScopeCondition());
 
                 if(obsTraces.isEmpty()) {
                     compilationCtx.setCodeGuard(guard);
@@ -193,7 +194,7 @@ public class ForwardExecutionBuilder {
 
             // If we are using restrictions in this code construct a guard for the code
             // generating this intermediate.
-            IRTreeReturn<BooleanVariable> guard = constructGuard(v, guardStatus, compilationCtx);
+            IRTreeReturn<BooleanVariable> guard = constructGuard(guardStatus, compilationCtx, v);
 
             if(obsTraces.isEmpty()) {
                 compilationCtx.setCodeGuard(guard);
@@ -444,7 +445,7 @@ public class ForwardExecutionBuilder {
      * 
      * @param v              The variable to get the dependent sample tasks for.
      * @param compilationCtx The compilation context.
-     * @return A set containing all the dependent variables.
+     * @return A set containing all the dependent sample tasks.
      */
     private static Set<SampleTask<?, ?>> getSourceSampleTasks(Variable<?> v, CompilationContext compilationCtx) {
         return getSourceSampleTasks(v, new HashSet<>(), compilationCtx.traces);
@@ -454,10 +455,10 @@ public class ForwardExecutionBuilder {
      * Method to get all the sample tasks that a variable is dependent on when performing forward execution.
      * 
      * @param v      The variable to get the dependent sample tasks for.
-     * @param traces The traces object to query.
      * @param seen   A set containing all the variables already seen. This will be updated with the variables seen
      *               during the execution of this method.
-     * @return A set containing all the dependent variables.
+     * @param traces The traces object to query.
+     * @return A set containing all the sample tasks.
      */
     private static Set<SampleTask<?, ?>> getSourceSampleTasks(Variable<?> v, Set<Variable<?>> seen, Traces traces) {
         Set<SampleTask<?, ?>> samples = traces.getSourceSampleTasks(v);
@@ -488,9 +489,12 @@ public class ForwardExecutionBuilder {
         return toReturn;
     }
 
-    static IRTreeReturn<BooleanVariable> constructGuard(Variable<?> v, GuardStatus guardStatus,
-            CompilationContext compilationCtx) {
-        return constructGuard(getSourceSampleTasks(v, compilationCtx), guardStatus);
+    static IRTreeReturn<BooleanVariable> constructGuard(GuardStatus guardStatus, CompilationContext compilationCtx,
+            Variable<?>... vs) {
+        Set<SampleTask<?, ?>> sampleTasks = new HashSet<>();
+        for(Variable<?> v:vs)
+            sampleTasks.addAll(getSourceSampleTasks(v, compilationCtx));
+        return constructGuard(sampleTasks, guardStatus);
     }
 
     private static IRTreeReturn<BooleanVariable> constructGuard(Set<SampleTask<?, ?>> sTasks, GuardStatus guardStatus) {

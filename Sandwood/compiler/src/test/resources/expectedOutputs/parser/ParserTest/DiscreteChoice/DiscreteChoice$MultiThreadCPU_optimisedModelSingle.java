@@ -441,9 +441,9 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// 
 				// Substituted "cv$temp$2$prob" with its value "prob".
 				// 
-				// cv$temp$3$$var502's comment
+				// cv$temp$3$$var503's comment
 				// 
-				// $var502's comment
+				// $var503's comment
 				// Constructing a random variable input for use later.
 				cv$accumulatedProbabilities = ((((0.0 <= choices[var76]) && (choices[var76] < noProducts))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
@@ -563,9 +563,9 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// 
 			// Substituted "cv$temp$2$prob" with its value "prob".
 			// 
-			// cv$temp$3$$var502's comment
+			// cv$temp$3$$var503's comment
 			// 
-			// $var502's comment
+			// $var503's comment
 			// Constructing a random variable input for use later.
 			cv$accumulatedProbabilities = ((((0.0 <= choices[var76]) && (choices[var76] < noProducts))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		

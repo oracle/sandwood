@@ -500,7 +500,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$$var98" with its value "2".
+			// Substituted "cv$temp$1$$var99" with its value "2".
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(prior, v, 2);
 			
 			// Processing random variable 20.
@@ -588,7 +588,7 @@ class DirichletBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$$var98" with its value "2".
+		// Substituted "cv$temp$1$$var99" with its value "2".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(prior, v, 2);
 		
 		// Processing random variable 20.

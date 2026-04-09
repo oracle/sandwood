@@ -267,7 +267,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					{
 						cv$temp$0$var67 = a[y];
 					}
-					int cv$temp$1$$var237;
+					int cv$temp$1$$var238;
 					{
 						int lengthCV$a$71_8 = -1;
 						{
@@ -278,9 +278,9 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 							if((1 == y))
 								lengthCV$a$71_8 = 3;
 						}
-						cv$temp$1$$var237 = lengthCV$a$71_8;
+						cv$temp$1$$var238 = lengthCV$a$71_8;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var237))?Math.log(cv$temp$0$var67[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var238))?Math.log(cv$temp$0$var67[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$i$6_1 = cv$currentValue;

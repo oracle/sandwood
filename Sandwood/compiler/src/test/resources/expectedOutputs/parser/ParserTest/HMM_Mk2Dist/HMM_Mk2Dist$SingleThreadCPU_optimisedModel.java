@@ -1607,9 +1607,9 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$1$$var656's comment
+						// cv$temp$1$$var657's comment
 						// 
-						// $var656's comment
+						// $var657's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$0$var121's comment
@@ -1698,9 +1698,9 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// 
 							// Value of the variable at this index
 							// 
-							// cv$temp$3$$var657's comment
+							// cv$temp$3$$var658's comment
 							// 
-							// $var657's comment
+							// $var658's comment
 							// Constructing a random variable input for use later.
 							// 
 							// cv$temp$2$var121's comment
@@ -1813,9 +1813,9 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$7$$var659's comment
+						// cv$temp$7$$var660's comment
 						// 
-						// $var659's comment
+						// $var660's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$6$var121's comment
@@ -1841,9 +1841,9 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						if(((0 <= var55) && (var55 < noStates))) {
 							// Substituted "i$var136" with its value "i$var104".
 							// 
-							// cv$temp$15$$var691's comment
+							// cv$temp$15$$var692's comment
 							// 
-							// $var691's comment
+							// $var692's comment
 							// Constructing a random variable input for use later.
 							// 
 							// cv$temp$14$var153's comment
@@ -1978,9 +1978,9 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$17$$var729's comment
+					// cv$temp$17$$var730's comment
 					// 
-					// $var729's comment
+					// $var730's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$16$var121's comment
@@ -2372,9 +2372,9 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// 
 			// Substituted "cv$temp$0$weights" with its value "weights".
 			// 
-			// cv$temp$1$$var493's comment
+			// cv$temp$1$$var494's comment
 			// 
-			// $var493's comment
+			// $var494's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(weights[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
@@ -2396,9 +2396,9 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// cv$temp$3$$var503's comment
+					// cv$temp$3$$var504's comment
 					// 
-					// $var503's comment
+					// $var504's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$2$var90's comment
@@ -2423,9 +2423,9 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$5$$var514's comment
+					// cv$temp$5$$var515's comment
 					// 
-					// $var514's comment
+					// $var515's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$4$var90's comment
@@ -2616,9 +2616,9 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					if(((0 <= var41) && (var41 < noStates))) {
 						// Substituted "i$var104" with its value "i$var87".
 						// 
-						// cv$temp$3$$var546's comment
+						// cv$temp$3$$var547's comment
 						// 
-						// $var546's comment
+						// $var547's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$2$var121's comment
@@ -2682,9 +2682,9 @@ class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// 
 						// The probability of reaching the consumer with this set of consumer arguments
 						// 
-						// cv$temp$7$$var570's comment
+						// cv$temp$7$$var571's comment
 						// 
-						// $var570's comment
+						// $var571's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$6$var121's comment

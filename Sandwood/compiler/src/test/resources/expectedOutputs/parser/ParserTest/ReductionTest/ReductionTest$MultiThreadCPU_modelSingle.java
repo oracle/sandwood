@@ -859,16 +859,16 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						double[] var59 = m[i$var58];
 						cv$temp$0$var59 = var59;
 					}
-					int cv$temp$1$$var253;
+					int cv$temp$1$$var254;
 					{
 						// Constructing a random variable input for use later.
-						int $var253 = noStates;
-						cv$temp$1$$var253 = $var253;
+						int $var254 = noStates;
+						cv$temp$1$$var254 = $var254;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var253))?Math.log(cv$temp$0$var59[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var254))?Math.log(cv$temp$0$var59[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 84.
 					{
@@ -885,24 +885,24 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 										int reduceVar$var82$5 = 0;
 										
 										// Reduce for every value except a masked value which will be skipped.
-										for(int cv$reduction382Index = 0; cv$reduction382Index < i$var58; cv$reduction382Index += 1) {
+										for(int cv$reduction383Index = 0; cv$reduction383Index < i$var58; cv$reduction383Index += 1) {
 											// Set the left hand term of the reduction function to the return variable value.
 											int i$var79 = reduceVar$var82$5;
 											
 											// Set the right hand term to a value from the array st
-											int j$var80 = st[cv$reduction382Index];
+											int j$var80 = st[cv$reduction383Index];
 											
 											// Execute the reduction function, saving the result into the return value.
 											// 
 											// Copy the result of the reduction into the variable returned by the reduction.
 											reduceVar$var82$5 = (i$var79 + j$var80);
 										}
-										for(int cv$reduction382Index = (i$var58 + 1); cv$reduction382Index < noCats; cv$reduction382Index += 1) {
+										for(int cv$reduction383Index = (i$var58 + 1); cv$reduction383Index < noCats; cv$reduction383Index += 1) {
 											// Set the left hand term of the reduction function to the return variable value.
 											int i$var79 = reduceVar$var82$5;
 											
 											// Set the right hand term to a value from the array st
-											int j$var80 = st[cv$reduction382Index];
+											int j$var80 = st[cv$reduction383Index];
 											
 											// Execute the reduction function, saving the result into the return value.
 											// 

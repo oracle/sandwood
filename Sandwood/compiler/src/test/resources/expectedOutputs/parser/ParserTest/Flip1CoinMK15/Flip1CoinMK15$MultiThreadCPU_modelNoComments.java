@@ -507,14 +507,14 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 									{
 										if((0 < 2)) {
 											double reduceVar$var33$16 = 0.0;
-											for(int cv$reduction407Index = 0; cv$reduction407Index < 0; cv$reduction407Index += 1) {
+											for(int cv$reduction408Index = 0; cv$reduction408Index < 0; cv$reduction408Index += 1) {
 												double i$var30 = reduceVar$var33$16;
-												double j = c[cv$reduction407Index];
+												double j = c[cv$reduction408Index];
 												reduceVar$var33$16 = (i$var30 + j);
 											}
-											for(int cv$reduction407Index = (0 + 1); cv$reduction407Index < 2; cv$reduction407Index += 1) {
+											for(int cv$reduction408Index = (0 + 1); cv$reduction408Index < 2; cv$reduction408Index += 1) {
 												double i$var30 = reduceVar$var33$16;
-												double j = c[cv$reduction407Index];
+												double j = c[cv$reduction408Index];
 												reduceVar$var33$16 = (i$var30 + j);
 											}
 											double cv$reduced30 = reduceVar$var33$16;
@@ -573,14 +573,14 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 									{
 										if((0 < 2)) {
 											double reduceVar$var33$17 = 0.0;
-											for(int cv$reduction428Index = 0; cv$reduction428Index < 1; cv$reduction428Index += 1) {
+											for(int cv$reduction429Index = 0; cv$reduction429Index < 1; cv$reduction429Index += 1) {
 												double i$var30 = reduceVar$var33$17;
-												double j = c[cv$reduction428Index];
+												double j = c[cv$reduction429Index];
 												reduceVar$var33$17 = (i$var30 + j);
 											}
-											for(int cv$reduction428Index = (1 + 1); cv$reduction428Index < 2; cv$reduction428Index += 1) {
+											for(int cv$reduction429Index = (1 + 1); cv$reduction429Index < 2; cv$reduction429Index += 1) {
 												double i$var30 = reduceVar$var33$17;
-												double j = c[cv$reduction428Index];
+												double j = c[cv$reduction429Index];
 												reduceVar$var33$17 = (i$var30 + j);
 											}
 											double cv$reduced30 = reduceVar$var33$17;

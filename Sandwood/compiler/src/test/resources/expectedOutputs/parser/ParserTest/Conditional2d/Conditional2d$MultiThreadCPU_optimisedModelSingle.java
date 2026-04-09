@@ -591,10 +591,11 @@ class Conditional2d$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
 		if(!fixedFlag$sample8)
 			u = DistributionSampling.sampleUniform(RNG$);
-		if(guard)
-			value = 1.0;
-		else {
-			if(!fixedFlag$sample8)
+		if(guard) {
+			if(!fixedFlag$sample4)
+				value = 1.0;
+		} else {
+			if((!fixedFlag$sample4 || !fixedFlag$sample8))
 				value = u;
 		}
 		if((!fixedFlag$sample4 || !fixedFlag$sample8))

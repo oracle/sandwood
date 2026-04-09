@@ -653,12 +653,13 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard)
-			bias = 0.5;
-		else {
+		if(guard) {
+			if(!fixedFlag$sample4)
+				bias = 0.5;
+		} else {
 			if(!fixedFlag$sample16)
 				var14 = (0.0 + ((0.5 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
-			if(!fixedFlag$sample16)
+			if(!(fixedFlag$sample4 && fixedFlag$sample16))
 				bias = var14;
 		}
 		value = DistributionSampling.sampleBeta(RNG$, bias, 1.0);
@@ -668,12 +669,13 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard)
-			bias = 0.5;
-		else {
+		if(guard) {
+			if(!fixedFlag$sample4)
+				bias = 0.5;
+		} else {
 			if(!fixedFlag$sample16)
 				var14 = (0.0 + ((0.5 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
-			if(!fixedFlag$sample16)
+			if(!(fixedFlag$sample4 && fixedFlag$sample16))
 				bias = var14;
 		}
 	}
@@ -682,12 +684,13 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard)
-			bias = 0.5;
-		else {
+		if(guard) {
+			if(!fixedFlag$sample4)
+				bias = 0.5;
+		} else {
 			if(!fixedFlag$sample16)
 				var14 = (0.0 + ((0.5 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
-			if(!fixedFlag$sample16)
+			if(!(fixedFlag$sample4 && fixedFlag$sample16))
 				bias = var14;
 		}
 	}
@@ -766,12 +769,13 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	public final void logProbabilityGeneration() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard)
-			bias = 0.5;
-		else {
+		if(guard) {
+			if(!fixedFlag$sample4)
+				bias = 0.5;
+		} else {
 			if(!fixedFlag$sample16)
 				var14 = (0.0 + ((0.5 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
-			if(!fixedFlag$sample16)
+			if(!(fixedFlag$sample4 && fixedFlag$sample16))
 				bias = var14;
 		}
 		logModelProbabilitiesVal();
@@ -784,10 +788,11 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	@Override
 	public final void setIntermediates() {
-		if(guard)
-			bias = 0.5;
-		else {
-			if(fixedFlag$sample16)
+		if(guard) {
+			if(fixedFlag$sample4)
+				bias = 0.5;
+		} else {
+			if((fixedFlag$sample4 && fixedFlag$sample16))
 				bias = var14;
 		}
 	}

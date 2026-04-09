@@ -536,9 +536,9 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// cv$temp$3$$var137's comment
+			// cv$temp$3$$var138's comment
 			// 
-			// $var137's comment
+			// $var138's comment
 			// Constructing a random variable input for use later.
 			// 
 			// Value of the variable at this index
@@ -624,9 +624,9 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
 		// 
-		// cv$temp$3$$var137's comment
+		// cv$temp$3$$var138's comment
 		// 
-		// $var137's comment
+		// $var138's comment
 		// Constructing a random variable input for use later.
 		// 
 		// Value of the variable at this index
@@ -842,9 +842,9 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// A reference local to the function for the sample variable.
 			// 
-			// cv$temp$1$$var157's comment
+			// cv$temp$1$$var158's comment
 			// 
-			// $var157's comment
+			// $var158's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_3);
 			
@@ -916,9 +916,9 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// A reference local to the function for the sample variable.
 		// 
-		// cv$temp$1$$var157's comment
+		// cv$temp$1$$var158's comment
 		// 
-		// $var157's comment
+		// $var158's comment
 		// Constructing a random variable input for use later.
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_3);
 		

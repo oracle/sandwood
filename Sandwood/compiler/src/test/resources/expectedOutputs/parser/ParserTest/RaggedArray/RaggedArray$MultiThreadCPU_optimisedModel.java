@@ -399,7 +399,7 @@ class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// 
 			// Substituted "cv$temp$0$var67" with its value "a[y]".
 			// 
-			// Substituted "cv$temp$1$$var237" with its value "lengthCV$a$71_8".
+			// Substituted "cv$temp$1$$var238" with its value "lengthCV$a$71_8".
 			double cv$accumulatedProbabilities = ((cv$valuePos < lengthCV$a$71_8)?Math.log(a[y][cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Processing sample task 89 of consumer random variable null.
