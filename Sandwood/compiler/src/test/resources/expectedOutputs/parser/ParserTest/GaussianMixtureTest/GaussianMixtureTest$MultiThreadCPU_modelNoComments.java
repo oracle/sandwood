@@ -600,12 +600,12 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					{
 						cv$temp$0$phi = phi;
 					}
-					int cv$temp$1$$var342;
+					int cv$temp$1$$var343;
 					{
-						int $var342 = k;
-						cv$temp$1$$var342 = $var342;
+						int $var343 = k;
+						cv$temp$1$$var343 = $var343;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var342))?Math.log(cv$temp$0$phi[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var343))?Math.log(cv$temp$0$phi[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							boolean guard$sample68gaussian71 = false;

@@ -318,11 +318,11 @@ class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					{
 						cv$temp$0$v = v;
 					}
-					int cv$temp$1$$var157;
+					int cv$temp$1$$var158;
 					{
-						cv$temp$1$$var157 = 2;
+						cv$temp$1$$var158 = 2;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$v, cv$temp$1$$var157));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$v, cv$temp$1$$var158));
 					{
 						{
 							{

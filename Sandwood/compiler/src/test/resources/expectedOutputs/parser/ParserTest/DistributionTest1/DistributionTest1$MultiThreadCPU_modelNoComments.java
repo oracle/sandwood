@@ -529,11 +529,11 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var155;
+					int cv$temp$1$$var156;
 					{
-						cv$temp$1$$var155 = weightings.length;
+						cv$temp$1$$var156 = weightings.length;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var155))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var156))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$v1$1_1 = cv$currentValue;
@@ -659,11 +659,11 @@ class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var175;
+					int cv$temp$1$$var176;
 					{
-						cv$temp$1$$var175 = weightings.length;
+						cv$temp$1$$var176 = weightings.length;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var175))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var176))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$v2$1_1 = cv$currentValue;

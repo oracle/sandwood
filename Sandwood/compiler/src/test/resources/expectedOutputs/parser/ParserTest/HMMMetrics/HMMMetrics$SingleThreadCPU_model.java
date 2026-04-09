@@ -8378,16 +8378,16 @@ class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					{
 						cv$temp$0$initialStateDistribution = initialStateDistribution;
 					}
-					int cv$temp$1$$var455;
+					int cv$temp$1$$var456;
 					{
 						// Constructing a random variable input for use later.
-						int $var455 = noStates;
-						cv$temp$1$$var455 = $var455;
+						int $var456 = noStates;
+						cv$temp$1$$var456 = $var456;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var455))?Math.log(cv$temp$0$initialStateDistribution[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var456))?Math.log(cv$temp$0$initialStateDistribution[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 55.
 					{
@@ -8422,22 +8422,22 @@ class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.model.Cor
 																	double[] var54 = m[traceTempVariable$var53$1_1];
 																	cv$temp$2$var54 = var54;
 																}
-																int cv$temp$3$$var466;
+																int cv$temp$3$$var467;
 																{
 																	// Constructing a random variable input for use later.
-																	int $var466 = noStates;
-																	cv$temp$3$$var466 = $var466;
+																	int $var467 = noStates;
+																	cv$temp$3$$var467 = $var467;
 																}
 																
 																// Record the probability of sample task 57 generating output with current configuration.
-																if(((Math.log(1.0) + (((0.0 <= st[i$var50]) && (st[i$var50] < cv$temp$3$$var466))?Math.log(cv$temp$2$var54[st[i$var50]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[i$var50]) && (st[i$var50] < cv$temp$3$$var466))?Math.log(cv$temp$2$var54[st[i$var50]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + (((0.0 <= st[i$var50]) && (st[i$var50] < cv$temp$3$$var467))?Math.log(cv$temp$2$var54[st[i$var50]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[i$var50]) && (st[i$var50] < cv$temp$3$$var467))?Math.log(cv$temp$2$var54[st[i$var50]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	// If the second value is -infinity.
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[i$var50]) && (st[i$var50] < cv$temp$3$$var466))?Math.log(cv$temp$2$var54[st[i$var50]]):Double.NEGATIVE_INFINITY));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[i$var50]) && (st[i$var50] < cv$temp$3$$var467))?Math.log(cv$temp$2$var54[st[i$var50]]):Double.NEGATIVE_INFINITY));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[i$var50]) && (st[i$var50] < cv$temp$3$$var466))?Math.log(cv$temp$2$var54[st[i$var50]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[i$var50]) && (st[i$var50] < cv$temp$3$$var466))?Math.log(cv$temp$2$var54[st[i$var50]]):Double.NEGATIVE_INFINITY)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[i$var50]) && (st[i$var50] < cv$temp$3$$var467))?Math.log(cv$temp$2$var54[st[i$var50]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[i$var50]) && (st[i$var50] < cv$temp$3$$var467))?Math.log(cv$temp$2$var54[st[i$var50]]):Double.NEGATIVE_INFINITY)));
 																}
 																
 																// Recorded the probability of reaching sample task 57 with the current configuration.
@@ -9940,11 +9940,11 @@ class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.model.Cor
 														double[] var54 = m[traceTempVariable$var53$156_1];
 														cv$temp$52$var54 = var54;
 													}
-													int cv$temp$53$$var729;
+													int cv$temp$53$$var730;
 													{
 														// Constructing a random variable input for use later.
-														int $var729 = noStates;
-														cv$temp$53$$var729 = $var729;
+														int $var730 = noStates;
+														cv$temp$53$$var730 = $var730;
 													}
 													
 													// The probability of reaching the consumer with this set of consumer arguments
@@ -9954,7 +9954,7 @@ class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.model.Cor
 													cv$reachedDistributionProbability = (cv$reachedDistributionProbability + cv$distributionProbability);
 													
 													// Add the current distribution to the distribution accumulator.
-													DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$52$var54, cv$temp$53$$var729);
+													DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$52$var54, cv$temp$53$$var730);
 												}
 											}
 										}
@@ -10169,16 +10169,16 @@ class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.model.Cor
 									double[] var54 = m[st[(i$var50 - 1)]];
 									cv$temp$0$var54 = var54;
 								}
-								int cv$temp$1$$var788;
+								int cv$temp$1$$var789;
 								{
 									// Constructing a random variable input for use later.
-									int $var788 = noStates;
-									cv$temp$1$$var788 = $var788;
+									int $var789 = noStates;
+									cv$temp$1$$var789 = $var789;
 								}
 								
 								// An accumulator to allow the value for each distribution to be constructed before
 								// it is added to the index probabilities.
-								double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var788))?Math.log(cv$temp$0$var54[cv$currentValue]):Double.NEGATIVE_INFINITY));
+								double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var789))?Math.log(cv$temp$0$var54[cv$currentValue]):Double.NEGATIVE_INFINITY));
 								
 								// Processing random variable 55.
 								{
@@ -11325,16 +11325,16 @@ class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.model.Cor
 											double[] var54 = m[st[(i$var50 - 1)]];
 											cv$temp$2$var54 = var54;
 										}
-										int cv$temp$3$$var789;
+										int cv$temp$3$$var790;
 										{
 											// Constructing a random variable input for use later.
-											int $var789 = noStates;
-											cv$temp$3$$var789 = $var789;
+											int $var790 = noStates;
+											cv$temp$3$$var790 = $var790;
 										}
 										
 										// An accumulator to allow the value for each distribution to be constructed before
 										// it is added to the index probabilities.
-										double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample39Value22) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$$var789))?Math.log(cv$temp$2$var54[cv$currentValue]):Double.NEGATIVE_INFINITY));
+										double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample39Value22) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$$var790))?Math.log(cv$temp$2$var54[cv$currentValue]):Double.NEGATIVE_INFINITY));
 										
 										// Processing random variable 55.
 										{
@@ -12761,16 +12761,16 @@ class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.model.Cor
 								double[] var54 = m[traceTempVariable$var53$27_1];
 								cv$temp$4$var54 = var54;
 							}
-							int cv$temp$5$$var790;
+							int cv$temp$5$$var791;
 							{
 								// Constructing a random variable input for use later.
-								int $var790 = noStates;
-								cv$temp$5$$var790 = $var790;
+								int $var791 = noStates;
+								cv$temp$5$$var791 = $var791;
 							}
 							
 							// An accumulator to allow the value for each distribution to be constructed before
 							// it is added to the index probabilities.
-							double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$5$$var790))?Math.log(cv$temp$4$var54[cv$currentValue]):Double.NEGATIVE_INFINITY));
+							double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$5$$var791))?Math.log(cv$temp$4$var54[cv$currentValue]):Double.NEGATIVE_INFINITY));
 							
 							// Processing random variable 55.
 							{
@@ -14218,16 +14218,16 @@ class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.model.Cor
 											double[] var54 = m[traceTempVariable$var53$32_1];
 											cv$temp$6$var54 = var54;
 										}
-										int cv$temp$7$$var791;
+										int cv$temp$7$$var792;
 										{
 											// Constructing a random variable input for use later.
-											int $var791 = noStates;
-											cv$temp$7$$var791 = $var791;
+											int $var792 = noStates;
+											cv$temp$7$$var792 = $var792;
 										}
 										
 										// An accumulator to allow the value for each distribution to be constructed before
 										// it is added to the index probabilities.
-										double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample57Value30) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$7$$var791))?Math.log(cv$temp$6$var54[cv$currentValue]):Double.NEGATIVE_INFINITY));
+										double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample57Value30) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$7$$var792))?Math.log(cv$temp$6$var54[cv$currentValue]):Double.NEGATIVE_INFINITY));
 										
 										// Processing random variable 55.
 										{
@@ -15986,11 +15986,11 @@ class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.model.Cor
 													double[] var54 = m[traceTempVariable$var53$621_1];
 													cv$temp$200$var54 = var54;
 												}
-												int cv$temp$201$$var1482;
+												int cv$temp$201$$var1483;
 												{
 													// Constructing a random variable input for use later.
-													int $var1482 = noStates;
-													cv$temp$201$$var1482 = $var1482;
+													int $var1483 = noStates;
+													cv$temp$201$$var1483 = $var1483;
 												}
 												
 												// The probability of reaching the consumer with this set of consumer arguments
@@ -16000,7 +16000,7 @@ class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.model.Cor
 												cv$reachedDistributionProbability = (cv$reachedDistributionProbability + cv$distributionProbability);
 												
 												// Add the current distribution to the distribution accumulator.
-												DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$200$var54, cv$temp$201$$var1482);
+												DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$200$var54, cv$temp$201$$var1483);
 											}
 										}
 									}

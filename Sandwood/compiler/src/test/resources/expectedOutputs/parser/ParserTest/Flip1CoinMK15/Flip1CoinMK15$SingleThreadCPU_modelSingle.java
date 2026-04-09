@@ -807,24 +807,24 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 											double reduceVar$var33$3 = 0.0;
 											
 											// Reduce for every value except a masked value which will be skipped.
-											for(int cv$reduction164Index = 0; cv$reduction164Index < 0; cv$reduction164Index += 1) {
+											for(int cv$reduction165Index = 0; cv$reduction165Index < 0; cv$reduction165Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var30 = reduceVar$var33$3;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction164Index];
+												double j = c[cv$reduction165Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
 												// Copy the result of the reduction into the variable returned by the reduction.
 												reduceVar$var33$3 = (i$var30 + j);
 											}
-											for(int cv$reduction164Index = (0 + 1); cv$reduction164Index < 2; cv$reduction164Index += 1) {
+											for(int cv$reduction165Index = (0 + 1); cv$reduction165Index < 2; cv$reduction165Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var30 = reduceVar$var33$3;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction164Index];
+												double j = c[cv$reduction165Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
@@ -918,24 +918,24 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 											double reduceVar$var33$4 = 0.0;
 											
 											// Reduce for every value except a masked value which will be skipped.
-											for(int cv$reduction185Index = 0; cv$reduction185Index < 1; cv$reduction185Index += 1) {
+											for(int cv$reduction186Index = 0; cv$reduction186Index < 1; cv$reduction186Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var30 = reduceVar$var33$4;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction185Index];
+												double j = c[cv$reduction186Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
 												// Copy the result of the reduction into the variable returned by the reduction.
 												reduceVar$var33$4 = (i$var30 + j);
 											}
-											for(int cv$reduction185Index = (1 + 1); cv$reduction185Index < 2; cv$reduction185Index += 1) {
+											for(int cv$reduction186Index = (1 + 1); cv$reduction186Index < 2; cv$reduction186Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var30 = reduceVar$var33$4;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction185Index];
+												double j = c[cv$reduction186Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 

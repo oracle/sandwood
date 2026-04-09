@@ -493,7 +493,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction164Index" with its value "1".
+				// Substituted "cv$reduction165Index" with its value "1".
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
@@ -514,7 +514,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// j's comment
 				// Set the right hand term to a value from the array c
 				// 
-				// Substituted "cv$reduction164Index" with its value "1".
+				// Substituted "cv$reduction165Index" with its value "1".
 				double reduceVar$var33$3 = ((b / 2) + c[1]);
 				
 				// Processing sample task 50 of consumer random variable bernoulli.
@@ -631,7 +631,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// j's comment
 			// Set the right hand term to a value from the array c
 			// 
-			// Substituted "cv$reduction164Index" with its value "1".
+			// Substituted "cv$reduction165Index" with its value "1".
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
@@ -652,7 +652,7 @@ class Flip1CoinMK15$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// j's comment
 			// Set the right hand term to a value from the array c
 			// 
-			// Substituted "cv$reduction164Index" with its value "1".
+			// Substituted "cv$reduction165Index" with its value "1".
 			double reduceVar$var33$3 = ((cv$proposedValue / 2) + c[1]);
 			
 			// Processing sample task 50 of consumer random variable bernoulli.

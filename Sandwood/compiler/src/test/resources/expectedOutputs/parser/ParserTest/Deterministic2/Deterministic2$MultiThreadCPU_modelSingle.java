@@ -1424,16 +1424,16 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 										double[] var52 = m[traceTempVariable$var51$15_3];
 										cv$temp$0$var52 = var52;
 									}
-									int cv$temp$1$$var791;
+									int cv$temp$1$$var792;
 									{
 										// Constructing a random variable input for use later.
-										int $var791 = states;
-										cv$temp$1$$var791 = $var791;
+										int $var792 = states;
+										cv$temp$1$$var792 = $var792;
 									}
 									
 									// An accumulator to allow the value for each distribution to be constructed before
 									// it is added to the index probabilities.
-									double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var791))?Math.log(cv$temp$0$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
+									double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var792))?Math.log(cv$temp$0$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
 									
 									// Processing random variable 53.
 									{
@@ -1547,16 +1547,16 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 										double[] var52 = m[traceTempVariable$var51$17_3];
 										cv$temp$2$var52 = var52;
 									}
-									int cv$temp$3$$var792;
+									int cv$temp$3$$var793;
 									{
 										// Constructing a random variable input for use later.
-										int $var792 = states;
-										cv$temp$3$$var792 = $var792;
+										int $var793 = states;
+										cv$temp$3$$var793 = $var793;
 									}
 									
 									// An accumulator to allow the value for each distribution to be constructed before
 									// it is added to the index probabilities.
-									double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$$var792))?Math.log(cv$temp$2$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
+									double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$$var793))?Math.log(cv$temp$2$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
 									
 									// Processing random variable 53.
 									{
@@ -1676,16 +1676,16 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 													double[] var52 = m[traceTempVariable$var51$22_3];
 													cv$temp$4$var52 = var52;
 												}
-												int cv$temp$5$$var793;
+												int cv$temp$5$$var794;
 												{
 													// Constructing a random variable input for use later.
-													int $var793 = states;
-													cv$temp$5$$var793 = $var793;
+													int $var794 = states;
+													cv$temp$5$$var794 = $var794;
 												}
 												
 												// An accumulator to allow the value for each distribution to be constructed before
 												// it is added to the index probabilities.
-												double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample55Value20) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$5$$var793))?Math.log(cv$temp$4$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
+												double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample55Value20) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$5$$var794))?Math.log(cv$temp$4$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
 												
 												// Processing random variable 53.
 												{
@@ -1879,11 +1879,11 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 															double[] var52 = m[traceTempVariable$var51$37_3];
 															cv$temp$9$var52 = var52;
 														}
-														int cv$temp$10$$var843;
+														int cv$temp$10$$var844;
 														{
 															// Constructing a random variable input for use later.
-															int $var843 = states;
-															cv$temp$10$$var843 = $var843;
+															int $var844 = states;
+															cv$temp$10$$var844 = $var844;
 														}
 														
 														// The probability of reaching the consumer with this set of consumer arguments
@@ -1893,7 +1893,7 @@ class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 														cv$reachedDistributionProbability = (cv$reachedDistributionProbability + cv$distributionProbability);
 														
 														// Add the current distribution to the distribution accumulator.
-														DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$9$var52, cv$temp$10$$var843);
+														DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$9$var52, cv$temp$10$$var844);
 													}
 												}
 											}

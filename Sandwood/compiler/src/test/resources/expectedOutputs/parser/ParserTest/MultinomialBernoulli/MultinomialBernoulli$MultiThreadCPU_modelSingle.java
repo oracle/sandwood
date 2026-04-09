@@ -822,11 +822,11 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 					{
 						cv$temp$0$p = p;
 					}
-					int cv$temp$1$$var209;
+					int cv$temp$1$$var210;
 					{
 						// Constructing a random variable input for use later.
-						int $var209 = 3;
-						cv$temp$1$$var209 = $var209;
+						int $var210 = 3;
+						cv$temp$1$$var210 = $var210;
 					}
 					int cv$temp$2$n;
 					{
@@ -835,7 +835,7 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(cv$targetLocal, cv$temp$0$p, cv$temp$1$$var209, cv$temp$2$n));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(cv$targetLocal, cv$temp$0$p, cv$temp$1$$var210, cv$temp$2$n));
 					
 					// Processing random variable 25.
 					{

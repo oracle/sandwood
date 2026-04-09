@@ -806,16 +806,16 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 						double[] var86 = theta[i$var71];
 						cv$temp$0$var86 = var86;
 					}
-					int cv$temp$1$$var366;
+					int cv$temp$1$$var367;
 					{
 						// Constructing a random variable input for use later.
-						int $var366 = noTopics;
-						cv$temp$1$$var366 = $var366;
+						int $var367 = noTopics;
+						cv$temp$1$$var367 = $var367;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var366))?Math.log(cv$temp$0$var86[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var367))?Math.log(cv$temp$0$var86[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 90.
 					{
@@ -839,22 +839,22 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 													double[] var89 = phi[cv$currentValue];
 													cv$temp$2$var89 = var89;
 												}
-												int cv$temp$3$$var367;
+												int cv$temp$3$$var368;
 												{
 													// Constructing a random variable input for use later.
-													int $var367 = vocabSize;
-													cv$temp$3$$var367 = $var367;
+													int $var368 = vocabSize;
+													cv$temp$3$$var368 = $var368;
 												}
 												
 												// Record the probability of sample task 93 generating output with current configuration.
-												if(((Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var367))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var367))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												if(((Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var368))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var368))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													// If the second value is -infinity.
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var367))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var368))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var367))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var367))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var368))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < cv$temp$3$$var368))?Math.log(cv$temp$2$var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)));
 												}
 												
 												// Recorded the probability of reaching sample task 93 with the current configuration.

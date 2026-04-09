@@ -492,14 +492,14 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 										{
 											if((0 < noProducts)) {
 												double reduceVar$sum$1 = 0.0;
-												for(int cv$reduction270Index = 0; cv$reduction270Index < i$var36; cv$reduction270Index += 1) {
+												for(int cv$reduction271Index = 0; cv$reduction271Index < i$var36; cv$reduction271Index += 1) {
 													double i$var47 = reduceVar$sum$1;
-													double j = exped[cv$reduction270Index];
+													double j = exped[cv$reduction271Index];
 													reduceVar$sum$1 = (i$var47 + j);
 												}
-												for(int cv$reduction270Index = (i$var36 + 1); cv$reduction270Index < noProducts; cv$reduction270Index += 1) {
+												for(int cv$reduction271Index = (i$var36 + 1); cv$reduction271Index < noProducts; cv$reduction271Index += 1) {
 													double i$var47 = reduceVar$sum$1;
-													double j = exped[cv$reduction270Index];
+													double j = exped[cv$reduction271Index];
 													reduceVar$sum$1 = (i$var47 + j);
 												}
 												double cv$reduced44 = reduceVar$sum$1;
@@ -519,18 +519,18 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 																			{
 																				cv$temp$2$prob = prob;
 																			}
-																			int cv$temp$3$$var225;
+																			int cv$temp$3$$var226;
 																			{
-																				int $var225 = noProducts;
-																				cv$temp$3$$var225 = $var225;
+																				int $var226 = noProducts;
+																				cv$temp$3$$var226 = $var226;
 																			}
-																			if(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var225))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var225))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			if(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var226))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var226))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var225))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var226))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var225))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var225))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var226))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var226))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)));
 																			}
 																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																		}
@@ -574,18 +574,18 @@ class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model
 																		{
 																			cv$temp$4$prob = prob;
 																		}
-																		int cv$temp$5$$var226;
+																		int cv$temp$5$$var227;
 																		{
-																			int $var226 = noProducts;
-																			cv$temp$5$$var226 = $var226;
+																			int $var227 = noProducts;
+																			cv$temp$5$$var227 = $var227;
 																		}
-																		if(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var226))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var226))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		if(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var227))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var227))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																		else {
 																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var226))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY));
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var227))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY));
 																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var226))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var226))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)));
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var227))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var227))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)));
 																		}
 																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																	}

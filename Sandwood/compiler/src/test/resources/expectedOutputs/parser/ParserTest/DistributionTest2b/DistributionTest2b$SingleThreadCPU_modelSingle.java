@@ -1508,14 +1508,14 @@ class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var211;
+					int cv$temp$1$$var212;
 					{
-						cv$temp$1$$var211 = weightings.length;
+						cv$temp$1$$var212 = weightings.length;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var211))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var212))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 42.
 					{
@@ -1730,14 +1730,14 @@ class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var246;
+					int cv$temp$1$$var247;
 					{
-						cv$temp$1$$var246 = weightings.length;
+						cv$temp$1$$var247 = weightings.length;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var246))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var247))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 42.
 					{
@@ -2172,14 +2172,14 @@ class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var134;
+					int cv$temp$1$$var135;
 					{
-						cv$temp$1$$var134 = weightings.length;
+						cv$temp$1$$var135 = weightings.length;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var134))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var135))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 42.
 					{
@@ -2465,14 +2465,14 @@ class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var178;
+					int cv$temp$1$$var179;
 					{
-						cv$temp$1$$var178 = weightings.length;
+						cv$temp$1$$var179 = weightings.length;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var178))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var179))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 42.
 					{

@@ -791,14 +791,14 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void forwardGeneration() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard)
-			bias = 0.5;
-		else {
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample16) {
+		if(guard) {
+			if(!fixedFlag$sample4)
+				bias = 0.5;
+		} else {
+			if(!fixedFlag$sample16)
 				var14 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+			if((!fixedFlag$sample4 || !fixedFlag$sample16))
 				bias = var14;
-			}
 		}
 		value = DistributionSampling.sampleBeta(RNG$, bias, 1.0);
 	}
@@ -809,14 +809,14 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void forwardGenerationDistributionsNoOutputs() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard)
-			bias = 0.5;
-		else {
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample16) {
+		if(guard) {
+			if(!fixedFlag$sample4)
+				bias = 0.5;
+		} else {
+			if(!fixedFlag$sample16)
 				var14 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+			if((!fixedFlag$sample4 || !fixedFlag$sample16))
 				bias = var14;
-			}
 		}
 	}
 
@@ -826,14 +826,14 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	public final void forwardGenerationValuesNoOutputs() {
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard)
-			bias = 0.5;
-		else {
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample16) {
+		if(guard) {
+			if(!fixedFlag$sample4)
+				bias = 0.5;
+		} else {
+			if(!fixedFlag$sample16)
 				var14 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+			if((!fixedFlag$sample4 || !fixedFlag$sample16))
 				bias = var14;
-			}
 		}
 	}
 
@@ -957,14 +957,14 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// Generate sample values for every call to sample in the model.
 		if(!fixedFlag$sample4)
 			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard)
-			bias = 0.5;
-		else {
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample16) {
+		if(guard) {
+			if(!fixedFlag$sample4)
+				bias = 0.5;
+		} else {
+			if(!fixedFlag$sample16)
 				var14 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
+			if((!fixedFlag$sample4 || !fixedFlag$sample16))
 				bias = var14;
-			}
 		}
 		
 		// Calculate the probabilities for every sample task in the model. These values are
@@ -986,11 +986,13 @@ class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		if(guard)
-			bias = 0.5;
-		else {
-			if(fixedFlag$sample16)
-				bias = var14;
+		if(fixedFlag$sample4) {
+			if(guard)
+				bias = 0.5;
+			else {
+				if(fixedFlag$sample16)
+					bias = var14;
+			}
 		}
 	}
 

@@ -519,12 +519,12 @@ class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 						double[] var117 = m[0];
 						cv$temp$0$var117 = var117;
 					}
-					int cv$temp$1$$var317;
+					int cv$temp$1$$var318;
 					{
-						int $var317 = states;
-						cv$temp$1$$var317 = $var317;
+						int $var318 = states;
+						cv$temp$1$$var318 = $var318;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var317))?Math.log(cv$temp$0$var117[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var318))?Math.log(cv$temp$0$var117[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$var181$2_1 = cv$currentValue;
@@ -735,12 +735,12 @@ class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 						double[] var77 = m[0];
 						cv$temp$0$var77 = var77;
 					}
-					int cv$temp$1$$var293;
+					int cv$temp$1$$var294;
 					{
-						int $var293 = states;
-						cv$temp$1$$var293 = $var293;
+						int $var294 = states;
+						cv$temp$1$$var294 = $var294;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var293))?Math.log(cv$temp$0$var77[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var294))?Math.log(cv$temp$0$var77[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$var181$2_1 = cv$currentValue;

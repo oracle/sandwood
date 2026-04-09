@@ -949,9 +949,9 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					// 
 					// Value of the variable at this index
 					// 
-					// cv$temp$1$$var320's comment
+					// cv$temp$1$$var321's comment
 					// 
-					// $var320's comment
+					// $var321's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$0$var52's comment
@@ -1122,9 +1122,9 @@ class Deterministic2$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$10$$var372's comment
+					// cv$temp$10$$var373's comment
 					// 
-					// $var372's comment
+					// $var373's comment
 					// Constructing a random variable input for use later.
 					// 
 					// Constructing a random variable input for use later.

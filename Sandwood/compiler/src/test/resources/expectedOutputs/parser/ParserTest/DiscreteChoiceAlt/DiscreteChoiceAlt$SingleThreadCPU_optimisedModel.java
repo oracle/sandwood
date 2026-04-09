@@ -436,9 +436,9 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				// 
 				// Substituted "cv$temp$2$prob" with its value "prob".
 				// 
-				// cv$temp$3$$var225's comment
+				// cv$temp$3$$var226's comment
 				// 
-				// $var225's comment
+				// $var226's comment
 				// Constructing a random variable input for use later.
 				cv$accumulatedProbabilities = ((((0.0 <= choices[var76]) && (choices[var76] < noProducts))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
@@ -558,9 +558,9 @@ class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// 
 			// Substituted "cv$temp$2$prob" with its value "prob".
 			// 
-			// cv$temp$3$$var225's comment
+			// cv$temp$3$$var226's comment
 			// 
-			// $var225's comment
+			// $var226's comment
 			// Constructing a random variable input for use later.
 			cv$accumulatedProbabilities = ((((0.0 <= choices[var76]) && (choices[var76] < noProducts))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		

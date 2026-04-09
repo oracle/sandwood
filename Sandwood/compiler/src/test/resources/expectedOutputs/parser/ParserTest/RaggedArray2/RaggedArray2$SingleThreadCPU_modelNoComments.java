@@ -339,11 +339,11 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					{
 						cv$temp$0$c = c;
 					}
-					int cv$temp$1$$var180;
+					int cv$temp$1$$var181;
 					{
-						cv$temp$1$$var180 = 2;
+						cv$temp$1$$var181 = 2;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var180))?Math.log(cv$temp$0$c[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var181))?Math.log(cv$temp$0$c[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$y$2_1 = cv$currentValue;
@@ -359,7 +359,7 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 													double[] var78 = a[traceTempVariable$y$2_1];
 													cv$temp$2$var78 = var78;
 												}
-												int cv$temp$3$$var182;
+												int cv$temp$3$$var183;
 												{
 													int lengthCV$a$82_0 = -1;
 													{
@@ -370,16 +370,16 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 														if((0 == traceTempVariable$y$2_1))
 															lengthCV$a$82_0 = 2;
 													}
-													int $var182 = lengthCV$a$82_0;
-													cv$temp$3$$var182 = $var182;
+													int $var183 = lengthCV$a$82_0;
+													cv$temp$3$$var183 = $var183;
 												}
-												if(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var182))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var182))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												if(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var183))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var183))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var182))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var183))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var182))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var182))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var183))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= i) && (i < cv$temp$3$$var183))?Math.log(cv$temp$2$var78[i]):Double.NEGATIVE_INFINITY)));
 												}
 												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 											}
@@ -520,7 +520,7 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						double[] var78 = a[y];
 						cv$temp$0$var78 = var78;
 					}
-					int cv$temp$1$$var204;
+					int cv$temp$1$$var205;
 					{
 						int lengthCV$a$82_2 = -1;
 						{
@@ -531,10 +531,10 @@ class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 							if((0 == y))
 								lengthCV$a$82_2 = 2;
 						}
-						int $var204 = lengthCV$a$82_2;
-						cv$temp$1$$var204 = $var204;
+						int $var205 = lengthCV$a$82_2;
+						cv$temp$1$$var205 = $var205;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var204))?Math.log(cv$temp$0$var78[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var205))?Math.log(cv$temp$0$var78[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$i$6_1 = cv$currentValue;

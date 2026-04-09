@@ -1567,9 +1567,9 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				if(((0 <= var27) && (var27 < 5))) {
 					// Substituted "i$var64" with its value "1".
 					// 
-					// cv$temp$3$$var303's comment
+					// cv$temp$3$$var304's comment
 					// 
-					// $var303's comment
+					// $var304's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$2$var68's comment
@@ -1686,9 +1686,9 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$6$$var323's comment
+					// cv$temp$6$$var324's comment
 					// 
-					// $var323's comment
+					// $var324's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$5$var68's comment
@@ -1917,9 +1917,9 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$1$$var382's comment
+						// cv$temp$1$$var383's comment
 						// 
-						// $var382's comment
+						// $var383's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$0$var68's comment
@@ -1998,9 +1998,9 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 							// 
 							// Value of the variable at this index
 							// 
-							// cv$temp$3$$var383's comment
+							// cv$temp$3$$var384's comment
 							// 
-							// $var383's comment
+							// $var384's comment
 							// Constructing a random variable input for use later.
 							// 
 							// cv$temp$2$var68's comment
@@ -2103,9 +2103,9 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$7$$var385's comment
+						// cv$temp$7$$var386's comment
 						// 
-						// $var385's comment
+						// $var386's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$6$var68's comment
@@ -2257,9 +2257,9 @@ class HMMTestPart7$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$13$$var434's comment
+					// cv$temp$13$$var435's comment
 					// 
-					// $var434's comment
+					// $var435's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$12$var68's comment

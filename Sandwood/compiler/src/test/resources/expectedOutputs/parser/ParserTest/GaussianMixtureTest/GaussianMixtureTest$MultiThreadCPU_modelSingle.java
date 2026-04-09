@@ -1002,16 +1002,16 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					{
 						cv$temp$0$phi = phi;
 					}
-					int cv$temp$1$$var318;
+					int cv$temp$1$$var319;
 					{
 						// Constructing a random variable input for use later.
-						int $var318 = k;
-						cv$temp$1$$var318 = $var318;
+						int $var319 = k;
+						cv$temp$1$$var319 = $var319;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var318))?Math.log(cv$temp$0$phi[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var319))?Math.log(cv$temp$0$phi[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 71.
 					{

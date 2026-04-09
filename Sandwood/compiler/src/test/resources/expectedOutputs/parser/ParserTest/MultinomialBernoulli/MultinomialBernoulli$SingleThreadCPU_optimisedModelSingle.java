@@ -768,9 +768,9 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 			// 
 			// Substituted "cv$temp$2$n" with its value "10".
 			// 
-			// cv$temp$1$$var131's comment
+			// cv$temp$1$$var132's comment
 			// 
-			// $var131's comment
+			// $var132's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityMultinomial(prior, p, 3, 10);
 			
@@ -870,9 +870,9 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		// 
 		// Substituted "cv$temp$2$n" with its value "10".
 		// 
-		// cv$temp$1$$var131's comment
+		// cv$temp$1$$var132's comment
 		// 
-		// $var131's comment
+		// $var132's comment
 		// Constructing a random variable input for use later.
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityMultinomial(prior, p, 3, 10);
 		

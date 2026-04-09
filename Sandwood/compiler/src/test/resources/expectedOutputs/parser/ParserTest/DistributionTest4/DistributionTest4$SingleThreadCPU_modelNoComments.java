@@ -3058,11 +3058,11 @@ class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var424;
+					int cv$temp$1$$var425;
 					{
-						cv$temp$1$$var424 = weightings.length;
+						cv$temp$1$$var425 = weightings.length;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var424))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var425))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							boolean[] guard$sample11bernoulli52 = guard$sample11bernoulli52$global;
@@ -6001,11 +6001,11 @@ class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var1087;
+					int cv$temp$1$$var1088;
 					{
-						cv$temp$1$$var1087 = weightings.length;
+						cv$temp$1$$var1088 = weightings.length;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var1087))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var1088))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							boolean[] guard$sample27bernoulli52 = guard$sample27bernoulli52$global;
@@ -8894,11 +8894,11 @@ class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var137;
+					int cv$temp$1$$var138;
 					{
-						cv$temp$1$$var137 = weightings.length;
+						cv$temp$1$$var138 = weightings.length;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var137))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var138))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							for(int j = 0; j < size; j += 1) {

@@ -1602,24 +1602,24 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 												double reduceVar$sum$10 = 0.0;
 												
 												// Reduce for every value except a masked value which will be skipped.
-												for(int cv$reduction2602Index = 0; cv$reduction2602Index < j$var38; cv$reduction2602Index += 1) {
+												for(int cv$reduction2603Index = 0; cv$reduction2603Index < j$var38; cv$reduction2603Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k$var49 = reduceVar$sum$10;
 													
 													// Set the right hand term to a value from the array exped
-													double l$var50 = exped[cv$reduction2602Index];
+													double l$var50 = exped[cv$reduction2603Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Copy the result of the reduction into the variable returned by the reduction.
 													reduceVar$sum$10 = (k$var49 + l$var50);
 												}
-												for(int cv$reduction2602Index = (j$var38 + 1); cv$reduction2602Index < noProducts; cv$reduction2602Index += 1) {
+												for(int cv$reduction2603Index = (j$var38 + 1); cv$reduction2603Index < noProducts; cv$reduction2603Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k$var49 = reduceVar$sum$10;
 													
 													// Set the right hand term to a value from the array exped
-													double l$var50 = exped[cv$reduction2602Index];
+													double l$var50 = exped[cv$reduction2603Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
@@ -1650,24 +1650,24 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																			double reduceVar$denom$19 = 0.0;
 																			
 																			// Reduce for every value except a masked value which will be skipped.
-																			for(int cv$reduction2621Index = 0; cv$reduction2621Index < j$var123; cv$reduction2621Index += 1) {
+																			for(int cv$reduction2622Index = 0; cv$reduction2622Index < j$var123; cv$reduction2622Index += 1) {
 																				// Set the left hand term of the reduction function to the return variable value.
 																				double k$var135 = reduceVar$denom$19;
 																				
 																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2621Index];
+																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2622Index];
 																				
 																				// Execute the reduction function, saving the result into the return value.
 																				// 
 																				// Copy the result of the reduction into the variable returned by the reduction.
 																				reduceVar$denom$19 = (k$var135 + l$var136);
 																			}
-																			for(int cv$reduction2621Index = (j$var123 + 1); cv$reduction2621Index < noProducts; cv$reduction2621Index += 1) {
+																			for(int cv$reduction2622Index = (j$var123 + 1); cv$reduction2622Index < noProducts; cv$reduction2622Index += 1) {
 																				// Set the left hand term of the reduction function to the return variable value.
 																				double k$var135 = reduceVar$denom$19;
 																				
 																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2621Index];
+																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2622Index];
 																				
 																				// Execute the reduction function, saving the result into the return value.
 																				// 
@@ -1702,11 +1702,11 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																									{
 																										cv$temp$2$weekly_rates = weekly_rates[((t$var112 - 0) / 1)];
 																									}
-																									int cv$temp$3$$var1865;
+																									int cv$temp$3$$var1866;
 																									{
 																										// Constructing a random variable input for use later.
-																										int $var1865 = noProducts;
-																										cv$temp$3$$var1865 = $var1865;
+																										int $var1866 = noProducts;
+																										cv$temp$3$$var1866 = $var1866;
 																									}
 																									int cv$temp$4$var151;
 																									{
@@ -1714,14 +1714,14 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																									}
 																									
 																									// Record the probability of sample task 157 generating output with current configuration.
-																									if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1865, cv$temp$4$var151)) < cv$accumulatedConsumerProbabilities))
-																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1865, cv$temp$4$var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																									if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1866, cv$temp$4$var151)) < cv$accumulatedConsumerProbabilities))
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1866, cv$temp$4$var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																									else {
 																										// If the second value is -infinity.
 																										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																											cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1865, cv$temp$4$var151));
+																											cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1866, cv$temp$4$var151));
 																										else
-																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1865, cv$temp$4$var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1865, cv$temp$4$var151)));
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1866, cv$temp$4$var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$2$weekly_rates, cv$temp$3$$var1866, cv$temp$4$var151)));
 																									}
 																									
 																									// Recorded the probability of reaching sample task 157 with the current configuration.
@@ -1775,24 +1775,24 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 												double reduceVar$sum$11 = 0.0;
 												
 												// Reduce for every value except a masked value which will be skipped.
-												for(int cv$reduction2650Index = 0; cv$reduction2650Index < j$var38; cv$reduction2650Index += 1) {
+												for(int cv$reduction2651Index = 0; cv$reduction2651Index < j$var38; cv$reduction2651Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k$var49 = reduceVar$sum$11;
 													
 													// Set the right hand term to a value from the array exped
-													double l$var50 = exped[cv$reduction2650Index];
+													double l$var50 = exped[cv$reduction2651Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Copy the result of the reduction into the variable returned by the reduction.
 													reduceVar$sum$11 = (k$var49 + l$var50);
 												}
-												for(int cv$reduction2650Index = (j$var38 + 1); cv$reduction2650Index < noProducts; cv$reduction2650Index += 1) {
+												for(int cv$reduction2651Index = (j$var38 + 1); cv$reduction2651Index < noProducts; cv$reduction2651Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k$var49 = reduceVar$sum$11;
 													
 													// Set the right hand term to a value from the array exped
-													double l$var50 = exped[cv$reduction2650Index];
+													double l$var50 = exped[cv$reduction2651Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
@@ -1835,11 +1835,11 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																								{
 																									cv$temp$5$weekly_rates = weekly_rates[((t$var112 - 0) / 1)];
 																								}
-																								int cv$temp$6$$var1868;
+																								int cv$temp$6$$var1869;
 																								{
 																									// Constructing a random variable input for use later.
-																									int $var1868 = noProducts;
-																									cv$temp$6$$var1868 = $var1868;
+																									int $var1869 = noProducts;
+																									cv$temp$6$$var1869 = $var1869;
 																								}
 																								int cv$temp$7$var151;
 																								{
@@ -1847,14 +1847,14 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																								}
 																								
 																								// Record the probability of sample task 157 generating output with current configuration.
-																								if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1868, cv$temp$7$var151)) < cv$accumulatedConsumerProbabilities))
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1868, cv$temp$7$var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																								if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1869, cv$temp$7$var151)) < cv$accumulatedConsumerProbabilities))
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1869, cv$temp$7$var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																								else {
 																									// If the second value is -infinity.
 																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																										cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1868, cv$temp$7$var151));
+																										cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1869, cv$temp$7$var151));
 																									else
-																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1868, cv$temp$7$var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1868, cv$temp$7$var151)));
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1869, cv$temp$7$var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$5$weekly_rates, cv$temp$6$$var1869, cv$temp$7$var151)));
 																								}
 																								
 																								// Recorded the probability of reaching sample task 157 with the current configuration.
@@ -1914,24 +1914,24 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																	double reduceVar$denom$20 = 0.0;
 																	
 																	// Reduce for every value except a masked value which will be skipped.
-																	for(int cv$reduction2696Index = 0; cv$reduction2696Index < j$var123; cv$reduction2696Index += 1) {
+																	for(int cv$reduction2697Index = 0; cv$reduction2697Index < j$var123; cv$reduction2697Index += 1) {
 																		// Set the left hand term of the reduction function to the return variable value.
 																		double k$var135 = reduceVar$denom$20;
 																		
 																		// Set the right hand term to a value from the array weekly_ut
-																		double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2696Index];
+																		double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2697Index];
 																		
 																		// Execute the reduction function, saving the result into the return value.
 																		// 
 																		// Copy the result of the reduction into the variable returned by the reduction.
 																		reduceVar$denom$20 = (k$var135 + l$var136);
 																	}
-																	for(int cv$reduction2696Index = (j$var123 + 1); cv$reduction2696Index < noProducts; cv$reduction2696Index += 1) {
+																	for(int cv$reduction2697Index = (j$var123 + 1); cv$reduction2697Index < noProducts; cv$reduction2697Index += 1) {
 																		// Set the left hand term of the reduction function to the return variable value.
 																		double k$var135 = reduceVar$denom$20;
 																		
 																		// Set the right hand term to a value from the array weekly_ut
-																		double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2696Index];
+																		double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction2697Index];
 																		
 																		// Execute the reduction function, saving the result into the return value.
 																		// 
@@ -1966,11 +1966,11 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																							{
 																								cv$temp$8$weekly_rates = weekly_rates[((t$var112 - 0) / 1)];
 																							}
-																							int cv$temp$9$$var1871;
+																							int cv$temp$9$$var1872;
 																							{
 																								// Constructing a random variable input for use later.
-																								int $var1871 = noProducts;
-																								cv$temp$9$$var1871 = $var1871;
+																								int $var1872 = noProducts;
+																								cv$temp$9$$var1872 = $var1872;
 																							}
 																							int cv$temp$10$var151;
 																							{
@@ -1978,14 +1978,14 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																							}
 																							
 																							// Record the probability of sample task 157 generating output with current configuration.
-																							if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1871, cv$temp$10$var151)) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1871, cv$temp$10$var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1872, cv$temp$10$var151)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1872, cv$temp$10$var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																							else {
 																								// If the second value is -infinity.
 																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1871, cv$temp$10$var151));
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1872, cv$temp$10$var151));
 																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1871, cv$temp$10$var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1871, cv$temp$10$var151)));
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1872, cv$temp$10$var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$8$weekly_rates, cv$temp$9$$var1872, cv$temp$10$var151)));
 																							}
 																							
 																							// Recorded the probability of reaching sample task 157 with the current configuration.
@@ -2056,11 +2056,11 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																						{
 																							cv$temp$11$weekly_rates = weekly_rates[((t$var112 - 0) / 1)];
 																						}
-																						int cv$temp$12$$var1874;
+																						int cv$temp$12$$var1875;
 																						{
 																							// Constructing a random variable input for use later.
-																							int $var1874 = noProducts;
-																							cv$temp$12$$var1874 = $var1874;
+																							int $var1875 = noProducts;
+																							cv$temp$12$$var1875 = $var1875;
 																						}
 																						int cv$temp$13$var151;
 																						{
@@ -2068,14 +2068,14 @@ class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 																						}
 																						
 																						// Record the probability of sample task 157 generating output with current configuration.
-																						if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1874, cv$temp$13$var151)) < cv$accumulatedConsumerProbabilities))
-																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1874, cv$temp$13$var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																						if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1875, cv$temp$13$var151)) < cv$accumulatedConsumerProbabilities))
+																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1875, cv$temp$13$var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																						else {
 																							// If the second value is -infinity.
 																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1874, cv$temp$13$var151));
+																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1875, cv$temp$13$var151));
 																							else
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1874, cv$temp$13$var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1874, cv$temp$13$var151)));
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1875, cv$temp$13$var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], cv$temp$11$weekly_rates, cv$temp$12$$var1875, cv$temp$13$var151)));
 																						}
 																						
 																						// Recorded the probability of reaching sample task 157 with the current configuration.

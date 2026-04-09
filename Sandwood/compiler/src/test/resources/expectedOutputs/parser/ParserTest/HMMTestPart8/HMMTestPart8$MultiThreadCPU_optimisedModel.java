@@ -1297,9 +1297,9 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 				if(((0 <= var27) && (var27 < 5))) {
 					// Substituted "i$var64" with its value "1".
 					// 
-					// cv$temp$3$$var705's comment
+					// cv$temp$3$$var706's comment
 					// 
-					// $var705's comment
+					// $var706's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$2$var68's comment
@@ -1416,9 +1416,9 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$6$$var725's comment
+					// cv$temp$6$$var726's comment
 					// 
-					// $var725's comment
+					// $var726's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$5$var68's comment
@@ -1648,9 +1648,9 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// 
 					// Value of the variable at this index
 					// 
-					// cv$temp$1$$var772's comment
+					// cv$temp$1$$var773's comment
 					// 
-					// $var772's comment
+					// $var773's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$0$var68's comment
@@ -1740,9 +1740,9 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$5$$var774's comment
+						// cv$temp$5$$var775's comment
 						// 
-						// $var774's comment
+						// $var775's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$4$var68's comment
@@ -1878,9 +1878,9 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$10$$var812's comment
+					// cv$temp$10$$var813's comment
 					// 
-					// $var812's comment
+					// $var813's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$9$var68's comment

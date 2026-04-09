@@ -486,14 +486,14 @@ class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					{
 						cv$temp$0$v = v;
 					}
-					int cv$temp$1$$var104;
+					int cv$temp$1$$var105;
 					{
-						cv$temp$1$$var104 = 10;
+						cv$temp$1$$var105 = 10;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$v, cv$temp$1$$var104));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$v, cv$temp$1$$var105));
 					
 					// Processing random variable 37.
 					{

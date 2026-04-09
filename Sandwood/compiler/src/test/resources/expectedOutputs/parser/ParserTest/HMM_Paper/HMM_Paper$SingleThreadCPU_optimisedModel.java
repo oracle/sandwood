@@ -1052,9 +1052,9 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// 
 			// Substituted "cv$temp$0$initialCoin" with its value "initialCoin".
 			// 
-			// cv$temp$1$$var186's comment
+			// cv$temp$1$$var187's comment
 			// 
-			// $var186's comment
+			// $var187's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < nCoins)?Math.log(initialCoin[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
@@ -1077,9 +1077,9 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// 
 				// Substituted "i" with its value "1".
 				// 
-				// cv$temp$3$$var195's comment
+				// cv$temp$3$$var196's comment
 				// 
-				// $var195's comment
+				// $var196's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var68's comment
@@ -1248,9 +1248,9 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$3$$var226's comment
+				// cv$temp$3$$var227's comment
 				// 
-				// $var226's comment
+				// $var227's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var68's comment

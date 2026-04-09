@@ -1033,12 +1033,12 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 						double[] var50 = m[0];
 						cv$temp$0$var50 = var50;
 					}
-					int cv$temp$1$$var694;
+					int cv$temp$1$$var695;
 					{
-						int $var694 = states;
-						cv$temp$1$$var694 = $var694;
+						int $var695 = states;
+						cv$temp$1$$var695 = $var695;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var694))?Math.log(cv$temp$0$var50[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var695))?Math.log(cv$temp$0$var50[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$var67$2_1 = cv$currentValue;
@@ -1059,18 +1059,18 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 																	double[] var68 = m[traceTempVariable$var67$2_1];
 																	cv$temp$2$var68 = var68;
 																}
-																int cv$temp$3$$var705;
+																int cv$temp$3$$var706;
 																{
-																	int $var705 = states;
-																	cv$temp$3$$var705 = $var705;
+																	int $var706 = states;
+																	cv$temp$3$$var706 = $var706;
 																}
-																if(((Math.log(1.0) + (((0.0 <= st[i$var64]) && (st[i$var64] < cv$temp$3$$var705))?Math.log(cv$temp$2$var68[st[i$var64]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[i$var64]) && (st[i$var64] < cv$temp$3$$var705))?Math.log(cv$temp$2$var68[st[i$var64]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + (((0.0 <= st[i$var64]) && (st[i$var64] < cv$temp$3$$var706))?Math.log(cv$temp$2$var68[st[i$var64]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[i$var64]) && (st[i$var64] < cv$temp$3$$var706))?Math.log(cv$temp$2$var68[st[i$var64]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[i$var64]) && (st[i$var64] < cv$temp$3$$var705))?Math.log(cv$temp$2$var68[st[i$var64]]):Double.NEGATIVE_INFINITY));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[i$var64]) && (st[i$var64] < cv$temp$3$$var706))?Math.log(cv$temp$2$var68[st[i$var64]]):Double.NEGATIVE_INFINITY));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[i$var64]) && (st[i$var64] < cv$temp$3$$var705))?Math.log(cv$temp$2$var68[st[i$var64]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[i$var64]) && (st[i$var64] < cv$temp$3$$var705))?Math.log(cv$temp$2$var68[st[i$var64]]):Double.NEGATIVE_INFINITY)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[i$var64]) && (st[i$var64] < cv$temp$3$$var706))?Math.log(cv$temp$2$var68[st[i$var64]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[i$var64]) && (st[i$var64] < cv$temp$3$$var706))?Math.log(cv$temp$2$var68[st[i$var64]]):Double.NEGATIVE_INFINITY)));
 																}
 																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
@@ -1172,14 +1172,14 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 														double[] var68 = m[traceTempVariable$var67$11_1];
 														cv$temp$5$var68 = var68;
 													}
-													int cv$temp$6$$var725;
+													int cv$temp$6$$var726;
 													{
-														int $var725 = states;
-														cv$temp$6$$var725 = $var725;
+														int $var726 = states;
+														cv$temp$6$$var726 = $var726;
 													}
 													double cv$distributionProbability = (scopeVariable$reachedSourceProbability * 1.0);
 													cv$reachedDistributionProbability = (cv$reachedDistributionProbability + cv$distributionProbability);
-													DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$5$var68, cv$temp$6$$var725);
+													DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$5$var68, cv$temp$6$$var726);
 												}
 											}
 										}
@@ -1295,12 +1295,12 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 								double[] var68 = m[st[(i$var64 - 1)]];
 								cv$temp$0$var68 = var68;
 							}
-							int cv$temp$1$$var772;
+							int cv$temp$1$$var773;
 							{
-								int $var772 = states;
-								cv$temp$1$$var772 = $var772;
+								int $var773 = states;
+								cv$temp$1$$var773 = $var773;
 							}
-							double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var772))?Math.log(cv$temp$0$var68[cv$currentValue]):Double.NEGATIVE_INFINITY));
+							double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var773))?Math.log(cv$temp$0$var68[cv$currentValue]):Double.NEGATIVE_INFINITY));
 							{
 								{
 									int traceTempVariable$var67$25_1 = cv$currentValue;
@@ -1373,12 +1373,12 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 								double[] var68 = m[traceTempVariable$var67$17_1];
 								cv$temp$2$var68 = var68;
 							}
-							int cv$temp$3$$var773;
+							int cv$temp$3$$var774;
 							{
-								int $var773 = states;
-								cv$temp$3$$var773 = $var773;
+								int $var774 = states;
+								cv$temp$3$$var774 = $var774;
 							}
-							double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$$var773))?Math.log(cv$temp$2$var68[cv$currentValue]):Double.NEGATIVE_INFINITY));
+							double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$3$$var774))?Math.log(cv$temp$2$var68[cv$currentValue]):Double.NEGATIVE_INFINITY));
 							{
 								{
 									int traceTempVariable$var67$26_1 = cv$currentValue;
@@ -1456,12 +1456,12 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 											double[] var68 = m[traceTempVariable$var67$22_1];
 											cv$temp$4$var68 = var68;
 										}
-										int cv$temp$5$$var774;
+										int cv$temp$5$$var775;
 										{
-											int $var774 = states;
-											cv$temp$5$$var774 = $var774;
+											int $var775 = states;
+											cv$temp$5$$var775 = $var775;
 										}
-										double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample71Value20) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$5$$var774))?Math.log(cv$temp$4$var68[cv$currentValue]):Double.NEGATIVE_INFINITY));
+										double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample71Value20) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$5$$var775))?Math.log(cv$temp$4$var68[cv$currentValue]):Double.NEGATIVE_INFINITY));
 										{
 											{
 												int traceTempVariable$var67$27_1 = distributionTempVariable$var70$21;
@@ -1575,14 +1575,14 @@ class HMMTestPart8$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 													double[] var68 = m[traceTempVariable$var67$40_1];
 													cv$temp$9$var68 = var68;
 												}
-												int cv$temp$10$$var812;
+												int cv$temp$10$$var813;
 												{
-													int $var812 = states;
-													cv$temp$10$$var812 = $var812;
+													int $var813 = states;
+													cv$temp$10$$var813 = $var813;
 												}
 												double cv$distributionProbability = (scopeVariable$reachedSourceProbability * 1.0);
 												cv$reachedDistributionProbability = (cv$reachedDistributionProbability + cv$distributionProbability);
-												DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$9$var68, cv$temp$10$$var812);
+												DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, cv$temp$9$var68, cv$temp$10$$var813);
 											}
 										}
 									}

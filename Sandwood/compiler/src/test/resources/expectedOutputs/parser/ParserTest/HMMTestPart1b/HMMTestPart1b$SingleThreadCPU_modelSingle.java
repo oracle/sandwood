@@ -766,16 +766,16 @@ class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 						double[] var47 = m[0];
 						cv$temp$0$var47 = var47;
 					}
-					int cv$temp$1$$var100;
+					int cv$temp$1$$var101;
 					{
 						// Constructing a random variable input for use later.
-						int $var100 = states;
-						cv$temp$1$$var100 = $var100;
+						int $var101 = states;
+						cv$temp$1$$var101 = $var101;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var100))?Math.log(cv$temp$0$var47[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var101))?Math.log(cv$temp$0$var47[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 51.
 					{

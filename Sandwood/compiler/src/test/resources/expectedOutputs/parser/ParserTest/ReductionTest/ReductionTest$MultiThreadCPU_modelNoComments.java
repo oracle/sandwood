@@ -511,12 +511,12 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						double[] var59 = m[i$var58];
 						cv$temp$0$var59 = var59;
 					}
-					int cv$temp$1$$var277;
+					int cv$temp$1$$var278;
 					{
-						int $var277 = noStates;
-						cv$temp$1$$var277 = $var277;
+						int $var278 = noStates;
+						cv$temp$1$$var278 = $var278;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var277))?Math.log(cv$temp$0$var59[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var278))?Math.log(cv$temp$0$var59[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$i$2_1 = cv$currentValue;
@@ -524,14 +524,14 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 								{
 									if((0 < noCats)) {
 										int reduceVar$var82$5 = 0;
-										for(int cv$reduction406Index = 0; cv$reduction406Index < i$var58; cv$reduction406Index += 1) {
+										for(int cv$reduction407Index = 0; cv$reduction407Index < i$var58; cv$reduction407Index += 1) {
 											int i$var79 = reduceVar$var82$5;
-											int j$var80 = st[cv$reduction406Index];
+											int j$var80 = st[cv$reduction407Index];
 											reduceVar$var82$5 = (i$var79 + j$var80);
 										}
-										for(int cv$reduction406Index = (i$var58 + 1); cv$reduction406Index < noCats; cv$reduction406Index += 1) {
+										for(int cv$reduction407Index = (i$var58 + 1); cv$reduction407Index < noCats; cv$reduction407Index += 1) {
 											int i$var79 = reduceVar$var82$5;
-											int j$var80 = st[cv$reduction406Index];
+											int j$var80 = st[cv$reduction407Index];
 											reduceVar$var82$5 = (i$var79 + j$var80);
 										}
 										int cv$reduced78 = reduceVar$var82$5;

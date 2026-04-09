@@ -492,16 +492,16 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 					{
 						cv$temp$0$p = p;
 					}
-					int cv$temp$1$$var131;
+					int cv$temp$1$$var132;
 					{
-						int $var131 = 3;
-						cv$temp$1$$var131 = $var131;
+						int $var132 = 3;
+						cv$temp$1$$var132 = $var132;
 					}
 					int cv$temp$2$n;
 					{
 						cv$temp$2$n = n;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(cv$targetLocal, cv$temp$0$p, cv$temp$1$$var131, cv$temp$2$n));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(cv$targetLocal, cv$temp$0$p, cv$temp$1$$var132, cv$temp$2$n));
 					{
 						{
 							{

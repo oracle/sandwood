@@ -1051,14 +1051,14 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var54;
+					int cv$temp$1$$var55;
 					{
-						cv$temp$1$$var54 = weightings.length;
+						cv$temp$1$$var55 = weightings.length;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var54))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var55))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 12.
 					{
@@ -1266,14 +1266,14 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var74;
+					int cv$temp$1$$var75;
 					{
-						cv$temp$1$$var74 = weightings.length;
+						cv$temp$1$$var75 = weightings.length;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var74))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var75))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 12.
 					{
@@ -1484,14 +1484,14 @@ class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.internal.m
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var94;
+					int cv$temp$1$$var95;
 					{
-						cv$temp$1$$var94 = weightings.length;
+						cv$temp$1$$var95 = weightings.length;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var94))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var95))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 12.
 					{

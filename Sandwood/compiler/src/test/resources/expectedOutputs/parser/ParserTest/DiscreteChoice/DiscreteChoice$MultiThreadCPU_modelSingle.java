@@ -765,24 +765,24 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 												double reduceVar$sum$9 = 0.0;
 												
 												// Reduce for every value except a masked value which will be skipped.
-												for(int cv$reduction715Index = 0; cv$reduction715Index < i$var36; cv$reduction715Index += 1) {
+												for(int cv$reduction716Index = 0; cv$reduction716Index < i$var36; cv$reduction716Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double i$var47 = reduceVar$sum$9;
 													
 													// Set the right hand term to a value from the array exped
-													double j = exped[cv$reduction715Index];
+													double j = exped[cv$reduction716Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Copy the result of the reduction into the variable returned by the reduction.
 													reduceVar$sum$9 = (i$var47 + j);
 												}
-												for(int cv$reduction715Index = (i$var36 + 1); cv$reduction715Index < noProducts; cv$reduction715Index += 1) {
+												for(int cv$reduction716Index = (i$var36 + 1); cv$reduction716Index < noProducts; cv$reduction716Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double i$var47 = reduceVar$sum$9;
 													
 													// Set the right hand term to a value from the array exped
-													double j = exped[cv$reduction715Index];
+													double j = exped[cv$reduction716Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
@@ -818,22 +818,22 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 																			{
 																				cv$temp$2$prob = prob;
 																			}
-																			int cv$temp$3$$var502;
+																			int cv$temp$3$$var503;
 																			{
 																				// Constructing a random variable input for use later.
-																				int $var502 = noProducts;
-																				cv$temp$3$$var502 = $var502;
+																				int $var503 = noProducts;
+																				cv$temp$3$$var503 = $var503;
 																			}
 																			
 																			// Record the probability of sample task 78 generating output with current configuration.
-																			if(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var502))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var502))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			if(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var503))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var503))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				// If the second value is -infinity.
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var502))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var503))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var502))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var502))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var503))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var503))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)));
 																			}
 																			
 																			// Recorded the probability of reaching sample task 78 with the current configuration.
@@ -894,22 +894,22 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 																		{
 																			cv$temp$4$prob = prob;
 																		}
-																		int cv$temp$5$$var503;
+																		int cv$temp$5$$var504;
 																		{
 																			// Constructing a random variable input for use later.
-																			int $var503 = noProducts;
-																			cv$temp$5$$var503 = $var503;
+																			int $var504 = noProducts;
+																			cv$temp$5$$var504 = $var504;
 																		}
 																		
 																		// Record the probability of sample task 78 generating output with current configuration.
-																		if(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var503))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var503))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		if(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var504))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var504))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																		else {
 																			// If the second value is -infinity.
 																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var503))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY));
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var504))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY));
 																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var503))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var503))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)));
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var504))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var504))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)));
 																		}
 																		
 																		// Recorded the probability of reaching sample task 78 with the current configuration.

@@ -326,10 +326,10 @@ class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			st[i$var58] = cv$valuePos;
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(m[i$var58][cv$valuePos]):Double.NEGATIVE_INFINITY);
 			int reduceVar$var82$1 = 0;
-			for(int cv$reduction222Index = 0; cv$reduction222Index < i$var58; cv$reduction222Index += 1)
-				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction222Index]);
-			for(int cv$reduction222Index = (i$var58 + 1); cv$reduction222Index < noCats; cv$reduction222Index += 1)
-				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction222Index]);
+			for(int cv$reduction223Index = 0; cv$reduction223Index < i$var58; cv$reduction223Index += 1)
+				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction223Index]);
+			for(int cv$reduction223Index = (i$var58 + 1); cv$reduction223Index < noCats; cv$reduction223Index += 1)
+				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction223Index]);
 			reduceVar$var82$1 = (cv$valuePos + reduceVar$var82$1);
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
 				double cv$temp$2$var83 = bias[reduceVar$var82$1];

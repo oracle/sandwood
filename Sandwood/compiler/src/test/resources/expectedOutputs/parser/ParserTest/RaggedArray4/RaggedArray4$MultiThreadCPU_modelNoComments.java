@@ -330,11 +330,11 @@ class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 					{
 						cv$temp$0$b = b;
 					}
-					int cv$temp$1$$var215;
+					int cv$temp$1$$var216;
 					{
-						cv$temp$1$$var215 = 2;
+						cv$temp$1$$var216 = 2;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var215))?Math.log(cv$temp$0$b[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var216))?Math.log(cv$temp$0$b[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$y$3_1 = cv$currentValue;
@@ -350,7 +350,7 @@ class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 													double[] var46 = a[traceTempVariable$y$3_1];
 													cv$temp$2$var46 = var46;
 												}
-												int cv$temp$3$$var217;
+												int cv$temp$3$$var218;
 												{
 													int lengthCV$a$48_12 = -1;
 													{
@@ -361,16 +361,16 @@ class RaggedArray4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 														if((0 == traceTempVariable$y$3_1))
 															lengthCV$a$48_12 = 2;
 													}
-													int $var217 = lengthCV$a$48_12;
-													cv$temp$3$$var217 = $var217;
+													int $var218 = lengthCV$a$48_12;
+													cv$temp$3$$var218 = $var218;
 												}
-												if(((Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var217)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var217)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												if(((Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var218)) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var218)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var217));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var218));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var217)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var217)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var218)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var218)));
 												}
 												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 											}

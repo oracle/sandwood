@@ -816,11 +816,11 @@ class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var190;
+					int cv$temp$1$$var191;
 					{
-						cv$temp$1$$var190 = weightings.length;
+						cv$temp$1$$var191 = weightings.length;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var190))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var191))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$var38$3_1 = cv$currentValue;
@@ -950,11 +950,11 @@ class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var125;
+					int cv$temp$1$$var126;
 					{
-						cv$temp$1$$var125 = weightings.length;
+						cv$temp$1$$var126 = weightings.length;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var125))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var126))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							for(int j = 0; j < size; j += 1) {
@@ -1139,11 +1139,11 @@ class DistributionTest2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					{
 						cv$temp$0$weightings = weightings;
 					}
-					int cv$temp$1$$var161;
+					int cv$temp$1$$var162;
 					{
-						cv$temp$1$$var161 = weightings.length;
+						cv$temp$1$$var162 = weightings.length;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var161))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var162))?Math.log(cv$temp$0$weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$var38$1_1 = cv$currentValue;

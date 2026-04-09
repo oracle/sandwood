@@ -911,9 +911,9 @@ class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMu
 				// 
 				// Substituted "i" with its value "1".
 				// 
-				// cv$temp$3$$var341's comment
+				// cv$temp$3$$var342's comment
 				// 
-				// $var341's comment
+				// $var342's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var68's comment
@@ -1082,9 +1082,9 @@ class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMu
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// cv$temp$3$$var372's comment
+				// cv$temp$3$$var373's comment
 				// 
-				// $var372's comment
+				// $var373's comment
 				// Constructing a random variable input for use later.
 				// 
 				// cv$temp$2$var68's comment

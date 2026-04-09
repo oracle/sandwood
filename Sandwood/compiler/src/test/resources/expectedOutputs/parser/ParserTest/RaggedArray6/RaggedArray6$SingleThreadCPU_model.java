@@ -539,14 +539,14 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					{
 						cv$temp$0$b = b;
 					}
-					int cv$temp$1$$var135;
+					int cv$temp$1$$var136;
 					{
-						cv$temp$1$$var135 = 2;
+						cv$temp$1$$var136 = 2;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var135))?Math.log(cv$temp$0$b[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var136))?Math.log(cv$temp$0$b[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 47.
 					{
@@ -572,7 +572,7 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 													double[] var46 = a[traceTempVariable$y$3_1];
 													cv$temp$2$var46 = var46;
 												}
-												int cv$temp$3$$var137;
+												int cv$temp$3$$var138;
 												{
 													// Allocate a local variable to hold the length of the array.
 													int lengthCV$a$48_1 = -1;
@@ -592,19 +592,19 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 													}
 													
 													// Constructing a random variable input for use later.
-													int $var137 = lengthCV$a$48_1;
-													cv$temp$3$$var137 = $var137;
+													int $var138 = lengthCV$a$48_1;
+													cv$temp$3$$var138 = $var138;
 												}
 												
 												// Record the probability of sample task 50 generating output with current configuration.
-												if(((Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var137)) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var137)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+												if(((Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var138)) < cv$accumulatedConsumerProbabilities))
+													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var138)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 												else {
 													// If the second value is -infinity.
 													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var137));
+														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var138));
 													else
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var137)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var137)));
+														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var138)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(d, cv$temp$2$var46, cv$temp$3$$var138)));
 												}
 												
 												// Recorded the probability of reaching sample task 50 with the current configuration.
@@ -893,7 +893,7 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						double[] var46 = a[y];
 						cv$temp$0$var46 = var46;
 					}
-					int cv$temp$1$$var157;
+					int cv$temp$1$$var158;
 					{
 						// Allocate a local variable to hold the length of the array.
 						int lengthCV$a$48_3 = -1;
@@ -913,13 +913,13 @@ class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 						}
 						
 						// Constructing a random variable input for use later.
-						int $var157 = lengthCV$a$48_3;
-						cv$temp$1$$var157 = $var157;
+						int $var158 = lengthCV$a$48_3;
+						cv$temp$1$$var158 = $var158;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$var46, cv$temp$1$$var157));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, cv$temp$0$var46, cv$temp$1$$var158));
 					
 					// Processing random variable 50.
 					{

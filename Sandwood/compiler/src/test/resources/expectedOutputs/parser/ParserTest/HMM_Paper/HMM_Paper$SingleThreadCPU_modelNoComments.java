@@ -683,12 +683,12 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 					{
 						cv$temp$0$initialCoin = initialCoin;
 					}
-					int cv$temp$1$$var186;
+					int cv$temp$1$$var187;
 					{
-						int $var186 = nCoins;
-						cv$temp$1$$var186 = $var186;
+						int $var187 = nCoins;
+						cv$temp$1$$var187 = $var187;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var186))?Math.log(cv$temp$0$initialCoin[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var187))?Math.log(cv$temp$0$initialCoin[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$var67$2_1 = cv$currentValue;
@@ -706,18 +706,18 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 															double[] var68 = m[traceTempVariable$var67$2_1];
 															cv$temp$2$var68 = var68;
 														}
-														int cv$temp$3$$var195;
+														int cv$temp$3$$var196;
 														{
-															int $var195 = nCoins;
-															cv$temp$3$$var195 = $var195;
+															int $var196 = nCoins;
+															cv$temp$3$$var196 = $var196;
 														}
-														if(((Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var195))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var195))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+														if(((Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var196))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var196))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 														else {
 															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var195))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY));
+																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var196))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY));
 															else
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var195))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var195))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY)));
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var196))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[i]) && (st[i] < cv$temp$3$$var196))?Math.log(cv$temp$2$var68[st[i]]):Double.NEGATIVE_INFINITY)));
 														}
 														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 													}
@@ -854,12 +854,12 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 						double[] var68 = m[st[(i - 1)]];
 						cv$temp$0$var68 = var68;
 					}
-					int cv$temp$1$$var217;
+					int cv$temp$1$$var218;
 					{
-						int $var217 = nCoins;
-						cv$temp$1$$var217 = $var217;
+						int $var218 = nCoins;
+						cv$temp$1$$var218 = $var218;
 					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var217))?Math.log(cv$temp$0$var68[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var218))?Math.log(cv$temp$0$var68[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					{
 						{
 							int traceTempVariable$var67$2_1 = cv$currentValue;
@@ -877,18 +877,18 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 															double[] var68 = m[traceTempVariable$var67$2_1];
 															cv$temp$2$var68 = var68;
 														}
-														int cv$temp$3$$var226;
+														int cv$temp$3$$var227;
 														{
-															int $var226 = nCoins;
-															cv$temp$3$$var226 = $var226;
+															int $var227 = nCoins;
+															cv$temp$3$$var227 = $var227;
 														}
-														if(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var226))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var226))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+														if(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var227))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var227))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 														else {
 															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var226))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY));
+																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var227))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY));
 															else
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var226))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var226))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)));
+																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var227))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < cv$temp$3$$var227))?Math.log(cv$temp$2$var68[st[index$i$2_2]]):Double.NEGATIVE_INFINITY)));
 														}
 														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 													}

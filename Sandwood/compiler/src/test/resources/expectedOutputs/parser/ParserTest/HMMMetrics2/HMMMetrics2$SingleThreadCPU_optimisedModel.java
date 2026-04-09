@@ -2079,9 +2079,9 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// 
 			// Substituted "cv$temp$0$initialStateDistribution" with its value "initialStateDistribution".
 			// 
-			// cv$temp$1$$var970's comment
+			// cv$temp$1$$var971's comment
 			// 
-			// $var970's comment
+			// $var971's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(initialStateDistribution[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
@@ -2103,9 +2103,9 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				if(((0 <= var31) && (var31 < noStates))) {
 					// Substituted "index$sample$3_2" with its value "sample".
 					// 
-					// cv$temp$3$$var983's comment
+					// cv$temp$3$$var984's comment
 					// 
-					// $var983's comment
+					// $var984's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$2$var119's comment
@@ -2371,9 +2371,9 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$22$$var1150's comment
+					// cv$temp$22$$var1151's comment
 					// 
-					// $var1150's comment
+					// $var1151's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$21$var119's comment
@@ -2592,9 +2592,9 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$1$$var1236's comment
+						// cv$temp$1$$var1237's comment
 						// 
-						// $var1236's comment
+						// $var1237's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$0$var119's comment
@@ -2846,9 +2846,9 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// 
 							// Value of the variable at this index
 							// 
-							// cv$temp$3$$var1237's comment
+							// cv$temp$3$$var1238's comment
 							// 
-							// $var1237's comment
+							// $var1238's comment
 							// Constructing a random variable input for use later.
 							// 
 							// cv$temp$2$var119's comment
@@ -3130,9 +3130,9 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// 
 						// Value of the variable at this index
 						// 
-						// cv$temp$7$$var1239's comment
+						// cv$temp$7$$var1240's comment
 						// 
-						// $var1239's comment
+						// $var1240's comment
 						// Constructing a random variable input for use later.
 						// 
 						// cv$temp$6$var119's comment
@@ -3436,9 +3436,9 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// cv$temp$77$$var1753's comment
+					// cv$temp$77$$var1754's comment
 					// 
-					// $var1753's comment
+					// $var1754's comment
 					// Constructing a random variable input for use later.
 					// 
 					// cv$temp$76$var119's comment
