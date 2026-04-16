@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface DistributionTest2b$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface DistributionTest2b$CoreInterface extends CoreModel {
 	public double[][] get$distribution$sample23();
 	public void set$distribution$sample23(double[][] cv$value, boolean allocated$);
 	public double[] get$distribution$sample5();

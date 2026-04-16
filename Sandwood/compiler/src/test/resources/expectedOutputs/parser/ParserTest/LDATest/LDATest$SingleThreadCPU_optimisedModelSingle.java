@@ -1,42 +1,43 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements LDATest$CoreInterface {
-	
+final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements LDATest$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[] alpha;
-	private double[] beta;
-	private boolean[] constrainedFlag$sample42;
-	private boolean[] constrainedFlag$sample58;
-	private boolean[][] constrainedFlag$sample90;
-	private double[] cv$var42$countGlobal;
-	private double[] cv$var57$countGlobal;
-	private double[] cv$var88$stateProbabilityGlobal;
-	private int[][] documents;
-	private boolean fixedFlag$sample42 = false;
-	private boolean fixedFlag$sample58 = false;
-	private boolean fixedProbFlag$sample42 = false;
-	private boolean fixedProbFlag$sample58 = false;
-	private int[] length$documents;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$phi;
-	private double logProbability$theta;
-	private double logProbability$var42;
-	private double logProbability$var57;
-	private double logProbability$var91;
-	private double logProbability$w;
-	private double logProbability$z;
-	private int noTopics;
-	private double[][] phi;
-	private boolean system$gibbsForward = true;
-	private double[][] theta;
-	private int vocabSize;
-	private int[][] w;
-	private int[][] z;
+	double[] alpha;
+	double[] beta;
+	boolean[] constrainedFlag$sample42;
+	boolean[] constrainedFlag$sample58;
+	boolean[][] constrainedFlag$sample90;
+	int[][] documents;
+	boolean fixedFlag$sample42 = false;
+	boolean fixedFlag$sample58 = false;
+	boolean fixedProbFlag$sample42 = false;
+	boolean fixedProbFlag$sample58 = false;
+	int[] length$documents;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$phi;
+	double logProbability$theta;
+	double logProbability$var42;
+	double logProbability$var57;
+	double logProbability$var91;
+	double logProbability$w;
+	double logProbability$z;
+	int noTopics;
+	double[][] phi;
+	boolean system$gibbsForward = true;
+	double[][] theta;
+	int vocabSize;
+	int[][] w;
+	int[][] z;
+	double[] cv$var42$countGlobal;
+	double[] cv$var57$countGlobal;
+	double[] cv$var88$stateProbabilityGlobal;
 
 	public LDATest$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -279,7 +280,7 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					// Increment the sample counter with the value sampled by sample task 93 of random
 					// variable var90
 					// 
-					// A local reference to the scratch space.
+															// A local reference to the scratch space.
 					cv$var42$countGlobal[w[i$var71][j]] = (cv$var42$countGlobal[w[i$var71][j]] + 1.0);
 				}
 			}
@@ -289,7 +290,7 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// 
 			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
-			// A reference local to the function for the sample variable.
+									// A reference local to the function for the sample variable.
 			Conjugates.sampleConjugateDirichletCategorical(RNG$, beta, cv$var42$countGlobal, phi[var41], vocabSize);
 	}
 
@@ -317,7 +318,7 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Increment the sample counter with the value sampled by sample task 90 of random
 				// variable var87
 				// 
-				// A local reference to the scratch space.
+												// A local reference to the scratch space.
 				cv$var57$countGlobal[z[var56][j]] = (cv$var57$countGlobal[z[var56][j]] + 1.0);
 			}
 		}
@@ -326,7 +327,7 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// 
 			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
-			// A reference local to the function for the sample variable.
+									// A reference local to the function for the sample variable.
 			Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$var57$countGlobal, theta[var56], noTopics);
 	}
 
@@ -342,7 +343,7 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// 
 		// variable marginalization
 		// 
-		// cv$numStates's comment
+				// cv$numStates's comment
 		// Calculate the number of states to evaluate.
 		int cv$numStates = Math.max(0, noTopics);
 		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
@@ -364,7 +365,7 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
 			// Record the reached probability density.
 			// 
@@ -378,10 +379,10 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
 			// 
-			// An accumulator to allow the value for each distribution to be constructed before
+									// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			cv$var88$stateProbabilityGlobal[cv$valuePos] = (((((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[w[i$var71][j]])) && (var89[w[i$var71][j]] <= 1.0))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY) + (((((cv$valuePos < noTopics) && (0 < noTopics)) && (0.0 <= var86[cv$valuePos])) && (var86[cv$valuePos] <= 1.0))?Math.log(var86[cv$valuePos]):Double.NEGATIVE_INFINITY));
 		}
 		if(constrainedFlag$sample90[i$var71][j]) {
@@ -434,7 +435,7 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			} else {
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					// Get a local reference to the scratch space.
+															// Get a local reference to the scratch space.
 					cv$var88$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var88$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
@@ -758,32 +759,9 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var42$countGlobal
-		// 
-		// Allocation of cv$var42$countGlobal for single threaded execution
-		cv$var42$countGlobal = new double[vocabSize];
-		
-		// Constructor for cv$var57$countGlobal
-		// 
-		// Allocation of cv$var57$countGlobal for single threaded execution
-		cv$var57$countGlobal = new double[noTopics];
-		
-		// Allocation of cv$var88$stateProbabilityGlobal for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 88. Initially set to the value
-		// of putTask 59.
-		cv$var88$stateProbabilityGlobal = new double[noTopics];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for alpha
 		alpha = new double[noTopics];
 		
@@ -829,6 +807,29 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var42$countGlobal
+		// 
+		// Allocation of cv$var42$countGlobal for single threaded execution
+		cv$var42$countGlobal = new double[vocabSize];
+		
+		// Constructor for cv$var57$countGlobal
+		// 
+		// Allocation of cv$var57$countGlobal for single threaded execution
+		cv$var57$countGlobal = new double[noTopics];
+		
+		// Allocation of cv$var88$stateProbabilityGlobal for single threaded execution
+		// 
+		// Variable to record the maximum value of Task Get 88. Initially set to the value
+		// of putTask 59.
+		cv$var88$stateProbabilityGlobal = new double[noTopics];
 	}
 
 	// Method to execute the model code conventionally.

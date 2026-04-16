@@ -1,23 +1,24 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK16$CoreInterface {
-	
+final class Flip1CoinMK16$MultiThreadCPU extends CoreModelMultiThreadCPU implements Flip1CoinMK16$CoreInterface {
+
 	// Declare the variables for the model.
-	private double bias;
-	private boolean constrainedFlag$sample14 = true;
-	private boolean flip;
-	private boolean flipMeasured;
-	private double guard;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bernoulli;
-	private double logProbability$bias;
-	private double logProbability$flip;
-	private boolean system$gibbsForward = true;
+	double bias;
+	boolean constrainedFlag$sample14 = true;
+	boolean flip;
+	boolean flipMeasured;
+	double guard;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bernoulli;
+	double logProbability$bias;
+	double logProbability$flip;
+	boolean system$gibbsForward = true;
 
 	public Flip1CoinMK16$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -289,15 +290,15 @@ final class Flip1CoinMK16$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {}
 
 	// Method to execute the model code conventionally.
 	@Override

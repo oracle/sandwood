@@ -1,25 +1,26 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements NullModelMK3$CoreInterface {
-	private double bias;
-	private boolean constrainedFlag$sample10 = true;
-	private double eta;
-	private boolean fixedFlag$sample10 = false;
-	private boolean fixedProbFlag$sample10 = false;
-	private boolean fixedProbFlag$sample12 = false;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double logProbability$binomial;
-	private double logProbability$positiveCount;
-	private double min;
-	private int observedPositiveCount;
-	private int observedSampleCount;
-	private int positiveCount;
-	private boolean system$gibbsForward = true;
+final class NullModelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU implements NullModelMK3$CoreInterface {
+double bias;
+	boolean constrainedFlag$sample10 = true;
+	double eta;
+	boolean fixedFlag$sample10 = false;
+	boolean fixedProbFlag$sample10 = false;
+	boolean fixedProbFlag$sample12 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$binomial;
+	double logProbability$positiveCount;
+	double min;
+	int observedPositiveCount;
+	int observedSampleCount;
+	int positiveCount;
+	boolean system$gibbsForward = true;
 
 	public NullModelMK3$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -316,10 +317,10 @@ final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void allocateScratch() {}
+	public final void allocate() {}
 
 	@Override
-	public final void allocator() {}
+	public final void allocateScratch() {}
 
 	@Override
 	public final void forwardGeneration() {

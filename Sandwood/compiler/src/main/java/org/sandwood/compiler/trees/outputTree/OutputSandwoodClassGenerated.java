@@ -8,50 +8,47 @@
 
 package org.sandwood.compiler.trees.outputTree;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.PriorityQueue;
+import java.util.Map;
 import java.util.Set;
 
+import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.names.ClassName;
+import org.sandwood.compiler.names.ModelClassName;
 import org.sandwood.compiler.names.PackageName;
+import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.util.StringUtil;
 
-public class OutputSandwoodClassGenerated extends OutputSandwoodClass {
+public class OutputSandwoodClassGenerated extends OutputSandwoodOuterClass {
 
-    private final ClassName name;
-    private final ClassName extendedClass;
-    private final ClassName[] interfaces;
-    private final PackageName packageName;
+    public static OutputSandwoodClassGenerated getClass(ExecutionType target, ModelClassName name,
+            PackageName packageName, List<OutputFunction> functions, OutputTree fieldsTree, String modelCode,
+            List<OutputFunction> gettersAndSetters) {
+
+        Map<ClassName, List<ClassName>> extended = Map.of(ClassName.coreBase(target), List.of());
+        List<ClassName> interfaces = List.of(name.interfaceName());
+
+        return new OutputSandwoodClassGenerated(name.backendName(target), packageName, extended, interfaces, functions,
+                fieldsTree, modelCode, gettersAndSetters);
+    }
+
     private final String modelCode;
     // Variable field name |-> Field Descriptor
     private final List<OutputFunction> functions;
     private final OutputTree fieldsTree;
     private final List<OutputFunction> gettersAndSetters;
 
-    public OutputSandwoodClassGenerated(ClassName name, PackageName packageName, ClassName extendedClass,
-            ClassName[] interfaces, List<OutputFunction> functions, OutputTree fieldsTree, String modelCode,
+    private OutputSandwoodClassGenerated(ClassName name, PackageName packageName,
+            Map<ClassName, List<ClassName>> extended, List<ClassName> interfaces,
+            List<OutputFunction> functions, OutputTree fieldsTree, String modelCode,
             List<OutputFunction> gettersAndSetters) {
-        this.name = name;
-        this.packageName = packageName;
-        this.extendedClass = extendedClass;
-        this.interfaces = interfaces;
+        super(packageName, name, extended, interfaces, List.of());
         this.functions = functions;
         // Normalize newline characters
         this.modelCode = StringUtil.normalizeNewLines(modelCode);
         this.fieldsTree = fieldsTree;
         this.gettersAndSetters = gettersAndSetters;
 
-    }
-
-    @Override
-    public String getName() {
-        return name.getName();
-    }
-
-    @Override
-    public PackageName getPackage() {
-        return packageName;
     }
 
     public List<OutputFunction> getFunctions() {
@@ -63,76 +60,73 @@ public class OutputSandwoodClassGenerated extends OutputSandwoodClass {
     }
 
     @Override
-    public void toJava(StringBuilder sb) {
-        Set<String> requiredImports = new HashSet<>();
+    protected void addDeclaration(StringBuilder sb) {
+        sb.append("final class ");
+    }
 
-        if(!packageName.isEmpty())
-            sb.append("package " + packageName + ";\n\n");
+    @Override
+    public void toJavaBody(StringBuilder sb, int indent, Set<String> requiredImports) {
 
-        StringBuilder bodySB = new StringBuilder();
+        fieldsTree.toJava(sb, indent, requiredImports);
 
-        bodySB.append("final class " + name);
-
-        if(extendedClass != null)
-            bodySB.append(" extends " + extendedClass);
-
-        if(interfaces.length != 0) {
-            bodySB.append(" implements " + interfaces[0]);
-            for(int i = 1; i < interfaces.length; i++)
-                bodySB.append(", " + interfaces[i]);
-        }
-
-        bodySB.append(" {\n");
-
-        bodySB.append("\t");
-        fieldsTree.toJava(bodySB, 1, requiredImports);
-
-        addConstructor(bodySB);
+        addConstructor(sb, indent, requiredImports);
 
         for(OutputFunction f:gettersAndSetters)
-            f.toJava(bodySB, 1, MethodLocation.CLASS, requiredImports);
+            f.toJava(sb, 1, MethodLocation.CLASS, requiredImports);
 
         for(OutputFunction f:functions)
-            f.toJava(bodySB, 1, MethodLocation.CLASS, requiredImports);
+            f.toJava(sb, 1, MethodLocation.CLASS, requiredImports);
 
-        bodySB.append("\n");
-
-        addModelCode(bodySB);
-
-        bodySB.append("}");
-
-        addImports(sb, requiredImports);
-        sb.append(bodySB);
-    }
-
-    private void addImports(StringBuilder sb, Set<String> requiredImports) {
-        requiredImports.add("org.sandwood.runtime.model.ExecutionTarget");
-        PriorityQueue<String> p = new PriorityQueue<>(requiredImports);
-        while(!p.isEmpty())
-            sb.append("import " + p.poll() + ";\n");
         sb.append("\n");
+
+        addModelCode(sb, indent);
     }
 
-    private void addConstructor(StringBuilder sb) {
-        sb.append("\n\tpublic " + name + "(ExecutionTarget target) {\n\t\tsuper(target);\n\t}\n");
+    private void addConstructor(StringBuilder sb, int indent, Set<String> requiredImports) {
+        requiredImports.add("org.sandwood.runtime.model.ExecutionTarget");
+        sb.append("\n");
+        addIndent(sb, indent);
+        sb.append("public " + getName() + "(ExecutionTarget target) {\n");
+        addIndent(sb, indent + 1);
+        sb.append("super(target);\n");
+        addIndent(sb, indent);
+        sb.append("}\n");
     }
 
     /**
      * Method to add in the required boilerplate code for random. We may want to make this an IR later, but for now I
      * cannot think of a good reason not to just keep it as a string.
      */
-    private void addModelCode(StringBuilder sb) {
-        sb.append("\t@Override\n\tpublic String modelCode() {\n\t\treturn "
-                + ((modelCode.equals("")) ? "null"
-                        : processInputString(StringUtil.escapeSpecialCharacters(modelCode)))
-                + ";\n\t}\n");
+    private void addModelCode(StringBuilder sb, int indent) {
+        addIndent(sb, indent);
+        sb.append("@Override\n");
+        addIndent(sb, indent);
+        sb.append("public String modelCode() {\n");
+        addIndent(sb, indent + 1);
+        if(modelCode.equals(""))
+            sb.append("return null;");
+        else {
+            sb.append("return ");
+            processInputString(sb, StringUtil.escapeSpecialCharacters(modelCode), indent + 1);
+            sb.append(";\n");
+        }
+        addIndent(sb, indent);
+        sb.append("}\n");
     }
 
-    private String processInputString(String input) {
-        StringBuilder sb = new StringBuilder();
+    private void processInputString(StringBuilder sb, String input, int indent) {
+        String[] parts = input.split("\\\\n", -1);
+        sb.append("\"" + parts[0]);
+        for(int i = 1; i < parts.length; i++) {
+            sb.append("\\n\"\n");
+            addIndent(sb, indent);
+            sb.append("     + \"" + parts[i]);
+        }
         sb.append("\"");
-        sb.append(String.join("\\n\"\n\t\t     + \"", input.split("\\\\n", -1)));
-        sb.append("\"");
-        return sb.toString();
+    }
+
+    @Override
+    public String getJavaDocComment() {
+        return Tree.NoComment;
     }
 }

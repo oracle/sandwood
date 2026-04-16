@@ -1,50 +1,51 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements HMMTestPart4$CoreInterface {
-	
+final class HMMTestPart4$MultiThreadCPU extends CoreModelMultiThreadCPU implements HMMTestPart4$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[] bias;
-	private boolean[][][] constrainedFlag$sample124;
-	private boolean[] constrainedFlag$sample28;
-	private boolean[] constrainedFlag$sample45;
-	private boolean constrainedFlag$sample84 = true;
-	private double[][] cv$var121$stateProbabilityGlobal;
-	private double[][] cv$var28$countGlobal;
-	private double[] cv$var81$stateProbabilityGlobal;
-	private boolean fixedFlag$sample124 = false;
-	private boolean fixedFlag$sample28 = false;
-	private boolean fixedFlag$sample45 = false;
-	private boolean fixedFlag$sample84 = false;
-	private boolean fixedProbFlag$sample124 = false;
-	private boolean fixedProbFlag$sample191 = false;
-	private boolean fixedProbFlag$sample28 = false;
-	private boolean fixedProbFlag$sample45 = false;
-	private boolean fixedProbFlag$sample84 = false;
-	private boolean[][][] flips;
-	private boolean[][][] flipsMeasured;
-	private int[][] length$flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double logProbability$m;
-	private double logProbability$st;
-	private double logProbability$var121;
-	private double logProbability$var186;
-	private double logProbability$var28;
-	private double logProbability$var44;
-	private double logProbability$var81;
-	private double[][] m;
-	private int samples;
-	private int[][][] st;
-	private int states;
-	private boolean system$gibbsForward = true;
-	private double[] v;
+	double[] bias;
+	boolean[][][] constrainedFlag$sample124;
+	boolean[] constrainedFlag$sample28;
+	boolean[] constrainedFlag$sample45;
+	boolean constrainedFlag$sample84 = true;
+	boolean fixedFlag$sample124 = false;
+	boolean fixedFlag$sample28 = false;
+	boolean fixedFlag$sample45 = false;
+	boolean fixedFlag$sample84 = false;
+	boolean fixedProbFlag$sample124 = false;
+	boolean fixedProbFlag$sample191 = false;
+	boolean fixedProbFlag$sample28 = false;
+	boolean fixedProbFlag$sample45 = false;
+	boolean fixedProbFlag$sample84 = false;
+	boolean[][][] flips;
+	boolean[][][] flipsMeasured;
+	int[][] length$flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$flips;
+	double logProbability$m;
+	double logProbability$st;
+	double logProbability$var121;
+	double logProbability$var186;
+	double logProbability$var28;
+	double logProbability$var44;
+	double logProbability$var81;
+	double[][] m;
+	int samples;
+	int[][][] st;
+	int states;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[][] cv$var121$stateProbabilityGlobal;
+	double[][] cv$var28$countGlobal;
+	double[] cv$var81$stateProbabilityGlobal;
 
 	public HMMTestPart4$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -1547,62 +1548,9 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var28$countGlobal
-		{
-			// Allocation of cv$var28$countGlobal for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				cv$var28$countGlobal = new double[cv$threadCount][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					cv$var28$countGlobal[cv$index] = new double[2];
-			}
-		}
-		
-		// Constructor for cv$var81$stateProbabilityGlobal
-		{
-			// Variable to record the maximum value of Task Get 82. Initially set to the value
-			// of putTask 29.
-			int cv$var29$max = 2;
-			
-			// Allocation of cv$var81$stateProbabilityGlobal for single threaded execution
-			cv$var81$stateProbabilityGlobal = new double[cv$var29$max];
-		}
-		
-		// Constructor for cv$var121$stateProbabilityGlobal
-		{
-			// Variable to record the maximum value of Task Get 122. Initially set to the value
-			// of putTask 29.
-			int cv$var29$max = 2;
-			
-			// Allocation of cv$var121$stateProbabilityGlobal for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				cv$var121$stateProbabilityGlobal = new double[cv$threadCount][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					cv$var121$stateProbabilityGlobal[cv$index] = new double[cv$var29$max];
-			}
-		}
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for v
 		{
 			v = new double[2];
@@ -1674,6 +1622,59 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var28$countGlobal
+		{
+			// Allocation of cv$var28$countGlobal for multithreaded execution
+			{
+				// Get the thread count.
+				int cv$threadCount = threadCount();
+				
+				// Allocate an array to hold a copy per thread
+				cv$var28$countGlobal = new double[cv$threadCount][];
+				
+				// Populate the array with a copy per thread
+				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+					cv$var28$countGlobal[cv$index] = new double[2];
+			}
+		}
+		
+		// Constructor for cv$var81$stateProbabilityGlobal
+		{
+			// Variable to record the maximum value of Task Get 82. Initially set to the value
+			// of putTask 29.
+			int cv$var29$max = 2;
+			
+			// Allocation of cv$var81$stateProbabilityGlobal for single threaded execution
+			cv$var81$stateProbabilityGlobal = new double[cv$var29$max];
+		}
+		
+		// Constructor for cv$var121$stateProbabilityGlobal
+		{
+			// Variable to record the maximum value of Task Get 122. Initially set to the value
+			// of putTask 29.
+			int cv$var29$max = 2;
+			
+			// Allocation of cv$var121$stateProbabilityGlobal for multithreaded execution
+			{
+				// Get the thread count.
+				int cv$threadCount = threadCount();
+				
+				// Allocate an array to hold a copy per thread
+				cv$var121$stateProbabilityGlobal = new double[cv$threadCount][];
+				
+				// Populate the array with a copy per thread
+				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+					cv$var121$stateProbabilityGlobal[cv$index] = new double[cv$var29$max];
+			}
+		}
 	}
 
 	// Method to execute the model code conventionally.

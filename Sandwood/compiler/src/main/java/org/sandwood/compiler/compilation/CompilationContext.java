@@ -65,7 +65,7 @@ public class CompilationContext {
 
     // TODO Ensure that the names and function names match here and are appropriate.
     public enum AuxFunctionType {
-        VAR_ALLOCATOR("allocator"),
+        VAR_ALLOCATOR("allocate"),
         SCRATCH_ALLOCATOR("allocateScratch"),
         INITIALIZE("initializeModel"),
         INITIALIZE_LOG_PROBABILITY_FIELDS("initializeLogProbabilityFields"),
@@ -352,7 +352,7 @@ public class CompilationContext {
                 unorderedConstructors.add(IRTree.treeScope(constructor, "Constructor for " + fieldName));
             else
                 orderedConstructors
-                .add(new VarConstructor(v, IRTree.treeScope(constructor, "Constructor for " + fieldName)));
+                        .add(new VarConstructor(v, IRTree.treeScope(constructor, "Constructor for " + fieldName)));
         }
 
         public void addScratchConstructor(ScratchVariableDescription<?> fieldName, IRTreeVoid constructor) {

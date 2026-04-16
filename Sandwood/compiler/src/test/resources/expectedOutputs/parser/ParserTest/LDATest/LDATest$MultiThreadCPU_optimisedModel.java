@@ -1,43 +1,44 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements LDATest$CoreInterface {
-	
+final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LDATest$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[] alpha;
-	private double[] beta;
-	private boolean[] constrainedFlag$sample42;
-	private boolean[] constrainedFlag$sample58;
-	private boolean[][] constrainedFlag$sample90;
-	private double[][] cv$var42$countGlobal;
-	private double[][] cv$var57$countGlobal;
-	private double[][] cv$var88$stateProbabilityGlobal;
-	private int[][] documents;
-	private boolean fixedFlag$sample42 = false;
-	private boolean fixedFlag$sample58 = false;
-	private boolean fixedProbFlag$sample42 = false;
-	private boolean fixedProbFlag$sample58 = false;
-	private int[] length$documents;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$phi;
-	private double[][] logProbability$sample90;
-	private double[][] logProbability$sample93;
-	private double logProbability$theta;
-	private double logProbability$var42;
-	private double logProbability$var57;
-	private double logProbability$w;
-	private int noTopics;
-	private double[][] phi;
-	private boolean system$gibbsForward = true;
-	private double[][] theta;
-	private int vocabSize;
-	private int[][] w;
-	private int[][] z;
+	double[] alpha;
+	double[] beta;
+	boolean[] constrainedFlag$sample42;
+	boolean[] constrainedFlag$sample58;
+	boolean[][] constrainedFlag$sample90;
+	int[][] documents;
+	boolean fixedFlag$sample42 = false;
+	boolean fixedFlag$sample58 = false;
+	boolean fixedProbFlag$sample42 = false;
+	boolean fixedProbFlag$sample58 = false;
+	int[] length$documents;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$phi;
+	double[][] logProbability$sample90;
+	double[][] logProbability$sample93;
+	double logProbability$theta;
+	double logProbability$var42;
+	double logProbability$var57;
+	double logProbability$w;
+	int noTopics;
+	double[][] phi;
+	boolean system$gibbsForward = true;
+	double[][] theta;
+	int vocabSize;
+	int[][] w;
+	int[][] z;
+	double[][] cv$var42$countGlobal;
+	double[][] cv$var57$countGlobal;
+	double[][] cv$var88$stateProbabilityGlobal;
 
 	public LDATest$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -320,7 +321,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Increment the sample counter with the value sampled by sample task 90 of random
 				// variable var87
 				// 
-				// Substituted "i$var71" with its value "var56".
+												// Substituted "i$var71" with its value "var56".
 				cv$countLocal[z[var56][j]] = (cv$countLocal[z[var56][j]] + 1.0);
 			}
 		}
@@ -345,7 +346,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// variable marginalization
 		// 
-		// cv$numStates's comment
+				// cv$numStates's comment
 		// Calculate the number of states to evaluate.
 		int cv$numStates = Math.max(0, noTopics);
 		
@@ -385,10 +386,10 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
 			// 
-			// An accumulator to allow the value for each distribution to be constructed before
+									// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			cv$stateProbabilityLocal[cv$valuePos] = (((((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[w[i$var71][j]])) && (var89[w[i$var71][j]] <= 1.0))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY) + (((((cv$valuePos < noTopics) && (0 < noTopics)) && (0.0 <= var86[cv$valuePos])) && (var86[cv$valuePos] <= 1.0))?Math.log(var86[cv$valuePos]):Double.NEGATIVE_INFINITY));
 		}
 		if(constrainedFlag$sample90[i$var71][j]) {
@@ -714,58 +715,9 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var42$countGlobal
-		{
-			// Allocation of cv$var42$countGlobal for multithreaded execution
-			// Get the thread count.
-			int cv$threadCount = threadCount();
-			
-			// Allocate an array to hold a copy per thread
-			cv$var42$countGlobal = new double[cv$threadCount][];
-			
-			// Populate the array with a copy per thread
-			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				cv$var42$countGlobal[cv$index] = new double[vocabSize];
-		}
-		
-		// Constructor for cv$var57$countGlobal
-		{
-			// Allocation of cv$var57$countGlobal for multithreaded execution
-			// Get the thread count.
-			int cv$threadCount = threadCount();
-			
-			// Allocate an array to hold a copy per thread
-			cv$var57$countGlobal = new double[cv$threadCount][];
-			
-			// Populate the array with a copy per thread
-			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				cv$var57$countGlobal[cv$index] = new double[noTopics];
-		}
-		
-		// Allocation of cv$var88$stateProbabilityGlobal for multithreaded execution
-		// 
-		// Get the thread count.
-		int cv$threadCount = threadCount();
-		
-		// Allocate an array to hold a copy per thread
-		cv$var88$stateProbabilityGlobal = new double[cv$threadCount][];
-		
-		// Populate the array with a copy per thread
-		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			// Variable to record the maximum value of Task Get 88. Initially set to the value
-			// of putTask 59.
-			cv$var88$stateProbabilityGlobal[cv$index] = new double[noTopics];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for alpha
 		alpha = new double[noTopics];
 		
@@ -821,6 +773,55 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var42$countGlobal
+		{
+			// Allocation of cv$var42$countGlobal for multithreaded execution
+			// Get the thread count.
+			int cv$threadCount = threadCount();
+			
+			// Allocate an array to hold a copy per thread
+			cv$var42$countGlobal = new double[cv$threadCount][];
+			
+			// Populate the array with a copy per thread
+			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+				cv$var42$countGlobal[cv$index] = new double[vocabSize];
+		}
+		
+		// Constructor for cv$var57$countGlobal
+		{
+			// Allocation of cv$var57$countGlobal for multithreaded execution
+			// Get the thread count.
+			int cv$threadCount = threadCount();
+			
+			// Allocate an array to hold a copy per thread
+			cv$var57$countGlobal = new double[cv$threadCount][];
+			
+			// Populate the array with a copy per thread
+			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+				cv$var57$countGlobal[cv$index] = new double[noTopics];
+		}
+		
+		// Allocation of cv$var88$stateProbabilityGlobal for multithreaded execution
+		// 
+		// Get the thread count.
+		int cv$threadCount = threadCount();
+		
+		// Allocate an array to hold a copy per thread
+		cv$var88$stateProbabilityGlobal = new double[cv$threadCount][];
+		
+		// Populate the array with a copy per thread
+		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+			// Variable to record the maximum value of Task Get 88. Initially set to the value
+			// of putTask 59.
+			cv$var88$stateProbabilityGlobal[cv$index] = new double[noTopics];
 	}
 
 	// Method to execute the model code conventionally.

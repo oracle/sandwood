@@ -16,7 +16,6 @@ import static org.sandwood.compiler.trees.irTree.IRTree.constant;
 import static org.sandwood.compiler.trees.irTree.IRTree.eq;
 import static org.sandwood.compiler.trees.irTree.IRTree.exp;
 import static org.sandwood.compiler.trees.irTree.IRTree.forStmt;
-import static org.sandwood.compiler.trees.irTree.IRTree.getIntField;
 import static org.sandwood.compiler.trees.irTree.IRTree.ifElse;
 import static org.sandwood.compiler.trees.irTree.IRTree.initializeVariable;
 import static org.sandwood.compiler.trees.irTree.IRTree.lessThan;
@@ -1433,7 +1432,7 @@ public class TreeUtils {
         // Local variables for the arrays.
         ts.add(initializeVariable(sourceName, source, Tree.NoComment));
         ts.add(initializeVariable(targetName, target, Tree.NoComment));
-        ts.add(initializeVariable(lengthName, getIntField(load(targetName), "length"), Tree.NoComment));
+        ts.add(initializeVariable(lengthName, ArrayVariable.getLengthTree(load(targetName)), Tree.NoComment));
 
         // Copy the data one dimension down
         IRTreeVoid body;
@@ -1501,7 +1500,7 @@ public class TreeUtils {
     private static <A extends Variable<A>, B extends Variable<B>, C extends Variable<C>> IRTreeVoid setArray(
             VariableName baseName, VariableDescription<ArrayVariable<A>> subArrayName, int i, IRTreeReturn<B> value) {
         IRTreeReturn<IntVariable> start = constant(0);
-        IRTreeReturn<IntVariable> end = getIntField(load(subArrayName), "length");
+        IRTreeReturn<IntVariable> end = ArrayVariable.getLengthTree(load(subArrayName));
         IRTreeReturn<IntVariable> step = constant(1);
         LocalVariableDescription<IntVariable> indexName = VariableNames.indexName(baseName, Integer.toString(i));
 

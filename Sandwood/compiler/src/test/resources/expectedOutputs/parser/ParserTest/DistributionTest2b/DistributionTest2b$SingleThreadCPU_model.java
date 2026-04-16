@@ -1,47 +1,48 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DistributionTest2b$CoreInterface {
-	
+final class DistributionTest2b$SingleThreadCPU extends CoreModelSingleThreadCPU implements DistributionTest2b$CoreInterface {
+
 	// Declare the variables for the model.
-	private boolean[] constrainedFlag$sample23;
-	private boolean[] constrainedFlag$sample36;
-	private boolean constrainedFlag$sample5 = true;
-	private boolean constrainedFlag$sample9 = true;
-	private double[] cv$var23$stateProbabilityGlobal;
-	private double[] cv$var36$stateProbabilityGlobal;
-	private double[] cv$var5$stateProbabilityGlobal;
-	private double[] cv$var9$stateProbabilityGlobal;
-	private double[][] distribution$sample23;
-	private double[] distribution$sample5;
-	private double[] distribution$sample9;
-	private boolean fixedFlag$sample23 = false;
-	private boolean fixedFlag$sample5 = false;
-	private boolean fixedFlag$sample9 = false;
-	private boolean fixedProbFlag$sample23 = false;
-	private boolean fixedProbFlag$sample5 = false;
-	private boolean fixedProbFlag$sample9 = false;
-	private int length$value;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$c;
-	private double[] logProbability$sample23;
-	private double[] logProbability$sample43;
-	private double logProbability$v;
-	private double logProbability$v1;
-	private double logProbability$v2;
-	private double logProbability$v3;
-	private double logProbability$var9;
-	private int size;
-	private boolean system$gibbsForward = true;
-	private boolean[] v;
-	private int v1;
-	private int[] v2;
-	private int[] v3;
-	private boolean[] value;
-	private double[] weightings;
+	boolean[] constrainedFlag$sample23;
+	boolean[] constrainedFlag$sample36;
+	boolean constrainedFlag$sample5 = true;
+	boolean constrainedFlag$sample9 = true;
+	double[][] distribution$sample23;
+	double[] distribution$sample5;
+	double[] distribution$sample9;
+	boolean fixedFlag$sample23 = false;
+	boolean fixedFlag$sample5 = false;
+	boolean fixedFlag$sample9 = false;
+	boolean fixedProbFlag$sample23 = false;
+	boolean fixedProbFlag$sample5 = false;
+	boolean fixedProbFlag$sample9 = false;
+	int length$value;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$c;
+	double[] logProbability$sample23;
+	double[] logProbability$sample43;
+	double logProbability$v;
+	double logProbability$v1;
+	double logProbability$v2;
+	double logProbability$v3;
+	double logProbability$var9;
+	int size;
+	boolean system$gibbsForward = true;
+	boolean[] v;
+	int v1;
+	int[] v2;
+	int[] v3;
+	boolean[] value;
+	double[] weightings;
+	double[] cv$var23$stateProbabilityGlobal;
+	double[] cv$var36$stateProbabilityGlobal;
+	double[] cv$var5$stateProbabilityGlobal;
+	double[] cv$var9$stateProbabilityGlobal;
 
 	public DistributionTest2b$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -2697,40 +2698,9 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var5$stateProbabilityGlobal
-		{
-			// Allocation of cv$var5$stateProbabilityGlobal for single threaded execution
-			cv$var5$stateProbabilityGlobal = new double[weightings.length];
-		}
-		
-		// Constructor for cv$var9$stateProbabilityGlobal
-		{
-			// Allocation of cv$var9$stateProbabilityGlobal for single threaded execution
-			cv$var9$stateProbabilityGlobal = new double[weightings.length];
-		}
-		
-		// Constructor for cv$var23$stateProbabilityGlobal
-		{
-			// Allocation of cv$var23$stateProbabilityGlobal for single threaded execution
-			cv$var23$stateProbabilityGlobal = new double[weightings.length];
-		}
-		
-		// Constructor for cv$var36$stateProbabilityGlobal
-		{
-			// Allocation of cv$var36$stateProbabilityGlobal for single threaded execution
-			cv$var36$stateProbabilityGlobal = new double[weightings.length];
-		}
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// If v2 has not been set already allocate space.
 		if((!fixedFlag$sample9 || !fixedFlag$sample23)) {
 			// Constructor for v2
@@ -2788,6 +2758,37 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var5$stateProbabilityGlobal
+		{
+			// Allocation of cv$var5$stateProbabilityGlobal for single threaded execution
+			cv$var5$stateProbabilityGlobal = new double[weightings.length];
+		}
+		
+		// Constructor for cv$var9$stateProbabilityGlobal
+		{
+			// Allocation of cv$var9$stateProbabilityGlobal for single threaded execution
+			cv$var9$stateProbabilityGlobal = new double[weightings.length];
+		}
+		
+		// Constructor for cv$var23$stateProbabilityGlobal
+		{
+			// Allocation of cv$var23$stateProbabilityGlobal for single threaded execution
+			cv$var23$stateProbabilityGlobal = new double[weightings.length];
+		}
+		
+		// Constructor for cv$var36$stateProbabilityGlobal
+		{
+			// Allocation of cv$var36$stateProbabilityGlobal for single threaded execution
+			cv$var36$stateProbabilityGlobal = new double[weightings.length];
+		}
 	}
 
 	// Method to execute the model code conventionally.

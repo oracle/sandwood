@@ -26,7 +26,7 @@ import java.util.Stack;
 
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
-import org.sandwood.compiler.dataflowGraph.variables.rng.RandomNumberGenerator;
+import org.sandwood.compiler.dataflowGraph.variables.internal.RandomNumberGenerator;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;

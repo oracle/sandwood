@@ -1,65 +1,66 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements HMM_Mk2$CoreInterface {
-	
+final class HMM_Mk2$MultiThreadCPU extends CoreModelMultiThreadCPU implements HMM_Mk2$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[][] bias;
-	private boolean[][] constrainedFlag$sample126;
-	private boolean[] constrainedFlag$sample42;
-	private boolean[] constrainedFlag$sample57;
-	private boolean constrainedFlag$sample78 = true;
-	private boolean constrainedFlag$sample80 = true;
-	private boolean[] constrainedFlag$sample95;
-	private double[][] cv$var123$stateProbabilityGlobal;
-	private double[][] cv$var42$countGlobal;
-	private double[][] cv$var56$countGlobal;
-	private double[] cv$var75$countGlobal;
-	private double[] cv$var77$stateProbabilityGlobal;
-	private double[][] cv$var92$stateProbabilityGlobal;
-	private int[][] events;
-	private int[][] eventsMeasured;
-	private boolean fixedFlag$sample126 = false;
-	private boolean fixedFlag$sample42 = false;
-	private boolean fixedFlag$sample57 = false;
-	private boolean fixedFlag$sample78 = false;
-	private boolean fixedFlag$sample80 = false;
-	private boolean fixedFlag$sample95 = false;
-	private boolean fixedProbFlag$sample126 = false;
-	private boolean fixedProbFlag$sample159 = false;
-	private boolean fixedProbFlag$sample42 = false;
-	private boolean fixedProbFlag$sample57 = false;
-	private boolean fixedProbFlag$sample78 = false;
-	private boolean fixedProbFlag$sample80 = false;
-	private boolean fixedProbFlag$sample95 = false;
-	private int initialState;
-	private int[] length$eventsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double logProbability$events;
-	private double logProbability$initialState;
-	private double logProbability$m;
-	private double logProbability$st;
-	private double logProbability$var123;
-	private double logProbability$var155;
-	private double logProbability$var42;
-	private double logProbability$var56;
-	private double logProbability$var92;
-	private double logProbability$weights;
-	private double[][] m;
-	private int noEvents;
-	private int noStates;
-	private int samples;
-	private int[][] st;
-	private boolean system$gibbsForward = true;
-	private double[] v;
-	private double[] v2;
-	private double[] weights;
+	double[][] bias;
+	boolean[][] constrainedFlag$sample126;
+	boolean[] constrainedFlag$sample42;
+	boolean[] constrainedFlag$sample57;
+	boolean constrainedFlag$sample78 = true;
+	boolean constrainedFlag$sample80 = true;
+	boolean[] constrainedFlag$sample95;
+	int[][] events;
+	int[][] eventsMeasured;
+	boolean fixedFlag$sample126 = false;
+	boolean fixedFlag$sample42 = false;
+	boolean fixedFlag$sample57 = false;
+	boolean fixedFlag$sample78 = false;
+	boolean fixedFlag$sample80 = false;
+	boolean fixedFlag$sample95 = false;
+	boolean fixedProbFlag$sample126 = false;
+	boolean fixedProbFlag$sample159 = false;
+	boolean fixedProbFlag$sample42 = false;
+	boolean fixedProbFlag$sample57 = false;
+	boolean fixedProbFlag$sample78 = false;
+	boolean fixedProbFlag$sample80 = false;
+	boolean fixedProbFlag$sample95 = false;
+	int initialState;
+	int[] length$eventsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$events;
+	double logProbability$initialState;
+	double logProbability$m;
+	double logProbability$st;
+	double logProbability$var123;
+	double logProbability$var155;
+	double logProbability$var42;
+	double logProbability$var56;
+	double logProbability$var92;
+	double logProbability$weights;
+	double[][] m;
+	int noEvents;
+	int noStates;
+	int samples;
+	int[][] st;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[] v2;
+	double[] weights;
+	double[][] cv$var123$stateProbabilityGlobal;
+	double[][] cv$var42$countGlobal;
+	double[][] cv$var56$countGlobal;
+	double[] cv$var75$countGlobal;
+	double[] cv$var77$stateProbabilityGlobal;
+	double[][] cv$var92$stateProbabilityGlobal;
 
 	public HMM_Mk2$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -2278,6 +2279,90 @@ final class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// Constructor for v
+		{
+			v = new double[noStates];
+		}
+		
+		// Constructor for v2
+		{
+			v2 = new double[noEvents];
+		}
+		
+		// If m has not been set already allocate space.
+		if(!fixedFlag$sample42) {
+			// Constructor for m
+			{
+				m = new double[noStates][];
+				for(int var41 = 0; var41 < noStates; var41 += 1)
+					m[var41] = new double[noStates];
+			}
+		}
+		
+		// If bias has not been set already allocate space.
+		if(!fixedFlag$sample57) {
+			// Constructor for bias
+			{
+				bias = new double[noStates][];
+				for(int var55 = 0; var55 < noStates; var55 += 1)
+					bias[var55] = new double[noEvents];
+			}
+		}
+		
+		// If st has not been set already allocate space.
+		if((!fixedFlag$sample95 || !fixedFlag$sample126)) {
+			// Constructor for st
+			{
+				st = new int[length$eventsMeasured.length][];
+				for(int i$var69 = 0; i$var69 < length$eventsMeasured.length; i$var69 += 1)
+					st[i$var69] = new int[length$eventsMeasured[i$var69]];
+			}
+		}
+		
+		// If weights has not been set already allocate space.
+		if(!fixedFlag$sample78) {
+			// Constructor for weights
+			{
+				weights = new double[noStates];
+			}
+		}
+		
+		// Constructor for events
+		{
+			events = new int[length$eventsMeasured.length][];
+			for(int i$var136 = 0; i$var136 < length$eventsMeasured.length; i$var136 += 1)
+				events[i$var136] = new int[length$eventsMeasured[i$var136]];
+		}
+		
+		// Constructor for constrainedFlag$sample95
+		{
+			constrainedFlag$sample95 = new boolean[((((length$eventsMeasured.length - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample126
+		{
+			constrainedFlag$sample126 = new boolean[((((length$eventsMeasured.length - 1) - 0) / 1) + 1)][];
+			for(int i$var104 = 0; i$var104 < length$eventsMeasured.length; i$var104 += 1)
+				constrainedFlag$sample126[((i$var104 - 0) / 1)] = new boolean[((((length$eventsMeasured[i$var104] - 1) - 1) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample42
+		{
+			constrainedFlag$sample42 = new boolean[((((noStates - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample57
+		{
+			constrainedFlag$sample57 = new boolean[((((noStates - 1) - 0) / 1) + 1)];
+		}
+		
+		// Allocate scratch space
+		allocateScratch();
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -2367,90 +2452,6 @@ final class HMM_Mk2$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					cv$var123$stateProbabilityGlobal[cv$index] = new double[cv$var43$max];
 			}
 		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// Constructor for v
-		{
-			v = new double[noStates];
-		}
-		
-		// Constructor for v2
-		{
-			v2 = new double[noEvents];
-		}
-		
-		// If m has not been set already allocate space.
-		if(!fixedFlag$sample42) {
-			// Constructor for m
-			{
-				m = new double[noStates][];
-				for(int var41 = 0; var41 < noStates; var41 += 1)
-					m[var41] = new double[noStates];
-			}
-		}
-		
-		// If bias has not been set already allocate space.
-		if(!fixedFlag$sample57) {
-			// Constructor for bias
-			{
-				bias = new double[noStates][];
-				for(int var55 = 0; var55 < noStates; var55 += 1)
-					bias[var55] = new double[noEvents];
-			}
-		}
-		
-		// If st has not been set already allocate space.
-		if((!fixedFlag$sample95 || !fixedFlag$sample126)) {
-			// Constructor for st
-			{
-				st = new int[length$eventsMeasured.length][];
-				for(int i$var69 = 0; i$var69 < length$eventsMeasured.length; i$var69 += 1)
-					st[i$var69] = new int[length$eventsMeasured[i$var69]];
-			}
-		}
-		
-		// If weights has not been set already allocate space.
-		if(!fixedFlag$sample78) {
-			// Constructor for weights
-			{
-				weights = new double[noStates];
-			}
-		}
-		
-		// Constructor for events
-		{
-			events = new int[length$eventsMeasured.length][];
-			for(int i$var136 = 0; i$var136 < length$eventsMeasured.length; i$var136 += 1)
-				events[i$var136] = new int[length$eventsMeasured[i$var136]];
-		}
-		
-		// Constructor for constrainedFlag$sample95
-		{
-			constrainedFlag$sample95 = new boolean[((((length$eventsMeasured.length - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample126
-		{
-			constrainedFlag$sample126 = new boolean[((((length$eventsMeasured.length - 1) - 0) / 1) + 1)][];
-			for(int i$var104 = 0; i$var104 < length$eventsMeasured.length; i$var104 += 1)
-				constrainedFlag$sample126[((i$var104 - 0) / 1)] = new boolean[((((length$eventsMeasured[i$var104] - 1) - 1) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample42
-		{
-			constrainedFlag$sample42 = new boolean[((((noStates - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample57
-		{
-			constrainedFlag$sample57 = new boolean[((((noStates - 1) - 0) / 1) + 1)];
-		}
-		
-		// Allocate scratch space
-		allocateScratch();
 	}
 
 	// Method to execute the model code conventionally.

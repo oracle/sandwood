@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface DistributionTest1b$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface DistributionTest1b$CoreInterface extends CoreModel {
 
 	// Getter for distribution$sample4.
 	public double[] get$distribution$sample4();

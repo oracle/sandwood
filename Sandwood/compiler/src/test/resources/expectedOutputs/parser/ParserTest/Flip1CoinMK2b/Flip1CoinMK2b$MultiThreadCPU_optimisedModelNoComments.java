@@ -1,26 +1,29 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip1CoinMK2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK2b$CoreInterface {
-	private double bias;
-	private boolean constrainedFlag$sample5 = true;
-	private boolean fixedFlag$sample5 = false;
-	private boolean fixedProbFlag$sample19 = false;
-	private boolean fixedProbFlag$sample5 = false;
-	private boolean[] flips;
-	private boolean[] flipsMeasured;
-	private int length$flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bernoulli;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double logProbability$var19;
-	private int samples;
-	private boolean system$gibbsForward = true;
+final class Flip1CoinMK2b$MultiThreadCPU extends CoreModelMultiThreadCPU implements Flip1CoinMK2b$CoreInterface {
+double a;
+	double b;
+	double bias;
+	boolean constrainedFlag$sample5 = true;
+	boolean fixedFlag$sample5 = false;
+	boolean fixedProbFlag$sample19 = false;
+	boolean fixedProbFlag$sample5 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	int length$flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bernoulli;
+	double logProbability$bias;
+	double logProbability$flips;
+	double logProbability$var19;
+	int samples;
+	boolean system$gibbsForward = true;
 
 	public Flip1CoinMK2b$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -169,12 +172,12 @@ final class Flip1CoinMK2b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void allocateScratch() {}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		flips = new boolean[length$flipsMeasured];
 	}
+
+	@Override
+	public final void allocateScratch() {}
 
 	@Override
 	public final void forwardGeneration() {

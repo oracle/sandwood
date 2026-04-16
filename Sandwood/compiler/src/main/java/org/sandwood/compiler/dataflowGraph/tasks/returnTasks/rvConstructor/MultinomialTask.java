@@ -12,7 +12,6 @@ import static org.sandwood.compiler.trees.irTree.IRTree.addII;
 import static org.sandwood.compiler.trees.irTree.IRTree.arrayGet;
 import static org.sandwood.compiler.trees.irTree.IRTree.constant;
 import static org.sandwood.compiler.trees.irTree.IRTree.forStmt;
-import static org.sandwood.compiler.trees.irTree.IRTree.getIntField;
 import static org.sandwood.compiler.trees.irTree.IRTree.initializeVariable;
 import static org.sandwood.compiler.trees.irTree.IRTree.load;
 import static org.sandwood.compiler.trees.irTree.IRTree.store;
@@ -23,7 +22,6 @@ import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
@@ -102,7 +100,7 @@ public class MultinomialTask extends RandomVariableConstructorTask<ArrayVariable
                     VariableType.IntVariable, true);
             compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(accName, constant(0), Tree.NoComment));
             IRTreeVoid sum = store(accName, addII(arrayGet(current, load(indexName)), load(accName)), Tree.NoComment);
-            IRTreeReturn<IntVariable> length = getIntField(current, "length");
+            IRTreeReturn<IntVariable> length = ArrayVariable.getLengthTree(current);
             IRTreeVoid loop = forStmt(sum, constant(0), length, constant(1), indexName, true,
                     "Sum the number of samples in the multinomial output.");
             compilationCtx.addTreeToScope(GlobalScope.scope, loop);

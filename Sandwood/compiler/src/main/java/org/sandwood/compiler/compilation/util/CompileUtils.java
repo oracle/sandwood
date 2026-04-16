@@ -35,7 +35,7 @@ import org.sandwood.compiler.names.PackageName;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.srcTools.sourceToSource.ParseException;
 import org.sandwood.compiler.srcTools.sourceToSource.TokenMapping;
-import org.sandwood.compiler.trees.outputTree.OutputSandwoodClass;
+import org.sandwood.compiler.trees.outputTree.OutputSandwoodOuterClass;
 
 public class CompileUtils {
     /**
@@ -64,18 +64,18 @@ public class CompileUtils {
         }
     }
 
-    public static DiagnosticCollector<JavaFileObject> compileToJava(List<OutputSandwoodClass> classes)
+    public static DiagnosticCollector<JavaFileObject> compileToJava(List<OutputSandwoodOuterClass> classes)
             throws IOException {
         return compileToJava(new CompilationOptions(), classes);
     }
 
     public static DiagnosticCollector<JavaFileObject> compileToJava(CompilationOptions opts,
-            List<OutputSandwoodClass> classes) throws IOException {
+            List<OutputSandwoodOuterClass> classes) throws IOException {
 
         final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         List<JavaSourceFromString> compilationUnits = new ArrayList<>();
 
-        for(OutputSandwoodClass c:classes) {
+        for(OutputSandwoodOuterClass c:classes) {
             StringBuilder sb = new StringBuilder();
             c.toJava(sb);
             PackageName packageName = c.getPackage();

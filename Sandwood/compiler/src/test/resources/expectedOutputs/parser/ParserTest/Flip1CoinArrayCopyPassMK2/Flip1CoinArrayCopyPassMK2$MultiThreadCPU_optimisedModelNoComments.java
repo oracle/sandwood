@@ -1,26 +1,29 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinArrayCopyPassMK2$CoreInterface {
-	private double[] bias;
-	private boolean constrainedFlag$sample10 = true;
-	private boolean fixedFlag$sample10 = false;
-	private boolean fixedProbFlag$sample10 = false;
-	private boolean fixedProbFlag$sample31 = false;
-	private boolean[] flips;
-	private boolean[] flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double[] logProbability$bernoulli;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double[] logProbability$sample31;
-	private double logProbability$var10;
-	private int samples;
-	private boolean system$gibbsForward = true;
+final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends CoreModelMultiThreadCPU implements Flip1CoinArrayCopyPassMK2$CoreInterface {
+double a;
+	double b;
+	double[] bias;
+	boolean constrainedFlag$sample10 = true;
+	boolean fixedFlag$sample10 = false;
+	boolean fixedProbFlag$sample10 = false;
+	boolean fixedProbFlag$sample31 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double[] logProbability$bernoulli;
+	double logProbability$bias;
+	double logProbability$flips;
+	double[] logProbability$sample31;
+	double logProbability$var10;
+	int samples;
+	boolean system$gibbsForward = true;
 
 	public Flip1CoinArrayCopyPassMK2$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -188,16 +191,16 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	}
 
 	@Override
-	public final void allocateScratch() {}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		if(!fixedFlag$sample10)
 			bias = new double[(samples + 1)];
 		flips = new boolean[samples];
 		logProbability$bernoulli = new double[samples];
 		logProbability$sample31 = new double[samples];
 	}
+
+	@Override
+	public final void allocateScratch() {}
 
 	@Override
 	public final void forwardGeneration() {

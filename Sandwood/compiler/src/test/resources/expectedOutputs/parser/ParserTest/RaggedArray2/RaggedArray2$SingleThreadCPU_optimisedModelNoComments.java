@@ -1,34 +1,35 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements RaggedArray2$CoreInterface {
-	private double[][] a;
-	private double[][] b;
-	private double[] c;
-	private boolean constrainedFlag$sample81 = true;
-	private boolean constrainedFlag$sample84 = true;
-	private double[] cv$var77$stateProbabilityGlobal;
-	private double[] cv$var80$stateProbabilityGlobal;
-	private boolean fixedFlag$sample81 = false;
-	private boolean fixedFlag$sample84 = false;
-	private boolean fixedProbFlag$sample100 = false;
-	private boolean fixedProbFlag$sample81 = false;
-	private boolean fixedProbFlag$sample84 = false;
-	private int i;
-	private int length$obs_measured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$i;
-	private double logProbability$obs;
-	private double logProbability$var96;
-	private double logProbability$y;
-	private boolean[] obs;
-	private boolean[] obs_measured;
-	private double p;
-	private boolean system$gibbsForward = true;
-	private int y;
+final class RaggedArray2$SingleThreadCPU extends CoreModelSingleThreadCPU implements RaggedArray2$CoreInterface {
+double[][] a;
+	double[][] b;
+	double[] c;
+	boolean constrainedFlag$sample81 = true;
+	boolean constrainedFlag$sample84 = true;
+	boolean fixedFlag$sample81 = false;
+	boolean fixedFlag$sample84 = false;
+	boolean fixedProbFlag$sample100 = false;
+	boolean fixedProbFlag$sample81 = false;
+	boolean fixedProbFlag$sample84 = false;
+	int i;
+	int length$obs_measured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$i;
+	double logProbability$obs;
+	double logProbability$var96;
+	double logProbability$y;
+	boolean[] obs;
+	boolean[] obs_measured;
+	double p;
+	boolean system$gibbsForward = true;
+	int y;
+	double[] cv$var77$stateProbabilityGlobal;
+	double[] cv$var80$stateProbabilityGlobal;
 
 	public RaggedArray2$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -333,13 +334,7 @@ final class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void allocateScratch() {
-		cv$var77$stateProbabilityGlobal = new double[2];
-		cv$var80$stateProbabilityGlobal = new double[3];
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		a = new double[2][];
 		a[0] = new double[2];
 		a[1] = new double[3];
@@ -349,6 +344,12 @@ final class RaggedArray2$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		c = new double[2];
 		obs = new boolean[length$obs_measured];
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		cv$var77$stateProbabilityGlobal = new double[2];
+		cv$var80$stateProbabilityGlobal = new double[3];
 	}
 
 	@Override

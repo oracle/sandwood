@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -162,9 +162,8 @@ public class APICompile {
             // If error free continue with the compilation
             CompilationContext compilationCtx = null; // TODO move this into the for loop and protect against cases with
             // no execution targets.
-            ClassName[] interfaces = { modelInterface };
 
-            Map<ExecutionType, IRSandwoodClassGenerated> irClasses = new LinkedHashMap<>();
+            Set<IRSandwoodClassGenerated> irClasses = new LinkedHashSet<>();
 
             for(ExecutionType target:ExecutionType.supportedTypes) {
                 compilationCtx = new CompilationContext(compilationOptions, traces, target);
@@ -189,28 +188,28 @@ public class APICompile {
 
                 constructSetIntermediates(forwardVariables, compilationCtx);
                 ObservedValuePropagationBuilder.constructPropagateObservedValues(compilationCtx);
-
-                IRSandwoodClassGenerated irCls = new IRSandwoodClassGenerated(className.backendName(target),
-                        targetPackageName, ClassName.coreBase(target), interfaces, compilationCtx.getClassFields(), compilationCtx.getScratchFields(),
+                
+                IRSandwoodClassGenerated irClass = new IRSandwoodClassGenerated(target, className,
+                        targetPackageName, compilationCtx.getClassFields(), compilationCtx.getScratchFields(),
                         compilationCtx.getFunctions(), modelCode);
-                irClasses.put(target, irCls);
+                irClasses.add(irClass);
             }
 
             // Convert constructed classes to output classes in parallel.
             ForkJoinPool commonPool = ForkJoinPool.commonPool();
             List<RecursiveTask<OutputSandwoodClassGenerated>> tasks = new ArrayList<>();
             boolean optimise = compilationCtx.getOptimisation();
-            for(ExecutionType e:irClasses.keySet()) {
+            for(IRSandwoodClassGenerated irClass:irClasses) {
                 RecursiveTask<OutputSandwoodClassGenerated> task = new RecursiveTask<>() {
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     protected OutputSandwoodClassGenerated compute() {
-                        TransSandwoodClassGenerated transCls = irClasses.get(e).toTransformationTree();
+                        TransSandwoodClassGenerated transCls = irClass.toTransformationTree();
                         if(optimise)
                             transCls = transCls.applyOptimisations();
 
-                        return transCls.toOutputTree(e);
+                        return transCls.toOutputTree();
                     }
                 };
                 tasks.add(task);
@@ -230,8 +229,8 @@ public class APICompile {
             outputCls = task.join();
 
             compDesc.classes.add(outputCls);
-            compDesc.classes.add(new OutputSandwoodInterfaceGenerated(outputCls, modelInterface, targetPackageName,
-                    ClassName.coreBase()));
+            
+            compDesc.classes.add(OutputSandwoodInterfaceGenerated.getInterface(outputCls, targetPackageName, modelInterface));
 
             while(i.hasNext()) {
                 task = i.next();

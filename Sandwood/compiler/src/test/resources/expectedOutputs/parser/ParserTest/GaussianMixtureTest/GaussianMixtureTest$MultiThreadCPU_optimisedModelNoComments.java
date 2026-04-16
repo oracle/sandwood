@@ -1,42 +1,44 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements GaussianMixtureTest$CoreInterface {
-	private double[] alpha;
-	private boolean constrainedFlag$sample17 = true;
-	private boolean[] constrainedFlag$sample34;
-	private boolean[] constrainedFlag$sample52;
-	private boolean[] constrainedFlag$sample68;
-	private double[] cv$var17$countGlobal;
-	private double[][] cv$var68$stateProbabilityGlobal;
-	private boolean fixedFlag$sample17 = false;
-	private boolean fixedFlag$sample34 = false;
-	private boolean fixedFlag$sample52 = false;
-	private boolean fixedProbFlag$sample17 = false;
-	private boolean fixedProbFlag$sample34 = false;
-	private boolean fixedProbFlag$sample52 = false;
-	private int length$xMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$mu;
-	private double logProbability$phi;
-	private double[] logProbability$sample68;
-	private double[] logProbability$sample72;
-	private double logProbability$sigma;
-	private double logProbability$var34;
-	private double logProbability$var52;
-	private double logProbability$x;
-	private double[] mu;
-	private double[] phi;
-	private double[] sigma;
-	private boolean system$gibbsForward = true;
-	private double[] x;
-	private double[] xMeasured;
-	private int[] z;
+final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU implements GaussianMixtureTest$CoreInterface {
+double[] alpha;
+	boolean constrainedFlag$sample17 = true;
+	boolean[] constrainedFlag$sample34;
+	boolean[] constrainedFlag$sample52;
+	boolean[] constrainedFlag$sample68;
+	boolean fixedFlag$sample17 = false;
+	boolean fixedFlag$sample34 = false;
+	boolean fixedFlag$sample52 = false;
+	boolean fixedProbFlag$sample17 = false;
+	boolean fixedProbFlag$sample34 = false;
+	boolean fixedProbFlag$sample52 = false;
+	int k;
+	int length$xMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$mu;
+	double logProbability$phi;
+	double[] logProbability$sample68;
+	double[] logProbability$sample72;
+	double logProbability$sigma;
+	double logProbability$var34;
+	double logProbability$var52;
+	double logProbability$x;
+	double[] mu;
+	double[] phi;
+	double[] sigma;
+	boolean system$gibbsForward = true;
+	double[] x;
+	double[] xMeasured;
+	int[] z;
+	double[] cv$var17$countGlobal;
+	double[][] cv$var68$stateProbabilityGlobal;
 
 	public GaussianMixtureTest$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -388,16 +390,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void allocateScratch() {
-		cv$var17$countGlobal = new double[5];
-		int cv$threadCount = threadCount();
-		cv$var68$stateProbabilityGlobal = new double[cv$threadCount][];
-		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			cv$var68$stateProbabilityGlobal[cv$index] = new double[5];
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		alpha = new double[5];
 		if(!fixedFlag$sample17)
 			phi = new double[5];
@@ -413,6 +406,15 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		logProbability$sample68 = new double[length$xMeasured];
 		logProbability$sample72 = new double[length$xMeasured];
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		cv$var17$countGlobal = new double[5];
+		int cv$threadCount = threadCount();
+		cv$var68$stateProbabilityGlobal = new double[cv$threadCount][];
+		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+			cv$var68$stateProbabilityGlobal[cv$index] = new double[5];
 	}
 
 	@Override

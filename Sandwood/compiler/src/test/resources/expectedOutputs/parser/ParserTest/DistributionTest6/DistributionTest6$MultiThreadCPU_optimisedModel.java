@@ -1,46 +1,47 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DistributionTest6$CoreInterface {
-	
+final class DistributionTest6$MultiThreadCPU extends CoreModelMultiThreadCPU implements DistributionTest6$CoreInterface {
+
 	// Declare the variables for the model.
-	private boolean constrainedFlag$sample11 = true;
-	private boolean[] constrainedFlag$sample27;
-	private boolean constrainedFlag$sample5 = true;
-	private double[] cv$var11$stateProbabilityGlobal;
-	private double[][] cv$var27$stateProbabilityGlobal;
-	private double[] cv$var5$stateProbabilityGlobal;
-	private double[] distribution$sample11;
-	private double[][] distribution$sample27;
-	private double[] distribution$sample5;
-	private boolean fixedFlag$sample11 = false;
-	private boolean fixedFlag$sample27 = false;
-	private boolean fixedFlag$sample5 = false;
-	private boolean fixedProbFlag$sample11 = false;
-	private boolean fixedProbFlag$sample27 = false;
-	private boolean fixedProbFlag$sample49 = false;
-	private boolean fixedProbFlag$sample5 = false;
-	private boolean[] guard$sample11bernoulli48$global;
-	private boolean[][] guard$sample27bernoulli48$global;
-	private int length$value;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double[] logProbability$sample27;
-	private double[] logProbability$sample49;
-	private double logProbability$v;
-	private double logProbability$v1;
-	private double logProbability$v2;
-	private double logProbability$var11;
-	private int size;
-	private boolean system$gibbsForward = true;
-	private boolean[] v;
-	private int v1;
-	private int[] v2;
-	private boolean[] value;
-	private double[] weightings;
+	boolean constrainedFlag$sample11 = true;
+	boolean[] constrainedFlag$sample27;
+	boolean constrainedFlag$sample5 = true;
+	double[] distribution$sample11;
+	double[][] distribution$sample27;
+	double[] distribution$sample5;
+	boolean fixedFlag$sample11 = false;
+	boolean fixedFlag$sample27 = false;
+	boolean fixedFlag$sample5 = false;
+	boolean fixedProbFlag$sample11 = false;
+	boolean fixedProbFlag$sample27 = false;
+	boolean fixedProbFlag$sample49 = false;
+	boolean fixedProbFlag$sample5 = false;
+	int length$value;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double[] logProbability$sample27;
+	double[] logProbability$sample49;
+	double logProbability$v;
+	double logProbability$v1;
+	double logProbability$v2;
+	double logProbability$var11;
+	int size;
+	boolean system$gibbsForward = true;
+	boolean[] v;
+	int v1;
+	int[] v2;
+	boolean[] value;
+	double[] weightings;
+	double[] cv$var11$stateProbabilityGlobal;
+	double[][] cv$var27$stateProbabilityGlobal;
+	double[] cv$var5$stateProbabilityGlobal;
+	boolean[] guard$sample11bernoulli48$global;
+	boolean[][] guard$sample27bernoulli48$global;
 
 	public DistributionTest6$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -330,14 +331,14 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			double cv$accumulatedProbabilities = (((((cv$valuePos < $var2938) && (0 < $var2938)) && (0.0 <= weightings[cv$valuePos])) && (weightings[cv$valuePos] <= 1.0))?Math.log(weightings[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 < size)) {
 				// Set the flags to false
 				// 
-				// Guard to check that at most one copy of the code is executed for a given random
+												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				guard$sample11bernoulli48$global[0] = false;
 				
@@ -345,7 +346,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 				if(!guard$sample11bernoulli48$global[0]) {
 					// The body will execute, so should not be executed again
 					// 
-					// Guard to check that at most one copy of the code is executed for a given random
+															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					guard$sample11bernoulli48$global[0] = true;
 					
@@ -374,7 +375,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 					if(fixedFlag$sample5) {
 						// Constructing a random variable input for use later.
 						// 
-						// Value of the variable at this index
+																		// Value of the variable at this index
 						double var47 = ((double)((v1 + cv$valuePos) + cv$valuePos) / cv$valuePos);
 						
 						// Substituted "j" with its value "0".
@@ -393,7 +394,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 							
 							// Constructing a random variable input for use later.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							double var47 = ((double)((index$sample5$11 + cv$valuePos) + cv$valuePos) / cv$valuePos);
 							
 							// Record the probability of sample task 49 generating output with current configuration.
@@ -408,7 +409,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 									// Substituted "j" with its value "0".
 									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value12) + (((0.0 <= var47) && (var47 <= 1.0))?Math.log((v[0]?var47:(1.0 - var47))):Double.NEGATIVE_INFINITY));
 								else
-									// Substituted "j" with its value "0".
+																											// Substituted "j" with its value "0".
 									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value12) + (((0.0 <= var47) && (var47 <= 1.0))?Math.log((v[0]?var47:(1.0 - var47))):Double.NEGATIVE_INFINITY)))) + 1)) + Math.log(cv$probabilitySample5Value12)) + (((0.0 <= var47) && (var47 <= 1.0))?Math.log((v[0]?var47:(1.0 - var47))):Double.NEGATIVE_INFINITY));
 							}
 							
@@ -438,7 +439,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 				if(!guard$sample11bernoulli48$global[0]) {
 					// The body will execute, so should not be executed again
 					// 
-					// Guard to check that at most one copy of the code is executed for a given random
+															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					guard$sample11bernoulli48$global[0] = true;
 					
@@ -467,7 +468,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 					if(fixedFlag$sample5) {
 						// Constructing a random variable input for use later.
 						// 
-						// Value of the variable at this index
+																		// Value of the variable at this index
 						double var47 = ((double)((v1 + cv$valuePos) + cv$valuePos) / cv$valuePos);
 						
 						// Substituted "j" with its value "0".
@@ -486,7 +487,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 							
 							// Constructing a random variable input for use later.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							double var47 = ((double)((index$sample5$155 + cv$valuePos) + cv$valuePos) / cv$valuePos);
 							
 							// Record the probability of sample task 49 generating output with current configuration.
@@ -501,7 +502,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 									// Substituted "j" with its value "0".
 									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value156) + (((0.0 <= var47) && (var47 <= 1.0))?Math.log((v[0]?var47:(1.0 - var47))):Double.NEGATIVE_INFINITY));
 								else
-									// Substituted "j" with its value "0".
+																											// Substituted "j" with its value "0".
 									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value156) + (((0.0 <= var47) && (var47 <= 1.0))?Math.log((v[0]?var47:(1.0 - var47))):Double.NEGATIVE_INFINITY)))) + 1)) + Math.log(cv$probabilitySample5Value156)) + (((0.0 <= var47) && (var47 <= 1.0))?Math.log((v[0]?var47:(1.0 - var47))):Double.NEGATIVE_INFINITY));
 							}
 							
@@ -531,7 +532,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 				if(!guard$sample11bernoulli48$global[0]) {
 					// The body will execute, so should not be executed again
 					// 
-					// Guard to check that at most one copy of the code is executed for a given random
+															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					guard$sample11bernoulli48$global[0] = true;
 					
@@ -560,7 +561,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 					if(fixedFlag$sample5) {
 						// Constructing a random variable input for use later.
 						// 
-						// Value of the variable at this index
+																		// Value of the variable at this index
 						double var47 = ((double)((v1 + cv$valuePos) + cv$valuePos) / cv$valuePos);
 						
 						// Substituted "j" with its value "0".
@@ -579,7 +580,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 							
 							// Constructing a random variable input for use later.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							double var47 = ((double)((index$sample5$299 + cv$valuePos) + cv$valuePos) / cv$valuePos);
 							
 							// Record the probability of sample task 49 generating output with current configuration.
@@ -594,7 +595,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 									// Substituted "j" with its value "0".
 									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value300) + (((0.0 <= var47) && (var47 <= 1.0))?Math.log((v[0]?var47:(1.0 - var47))):Double.NEGATIVE_INFINITY));
 								else
-									// Substituted "j" with its value "0".
+																											// Substituted "j" with its value "0".
 									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value300) + (((0.0 <= var47) && (var47 <= 1.0))?Math.log((v[0]?var47:(1.0 - var47))):Double.NEGATIVE_INFINITY)))) + 1)) + Math.log(cv$probabilitySample5Value300)) + (((0.0 <= var47) && (var47 <= 1.0))?Math.log((v[0]?var47:(1.0 - var47))):Double.NEGATIVE_INFINITY));
 							}
 							
@@ -623,7 +624,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
 			// Record the reached probability density.
 			// 
@@ -681,7 +682,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 			} else {
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					// Local copy of the probability array
+															// Local copy of the probability array
 					distribution$sample11[cv$indexName] = Math.exp((cv$var11$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
@@ -718,7 +719,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			double cv$accumulatedProbabilities = (((((cv$valuePos < $var3595) && (0 < $var3595)) && (0.0 <= weightings[cv$valuePos])) && (weightings[cv$valuePos] <= 1.0))?Math.log(weightings[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Processing random variable 48.
@@ -772,7 +773,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 						{
 							// Constructing a random variable input for use later.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							double var47 = ((double)((v1 + cv$valuePos) + cv$valuePos) / cv$valuePos);
 							cv$accumulatedConsumerProbabilities = (((0.0 <= var47) && (var47 <= 1.0))?Math.log((v[j]?var47:(1.0 - var47))):Double.NEGATIVE_INFINITY);
 							
@@ -784,14 +785,14 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 						}
 						int index$i$132 = (j - 1);
 						
-						// index$i$1's comment
+																								// index$i$1's comment
 						// Copy of index so that its values can be safely substituted
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						if(!(index$i$132 == i)) {
 							// Enumerating the possible outputs of Categorical 26.
 							for(int index$sample27$133 = 0; index$sample27$133 < weightings.length; index$sample27$133 += 1) {
@@ -800,7 +801,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 								
 								// Constructing a random variable input for use later.
 								// 
-								// Value of the variable at this index
+																								// Value of the variable at this index
 								double var47 = ((double)((v1 + cv$valuePos) + cv$valuePos) / index$sample27$133);
 								
 								// Record the probability of sample task 49 generating output with current configuration.
@@ -820,14 +821,14 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 						}
 						int index$i$120 = (j - 1);
 						
-						// index$i$1's comment
+																								// index$i$1's comment
 						// Copy of index so that its values can be safely substituted
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						if(!(index$i$120 == i)) {
 							// Enumerating the possible outputs of Categorical 26.
 							for(int index$sample27$121 = 0; index$sample27$121 < weightings.length; index$sample27$121 += 1) {
@@ -836,7 +837,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 								{
 									// Constructing a random variable input for use later.
 									// 
-									// Value of the variable at this index
+																											// Value of the variable at this index
 									double var47 = ((double)((v1 + cv$valuePos) + index$sample27$121) / cv$valuePos);
 									
 									// Record the probability of sample task 49 generating output with current configuration.
@@ -856,7 +857,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 								
 								// Constructing a random variable input for use later.
 								// 
-								// Value of the variable at this index
+																								// Value of the variable at this index
 								double var47 = ((double)((v1 + cv$valuePos) + index$sample27$121) / index$sample27$121);
 								
 								// Record the probability of sample task 49 generating output with current configuration.
@@ -882,7 +883,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 							{
 								// Constructing a random variable input for use later.
 								// 
-								// Value of the variable at this index
+																								// Value of the variable at this index
 								double var47 = ((double)((index$sample5$115 + cv$valuePos) + cv$valuePos) / cv$valuePos);
 								
 								// Record the probability of sample task 49 generating output with current configuration.
@@ -901,14 +902,14 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 							}
 							int index$i$145 = (j - 1);
 							
-							// index$i$1's comment
+																												// index$i$1's comment
 							// Copy of index so that its values can be safely substituted
 							// 
-							// Substituted "j" with its value "(i + 1)".
+																					// Substituted "j" with its value "(i + 1)".
 							// 
-							// Substituted "j" with its value "(i + 1)".
+																					// Substituted "j" with its value "(i + 1)".
 							// 
-							// Substituted "j" with its value "(i + 1)".
+																					// Substituted "j" with its value "(i + 1)".
 							if(!(index$i$145 == i)) {
 								// Enumerating the possible outputs of Categorical 26.
 								for(int index$sample27$146 = 0; index$sample27$146 < weightings.length; index$sample27$146 += 1) {
@@ -917,7 +918,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 									
 									// Constructing a random variable input for use later.
 									// 
-									// Value of the variable at this index
+																											// Value of the variable at this index
 									double var47 = ((double)((index$sample5$115 + cv$valuePos) + cv$valuePos) / index$sample27$146);
 									
 									// Record the probability of sample task 49 generating output with current configuration.
@@ -937,14 +938,14 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 							}
 							int index$i$126 = (j - 1);
 							
-							// index$i$1's comment
+																												// index$i$1's comment
 							// Copy of index so that its values can be safely substituted
 							// 
-							// Substituted "j" with its value "(i + 1)".
+																					// Substituted "j" with its value "(i + 1)".
 							// 
-							// Substituted "j" with its value "(i + 1)".
+																					// Substituted "j" with its value "(i + 1)".
 							// 
-							// Substituted "j" with its value "(i + 1)".
+																					// Substituted "j" with its value "(i + 1)".
 							if(!(index$i$126 == i)) {
 								// Enumerating the possible outputs of Categorical 26.
 								for(int index$sample27$127 = 0; index$sample27$127 < weightings.length; index$sample27$127 += 1) {
@@ -953,7 +954,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 									{
 										// Constructing a random variable input for use later.
 										// 
-										// Value of the variable at this index
+																														// Value of the variable at this index
 										double var47 = ((double)((index$sample5$115 + cv$valuePos) + index$sample27$127) / cv$valuePos);
 										
 										// Record the probability of sample task 49 generating output with current configuration.
@@ -973,7 +974,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 									
 									// Constructing a random variable input for use later.
 									// 
-									// Value of the variable at this index
+																											// Value of the variable at this index
 									double var47 = ((double)((index$sample5$115 + cv$valuePos) + index$sample27$127) / index$sample27$127);
 									
 									// Record the probability of sample task 49 generating output with current configuration.
@@ -1037,7 +1038,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 						{
 							// Constructing a random variable input for use later.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							double var47 = ((double)((v1 + cv$valuePos) + cv$valuePos) / cv$valuePos);
 							cv$accumulatedConsumerProbabilities = (((0.0 <= var47) && (var47 <= 1.0))?Math.log((v[j]?var47:(1.0 - var47))):Double.NEGATIVE_INFINITY);
 							
@@ -1049,14 +1050,14 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 						}
 						int index$i$278 = (j - 1);
 						
-						// index$i$1's comment
+																								// index$i$1's comment
 						// Copy of index so that its values can be safely substituted
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						if(!(index$i$278 == i)) {
 							// Enumerating the possible outputs of Categorical 26.
 							for(int index$sample27$279 = 0; index$sample27$279 < weightings.length; index$sample27$279 += 1) {
@@ -1065,7 +1066,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 								
 								// Constructing a random variable input for use later.
 								// 
-								// Value of the variable at this index
+																								// Value of the variable at this index
 								double var47 = ((double)((v1 + cv$valuePos) + cv$valuePos) / index$sample27$279);
 								
 								// Record the probability of sample task 49 generating output with current configuration.
@@ -1085,14 +1086,14 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 						}
 						int index$i$266 = (j - 1);
 						
-						// index$i$1's comment
+																								// index$i$1's comment
 						// Copy of index so that its values can be safely substituted
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						if(!(index$i$266 == i)) {
 							// Enumerating the possible outputs of Categorical 26.
 							for(int index$sample27$267 = 0; index$sample27$267 < weightings.length; index$sample27$267 += 1) {
@@ -1101,7 +1102,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 								{
 									// Constructing a random variable input for use later.
 									// 
-									// Value of the variable at this index
+																											// Value of the variable at this index
 									double var47 = ((double)((v1 + index$sample27$267) + cv$valuePos) / cv$valuePos);
 									
 									// Record the probability of sample task 49 generating output with current configuration.
@@ -1121,7 +1122,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 								
 								// Constructing a random variable input for use later.
 								// 
-								// Value of the variable at this index
+																								// Value of the variable at this index
 								double var47 = ((double)((v1 + index$sample27$267) + cv$valuePos) / index$sample27$267);
 								
 								// Record the probability of sample task 49 generating output with current configuration.
@@ -1147,7 +1148,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 							{
 								// Constructing a random variable input for use later.
 								// 
-								// Value of the variable at this index
+																								// Value of the variable at this index
 								double var47 = ((double)((index$sample5$261 + cv$valuePos) + cv$valuePos) / cv$valuePos);
 								
 								// Record the probability of sample task 49 generating output with current configuration.
@@ -1166,14 +1167,14 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 							}
 							int index$i$291 = (j - 1);
 							
-							// index$i$1's comment
+																												// index$i$1's comment
 							// Copy of index so that its values can be safely substituted
 							// 
-							// Substituted "j" with its value "(i + 1)".
+																					// Substituted "j" with its value "(i + 1)".
 							// 
-							// Substituted "j" with its value "(i + 1)".
+																					// Substituted "j" with its value "(i + 1)".
 							// 
-							// Substituted "j" with its value "(i + 1)".
+																					// Substituted "j" with its value "(i + 1)".
 							if(!(index$i$291 == i)) {
 								// Enumerating the possible outputs of Categorical 26.
 								for(int index$sample27$292 = 0; index$sample27$292 < weightings.length; index$sample27$292 += 1) {
@@ -1182,7 +1183,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 									
 									// Constructing a random variable input for use later.
 									// 
-									// Value of the variable at this index
+																											// Value of the variable at this index
 									double var47 = ((double)((index$sample5$261 + cv$valuePos) + cv$valuePos) / index$sample27$292);
 									
 									// Record the probability of sample task 49 generating output with current configuration.
@@ -1202,14 +1203,14 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 							}
 							int index$i$272 = (j - 1);
 							
-							// index$i$1's comment
+																												// index$i$1's comment
 							// Copy of index so that its values can be safely substituted
 							// 
-							// Substituted "j" with its value "(i + 1)".
+																					// Substituted "j" with its value "(i + 1)".
 							// 
-							// Substituted "j" with its value "(i + 1)".
+																					// Substituted "j" with its value "(i + 1)".
 							// 
-							// Substituted "j" with its value "(i + 1)".
+																					// Substituted "j" with its value "(i + 1)".
 							if(!(index$i$272 == i)) {
 								// Enumerating the possible outputs of Categorical 26.
 								for(int index$sample27$273 = 0; index$sample27$273 < weightings.length; index$sample27$273 += 1) {
@@ -1218,7 +1219,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 									{
 										// Constructing a random variable input for use later.
 										// 
-										// Value of the variable at this index
+																														// Value of the variable at this index
 										double var47 = ((double)((index$sample5$261 + index$sample27$273) + cv$valuePos) / cv$valuePos);
 										
 										// Record the probability of sample task 49 generating output with current configuration.
@@ -1238,7 +1239,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 									
 									// Constructing a random variable input for use later.
 									// 
-									// Value of the variable at this index
+																											// Value of the variable at this index
 									double var47 = ((double)((index$sample5$261 + index$sample27$273) + cv$valuePos) / index$sample27$273);
 									
 									// Record the probability of sample task 49 generating output with current configuration.
@@ -1301,7 +1302,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 					{
 						// Constructing a random variable input for use later.
 						// 
-						// Value of the variable at this index
+																		// Value of the variable at this index
 						double var47 = ((double)((v1 + cv$valuePos) + cv$valuePos) / cv$valuePos);
 						cv$accumulatedConsumerProbabilities = (((0.0 <= var47) && (var47 <= 1.0))?Math.log((v[j]?var47:(1.0 - var47))):Double.NEGATIVE_INFINITY);
 						
@@ -1313,14 +1314,14 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 					}
 					int index$i$424 = (j - 1);
 					
-					// index$i$1's comment
+																				// index$i$1's comment
 					// Copy of index so that its values can be safely substituted
 					// 
-					// Substituted "j" with its value "(i + 1)".
+															// Substituted "j" with its value "(i + 1)".
 					// 
-					// Substituted "j" with its value "(i + 1)".
+															// Substituted "j" with its value "(i + 1)".
 					// 
-					// Substituted "j" with its value "(i + 1)".
+															// Substituted "j" with its value "(i + 1)".
 					if(!(index$i$424 == i)) {
 						// Enumerating the possible outputs of Categorical 26.
 						for(int index$sample27$425 = 0; index$sample27$425 < weightings.length; index$sample27$425 += 1) {
@@ -1329,7 +1330,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 							
 							// Constructing a random variable input for use later.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							double var47 = ((double)((v1 + cv$valuePos) + index$sample27$425) / cv$valuePos);
 							
 							// Record the probability of sample task 49 generating output with current configuration.
@@ -1349,14 +1350,14 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 					}
 					int index$i$412 = (j - 1);
 					
-					// index$i$1's comment
+																				// index$i$1's comment
 					// Copy of index so that its values can be safely substituted
 					// 
-					// Substituted "j" with its value "(i + 1)".
+															// Substituted "j" with its value "(i + 1)".
 					// 
-					// Substituted "j" with its value "(i + 1)".
+															// Substituted "j" with its value "(i + 1)".
 					// 
-					// Substituted "j" with its value "(i + 1)".
+															// Substituted "j" with its value "(i + 1)".
 					if(!(index$i$412 == i)) {
 						// Enumerating the possible outputs of Categorical 26.
 						for(int index$sample27$413 = 0; index$sample27$413 < weightings.length; index$sample27$413 += 1) {
@@ -1365,7 +1366,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 							{
 								// Constructing a random variable input for use later.
 								// 
-								// Value of the variable at this index
+																								// Value of the variable at this index
 								double var47 = ((double)((v1 + index$sample27$413) + cv$valuePos) / cv$valuePos);
 								
 								// Record the probability of sample task 49 generating output with current configuration.
@@ -1411,7 +1412,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 						{
 							// Constructing a random variable input for use later.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							double var47 = ((double)((index$sample5$407 + cv$valuePos) + cv$valuePos) / cv$valuePos);
 							
 							// Record the probability of sample task 49 generating output with current configuration.
@@ -1430,14 +1431,14 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 						}
 						int index$i$437 = (j - 1);
 						
-						// index$i$1's comment
+																								// index$i$1's comment
 						// Copy of index so that its values can be safely substituted
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						if(!(index$i$437 == i)) {
 							// Enumerating the possible outputs of Categorical 26.
 							for(int index$sample27$438 = 0; index$sample27$438 < weightings.length; index$sample27$438 += 1) {
@@ -1446,7 +1447,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 								
 								// Constructing a random variable input for use later.
 								// 
-								// Value of the variable at this index
+																								// Value of the variable at this index
 								double var47 = ((double)((index$sample5$407 + cv$valuePos) + index$sample27$438) / cv$valuePos);
 								
 								// Record the probability of sample task 49 generating output with current configuration.
@@ -1466,14 +1467,14 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 						}
 						int index$i$418 = (j - 1);
 						
-						// index$i$1's comment
+																								// index$i$1's comment
 						// Copy of index so that its values can be safely substituted
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						// 
-						// Substituted "j" with its value "(i + 1)".
+																		// Substituted "j" with its value "(i + 1)".
 						if(!(index$i$418 == i)) {
 							// Enumerating the possible outputs of Categorical 26.
 							for(int index$sample27$419 = 0; index$sample27$419 < weightings.length; index$sample27$419 += 1) {
@@ -1482,7 +1483,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 								{
 									// Constructing a random variable input for use later.
 									// 
-									// Value of the variable at this index
+																											// Value of the variable at this index
 									double var47 = ((double)((index$sample5$407 + index$sample27$419) + cv$valuePos) / cv$valuePos);
 									
 									// Record the probability of sample task 49 generating output with current configuration.
@@ -1629,7 +1630,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			double cv$accumulatedProbabilities = (((((cv$valuePos < $var2608) && (0 < $var2608)) && (0.0 <= weightings[cv$valuePos])) && (weightings[cv$valuePos] <= 1.0))?Math.log(weightings[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			for(int j = 0; j < size; j += 1) {
 				// Mark that the sample has observed constrained data.
@@ -1651,9 +1652,9 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 					if(fixedFlag$sample11) {
 						// Constructing a random variable input for use later.
 						// 
-						// Substituted "j" with its value "0".
+																		// Substituted "j" with its value "0".
 						// 
-						// Value of the variable at this index
+																		// Value of the variable at this index
 						double var47 = ((double)((cv$valuePos + v2[0]) + v2[0]) / v2[0]);
 						
 						// Substituted "j" with its value "0".
@@ -1672,7 +1673,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 							
 							// Constructing a random variable input for use later.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							double var47 = ((double)((cv$valuePos + index$sample11$4) + index$sample11$4) / index$sample11$4);
 							
 							// Record the probability of sample task 49 generating output with current configuration.
@@ -1687,7 +1688,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 									// Substituted "j" with its value "0".
 									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample11Value5) + (((0.0 <= var47) && (var47 <= 1.0))?Math.log((v[0]?var47:(1.0 - var47))):Double.NEGATIVE_INFINITY));
 								else
-									// Substituted "j" with its value "0".
+																											// Substituted "j" with its value "0".
 									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample11Value5) + (((0.0 <= var47) && (var47 <= 1.0))?Math.log((v[0]?var47:(1.0 - var47))):Double.NEGATIVE_INFINITY)))) + 1)) + Math.log(cv$probabilitySample11Value5)) + (((0.0 <= var47) && (var47 <= 1.0))?Math.log((v[0]?var47:(1.0 - var47))):Double.NEGATIVE_INFINITY));
 							}
 							
@@ -1704,7 +1705,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 					if((1 <= j)) {
 						// Constructing a random variable input for use later.
 						// 
-						// Value of the variable at this index
+																		// Value of the variable at this index
 						double var47 = ((double)((cv$valuePos + v2[j]) + v2[j]) / v2[j]);
 						
 						// Record the probability of sample task 49 generating output with current configuration.
@@ -1733,7 +1734,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 							
 							// Constructing a random variable input for use later.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							double var47 = ((double)((cv$valuePos + index$sample27$203) + index$sample27$203) / index$sample27$203);
 							
 							// Record the probability of sample task 49 generating output with current configuration.
@@ -1772,7 +1773,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
 			// Record the reached probability density.
 			// 
@@ -1830,7 +1831,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 			} else {
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					// Local copy of the probability array
+															// Local copy of the probability array
 					distribution$sample5[cv$indexName] = Math.exp((cv$var5$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
@@ -2078,7 +2079,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 					// Enumerating the possible arguments for Bernoulli 48.
 					if(fixedFlag$sample5) {
 						if(fixedFlag$sample11) {
-							// Substituted "j" with its value "0".
+																					// Substituted "j" with its value "0".
 							double var47 = ((double)((v1 + v2[0]) + v2[0]) / v2[0]);
 							
 							// Store the value of the function call, so the function call is only made once.
@@ -2123,7 +2124,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 							// Update the probability of sampling this value from the distribution value.
 							double cv$probabilitySample5Value4 = distribution$sample5[index$sample5$3];
 							if(fixedFlag$sample11) {
-								// Substituted "j" with its value "0".
+																								// Substituted "j" with its value "0".
 								double var47 = ((double)((index$sample5$3 + v2[0]) + v2[0]) / v2[0]);
 								
 								// Store the value of the function call, so the function call is only made once.
@@ -2349,7 +2350,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// Store the value of the function call, so the function call is only made once.
 				// 
-				// The sample value to calculate the probability of generating
+												// The sample value to calculate the probability of generating
 				// 
 				// Scale the probability relative to the observed distribution space.
 				// 
@@ -2363,7 +2364,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// Store the value of the function call, so the function call is only made once.
 				// 
-				// The sample value to calculate the probability of generating
+												// The sample value to calculate the probability of generating
 				double cv$distributionAccumulator = ((((((0.0 <= v1) && (v1 < weightings.length)) && (0 < weightings.length)) && (0.0 <= weightings[v1])) && (weightings[v1] <= 1.0))?Math.log(weightings[v1]):Double.NEGATIVE_INFINITY);
 				
 				// Store the sample task probability
@@ -2705,7 +2706,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -2719,7 +2720,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = ((((((0.0 <= v1) && (v1 < weightings.length)) && (0 < weightings.length)) && (0.0 <= weightings[v1])) && (weightings[v1] <= 1.0))?Math.log(weightings[v1]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -2779,6 +2780,41 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// If v2 has not been set already allocate space.
+		if((!fixedFlag$sample11 || !fixedFlag$sample27))
+			// Constructor for v2
+			v2 = new int[(length$value + 1)];
+		
+		// Constructor for v
+		v = new boolean[length$value];
+		
+		// Constructor for distribution$sample5
+		distribution$sample5 = new double[weightings.length];
+		
+		// Constructor for distribution$sample11
+		distribution$sample11 = new double[weightings.length];
+		
+		// Constructor for distribution$sample27
+		distribution$sample27 = new double[length$value][];
+		for(int i = 0; i < length$value; i += 1)
+			distribution$sample27[i] = new double[weightings.length];
+		
+		// Constructor for constrainedFlag$sample27
+		constrainedFlag$sample27 = new boolean[length$value];
+		
+		// Constructor for logProbability$sample27
+		logProbability$sample27 = new double[length$value];
+		
+		// Constructor for logProbability$sample49
+		logProbability$sample49 = new double[length$value];
+		
+		// Allocate scratch space
+		allocateScratch();
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -2827,41 +2863,6 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 			guard$sample27bernoulli48$global[cv$index] = new boolean[length$value];
 	}
 
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// If v2 has not been set already allocate space.
-		if((!fixedFlag$sample11 || !fixedFlag$sample27))
-			// Constructor for v2
-			v2 = new int[(length$value + 1)];
-		
-		// Constructor for v
-		v = new boolean[length$value];
-		
-		// Constructor for distribution$sample5
-		distribution$sample5 = new double[weightings.length];
-		
-		// Constructor for distribution$sample11
-		distribution$sample11 = new double[weightings.length];
-		
-		// Constructor for distribution$sample27
-		distribution$sample27 = new double[length$value][];
-		for(int i = 0; i < length$value; i += 1)
-			distribution$sample27[i] = new double[weightings.length];
-		
-		// Constructor for constrainedFlag$sample27
-		constrainedFlag$sample27 = new boolean[length$value];
-		
-		// Constructor for logProbability$sample27
-		logProbability$sample27 = new double[length$value];
-		
-		// Constructor for logProbability$sample49
-		logProbability$sample49 = new double[length$value];
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
@@ -2906,7 +2907,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 			for(int index$var4 = 0; index$var4 < weightings.length; index$var4 += 1)
 				// Save the probability of each value
 				// 
-				// cv$distribution$sample5's comment
+																// cv$distribution$sample5's comment
 				// Create local copy of variable probabilities.
 				distribution$sample5[index$var4] = ((((0 < weightings.length) && (0.0 <= weightings[index$var4])) && (weightings[index$var4] <= 1.0))?weightings[index$var4]:0.0);
 		}
@@ -2916,7 +2917,7 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 			for(int index$var10 = 0; index$var10 < weightings.length; index$var10 += 1)
 				// Save the probability of each value
 				// 
-				// cv$distribution$sample11's comment
+																// cv$distribution$sample11's comment
 				// Create local copy of variable probabilities.
 				distribution$sample11[index$var10] = ((((0 < weightings.length) && (0.0 <= weightings[index$var10])) && (weightings[index$var10] <= 1.0))?weightings[index$var10]:0.0);
 		}

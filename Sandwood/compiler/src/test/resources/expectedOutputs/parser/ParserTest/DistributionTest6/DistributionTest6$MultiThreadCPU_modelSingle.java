@@ -1,46 +1,47 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DistributionTest6$CoreInterface {
-	
+final class DistributionTest6$MultiThreadCPU extends CoreModelMultiThreadCPU implements DistributionTest6$CoreInterface {
+
 	// Declare the variables for the model.
-	private boolean constrainedFlag$sample11 = true;
-	private boolean[] constrainedFlag$sample27;
-	private boolean constrainedFlag$sample5 = true;
-	private double[] cv$var11$stateProbabilityGlobal;
-	private double[][] cv$var27$stateProbabilityGlobal;
-	private double[] cv$var5$stateProbabilityGlobal;
-	private double[] distribution$sample11;
-	private double[][] distribution$sample27;
-	private double[] distribution$sample5;
-	private boolean fixedFlag$sample11 = false;
-	private boolean fixedFlag$sample27 = false;
-	private boolean fixedFlag$sample5 = false;
-	private boolean fixedProbFlag$sample11 = false;
-	private boolean fixedProbFlag$sample27 = false;
-	private boolean fixedProbFlag$sample49 = false;
-	private boolean fixedProbFlag$sample5 = false;
-	private boolean[] guard$sample11bernoulli48$global;
-	private boolean[][] guard$sample27bernoulli48$global;
-	private int length$value;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$v;
-	private double logProbability$v1;
-	private double logProbability$v2;
-	private double logProbability$var11;
-	private double logProbability$var27;
-	private double logProbability$var49;
-	private int size;
-	private boolean system$gibbsForward = true;
-	private boolean[] v;
-	private int v1;
-	private int[] v2;
-	private boolean[] value;
-	private double[] weightings;
+	boolean constrainedFlag$sample11 = true;
+	boolean[] constrainedFlag$sample27;
+	boolean constrainedFlag$sample5 = true;
+	double[] distribution$sample11;
+	double[][] distribution$sample27;
+	double[] distribution$sample5;
+	boolean fixedFlag$sample11 = false;
+	boolean fixedFlag$sample27 = false;
+	boolean fixedFlag$sample5 = false;
+	boolean fixedProbFlag$sample11 = false;
+	boolean fixedProbFlag$sample27 = false;
+	boolean fixedProbFlag$sample49 = false;
+	boolean fixedProbFlag$sample5 = false;
+	int length$value;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$v;
+	double logProbability$v1;
+	double logProbability$v2;
+	double logProbability$var11;
+	double logProbability$var27;
+	double logProbability$var49;
+	int size;
+	boolean system$gibbsForward = true;
+	boolean[] v;
+	int v1;
+	int[] v2;
+	boolean[] value;
+	double[] weightings;
+	double[] cv$var11$stateProbabilityGlobal;
+	double[][] cv$var27$stateProbabilityGlobal;
+	double[] cv$var5$stateProbabilityGlobal;
+	boolean[] guard$sample11bernoulli48$global;
+	boolean[][] guard$sample27bernoulli48$global;
 
 	public DistributionTest6$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -15332,6 +15333,48 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// If v2 has not been set already allocate space.
+		if((!fixedFlag$sample11 || !fixedFlag$sample27)) {
+			// Constructor for v2
+			{
+				v2 = new int[(length$value + 1)];
+			}
+		}
+		
+		// Constructor for v
+		{
+			v = new boolean[length$value];
+		}
+		
+		// Constructor for distribution$sample5
+		{
+			distribution$sample5 = new double[weightings.length];
+		}
+		
+		// Constructor for distribution$sample11
+		{
+			distribution$sample11 = new double[weightings.length];
+		}
+		
+		// Constructor for distribution$sample27
+		{
+			distribution$sample27 = new double[((((length$value - 1) - 0) / 1) + 1)][];
+			for(int i = 0; i < length$value; i += 1)
+				distribution$sample27[((i - 0) / 1)] = new double[weightings.length];
+		}
+		
+		// Constructor for constrainedFlag$sample27
+		{
+			constrainedFlag$sample27 = new boolean[((((length$value - 1) - 0) / 1) + 1)];
+		}
+		
+		// Allocate scratch space
+		allocateScratch();
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -15397,48 +15440,6 @@ final class DistributionTest6$MultiThreadCPU extends org.sandwood.runtime.intern
 					guard$sample27bernoulli48$global[cv$index] = new boolean[cv$max_j];
 			}
 		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// If v2 has not been set already allocate space.
-		if((!fixedFlag$sample11 || !fixedFlag$sample27)) {
-			// Constructor for v2
-			{
-				v2 = new int[(length$value + 1)];
-			}
-		}
-		
-		// Constructor for v
-		{
-			v = new boolean[length$value];
-		}
-		
-		// Constructor for distribution$sample5
-		{
-			distribution$sample5 = new double[weightings.length];
-		}
-		
-		// Constructor for distribution$sample11
-		{
-			distribution$sample11 = new double[weightings.length];
-		}
-		
-		// Constructor for distribution$sample27
-		{
-			distribution$sample27 = new double[((((length$value - 1) - 0) / 1) + 1)][];
-			for(int i = 0; i < length$value; i += 1)
-				distribution$sample27[((i - 0) / 1)] = new double[weightings.length];
-		}
-		
-		// Constructor for constrainedFlag$sample27
-		{
-			constrainedFlag$sample27 = new boolean[((((length$value - 1) - 0) / 1) + 1)];
-		}
-		
-		// Allocate scratch space
-		allocateScratch();
 	}
 
 	// Method to execute the model code conventionally.

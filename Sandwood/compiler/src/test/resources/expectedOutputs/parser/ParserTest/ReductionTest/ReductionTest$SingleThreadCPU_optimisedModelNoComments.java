@@ -1,43 +1,44 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ReductionTest$CoreInterface {
-	private double[] bias;
-	private boolean[] constrainedFlag$sample30;
-	private boolean[] constrainedFlag$sample47;
-	private boolean[] constrainedFlag$sample62;
-	private double[] cv$var30$countGlobal;
-	private double[] cv$var61$stateProbabilityGlobal;
-	private boolean fixedFlag$sample30 = false;
-	private boolean fixedFlag$sample47 = false;
-	private boolean fixedFlag$sample62 = false;
-	private boolean fixedProbFlag$sample30 = false;
-	private boolean fixedProbFlag$sample47 = false;
-	private boolean fixedProbFlag$sample62 = false;
-	private boolean fixedProbFlag$sample87 = false;
-	private boolean[] flips;
-	private boolean[] flipsMeasured;
-	private int length$flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double logProbability$m;
-	private double[] logProbability$sample62;
-	private double[] logProbability$sample87;
-	private double logProbability$st;
-	private double logProbability$var30;
-	private double logProbability$var46;
-	private double[][] m;
-	private int noCats;
-	private int noFlips;
-	private int noStates;
-	private int[] st;
-	private boolean system$gibbsForward = true;
-	private double[] v;
+final class ReductionTest$SingleThreadCPU extends CoreModelSingleThreadCPU implements ReductionTest$CoreInterface {
+double[] bias;
+	boolean[] constrainedFlag$sample30;
+	boolean[] constrainedFlag$sample47;
+	boolean[] constrainedFlag$sample62;
+	boolean fixedFlag$sample30 = false;
+	boolean fixedFlag$sample47 = false;
+	boolean fixedFlag$sample62 = false;
+	boolean fixedProbFlag$sample30 = false;
+	boolean fixedProbFlag$sample47 = false;
+	boolean fixedProbFlag$sample62 = false;
+	boolean fixedProbFlag$sample87 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	int length$flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$flips;
+	double logProbability$m;
+	double[] logProbability$sample62;
+	double[] logProbability$sample87;
+	double logProbability$st;
+	double logProbability$var30;
+	double logProbability$var46;
+	double[][] m;
+	int noCats;
+	int noFlips;
+	int noStates;
+	int[] st;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[] cv$var30$countGlobal;
+	double[] cv$var61$stateProbabilityGlobal;
 
 	public ReductionTest$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -390,13 +391,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void allocateScratch() {
-		cv$var30$countGlobal = new double[((0.0 <= noCats)?(flipsMeasured.length / noCats):((noCats < 0.0)?(flipsMeasured.length / noCats):flipsMeasured.length))];
-		cv$var61$stateProbabilityGlobal = new double[((0.0 <= noCats)?(flipsMeasured.length / noCats):((noCats < 0.0)?(flipsMeasured.length / noCats):flipsMeasured.length))];
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		v = new double[(length$flipsMeasured / noCats)];
 		if(!fixedFlag$sample30) {
 			m = new double[noCats][];
@@ -414,6 +409,12 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		logProbability$sample62 = new double[noCats];
 		logProbability$sample87 = new double[length$flipsMeasured];
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		cv$var30$countGlobal = new double[((0.0 <= noCats)?(flipsMeasured.length / noCats):((noCats < 0.0)?(flipsMeasured.length / noCats):flipsMeasured.length))];
+		cv$var61$stateProbabilityGlobal = new double[((0.0 <= noCats)?(flipsMeasured.length / noCats):((noCats < 0.0)?(flipsMeasured.length / noCats):flipsMeasured.length))];
 	}
 
 	@Override

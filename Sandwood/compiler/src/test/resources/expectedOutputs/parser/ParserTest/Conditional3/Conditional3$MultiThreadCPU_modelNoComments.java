@@ -1,31 +1,32 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Conditional3$CoreInterface {
-	private double bias;
-	private boolean constrainedFlag$sample16 = true;
-	private boolean constrainedFlag$sample4 = true;
-	private double[] cv$var4$stateProbabilityGlobal;
-	private boolean fixedFlag$sample16 = false;
-	private boolean fixedFlag$sample4 = false;
-	private boolean fixedProbFlag$sample16 = false;
-	private boolean fixedProbFlag$sample20 = false;
-	private boolean fixedProbFlag$sample4 = false;
-	private boolean guard;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bernoulli;
-	private double logProbability$bias;
-	private double logProbability$guard;
-	private double logProbability$sample16;
-	private double logProbability$value;
-	private double logProbability$var14;
-	private double observedValue;
-	private boolean system$gibbsForward = true;
-	private double value;
-	private double var14;
+final class Conditional3$MultiThreadCPU extends CoreModelMultiThreadCPU implements Conditional3$CoreInterface {
+double bias;
+	boolean constrainedFlag$sample16 = true;
+	boolean constrainedFlag$sample4 = true;
+	boolean fixedFlag$sample16 = false;
+	boolean fixedFlag$sample4 = false;
+	boolean fixedProbFlag$sample16 = false;
+	boolean fixedProbFlag$sample20 = false;
+	boolean fixedProbFlag$sample4 = false;
+	boolean guard;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bernoulli;
+	double logProbability$bias;
+	double logProbability$guard;
+	double logProbability$sample16;
+	double logProbability$value;
+	double logProbability$var14;
+	double observedValue;
+	boolean system$gibbsForward = true;
+	double value;
+	double var14;
+	double[] cv$var4$stateProbabilityGlobal;
 
 	public Conditional3$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -683,13 +684,13 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void allocateScratch() {
-		cv$var4$stateProbabilityGlobal = new double[2];
+	public final void allocate() {
+		allocateScratch();
 	}
 
 	@Override
-	public final void allocator() {
-		allocateScratch();
+	public final void allocateScratch() {
+		cv$var4$stateProbabilityGlobal = new double[2];
 	}
 
 	@Override

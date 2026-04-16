@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface ReductionTest1$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface ReductionTest1$CoreInterface extends CoreModel {
 	public int[][] get$ObsArr();
 	public void set$ObsArr(int[][] cv$value, boolean allocated$);
 	public int get$T();

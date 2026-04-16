@@ -1,34 +1,35 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DiscreteChoiceAlt$CoreInterface {
-	
+final class DiscreteChoiceAlt$MultiThreadCPU extends CoreModelMultiThreadCPU implements DiscreteChoiceAlt$CoreInterface {
+
 	// Declare the variables for the model.
-	private int[] ObsChoices;
-	private int[] choices;
-	private boolean[] constrainedFlag$sample24;
-	private double[] exped;
-	private boolean fixedFlag$sample24 = false;
-	private boolean fixedProbFlag$sample24 = false;
-	private boolean fixedProbFlag$sample78 = false;
-	private boolean[] guard$sample24put65$global;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$choices;
-	private double logProbability$exped;
-	private double logProbability$prob;
-	private double[] logProbability$sample24;
-	private double logProbability$sum;
-	private double logProbability$ut;
-	private double logProbability$var77;
-	private int noObs;
-	private int noProducts;
-	private double[] prob;
-	private double sum;
-	private boolean system$gibbsForward = true;
-	private double[] ut;
+	int[] ObsChoices;
+	int[] choices;
+	boolean[] constrainedFlag$sample24;
+	double[] exped;
+	boolean fixedFlag$sample24 = false;
+	boolean fixedProbFlag$sample24 = false;
+	boolean fixedProbFlag$sample78 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$choices;
+	double logProbability$exped;
+	double logProbability$prob;
+	double[] logProbability$sample24;
+	double logProbability$sum;
+	double logProbability$ut;
+	double logProbability$var77;
+	int noObs;
+	int noProducts;
+	double[] prob;
+	double sum;
+	boolean system$gibbsForward = true;
+	double[] ut;
+	boolean[] guard$sample24put65$global;
 
 	public DiscreteChoiceAlt$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -197,7 +198,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 		// 
 		// Looking for a path between Sample 24 and consumer double[] 39.
 		// 
-		// Substituted "i$var36" with its value "i$var18".
+						// Substituted "i$var36" with its value "i$var18".
 		exped[i$var18] = Math.exp(ut[i$var18]);
 		
 		// Guards to ensure that sum is only updated when there is a valid path.
@@ -217,7 +218,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// j's comment
+												// j's comment
 			// Set the right hand term to a value from the array exped
 			reduceVar$sum$13 = (reduceVar$sum$13 + exped[cv$reduction44Index]);
 		
@@ -247,13 +248,13 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 				// variable instance.
 				guard$sample24put65$global[i$var61] = true;
 				
-				// sum's comment
+								// sum's comment
 				// Write out the new sample value.
 				prob[i$var61] = (exped[i$var61] / reduceVar$sum$13);
 			}
 		}
 		
-		// Substituted "i$var36" with its value "i$var18".
+						// Substituted "i$var36" with its value "i$var18".
 		// 
 		// Substituted "i$var61" with its value "i$var18".
 		if(!guard$sample24put65$global[i$var18]) {
@@ -265,9 +266,9 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Substituted "i$var61" with its value "i$var18".
 			guard$sample24put65$global[i$var18] = true;
 			
-			// Substituted "i$var61" with its value "i$var18".
+									// Substituted "i$var61" with its value "i$var18".
 			// 
-			// sum's comment
+						// sum's comment
 			// Write out the new sample value.
 			prob[i$var18] = (exped[i$var18] / reduceVar$sum$13);
 		}
@@ -338,7 +339,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Looking for a path between Sample 24 and consumer double[] 39.
 			// 
-			// Substituted "i$var36" with its value "i$var18".
+									// Substituted "i$var36" with its value "i$var18".
 			exped[i$var18] = Math.exp(ut[i$var18]);
 			
 			// Guards to ensure that sum is only updated when there is a valid path.
@@ -358,7 +359,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// j's comment
+																// j's comment
 				// Set the right hand term to a value from the array exped
 				reduceVar$sum$10 = (reduceVar$sum$10 + exped[cv$reduction44Index]);
 			
@@ -388,13 +389,13 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 					// variable instance.
 					guard$sample24put65$global[i$var61] = true;
 					
-					// sum's comment
+										// sum's comment
 					// Write out the new sample value.
 					prob[i$var61] = (exped[i$var61] / reduceVar$sum$10);
 				}
 			}
 			
-			// Substituted "i$var36" with its value "i$var18".
+									// Substituted "i$var36" with its value "i$var18".
 			// 
 			// Substituted "i$var61" with its value "i$var18".
 			if(!guard$sample24put65$global[i$var18]) {
@@ -406,9 +407,9 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 				// Substituted "i$var61" with its value "i$var18".
 				guard$sample24put65$global[i$var18] = true;
 				
-				// Substituted "i$var61" with its value "i$var18".
+												// Substituted "i$var61" with its value "i$var18".
 				// 
-				// sum's comment
+								// sum's comment
 				// Write out the new sample value.
 				prob[i$var18] = (exped[i$var18] / reduceVar$sum$10);
 			}
@@ -462,7 +463,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// Looking for a path between Sample 24 and consumer double[] 39.
 				// 
-				// Substituted "i$var36" with its value "i$var18".
+												// Substituted "i$var36" with its value "i$var18".
 				exped[i$var18] = Math.exp(ut[i$var18]);
 				
 				// Guards to ensure that sum is only updated when there is a valid path.
@@ -482,7 +483,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
-					// j's comment
+																				// j's comment
 					// Set the right hand term to a value from the array exped
 					reduceVar$sum$12 = (reduceVar$sum$12 + exped[cv$reduction44Index]);
 				
@@ -512,13 +513,13 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 						// variable instance.
 						guard$sample24put65$global[i$var61] = true;
 						
-						// sum's comment
+												// sum's comment
 						// Write out the new sample value.
 						prob[i$var61] = (exped[i$var61] / reduceVar$sum$12);
 					}
 				}
 				
-				// Substituted "i$var36" with its value "i$var18".
+												// Substituted "i$var36" with its value "i$var18".
 				// 
 				// Substituted "i$var61" with its value "i$var18".
 				if(!guard$sample24put65$global[i$var18]) {
@@ -530,9 +531,9 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 					// Substituted "i$var61" with its value "i$var18".
 					guard$sample24put65$global[i$var18] = true;
 					
-					// Substituted "i$var61" with its value "i$var18".
+															// Substituted "i$var61" with its value "i$var18".
 					// 
-					// sum's comment
+										// sum's comment
 					// Write out the new sample value.
 					prob[i$var18] = (exped[i$var18] / reduceVar$sum$12);
 				}
@@ -734,25 +735,9 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// 
-		// Constructor for guard$sample24put65$global
-		// 
-		// Allocation of guard$sample24put65$global for single threaded execution
-		// 
-		// Calculate the largest index of i that is possible and allocate an array to hold
-		// the guard for each of these.
-		guard$sample24put65$global = new boolean[Math.max(0, noProducts)];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// If ut has not been set already allocate space.
 		if(!fixedFlag$sample24)
 			// Constructor for ut
@@ -775,6 +760,22 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// 
+		// Constructor for guard$sample24put65$global
+		// 
+		// Allocation of guard$sample24put65$global for single threaded execution
+		// 
+		// Calculate the largest index of i that is possible and allocate an array to hold
+		// the guard for each of these.
+		guard$sample24put65$global = new boolean[Math.max(0, noProducts)];
 	}
 
 	// Method to execute the model code conventionally.
@@ -815,7 +816,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 			for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// j's comment
+																// j's comment
 				// Set the right hand term to a value from the array exped
 				reduceVar$sum$14 = (reduceVar$sum$14 + exped[cv$reduction44Index]);
 			sum = reduceVar$sum$14;
@@ -891,7 +892,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// j's comment
+												// j's comment
 			// Set the right hand term to a value from the array exped
 			reduceVar$sum$18 = (reduceVar$sum$18 + exped[cv$reduction44Index]);
 		sum = reduceVar$sum$18;
@@ -954,7 +955,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// j's comment
+												// j's comment
 			// Set the right hand term to a value from the array exped
 			reduceVar$sum$15 = (reduceVar$sum$15 + exped[cv$reduction44Index]);
 		sum = reduceVar$sum$15;
@@ -1025,7 +1026,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 			for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// j's comment
+																// j's comment
 				// Set the right hand term to a value from the array exped
 				reduceVar$sum$16 = (reduceVar$sum$16 + exped[cv$reduction44Index]);
 			sum = reduceVar$sum$16;
@@ -1090,7 +1091,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// j's comment
+												// j's comment
 			// Set the right hand term to a value from the array exped
 			reduceVar$sum$17 = (reduceVar$sum$17 + exped[cv$reduction44Index]);
 		sum = reduceVar$sum$17;
@@ -1260,7 +1261,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// j's comment
+												// j's comment
 			// Set the right hand term to a value from the array exped
 			reduceVar$sum$19 = (reduceVar$sum$19 + exped[cv$reduction44Index]);
 		sum = reduceVar$sum$19;

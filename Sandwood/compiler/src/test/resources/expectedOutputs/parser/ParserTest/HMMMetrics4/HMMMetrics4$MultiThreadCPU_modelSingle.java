@@ -1,82 +1,83 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements HMMMetrics4$CoreInterface {
-	
+final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implements HMMMetrics4$CoreInterface {
+
 	// Declare the variables for the model.
-	private boolean[][] constrainedFlag$sample134;
-	private boolean[][] constrainedFlag$sample162;
-	private boolean[][] constrainedFlag$sample190;
-	private boolean constrainedFlag$sample20 = true;
-	private boolean[] constrainedFlag$sample33;
-	private boolean[] constrainedFlag$sample57;
-	private boolean[][] constrainedFlag$sample76;
-	private double[][] current_metric_mean;
-	private double[][] current_metric_valid_bias;
-	private double[][] current_metric_var;
-	private double[][] cv$distributionAccumulator$var73;
-	private double[] cv$var20$countGlobal;
-	private double[][] cv$var33$countGlobal;
-	private double[][] cv$var55$stateProbabilityGlobal;
-	private double[][] cv$var74$stateProbabilityGlobal;
-	private double[][] distribution$sample57;
-	private double[][][] distribution$sample76;
-	private boolean fixedFlag$sample134 = false;
-	private boolean fixedFlag$sample162 = false;
-	private boolean fixedFlag$sample190 = false;
-	private boolean fixedFlag$sample20 = false;
-	private boolean fixedFlag$sample33 = false;
-	private boolean fixedFlag$sample57 = false;
-	private boolean fixedFlag$sample76 = false;
-	private boolean fixedProbFlag$sample134 = false;
-	private boolean fixedProbFlag$sample162 = false;
-	private boolean fixedProbFlag$sample190 = false;
-	private boolean fixedProbFlag$sample20 = false;
-	private boolean fixedProbFlag$sample241 = false;
-	private boolean fixedProbFlag$sample256 = false;
-	private boolean fixedProbFlag$sample33 = false;
-	private boolean fixedProbFlag$sample57 = false;
-	private boolean fixedProbFlag$sample76 = false;
-	private boolean[][][][] guard$sample57gaussian255$global;
-	private boolean[][][][] guard$sample76gaussian255$global;
-	private double[] initialStateDistribution;
-	private int[][] length$metric;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$current_metric_mean;
-	private double logProbability$current_metric_valid_bias;
-	private double logProbability$current_metric_var;
-	private double logProbability$initialStateDistribution;
-	private double logProbability$m;
-	private double logProbability$metric_g;
-	private double logProbability$metric_valid_g;
-	private double logProbability$metric_valid_inner;
-	private double logProbability$st;
-	private double logProbability$var130;
-	private double logProbability$var157;
-	private double logProbability$var184;
-	private double logProbability$var232;
-	private double logProbability$var245;
-	private double logProbability$var33;
-	private double logProbability$var55;
-	private double logProbability$var74;
-	private double[][] m;
-	private int max_metric;
-	private double[][][] metric;
-	private double[][][] metric_g;
-	private boolean[][][] metric_valid;
-	private boolean[][][] metric_valid_g;
-	private int noSamples;
-	private int noServers;
-	private int noStates;
-	private int[][] st;
-	private boolean system$gibbsForward = true;
-	private double[] v;
-	private double[][][] var245;
+	boolean[][] constrainedFlag$sample134;
+	boolean[][] constrainedFlag$sample162;
+	boolean[][] constrainedFlag$sample190;
+	boolean constrainedFlag$sample20 = true;
+	boolean[] constrainedFlag$sample33;
+	boolean[] constrainedFlag$sample57;
+	boolean[][] constrainedFlag$sample76;
+	double[][] current_metric_mean;
+	double[][] current_metric_valid_bias;
+	double[][] current_metric_var;
+	double[][] distribution$sample57;
+	double[][][] distribution$sample76;
+	boolean fixedFlag$sample134 = false;
+	boolean fixedFlag$sample162 = false;
+	boolean fixedFlag$sample190 = false;
+	boolean fixedFlag$sample20 = false;
+	boolean fixedFlag$sample33 = false;
+	boolean fixedFlag$sample57 = false;
+	boolean fixedFlag$sample76 = false;
+	boolean fixedProbFlag$sample134 = false;
+	boolean fixedProbFlag$sample162 = false;
+	boolean fixedProbFlag$sample190 = false;
+	boolean fixedProbFlag$sample20 = false;
+	boolean fixedProbFlag$sample241 = false;
+	boolean fixedProbFlag$sample256 = false;
+	boolean fixedProbFlag$sample33 = false;
+	boolean fixedProbFlag$sample57 = false;
+	boolean fixedProbFlag$sample76 = false;
+	double[] initialStateDistribution;
+	int[][] length$metric;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$current_metric_mean;
+	double logProbability$current_metric_valid_bias;
+	double logProbability$current_metric_var;
+	double logProbability$initialStateDistribution;
+	double logProbability$m;
+	double logProbability$metric_g;
+	double logProbability$metric_valid_g;
+	double logProbability$metric_valid_inner;
+	double logProbability$st;
+	double logProbability$var130;
+	double logProbability$var157;
+	double logProbability$var184;
+	double logProbability$var232;
+	double logProbability$var245;
+	double logProbability$var33;
+	double logProbability$var55;
+	double logProbability$var74;
+	double[][] m;
+	int max_metric;
+	double[][][] metric;
+	double[][][] metric_g;
+	boolean[][][] metric_valid;
+	boolean[][][] metric_valid_g;
+	int noSamples;
+	int noServers;
+	int noStates;
+	int[][] st;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[][][] var245;
+	double[][] cv$distributionAccumulator$var73;
+	double[] cv$var20$countGlobal;
+	double[][] cv$var33$countGlobal;
+	double[][] cv$var55$stateProbabilityGlobal;
+	double[][] cv$var74$stateProbabilityGlobal;
+	boolean[][][][] guard$sample57gaussian255$global;
+	boolean[][][][] guard$sample76gaussian255$global;
 
 	public HMMMetrics4$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -10787,162 +10788,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var20$countGlobal
-		{
-			// Allocation of cv$var20$countGlobal for single threaded execution
-			cv$var20$countGlobal = new double[noStates];
-		}
-		
-		// Constructor for cv$var33$countGlobal
-		{
-			// Allocation of cv$var33$countGlobal for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				cv$var33$countGlobal = new double[cv$threadCount][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					cv$var33$countGlobal[cv$index] = new double[noStates];
-			}
-		}
-		
-		// Constructor for cv$distributionAccumulator$var73
-		{
-			// Variable to record the maximum value of Task Get 74. Initially set to the value
-			// of putTask 34.
-			int cv$var34$max = noStates;
-			
-			// Allocation of cv$distributionAccumulator$var73 for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				cv$distributionAccumulator$var73 = new double[cv$threadCount][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					cv$distributionAccumulator$var73[cv$index] = new double[cv$var34$max];
-			}
-		}
-		
-		// Constructor for cv$var55$stateProbabilityGlobal
-		{
-			// Allocation of cv$var55$stateProbabilityGlobal for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				cv$var55$stateProbabilityGlobal = new double[cv$threadCount][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					cv$var55$stateProbabilityGlobal[cv$index] = new double[noStates];
-			}
-		}
-		
-		// Constructor for guard$sample57gaussian255$global
-		{
-			// Calculate the largest index of sample that is possible and allocate an array to
-			// hold the guard for each of these.
-			int cv$max_sample$var196 = 0;
-			
-			// Calculate the largest index of server that is possible and allocate an array to
-			// hold the guard for each of these.
-			int cv$max_server = 0;
-			
-			// Calculate the largest index of timeStep that is possible and allocate an array
-			// to hold the guard for each of these.
-			int cv$max_timeStep$var226 = 0;
-			for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
-				for(int server = 0; server < length$metric[0].length; server += 1)
-					cv$max_timeStep$var226 = Math.max(cv$max_timeStep$var226, ((length$metric[sample$var196][0] - 0) / 1));
-				cv$max_server = Math.max(cv$max_server, ((length$metric[0].length - 0) / 1));
-			}
-			cv$max_sample$var196 = Math.max(cv$max_sample$var196, ((length$metric.length - 0) / 1));
-			
-			// Allocation of guard$sample57gaussian255$global for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				guard$sample57gaussian255$global = new boolean[cv$threadCount][][][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					guard$sample57gaussian255$global[cv$index] = new boolean[cv$max_sample$var196][cv$max_server][cv$max_timeStep$var226];
-			}
-		}
-		
-		// Constructor for cv$var74$stateProbabilityGlobal
-		{
-			// Variable to record the maximum value of Task Get 74. Initially set to the value
-			// of putTask 34.
-			int cv$var34$max = noStates;
-			
-			// Allocation of cv$var74$stateProbabilityGlobal for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				cv$var74$stateProbabilityGlobal = new double[cv$threadCount][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					cv$var74$stateProbabilityGlobal[cv$index] = new double[cv$var34$max];
-			}
-		}
-		
-		// Constructor for guard$sample76gaussian255$global
-		{
-			// Calculate the largest index of sample that is possible and allocate an array to
-			// hold the guard for each of these.
-			int cv$max_sample$var196 = 0;
-			
-			// Calculate the largest index of server that is possible and allocate an array to
-			// hold the guard for each of these.
-			int cv$max_server = 0;
-			
-			// Calculate the largest index of timeStep that is possible and allocate an array
-			// to hold the guard for each of these.
-			int cv$max_timeStep$var226 = 0;
-			for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
-				for(int server = 0; server < length$metric[0].length; server += 1)
-					cv$max_timeStep$var226 = Math.max(cv$max_timeStep$var226, ((length$metric[sample$var196][0] - 0) / 1));
-				cv$max_server = Math.max(cv$max_server, ((length$metric[0].length - 0) / 1));
-			}
-			cv$max_sample$var196 = Math.max(cv$max_sample$var196, ((length$metric.length - 0) / 1));
-			
-			// Allocation of guard$sample76gaussian255$global for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				guard$sample76gaussian255$global = new boolean[cv$threadCount][][][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					guard$sample76gaussian255$global[cv$index] = new boolean[cv$max_sample$var196][cv$max_server][cv$max_timeStep$var226];
-			}
-		}
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for v
 		{
 			v = new double[noStates];
@@ -11105,6 +10953,159 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var20$countGlobal
+		{
+			// Allocation of cv$var20$countGlobal for single threaded execution
+			cv$var20$countGlobal = new double[noStates];
+		}
+		
+		// Constructor for cv$var33$countGlobal
+		{
+			// Allocation of cv$var33$countGlobal for multithreaded execution
+			{
+				// Get the thread count.
+				int cv$threadCount = threadCount();
+				
+				// Allocate an array to hold a copy per thread
+				cv$var33$countGlobal = new double[cv$threadCount][];
+				
+				// Populate the array with a copy per thread
+				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+					cv$var33$countGlobal[cv$index] = new double[noStates];
+			}
+		}
+		
+		// Constructor for cv$distributionAccumulator$var73
+		{
+			// Variable to record the maximum value of Task Get 74. Initially set to the value
+			// of putTask 34.
+			int cv$var34$max = noStates;
+			
+			// Allocation of cv$distributionAccumulator$var73 for multithreaded execution
+			{
+				// Get the thread count.
+				int cv$threadCount = threadCount();
+				
+				// Allocate an array to hold a copy per thread
+				cv$distributionAccumulator$var73 = new double[cv$threadCount][];
+				
+				// Populate the array with a copy per thread
+				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+					cv$distributionAccumulator$var73[cv$index] = new double[cv$var34$max];
+			}
+		}
+		
+		// Constructor for cv$var55$stateProbabilityGlobal
+		{
+			// Allocation of cv$var55$stateProbabilityGlobal for multithreaded execution
+			{
+				// Get the thread count.
+				int cv$threadCount = threadCount();
+				
+				// Allocate an array to hold a copy per thread
+				cv$var55$stateProbabilityGlobal = new double[cv$threadCount][];
+				
+				// Populate the array with a copy per thread
+				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+					cv$var55$stateProbabilityGlobal[cv$index] = new double[noStates];
+			}
+		}
+		
+		// Constructor for guard$sample57gaussian255$global
+		{
+			// Calculate the largest index of sample that is possible and allocate an array to
+			// hold the guard for each of these.
+			int cv$max_sample$var196 = 0;
+			
+			// Calculate the largest index of server that is possible and allocate an array to
+			// hold the guard for each of these.
+			int cv$max_server = 0;
+			
+			// Calculate the largest index of timeStep that is possible and allocate an array
+			// to hold the guard for each of these.
+			int cv$max_timeStep$var226 = 0;
+			for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
+				for(int server = 0; server < length$metric[0].length; server += 1)
+					cv$max_timeStep$var226 = Math.max(cv$max_timeStep$var226, ((length$metric[sample$var196][0] - 0) / 1));
+				cv$max_server = Math.max(cv$max_server, ((length$metric[0].length - 0) / 1));
+			}
+			cv$max_sample$var196 = Math.max(cv$max_sample$var196, ((length$metric.length - 0) / 1));
+			
+			// Allocation of guard$sample57gaussian255$global for multithreaded execution
+			{
+				// Get the thread count.
+				int cv$threadCount = threadCount();
+				
+				// Allocate an array to hold a copy per thread
+				guard$sample57gaussian255$global = new boolean[cv$threadCount][][][];
+				
+				// Populate the array with a copy per thread
+				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+					guard$sample57gaussian255$global[cv$index] = new boolean[cv$max_sample$var196][cv$max_server][cv$max_timeStep$var226];
+			}
+		}
+		
+		// Constructor for cv$var74$stateProbabilityGlobal
+		{
+			// Variable to record the maximum value of Task Get 74. Initially set to the value
+			// of putTask 34.
+			int cv$var34$max = noStates;
+			
+			// Allocation of cv$var74$stateProbabilityGlobal for multithreaded execution
+			{
+				// Get the thread count.
+				int cv$threadCount = threadCount();
+				
+				// Allocate an array to hold a copy per thread
+				cv$var74$stateProbabilityGlobal = new double[cv$threadCount][];
+				
+				// Populate the array with a copy per thread
+				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+					cv$var74$stateProbabilityGlobal[cv$index] = new double[cv$var34$max];
+			}
+		}
+		
+		// Constructor for guard$sample76gaussian255$global
+		{
+			// Calculate the largest index of sample that is possible and allocate an array to
+			// hold the guard for each of these.
+			int cv$max_sample$var196 = 0;
+			
+			// Calculate the largest index of server that is possible and allocate an array to
+			// hold the guard for each of these.
+			int cv$max_server = 0;
+			
+			// Calculate the largest index of timeStep that is possible and allocate an array
+			// to hold the guard for each of these.
+			int cv$max_timeStep$var226 = 0;
+			for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
+				for(int server = 0; server < length$metric[0].length; server += 1)
+					cv$max_timeStep$var226 = Math.max(cv$max_timeStep$var226, ((length$metric[sample$var196][0] - 0) / 1));
+				cv$max_server = Math.max(cv$max_server, ((length$metric[0].length - 0) / 1));
+			}
+			cv$max_sample$var196 = Math.max(cv$max_sample$var196, ((length$metric.length - 0) / 1));
+			
+			// Allocation of guard$sample76gaussian255$global for multithreaded execution
+			{
+				// Get the thread count.
+				int cv$threadCount = threadCount();
+				
+				// Allocate an array to hold a copy per thread
+				guard$sample76gaussian255$global = new boolean[cv$threadCount][][][];
+				
+				// Populate the array with a copy per thread
+				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+					guard$sample76gaussian255$global[cv$index] = new boolean[cv$max_sample$var196][cv$max_server][cv$max_timeStep$var226];
+			}
+		}
 	}
 
 	// Method to execute the model code conventionally.

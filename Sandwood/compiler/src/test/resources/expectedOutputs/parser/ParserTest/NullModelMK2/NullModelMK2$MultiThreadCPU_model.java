@@ -1,27 +1,28 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements NullModelMK2$CoreInterface {
-	
+final class NullModelMK2$MultiThreadCPU extends CoreModelMultiThreadCPU implements NullModelMK2$CoreInterface {
+
 	// Declare the variables for the model.
-	private double bias;
-	private boolean constrainedFlag$sample10 = true;
-	private double eta;
-	private boolean fixedFlag$sample10 = false;
-	private boolean fixedProbFlag$sample10 = false;
-	private boolean fixedProbFlag$sample12 = false;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double logProbability$binomial;
-	private double logProbability$positiveCount;
-	private double min;
-	private int observedPositiveCount;
-	private int observedSampleCount;
-	private int positiveCount;
-	private boolean system$gibbsForward = true;
+	double bias;
+	boolean constrainedFlag$sample10 = true;
+	double eta;
+	boolean fixedFlag$sample10 = false;
+	boolean fixedProbFlag$sample10 = false;
+	boolean fixedProbFlag$sample12 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$binomial;
+	double logProbability$positiveCount;
+	double min;
+	int observedPositiveCount;
+	int observedSampleCount;
+	int positiveCount;
+	boolean system$gibbsForward = true;
 
 	public NullModelMK2$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -510,15 +511,15 @@ final class NullModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {}
 
 	// Method to execute the model code conventionally.
 	@Override

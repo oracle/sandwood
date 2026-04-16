@@ -1,30 +1,31 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements RaggedArray$CoreInterface {
-	
+final class RaggedArray$MultiThreadCPU extends CoreModelMultiThreadCPU implements RaggedArray$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[][] a;
-	private double[][] b;
-	private boolean constrainedFlag$sample73 = true;
-	private double[] cv$var69$stateProbabilityGlobal;
-	private boolean fixedFlag$sample73 = false;
-	private boolean fixedProbFlag$sample73 = false;
-	private boolean fixedProbFlag$sample89 = false;
-	private int i;
-	private int length$obs_measured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$i;
-	private double logProbability$obs;
-	private double logProbability$var85;
-	private boolean[] obs;
-	private boolean[] obs_measured;
-	private double p;
-	private boolean system$gibbsForward = true;
-	private int y;
+	double[][] a;
+	double[][] b;
+	boolean constrainedFlag$sample73 = true;
+	boolean fixedFlag$sample73 = false;
+	boolean fixedProbFlag$sample73 = false;
+	boolean fixedProbFlag$sample89 = false;
+	int i;
+	int length$obs_measured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$i;
+	double logProbability$obs;
+	double logProbability$var85;
+	boolean[] obs;
+	boolean[] obs_measured;
+	double p;
+	boolean system$gibbsForward = true;
+	int y;
+	double[] cv$var69$stateProbabilityGlobal;
 
 	public RaggedArray$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -205,7 +206,7 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// 
 		// variable marginalization
 		// 
-		// cv$numStates's comment
+				// cv$numStates's comment
 		// Calculate the number of states to evaluate.
 		int cv$numStates = Math.max(0, lengthCV$a$71_9);
 		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
@@ -238,7 +239,7 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			double cv$accumulatedProbabilities = (((((cv$valuePos < lengthCV$a$71_10) && (0 < lengthCV$a$71_10)) && (0.0 <= var67[cv$valuePos])) && (var67[cv$valuePos] <= 1.0))?Math.log(var67[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Processing sample task 89 of consumer random variable null.
@@ -263,7 +264,7 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
 			// Record the reached probability density.
 			// 
@@ -320,7 +321,7 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			} else {
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					// Get a local reference to the scratch space.
+															// Get a local reference to the scratch space.
 					cv$var69$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var69$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
@@ -371,7 +372,7 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -385,7 +386,7 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = ((((((0.0 <= i) && (i < lengthCV$a$71_12)) && (0 < lengthCV$a$71_12)) && (0.0 <= var67[i])) && (var67[i] <= 1.0))?Math.log(var67[i]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -530,24 +531,9 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// 
-		// Constructor for cv$var69$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var69$stateProbabilityGlobal for single threaded execution
-		// 
-		// Test if the input to putTask 35 is larger than the current values.
-		cv$var69$stateProbabilityGlobal = new double[3];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for a
 		a = new double[2][];
 		a[0] = new double[2];
@@ -563,6 +549,21 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// 
+		// Constructor for cv$var69$stateProbabilityGlobal
+		// 
+		// Allocation of cv$var69$stateProbabilityGlobal for single threaded execution
+		// 
+		// Test if the input to putTask 35 is larger than the current values.
+		cv$var69$stateProbabilityGlobal = new double[3];
 	}
 
 	// Method to execute the model code conventionally.

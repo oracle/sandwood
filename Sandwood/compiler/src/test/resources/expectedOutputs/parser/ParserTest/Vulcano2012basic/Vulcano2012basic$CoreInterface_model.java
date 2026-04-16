@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface Vulcano2012basic$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface Vulcano2012basic$CoreInterface extends CoreModel {
 
 	// Getter for Avail.
 	public int[][] get$Avail();

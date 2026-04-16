@@ -1,49 +1,51 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMTestPart3d$CoreInterface {
-	private double[] bias;
-	private boolean[] constrainedFlag$sample28;
-	private boolean[] constrainedFlag$sample45;
-	private boolean constrainedFlag$sample54 = true;
-	private boolean[] constrainedFlag$sample79;
-	private double[] cv$var28$countGlobal;
-	private double[] cv$var53$stateProbabilityGlobal;
-	private double[] cv$var78$stateProbabilityGlobal;
-	private boolean fixedFlag$sample28 = false;
-	private boolean fixedFlag$sample45 = false;
-	private boolean fixedFlag$sample54 = false;
-	private boolean fixedFlag$sample79 = false;
-	private boolean fixedProbFlag$sample119 = false;
-	private boolean fixedProbFlag$sample28 = false;
-	private boolean fixedProbFlag$sample45 = false;
-	private boolean fixedProbFlag$sample54 = false;
-	private boolean fixedProbFlag$sample79 = false;
-	private boolean[] flips;
-	private boolean[] flipsMeasured;
-	private int[][] indirection;
-	private int length$flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double logProbability$m;
-	private double[] logProbability$sample119;
-	private double[] logProbability$sample79;
-	private double logProbability$st;
-	private double logProbability$st2;
-	private double logProbability$var28;
-	private double logProbability$var44;
-	private double logProbability$var53;
-	private double[][] m;
-	private int samples;
-	private int[] st;
-	private int[] st2;
-	private boolean system$gibbsForward = true;
-	private double[] v;
+final class HMMTestPart3d$SingleThreadCPU extends CoreModelSingleThreadCPU implements HMMTestPart3d$CoreInterface {
+double[] bias;
+	boolean[] constrainedFlag$sample28;
+	boolean[] constrainedFlag$sample45;
+	boolean constrainedFlag$sample54 = true;
+	boolean[] constrainedFlag$sample79;
+	boolean fixedFlag$sample28 = false;
+	boolean fixedFlag$sample45 = false;
+	boolean fixedFlag$sample54 = false;
+	boolean fixedFlag$sample79 = false;
+	boolean fixedProbFlag$sample119 = false;
+	boolean fixedProbFlag$sample28 = false;
+	boolean fixedProbFlag$sample45 = false;
+	boolean fixedProbFlag$sample54 = false;
+	boolean fixedProbFlag$sample79 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	int[][] indirection;
+	int length$flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$flips;
+	double logProbability$m;
+	double[] logProbability$sample119;
+	double[] logProbability$sample79;
+	double logProbability$st;
+	double logProbability$st2;
+	double logProbability$var28;
+	double logProbability$var44;
+	double logProbability$var53;
+	double[][] m;
+	int samples;
+	int[] st;
+	int[] st2;
+	int states;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[] cv$var28$countGlobal;
+	double[] cv$var53$stateProbabilityGlobal;
+	double[] cv$var78$stateProbabilityGlobal;
 
 	public HMMTestPart3d$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -620,14 +622,7 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void allocateScratch() {
-		cv$var28$countGlobal = new double[2];
-		cv$var53$stateProbabilityGlobal = new double[2];
-		cv$var78$stateProbabilityGlobal = new double[2];
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		v = new double[2];
 		if(!fixedFlag$sample28) {
 			m = new double[2][];
@@ -649,6 +644,13 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 		logProbability$sample79 = new double[(length$flipsMeasured - 1)];
 		logProbability$sample119 = new double[length$flipsMeasured];
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		cv$var28$countGlobal = new double[2];
+		cv$var53$stateProbabilityGlobal = new double[2];
+		cv$var78$stateProbabilityGlobal = new double[2];
 	}
 
 	@Override

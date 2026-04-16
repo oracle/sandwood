@@ -1,33 +1,34 @@
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements LinearRegression2Fail$CoreInterface {
-	private double b0;
-	private double b1;
-	private boolean constrainedFlag$sample11 = true;
-	private boolean constrainedFlag$sample15 = true;
-	private boolean constrainedFlag$sample7 = true;
-	private boolean fixedFlag$sample11 = false;
-	private boolean fixedFlag$sample15 = false;
-	private boolean fixedFlag$sample7 = false;
-	private boolean fixedProbFlag$sample11 = false;
-	private boolean fixedProbFlag$sample15 = false;
-	private boolean fixedProbFlag$sample31 = false;
-	private boolean fixedProbFlag$sample7 = false;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$b0;
-	private double logProbability$b1;
-	private double[] logProbability$sample31;
-	private double logProbability$variance;
-	private double logProbability$y;
-	private int noSamples;
-	private boolean system$gibbsForward = true;
-	private double variance;
-	private double[] x;
-	private double[] y;
-	private double[] yMeasured;
+final class LinearRegression2Fail$SingleThreadCPU extends CoreModelSingleThreadCPU implements LinearRegression2Fail$CoreInterface {
+double b0;
+	double b1;
+	boolean constrainedFlag$sample11 = true;
+	boolean constrainedFlag$sample15 = true;
+	boolean constrainedFlag$sample7 = true;
+	boolean fixedFlag$sample11 = false;
+	boolean fixedFlag$sample15 = false;
+	boolean fixedFlag$sample7 = false;
+	boolean fixedProbFlag$sample11 = false;
+	boolean fixedProbFlag$sample15 = false;
+	boolean fixedProbFlag$sample31 = false;
+	boolean fixedProbFlag$sample7 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$b0;
+	double logProbability$b1;
+	double[] logProbability$sample31;
+	double logProbability$variance;
+	double logProbability$y;
+	int noSamples;
+	boolean system$gibbsForward = true;
+	double variance;
+	double[] x;
+	double[] y;
+	double[] yMeasured;
 
 	public LinearRegression2Fail$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -522,10 +523,7 @@ final class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.i
 	}
 
 	@Override
-	public final void allocateScratch() {}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		{
 			y = new double[x.length];
 		}
@@ -533,6 +531,9 @@ final class LinearRegression2Fail$SingleThreadCPU extends org.sandwood.runtime.i
 			logProbability$sample31 = new double[((((x.length - 1) - 0) / 1) + 1)];
 		}
 	}
+
+	@Override
+	public final void allocateScratch() {}
 
 	@Override
 	public final void forwardGeneration() {

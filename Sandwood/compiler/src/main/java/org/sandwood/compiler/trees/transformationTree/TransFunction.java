@@ -16,6 +16,7 @@ import org.sandwood.compiler.names.FunctionName;
 import org.sandwood.compiler.trees.ArgDesc;
 import org.sandwood.compiler.trees.Visibility;
 import org.sandwood.compiler.trees.outputTree.OutputFunction;
+import org.sandwood.compiler.trees.transformationTree.transformers.Transformer;
 import org.sandwood.compiler.trees.transformationTree.util.KnownValuesTrans;
 
 public abstract class TransFunction<T extends TransTree<T>> {
@@ -51,4 +52,6 @@ public abstract class TransFunction<T extends TransTree<T>> {
     }
 
     protected abstract TransFunction<?> applyConstants(Map<VariableDescription<?>, TransTreeReturn<?>> constants);
+    
+    protected abstract TransFunction<?> applyTransformation(Transformer t);
 }

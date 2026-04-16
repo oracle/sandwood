@@ -1,37 +1,38 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements LogitRegressionTest$CoreInterface {
-	
+final class LogitRegressionTest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LogitRegressionTest$CoreInterface {
+
 	// Declare the variables for the model.
-	private double bias;
-	private boolean[] constrainedFlag$sample35;
-	private boolean constrainedFlag$sample42 = true;
-	private boolean fixedFlag$sample35 = false;
-	private boolean fixedFlag$sample42 = false;
-	private boolean fixedProbFlag$sample35 = false;
-	private boolean fixedProbFlag$sample42 = false;
-	private boolean fixedProbFlag$sample94 = false;
-	private boolean[][] guard$sample35bernoulli93$global;
-	private boolean[][] guard$sample35put89$global;
-	private double[][] indicator;
-	private int k;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double[] logProbability$sample35;
-	private double logProbability$var93;
-	private double logProbability$weights;
-	private double logProbability$y;
-	private int n;
-	private double[][] p;
-	private boolean system$gibbsForward = true;
-	private double[] weights;
-	private double[][] x;
-	private boolean[][] y;
-	private boolean[][] yMeasured;
+	double bias;
+	boolean[] constrainedFlag$sample35;
+	boolean constrainedFlag$sample42 = true;
+	boolean fixedFlag$sample35 = false;
+	boolean fixedFlag$sample42 = false;
+	boolean fixedProbFlag$sample35 = false;
+	boolean fixedProbFlag$sample42 = false;
+	boolean fixedProbFlag$sample94 = false;
+	double[][] indicator;
+	int k;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double[] logProbability$sample35;
+	double logProbability$var93;
+	double logProbability$weights;
+	double logProbability$y;
+	int n;
+	double[][] p;
+	boolean system$gibbsForward = true;
+	double[] weights;
+	double[][] x;
+	boolean[][] y;
+	boolean[][] yMeasured;
+	boolean[][] guard$sample35bernoulli93$global;
+	boolean[][] guard$sample35put89$global;
 
 	public LogitRegressionTest$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -1719,50 +1720,9 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for guard$sample35put89$global
-		{
-			// Calculate the largest index of i that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_i = 0;
-			
-			// Calculate the largest index of j that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_j$var85 = 0;
-			for(int i = 0; i < x.length; i += 1)
-				cv$max_j$var85 = Math.max(cv$max_j$var85, ((3 - 0) / 1));
-			cv$max_i = Math.max(cv$max_i, ((x.length - 0) / 1));
-			
-			// Allocation of guard$sample35put89$global for single threaded execution
-			guard$sample35put89$global = new boolean[cv$max_i][cv$max_j$var85];
-		}
-		
-		// Constructor for guard$sample35bernoulli93$global
-		{
-			// Calculate the largest index of i that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_i = 0;
-			
-			// Calculate the largest index of j that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_j$var85 = 0;
-			for(int i = 0; i < x.length; i += 1)
-				cv$max_j$var85 = Math.max(cv$max_j$var85, ((3 - 0) / 1));
-			cv$max_i = Math.max(cv$max_i, ((x.length - 0) / 1));
-			
-			// Allocation of guard$sample35bernoulli93$global for single threaded execution
-			guard$sample35bernoulli93$global = new boolean[cv$max_i][cv$max_j$var85];
-		}
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for y
 		{
 			y = new boolean[x.length][];
@@ -1804,6 +1764,47 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for guard$sample35put89$global
+		{
+			// Calculate the largest index of i that is possible and allocate an array to hold
+			// the guard for each of these.
+			int cv$max_i = 0;
+			
+			// Calculate the largest index of j that is possible and allocate an array to hold
+			// the guard for each of these.
+			int cv$max_j$var85 = 0;
+			for(int i = 0; i < x.length; i += 1)
+				cv$max_j$var85 = Math.max(cv$max_j$var85, ((3 - 0) / 1));
+			cv$max_i = Math.max(cv$max_i, ((x.length - 0) / 1));
+			
+			// Allocation of guard$sample35put89$global for single threaded execution
+			guard$sample35put89$global = new boolean[cv$max_i][cv$max_j$var85];
+		}
+		
+		// Constructor for guard$sample35bernoulli93$global
+		{
+			// Calculate the largest index of i that is possible and allocate an array to hold
+			// the guard for each of these.
+			int cv$max_i = 0;
+			
+			// Calculate the largest index of j that is possible and allocate an array to hold
+			// the guard for each of these.
+			int cv$max_j$var85 = 0;
+			for(int i = 0; i < x.length; i += 1)
+				cv$max_j$var85 = Math.max(cv$max_j$var85, ((3 - 0) / 1));
+			cv$max_i = Math.max(cv$max_i, ((x.length - 0) / 1));
+			
+			// Allocation of guard$sample35bernoulli93$global for single threaded execution
+			guard$sample35bernoulli93$global = new boolean[cv$max_i][cv$max_j$var85];
+		}
 	}
 
 	// Method to execute the model code conventionally.

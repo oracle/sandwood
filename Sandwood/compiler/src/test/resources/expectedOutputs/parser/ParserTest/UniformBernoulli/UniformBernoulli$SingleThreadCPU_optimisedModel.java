@@ -1,26 +1,29 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements UniformBernoulli$CoreInterface {
-	
+final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU implements UniformBernoulli$CoreInterface {
+
 	// Declare the variables for the model.
-	private boolean constrainedFlag$sample5 = true;
-	private boolean fixedFlag$sample5 = false;
-	private boolean fixedProbFlag$sample19 = false;
-	private boolean fixedProbFlag$sample5 = false;
-	private int length$observed;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bernoulli;
-	private double logProbability$output;
-	private double logProbability$prior;
-	private double logProbability$var19;
-	private boolean[] observed;
-	private boolean[] output;
-	private double prior;
-	private boolean system$gibbsForward = true;
+	double a;
+	double b;
+	boolean constrainedFlag$sample5 = true;
+	boolean fixedFlag$sample5 = false;
+	boolean fixedProbFlag$sample19 = false;
+	boolean fixedProbFlag$sample5 = false;
+	int length$observed;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bernoulli;
+	double logProbability$output;
+	double logProbability$prior;
+	double logProbability$var19;
+	boolean[] observed;
+	boolean[] output;
+	double prior;
+	boolean system$gibbsForward = true;
 
 	public UniformBernoulli$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -167,7 +170,7 @@ final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.intern
 		
 		// Calculate a proposed variance.
 		// 
-		// The original value of the sample
+						// The original value of the sample
 		double cv$var = ((prior * prior) * 0.010000000000000002);
 		
 		// Ensure the variance is at least 0.01
@@ -182,7 +185,7 @@ final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.intern
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Set the current value to the current state of the tree.
+									// Set the current value to the current state of the tree.
 			// 
 			// The original value of the sample
 			double cv$accumulatedProbabilities = (((0.0 <= prior) && (prior < 1.0))?0.0:Double.NEGATIVE_INFINITY);
@@ -205,7 +208,7 @@ final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.intern
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Set the current value to the current state of the tree.
+												// Set the current value to the current state of the tree.
 				// 
 				// The original value of the sample
 				cv$accumulatedProbabilities = ((((0.0 <= prior) && (prior <= 1.0))?Math.log((output[var18]?prior:(1.0 - prior))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
@@ -366,7 +369,7 @@ final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -380,7 +383,7 @@ final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (((0.0 <= prior) && (prior < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -440,18 +443,18 @@ final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.intern
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// Constructor for output
+		output = new boolean[length$observed];
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// Constructor for output
-		output = new boolean[length$observed];
-	}
 
 	// Method to execute the model code conventionally.
 	@Override

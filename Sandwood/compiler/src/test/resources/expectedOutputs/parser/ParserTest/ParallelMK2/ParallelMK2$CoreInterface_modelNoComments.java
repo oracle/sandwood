@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface ParallelMK2$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface ParallelMK2$CoreInterface extends CoreModel {
 	public boolean get$fixedFlag$sample26();
 	public void set$fixedFlag$sample26(boolean cv$value, boolean allocated$);
 	public double[] get$generated();

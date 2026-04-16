@@ -16,7 +16,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
  * A class to hold any boilerplate code associated with single threaded execution. This will probably end up being null
  * methods for setting thread counts etc.
  */
-public abstract class CoreModelSingleThreadCPU extends CoreModelBase {
+public abstract class CoreModelSingleThreadCPU<S extends CoreModelScratch> extends CoreModelBase<S> {
     protected CoreModelSingleThreadCPU(ExecutionTarget target) {
         if(target != ExecutionTarget.singleThread)
             throw new SandwoodRuntimeException(

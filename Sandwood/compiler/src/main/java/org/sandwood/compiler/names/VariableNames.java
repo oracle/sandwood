@@ -21,8 +21,8 @@ import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
+import org.sandwood.compiler.dataflowGraph.variables.internal.RandomNumberGenerator;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
-import org.sandwood.compiler.dataflowGraph.variables.rng.RandomNumberGenerator;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
@@ -49,12 +49,12 @@ public final class VariableNames {
     private static final String rng = "RNG" + Name.prefix;
 
     public static GlobalVariableDescription<RandomNumberGenerator> rngName() {
-        return new GlobalVariableDescription<>(rng, VariableType.RNG, true);
+        return new GlobalVariableDescription<>(rng, VariableType.RNG, false);
     }
 
     public static LocalVariableDescription<RandomNumberGenerator> rngName(int depth) {
         assert (depth > 0);
-        return new LocalVariableDescription<>(rng + depth, VariableType.RNG, true);
+        return new LocalVariableDescription<>(rng + depth, VariableType.RNG, false);
     }
 
     private static final String threadId = "threadID" + Name.prefix;

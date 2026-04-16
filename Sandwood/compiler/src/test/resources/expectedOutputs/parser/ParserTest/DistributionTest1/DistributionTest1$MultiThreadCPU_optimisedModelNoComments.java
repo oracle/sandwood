@@ -1,31 +1,32 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DistributionTest1$CoreInterface {
-	private boolean constrainedFlag$sample4 = true;
-	private boolean constrainedFlag$sample6 = true;
-	private double[] cv$var4$stateProbabilityGlobal;
-	private double[] cv$var6$stateProbabilityGlobal;
-	private double[] distribution$sample4;
-	private double[] distribution$sample6;
-	private boolean fixedFlag$sample4 = false;
-	private boolean fixedFlag$sample6 = false;
-	private boolean fixedProbFlag$sample11 = false;
-	private boolean fixedProbFlag$sample4 = false;
-	private boolean fixedProbFlag$sample6 = false;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$v;
-	private double logProbability$v1;
-	private double logProbability$v2;
-	private boolean system$gibbsForward = true;
-	private boolean v;
-	private int v1;
-	private int v2;
-	private boolean value;
-	private double[] weightings;
+final class DistributionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implements DistributionTest1$CoreInterface {
+boolean constrainedFlag$sample4 = true;
+	boolean constrainedFlag$sample6 = true;
+	double[] distribution$sample4;
+	double[] distribution$sample6;
+	boolean fixedFlag$sample4 = false;
+	boolean fixedFlag$sample6 = false;
+	boolean fixedProbFlag$sample11 = false;
+	boolean fixedProbFlag$sample4 = false;
+	boolean fixedProbFlag$sample6 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$v;
+	double logProbability$v1;
+	double logProbability$v2;
+	boolean system$gibbsForward = true;
+	boolean v;
+	int v1;
+	int v2;
+	boolean value;
+	double[] weightings;
+	double[] cv$var4$stateProbabilityGlobal;
+	double[] cv$var6$stateProbabilityGlobal;
 
 	public DistributionTest1$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -442,16 +443,16 @@ final class DistributionTest1$MultiThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	@Override
-	public final void allocateScratch() {
-		cv$var4$stateProbabilityGlobal = new double[weightings.length];
-		cv$var6$stateProbabilityGlobal = new double[weightings.length];
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		distribution$sample4 = new double[weightings.length];
 		distribution$sample6 = new double[weightings.length];
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		cv$var4$stateProbabilityGlobal = new double[weightings.length];
+		cv$var6$stateProbabilityGlobal = new double[weightings.length];
 	}
 
 	@Override

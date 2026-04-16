@@ -1,45 +1,46 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DistributionTest5$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DistributionTest5$CoreInterface {
-	private boolean constrainedFlag$sample11 = true;
-	private boolean[] constrainedFlag$sample27;
-	private boolean constrainedFlag$sample5 = true;
-	private double[] cv$var11$stateProbabilityGlobal;
-	private double[] cv$var27$stateProbabilityGlobal;
-	private double[] cv$var5$stateProbabilityGlobal;
-	private double[] distribution$sample11;
-	private double[][] distribution$sample27;
-	private double[] distribution$sample5;
-	private boolean fixedFlag$sample11 = false;
-	private boolean fixedFlag$sample27 = false;
-	private boolean fixedFlag$sample5 = false;
-	private boolean fixedProbFlag$sample11 = false;
-	private boolean fixedProbFlag$sample27 = false;
-	private boolean fixedProbFlag$sample5 = false;
-	private boolean fixedProbFlag$sample70 = false;
-	private boolean[] guard$sample11bernoulli69$global;
-	private boolean[] guard$sample27bernoulli69$global;
-	private int length$value;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double[] logProbability$sample27;
-	private double[] logProbability$sample70;
-	private double logProbability$v;
-	private double logProbability$v1;
-	private double logProbability$v2;
-	private double logProbability$v3;
-	private double logProbability$var11;
-	private int size;
-	private boolean system$gibbsForward = true;
-	private boolean[] v;
-	private int v1;
-	private int[] v2;
-	private int[] v3;
-	private boolean[] value;
-	private double[] weightings;
+final class DistributionTest5$SingleThreadCPU extends CoreModelSingleThreadCPU implements DistributionTest5$CoreInterface {
+boolean constrainedFlag$sample11 = true;
+	boolean[] constrainedFlag$sample27;
+	boolean constrainedFlag$sample5 = true;
+	double[] distribution$sample11;
+	double[][] distribution$sample27;
+	double[] distribution$sample5;
+	boolean fixedFlag$sample11 = false;
+	boolean fixedFlag$sample27 = false;
+	boolean fixedFlag$sample5 = false;
+	boolean fixedProbFlag$sample11 = false;
+	boolean fixedProbFlag$sample27 = false;
+	boolean fixedProbFlag$sample5 = false;
+	boolean fixedProbFlag$sample70 = false;
+	int length$value;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double[] logProbability$sample27;
+	double[] logProbability$sample70;
+	double logProbability$v;
+	double logProbability$v1;
+	double logProbability$v2;
+	double logProbability$v3;
+	double logProbability$var11;
+	int size;
+	boolean system$gibbsForward = true;
+	boolean[] v;
+	int v1;
+	int[] v2;
+	int[] v3;
+	boolean[] value;
+	double[] weightings;
+	double[] cv$var11$stateProbabilityGlobal;
+	double[] cv$var27$stateProbabilityGlobal;
+	double[] cv$var5$stateProbabilityGlobal;
+	boolean[] guard$sample11bernoulli69$global;
+	boolean[] guard$sample27bernoulli69$global;
 
 	public DistributionTest5$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -1247,16 +1248,7 @@ final class DistributionTest5$SingleThreadCPU extends org.sandwood.runtime.inter
 	}
 
 	@Override
-	public final void allocateScratch() {
-		cv$var5$stateProbabilityGlobal = new double[weightings.length];
-		cv$var11$stateProbabilityGlobal = new double[weightings.length];
-		guard$sample11bernoulli69$global = new boolean[length$value];
-		cv$var27$stateProbabilityGlobal = new double[weightings.length];
-		guard$sample27bernoulli69$global = new boolean[length$value];
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		if((!fixedFlag$sample11 || !fixedFlag$sample27))
 			v2 = new int[(length$value + 1)];
 		v3 = new int[(length$value + 1)];
@@ -1270,6 +1262,15 @@ final class DistributionTest5$SingleThreadCPU extends org.sandwood.runtime.inter
 		logProbability$sample27 = new double[length$value];
 		logProbability$sample70 = new double[length$value];
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		cv$var5$stateProbabilityGlobal = new double[weightings.length];
+		cv$var11$stateProbabilityGlobal = new double[weightings.length];
+		guard$sample11bernoulli69$global = new boolean[length$value];
+		cv$var27$stateProbabilityGlobal = new double[weightings.length];
+		guard$sample27bernoulli69$global = new boolean[length$value];
 	}
 
 	@Override

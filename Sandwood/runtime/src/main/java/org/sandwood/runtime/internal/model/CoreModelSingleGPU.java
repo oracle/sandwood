@@ -15,7 +15,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
  * A class to hold any boilerplate code associated with single GPU execution. This will probably end up being null
  * methods for setting thread counts etc.
  */
-public abstract class CoreModelSingleGPU extends CoreModelBase {
+public abstract class CoreModelSingleGPU<S extends CoreModelScratch> extends CoreModelBase<S> {
     protected CoreModelSingleGPU(ExecutionTarget target) {
         if(target != ExecutionTarget.gpu)
             throw new SandwoodRuntimeException(

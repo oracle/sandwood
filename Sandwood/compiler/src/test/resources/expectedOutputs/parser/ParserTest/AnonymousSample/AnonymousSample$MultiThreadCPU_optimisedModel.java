@@ -1,44 +1,45 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements AnonymousSample$CoreInterface {
-	
+final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU implements AnonymousSample$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[] amounts1;
-	private double[] amounts2;
-	private boolean constrainedFlag$sample15 = true;
-	private boolean constrainedFlag$sample21 = true;
-	private boolean constrainedFlag$sample9 = true;
-	private boolean fixedFlag$sample15 = false;
-	private boolean fixedFlag$sample21 = false;
-	private boolean fixedFlag$sample9 = false;
-	private boolean fixedProbFlag$sample15 = false;
-	private boolean fixedProbFlag$sample21 = false;
-	private boolean fixedProbFlag$sample35 = false;
-	private boolean fixedProbFlag$sample39 = false;
-	private boolean fixedProbFlag$sample9 = false;
-	private int length$obsAmounts1;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$amounts1;
-	private double logProbability$amounts2;
-	private double logProbability$mean1;
-	private double logProbability$mean2;
-	private double logProbability$priorSigma2;
-	private double[] logProbability$sample35;
-	private double[] logProbability$sample39;
-	private double logProbability$var39;
-	private double mean1;
-	private double mean2;
-	private int n;
-	private double[] obsAmounts1;
-	private double[] obsAmounts2;
-	private double priorSigma2;
-	private boolean system$gibbsForward = true;
-	private double[] var39;
+	double[] amounts1;
+	double[] amounts2;
+	boolean constrainedFlag$sample15 = true;
+	boolean constrainedFlag$sample21 = true;
+	boolean constrainedFlag$sample9 = true;
+	boolean fixedFlag$sample15 = false;
+	boolean fixedFlag$sample21 = false;
+	boolean fixedFlag$sample9 = false;
+	boolean fixedProbFlag$sample15 = false;
+	boolean fixedProbFlag$sample21 = false;
+	boolean fixedProbFlag$sample35 = false;
+	boolean fixedProbFlag$sample39 = false;
+	boolean fixedProbFlag$sample9 = false;
+	int length$obsAmounts1;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$amounts1;
+	double logProbability$amounts2;
+	double logProbability$mean1;
+	double logProbability$mean2;
+	double logProbability$priorSigma2;
+	double[] logProbability$sample35;
+	double[] logProbability$sample39;
+	double logProbability$var39;
+	double mean1;
+	double mean2;
+	int n;
+	double[] obsAmounts1;
+	double[] obsAmounts2;
+	double priorSigma2;
+	boolean system$gibbsForward = true;
+	double[] var39;
 
 	public AnonymousSample$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -341,14 +342,14 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 			// 
 			// Add the denominator squared to the sample denominator
 			// 
-			// cv$denominator's comment
+												// cv$denominator's comment
 			// State for tracking the changes that happen to the sampled value between it being
 			// consumed and it being produced.
 			cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
 			
 			// Add the weighting of the sample to the sum.
 			// 
-			// Substituted "cv$numerator" with its value "0.0".
+									// Substituted "cv$numerator" with its value "0.0".
 			cv$sum = (cv$sum + amounts1[i]);
 			
 			// If we have not got the value of sigma yet record it and set a flag so it is not
@@ -393,14 +394,14 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 			// 
 			// Add the denominator squared to the sample denominator
 			// 
-			// cv$denominator's comment
+												// cv$denominator's comment
 			// State for tracking the changes that happen to the sampled value between it being
 			// consumed and it being produced.
 			cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
 			
 			// Add the weighting of the sample to the sum.
 			// 
-			// Substituted "cv$numerator" with its value "0.0".
+									// Substituted "cv$numerator" with its value "0.0".
 			cv$sum = (cv$sum + var39[i]);
 			
 			// If we have not got the value of sigma yet record it and set a flag so it is not
@@ -430,7 +431,7 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 		
 		// Calculate a proposed variance.
 		// 
-		// The original value of the sample
+						// The original value of the sample
 		double cv$var = ((priorSigma2 * priorSigma2) * 0.010000000000000002);
 		
 		// Ensure the variance is at least 0.01
@@ -468,7 +469,7 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Set the current value to the current state of the tree.
+												// Set the current value to the current state of the tree.
 				// 
 				// The original value of the sample
 				cv$accumulatedProbabilities = (((0.0 < priorSigma2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
@@ -492,7 +493,7 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Set the current value to the current state of the tree.
+												// Set the current value to the current state of the tree.
 				// 
 				// The original value of the sample
 				cv$accumulatedProbabilities = (((0.0 < priorSigma2)?(DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
@@ -1003,15 +1004,9 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for amounts1
 		amounts1 = new double[length$obsAmounts1];
 		
@@ -1027,6 +1022,12 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 		// Constructor for logProbability$sample39
 		logProbability$sample39 = new double[length$obsAmounts1];
 	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override

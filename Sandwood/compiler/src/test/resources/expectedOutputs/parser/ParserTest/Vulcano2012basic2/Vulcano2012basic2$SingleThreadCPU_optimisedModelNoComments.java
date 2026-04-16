@@ -1,44 +1,45 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Vulcano2012basic2$CoreInterface {
-	private int[][] Avail;
-	private int[][] ObsSales;
-	private int[][] Sales;
-	private int T;
-	private boolean[] constrainedFlag$sample26;
-	private double[] exped;
-	private double[] expedNorm;
-	private boolean fixedFlag$sample26 = false;
-	private boolean fixedFlag$sample82 = false;
-	private boolean fixedProbFlag$sample149 = false;
-	private boolean fixedProbFlag$sample26 = false;
-	private boolean fixedProbFlag$sample82 = false;
-	private boolean[] guard$sample26multinomial148$global;
-	private boolean[][] guard$sample26put123$global;
-	private boolean[][] guard$sample26put146$global;
-	private boolean[] guard$sample26put68$global;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$Sales;
-	private double logProbability$exped;
-	private double logProbability$expedNorm;
-	private double logProbability$sales_sum;
-	private double[] logProbability$sample149;
-	private double[] logProbability$sample26;
-	private double[] logProbability$sample82;
-	private double logProbability$sum;
-	private double logProbability$ut;
-	private int noProducts;
-	private double r;
-	private int[] sales_sum;
-	private double sum;
-	private boolean system$gibbsForward = true;
-	private double[] ut;
-	private double[][] weekly_rates;
-	private double[][] weekly_ut;
+final class Vulcano2012basic2$SingleThreadCPU extends CoreModelSingleThreadCPU implements Vulcano2012basic2$CoreInterface {
+int[][] Avail;
+	int[][] ObsSales;
+	int[][] Sales;
+	int T;
+	boolean[] constrainedFlag$sample26;
+	double[] exped;
+	double[] expedNorm;
+	boolean fixedFlag$sample26 = false;
+	boolean fixedFlag$sample82 = false;
+	boolean fixedProbFlag$sample149 = false;
+	boolean fixedProbFlag$sample26 = false;
+	boolean fixedProbFlag$sample82 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$Sales;
+	double logProbability$exped;
+	double logProbability$expedNorm;
+	double logProbability$sales_sum;
+	double[] logProbability$sample149;
+	double[] logProbability$sample26;
+	double[] logProbability$sample82;
+	double logProbability$sum;
+	double logProbability$ut;
+	int noProducts;
+	double r;
+	int[] sales_sum;
+	double sum;
+	boolean system$gibbsForward = true;
+	double[] ut;
+	double[][] weekly_rates;
+	double[][] weekly_ut;
+	boolean[] guard$sample26multinomial148$global;
+	boolean[][] guard$sample26put123$global;
+	boolean[][] guard$sample26put146$global;
+	boolean[] guard$sample26put68$global;
 
 	public Vulcano2012basic2$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -634,21 +635,7 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 	}
 
 	@Override
-	public final void allocateScratch() {
-		guard$sample26put68$global = new boolean[Math.max(0, noProducts)];
-		int cv$max_j$var116 = 0;
-		if((0 < T))
-			cv$max_j$var116 = Math.max(0, noProducts);
-		guard$sample26put123$global = new boolean[Math.max(0, T)][cv$max_j$var116];
-		int cv$max_j$var140 = 0;
-		if((0 < T))
-			cv$max_j$var140 = Math.max(0, noProducts);
-		guard$sample26put146$global = new boolean[Math.max(0, T)][cv$max_j$var140];
-		guard$sample26multinomial148$global = new boolean[Math.max(0, T)];
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		if(!fixedFlag$sample26)
 			ut = new double[noProducts];
 		exped = new double[noProducts];
@@ -670,6 +657,20 @@ final class Vulcano2012basic2$SingleThreadCPU extends org.sandwood.runtime.inter
 		logProbability$sample82 = new double[T];
 		logProbability$sample149 = new double[T];
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		guard$sample26put68$global = new boolean[Math.max(0, noProducts)];
+		int cv$max_j$var116 = 0;
+		if((0 < T))
+			cv$max_j$var116 = Math.max(0, noProducts);
+		guard$sample26put123$global = new boolean[Math.max(0, T)][cv$max_j$var116];
+		int cv$max_j$var140 = 0;
+		if((0 < T))
+			cv$max_j$var140 = Math.max(0, noProducts);
+		guard$sample26put146$global = new boolean[Math.max(0, T)][cv$max_j$var140];
+		guard$sample26multinomial148$global = new boolean[Math.max(0, T)];
 	}
 
 	@Override

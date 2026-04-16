@@ -1,34 +1,37 @@
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ClassName$CoreInterface {
-	
+final class ClassName$MultiThreadCPU extends CoreModelMultiThreadCPU implements ClassName$CoreInterface {
+
 	// Declare the variables for the model.
-	private double bias;
-	private boolean constrainedFlag$sample8 = true;
-	private boolean fixedFlag$sample8 = false;
-	private boolean fixedProbFlag$sample21 = false;
-	private boolean fixedProbFlag$sample35 = false;
-	private boolean fixedProbFlag$sample8 = false;
-	private boolean[] flips1;
-	private boolean[] flips2;
-	private boolean[] flipsMeasured1;
-	private boolean[] flipsMeasured2;
-	private int length$flipsMeasured1;
-	private int length$flipsMeasured2;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bernoulli1;
-	private double logProbability$bernoulli2;
-	private double logProbability$bias;
-	private double logProbability$flips1;
-	private double logProbability$flips2;
-	private double logProbability$var21;
-	private double logProbability$var35;
-	private int samples1;
-	private int samples2;
-	private boolean system$gibbsForward = true;
+	double a;
+	double b;
+	double bias;
+	boolean constrainedFlag$sample8 = true;
+	boolean fixedFlag$sample8 = false;
+	boolean fixedProbFlag$sample21 = false;
+	boolean fixedProbFlag$sample35 = false;
+	boolean fixedProbFlag$sample8 = false;
+	boolean[] flips1;
+	boolean[] flips2;
+	boolean[] flipsMeasured1;
+	boolean[] flipsMeasured2;
+	int length$flipsMeasured1;
+	int length$flipsMeasured2;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bernoulli1;
+	double logProbability$bernoulli2;
+	double logProbability$bias;
+	double logProbability$flips1;
+	double logProbability$flips2;
+	double logProbability$var21;
+	double logProbability$var35;
+	int samples1;
+	int samples2;
+	boolean system$gibbsForward = true;
 
 	public ClassName$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -517,21 +520,21 @@ final class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for flips1
 		flips1 = new boolean[length$flipsMeasured1];
 		
 		// Constructor for flips2
 		flips2 = new boolean[length$flipsMeasured2];
 	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override
@@ -732,6 +735,5 @@ final class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model
 
 	@Override
 	public String modelCode() {
-		return null;
-	}
+		return null;	}
 }

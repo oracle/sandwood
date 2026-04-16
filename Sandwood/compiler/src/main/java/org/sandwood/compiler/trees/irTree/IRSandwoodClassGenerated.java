@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.compilation.CompilationContext.FieldDesc;
 import org.sandwood.compiler.dataflowGraph.variables.ScratchVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
@@ -22,8 +23,8 @@ import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
-import org.sandwood.compiler.names.ClassName;
 import org.sandwood.compiler.names.FunctionName;
+import org.sandwood.compiler.names.ModelClassName;
 import org.sandwood.compiler.names.PackageName;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.trees.ArgDesc;
@@ -36,9 +37,8 @@ import org.sandwood.compiler.trees.transformationTree.TransTreeVoid;
 
 public class IRSandwoodClassGenerated {
 
-    private final ClassName name;
-    private final ClassName extendedClass;
-    private final ClassName[] interfaces;
+    private final ExecutionType target;
+    private final ModelClassName name;
     private final PackageName packageName;
     private final String modelCode;
     // Variable field name |-> Field Descriptor
@@ -52,13 +52,12 @@ public class IRSandwoodClassGenerated {
     private static final VariableDescription<DoubleVariable> evidenceProbabilityName = VariableNames
             .logProbabilityName(VariableNames.internalName("evidence"));
 
-    public IRSandwoodClassGenerated(ClassName name, PackageName packageName, ClassName extendedClass,
-            ClassName[] interfaces, Map<VariableName, FieldDesc<?>> classFields, Set<ScratchVariableDescription<?>> scratchFields,
+    public IRSandwoodClassGenerated(ExecutionType target, ModelClassName name, PackageName packageName,
+            Map<VariableName, FieldDesc<?>> classFields, Set<ScratchVariableDescription<?>> scratchFields,
             Map<FunctionName, IRFunction<?>> functions, String modelCode) {
+        this.target = target;
         this.name = name;
         this.packageName = packageName;
-        this.extendedClass = extendedClass;
-        this.interfaces = interfaces;
         this.modelCode = modelCode;
         this.classFields = classFields;
         this.scratchFields = scratchFields;
@@ -70,9 +69,9 @@ public class IRSandwoodClassGenerated {
 
     private <A extends Variable<A>> IRTreeVoid declareField(FieldDesc<A> f) {
         if(f.initialValue == null)
-            return IRTree.initializeUnsetField(Visibility.PRIVATE, f.varDesc, Tree.NoComment);
+            return IRTree.initializeUnsetField(Visibility.DEFAULT, f.varDesc, Tree.NoComment);
         else
-            return IRTree.initializeField(Visibility.PRIVATE, f.varDesc, f.initialValue, Tree.NoComment);
+            return IRTree.initializeField(Visibility.DEFAULT, f.varDesc, f.initialValue, Tree.NoComment);
     }
 
     private void addGettersAndSetters() {
@@ -85,6 +84,7 @@ public class IRSandwoodClassGenerated {
     }
 
     private <A extends Variable<A>> void addGetterAndSetter(FieldDesc<A> f) {
+        boolean override = overridesModel(f.varDesc);
         if(f.fieldType.getter) {
             IRTreeReturn<A> body = IRTree.load(f.varDesc);
             IRFunction<?> get;
@@ -94,7 +94,7 @@ public class IRSandwoodClassGenerated {
                         "Getter for the probability of " + f.varDesc + ".");
             else
                 get = IRTree.returnFunction(Visibility.PUBLIC, f.varDesc.type, FunctionName.getterName(f.varDesc.name),
-                        new ArgDesc[0], body, overridesModel(f.varDesc), "Getter for " + f.varDesc + ".");
+                        new ArgDesc[0], body, override, "Getter for " + f.varDesc + ".");
             gettersAndSetters.add(get);
         }
 
@@ -126,7 +126,7 @@ public class IRSandwoodClassGenerated {
 
             // Add the resulting body to a function.
             IRVoidFunction set = IRTree.voidFunction(Visibility.PUBLIC, FunctionName.setterName(f.varDesc.name), args,
-                    body, "Setter for " + f.varDesc + ".");
+                    body, override, "Setter for " + f.varDesc + ".");
             gettersAndSetters.add(set);
         }
     }
@@ -136,7 +136,6 @@ public class IRSandwoodClassGenerated {
     }
 
     public TransSandwoodClassGenerated toTransformationTree() {
-
         Map<FunctionName, TransFunction<?>> transFunctions = new HashMap<>();
         for(FunctionName name:functions.keySet())
             transFunctions.put(name, functions.get(name).toTransformationTree());
@@ -146,16 +145,18 @@ public class IRSandwoodClassGenerated {
             transGettersAndSetters.add(f.toTransformationTree());
 
         // Construct fields Map.
-        Map<VariableName, TransTreeVoid> fieldTrees = new HashMap<>();
+        Map<VariableName, TransTreeVoid> classFieldTrees = new HashMap<>();
         for(VariableName fieldName:classFields.keySet()) {
             FieldDesc<?> f = classFields.get(fieldName);
-            fieldTrees.put(fieldName, declareField(f).toTransformationTree());
+            classFieldTrees.put(fieldName, declareField(f).toTransformationTree());
         }
 
+        Map<VariableName, TransTreeVoid> scratchFieldTrees = new HashMap<>();
         for(ScratchVariableDescription<?> varDesc:scratchFields)
-            fieldTrees.put(varDesc.name, IRTree.initializeUnsetField(Visibility.PRIVATE, varDesc, null).toTransformationTree());
+            scratchFieldTrees.put(varDesc.name,
+                    IRTree.initializeUnsetField(Visibility.DEFAULT, varDesc, null).toTransformationTree());
 
-        return new TransSandwoodClassGenerated(name, packageName, extendedClass, interfaces, modelCode, transFunctions,
-                fieldTrees, transGettersAndSetters);
+        return new TransSandwoodClassGenerated(target, name, packageName, modelCode,
+                transFunctions, classFieldTrees, scratchFieldTrees, transGettersAndSetters);
     }
 }

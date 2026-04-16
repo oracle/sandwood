@@ -1,43 +1,44 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK12$CoreInterface {
-	private double bias;
-	private boolean constrainedFlag$sample16 = true;
-	private boolean constrainedFlag$sample28 = true;
-	private boolean constrainedFlag$sample35 = true;
-	private boolean fixedFlag$sample16 = false;
-	private boolean fixedFlag$sample28 = false;
-	private boolean fixedFlag$sample35 = false;
-	private boolean fixedProbFlag$sample16 = false;
-	private boolean fixedProbFlag$sample28 = false;
-	private boolean fixedProbFlag$sample35 = false;
-	private boolean fixedProbFlag$sample52 = false;
-	private boolean[] flips;
-	private boolean[] flipsMeasured;
-	private boolean guard1;
-	private int guard2;
-	private int length$flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bernoulli;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double logProbability$sample16;
-	private double logProbability$sample28;
-	private double logProbability$sample35;
-	private double logProbability$var14;
-	private double logProbability$var26;
-	private double logProbability$var33;
-	private double logProbability$var48;
-	private int samples;
-	private boolean system$gibbsForward = true;
-	private double var14;
-	private double var26;
-	private double var33;
+final class Flip1CoinMK12$SingleThreadCPU extends CoreModelSingleThreadCPU implements Flip1CoinMK12$CoreInterface {
+double bias;
+	boolean constrainedFlag$sample16 = true;
+	boolean constrainedFlag$sample28 = true;
+	boolean constrainedFlag$sample35 = true;
+	boolean fixedFlag$sample16 = false;
+	boolean fixedFlag$sample28 = false;
+	boolean fixedFlag$sample35 = false;
+	boolean fixedProbFlag$sample16 = false;
+	boolean fixedProbFlag$sample28 = false;
+	boolean fixedProbFlag$sample35 = false;
+	boolean fixedProbFlag$sample52 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	boolean guard1;
+	int guard2;
+	int length$flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bernoulli;
+	double logProbability$bias;
+	double logProbability$flips;
+	double logProbability$sample16;
+	double logProbability$sample28;
+	double logProbability$sample35;
+	double logProbability$var14;
+	double logProbability$var26;
+	double logProbability$var33;
+	double logProbability$var48;
+	int samples;
+	boolean system$gibbsForward = true;
+	double var14;
+	double var26;
+	double var33;
 
 	public Flip1CoinMK12$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -397,12 +398,12 @@ final class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void allocateScratch() {}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		flips = new boolean[length$flipsMeasured];
 	}
+
+	@Override
+	public final void allocateScratch() {}
 
 	@Override
 	public final void forwardGeneration() {

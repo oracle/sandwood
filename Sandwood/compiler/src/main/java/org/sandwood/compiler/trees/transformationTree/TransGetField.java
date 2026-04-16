@@ -10,49 +10,49 @@ package org.sandwood.compiler.trees.transformationTree;
 
 import java.util.Map;
 
+import org.sandwood.compiler.dataflowGraph.variables.ObjectVariable;
+import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
-import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
-import org.sandwood.compiler.trees.outputTree.OutputGetIntField;
 import org.sandwood.compiler.trees.outputTree.OutputTree;
+import org.sandwood.compiler.trees.outputTree.OutputTreeReturn;
 import org.sandwood.compiler.trees.transformationTree.transformers.Transformer;
 import org.sandwood.compiler.trees.transformationTree.util.Bounds;
 import org.sandwood.compiler.trees.transformationTree.visitors.TreeVisitor;
 
-//TODO Rename to TransGetLength and tighten arguments, or think about how to tighten arguments in general.
-public class TransGetIntField extends TransTreeReturn<IntVariable> {
+public class TransGetField<A extends ObjectVariable<A>, X extends Variable<X>> extends TransTreeReturn<X> {
 
-    private final String name;
-    private final TransTreeReturn<?> tree;
+    private final VariableDescription<X> fieldDesc;
+    private final TransTreeReturn<A> objectTree;
 
-    TransGetIntField(TransTreeReturn<?> tree, String name) {
-        super(TransTreeType.GET_FIELD, 1 + tree.size());
-        this.name = name;
-        this.tree = tree;
+    TransGetField(TransTreeReturn<A> objectTree, VariableDescription<X> fieldDesc) {
+        super(TransTreeType.GET_FIELD, 1 + objectTree.size());
+        this.fieldDesc = fieldDesc;
+        this.objectTree = objectTree;
     }
 
     @Override
     public TransTree<?>[] getChildren() {
-        return new TransTree<?>[] { tree };
+        return new TransTree<?>[] { objectTree };
     }
 
     @Override
     public String getDescription() {
-        return "." + name;
+        return "." + fieldDesc;
     }
 
     @Override
-    public OutputGetIntField toOutputTreeReturnInternal() {
-        return OutputTree.getIntField(tree.toOutputTreeReturnInternal(), name);
+    public OutputTreeReturn<X> toOutputTreeReturnInternal() {
+        return OutputTree.getField(objectTree.toOutputTreeReturnInternal(), fieldDesc);
     }
 
     @Override
     public int equivalentHashCodeInternal() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + name.hashCode();
-        result = prime * result + tree.equivalentHashCode();
+        result = prime * result + fieldDesc.hashCode();
+        result = prime * result + objectTree.equivalentHashCode();
         return result;
     }
 
@@ -63,10 +63,10 @@ public class TransGetIntField extends TransTreeReturn<IntVariable> {
             return true;
         if((otherTree == null) || (type != otherTree.type))
             return false;
-        TransGetIntField other = (TransGetIntField) otherTree;
-        if(!name.equals(other.name))
+        TransGetField<?,?> other = (TransGetField<?,?>) otherTree;
+        if(!fieldDesc.equals(other.fieldDesc))
             return false;
-        return this.tree.equivalent(other.tree, substitutions);
+        return this.objectTree.equivalent(other.objectTree, substitutions);
     }
 
     /*
@@ -74,33 +74,33 @@ public class TransGetIntField extends TransTreeReturn<IntVariable> {
      * oracle compiler that it is type safe.
      */
     @Override
-    public TransGetIntField applyTransformationInternal(Transformer t) {
+    public TransGetField<A,X> applyTransformationInternal(Transformer t) {
         // Cast included to keep Oracle compiler happy.
-        return new TransGetIntField((TransTreeReturn<?>) t.transform(tree), name);
+        return new TransGetField<>(t.transform(objectTree), fieldDesc);
     }
 
     @Override
-    public Type<IntVariable> getOutputType() {
-        return VariableType.IntVariable;
+    public Type<X> getOutputType() {
+        return fieldDesc.type;
     }
 
     @Override
     public void traverseTree(TreeVisitor v) {
-        v.visit(tree);
+        v.visit(objectTree);
     }
 
     @Override
-    public TransTreeReturn<IntVariable> maxValue(Bounds bounds) {
+    public TransTreeReturn<X> maxValue(Bounds bounds) {
         return this;
     }
 
     @Override
-    public TransTreeReturn<IntVariable> minValue(Bounds bounds) {
+    public TransTreeReturn<X> minValue(Bounds bounds) {
         // Only return for array lengths when all values are being returned.
-        if(name.equals("length") && tree.getOutputType().isArray()) {
+        if(fieldDesc.name.getName().equals("length") && objectTree.getOutputType().isArray()) {
             TransTreeReturn<IntVariable> tree = constant(0);
             bounds.addTransformedTree(this, tree);
-            return tree;
+            return (TransTreeReturn<X>) tree;
         } else
             return this;
     }

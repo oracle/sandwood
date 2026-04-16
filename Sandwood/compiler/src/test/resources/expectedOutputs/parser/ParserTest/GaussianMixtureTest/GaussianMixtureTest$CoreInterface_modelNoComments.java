@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface GaussianMixtureTest$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface GaussianMixtureTest$CoreInterface extends CoreModel {
 	public double[] get$alpha();
 	public boolean get$fixedFlag$sample17();
 	public void set$fixedFlag$sample17(boolean cv$value, boolean allocated$);

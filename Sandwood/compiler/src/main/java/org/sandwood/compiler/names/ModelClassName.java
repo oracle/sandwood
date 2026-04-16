@@ -18,7 +18,7 @@ public class ModelClassName extends ClassName {
     private final Set<String> helperClasses;
 
     private ModelClassName(String name, Set<String> helperClasses) {
-        super(name);
+        super(name, true);
         this.helperClasses = helperClasses;
         if(helperClasses == null)
             throw new CompilerException("Set null helper classes set.");
@@ -29,17 +29,17 @@ public class ModelClassName extends ClassName {
     }
 
     public ClassName backendName(ExecutionType target) {
-        return new ClassName(name + prefix + target);
+        return new ClassName(name + prefix + target, true);
     }
 
     public ClassName interfaceName() {
-        return new ClassName(name + prefix + "CoreInterface");
+        return new ClassName(name + prefix + "CoreInterface", true);
     }
 
     public Set<ClassName> helperClassNames() {
         Set<ClassName> classNames = new HashSet<>();
         for(String helperClass:helperClasses)
-            classNames.add(new ClassName(name + prefix + helperClass));
+            classNames.add(new ClassName(name + prefix + helperClass, true));
         return classNames;
     }
 }

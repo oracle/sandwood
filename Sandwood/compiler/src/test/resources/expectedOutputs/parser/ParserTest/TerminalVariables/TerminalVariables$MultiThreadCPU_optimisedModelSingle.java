@@ -1,83 +1,84 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements TerminalVariables$CoreInterface {
-	
+final class TerminalVariables$MultiThreadCPU extends CoreModelMultiThreadCPU implements TerminalVariables$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[][][][][] a;
-	private int c1;
-	private int c10;
-	private int c11;
-	private int c12;
-	private int c2;
-	private int c3;
-	private int c4;
-	private int c5;
-	private int c6;
-	private int c7;
-	private int c8;
-	private int c9;
-	private double[][] conditionals;
-	private boolean constrainedFlag$sample47 = true;
-	private boolean constrainedFlag$sample52 = true;
-	private boolean constrainedFlag$sample55 = true;
-	private boolean constrainedFlag$sample57 = true;
-	private boolean constrainedFlag$sample62 = true;
-	private boolean constrainedFlag$sample67 = true;
-	private boolean constrainedFlag$sample72 = true;
-	private double[] cv$var45$stateProbabilityGlobal;
-	private double[] cv$var50$stateProbabilityGlobal;
-	private double[] cv$var53$stateProbabilityGlobal;
-	private double[] cv$var55$stateProbabilityGlobal;
-	private double[] cv$var60$stateProbabilityGlobal;
-	private double[] cv$var65$stateProbabilityGlobal;
-	private double[] cv$var70$stateProbabilityGlobal;
-	private int evidence;
-	private boolean fixedFlag$sample47 = false;
-	private boolean fixedFlag$sample52 = false;
-	private boolean fixedFlag$sample55 = false;
-	private boolean fixedFlag$sample57 = false;
-	private boolean fixedFlag$sample60 = false;
-	private boolean fixedFlag$sample62 = false;
-	private boolean fixedFlag$sample636 = false;
-	private boolean fixedFlag$sample65 = false;
-	private boolean fixedFlag$sample67 = false;
-	private boolean fixedFlag$sample70 = false;
-	private boolean fixedFlag$sample72 = false;
-	private boolean fixedFlag$sample75 = false;
-	private boolean fixedProbFlag$sample47 = false;
-	private boolean fixedProbFlag$sample50 = false;
-	private boolean fixedProbFlag$sample52 = false;
-	private boolean fixedProbFlag$sample55 = false;
-	private boolean fixedProbFlag$sample57 = false;
-	private boolean fixedProbFlag$sample60 = false;
-	private boolean fixedProbFlag$sample62 = false;
-	private boolean fixedProbFlag$sample636 = false;
-	private boolean fixedProbFlag$sample65 = false;
-	private boolean fixedProbFlag$sample67 = false;
-	private boolean fixedProbFlag$sample70 = false;
-	private boolean fixedProbFlag$sample72 = false;
-	private boolean fixedProbFlag$sample75 = false;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$c1;
-	private double logProbability$c10;
-	private double logProbability$c11;
-	private double logProbability$c12;
-	private double logProbability$c2;
-	private double logProbability$c3;
-	private double logProbability$c4;
-	private double logProbability$c5;
-	private double logProbability$c6;
-	private double logProbability$c7;
-	private double logProbability$c8;
-	private double logProbability$c9;
-	private double logProbability$terminalVariable;
-	private double[] priors;
-	private boolean system$gibbsForward = true;
-	private int terminalVariable;
+	double[][][][][] a;
+	int c1;
+	int c10;
+	int c11;
+	int c12;
+	int c2;
+	int c3;
+	int c4;
+	int c5;
+	int c6;
+	int c7;
+	int c8;
+	int c9;
+	double[][] conditionals;
+	boolean constrainedFlag$sample47 = true;
+	boolean constrainedFlag$sample52 = true;
+	boolean constrainedFlag$sample55 = true;
+	boolean constrainedFlag$sample57 = true;
+	boolean constrainedFlag$sample62 = true;
+	boolean constrainedFlag$sample67 = true;
+	boolean constrainedFlag$sample72 = true;
+	int evidence;
+	boolean fixedFlag$sample47 = false;
+	boolean fixedFlag$sample52 = false;
+	boolean fixedFlag$sample55 = false;
+	boolean fixedFlag$sample57 = false;
+	boolean fixedFlag$sample60 = false;
+	boolean fixedFlag$sample62 = false;
+	boolean fixedFlag$sample636 = false;
+	boolean fixedFlag$sample65 = false;
+	boolean fixedFlag$sample67 = false;
+	boolean fixedFlag$sample70 = false;
+	boolean fixedFlag$sample72 = false;
+	boolean fixedFlag$sample75 = false;
+	boolean fixedProbFlag$sample47 = false;
+	boolean fixedProbFlag$sample50 = false;
+	boolean fixedProbFlag$sample52 = false;
+	boolean fixedProbFlag$sample55 = false;
+	boolean fixedProbFlag$sample57 = false;
+	boolean fixedProbFlag$sample60 = false;
+	boolean fixedProbFlag$sample62 = false;
+	boolean fixedProbFlag$sample636 = false;
+	boolean fixedProbFlag$sample65 = false;
+	boolean fixedProbFlag$sample67 = false;
+	boolean fixedProbFlag$sample70 = false;
+	boolean fixedProbFlag$sample72 = false;
+	boolean fixedProbFlag$sample75 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$c1;
+	double logProbability$c10;
+	double logProbability$c11;
+	double logProbability$c12;
+	double logProbability$c2;
+	double logProbability$c3;
+	double logProbability$c4;
+	double logProbability$c5;
+	double logProbability$c6;
+	double logProbability$c7;
+	double logProbability$c8;
+	double logProbability$c9;
+	double logProbability$terminalVariable;
+	double[] priors;
+	boolean system$gibbsForward = true;
+	int terminalVariable;
+	double[] cv$var45$stateProbabilityGlobal;
+	double[] cv$var50$stateProbabilityGlobal;
+	double[] cv$var53$stateProbabilityGlobal;
+	double[] cv$var55$stateProbabilityGlobal;
+	double[] cv$var60$stateProbabilityGlobal;
+	double[] cv$var65$stateProbabilityGlobal;
+	double[] cv$var70$stateProbabilityGlobal;
 
 	public TerminalVariables$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -1012,9 +1013,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			// 
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -1027,9 +1028,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			// 
 			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 			// Declaration comment was:
@@ -1151,9 +1152,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$var45$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
@@ -1183,9 +1184,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
+						// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
+						// Substituted "cv$valuePos" with its value "1".
 		// 
 		// A check to ensure rounding of floating point values can never result in a negative
 		// value.
@@ -1198,9 +1199,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
+						// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
+						// Substituted "cv$valuePos" with its value "1".
 		// 
 		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 		// Declaration comment was:
@@ -1322,9 +1323,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$var45$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
@@ -1368,30 +1369,30 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Unrolled loop
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			cv$var45$stateProbabilityGlobal[0] = 0.5;
 			
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			cv$var45$stateProbabilityGlobal[1] = 0.5;
 		} else {
 			// Unrolled loop
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			cv$var45$stateProbabilityGlobal[0] = Math.exp((cv$var45$stateProbabilityGlobal[0] - cv$logSum));
 			
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			cv$var45$stateProbabilityGlobal[1] = Math.exp((cv$var45$stateProbabilityGlobal[1] - cv$logSum));
 		}
 		
 		// Set array values that are not computed for the input to negative infinity.
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		for(int cv$indexName = 2; cv$indexName < cv$var45$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Get a local reference to the scratch space.
 			cv$var45$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the new value of the sample.
 		// 
-		// cv$numStates's comment
+								// cv$numStates's comment
 		// variable marginalization
 		c1 = DistributionSampling.sampleCategorical(RNG$, cv$var45$stateProbabilityGlobal, 2);
 	}
@@ -1412,9 +1413,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = (((0.0 <= priors[0]) && (priors[0] <= 1.0))?Math.log(priors[0]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1446,9 +1447,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$var50$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
@@ -1464,9 +1465,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
+						// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
+						// Substituted "cv$valuePos" with its value "1".
 		double cv$accumulatedProbabilities = (((0.0 <= priors[1]) && (priors[1] <= 1.0))?Math.log(priors[1]):Double.NEGATIVE_INFINITY);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1498,9 +1499,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$var50$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
@@ -1544,30 +1545,30 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var50$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var50$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var50$stateProbabilityGlobal[0] = Math.exp((cv$var50$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var50$stateProbabilityGlobal[1] = Math.exp((cv$var50$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			for(int cv$indexName = 2; cv$indexName < cv$var50$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var50$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			c3 = DistributionSampling.sampleCategorical(RNG$, cv$var50$stateProbabilityGlobal, 2);
 		}
@@ -1596,7 +1597,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 		// 
 		// variable marginalization
 		// 
-		// cv$numStates's comment
+				// cv$numStates's comment
 		// Calculate the number of states to evaluate.
 		int cv$numStates = Math.max(0, lengthCV$conditionals$53_11);
 		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
@@ -1622,7 +1623,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			double cv$accumulatedProbabilities = (((((cv$valuePos < lengthCV$conditionals$53_12) && (0 < lengthCV$conditionals$53_12)) && (0.0 <= var51[cv$valuePos])) && (var51[cv$valuePos] <= 1.0))?Math.log(var51[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1646,13 +1647,13 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 						if((0 == c1)) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((0 == cv$valuePos))
 								lengthCV$var601$634_12 = 5;
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((1 == cv$valuePos))
 								lengthCV$var601$634_12 = 5;
 						}
@@ -1661,13 +1662,13 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 						if((1 == c1)) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((0 == cv$valuePos))
 								lengthCV$var601$634_12 = 5;
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((1 == cv$valuePos))
 								lengthCV$var601$634_12 = 5;
 						}
@@ -1679,13 +1680,13 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 						if((0 == c1)) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((0 == cv$valuePos))
 								lengthCV$var601$634_12 = 5;
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((1 == cv$valuePos))
 								lengthCV$var601$634_12 = 5;
 						}
@@ -1694,13 +1695,13 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 						if((1 == c1)) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((0 == cv$valuePos))
 								lengthCV$var601$634_12 = 5;
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((1 == cv$valuePos))
 								lengthCV$var601$634_12 = 5;
 						}
@@ -1715,13 +1716,13 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 						if((0 == c1)) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((0 == cv$valuePos))
 								lengthCV$var601$634_12 = 5;
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((1 == cv$valuePos))
 								lengthCV$var601$634_12 = 5;
 						}
@@ -1730,13 +1731,13 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 						if((1 == c1)) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((0 == cv$valuePos))
 								lengthCV$var601$634_12 = 5;
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((1 == cv$valuePos))
 								lengthCV$var601$634_12 = 5;
 						}
@@ -1748,13 +1749,13 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 						if((0 == c1)) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((0 == cv$valuePos))
 								lengthCV$var601$634_12 = 5;
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((1 == cv$valuePos))
 								lengthCV$var601$634_12 = 5;
 						}
@@ -1763,13 +1764,13 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 						if((1 == c1)) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((0 == cv$valuePos))
 								lengthCV$var601$634_12 = 5;
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((1 == cv$valuePos))
 								lengthCV$var601$634_12 = 5;
 						}
@@ -1793,7 +1794,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
 			// Record the reached probability density.
 			// 
@@ -1850,7 +1851,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			} else {
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					// Get a local reference to the scratch space.
+															// Get a local reference to the scratch space.
 					cv$var53$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var53$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
@@ -1884,9 +1885,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = (((0.0 <= priors[0]) && (priors[0] <= 1.0))?Math.log(priors[0]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1998,9 +1999,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$var55$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
@@ -2016,9 +2017,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
+						// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
+						// Substituted "cv$valuePos" with its value "1".
 		double cv$accumulatedProbabilities = (((0.0 <= priors[1]) && (priors[1] <= 1.0))?Math.log(priors[1]):Double.NEGATIVE_INFINITY);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2130,9 +2131,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$var55$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
@@ -2176,30 +2177,30 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var55$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var55$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var55$stateProbabilityGlobal[0] = Math.exp((cv$var55$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var55$stateProbabilityGlobal[1] = Math.exp((cv$var55$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			for(int cv$indexName = 2; cv$indexName < cv$var55$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var55$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			c5 = DistributionSampling.sampleCategorical(RNG$, cv$var55$stateProbabilityGlobal, 2);
 		}
@@ -2221,9 +2222,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = (((0.0 <= priors[0]) && (priors[0] <= 1.0))?Math.log(priors[0]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2255,9 +2256,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$var60$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
@@ -2273,9 +2274,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
+						// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
+						// Substituted "cv$valuePos" with its value "1".
 		double cv$accumulatedProbabilities = (((0.0 <= priors[1]) && (priors[1] <= 1.0))?Math.log(priors[1]):Double.NEGATIVE_INFINITY);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2307,9 +2308,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$var60$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
@@ -2353,30 +2354,30 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var60$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var60$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var60$stateProbabilityGlobal[0] = Math.exp((cv$var60$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var60$stateProbabilityGlobal[1] = Math.exp((cv$var60$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			for(int cv$indexName = 2; cv$indexName < cv$var60$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var60$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			c7 = DistributionSampling.sampleCategorical(RNG$, cv$var60$stateProbabilityGlobal, 2);
 		}
@@ -2398,9 +2399,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = (((0.0 <= priors[0]) && (priors[0] <= 1.0))?Math.log(priors[0]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2528,9 +2529,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$var65$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
@@ -2546,9 +2547,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
+						// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
+						// Substituted "cv$valuePos" with its value "1".
 		double cv$accumulatedProbabilities = (((0.0 <= priors[1]) && (priors[1] <= 1.0))?Math.log(priors[1]):Double.NEGATIVE_INFINITY);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2692,9 +2693,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$var65$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
@@ -2738,30 +2739,30 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var65$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var65$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var65$stateProbabilityGlobal[0] = Math.exp((cv$var65$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var65$stateProbabilityGlobal[1] = Math.exp((cv$var65$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			for(int cv$indexName = 2; cv$indexName < cv$var65$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var65$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			c9 = DistributionSampling.sampleCategorical(RNG$, cv$var65$stateProbabilityGlobal, 2);
 		}
@@ -2783,9 +2784,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = (((0.0 <= priors[0]) && (priors[0] <= 1.0))?Math.log(priors[0]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2817,9 +2818,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$var70$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
@@ -2835,9 +2836,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
+						// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
+						// Substituted "cv$valuePos" with its value "1".
 		double cv$accumulatedProbabilities = (((0.0 <= priors[1]) && (priors[1] <= 1.0))?Math.log(priors[1]):Double.NEGATIVE_INFINITY);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2869,9 +2870,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$var70$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
@@ -2915,30 +2916,30 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var70$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var70$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var70$stateProbabilityGlobal[0] = Math.exp((cv$var70$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var70$stateProbabilityGlobal[1] = Math.exp((cv$var70$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			for(int cv$indexName = 2; cv$indexName < cv$var70$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var70$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			c11 = DistributionSampling.sampleCategorical(RNG$, cv$var70$stateProbabilityGlobal, 2);
 		}
@@ -2959,7 +2960,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -2973,7 +2974,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (((((0.0 <= c1) && (c1 < 2)) && (0.0 <= priors[c1])) && (priors[c1] <= 1.0))?Math.log(priors[c1]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -3061,7 +3062,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3075,7 +3076,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = ((((((0.0 <= c2) && (c2 < lengthCV$conditionals$48_5)) && (0 < lengthCV$conditionals$48_5)) && (0.0 <= var46[c2])) && (var46[c2] <= 1.0))?Math.log(var46[c2]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -3144,7 +3145,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3158,7 +3159,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (((((0.0 <= c3) && (c3 < 2)) && (0.0 <= priors[c3])) && (priors[c3] <= 1.0))?Math.log(priors[c3]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -3246,7 +3247,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3260,7 +3261,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = ((((((0.0 <= c4) && (c4 < lengthCV$conditionals$53_14)) && (0 < lengthCV$conditionals$53_14)) && (0.0 <= var51[c4])) && (var51[c4] <= 1.0))?Math.log(var51[c4]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -3335,7 +3336,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3349,7 +3350,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (((((0.0 <= c5) && (c5 < 2)) && (0.0 <= priors[c5])) && (priors[c5] <= 1.0))?Math.log(priors[c5]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -3437,7 +3438,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3451,7 +3452,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = ((((((0.0 <= c6) && (c6 < lengthCV$conditionals$58_10)) && (0 < lengthCV$conditionals$58_10)) && (0.0 <= var56[c6])) && (var56[c6] <= 1.0))?Math.log(var56[c6]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -3526,7 +3527,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3540,7 +3541,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (((((0.0 <= c7) && (c7 < 2)) && (0.0 <= priors[c7])) && (priors[c7] <= 1.0))?Math.log(priors[c7]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -3726,7 +3727,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3740,7 +3741,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_16)) && (0 < lengthCV$var601$634_16)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -3828,7 +3829,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3842,7 +3843,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = ((((((0.0 <= c8) && (c8 < lengthCV$conditionals$63_10)) && (0 < lengthCV$conditionals$63_10)) && (0.0 <= var61[c8])) && (var61[c8] <= 1.0))?Math.log(var61[c8]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -3917,7 +3918,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3931,7 +3932,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (((((0.0 <= c9) && (c9 < 2)) && (0.0 <= priors[c9])) && (priors[c9] <= 1.0))?Math.log(priors[c9]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -4019,7 +4020,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -4033,7 +4034,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = ((((((0.0 <= c10) && (c10 < lengthCV$conditionals$68_10)) && (0 < lengthCV$conditionals$68_10)) && (0.0 <= var66[c10])) && (var66[c10] <= 1.0))?Math.log(var66[c10]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -4108,7 +4109,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -4122,7 +4123,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (((((0.0 <= c11) && (c11 < 2)) && (0.0 <= priors[c11])) && (priors[c11] <= 1.0))?Math.log(priors[c11]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -4210,7 +4211,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -4224,7 +4225,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = ((((((0.0 <= c12) && (c12 < lengthCV$conditionals$73_10)) && (0 < lengthCV$conditionals$73_10)) && (0.0 <= var71[c12])) && (var71[c12] <= 1.0))?Math.log(var71[c12]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -4284,51 +4285,9 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var45$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var45$stateProbabilityGlobal for single threaded execution
-		cv$var45$stateProbabilityGlobal = new double[2];
-		
-		// Constructor for cv$var50$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var50$stateProbabilityGlobal for single threaded execution
-		cv$var50$stateProbabilityGlobal = new double[2];
-		
-		// Allocation of cv$var53$stateProbabilityGlobal for single threaded execution
-		// 
-		// Test if the input to putTask 44 is larger than the current values.
-		cv$var53$stateProbabilityGlobal = new double[2];
-		
-		// Constructor for cv$var55$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var55$stateProbabilityGlobal for single threaded execution
-		cv$var55$stateProbabilityGlobal = new double[2];
-		
-		// Constructor for cv$var60$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var60$stateProbabilityGlobal for single threaded execution
-		cv$var60$stateProbabilityGlobal = new double[2];
-		
-		// Constructor for cv$var65$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var65$stateProbabilityGlobal for single threaded execution
-		cv$var65$stateProbabilityGlobal = new double[2];
-		
-		// Constructor for cv$var70$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var70$stateProbabilityGlobal for single threaded execution
-		cv$var70$stateProbabilityGlobal = new double[2];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for priors
 		priors = new double[2];
 		
@@ -4386,6 +4345,48 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var45$stateProbabilityGlobal
+		// 
+		// Allocation of cv$var45$stateProbabilityGlobal for single threaded execution
+		cv$var45$stateProbabilityGlobal = new double[2];
+		
+		// Constructor for cv$var50$stateProbabilityGlobal
+		// 
+		// Allocation of cv$var50$stateProbabilityGlobal for single threaded execution
+		cv$var50$stateProbabilityGlobal = new double[2];
+		
+		// Allocation of cv$var53$stateProbabilityGlobal for single threaded execution
+		// 
+		// Test if the input to putTask 44 is larger than the current values.
+		cv$var53$stateProbabilityGlobal = new double[2];
+		
+		// Constructor for cv$var55$stateProbabilityGlobal
+		// 
+		// Allocation of cv$var55$stateProbabilityGlobal for single threaded execution
+		cv$var55$stateProbabilityGlobal = new double[2];
+		
+		// Constructor for cv$var60$stateProbabilityGlobal
+		// 
+		// Allocation of cv$var60$stateProbabilityGlobal for single threaded execution
+		cv$var60$stateProbabilityGlobal = new double[2];
+		
+		// Constructor for cv$var65$stateProbabilityGlobal
+		// 
+		// Allocation of cv$var65$stateProbabilityGlobal for single threaded execution
+		cv$var65$stateProbabilityGlobal = new double[2];
+		
+		// Constructor for cv$var70$stateProbabilityGlobal
+		// 
+		// Allocation of cv$var70$stateProbabilityGlobal for single threaded execution
+		cv$var70$stateProbabilityGlobal = new double[2];
 	}
 
 	// Method to execute the model code conventionally.

@@ -16,7 +16,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 /**
  * A class to hold any boilerplate code associated with Fork-Join execution.
  */
-public abstract class CoreModelMultiThreadCPU extends CoreModelBase {
+public abstract class CoreModelMultiThreadCPU<S extends CoreModelScratch> extends CoreModelBase<S> {
 
     public interface LoopBody {
         void run(int start, int end, int threadId, Rng random);

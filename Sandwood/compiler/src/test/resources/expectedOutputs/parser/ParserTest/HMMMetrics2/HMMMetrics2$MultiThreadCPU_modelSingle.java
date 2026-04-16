@@ -1,81 +1,82 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements HMMMetrics2$CoreInterface {
-	
+final class HMMMetrics2$MultiThreadCPU extends CoreModelMultiThreadCPU implements HMMMetrics2$CoreInterface {
+
 	// Declare the variables for the model.
-	private boolean[] constrainedFlag$sample104;
-	private boolean[][] constrainedFlag$sample123;
-	private boolean constrainedFlag$sample19 = true;
-	private boolean[] constrainedFlag$sample32;
-	private boolean[] constrainedFlag$sample52;
-	private boolean[] constrainedFlag$sample68;
-	private boolean[] constrainedFlag$sample84;
-	private double[][] cv$distributionAccumulator$var120;
-	private double[][] cv$var102$stateProbabilityGlobal;
-	private double[][] cv$var121$stateProbabilityGlobal;
-	private double[] cv$var19$countGlobal;
-	private double[][] cv$var32$countGlobal;
-	private double[][] distribution$sample104;
-	private double[][][] distribution$sample123;
-	private boolean fixedFlag$sample104 = false;
-	private boolean fixedFlag$sample123 = false;
-	private boolean fixedFlag$sample157 = false;
-	private boolean fixedFlag$sample19 = false;
-	private boolean fixedFlag$sample32 = false;
-	private boolean fixedFlag$sample52 = false;
-	private boolean fixedFlag$sample68 = false;
-	private boolean fixedFlag$sample84 = false;
-	private boolean fixedProbFlag$sample104 = false;
-	private boolean fixedProbFlag$sample123 = false;
-	private boolean fixedProbFlag$sample145 = false;
-	private boolean fixedProbFlag$sample157 = false;
-	private boolean fixedProbFlag$sample19 = false;
-	private boolean fixedProbFlag$sample32 = false;
-	private boolean fixedProbFlag$sample52 = false;
-	private boolean fixedProbFlag$sample68 = false;
-	private boolean fixedProbFlag$sample84 = false;
-	private boolean[][][] guard$sample104gaussian156$global;
-	private boolean[][][] guard$sample123gaussian156$global;
-	private double[] initialStateDistribution;
-	private int[] length$metric;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$initialStateDistribution;
-	private double logProbability$m;
-	private double logProbability$metric_g;
-	private double logProbability$metric_mean;
-	private double logProbability$metric_valid_1d;
-	private double logProbability$metric_valid_bias;
-	private double logProbability$metric_valid_g;
-	private double logProbability$metric_var;
-	private double logProbability$st;
-	private double logProbability$var102;
-	private double logProbability$var121;
-	private double logProbability$var141;
-	private double logProbability$var151;
-	private double logProbability$var32;
-	private double logProbability$var51;
-	private double logProbability$var67;
-	private double logProbability$var83;
-	private double[][] m;
-	private double[][] metric;
-	private double[][] metric_g;
-	private double[] metric_mean;
-	private boolean[][] metric_valid;
-	private double[] metric_valid_bias;
-	private boolean[][] metric_valid_g;
-	private double[] metric_var;
-	private int noSamples;
-	private int noStates;
-	private int[][] st;
-	private boolean system$gibbsForward = true;
-	private double[] v;
-	private double[][] var151;
+	boolean[] constrainedFlag$sample104;
+	boolean[][] constrainedFlag$sample123;
+	boolean constrainedFlag$sample19 = true;
+	boolean[] constrainedFlag$sample32;
+	boolean[] constrainedFlag$sample52;
+	boolean[] constrainedFlag$sample68;
+	boolean[] constrainedFlag$sample84;
+	double[][] distribution$sample104;
+	double[][][] distribution$sample123;
+	boolean fixedFlag$sample104 = false;
+	boolean fixedFlag$sample123 = false;
+	boolean fixedFlag$sample157 = false;
+	boolean fixedFlag$sample19 = false;
+	boolean fixedFlag$sample32 = false;
+	boolean fixedFlag$sample52 = false;
+	boolean fixedFlag$sample68 = false;
+	boolean fixedFlag$sample84 = false;
+	boolean fixedProbFlag$sample104 = false;
+	boolean fixedProbFlag$sample123 = false;
+	boolean fixedProbFlag$sample145 = false;
+	boolean fixedProbFlag$sample157 = false;
+	boolean fixedProbFlag$sample19 = false;
+	boolean fixedProbFlag$sample32 = false;
+	boolean fixedProbFlag$sample52 = false;
+	boolean fixedProbFlag$sample68 = false;
+	boolean fixedProbFlag$sample84 = false;
+	double[] initialStateDistribution;
+	int[] length$metric;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$initialStateDistribution;
+	double logProbability$m;
+	double logProbability$metric_g;
+	double logProbability$metric_mean;
+	double logProbability$metric_valid_1d;
+	double logProbability$metric_valid_bias;
+	double logProbability$metric_valid_g;
+	double logProbability$metric_var;
+	double logProbability$st;
+	double logProbability$var102;
+	double logProbability$var121;
+	double logProbability$var141;
+	double logProbability$var151;
+	double logProbability$var32;
+	double logProbability$var51;
+	double logProbability$var67;
+	double logProbability$var83;
+	double[][] m;
+	double[][] metric;
+	double[][] metric_g;
+	double[] metric_mean;
+	boolean[][] metric_valid;
+	double[] metric_valid_bias;
+	boolean[][] metric_valid_g;
+	double[] metric_var;
+	int noSamples;
+	int noStates;
+	int[][] st;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[][] var151;
+	double[][] cv$distributionAccumulator$var120;
+	double[][] cv$var102$stateProbabilityGlobal;
+	double[][] cv$var121$stateProbabilityGlobal;
+	double[] cv$var19$countGlobal;
+	double[][] cv$var32$countGlobal;
+	boolean[][][] guard$sample104gaussian156$global;
+	boolean[][][] guard$sample123gaussian156$global;
 
 	public HMMMetrics2$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -10150,6 +10151,141 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// Constructor for v
+		{
+			v = new double[noStates];
+		}
+		
+		// If initialStateDistribution has not been set already allocate space.
+		if(!fixedFlag$sample19) {
+			// Constructor for initialStateDistribution
+			{
+				initialStateDistribution = new double[noStates];
+			}
+		}
+		
+		// If m has not been set already allocate space.
+		if(!fixedFlag$sample32) {
+			// Constructor for m
+			{
+				m = new double[noStates][];
+				for(int var31 = 0; var31 < noStates; var31 += 1)
+					m[var31] = new double[noStates];
+			}
+		}
+		
+		// If st has not been set already allocate space.
+		if((!fixedFlag$sample104 || !fixedFlag$sample123)) {
+			// Constructor for st
+			{
+				st = new int[length$metric.length][];
+				for(int sample = 0; sample < length$metric.length; sample += 1)
+					st[sample] = new int[length$metric[sample]];
+			}
+		}
+		
+		// Constructor for metric_g
+		{
+			metric_g = new double[length$metric.length][];
+			for(int sample = 0; sample < length$metric.length; sample += 1)
+				metric_g[sample] = new double[length$metric[sample]];
+		}
+		
+		// Constructor for metric_valid_g
+		{
+			metric_valid_g = new boolean[length$metric.length][];
+			for(int sample = 0; sample < length$metric.length; sample += 1)
+				metric_valid_g[sample] = new boolean[length$metric[sample]];
+		}
+		
+		// If metric_mean has not been set already allocate space.
+		if(!fixedFlag$sample52) {
+			// Constructor for metric_mean
+			{
+				metric_mean = new double[noStates];
+			}
+		}
+		
+		// If metric_var has not been set already allocate space.
+		if(!fixedFlag$sample68) {
+			// Constructor for metric_var
+			{
+				metric_var = new double[noStates];
+			}
+		}
+		
+		// If metric_valid_bias has not been set already allocate space.
+		if(!fixedFlag$sample84) {
+			// Constructor for metric_valid_bias
+			{
+				metric_valid_bias = new double[noStates];
+			}
+		}
+		
+		// Constructor for var151
+		{
+			var151 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][];
+			for(int sample = 0; sample < length$metric.length; sample += 1)
+				var151[((sample - 0) / 1)] = new double[((((length$metric[sample] - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for distribution$sample104
+		{
+			distribution$sample104 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][];
+			for(int sample = 0; sample < length$metric.length; sample += 1)
+				distribution$sample104[((sample - 0) / 1)] = new double[noStates];
+		}
+		
+		// Constructor for distribution$sample123
+		{
+			distribution$sample123 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][][];
+			for(int sample = 0; sample < length$metric.length; sample += 1) {
+				double[][] subarray$0 = new double[((((length$metric[sample] - 1) - 1) / 1) + 1)][];
+				distribution$sample123[((sample - 0) / 1)] = subarray$0;
+				for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1)
+					subarray$0[((timeStep$var113 - 1) / 1)] = new double[noStates];
+			}
+		}
+		
+		// Constructor for constrainedFlag$sample32
+		{
+			constrainedFlag$sample32 = new boolean[((((noStates - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample123
+		{
+			constrainedFlag$sample123 = new boolean[((((length$metric.length - 1) - 0) / 1) + 1)][];
+			for(int sample = 0; sample < length$metric.length; sample += 1)
+				constrainedFlag$sample123[((sample - 0) / 1)] = new boolean[((((length$metric[sample] - 1) - 1) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample104
+		{
+			constrainedFlag$sample104 = new boolean[((((length$metric.length - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample84
+		{
+			constrainedFlag$sample84 = new boolean[((((noStates - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample68
+		{
+			constrainedFlag$sample68 = new boolean[((((noStates - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample52
+		{
+			constrainedFlag$sample52 = new boolean[((((noStates - 1) - 0) / 1) + 1)];
+		}
+		
+		// Allocate scratch space
+		allocateScratch();
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -10287,141 +10423,6 @@ final class HMMMetrics2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					guard$sample123gaussian156$global[cv$index] = new boolean[cv$max_sample][cv$max_timeStep$var136];
 			}
 		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// Constructor for v
-		{
-			v = new double[noStates];
-		}
-		
-		// If initialStateDistribution has not been set already allocate space.
-		if(!fixedFlag$sample19) {
-			// Constructor for initialStateDistribution
-			{
-				initialStateDistribution = new double[noStates];
-			}
-		}
-		
-		// If m has not been set already allocate space.
-		if(!fixedFlag$sample32) {
-			// Constructor for m
-			{
-				m = new double[noStates][];
-				for(int var31 = 0; var31 < noStates; var31 += 1)
-					m[var31] = new double[noStates];
-			}
-		}
-		
-		// If st has not been set already allocate space.
-		if((!fixedFlag$sample104 || !fixedFlag$sample123)) {
-			// Constructor for st
-			{
-				st = new int[length$metric.length][];
-				for(int sample = 0; sample < length$metric.length; sample += 1)
-					st[sample] = new int[length$metric[sample]];
-			}
-		}
-		
-		// Constructor for metric_g
-		{
-			metric_g = new double[length$metric.length][];
-			for(int sample = 0; sample < length$metric.length; sample += 1)
-				metric_g[sample] = new double[length$metric[sample]];
-		}
-		
-		// Constructor for metric_valid_g
-		{
-			metric_valid_g = new boolean[length$metric.length][];
-			for(int sample = 0; sample < length$metric.length; sample += 1)
-				metric_valid_g[sample] = new boolean[length$metric[sample]];
-		}
-		
-		// If metric_mean has not been set already allocate space.
-		if(!fixedFlag$sample52) {
-			// Constructor for metric_mean
-			{
-				metric_mean = new double[noStates];
-			}
-		}
-		
-		// If metric_var has not been set already allocate space.
-		if(!fixedFlag$sample68) {
-			// Constructor for metric_var
-			{
-				metric_var = new double[noStates];
-			}
-		}
-		
-		// If metric_valid_bias has not been set already allocate space.
-		if(!fixedFlag$sample84) {
-			// Constructor for metric_valid_bias
-			{
-				metric_valid_bias = new double[noStates];
-			}
-		}
-		
-		// Constructor for var151
-		{
-			var151 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][];
-			for(int sample = 0; sample < length$metric.length; sample += 1)
-				var151[((sample - 0) / 1)] = new double[((((length$metric[sample] - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for distribution$sample104
-		{
-			distribution$sample104 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][];
-			for(int sample = 0; sample < length$metric.length; sample += 1)
-				distribution$sample104[((sample - 0) / 1)] = new double[noStates];
-		}
-		
-		// Constructor for distribution$sample123
-		{
-			distribution$sample123 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][][];
-			for(int sample = 0; sample < length$metric.length; sample += 1) {
-				double[][] subarray$0 = new double[((((length$metric[sample] - 1) - 1) / 1) + 1)][];
-				distribution$sample123[((sample - 0) / 1)] = subarray$0;
-				for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1)
-					subarray$0[((timeStep$var113 - 1) / 1)] = new double[noStates];
-			}
-		}
-		
-		// Constructor for constrainedFlag$sample32
-		{
-			constrainedFlag$sample32 = new boolean[((((noStates - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample123
-		{
-			constrainedFlag$sample123 = new boolean[((((length$metric.length - 1) - 0) / 1) + 1)][];
-			for(int sample = 0; sample < length$metric.length; sample += 1)
-				constrainedFlag$sample123[((sample - 0) / 1)] = new boolean[((((length$metric[sample] - 1) - 1) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample104
-		{
-			constrainedFlag$sample104 = new boolean[((((length$metric.length - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample84
-		{
-			constrainedFlag$sample84 = new boolean[((((noStates - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample68
-		{
-			constrainedFlag$sample68 = new boolean[((((noStates - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample52
-		{
-			constrainedFlag$sample52 = new boolean[((((noStates - 1) - 0) / 1) + 1)];
-		}
-		
-		// Allocate scratch space
-		allocateScratch();
 	}
 
 	// Method to execute the model code conventionally.

@@ -8,6 +8,7 @@
 
 package org.sandwood.compiler.trees.transformationTree.transformers;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
@@ -18,7 +19,7 @@ import org.sandwood.compiler.trees.transformationTree.TransTreeVoid;
 
 public abstract class Transformer {
 
-    public Set<TransTree<?>> visitedNodes;
+    public Set<TransTree<?>> visitedNodes = new HashSet<>();
 
     public <T extends TransTree<T>> T transform(TransTree<T> transTree, Set<TransTree<?>> visitedNodes) {
         this.visitedNodes = visitedNodes;

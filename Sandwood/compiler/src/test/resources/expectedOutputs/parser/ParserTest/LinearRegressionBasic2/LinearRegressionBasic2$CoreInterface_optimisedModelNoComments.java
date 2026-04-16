@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface LinearRegressionBasic2$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface LinearRegressionBasic2$CoreInterface extends CoreModel {
 	public double get$b0();
 	public void set$b0(double cv$value, boolean allocated$);
 	public double get$b1();

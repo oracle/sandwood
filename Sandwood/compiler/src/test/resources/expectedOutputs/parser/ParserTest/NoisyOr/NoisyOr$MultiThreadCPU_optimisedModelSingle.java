@@ -1,94 +1,101 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements NoisyOr$CoreInterface {
-	
+final class NoisyOr$MultiThreadCPU extends CoreModelMultiThreadCPU implements NoisyOr$CoreInterface {
+
 	// Declare the variables for the model.
-	private boolean constrainedFlag$sample12 = true;
-	private boolean constrainedFlag$sample15 = true;
-	private boolean constrainedFlag$sample18 = true;
-	private boolean[] constrainedFlag$sample233;
-	private boolean[] constrainedFlag$sample248;
-	private boolean[] constrainedFlag$sample263;
-	private boolean[] constrainedFlag$sample278;
-	private boolean[] constrainedFlag$sample293;
-	private boolean constrainedFlag$sample3 = true;
-	private boolean[] constrainedFlag$sample308;
-	private boolean constrainedFlag$sample6 = true;
-	private boolean constrainedFlag$sample9 = true;
-	private double[] cv$var12$stateProbabilityGlobal;
-	private double[] cv$var15$stateProbabilityGlobal;
-	private double[] cv$var18$stateProbabilityGlobal;
-	private double[][] cv$var225$stateProbabilityGlobal;
-	private double[][] cv$var238$stateProbabilityGlobal;
-	private double[][] cv$var251$stateProbabilityGlobal;
-	private double[][] cv$var264$stateProbabilityGlobal;
-	private double[][] cv$var277$stateProbabilityGlobal;
-	private double[][] cv$var290$stateProbabilityGlobal;
-	private double[] cv$var3$stateProbabilityGlobal;
-	private double[] cv$var6$stateProbabilityGlobal;
-	private double[] cv$var9$stateProbabilityGlobal;
-	private boolean fixedFlag$sample12 = false;
-	private boolean fixedFlag$sample15 = false;
-	private boolean fixedFlag$sample18 = false;
-	private boolean fixedFlag$sample233 = false;
-	private boolean fixedFlag$sample248 = false;
-	private boolean fixedFlag$sample263 = false;
-	private boolean fixedFlag$sample278 = false;
-	private boolean fixedFlag$sample293 = false;
-	private boolean fixedFlag$sample3 = false;
-	private boolean fixedFlag$sample308 = false;
-	private boolean fixedFlag$sample430 = false;
-	private boolean fixedFlag$sample6 = false;
-	private boolean fixedFlag$sample9 = false;
-	private boolean fixedProbFlag$sample12 = false;
-	private boolean fixedProbFlag$sample15 = false;
-	private boolean fixedProbFlag$sample18 = false;
-	private boolean fixedProbFlag$sample233 = false;
-	private boolean fixedProbFlag$sample248 = false;
-	private boolean fixedProbFlag$sample263 = false;
-	private boolean fixedProbFlag$sample278 = false;
-	private boolean fixedProbFlag$sample293 = false;
-	private boolean fixedProbFlag$sample3 = false;
-	private boolean fixedProbFlag$sample308 = false;
-	private boolean fixedProbFlag$sample430 = false;
-	private boolean fixedProbFlag$sample6 = false;
-	private boolean fixedProbFlag$sample9 = false;
-	private boolean flag1;
-	private boolean flag2;
-	private boolean flag3;
-	private boolean flag4;
-	private boolean flag5;
-	private boolean flag6;
-	private boolean[][] issues$var213;
-	private boolean[][] issues$var383;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$flag1;
-	private double logProbability$flag2;
-	private double logProbability$flag3;
-	private double logProbability$flag4;
-	private double logProbability$flag5;
-	private double logProbability$flag6;
-	private double logProbability$issues$var213;
-	private double logProbability$issues$var383;
-	private double logProbability$n13State;
-	private double logProbability$noisyOr;
-	private double[] logProbability$sample233;
-	private double[] logProbability$sample248;
-	private double[] logProbability$sample263;
-	private double[] logProbability$sample278;
-	private double[] logProbability$sample293;
-	private double[] logProbability$sample308;
-	private double[][] logProbability$sample430;
-	private boolean[] n13State;
-	private boolean[] noisyOr;
-	private double[][] p;
-	private double[][] p13;
-	private boolean system$gibbsForward = true;
+	boolean constrainedFlag$sample12 = true;
+	boolean constrainedFlag$sample15 = true;
+	boolean constrainedFlag$sample18 = true;
+	boolean[] constrainedFlag$sample233;
+	boolean[] constrainedFlag$sample248;
+	boolean[] constrainedFlag$sample263;
+	boolean[] constrainedFlag$sample278;
+	boolean[] constrainedFlag$sample293;
+	boolean constrainedFlag$sample3 = true;
+	boolean[] constrainedFlag$sample308;
+	boolean constrainedFlag$sample6 = true;
+	boolean constrainedFlag$sample9 = true;
+	boolean fixedFlag$sample12 = false;
+	boolean fixedFlag$sample15 = false;
+	boolean fixedFlag$sample18 = false;
+	boolean fixedFlag$sample233 = false;
+	boolean fixedFlag$sample248 = false;
+	boolean fixedFlag$sample263 = false;
+	boolean fixedFlag$sample278 = false;
+	boolean fixedFlag$sample293 = false;
+	boolean fixedFlag$sample3 = false;
+	boolean fixedFlag$sample308 = false;
+	boolean fixedFlag$sample430 = false;
+	boolean fixedFlag$sample6 = false;
+	boolean fixedFlag$sample9 = false;
+	boolean fixedProbFlag$sample12 = false;
+	boolean fixedProbFlag$sample15 = false;
+	boolean fixedProbFlag$sample18 = false;
+	boolean fixedProbFlag$sample233 = false;
+	boolean fixedProbFlag$sample248 = false;
+	boolean fixedProbFlag$sample263 = false;
+	boolean fixedProbFlag$sample278 = false;
+	boolean fixedProbFlag$sample293 = false;
+	boolean fixedProbFlag$sample3 = false;
+	boolean fixedProbFlag$sample308 = false;
+	boolean fixedProbFlag$sample430 = false;
+	boolean fixedProbFlag$sample6 = false;
+	boolean fixedProbFlag$sample9 = false;
+	boolean flag1;
+	boolean flag2;
+	boolean flag3;
+	boolean flag4;
+	boolean flag5;
+	boolean flag6;
+	boolean[][] issues$var213;
+	boolean[][] issues$var383;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$flag1;
+	double logProbability$flag2;
+	double logProbability$flag3;
+	double logProbability$flag4;
+	double logProbability$flag5;
+	double logProbability$flag6;
+	double logProbability$issues$var213;
+	double logProbability$issues$var383;
+	double logProbability$n13State;
+	double logProbability$noisyOr;
+	double[] logProbability$sample233;
+	double[] logProbability$sample248;
+	double[] logProbability$sample263;
+	double[] logProbability$sample278;
+	double[] logProbability$sample293;
+	double[] logProbability$sample308;
+	double[][] logProbability$sample430;
+	boolean[] n13State;
+	boolean[] noisyOr;
+	double[][] p;
+	double[][] p13;
+	double prior1;
+	double prior2;
+	double prior3;
+	double prior4;
+	double prior5;
+	double prior6;
+	boolean system$gibbsForward = true;
+	double[] cv$var12$stateProbabilityGlobal;
+	double[] cv$var15$stateProbabilityGlobal;
+	double[] cv$var18$stateProbabilityGlobal;
+	double[][] cv$var225$stateProbabilityGlobal;
+	double[][] cv$var238$stateProbabilityGlobal;
+	double[][] cv$var251$stateProbabilityGlobal;
+	double[][] cv$var264$stateProbabilityGlobal;
+	double[][] cv$var277$stateProbabilityGlobal;
+	double[][] cv$var290$stateProbabilityGlobal;
+	double[] cv$var3$stateProbabilityGlobal;
+	double[] cv$var6$stateProbabilityGlobal;
+	double[] cv$var9$stateProbabilityGlobal;
 
 	public NoisyOr$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -789,7 +796,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// y$var298's comment
+												// y$var298's comment
 			// Set the right hand term to a value from the array issues
 			reduceVar$var300$36 = (reduceVar$var300$36 || issues$var213[i$var211][cv$reduction313Index]);
 		noisyOr[i$var211] = reduceVar$var300$36;
@@ -819,7 +826,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// y$var298's comment
+												// y$var298's comment
 			// Set the right hand term to a value from the array issues
 			reduceVar$var300$37 = (reduceVar$var300$37 || issues$var213[i$var211][cv$reduction313Index]);
 		noisyOr[i$var211] = reduceVar$var300$37;
@@ -849,7 +856,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// y$var298's comment
+												// y$var298's comment
 			// Set the right hand term to a value from the array issues
 			reduceVar$var300$38 = (reduceVar$var300$38 || issues$var213[i$var211][cv$reduction313Index]);
 		noisyOr[i$var211] = reduceVar$var300$38;
@@ -879,7 +886,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// y$var298's comment
+												// y$var298's comment
 			// Set the right hand term to a value from the array issues
 			reduceVar$var300$39 = (reduceVar$var300$39 || issues$var213[i$var211][cv$reduction313Index]);
 		noisyOr[i$var211] = reduceVar$var300$39;
@@ -909,7 +916,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// y$var298's comment
+												// y$var298's comment
 			// Set the right hand term to a value from the array issues
 			reduceVar$var300$40 = (reduceVar$var300$40 || issues$var213[i$var211][cv$reduction313Index]);
 		noisyOr[i$var211] = reduceVar$var300$40;
@@ -944,7 +951,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// y$var298's comment
+												// y$var298's comment
 			// Set the right hand term to a value from the array issues
 			reduceVar$var300$41 = (reduceVar$var300$41 || issues$var213[i$var211][cv$reduction313Index]);
 		noisyOr[i$var211] = reduceVar$var300$41;
@@ -974,7 +981,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// y$var412's comment
+												// y$var412's comment
 			// Set the right hand term to a value from the array issues
 			reduceVar$var414$7 = (reduceVar$var414$7 || issues$var383[i$var381][cv$reduction435Index]);
 		n13State[i$var381] = reduceVar$var414$7;
@@ -1004,7 +1011,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			flag4 = false;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
@@ -1016,7 +1023,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = -0.01005033585350145;
 			
 			// Processing conditional point276.
@@ -1044,9 +1051,9 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$var12$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
@@ -1102,9 +1109,9 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$var12$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
@@ -1148,30 +1155,30 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var12$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var12$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var12$stateProbabilityGlobal[0] = Math.exp((cv$var12$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var12$stateProbabilityGlobal[1] = Math.exp((cv$var12$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			for(int cv$indexName = 2; cv$indexName < cv$var12$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var12$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			flag4 = (DistributionSampling.sampleCategorical(RNG$, cv$var12$stateProbabilityGlobal, 2) == 1);
 		}
@@ -1191,7 +1198,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			flag5 = false;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
@@ -1203,7 +1210,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = -0.01005033585350145;
 			
 			// Processing conditional point291.
@@ -1231,9 +1238,9 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$var15$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
@@ -1289,9 +1296,9 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$var15$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
@@ -1335,30 +1342,30 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var15$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var15$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var15$stateProbabilityGlobal[0] = Math.exp((cv$var15$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var15$stateProbabilityGlobal[1] = Math.exp((cv$var15$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			for(int cv$indexName = 2; cv$indexName < cv$var15$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var15$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			flag5 = (DistributionSampling.sampleCategorical(RNG$, cv$var15$stateProbabilityGlobal, 2) == 1);
 		}
@@ -1378,7 +1385,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			flag6 = false;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
@@ -1390,7 +1397,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = -0.01005033585350145;
 			
 			// Processing conditional point306.
@@ -1418,9 +1425,9 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$var18$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
@@ -1476,9 +1483,9 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$var18$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
@@ -1522,30 +1529,30 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var18$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var18$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var18$stateProbabilityGlobal[0] = Math.exp((cv$var18$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var18$stateProbabilityGlobal[1] = Math.exp((cv$var18$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			for(int cv$indexName = 2; cv$indexName < cv$var18$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var18$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			flag6 = (DistributionSampling.sampleCategorical(RNG$, cv$var18$stateProbabilityGlobal, 2) == 1);
 		}
@@ -1568,7 +1575,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			issues$var213[i$var211][0] = false;
 			
 			// Guards to ensure that noisyOr is only updated when there is a valid path.
@@ -1586,7 +1593,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// y$var298's comment
+																// y$var298's comment
 				// Set the right hand term to a value from the array issues
 				reduceVar$var300$24 = (reduceVar$var300$24 || issues$var213[i$var211][cv$reduction313Index]);
 			noisyOr[i$var211] = reduceVar$var300$24;
@@ -1605,7 +1612,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = (((0.0 <= var223) && (var223 <= 1.0))?Math.log((1.0 - var223)):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1615,7 +1622,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if(noisyOr[i$var211]) {
 					{
-						// Substituted "j" with its value "i$var211".
+																		// Substituted "j" with its value "i$var211".
 						double traceTempVariable$var402$4_1 = p13[i$var211][0];
 						
 						// A check to ensure rounding of floating point values can never result in a negative
@@ -1631,11 +1638,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
-						// Substituted "i$var381" with its value "0".
+																		// Substituted "i$var381" with its value "0".
 						cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[0][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
-					// Substituted "j" with its value "i$var211".
+															// Substituted "j" with its value "i$var211".
 					double traceTempVariable$var402$4_1 = p13[i$var211][1];
 					
 					// Mark that the sample has observed constrained data.
@@ -1654,7 +1661,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "1".
+															// Substituted "i$var381" with its value "1".
 					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[1][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1674,7 +1681,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "0".
+															// Substituted "i$var381" with its value "0".
 					cv$accumulatedProbabilities = (Math.log((issues$var383[0][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 					
 					// Mark that the sample has observed constrained data.
@@ -1693,7 +1700,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "1".
+															// Substituted "i$var381" with its value "1".
 					cv$accumulatedProbabilities = (Math.log((issues$var383[1][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 				}
 			}
@@ -1703,7 +1710,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$stateProbabilityLocal[0] = cv$accumulatedProbabilities;
@@ -1735,7 +1742,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// y$var298's comment
+												// y$var298's comment
 			// Set the right hand term to a value from the array issues
 			reduceVar$var300$24 = (reduceVar$var300$24 || issues$var213[i$var211][cv$reduction313Index]);
 		noisyOr[i$var211] = reduceVar$var300$24;
@@ -1764,7 +1771,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(noisyOr[i$var211]) {
 				{
-					// Substituted "j" with its value "i$var211".
+															// Substituted "j" with its value "i$var211".
 					double traceTempVariable$var402$4_1 = p13[i$var211][0];
 					
 					// A check to ensure rounding of floating point values can never result in a negative
@@ -1780,11 +1787,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "0".
+															// Substituted "i$var381" with its value "0".
 					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[0][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				
-				// Substituted "j" with its value "i$var211".
+												// Substituted "j" with its value "i$var211".
 				double traceTempVariable$var402$4_1 = p13[i$var211][1];
 				
 				// Mark that the sample has observed constrained data.
@@ -1803,7 +1810,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "1".
+												// Substituted "i$var381" with its value "1".
 				cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[1][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1823,7 +1830,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "0".
+												// Substituted "i$var381" with its value "0".
 				cv$accumulatedProbabilities = (Math.log((issues$var383[0][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 				
 				// Mark that the sample has observed constrained data.
@@ -1842,7 +1849,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "1".
+												// Substituted "i$var381" with its value "1".
 				cv$accumulatedProbabilities = (Math.log((issues$var383[1][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 			}
 		}
@@ -1852,7 +1859,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Initialize a log space accumulator to take the product of all the distribution
 		// probabilities.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$stateProbabilityLocal[1] = cv$accumulatedProbabilities;
@@ -1888,11 +1895,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				cv$stateProbabilityLocal[0] = 0.5;
 				
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				cv$stateProbabilityLocal[1] = 0.5;
 			} else {
@@ -1903,7 +1910,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// cv$numStates's comment
+						// cv$numStates's comment
 			// variable marginalization
 			for(int cv$indexName = 2; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 				cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
@@ -1913,7 +1920,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			issues$var213[i$var211][0] = (DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, 2) == 1);
 			
@@ -1932,7 +1939,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// y$var298's comment
+																// y$var298's comment
 				// Set the right hand term to a value from the array issues
 				reduceVar$var300$25 = (reduceVar$var300$25 || issues$var213[i$var211][cv$reduction313Index]);
 			noisyOr[i$var211] = reduceVar$var300$25;
@@ -1956,7 +1963,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			issues$var213[i$var211][1] = false;
 			
 			// Guards to ensure that noisyOr is only updated when there is a valid path.
@@ -1974,7 +1981,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// y$var298's comment
+																// y$var298's comment
 				// Set the right hand term to a value from the array issues
 				reduceVar$var300$26 = (reduceVar$var300$26 || issues$var213[i$var211][cv$reduction313Index]);
 			noisyOr[i$var211] = reduceVar$var300$26;
@@ -1993,7 +2000,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = (((0.0 <= var236) && (var236 <= 1.0))?Math.log((1.0 - var236)):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2003,7 +2010,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if(noisyOr[i$var211]) {
 					{
-						// Substituted "j" with its value "i$var211".
+																		// Substituted "j" with its value "i$var211".
 						double traceTempVariable$var402$4_1 = p13[i$var211][0];
 						
 						// A check to ensure rounding of floating point values can never result in a negative
@@ -2019,11 +2026,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
-						// Substituted "i$var381" with its value "0".
+																		// Substituted "i$var381" with its value "0".
 						cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[0][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
-					// Substituted "j" with its value "i$var211".
+															// Substituted "j" with its value "i$var211".
 					double traceTempVariable$var402$4_1 = p13[i$var211][1];
 					
 					// Mark that the sample has observed constrained data.
@@ -2042,7 +2049,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "1".
+															// Substituted "i$var381" with its value "1".
 					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[1][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2062,7 +2069,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "0".
+															// Substituted "i$var381" with its value "0".
 					cv$accumulatedProbabilities = (Math.log((issues$var383[0][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 					
 					// Mark that the sample has observed constrained data.
@@ -2081,7 +2088,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "1".
+															// Substituted "i$var381" with its value "1".
 					cv$accumulatedProbabilities = (Math.log((issues$var383[1][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 				}
 			}
@@ -2091,7 +2098,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$stateProbabilityLocal[0] = cv$accumulatedProbabilities;
@@ -2123,7 +2130,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// y$var298's comment
+												// y$var298's comment
 			// Set the right hand term to a value from the array issues
 			reduceVar$var300$26 = (reduceVar$var300$26 || issues$var213[i$var211][cv$reduction313Index]);
 		noisyOr[i$var211] = reduceVar$var300$26;
@@ -2152,7 +2159,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(noisyOr[i$var211]) {
 				{
-					// Substituted "j" with its value "i$var211".
+															// Substituted "j" with its value "i$var211".
 					double traceTempVariable$var402$4_1 = p13[i$var211][0];
 					
 					// A check to ensure rounding of floating point values can never result in a negative
@@ -2168,11 +2175,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "0".
+															// Substituted "i$var381" with its value "0".
 					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[0][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				
-				// Substituted "j" with its value "i$var211".
+												// Substituted "j" with its value "i$var211".
 				double traceTempVariable$var402$4_1 = p13[i$var211][1];
 				
 				// Mark that the sample has observed constrained data.
@@ -2191,7 +2198,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "1".
+												// Substituted "i$var381" with its value "1".
 				cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[1][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2211,7 +2218,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "0".
+												// Substituted "i$var381" with its value "0".
 				cv$accumulatedProbabilities = (Math.log((issues$var383[0][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 				
 				// Mark that the sample has observed constrained data.
@@ -2230,7 +2237,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "1".
+												// Substituted "i$var381" with its value "1".
 				cv$accumulatedProbabilities = (Math.log((issues$var383[1][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 			}
 		}
@@ -2240,7 +2247,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Initialize a log space accumulator to take the product of all the distribution
 		// probabilities.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$stateProbabilityLocal[1] = cv$accumulatedProbabilities;
@@ -2276,11 +2283,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				cv$stateProbabilityLocal[0] = 0.5;
 				
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				cv$stateProbabilityLocal[1] = 0.5;
 			} else {
@@ -2291,7 +2298,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// cv$numStates's comment
+						// cv$numStates's comment
 			// variable marginalization
 			for(int cv$indexName = 2; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 				cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
@@ -2301,7 +2308,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			issues$var213[i$var211][1] = (DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, 2) == 1);
 			
@@ -2320,7 +2327,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// y$var298's comment
+																// y$var298's comment
 				// Set the right hand term to a value from the array issues
 				reduceVar$var300$27 = (reduceVar$var300$27 || issues$var213[i$var211][cv$reduction313Index]);
 			noisyOr[i$var211] = reduceVar$var300$27;
@@ -2344,7 +2351,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			issues$var213[i$var211][2] = false;
 			
 			// Guards to ensure that noisyOr is only updated when there is a valid path.
@@ -2362,7 +2369,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// y$var298's comment
+																// y$var298's comment
 				// Set the right hand term to a value from the array issues
 				reduceVar$var300$28 = (reduceVar$var300$28 || issues$var213[i$var211][cv$reduction313Index]);
 			noisyOr[i$var211] = reduceVar$var300$28;
@@ -2381,7 +2388,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = (((0.0 <= var249) && (var249 <= 1.0))?Math.log((1.0 - var249)):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2391,7 +2398,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if(noisyOr[i$var211]) {
 					{
-						// Substituted "j" with its value "i$var211".
+																		// Substituted "j" with its value "i$var211".
 						double traceTempVariable$var402$4_1 = p13[i$var211][0];
 						
 						// A check to ensure rounding of floating point values can never result in a negative
@@ -2407,11 +2414,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
-						// Substituted "i$var381" with its value "0".
+																		// Substituted "i$var381" with its value "0".
 						cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[0][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
-					// Substituted "j" with its value "i$var211".
+															// Substituted "j" with its value "i$var211".
 					double traceTempVariable$var402$4_1 = p13[i$var211][1];
 					
 					// Mark that the sample has observed constrained data.
@@ -2430,7 +2437,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "1".
+															// Substituted "i$var381" with its value "1".
 					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[1][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2450,7 +2457,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "0".
+															// Substituted "i$var381" with its value "0".
 					cv$accumulatedProbabilities = (Math.log((issues$var383[0][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 					
 					// Mark that the sample has observed constrained data.
@@ -2469,7 +2476,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "1".
+															// Substituted "i$var381" with its value "1".
 					cv$accumulatedProbabilities = (Math.log((issues$var383[1][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 				}
 			}
@@ -2479,7 +2486,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$stateProbabilityLocal[0] = cv$accumulatedProbabilities;
@@ -2511,7 +2518,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// y$var298's comment
+												// y$var298's comment
 			// Set the right hand term to a value from the array issues
 			reduceVar$var300$28 = (reduceVar$var300$28 || issues$var213[i$var211][cv$reduction313Index]);
 		noisyOr[i$var211] = reduceVar$var300$28;
@@ -2540,7 +2547,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(noisyOr[i$var211]) {
 				{
-					// Substituted "j" with its value "i$var211".
+															// Substituted "j" with its value "i$var211".
 					double traceTempVariable$var402$4_1 = p13[i$var211][0];
 					
 					// A check to ensure rounding of floating point values can never result in a negative
@@ -2556,11 +2563,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "0".
+															// Substituted "i$var381" with its value "0".
 					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[0][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				
-				// Substituted "j" with its value "i$var211".
+												// Substituted "j" with its value "i$var211".
 				double traceTempVariable$var402$4_1 = p13[i$var211][1];
 				
 				// Mark that the sample has observed constrained data.
@@ -2579,7 +2586,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "1".
+												// Substituted "i$var381" with its value "1".
 				cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[1][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2599,7 +2606,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "0".
+												// Substituted "i$var381" with its value "0".
 				cv$accumulatedProbabilities = (Math.log((issues$var383[0][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 				
 				// Mark that the sample has observed constrained data.
@@ -2618,7 +2625,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "1".
+												// Substituted "i$var381" with its value "1".
 				cv$accumulatedProbabilities = (Math.log((issues$var383[1][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 			}
 		}
@@ -2628,7 +2635,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Initialize a log space accumulator to take the product of all the distribution
 		// probabilities.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$stateProbabilityLocal[1] = cv$accumulatedProbabilities;
@@ -2664,11 +2671,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				cv$stateProbabilityLocal[0] = 0.5;
 				
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				cv$stateProbabilityLocal[1] = 0.5;
 			} else {
@@ -2679,7 +2686,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// cv$numStates's comment
+						// cv$numStates's comment
 			// variable marginalization
 			for(int cv$indexName = 2; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 				cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
@@ -2689,7 +2696,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			issues$var213[i$var211][2] = (DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, 2) == 1);
 			
@@ -2708,7 +2715,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// y$var298's comment
+																// y$var298's comment
 				// Set the right hand term to a value from the array issues
 				reduceVar$var300$29 = (reduceVar$var300$29 || issues$var213[i$var211][cv$reduction313Index]);
 			noisyOr[i$var211] = reduceVar$var300$29;
@@ -2732,7 +2739,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			issues$var213[i$var211][3] = false;
 			
 			// Guards to ensure that noisyOr is only updated when there is a valid path.
@@ -2750,7 +2757,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// y$var298's comment
+																// y$var298's comment
 				// Set the right hand term to a value from the array issues
 				reduceVar$var300$30 = (reduceVar$var300$30 || issues$var213[i$var211][cv$reduction313Index]);
 			noisyOr[i$var211] = reduceVar$var300$30;
@@ -2769,7 +2776,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = (((0.0 <= var262) && (var262 <= 1.0))?Math.log((1.0 - var262)):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2779,7 +2786,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if(noisyOr[i$var211]) {
 					{
-						// Substituted "j" with its value "i$var211".
+																		// Substituted "j" with its value "i$var211".
 						double traceTempVariable$var402$4_1 = p13[i$var211][0];
 						
 						// A check to ensure rounding of floating point values can never result in a negative
@@ -2795,11 +2802,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
-						// Substituted "i$var381" with its value "0".
+																		// Substituted "i$var381" with its value "0".
 						cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[0][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
-					// Substituted "j" with its value "i$var211".
+															// Substituted "j" with its value "i$var211".
 					double traceTempVariable$var402$4_1 = p13[i$var211][1];
 					
 					// Mark that the sample has observed constrained data.
@@ -2818,7 +2825,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "1".
+															// Substituted "i$var381" with its value "1".
 					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[1][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2838,7 +2845,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "0".
+															// Substituted "i$var381" with its value "0".
 					cv$accumulatedProbabilities = (Math.log((issues$var383[0][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 					
 					// Mark that the sample has observed constrained data.
@@ -2857,7 +2864,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "1".
+															// Substituted "i$var381" with its value "1".
 					cv$accumulatedProbabilities = (Math.log((issues$var383[1][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 				}
 			}
@@ -2867,7 +2874,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$stateProbabilityLocal[0] = cv$accumulatedProbabilities;
@@ -2899,7 +2906,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// y$var298's comment
+												// y$var298's comment
 			// Set the right hand term to a value from the array issues
 			reduceVar$var300$30 = (reduceVar$var300$30 || issues$var213[i$var211][cv$reduction313Index]);
 		noisyOr[i$var211] = reduceVar$var300$30;
@@ -2928,7 +2935,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(noisyOr[i$var211]) {
 				{
-					// Substituted "j" with its value "i$var211".
+															// Substituted "j" with its value "i$var211".
 					double traceTempVariable$var402$4_1 = p13[i$var211][0];
 					
 					// A check to ensure rounding of floating point values can never result in a negative
@@ -2944,11 +2951,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "0".
+															// Substituted "i$var381" with its value "0".
 					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[0][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				
-				// Substituted "j" with its value "i$var211".
+												// Substituted "j" with its value "i$var211".
 				double traceTempVariable$var402$4_1 = p13[i$var211][1];
 				
 				// Mark that the sample has observed constrained data.
@@ -2967,7 +2974,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "1".
+												// Substituted "i$var381" with its value "1".
 				cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[1][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2987,7 +2994,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "0".
+												// Substituted "i$var381" with its value "0".
 				cv$accumulatedProbabilities = (Math.log((issues$var383[0][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 				
 				// Mark that the sample has observed constrained data.
@@ -3006,7 +3013,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "1".
+												// Substituted "i$var381" with its value "1".
 				cv$accumulatedProbabilities = (Math.log((issues$var383[1][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 			}
 		}
@@ -3016,7 +3023,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Initialize a log space accumulator to take the product of all the distribution
 		// probabilities.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$stateProbabilityLocal[1] = cv$accumulatedProbabilities;
@@ -3052,11 +3059,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				cv$stateProbabilityLocal[0] = 0.5;
 				
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				cv$stateProbabilityLocal[1] = 0.5;
 			} else {
@@ -3067,7 +3074,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// cv$numStates's comment
+						// cv$numStates's comment
 			// variable marginalization
 			for(int cv$indexName = 2; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 				cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
@@ -3077,7 +3084,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			issues$var213[i$var211][3] = (DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, 2) == 1);
 			
@@ -3096,7 +3103,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// y$var298's comment
+																// y$var298's comment
 				// Set the right hand term to a value from the array issues
 				reduceVar$var300$31 = (reduceVar$var300$31 || issues$var213[i$var211][cv$reduction313Index]);
 			noisyOr[i$var211] = reduceVar$var300$31;
@@ -3120,7 +3127,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			issues$var213[i$var211][4] = false;
 			
 			// Guards to ensure that noisyOr is only updated when there is a valid path.
@@ -3138,7 +3145,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// y$var298's comment
+																// y$var298's comment
 				// Set the right hand term to a value from the array issues
 				reduceVar$var300$32 = (reduceVar$var300$32 || issues$var213[i$var211][cv$reduction313Index]);
 			noisyOr[i$var211] = reduceVar$var300$32;
@@ -3157,7 +3164,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = (((0.0 <= var275) && (var275 <= 1.0))?Math.log((1.0 - var275)):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -3167,7 +3174,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if(noisyOr[i$var211]) {
 					{
-						// Substituted "j" with its value "i$var211".
+																		// Substituted "j" with its value "i$var211".
 						double traceTempVariable$var402$4_1 = p13[i$var211][0];
 						
 						// A check to ensure rounding of floating point values can never result in a negative
@@ -3183,11 +3190,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
-						// Substituted "i$var381" with its value "0".
+																		// Substituted "i$var381" with its value "0".
 						cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[0][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
-					// Substituted "j" with its value "i$var211".
+															// Substituted "j" with its value "i$var211".
 					double traceTempVariable$var402$4_1 = p13[i$var211][1];
 					
 					// Mark that the sample has observed constrained data.
@@ -3206,7 +3213,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "1".
+															// Substituted "i$var381" with its value "1".
 					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[1][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -3226,7 +3233,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "0".
+															// Substituted "i$var381" with its value "0".
 					cv$accumulatedProbabilities = (Math.log((issues$var383[0][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 					
 					// Mark that the sample has observed constrained data.
@@ -3245,7 +3252,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "1".
+															// Substituted "i$var381" with its value "1".
 					cv$accumulatedProbabilities = (Math.log((issues$var383[1][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 				}
 			}
@@ -3255,7 +3262,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$stateProbabilityLocal[0] = cv$accumulatedProbabilities;
@@ -3287,7 +3294,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// y$var298's comment
+												// y$var298's comment
 			// Set the right hand term to a value from the array issues
 			reduceVar$var300$32 = (reduceVar$var300$32 || issues$var213[i$var211][cv$reduction313Index]);
 		noisyOr[i$var211] = reduceVar$var300$32;
@@ -3316,7 +3323,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(noisyOr[i$var211]) {
 				{
-					// Substituted "j" with its value "i$var211".
+															// Substituted "j" with its value "i$var211".
 					double traceTempVariable$var402$4_1 = p13[i$var211][0];
 					
 					// A check to ensure rounding of floating point values can never result in a negative
@@ -3332,11 +3339,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "0".
+															// Substituted "i$var381" with its value "0".
 					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[0][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				
-				// Substituted "j" with its value "i$var211".
+												// Substituted "j" with its value "i$var211".
 				double traceTempVariable$var402$4_1 = p13[i$var211][1];
 				
 				// Mark that the sample has observed constrained data.
@@ -3355,7 +3362,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "1".
+												// Substituted "i$var381" with its value "1".
 				cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[1][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -3375,7 +3382,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "0".
+												// Substituted "i$var381" with its value "0".
 				cv$accumulatedProbabilities = (Math.log((issues$var383[0][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 				
 				// Mark that the sample has observed constrained data.
@@ -3394,7 +3401,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "1".
+												// Substituted "i$var381" with its value "1".
 				cv$accumulatedProbabilities = (Math.log((issues$var383[1][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 			}
 		}
@@ -3404,7 +3411,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Initialize a log space accumulator to take the product of all the distribution
 		// probabilities.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$stateProbabilityLocal[1] = cv$accumulatedProbabilities;
@@ -3440,11 +3447,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				cv$stateProbabilityLocal[0] = 0.5;
 				
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				cv$stateProbabilityLocal[1] = 0.5;
 			} else {
@@ -3455,7 +3462,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// cv$numStates's comment
+						// cv$numStates's comment
 			// variable marginalization
 			for(int cv$indexName = 2; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 				cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
@@ -3465,7 +3472,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			issues$var213[i$var211][4] = (DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, 2) == 1);
 			
@@ -3484,7 +3491,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// y$var298's comment
+																// y$var298's comment
 				// Set the right hand term to a value from the array issues
 				reduceVar$var300$33 = (reduceVar$var300$33 || issues$var213[i$var211][cv$reduction313Index]);
 			noisyOr[i$var211] = reduceVar$var300$33;
@@ -3505,7 +3512,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			flag1 = false;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
@@ -3517,7 +3524,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = -0.01005033585350145;
 			
 			// Processing conditional point231.
@@ -3545,9 +3552,9 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$var3$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
@@ -3603,9 +3610,9 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$var3$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
@@ -3649,30 +3656,30 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var3$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var3$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var3$stateProbabilityGlobal[0] = Math.exp((cv$var3$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var3$stateProbabilityGlobal[1] = Math.exp((cv$var3$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			for(int cv$indexName = 2; cv$indexName < cv$var3$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var3$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			flag1 = (DistributionSampling.sampleCategorical(RNG$, cv$var3$stateProbabilityGlobal, 2) == 1);
 		}
@@ -3695,7 +3702,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			issues$var213[i$var211][5] = false;
 			
 			// Guards to ensure that noisyOr is only updated when there is a valid path.
@@ -3713,7 +3720,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// y$var298's comment
+																// y$var298's comment
 				// Set the right hand term to a value from the array issues
 				reduceVar$var300$34 = (reduceVar$var300$34 || issues$var213[i$var211][cv$reduction313Index]);
 			noisyOr[i$var211] = reduceVar$var300$34;
@@ -3732,7 +3739,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = (((0.0 <= var288) && (var288 <= 1.0))?Math.log((1.0 - var288)):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -3742,7 +3749,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if(noisyOr[i$var211]) {
 					{
-						// Substituted "j" with its value "i$var211".
+																		// Substituted "j" with its value "i$var211".
 						double traceTempVariable$var402$4_1 = p13[i$var211][0];
 						
 						// A check to ensure rounding of floating point values can never result in a negative
@@ -3758,11 +3765,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
-						// Substituted "i$var381" with its value "0".
+																		// Substituted "i$var381" with its value "0".
 						cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[0][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
-					// Substituted "j" with its value "i$var211".
+															// Substituted "j" with its value "i$var211".
 					double traceTempVariable$var402$4_1 = p13[i$var211][1];
 					
 					// Mark that the sample has observed constrained data.
@@ -3781,7 +3788,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "1".
+															// Substituted "i$var381" with its value "1".
 					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[1][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -3801,7 +3808,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "0".
+															// Substituted "i$var381" with its value "0".
 					cv$accumulatedProbabilities = (Math.log((issues$var383[0][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 					
 					// Mark that the sample has observed constrained data.
@@ -3820,7 +3827,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "1".
+															// Substituted "i$var381" with its value "1".
 					cv$accumulatedProbabilities = (Math.log((issues$var383[1][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 				}
 			}
@@ -3830,7 +3837,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$stateProbabilityLocal[0] = cv$accumulatedProbabilities;
@@ -3862,7 +3869,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// y$var298's comment
+												// y$var298's comment
 			// Set the right hand term to a value from the array issues
 			reduceVar$var300$34 = (reduceVar$var300$34 || issues$var213[i$var211][cv$reduction313Index]);
 		noisyOr[i$var211] = reduceVar$var300$34;
@@ -3891,7 +3898,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(noisyOr[i$var211]) {
 				{
-					// Substituted "j" with its value "i$var211".
+															// Substituted "j" with its value "i$var211".
 					double traceTempVariable$var402$4_1 = p13[i$var211][0];
 					
 					// A check to ensure rounding of floating point values can never result in a negative
@@ -3907,11 +3914,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i$var381" with its value "0".
+															// Substituted "i$var381" with its value "0".
 					cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[0][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				
-				// Substituted "j" with its value "i$var211".
+												// Substituted "j" with its value "i$var211".
 				double traceTempVariable$var402$4_1 = p13[i$var211][1];
 				
 				// Mark that the sample has observed constrained data.
@@ -3930,7 +3937,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "1".
+												// Substituted "i$var381" with its value "1".
 				cv$accumulatedProbabilities = ((((0.0 <= traceTempVariable$var402$4_1) && (traceTempVariable$var402$4_1 <= 1.0))?Math.log((issues$var383[1][i$var211]?traceTempVariable$var402$4_1:(1.0 - traceTempVariable$var402$4_1))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -3950,7 +3957,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "0".
+												// Substituted "i$var381" with its value "0".
 				cv$accumulatedProbabilities = (Math.log((issues$var383[0][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 				
 				// Mark that the sample has observed constrained data.
@@ -3969,7 +3976,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var381" with its value "1".
+												// Substituted "i$var381" with its value "1".
 				cv$accumulatedProbabilities = (Math.log((issues$var383[1][i$var211]?0.0:1.0)) + cv$accumulatedProbabilities);
 			}
 		}
@@ -3979,7 +3986,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Initialize a log space accumulator to take the product of all the distribution
 		// probabilities.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$stateProbabilityLocal[1] = cv$accumulatedProbabilities;
@@ -4015,11 +4022,11 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				cv$stateProbabilityLocal[0] = 0.5;
 				
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				cv$stateProbabilityLocal[1] = 0.5;
 			} else {
@@ -4030,7 +4037,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// cv$numStates's comment
+						// cv$numStates's comment
 			// variable marginalization
 			for(int cv$indexName = 2; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 				cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
@@ -4040,7 +4047,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			issues$var213[i$var211][5] = (DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, 2) == 1);
 			
@@ -4059,7 +4066,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// y$var298's comment
+																// y$var298's comment
 				// Set the right hand term to a value from the array issues
 				reduceVar$var300$35 = (reduceVar$var300$35 || issues$var213[i$var211][cv$reduction313Index]);
 			noisyOr[i$var211] = reduceVar$var300$35;
@@ -4080,7 +4087,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			flag2 = false;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
@@ -4092,7 +4099,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = -0.01005033585350145;
 			
 			// Processing conditional point246.
@@ -4120,9 +4127,9 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$var6$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
@@ -4178,9 +4185,9 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$var6$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
@@ -4224,30 +4231,30 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var6$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var6$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var6$stateProbabilityGlobal[0] = Math.exp((cv$var6$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var6$stateProbabilityGlobal[1] = Math.exp((cv$var6$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			for(int cv$indexName = 2; cv$indexName < cv$var6$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var6$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			flag2 = (DistributionSampling.sampleCategorical(RNG$, cv$var6$stateProbabilityGlobal, 2) == 1);
 		}
@@ -4267,7 +4274,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			flag3 = false;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
@@ -4279,7 +4286,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// 
 			// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = -0.01005033585350145;
 			
 			// Processing conditional point261.
@@ -4307,9 +4314,9 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$var9$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
@@ -4365,9 +4372,9 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$var9$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
@@ -4411,30 +4418,30 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var9$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var9$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var9$stateProbabilityGlobal[0] = Math.exp((cv$var9$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var9$stateProbabilityGlobal[1] = Math.exp((cv$var9$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			for(int cv$indexName = 2; cv$indexName < cv$var9$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var9$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			flag3 = (DistributionSampling.sampleCategorical(RNG$, cv$var9$stateProbabilityGlobal, 2) == 1);
 		}
@@ -5769,6 +5776,101 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// Constructor for p
+		p = new double[6][];
+		p[0] = new double[5];
+		p[1] = new double[5];
+		p[2] = new double[5];
+		p[3] = new double[5];
+		p[4] = new double[5];
+		p[5] = new double[5];
+		
+		// Constructor for noisyOr
+		noisyOr = new boolean[5];
+		
+		// If issues$var213 has not been set already allocate space.
+		if((((((!fixedFlag$sample233 || !fixedFlag$sample248) || !fixedFlag$sample263) || !fixedFlag$sample278) || !fixedFlag$sample293) || !fixedFlag$sample308)) {
+			// Constructor for issues$var213
+			issues$var213 = new boolean[5][];
+			for(int i$var211 = 0; i$var211 < 5; i$var211 += 1)
+				issues$var213[i$var211] = new boolean[6];
+		}
+		
+		// Constructor for p13
+		p13 = new double[5][];
+		p13[0] = new double[2];
+		p13[1] = new double[2];
+		p13[2] = new double[2];
+		p13[3] = new double[2];
+		p13[4] = new double[2];
+		
+		// Constructor for n13State
+		n13State = new boolean[2];
+		
+		// If issues$var383 has not been set already allocate space.
+		if(!fixedFlag$sample430) {
+			// Constructor for issues$var383
+			issues$var383 = new boolean[2][];
+			
+			// Substituted "i$var381" with its value "0".
+			issues$var383[0] = new boolean[5];
+			
+			// Substituted "i$var381" with its value "1".
+			issues$var383[1] = new boolean[5];
+		}
+		
+		// Constructor for constrainedFlag$sample233
+		constrainedFlag$sample233 = new boolean[5];
+		
+		// Constructor for constrainedFlag$sample248
+		constrainedFlag$sample248 = new boolean[5];
+		
+		// Constructor for constrainedFlag$sample263
+		constrainedFlag$sample263 = new boolean[5];
+		
+		// Constructor for constrainedFlag$sample278
+		constrainedFlag$sample278 = new boolean[5];
+		
+		// Constructor for constrainedFlag$sample293
+		constrainedFlag$sample293 = new boolean[5];
+		
+		// Constructor for constrainedFlag$sample308
+		constrainedFlag$sample308 = new boolean[5];
+		
+		// Constructor for logProbability$sample233
+		logProbability$sample233 = new double[5];
+		
+		// Constructor for logProbability$sample248
+		logProbability$sample248 = new double[5];
+		
+		// Constructor for logProbability$sample263
+		logProbability$sample263 = new double[5];
+		
+		// Constructor for logProbability$sample278
+		logProbability$sample278 = new double[5];
+		
+		// Constructor for logProbability$sample293
+		logProbability$sample293 = new double[5];
+		
+		// Constructor for logProbability$sample308
+		logProbability$sample308 = new double[5];
+		
+		// Constructor for logProbability$sample430
+		logProbability$sample430 = new double[2][];
+		
+		// Substituted "i$var381" with its value "0".
+		logProbability$sample430[0] = new double[5];
+		
+		// Substituted "i$var381" with its value "1".
+		logProbability$sample430[1] = new double[5];
+		
+		// Allocate scratch space
+		allocateScratch();
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -5890,101 +5992,6 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			cv$var290$stateProbabilityGlobal[cv$index] = new double[2];
 	}
 
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// Constructor for p
-		p = new double[6][];
-		p[0] = new double[5];
-		p[1] = new double[5];
-		p[2] = new double[5];
-		p[3] = new double[5];
-		p[4] = new double[5];
-		p[5] = new double[5];
-		
-		// Constructor for noisyOr
-		noisyOr = new boolean[5];
-		
-		// If issues$var213 has not been set already allocate space.
-		if((((((!fixedFlag$sample233 || !fixedFlag$sample248) || !fixedFlag$sample263) || !fixedFlag$sample278) || !fixedFlag$sample293) || !fixedFlag$sample308)) {
-			// Constructor for issues$var213
-			issues$var213 = new boolean[5][];
-			for(int i$var211 = 0; i$var211 < 5; i$var211 += 1)
-				issues$var213[i$var211] = new boolean[6];
-		}
-		
-		// Constructor for p13
-		p13 = new double[5][];
-		p13[0] = new double[2];
-		p13[1] = new double[2];
-		p13[2] = new double[2];
-		p13[3] = new double[2];
-		p13[4] = new double[2];
-		
-		// Constructor for n13State
-		n13State = new boolean[2];
-		
-		// If issues$var383 has not been set already allocate space.
-		if(!fixedFlag$sample430) {
-			// Constructor for issues$var383
-			issues$var383 = new boolean[2][];
-			
-			// Substituted "i$var381" with its value "0".
-			issues$var383[0] = new boolean[5];
-			
-			// Substituted "i$var381" with its value "1".
-			issues$var383[1] = new boolean[5];
-		}
-		
-		// Constructor for constrainedFlag$sample233
-		constrainedFlag$sample233 = new boolean[5];
-		
-		// Constructor for constrainedFlag$sample248
-		constrainedFlag$sample248 = new boolean[5];
-		
-		// Constructor for constrainedFlag$sample263
-		constrainedFlag$sample263 = new boolean[5];
-		
-		// Constructor for constrainedFlag$sample278
-		constrainedFlag$sample278 = new boolean[5];
-		
-		// Constructor for constrainedFlag$sample293
-		constrainedFlag$sample293 = new boolean[5];
-		
-		// Constructor for constrainedFlag$sample308
-		constrainedFlag$sample308 = new boolean[5];
-		
-		// Constructor for logProbability$sample233
-		logProbability$sample233 = new double[5];
-		
-		// Constructor for logProbability$sample248
-		logProbability$sample248 = new double[5];
-		
-		// Constructor for logProbability$sample263
-		logProbability$sample263 = new double[5];
-		
-		// Constructor for logProbability$sample278
-		logProbability$sample278 = new double[5];
-		
-		// Constructor for logProbability$sample293
-		logProbability$sample293 = new double[5];
-		
-		// Constructor for logProbability$sample308
-		logProbability$sample308 = new double[5];
-		
-		// Constructor for logProbability$sample430
-		logProbability$sample430 = new double[2][];
-		
-		// Substituted "i$var381" with its value "0".
-		logProbability$sample430[0] = new double[5];
-		
-		// Substituted "i$var381" with its value "1".
-		logProbability$sample430[1] = new double[5];
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
@@ -6087,7 +6094,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							for(int cv$reduction313Index = 0; cv$reduction313Index < 6; cv$reduction313Index += 1)
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
-								// y$var298's comment
+																																// y$var298's comment
 								// Set the right hand term to a value from the array issues
 								reduceVar$var300$42 = (reduceVar$var300$42 || issues$var213[i$var211][cv$reduction313Index]);
 							noisyOr[i$var211] = reduceVar$var300$42;
@@ -6137,7 +6144,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							for(int cv$reduction435Index = 0; cv$reduction435Index < 5; cv$reduction435Index += 1)
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
-								// y$var412's comment
+																																// y$var412's comment
 								// Set the right hand term to a value from the array issues
 								reduceVar$var414$8 = (reduceVar$var414$8 || issues$var383[i$var381][cv$reduction435Index]);
 							n13State[i$var381] = reduceVar$var414$8;
@@ -6251,7 +6258,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// y$var298's comment
+																												// y$var298's comment
 							// Set the right hand term to a value from the array issues
 							reduceVar$var300$46 = (reduceVar$var300$46 || issues$var213[i$var211][cv$reduction313Index]);
 						noisyOr[i$var211] = reduceVar$var300$46;
@@ -6303,7 +6310,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// y$var412's comment
+																												// y$var412's comment
 							// Set the right hand term to a value from the array issues
 							reduceVar$var414$12 = (reduceVar$var414$12 || issues$var383[i$var381][cv$reduction435Index]);
 						n13State[i$var381] = reduceVar$var414$12;
@@ -6415,7 +6422,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// y$var298's comment
+																												// y$var298's comment
 							// Set the right hand term to a value from the array issues
 							reduceVar$var300$43 = (reduceVar$var300$43 || issues$var213[i$var211][cv$reduction313Index]);
 						noisyOr[i$var211] = reduceVar$var300$43;
@@ -6467,7 +6474,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// y$var412's comment
+																												// y$var412's comment
 							// Set the right hand term to a value from the array issues
 							reduceVar$var414$9 = (reduceVar$var414$9 || issues$var383[i$var381][cv$reduction435Index]);
 						n13State[i$var381] = reduceVar$var414$9;
@@ -6579,7 +6586,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							for(int cv$reduction313Index = 0; cv$reduction313Index < 6; cv$reduction313Index += 1)
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
-								// y$var298's comment
+																																// y$var298's comment
 								// Set the right hand term to a value from the array issues
 								reduceVar$var300$44 = (reduceVar$var300$44 || issues$var213[i$var211][cv$reduction313Index]);
 							noisyOr[i$var211] = reduceVar$var300$44;
@@ -6629,7 +6636,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							for(int cv$reduction435Index = 0; cv$reduction435Index < 5; cv$reduction435Index += 1)
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
-								// y$var412's comment
+																																// y$var412's comment
 								// Set the right hand term to a value from the array issues
 								reduceVar$var414$10 = (reduceVar$var414$10 || issues$var383[i$var381][cv$reduction435Index]);
 							n13State[i$var381] = reduceVar$var414$10;
@@ -6743,7 +6750,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// y$var298's comment
+																												// y$var298's comment
 							// Set the right hand term to a value from the array issues
 							reduceVar$var300$45 = (reduceVar$var300$45 || issues$var213[i$var211][cv$reduction313Index]);
 						noisyOr[i$var211] = reduceVar$var300$45;
@@ -6795,7 +6802,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// y$var412's comment
+																												// y$var412's comment
 							// Set the right hand term to a value from the array issues
 							reduceVar$var414$11 = (reduceVar$var414$11 || issues$var383[i$var381][cv$reduction435Index]);
 						n13State[i$var381] = reduceVar$var414$11;
@@ -7215,7 +7222,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// y$var298's comment
+																												// y$var298's comment
 							// Set the right hand term to a value from the array issues
 							reduceVar$var300$47 = (reduceVar$var300$47 || issues$var213[i$var211][cv$reduction313Index]);
 						noisyOr[i$var211] = reduceVar$var300$47;
@@ -7243,7 +7250,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// y$var412's comment
+																												// y$var412's comment
 							// Set the right hand term to a value from the array issues
 							reduceVar$var414$13 = (reduceVar$var414$13 || issues$var383[i$var381][cv$reduction435Index]);
 						n13State[i$var381] = reduceVar$var414$13;

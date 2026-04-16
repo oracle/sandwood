@@ -1,35 +1,36 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements LogitRegressionTest$CoreInterface {
-	private double bias;
-	private boolean[] constrainedFlag$sample35;
-	private boolean constrainedFlag$sample42 = true;
-	private boolean fixedFlag$sample35 = false;
-	private boolean fixedFlag$sample42 = false;
-	private boolean fixedProbFlag$sample35 = false;
-	private boolean fixedProbFlag$sample42 = false;
-	private boolean fixedProbFlag$sample94 = false;
-	private boolean[][] guard$sample35bernoulli93$global;
-	private boolean[][] guard$sample35put89$global;
-	private double[][] indicator;
-	private int k;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double[] logProbability$sample35;
-	private double[][] logProbability$sample94;
-	private double logProbability$weights;
-	private double logProbability$y;
-	private int n;
-	private double[][] p;
-	private boolean system$gibbsForward = true;
-	private double[] weights;
-	private double[][] x;
-	private boolean[][] y;
-	private boolean[][] yMeasured;
+final class LogitRegressionTest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LogitRegressionTest$CoreInterface {
+double bias;
+	boolean[] constrainedFlag$sample35;
+	boolean constrainedFlag$sample42 = true;
+	boolean fixedFlag$sample35 = false;
+	boolean fixedFlag$sample42 = false;
+	boolean fixedProbFlag$sample35 = false;
+	boolean fixedProbFlag$sample42 = false;
+	boolean fixedProbFlag$sample94 = false;
+	double[][] indicator;
+	int k;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double[] logProbability$sample35;
+	double[][] logProbability$sample94;
+	double logProbability$weights;
+	double logProbability$y;
+	int n;
+	double[][] p;
+	boolean system$gibbsForward = true;
+	double[] weights;
+	double[][] x;
+	boolean[][] y;
+	boolean[][] yMeasured;
+	boolean[][] guard$sample35bernoulli93$global;
+	boolean[][] guard$sample35put89$global;
 
 	public LogitRegressionTest$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -1212,27 +1213,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void allocateScratch() {
-		{
-			int cv$max_i = 0;
-			int cv$max_j$var85 = 0;
-			for(int i = 0; i < x.length; i += 1)
-				cv$max_j$var85 = Math.max(cv$max_j$var85, ((3 - 0) / 1));
-			cv$max_i = Math.max(cv$max_i, ((x.length - 0) / 1));
-			guard$sample35put89$global = new boolean[cv$max_i][cv$max_j$var85];
-		}
-		{
-			int cv$max_i = 0;
-			int cv$max_j$var85 = 0;
-			for(int i = 0; i < x.length; i += 1)
-				cv$max_j$var85 = Math.max(cv$max_j$var85, ((3 - 0) / 1));
-			cv$max_i = Math.max(cv$max_i, ((x.length - 0) / 1));
-			guard$sample35bernoulli93$global = new boolean[cv$max_i][cv$max_j$var85];
-		}
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		{
 			y = new boolean[x.length][];
 			for(int var15 = 0; var15 < x.length; var15 += 1)
@@ -1265,6 +1246,26 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 				logProbability$sample94[((i - 0) / 1)] = new double[((((3 - 1) - 0) / 1) + 1)];
 		}
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		{
+			int cv$max_i = 0;
+			int cv$max_j$var85 = 0;
+			for(int i = 0; i < x.length; i += 1)
+				cv$max_j$var85 = Math.max(cv$max_j$var85, ((3 - 0) / 1));
+			cv$max_i = Math.max(cv$max_i, ((x.length - 0) / 1));
+			guard$sample35put89$global = new boolean[cv$max_i][cv$max_j$var85];
+		}
+		{
+			int cv$max_i = 0;
+			int cv$max_j$var85 = 0;
+			for(int i = 0; i < x.length; i += 1)
+				cv$max_j$var85 = Math.max(cv$max_j$var85, ((3 - 0) / 1));
+			cv$max_i = Math.max(cv$max_i, ((x.length - 0) / 1));
+			guard$sample35bernoulli93$global = new boolean[cv$max_i][cv$max_j$var85];
+		}
 	}
 
 	@Override

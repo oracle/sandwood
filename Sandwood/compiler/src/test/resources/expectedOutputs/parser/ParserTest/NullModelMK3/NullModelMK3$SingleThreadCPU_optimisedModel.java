@@ -1,27 +1,28 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements NullModelMK3$CoreInterface {
-	
+final class NullModelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU implements NullModelMK3$CoreInterface {
+
 	// Declare the variables for the model.
-	private double bias;
-	private boolean constrainedFlag$sample10 = true;
-	private double eta;
-	private boolean fixedFlag$sample10 = false;
-	private boolean fixedProbFlag$sample10 = false;
-	private boolean fixedProbFlag$sample12 = false;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double logProbability$binomial;
-	private double logProbability$positiveCount;
-	private double min;
-	private int observedPositiveCount;
-	private int observedSampleCount;
-	private int positiveCount;
-	private boolean system$gibbsForward = true;
+	double bias;
+	boolean constrainedFlag$sample10 = true;
+	double eta;
+	boolean fixedFlag$sample10 = false;
+	boolean fixedProbFlag$sample10 = false;
+	boolean fixedProbFlag$sample12 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$binomial;
+	double logProbability$positiveCount;
+	double min;
+	int observedPositiveCount;
+	int observedSampleCount;
+	int positiveCount;
+	boolean system$gibbsForward = true;
 
 	public NullModelMK3$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -169,7 +170,7 @@ final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Calculate a proposed variance.
 		// 
-		// The original value of the sample
+						// The original value of the sample
 		double cv$var = ((bias * bias) * 0.010000000000000002);
 		
 		// Ensure the variance is at least 0.01
@@ -205,10 +206,10 @@ final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Set an accumulator to record the consumer distributions not seen. Initially set
 		// to 1 as seen values will be deducted from this value.
 		// 
-		// An accumulator to allow the value for each distribution to be constructed before
+						// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Set the current value to the current state of the tree.
+						// Set the current value to the current state of the tree.
 		// 
 		// The original value of the sample
 		double cv$originalProbability = (DistributionSampling.logProbabilityBinomial(positiveCount, bias, observedSampleCount) + (((min <= bias) && (bias < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY));
@@ -238,7 +239,7 @@ final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Set an accumulator to record the consumer distributions not seen. Initially set
 		// to 1 as seen values will be deducted from this value.
 		// 
-		// An accumulator to allow the value for each distribution to be constructed before
+						// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		double cv$ratio = ((DistributionSampling.logProbabilityBinomial(positiveCount, cv$proposedValue, observedSampleCount) + (((min <= cv$proposedValue) && (cv$proposedValue < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY)) - cv$originalProbability);
 		
@@ -269,7 +270,7 @@ final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -283,7 +284,7 @@ final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (((min <= bias) && (bias < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -433,15 +434,15 @@ final class NullModelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {}
 
 	// Method to execute the model code conventionally.
 	@Override

@@ -30,7 +30,7 @@ import org.sandwood.compiler.compilation.ChildFirstClassLoader;
 import org.sandwood.compiler.compilation.util.CompilationDesc;
 import org.sandwood.compiler.compilation.util.CompileUtils;
 import org.sandwood.compiler.tests.util.CompilerState;
-import org.sandwood.compiler.trees.outputTree.OutputSandwoodClass;
+import org.sandwood.compiler.trees.outputTree.OutputSandwoodOuterClass;
 import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.RetentionPolicy;
 import org.sandwood.runtime.model.variables.ComputedVariable;
@@ -54,7 +54,7 @@ public abstract class ModelTestSkeleton {
         try {
             CompilationOptions opts = new CompilationOptions();
             opts.setCalculateIndividualProbabilities();
-            List<OutputSandwoodClass> classes = buildClass(opts).classes;
+            List<OutputSandwoodOuterClass> classes = buildClass(opts).classes;
             opts.setTargetDirectory(tempDir);
             DiagnosticCollector<JavaFileObject> diagnostics = CompileUtils.compileToJava(opts, classes);
             if(!diagnostics.getDiagnostics().isEmpty()) {

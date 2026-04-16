@@ -52,6 +52,7 @@ import org.sandwood.compiler.tests.util.JsonResultsDecoder;
 import org.sandwood.compiler.tests.util.JsonResultsEncoder;
 import org.sandwood.compiler.tests.util.TestStringGenerator;
 import org.sandwood.compiler.trees.outputTree.OutputSandwoodClass;
+import org.sandwood.compiler.trees.outputTree.OutputSandwoodOuterClass;
 import org.sandwood.compiler.util.StringUtil;
 import org.sandwood.runtime.exceptions.SandwoodJsonException;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -164,7 +165,7 @@ public abstract class ModelTestSkeleton {
         try {
             CompilationOptions opts = new CompilationOptions();
             opts.setCalculateIndividualProbabilities();
-            List<OutputSandwoodClass> classes = buildClass(opts).classes;
+            List<OutputSandwoodOuterClass> classes = buildClass(opts).classes;
             for(OutputSandwoodClass c:classes) {
                 StringBuilder sb = new StringBuilder();
                 c.toJava(sb);
@@ -203,7 +204,7 @@ public abstract class ModelTestSkeleton {
         try {
             CompilationOptions opts = new CompilationOptions();
             opts.setCalculateIndividualProbabilities();
-            List<OutputSandwoodClass> classes = buildClass(opts).classes;
+            List<OutputSandwoodOuterClass> classes = buildClass(opts).classes;
             opts.setTargetDirectory(tempDir);
             DiagnosticCollector<JavaFileObject> diagnostics = CompileUtils.compileToJava(opts, classes);
             if(!diagnostics.getDiagnostics().isEmpty()) {
@@ -311,7 +312,7 @@ public abstract class ModelTestSkeleton {
         try {
             CompilationOptions opts = new CompilationOptions();
             opts.setCalculateIndividualProbabilities();
-            List<OutputSandwoodClass> classes = buildClass(opts).classes;
+            List<OutputSandwoodOuterClass> classes = buildClass(opts).classes;
             opts.setTargetDirectory(tempDir);
             DiagnosticCollector<JavaFileObject> diagnostics = CompileUtils.compileToJava(opts, classes);
             if(!diagnostics.getDiagnostics().isEmpty()) {
@@ -442,7 +443,7 @@ public abstract class ModelTestSkeleton {
         try {
             CompilationOptions opts = new CompilationOptions();
             opts.setCalculateIndividualProbabilities();
-            List<OutputSandwoodClass> classes = buildClass(opts).classes;
+            List<OutputSandwoodOuterClass> classes = buildClass(opts).classes;
             opts.setTargetDirectory(tempDir);
             DiagnosticCollector<JavaFileObject> diagnostics = CompileUtils.compileToJava(opts, classes);
             if(!diagnostics.getDiagnostics().isEmpty()) {

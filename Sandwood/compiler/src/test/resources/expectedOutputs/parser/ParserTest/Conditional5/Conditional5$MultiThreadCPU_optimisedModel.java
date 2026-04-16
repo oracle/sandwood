@@ -1,28 +1,29 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Conditional5$CoreInterface {
-	
+final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implements Conditional5$CoreInterface {
+
 	// Declare the variables for the model.
-	private double a;
-	private double b;
-	private boolean fixedProbFlag$sample13 = false;
-	private boolean fixedProbFlag$sample5 = false;
-	private boolean fixedProbFlag$sample9 = false;
-	private boolean guard;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$a;
-	private double logProbability$b;
-	private double logProbability$bernoulli;
-	private double logProbability$guard;
-	private double logProbability$value;
-	private boolean observedGuard;
-	private double observedValue;
-	private boolean system$gibbsForward = true;
-	private double value;
+	double a;
+	double b;
+	boolean fixedProbFlag$sample13 = false;
+	boolean fixedProbFlag$sample5 = false;
+	boolean fixedProbFlag$sample9 = false;
+	boolean guard;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$a;
+	double logProbability$b;
+	double logProbability$bernoulli;
+	double logProbability$guard;
+	double logProbability$value;
+	boolean observedGuard;
+	double observedValue;
+	boolean system$gibbsForward = true;
+	double value;
 
 	public Conditional5$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -133,7 +134,7 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -147,7 +148,7 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (((0.0 <= b) && (b < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -360,7 +361,7 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -374,7 +375,7 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (((0.0 <= a) && (a < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -453,15 +454,15 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {}
 
 	// Method to execute the model code conventionally.
 	@Override

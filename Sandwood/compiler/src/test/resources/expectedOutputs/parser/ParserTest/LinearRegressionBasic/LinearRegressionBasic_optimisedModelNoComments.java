@@ -1,22 +1,20 @@
 package org.sandwood.compiler.tests.parser;
 
-import org.sandwood.runtime.model.Model;
-import org.sandwood.runtime.model.ExecutionTarget;
-import org.sandwood.runtime.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import java.util.HashMap;
+import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
-
-import java.util.Map;
-import java.util.HashMap;
+import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import org.sandwood.runtime.model.ExecutionTarget;
+import org.sandwood.runtime.model.Model;
+import org.sandwood.runtime.model.variables.*;
 
 /**
-  * Class representing the Sandwood model LinearRegressionBasic This is the class that
-  * all user interactions with the model should occur through.
-  */
+ * Class representing the Sandwood model LinearRegressionBasic This is the class that
+ * all user interactions with the model should occur through.
+ */
 public final class LinearRegressionBasic extends Model {
-
     private LinearRegressionBasic$CoreInterface system$c = new LinearRegressionBasic$SingleThreadCPU(ExecutionTarget.singleThread);
 
     private final ComputedDoubleInternal $b0 = new ComputedDoubleInternal(this, "b0", true, true, false, ProbabilityType.UNSKIPPABLE) {
@@ -48,9 +46,7 @@ public final class LinearRegressionBasic extends Model {
         }
     };
 
-    /**
-     * Computed variable representing b0 of type double from the Sandwood model 
-     */
+	/** Computed variable representing b0 of type double from the Sandwood model. */
     public final ComputedDouble b0 = $b0;
 
     private final ComputedDoubleInternal $b1 = new ComputedDoubleInternal(this, "b1", true, true, false, ProbabilityType.UNSKIPPABLE) {
@@ -82,9 +78,7 @@ public final class LinearRegressionBasic extends Model {
         }
     };
 
-    /**
-     * Computed variable representing b1 of type double from the Sandwood model 
-     */
+	/** Computed variable representing b1 of type double from the Sandwood model. */
     public final ComputedDouble b1 = $b1;
 
     private final ComputedDoubleInternal $variance = new ComputedDoubleInternal(this, "variance", true, true, false, ProbabilityType.UNSKIPPABLE) {
@@ -116,9 +110,7 @@ public final class LinearRegressionBasic extends Model {
         }
     };
 
-    /**
-     * Computed variable representing variance of type double from the Sandwood model 
-     */
+	/** Computed variable representing variance of type double from the Sandwood model. */
     public final ComputedDouble variance = $variance;
 
     private final ComputedDoubleArrayInternal $y = new ComputedDoubleArrayInternal(this, "y", false, true, false, ProbabilityType.UNSKIPPABLE) {
@@ -147,9 +139,7 @@ public final class LinearRegressionBasic extends Model {
         }
     };
 
-    /**
-     * Computed variable representing y of type double[] from the Sandwood model 
-     */
+	/** Computed variable representing y of type double[] from the Sandwood model. */
     public final ComputedDoubleArray y = $y;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
@@ -166,9 +156,7 @@ public final class LinearRegressionBasic extends Model {
         protected void setValueInternal(double[] value) { system$c.set$x(value, allocated); }
     };
 
-    /**
-     * Observed variable representing x of type double[] from the Sandwood model 
-     */
+	/** Observed variable representing x of type double[] from the Sandwood model. */
     public final ObservedDoubleArray x = $x;
 
     private Map<String, ObservedVariableInternal> $modelInputs = new HashMap<>();
@@ -185,19 +173,17 @@ public final class LinearRegressionBasic extends Model {
         protected void setValueInternal(double[] value) { system$c.set$yMeasured(value, allocated); }
     };
 
-    /**
-     * Observed variable representing yMeasured of type double[] from the Sandwood model 
-     */
+	/**
+	 * Observed variable representing yMeasured of type double[] from the Sandwood model.
+	 */
     public final ObservedDoubleArray yMeasured = $yMeasured;
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
     private HasProbabilityInternal[] $probabilityVariables = {$b0, $b1, $variance, $y};
 
-    //Constructors
-    /**
-     * A constructor for a model where no variable values are set.
-     */
+    // Constructors
+	/** A constructor for a model where no variable values are set. */
     public LinearRegressionBasic() {
         super();
         //ComputedVariable
@@ -213,24 +199,24 @@ public final class LinearRegressionBasic extends Model {
         $regularObservedValues.put("yMeasured", $yMeasured);
         init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
-    /**
-      * A constructor to set all the required values in the model to infer values. These
-      * will be values in an untrained model so this will only generate values from the
-      * default distributions described in the model.
-      * @param x The value to set x to.
-      */
 
+	/**
+	 * A constructor to set all the required values in the model to infer values. These
+	 * will be values in an untrained model so this will only generate values from the
+	 * default distributions described in the model.
+	 * @param x The value to set x to.
+	 */
     public LinearRegressionBasic(double[] x) {
         this();
         this.$x.setValue(x);
     }
-    /**
-      * A constructor to set all the required values in the model to infer the model
-      * parameters, or to generate probabilities for the model.
-      * @param x The value to set x to.
-      * @param yMeasured The value to set yMeasured to.
-      */
 
+	/**
+	 * A constructor to set all the required values in the model to infer the model parameters,
+	 * or to generate probabilities for the model.
+	 * @param x The value to set x to.
+	 * @param yMeasured The value to set yMeasured to
+	 */
     public LinearRegressionBasic(double[] x, double[] yMeasured) {
         this();
         this.x.setValue(x);
@@ -278,55 +264,52 @@ public final class LinearRegressionBasic extends Model {
         newCore.set$fixedFlag$sample7(oldCore.get$fixedFlag$sample7(), false);
     }
 
-    /**
-     * A class to hold all the values required to perform a value inference on the model.
-     */
+	/**
+	 * A class to hold all the values required to perform a value inference on the model.
+	 */
     public static class InferValueInputs {
-        /** Field holding the value of model input x */
+		/** Field holding the value of model input x */
         public final double[] x;
 
-        /**
-          * A constructor taking all the values required to set up the model to infer variables.
-          * @param x The value to set x to.
-          */
+		/**
+		 * A constructor taking all the values required to set up the model to infer variables.
+		 * @param x The value to set x to.
+		 */
         public InferValueInputs(double[] x) {
             this.x = x;
         }
     }
 
-    /**
-     * A class to hold all the inputs for the model. It can be used to parameterize inference of the model probabilities
-     * and probability calculations.
-     */
+	/**
+	 * A class to hold all the inputs for the model. It can be used to parameterize inference
+	 * of the model probabilities and probability calculations.
+	 */
     public static class AllInputs {
-        /** Field holding the value of model input x */
+		/** Field holding the value of model input x */
         public final double[] x;
-        /** Field holding the value of model input yMeasured */
+		/** Field holding the value of model input yMeasured */
         public final double[] yMeasured;
 
-        /**
-          * A constructor to take all the required values by the model to infer the model
-          * parameters, or to generate probabilities for the model.
-          * @param x The value to set x to.
-          * @param yMeasured The value to set yMeasured to.
-          */
+		/**
+		 * A constructor to take all the required values by the model to infer the model parameters,
+		 * or to generate probabilities for the model.
+		 * @param x The value to set x to.
+		 * @param yMeasured The value to set yMeasured to.
+		 */
         public AllInputs(double[] x, double[] yMeasured) {
             this.x = x;
             this.yMeasured = yMeasured;
         }
     }
-
-    /**
-     * A class to hold all the outputs from the model after an infer values step.
-     */
+	/** A class to hold all the outputs from the model after an infer values step. */
     public static class InferredValueOutputs {
-        /** Field holding the value of b0 after a convention execution step.*/
+		/** Field holding the value of b0 after a convention execution step. */
         public final double b0;
-        /** Field holding the value of b1 after a convention execution step.*/
+		/** Field holding the value of b1 after a convention execution step. */
         public final double b1;
-        /** Field holding the value of variance after a convention execution step.*/
+		/** Field holding the value of variance after a convention execution step. */
         public final double variance;
-        /** Field holding the value of y after a convention execution step.*/
+		/** Field holding the value of y after a convention execution step. */
         public final double[] y;
 
         InferredValueOutputs(LinearRegressionBasic system$model) {
@@ -337,18 +320,19 @@ public final class LinearRegressionBasic extends Model {
         }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class LogProbabilities {
         private final double $logModelProbability;
-        /** Field holding the log probability of computed variable b0 */
+		/** Field holding the log probability of computed variable b0 */
         public final double b0;
-        /** Field holding the log probability of computed variable b1 */
+		/** Field holding the log probability of computed variable b1 */
         public final double b1;
-        /** Field holding the log probability of computed variable variance */
+		/** Field holding the log probability of computed variable variance */
         public final double variance;
-        /** Field holding the log probability of computed variable y */
+		/** Field holding the log probability of computed variable y */
         public final double y;
 
         LogProbabilities(LinearRegressionBasic system$model) {
@@ -359,23 +343,26 @@ public final class LinearRegressionBasic extends Model {
             this.y = system$model.y.getLogProbability();
         }
 
-        /** Method to return log probability of the whole model 
-         *  @return The log probability of the whole model. */
+		/**
+		 * Method to return log probability of the whole model
+		 * @return The log probability of the whole model.
+		 */
         public double getModelProbability() { return $logModelProbability; }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class Probabilities {
         private final double $modelProbability;
-        /** Field holding the probability of computed variable b0 */
+		/** Field holding the probability of computed variable b0 */
         public final double b0;
-        /** Field holding the probability of computed variable b1 */
+		/** Field holding the probability of computed variable b1 */
         public final double b1;
-        /** Field holding the probability of computed variable variance */
+		/** Field holding the probability of computed variable variance */
         public final double variance;
-        /** Field holding the probability of computed variable y */
+		/** Field holding the probability of computed variable y */
         public final double y;
 
         Probabilities(LinearRegressionBasic system$model) {
@@ -386,20 +373,20 @@ public final class LinearRegressionBasic extends Model {
             this.y = system$model.y.getProbability();
         }
 
-        /** Method to return probability of the whole model 
-         *  @return The probability of the whole model. */
+		/**
+		 * Method to return probability of the whole model
+		 * @return The probability of the whole model.
+		 */
         public double getModelProbability() { return $modelProbability; }
     }
 
-    /**
-     * A class to hold all the outputs from the model after an infer model call.
-     */
+	/** A class to hold all the outputs from the model after an infer model call. */
     public static class InferredModelOutputs {
-        /** Field holding the MAP or Sample value of b0 after an infer model call. */
+		/** Field holding the MAP or Sample value of b0 after an infer model call. */
         public final double[] b0;
-        /** Field holding the MAP or Sample value of b1 after an infer model call. */
+		/** Field holding the MAP or Sample value of b1 after an infer model call. */
         public final double[] b1;
-        /** Field holding the MAP or Sample value of variance after an infer model call. */
+		/** Field holding the MAP or Sample value of variance after an infer model call. */
         public final double[] variance;
 
         InferredModelOutputs(LinearRegressionBasic system$model) {
@@ -409,23 +396,25 @@ public final class LinearRegressionBasic extends Model {
         }
     }
 
-    /**
-     * Perform a single pass generating values from the model.
-     * @param inputs An object containing the parameters required to run inference on the model.
-     * @return An object containing the values computed by the inference step.
-     */
+	/**
+	 * Perform a single pass generating values from the model.
+	 * @param inputs An object containing the parameters required to run inference on
+	 *               the model.
+	 * @return An object containing the values computed by the inference step.
+	 */
     public InferredValueOutputs execute(InferValueInputs inputs) {
         this.x.setValue(inputs.x);
         execute();
         return new InferredValueOutputs(this);
     }
 
-    /**
-     * Infer the values of the different elements of the model.
-     * @param iterations The number of iterations to perform when inferring the values.
-     * @param inputs An object containing the parameters required to generate the model parameters.
-     * @return An object containing the computed values for the model.
-     */
+	/**
+	 * Infer the values of the different elements of the model.
+	 * @param iterations The number of iterations to perform when inferring the values.
+	 * @param inputs An object containing the parameters required to generate the model
+	 *               parameters.
+	 * @return An object containing the computed values for the model.
+	 */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
         this.x.setValue(inputs.x);
         this.$yMeasured.setValue(inputs.yMeasured);
@@ -433,12 +422,13 @@ public final class LinearRegressionBasic extends Model {
         return new InferredModelOutputs(this);
     }
 
-    /**
-     * Generate the probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
         this.x.setValue(inputs.x);
         this.$yMeasured.setValue(inputs.yMeasured);
@@ -446,16 +436,19 @@ public final class LinearRegressionBasic extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.x.setValue(inputs.x);
         this.$yMeasured.setValue(inputs.yMeasured);
@@ -463,18 +456,23 @@ public final class LinearRegressionBasic extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.x.setValue(inputs.x);
         this.$yMeasured.setValue(inputs.yMeasured);
@@ -482,12 +480,13 @@ public final class LinearRegressionBasic extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Generate the log probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the log probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
         this.x.setValue(inputs.x);
         this.$yMeasured.setValue(inputs.yMeasured);
@@ -495,16 +494,19 @@ public final class LinearRegressionBasic extends Model {
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.x.setValue(inputs.x);
         this.$yMeasured.setValue(inputs.yMeasured);
@@ -512,18 +514,23 @@ public final class LinearRegressionBasic extends Model {
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.x.setValue(inputs.x);
         this.$yMeasured.setValue(inputs.yMeasured);
@@ -531,4 +538,3 @@ public final class LinearRegressionBasic extends Model {
         return new LogProbabilities(this);
     }
 }
-//END OF CODE

@@ -47,7 +47,7 @@ import org.sandwood.compiler.names.PackageName;
 import org.sandwood.compiler.srcTools.sourceToSource.ParseException;
 import org.sandwood.compiler.srcTools.sourceToSource.SandwoodParser;
 import org.sandwood.compiler.srcTools.sourceToSource.TokenMapping;
-import org.sandwood.compiler.trees.outputTree.OutputSandwoodClass;
+import org.sandwood.compiler.trees.outputTree.OutputSandwoodOuterClass;
 
 /**
  * A class for compiling Sandwood models.
@@ -207,7 +207,7 @@ public class SandwoodCompiler {
         URL[] urls = new URL[] { url };
 
         // List to store any classes to javadoc later
-        List<OutputSandwoodClass> javadocClasses = new ArrayList<>();
+        List<OutputSandwoodOuterClass> javadocClasses = new ArrayList<>();
 
         // Load the contents
         ChildFirstClassLoader cl = new ChildFirstClassLoader(urls);

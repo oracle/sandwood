@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface ParallelMK4$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface ParallelMK4$CoreInterface extends CoreModel {
 
 	// Getter for fixedFlag$sample61.
 	public boolean get$fixedFlag$sample61();

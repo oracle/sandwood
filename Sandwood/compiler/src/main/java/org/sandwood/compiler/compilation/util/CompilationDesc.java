@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sandwood.compiler.exceptions.SandwoodModelException;
-import org.sandwood.compiler.trees.outputTree.OutputSandwoodClass;
+import org.sandwood.compiler.trees.outputTree.OutputSandwoodOuterClass;
 
 public class CompilationDesc {
-    public final List<OutputSandwoodClass> classes = new ArrayList<>();
+    public final List<OutputSandwoodOuterClass> classes = new ArrayList<>();
     public final List<SandwoodModelException> errors = new ArrayList<>();
     public final List<SandwoodModelException> warnings = new ArrayList<>();
 

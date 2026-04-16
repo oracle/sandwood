@@ -11,6 +11,8 @@ package org.sandwood.compiler.names;
 import org.sandwood.compiler.exceptions.CompilerException;
 
 public class PackageName extends Name {
+    
+    public static final PackageName emptyName = new PackageName("");
 
     public PackageName(String name) {
         super(name);

@@ -17,6 +17,7 @@ import org.sandwood.compiler.trees.ArgDesc;
 import org.sandwood.compiler.trees.Visibility;
 import org.sandwood.compiler.trees.outputTree.OutputFunction;
 import org.sandwood.compiler.trees.outputTree.OutputTree;
+import org.sandwood.compiler.trees.transformationTree.transformers.Transformer;
 import org.sandwood.compiler.trees.transformationTree.util.KnownValuesTrans;
 
 public class TransConstructorFunction extends TransFunction<TransTreeVoid> {
@@ -43,5 +44,10 @@ public class TransConstructorFunction extends TransFunction<TransTreeVoid> {
     @Override
     protected TransFunction<?> applyConstants(Map<VariableDescription<?>, TransTreeReturn<?>> constants) {
         return new TransConstructorFunction(visibility, name, args, body.applyConstants(constants), comment);
+    }
+
+    @Override
+    protected TransFunction<?> applyTransformation(Transformer t) {
+        return new TransConstructorFunction(visibility, name, args, t.transform(body), comment);
     }
 }

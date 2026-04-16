@@ -1,36 +1,37 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK18$CoreInterface {
-	
+final class Flip1CoinMK18$MultiThreadCPU extends CoreModelMultiThreadCPU implements Flip1CoinMK18$CoreInterface {
+
 	// Declare the variables for the model.
-	private int a;
-	private int b;
-	private double[][][] bias;
-	private int c;
-	private boolean constrainedFlag$sample11 = true;
-	private boolean constrainedFlag$sample17 = true;
-	private boolean fixedFlag$sample11 = false;
-	private boolean fixedFlag$sample17 = false;
-	private boolean fixedProbFlag$sample103 = false;
-	private boolean fixedProbFlag$sample11 = false;
-	private boolean fixedProbFlag$sample17 = false;
-	private boolean[] flips;
-	private boolean[] flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bernoulli;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double logProbability$q;
-	private double logProbability$t;
-	private double logProbability$var97;
-	private double q;
-	private int samples;
-	private boolean system$gibbsForward = true;
-	private double t;
+	int a;
+	int b;
+	double[][][] bias;
+	int c;
+	boolean constrainedFlag$sample11 = true;
+	boolean constrainedFlag$sample17 = true;
+	boolean fixedFlag$sample11 = false;
+	boolean fixedFlag$sample17 = false;
+	boolean fixedProbFlag$sample103 = false;
+	boolean fixedProbFlag$sample11 = false;
+	boolean fixedProbFlag$sample17 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bernoulli;
+	double logProbability$bias;
+	double logProbability$flips;
+	double logProbability$q;
+	double logProbability$t;
+	double logProbability$var97;
+	double q;
+	int samples;
+	boolean system$gibbsForward = true;
+	double t;
 
 	public Flip1CoinMK18$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -283,7 +284,7 @@ final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Calculate a proposed variance.
 		// 
-		// The original value of the sample
+						// The original value of the sample
 		double cv$var = ((q * q) * 0.010000000000000002);
 		
 		// Ensure the variance is at least 0.01
@@ -413,7 +414,7 @@ final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							// 
-							// Set the current value to the current state of the tree.
+																					// Set the current value to the current state of the tree.
 							// 
 							// The original value of the sample
 							cv$accumulatedProbabilities = ((((0.0 <= q) && (q <= 1.0))?Math.log((flips[var96]?q:(1.0 - q))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
@@ -576,21 +577,21 @@ final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// Write out the new value of the sample.
 				q = cv$originalValue;
 				
-				// q's comment
+								// q's comment
 				// Write out the new value of the sample.
 				bias[0][1][0] = (1 - cv$originalValue);
 				double[][] var52 = bias[1];
 				
-				// q's comment
+								// q's comment
 				// Write out the new value of the sample.
 				var52[0][1] = (1 - cv$originalValue);
 				double[] var67 = var52[1];
 				
-				// q's comment
+								// q's comment
 				// Write out the new value of the sample.
 				var67[0] = (1 - cv$originalValue);
 				
-				// q's comment
+								// q's comment
 				// Write out the new value of the sample.
 				var67[1] = cv$originalValue;
 			}
@@ -612,7 +613,7 @@ final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Calculate a proposed variance.
 		// 
-		// The original value of the sample
+						// The original value of the sample
 		double cv$var = ((t * t) * 0.010000000000000002);
 		
 		// Ensure the variance is at least 0.01
@@ -658,7 +659,7 @@ final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							// 
-							// Set the current value to the current state of the tree.
+																					// Set the current value to the current state of the tree.
 							// 
 							// The original value of the sample
 							cv$accumulatedProbabilities = ((((0.0 <= t) && (t <= 1.0))?Math.log((flips[var96]?t:(1.0 - t))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
@@ -714,7 +715,7 @@ final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.m
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
-						// Set the current value to the current state of the tree.
+																		// Set the current value to the current state of the tree.
 						// 
 						// The original value of the sample
 						cv$accumulatedProbabilities = ((((0.0 <= t) && (t <= 1.0))?Math.log((flips[var96]?t:(1.0 - t))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
@@ -742,7 +743,7 @@ final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Set the current value to the current state of the tree.
+															// Set the current value to the current state of the tree.
 					// 
 					// The original value of the sample
 					cv$accumulatedProbabilities = ((((0.0 <= t) && (t <= 1.0))?Math.log((flips[var96]?t:(1.0 - t))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
@@ -901,19 +902,19 @@ final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				double[][] var21 = bias[0];
 				double[] var23 = var21[0];
 				
-				// t's comment
+								// t's comment
 				// Write out the new value of the sample.
 				var23[0] = cv$originalValue;
 				
-				// t's comment
+								// t's comment
 				// Write out the new value of the sample.
 				var23[1] = (1 - cv$originalValue);
 				
-				// t's comment
+								// t's comment
 				// Write out the new value of the sample.
 				var21[1][1] = cv$originalValue;
 				
-				// t's comment
+								// t's comment
 				// Write out the new value of the sample.
 				bias[1][0][0] = cv$originalValue;
 			}
@@ -1221,15 +1222,9 @@ final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for bias
 		bias = new double[2][][];
 		double[][] subarray$0 = new double[2][];
@@ -1244,6 +1239,12 @@ final class Flip1CoinMK18$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Constructor for flips
 		flips = new boolean[samples];
 	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override

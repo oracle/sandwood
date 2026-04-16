@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface HMMMetrics2$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface HMMMetrics2$CoreInterface extends CoreModel {
 
 	// Getter for distribution$sample104.
 	public double[][] get$distribution$sample104();

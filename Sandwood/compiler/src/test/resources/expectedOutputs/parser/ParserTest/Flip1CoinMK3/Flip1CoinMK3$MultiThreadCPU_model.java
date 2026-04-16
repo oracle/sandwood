@@ -1,28 +1,29 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip1CoinMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK3$CoreInterface {
-	
+final class Flip1CoinMK3$MultiThreadCPU extends CoreModelMultiThreadCPU implements Flip1CoinMK3$CoreInterface {
+
 	// Declare the variables for the model.
-	private double bias;
-	private boolean constrainedFlag$sample6 = true;
-	private boolean fixedFlag$sample6 = false;
-	private boolean fixedProbFlag$sample23 = false;
-	private boolean fixedProbFlag$sample6 = false;
-	private boolean[] flips;
-	private boolean[] flipsMeasured;
-	private int length$flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double[] logProbability$bernoulli;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double[] logProbability$sample23;
-	private int samples;
-	private boolean system$gibbsForward = true;
+	double bias;
+	boolean constrainedFlag$sample6 = true;
+	boolean fixedFlag$sample6 = false;
+	boolean fixedProbFlag$sample23 = false;
+	boolean fixedProbFlag$sample6 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	int length$flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double[] logProbability$bernoulli;
+	double logProbability$bias;
+	double logProbability$flips;
+	double[] logProbability$sample23;
+	int samples;
+	boolean system$gibbsForward = true;
 
 	public Flip1CoinMK3$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -399,15 +400,9 @@ final class Flip1CoinMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for flips
 		{
 			flips = new boolean[length$flipsMeasured];
@@ -423,6 +418,12 @@ final class Flip1CoinMK3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			logProbability$sample23 = new double[((((((length$flipsMeasured - 1) + 1) - 1) - 0) / 1) + 1)];
 		}
 	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override

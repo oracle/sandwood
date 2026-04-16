@@ -1,28 +1,29 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements RaggedArray$CoreInterface {
-	private double[][] a;
-	private double[][] b;
-	private boolean constrainedFlag$sample73 = true;
-	private double[] cv$var69$stateProbabilityGlobal;
-	private boolean fixedFlag$sample73 = false;
-	private boolean fixedProbFlag$sample73 = false;
-	private boolean fixedProbFlag$sample89 = false;
-	private int i;
-	private int length$obs_measured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$i;
-	private double logProbability$obs;
-	private double logProbability$var85;
-	private boolean[] obs;
-	private boolean[] obs_measured;
-	private double p;
-	private boolean system$gibbsForward = true;
-	private int y;
+final class RaggedArray$SingleThreadCPU extends CoreModelSingleThreadCPU implements RaggedArray$CoreInterface {
+double[][] a;
+	double[][] b;
+	boolean constrainedFlag$sample73 = true;
+	boolean fixedFlag$sample73 = false;
+	boolean fixedProbFlag$sample73 = false;
+	boolean fixedProbFlag$sample89 = false;
+	int i;
+	int length$obs_measured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$i;
+	double logProbability$obs;
+	double logProbability$var85;
+	boolean[] obs;
+	boolean[] obs_measured;
+	double p;
+	boolean system$gibbsForward = true;
+	int y;
+	double[] cv$var69$stateProbabilityGlobal;
 
 	public RaggedArray$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -226,12 +227,7 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void allocateScratch() {
-		cv$var69$stateProbabilityGlobal = new double[3];
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		a = new double[2][];
 		a[0] = new double[2];
 		a[1] = new double[3];
@@ -240,6 +236,11 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		b[1] = new double[3];
 		obs = new boolean[length$obs_measured];
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		cv$var69$stateProbabilityGlobal = new double[3];
 	}
 
 	@Override

@@ -1,39 +1,40 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Deterministic$CoreInterface {
-	
+final class Deterministic$SingleThreadCPU extends CoreModelSingleThreadCPU implements Deterministic$CoreInterface {
+
 	// Declare the variables for the model.
-	private int[] a;
-	private int[] b;
-	private boolean[] constrainedFlag$sample29;
-	private boolean[] constrainedFlag$sample55;
-	private double[] cv$var29$countGlobal;
-	private double[] cv$var54$stateProbabilityGlobal;
-	private boolean fixedFlag$sample29 = false;
-	private boolean fixedFlag$sample55 = false;
-	private boolean fixedProbFlag$sample29 = false;
-	private boolean fixedProbFlag$sample55 = false;
-	private boolean fixedProbFlag$sample75 = false;
-	private boolean[] flips;
-	private boolean[] flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$a;
-	private double logProbability$b;
-	private double logProbability$flips;
-	private double logProbability$m;
-	private double[] logProbability$sample55;
-	private double logProbability$var29;
-	private double logProbability$var74;
-	private double[][] m;
-	private int n;
-	private int states;
-	private boolean system$gibbsForward = true;
-	private double[] v;
+	int[] a;
+	int[] b;
+	boolean[] constrainedFlag$sample29;
+	boolean[] constrainedFlag$sample55;
+	boolean fixedFlag$sample29 = false;
+	boolean fixedFlag$sample55 = false;
+	boolean fixedProbFlag$sample29 = false;
+	boolean fixedProbFlag$sample55 = false;
+	boolean fixedProbFlag$sample75 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$a;
+	double logProbability$b;
+	double logProbability$flips;
+	double logProbability$m;
+	double[] logProbability$sample55;
+	double logProbability$var29;
+	double logProbability$var74;
+	double[][] m;
+	int n;
+	int states;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[] cv$var29$countGlobal;
+	double[] cv$var54$stateProbabilityGlobal;
 
 	public Deterministic$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -1026,32 +1027,9 @@ final class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var29$countGlobal
-		{
-			// Allocation of cv$var29$countGlobal for single threaded execution
-			cv$var29$countGlobal = new double[5];
-		}
-		
-		// Constructor for cv$var54$stateProbabilityGlobal
-		{
-			// Variable to record the maximum value of Task Get 53. Initially set to the value
-			// of putTask 30.
-			int cv$var30$max = 5;
-			
-			// Allocation of cv$var54$stateProbabilityGlobal for single threaded execution
-			cv$var54$stateProbabilityGlobal = new double[cv$var30$max];
-		}
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for v
 		{
 			v = new double[5];
@@ -1102,6 +1080,29 @@ final class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var29$countGlobal
+		{
+			// Allocation of cv$var29$countGlobal for single threaded execution
+			cv$var29$countGlobal = new double[5];
+		}
+		
+		// Constructor for cv$var54$stateProbabilityGlobal
+		{
+			// Variable to record the maximum value of Task Get 53. Initially set to the value
+			// of putTask 30.
+			int cv$var30$max = 5;
+			
+			// Allocation of cv$var54$stateProbabilityGlobal for single threaded execution
+			cv$var54$stateProbabilityGlobal = new double[cv$var30$max];
+		}
 	}
 
 	// Method to execute the model code conventionally.

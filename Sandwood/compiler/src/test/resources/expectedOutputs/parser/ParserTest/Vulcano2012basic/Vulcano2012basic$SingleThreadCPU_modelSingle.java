@@ -1,42 +1,43 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Vulcano2012basic$CoreInterface {
-	
+final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU implements Vulcano2012basic$CoreInterface {
+
 	// Declare the variables for the model.
-	private int[][] Avail;
-	private int[][] ObsSales;
-	private int[][] Sales;
-	private int T;
-	private boolean[] constrainedFlag$sample26;
-	private double[] exped;
-	private double[] expedNorm;
-	private boolean fixedFlag$sample26 = false;
-	private boolean fixedProbFlag$sample157 = false;
-	private boolean fixedProbFlag$sample26 = false;
-	private boolean[] guard$sample26multinomial156$global;
-	private boolean[][] guard$sample26put131$global;
-	private boolean[][] guard$sample26put154$global;
-	private boolean[] guard$sample26put68$global;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$Sales;
-	private double logProbability$exped;
-	private double logProbability$expedNorm;
-	private double[] logProbability$sample26;
-	private double logProbability$sum;
-	private double logProbability$ut;
-	private double logProbability$weekly_sales;
-	private int noProducts;
-	private double r;
-	private int[] sales_sum;
-	private double sum;
-	private boolean system$gibbsForward = true;
-	private double[] ut;
-	private double[][] weekly_rates;
-	private double[][] weekly_ut;
+	int[][] Avail;
+	int[][] ObsSales;
+	int[][] Sales;
+	int T;
+	boolean[] constrainedFlag$sample26;
+	double[] exped;
+	double[] expedNorm;
+	boolean fixedFlag$sample26 = false;
+	boolean fixedProbFlag$sample157 = false;
+	boolean fixedProbFlag$sample26 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$Sales;
+	double logProbability$exped;
+	double logProbability$expedNorm;
+	double[] logProbability$sample26;
+	double logProbability$sum;
+	double logProbability$ut;
+	double logProbability$weekly_sales;
+	int noProducts;
+	double r;
+	int[] sales_sum;
+	double sum;
+	boolean system$gibbsForward = true;
+	double[] ut;
+	double[][] weekly_rates;
+	double[][] weekly_ut;
+	boolean[] guard$sample26multinomial156$global;
+	boolean[][] guard$sample26put131$global;
+	boolean[][] guard$sample26put154$global;
+	boolean[] guard$sample26put68$global;
 
 	public Vulcano2012basic$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -2835,6 +2836,69 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// If ut has not been set already allocate space.
+		if(!fixedFlag$sample26) {
+			// Constructor for ut
+			{
+				ut = new double[noProducts];
+			}
+		}
+		
+		// Constructor for exped
+		{
+			exped = new double[noProducts];
+		}
+		
+		// Constructor for expedNorm
+		{
+			expedNorm = new double[noProducts];
+		}
+		
+		// Constructor for sales_sum
+		{
+			sales_sum = new int[T];
+		}
+		
+		// Constructor for Sales
+		{
+			Sales = new int[T][];
+			for(int var100 = 0; var100 < T; var100 += 1)
+				Sales[var100] = new int[noProducts];
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				Sales[t$var112] = new int[noProducts];
+		}
+		
+		// Constructor for weekly_rates
+		{
+			weekly_rates = new double[((((T - 1) - 0) / 1) + 1)][];
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				weekly_rates[((t$var112 - 0) / 1)] = new double[noProducts];
+		}
+		
+		// Constructor for weekly_ut
+		{
+			weekly_ut = new double[((((T - 1) - 0) / 1) + 1)][];
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				weekly_ut[((t$var112 - 0) / 1)] = new double[noProducts];
+		}
+		
+		// Constructor for constrainedFlag$sample26
+		{
+			constrainedFlag$sample26 = new boolean[((((noProducts - 1) - 1) / 1) + 1)];
+		}
+		
+		// Constructor for logProbability$sample26
+		{
+			logProbability$sample26 = new double[((((noProducts - 1) - 1) / 1) + 1)];
+		}
+		
+		// Allocate scratch space
+		allocateScratch();
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -2896,69 +2960,6 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 			// Allocation of guard$sample26multinomial156$global for single threaded execution
 			guard$sample26multinomial156$global = new boolean[cv$max_t$var112];
 		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// If ut has not been set already allocate space.
-		if(!fixedFlag$sample26) {
-			// Constructor for ut
-			{
-				ut = new double[noProducts];
-			}
-		}
-		
-		// Constructor for exped
-		{
-			exped = new double[noProducts];
-		}
-		
-		// Constructor for expedNorm
-		{
-			expedNorm = new double[noProducts];
-		}
-		
-		// Constructor for sales_sum
-		{
-			sales_sum = new int[T];
-		}
-		
-		// Constructor for Sales
-		{
-			Sales = new int[T][];
-			for(int var100 = 0; var100 < T; var100 += 1)
-				Sales[var100] = new int[noProducts];
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				Sales[t$var112] = new int[noProducts];
-		}
-		
-		// Constructor for weekly_rates
-		{
-			weekly_rates = new double[((((T - 1) - 0) / 1) + 1)][];
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				weekly_rates[((t$var112 - 0) / 1)] = new double[noProducts];
-		}
-		
-		// Constructor for weekly_ut
-		{
-			weekly_ut = new double[((((T - 1) - 0) / 1) + 1)][];
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				weekly_ut[((t$var112 - 0) / 1)] = new double[noProducts];
-		}
-		
-		// Constructor for constrainedFlag$sample26
-		{
-			constrainedFlag$sample26 = new boolean[((((noProducts - 1) - 1) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample26
-		{
-			logProbability$sample26 = new double[((((noProducts - 1) - 1) / 1) + 1)];
-		}
-		
-		// Allocate scratch space
-		allocateScratch();
 	}
 
 	// Method to execute the model code conventionally.

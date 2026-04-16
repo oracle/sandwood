@@ -1,56 +1,57 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements HMM_Paper$CoreInterface {
-	
+final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements HMM_Paper$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[] bias;
-	private boolean[] constrainedFlag$sample28;
-	private boolean constrainedFlag$sample32 = true;
-	private boolean[] constrainedFlag$sample47;
-	private boolean constrainedFlag$sample53 = true;
-	private boolean[] constrainedFlag$sample71;
-	private double[][] cv$var28$countGlobal;
-	private double[] cv$var31$countGlobal;
-	private double[] cv$var52$stateProbabilityGlobal;
-	private double[] cv$var70$stateProbabilityGlobal;
-	private boolean fixedFlag$sample28 = false;
-	private boolean fixedFlag$sample32 = false;
-	private boolean fixedFlag$sample47 = false;
-	private boolean fixedFlag$sample53 = false;
-	private boolean fixedFlag$sample71 = false;
-	private boolean fixedProbFlag$sample28 = false;
-	private boolean fixedProbFlag$sample32 = false;
-	private boolean fixedProbFlag$sample47 = false;
-	private boolean fixedProbFlag$sample53 = false;
-	private boolean fixedProbFlag$sample71 = false;
-	private boolean fixedProbFlag$sample87 = false;
-	private boolean[] flips;
-	private double[] initialCoin;
-	private int length$measured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double logProbability$initialCoin;
-	private double logProbability$m;
-	private double[] logProbability$sample71;
-	private double[] logProbability$sample87;
-	private double logProbability$st;
-	private double logProbability$var28;
-	private double logProbability$var46;
-	private double logProbability$var52;
-	private double[][] m;
-	private boolean[] measured;
-	private int nCoins;
-	private int nFlips;
-	private int[] st;
-	private boolean system$gibbsForward = true;
-	private double[] v;
+	double[] bias;
+	boolean[] constrainedFlag$sample28;
+	boolean constrainedFlag$sample32 = true;
+	boolean[] constrainedFlag$sample47;
+	boolean constrainedFlag$sample53 = true;
+	boolean[] constrainedFlag$sample71;
+	boolean fixedFlag$sample28 = false;
+	boolean fixedFlag$sample32 = false;
+	boolean fixedFlag$sample47 = false;
+	boolean fixedFlag$sample53 = false;
+	boolean fixedFlag$sample71 = false;
+	boolean fixedProbFlag$sample28 = false;
+	boolean fixedProbFlag$sample32 = false;
+	boolean fixedProbFlag$sample47 = false;
+	boolean fixedProbFlag$sample53 = false;
+	boolean fixedProbFlag$sample71 = false;
+	boolean fixedProbFlag$sample87 = false;
+	boolean[] flips;
+	double[] initialCoin;
+	int length$measured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$flips;
+	double logProbability$initialCoin;
+	double logProbability$m;
+	double[] logProbability$sample71;
+	double[] logProbability$sample87;
+	double logProbability$st;
+	double logProbability$var28;
+	double logProbability$var46;
+	double logProbability$var52;
+	double[][] m;
+	boolean[] measured;
+	int nCoins;
+	int nFlips;
+	int[] st;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[][] cv$var28$countGlobal;
+	double[] cv$var31$countGlobal;
+	double[] cv$var52$stateProbabilityGlobal;
+	double[] cv$var70$stateProbabilityGlobal;
 
 	public HMM_Paper$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -484,7 +485,7 @@ final class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// Increment the sample counter with the value sampled by sample task 53 of random
 			// variable var51
 			// 
-			// A local reference to the scratch space.
+									// A local reference to the scratch space.
 			cv$var31$countGlobal[st[0]] = (cv$var31$countGlobal[st[0]] + 1.0);
 		}
 		if(constrainedFlag$sample32)
@@ -492,7 +493,7 @@ final class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// 
 			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
-			// A reference local to the function for the sample variable.
+									// A reference local to the function for the sample variable.
 			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var31$countGlobal, initialCoin, nCoins);
 	}
 
@@ -547,7 +548,7 @@ final class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		// 
 		// variable marginalization
 		// 
-		// cv$numStates's comment
+				// cv$numStates's comment
 		// Calculate the number of states to evaluate.
 		int cv$numStates = Math.max(0, nCoins);
 		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
@@ -559,7 +560,7 @@ final class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			double cv$accumulatedProbabilities = (((((cv$valuePos < nCoins) && (0 < nCoins)) && (0.0 <= initialCoin[cv$valuePos])) && (initialCoin[cv$valuePos] <= 1.0))?Math.log(initialCoin[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Substituted "i" with its value "1".
@@ -590,7 +591,7 @@ final class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i" with its value "1".
+												// Substituted "i" with its value "1".
 				cv$accumulatedProbabilities = (((((((0.0 <= st[1]) && (st[1] < nCoins)) && (0 < nCoins)) && (0.0 <= var68[st[1]])) && (var68[st[1]] <= 1.0))?Math.log(var68[st[1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
@@ -626,7 +627,7 @@ final class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
 			// Record the reached probability density.
 			// 
@@ -683,7 +684,7 @@ final class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			} else {
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					// Get a local reference to the scratch space.
+															// Get a local reference to the scratch space.
 					cv$var52$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var52$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
@@ -716,7 +717,7 @@ final class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		// 
 		// variable marginalization
 		// 
-		// cv$numStates's comment
+				// cv$numStates's comment
 		// Calculate the number of states to evaluate.
 		int cv$numStates = Math.max(0, nCoins);
 		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
@@ -731,7 +732,7 @@ final class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			double cv$accumulatedProbabilities = (((((cv$valuePos < nCoins) && (0 < nCoins)) && (0.0 <= var68[cv$valuePos])) && (var68[cv$valuePos] <= 1.0))?Math.log(var68[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			int index$i$2_2 = (i + 1);
 			if(((index$i$2_2 < nFlips) && (fixedFlag$sample71 || constrainedFlag$sample71[(index$i$2_2 - 1)]))) {
@@ -788,7 +789,7 @@ final class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
 			// Record the reached probability density.
 			// 
@@ -845,7 +846,7 @@ final class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			} else {
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					// Get a local reference to the scratch space.
+															// Get a local reference to the scratch space.
 					cv$var70$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var70$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
@@ -1386,46 +1387,9 @@ final class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var28$countGlobal
-		// 
-		// Allocation of cv$var28$countGlobal for multithreaded execution
-		// 
-		// Get the thread count.
-		int cv$threadCount = threadCount();
-		
-		// Allocate an array to hold a copy per thread
-		cv$var28$countGlobal = new double[cv$threadCount][];
-		
-		// Populate the array with a copy per thread
-		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			cv$var28$countGlobal[cv$index] = new double[nCoins];
-		
-		// Constructor for cv$var31$countGlobal
-		// 
-		// Allocation of cv$var31$countGlobal for single threaded execution
-		cv$var31$countGlobal = new double[nCoins];
-		
-		// Constructor for cv$var52$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var52$stateProbabilityGlobal for single threaded execution
-		cv$var52$stateProbabilityGlobal = new double[nCoins];
-		
-		// Allocation of cv$var70$stateProbabilityGlobal for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 69. Initially set to the value
-		// of putTask 29.
-		cv$var70$stateProbabilityGlobal = new double[nCoins];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for v
 		v = new double[nCoins];
 		
@@ -1472,6 +1436,43 @@ final class HMM_Paper$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var28$countGlobal
+		// 
+		// Allocation of cv$var28$countGlobal for multithreaded execution
+		// 
+		// Get the thread count.
+		int cv$threadCount = threadCount();
+		
+		// Allocate an array to hold a copy per thread
+		cv$var28$countGlobal = new double[cv$threadCount][];
+		
+		// Populate the array with a copy per thread
+		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+			cv$var28$countGlobal[cv$index] = new double[nCoins];
+		
+		// Constructor for cv$var31$countGlobal
+		// 
+		// Allocation of cv$var31$countGlobal for single threaded execution
+		cv$var31$countGlobal = new double[nCoins];
+		
+		// Constructor for cv$var52$stateProbabilityGlobal
+		// 
+		// Allocation of cv$var52$stateProbabilityGlobal for single threaded execution
+		cv$var52$stateProbabilityGlobal = new double[nCoins];
+		
+		// Allocation of cv$var70$stateProbabilityGlobal for single threaded execution
+		// 
+		// Variable to record the maximum value of Task Get 69. Initially set to the value
+		// of putTask 29.
+		cv$var70$stateProbabilityGlobal = new double[nCoins];
 	}
 
 	// Method to execute the model code conventionally.

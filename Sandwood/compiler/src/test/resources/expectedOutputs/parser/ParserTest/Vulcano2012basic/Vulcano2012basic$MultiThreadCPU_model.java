@@ -1,42 +1,43 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Vulcano2012basic$CoreInterface {
-	
+final class Vulcano2012basic$MultiThreadCPU extends CoreModelMultiThreadCPU implements Vulcano2012basic$CoreInterface {
+
 	// Declare the variables for the model.
-	private int[][] Avail;
-	private int[][] ObsSales;
-	private int[][] Sales;
-	private int T;
-	private boolean[] constrainedFlag$sample26;
-	private double[] exped;
-	private double[] expedNorm;
-	private boolean fixedFlag$sample26 = false;
-	private boolean fixedProbFlag$sample157 = false;
-	private boolean fixedProbFlag$sample26 = false;
-	private boolean[] guard$sample26multinomial156$global;
-	private boolean[][] guard$sample26put131$global;
-	private boolean[][] guard$sample26put154$global;
-	private boolean[] guard$sample26put68$global;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$Sales;
-	private double logProbability$exped;
-	private double logProbability$expedNorm;
-	private double[] logProbability$sample157;
-	private double[] logProbability$sample26;
-	private double logProbability$sum;
-	private double logProbability$ut;
-	private int noProducts;
-	private double r;
-	private int[] sales_sum;
-	private double sum;
-	private boolean system$gibbsForward = true;
-	private double[] ut;
-	private double[][] weekly_rates;
-	private double[][] weekly_ut;
+	int[][] Avail;
+	int[][] ObsSales;
+	int[][] Sales;
+	int T;
+	boolean[] constrainedFlag$sample26;
+	double[] exped;
+	double[] expedNorm;
+	boolean fixedFlag$sample26 = false;
+	boolean fixedProbFlag$sample157 = false;
+	boolean fixedProbFlag$sample26 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$Sales;
+	double logProbability$exped;
+	double logProbability$expedNorm;
+	double[] logProbability$sample157;
+	double[] logProbability$sample26;
+	double logProbability$sum;
+	double logProbability$ut;
+	int noProducts;
+	double r;
+	int[] sales_sum;
+	double sum;
+	boolean system$gibbsForward = true;
+	double[] ut;
+	double[][] weekly_rates;
+	double[][] weekly_ut;
+	boolean[] guard$sample26multinomial156$global;
+	boolean[][] guard$sample26put131$global;
+	boolean[][] guard$sample26put154$global;
+	boolean[] guard$sample26put68$global;
 
 	public Vulcano2012basic$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -2831,72 +2832,9 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for guard$sample26put68$global
-		{
-			// Calculate the largest index of j that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_j$var63 = 0;
-			cv$max_j$var63 = Math.max(cv$max_j$var63, ((noProducts - 0) / 1));
-			
-			// Allocation of guard$sample26put68$global for single threaded execution
-			guard$sample26put68$global = new boolean[cv$max_j$var63];
-		}
-		
-		// Constructor for guard$sample26put131$global
-		{
-			// Calculate the largest index of t that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_t$var112 = 0;
-			
-			// Calculate the largest index of j that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_j$var123 = 0;
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				cv$max_j$var123 = Math.max(cv$max_j$var123, ((noProducts - 0) / 1));
-			cv$max_t$var112 = Math.max(cv$max_t$var112, ((T - 0) / 1));
-			
-			// Allocation of guard$sample26put131$global for single threaded execution
-			guard$sample26put131$global = new boolean[cv$max_t$var112][cv$max_j$var123];
-		}
-		
-		// Constructor for guard$sample26put154$global
-		{
-			// Calculate the largest index of t that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_t$var112 = 0;
-			
-			// Calculate the largest index of j that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_j$var147 = 0;
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				cv$max_j$var147 = Math.max(cv$max_j$var147, ((noProducts - 0) / 1));
-			cv$max_t$var112 = Math.max(cv$max_t$var112, ((T - 0) / 1));
-			
-			// Allocation of guard$sample26put154$global for single threaded execution
-			guard$sample26put154$global = new boolean[cv$max_t$var112][cv$max_j$var147];
-		}
-		
-		// Constructor for guard$sample26multinomial156$global
-		{
-			// Calculate the largest index of t that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_t$var112 = 0;
-			cv$max_t$var112 = Math.max(cv$max_t$var112, ((T - 0) / 1));
-			
-			// Allocation of guard$sample26multinomial156$global for single threaded execution
-			guard$sample26multinomial156$global = new boolean[cv$max_t$var112];
-		}
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// If ut has not been set already allocate space.
 		if(!fixedFlag$sample26) {
 			// Constructor for ut
@@ -2960,6 +2898,69 @@ final class Vulcano2012basic$MultiThreadCPU extends org.sandwood.runtime.interna
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for guard$sample26put68$global
+		{
+			// Calculate the largest index of j that is possible and allocate an array to hold
+			// the guard for each of these.
+			int cv$max_j$var63 = 0;
+			cv$max_j$var63 = Math.max(cv$max_j$var63, ((noProducts - 0) / 1));
+			
+			// Allocation of guard$sample26put68$global for single threaded execution
+			guard$sample26put68$global = new boolean[cv$max_j$var63];
+		}
+		
+		// Constructor for guard$sample26put131$global
+		{
+			// Calculate the largest index of t that is possible and allocate an array to hold
+			// the guard for each of these.
+			int cv$max_t$var112 = 0;
+			
+			// Calculate the largest index of j that is possible and allocate an array to hold
+			// the guard for each of these.
+			int cv$max_j$var123 = 0;
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				cv$max_j$var123 = Math.max(cv$max_j$var123, ((noProducts - 0) / 1));
+			cv$max_t$var112 = Math.max(cv$max_t$var112, ((T - 0) / 1));
+			
+			// Allocation of guard$sample26put131$global for single threaded execution
+			guard$sample26put131$global = new boolean[cv$max_t$var112][cv$max_j$var123];
+		}
+		
+		// Constructor for guard$sample26put154$global
+		{
+			// Calculate the largest index of t that is possible and allocate an array to hold
+			// the guard for each of these.
+			int cv$max_t$var112 = 0;
+			
+			// Calculate the largest index of j that is possible and allocate an array to hold
+			// the guard for each of these.
+			int cv$max_j$var147 = 0;
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				cv$max_j$var147 = Math.max(cv$max_j$var147, ((noProducts - 0) / 1));
+			cv$max_t$var112 = Math.max(cv$max_t$var112, ((T - 0) / 1));
+			
+			// Allocation of guard$sample26put154$global for single threaded execution
+			guard$sample26put154$global = new boolean[cv$max_t$var112][cv$max_j$var147];
+		}
+		
+		// Constructor for guard$sample26multinomial156$global
+		{
+			// Calculate the largest index of t that is possible and allocate an array to hold
+			// the guard for each of these.
+			int cv$max_t$var112 = 0;
+			cv$max_t$var112 = Math.max(cv$max_t$var112, ((T - 0) / 1));
+			
+			// Allocation of guard$sample26multinomial156$global for single threaded execution
+			guard$sample26multinomial156$global = new boolean[cv$max_t$var112];
+		}
 	}
 
 	// Method to execute the model code conventionally.

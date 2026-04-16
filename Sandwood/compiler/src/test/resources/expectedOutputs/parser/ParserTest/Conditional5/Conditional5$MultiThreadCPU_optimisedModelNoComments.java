@@ -1,26 +1,27 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Conditional5$CoreInterface {
-	private double a;
-	private double b;
-	private boolean fixedProbFlag$sample13 = false;
-	private boolean fixedProbFlag$sample5 = false;
-	private boolean fixedProbFlag$sample9 = false;
-	private boolean guard;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$a;
-	private double logProbability$b;
-	private double logProbability$bernoulli;
-	private double logProbability$guard;
-	private double logProbability$value;
-	private boolean observedGuard;
-	private double observedValue;
-	private boolean system$gibbsForward = true;
-	private double value;
+final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implements Conditional5$CoreInterface {
+double a;
+	double b;
+	boolean fixedProbFlag$sample13 = false;
+	boolean fixedProbFlag$sample5 = false;
+	boolean fixedProbFlag$sample9 = false;
+	boolean guard;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$a;
+	double logProbability$b;
+	double logProbability$bernoulli;
+	double logProbability$guard;
+	double logProbability$value;
+	boolean observedGuard;
+	double observedValue;
+	boolean system$gibbsForward = true;
+	double value;
 
 	public Conditional5$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -150,10 +151,10 @@ final class Conditional5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void allocateScratch() {}
+	public final void allocate() {}
 
 	@Override
-	public final void allocator() {}
+	public final void allocateScratch() {}
 
 	@Override
 	public final void forwardGeneration() {

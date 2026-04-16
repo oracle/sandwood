@@ -10,6 +10,7 @@ package org.sandwood.compiler.trees.transformationTree;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
@@ -26,7 +27,9 @@ public class TransStore<X extends Variable<X>> extends TransTreeVoid {
 
     TransStore(VariableDescription<X> varDesc, TransTreeReturn<X> value, String comment) {
         super(TransTreeType.STORE, value.size() + 1, comment);
+        Objects.nonNull(varDesc);
         this.varDesc = varDesc;
+        Objects.nonNull(value);
         this.value = value;
     }
 
@@ -49,8 +52,8 @@ public class TransStore<X extends Variable<X>> extends TransTreeVoid {
     public int equivalentHashCodeInternal() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((varDesc == null) ? 0 : varDesc.hashCode());
-        result = prime * result + ((value == null) ? 0 : value.equivalentHashCode());
+        result = prime * result + varDesc.hashCode();
+        result = prime * result + value.equivalentHashCode();
         return result;
     }
 

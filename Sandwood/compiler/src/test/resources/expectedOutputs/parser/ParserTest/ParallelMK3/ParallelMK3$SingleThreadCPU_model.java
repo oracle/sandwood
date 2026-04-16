@@ -1,29 +1,30 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ParallelMK3$CoreInterface {
-	
+final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU implements ParallelMK3$CoreInterface {
+
 	// Declare the variables for the model.
-	private boolean constrainedFlag$sample21 = true;
-	private boolean fixedFlag$sample21 = false;
-	private boolean fixedProbFlag$sample21 = false;
-	private boolean fixedProbFlag$sample38 = false;
-	private double[] generated;
-	private boolean[] guard$sample21gaussian37$global;
-	private double[] indirection;
-	private int length$observed;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$generated;
-	private double logProbability$indirection;
-	private double logProbability$sample;
-	private double[] logProbability$sample38;
-	private double[] observed;
-	private double[] sample;
-	private boolean system$gibbsForward = true;
-	private double[] v;
+	boolean constrainedFlag$sample21 = true;
+	boolean fixedFlag$sample21 = false;
+	boolean fixedProbFlag$sample21 = false;
+	boolean fixedProbFlag$sample38 = false;
+	double[] generated;
+	double[] indirection;
+	int length$observed;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$generated;
+	double logProbability$indirection;
+	double logProbability$sample;
+	double[] logProbability$sample38;
+	double[] observed;
+	double[] sample;
+	boolean system$gibbsForward = true;
+	double[] v;
+	boolean[] guard$sample21gaussian37$global;
 
 	public ParallelMK3$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -752,23 +753,9 @@ final class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Calculate the largest index of i that is possible and allocate an array to hold
-		// the guard for each of these.
-		int cv$max_i = 0;
-		cv$max_i = Math.max(cv$max_i, ((length$observed - 0) / 1));
-		
-		// Allocation of guard$sample21gaussian37$global for single threaded execution
-		guard$sample21gaussian37$global = new boolean[cv$max_i];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for generated
 		{
 			generated = new double[length$observed];
@@ -799,6 +786,20 @@ final class ParallelMK3$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Calculate the largest index of i that is possible and allocate an array to hold
+		// the guard for each of these.
+		int cv$max_i = 0;
+		cv$max_i = Math.max(cv$max_i, ((length$observed - 0) / 1));
+		
+		// Allocation of guard$sample21gaussian37$global for single threaded execution
+		guard$sample21gaussian37$global = new boolean[cv$max_i];
 	}
 
 	// Method to execute the model code conventionally.

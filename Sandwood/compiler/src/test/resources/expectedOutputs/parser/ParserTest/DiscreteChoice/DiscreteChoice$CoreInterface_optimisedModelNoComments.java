@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface DiscreteChoice$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface DiscreteChoice$CoreInterface extends CoreModel {
 	public int[] get$ObsChoices();
 	public void set$ObsChoices(int[] cv$value, boolean allocated$);
 	public int[] get$choices();

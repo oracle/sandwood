@@ -1,34 +1,35 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DiscreteChoiceAlt$CoreInterface {
-	
+final class DiscreteChoiceAlt$SingleThreadCPU extends CoreModelSingleThreadCPU implements DiscreteChoiceAlt$CoreInterface {
+
 	// Declare the variables for the model.
-	private int[] ObsChoices;
-	private int[] choices;
-	private boolean[] constrainedFlag$sample24;
-	private double[] exped;
-	private boolean fixedFlag$sample24 = false;
-	private boolean fixedProbFlag$sample24 = false;
-	private boolean fixedProbFlag$sample78 = false;
-	private boolean[] guard$sample24put65$global;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$choices;
-	private double logProbability$exped;
-	private double logProbability$prob;
-	private double[] logProbability$sample24;
-	private double logProbability$sum;
-	private double logProbability$ut;
-	private double logProbability$var77;
-	private int noObs;
-	private int noProducts;
-	private double[] prob;
-	private double sum;
-	private boolean system$gibbsForward = true;
-	private double[] ut;
+	int[] ObsChoices;
+	int[] choices;
+	boolean[] constrainedFlag$sample24;
+	double[] exped;
+	boolean fixedFlag$sample24 = false;
+	boolean fixedProbFlag$sample24 = false;
+	boolean fixedProbFlag$sample78 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$choices;
+	double logProbability$exped;
+	double logProbability$prob;
+	double[] logProbability$sample24;
+	double logProbability$sum;
+	double logProbability$ut;
+	double logProbability$var77;
+	int noObs;
+	int noProducts;
+	double[] prob;
+	double sum;
+	boolean system$gibbsForward = true;
+	double[] ut;
+	boolean[] guard$sample24put65$global;
 
 	public DiscreteChoiceAlt$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -1283,23 +1284,9 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Calculate the largest index of i that is possible and allocate an array to hold
-		// the guard for each of these.
-		int cv$max_i$var61 = 0;
-		cv$max_i$var61 = Math.max(cv$max_i$var61, ((noProducts - 0) / 1));
-		
-		// Allocation of guard$sample24put65$global for single threaded execution
-		guard$sample24put65$global = new boolean[cv$max_i$var61];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// If ut has not been set already allocate space.
 		if(!fixedFlag$sample24) {
 			// Constructor for ut
@@ -1335,6 +1322,20 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Calculate the largest index of i that is possible and allocate an array to hold
+		// the guard for each of these.
+		int cv$max_i$var61 = 0;
+		cv$max_i$var61 = Math.max(cv$max_i$var61, ((noProducts - 0) / 1));
+		
+		// Allocation of guard$sample24put65$global for single threaded execution
+		guard$sample24put65$global = new boolean[cv$max_i$var61];
 	}
 
 	// Method to execute the model code conventionally.

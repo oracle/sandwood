@@ -1,102 +1,103 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMMetrics$CoreInterface {
-	private boolean[] constrainedFlag$sample113;
-	private boolean[] constrainedFlag$sample130;
-	private boolean[] constrainedFlag$sample147;
-	private boolean[] constrainedFlag$sample164;
-	private boolean[] constrainedFlag$sample30;
-	private boolean constrainedFlag$sample36 = true;
-	private boolean constrainedFlag$sample39 = true;
-	private boolean[] constrainedFlag$sample57;
-	private boolean[] constrainedFlag$sample77;
-	private boolean[] constrainedFlag$sample95;
-	private double[] cpu;
-	private double[] cpuMean;
-	private double[] cpuVar;
-	private double[] cpu_measured;
-	private double[] cv$distributionAccumulator$var55;
-	private double[] cv$var30$countGlobal;
-	private double[] cv$var35$countGlobal;
-	private double[] cv$var38$stateProbabilityGlobal;
-	private double[] cv$var56$stateProbabilityGlobal;
-	private double[] distribution$sample39;
-	private double[][] distribution$sample57;
-	private boolean fixedFlag$sample113 = false;
-	private boolean fixedFlag$sample130 = false;
-	private boolean fixedFlag$sample147 = false;
-	private boolean fixedFlag$sample164 = false;
-	private boolean fixedFlag$sample30 = false;
-	private boolean fixedFlag$sample36 = false;
-	private boolean fixedFlag$sample39 = false;
-	private boolean fixedFlag$sample57 = false;
-	private boolean fixedFlag$sample77 = false;
-	private boolean fixedFlag$sample95 = false;
-	private boolean fixedProbFlag$sample113 = false;
-	private boolean fixedProbFlag$sample130 = false;
-	private boolean fixedProbFlag$sample147 = false;
-	private boolean fixedProbFlag$sample164 = false;
-	private boolean fixedProbFlag$sample180 = false;
-	private boolean fixedProbFlag$sample185 = false;
-	private boolean fixedProbFlag$sample190 = false;
-	private boolean fixedProbFlag$sample30 = false;
-	private boolean fixedProbFlag$sample36 = false;
-	private boolean fixedProbFlag$sample39 = false;
-	private boolean fixedProbFlag$sample57 = false;
-	private boolean fixedProbFlag$sample77 = false;
-	private boolean fixedProbFlag$sample95 = false;
-	private boolean[] guard$sample39gaussian179$global;
-	private boolean[] guard$sample39gaussian184$global;
-	private boolean[] guard$sample39gaussian189$global;
-	private boolean[] guard$sample57gaussian179$global;
-	private boolean[] guard$sample57gaussian184$global;
-	private boolean[] guard$sample57gaussian189$global;
-	private double[] initialStateDistribution;
-	private int length$cpu_measured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$cpu;
-	private double logProbability$cpuMean;
-	private double logProbability$cpuVar;
-	private double logProbability$initialStateDistribution;
-	private double logProbability$m;
-	private double logProbability$mem;
-	private double logProbability$memMean;
-	private double logProbability$memVar;
-	private double logProbability$pageFaults;
-	private double logProbability$pageFaultsMean;
-	private double logProbability$pageFaultsVar;
-	private double[] logProbability$sample180;
-	private double[] logProbability$sample185;
-	private double[] logProbability$sample190;
-	private double[] logProbability$sample57;
-	private double logProbability$st;
-	private double logProbability$var112;
-	private double logProbability$var129;
-	private double logProbability$var146;
-	private double logProbability$var163;
-	private double logProbability$var30;
-	private double logProbability$var38;
-	private double logProbability$var76;
-	private double logProbability$var94;
-	private double[][] m;
-	private double[] mem;
-	private double[] memMean;
-	private double[] memVar;
-	private double[] mem_measured;
-	private int noStates;
-	private double[] pageFaults;
-	private double[] pageFaultsMean;
-	private double[] pageFaultsVar;
-	private double[] pageFaults_measured;
-	private int samples;
-	private int[] st;
-	private boolean system$gibbsForward = true;
-	private double[] v;
+final class HMMMetrics$SingleThreadCPU extends CoreModelSingleThreadCPU implements HMMMetrics$CoreInterface {
+boolean[] constrainedFlag$sample113;
+	boolean[] constrainedFlag$sample130;
+	boolean[] constrainedFlag$sample147;
+	boolean[] constrainedFlag$sample164;
+	boolean[] constrainedFlag$sample30;
+	boolean constrainedFlag$sample36 = true;
+	boolean constrainedFlag$sample39 = true;
+	boolean[] constrainedFlag$sample57;
+	boolean[] constrainedFlag$sample77;
+	boolean[] constrainedFlag$sample95;
+	double[] cpu;
+	double[] cpuMean;
+	double[] cpuVar;
+	double[] cpu_measured;
+	double[] distribution$sample39;
+	double[][] distribution$sample57;
+	boolean fixedFlag$sample113 = false;
+	boolean fixedFlag$sample130 = false;
+	boolean fixedFlag$sample147 = false;
+	boolean fixedFlag$sample164 = false;
+	boolean fixedFlag$sample30 = false;
+	boolean fixedFlag$sample36 = false;
+	boolean fixedFlag$sample39 = false;
+	boolean fixedFlag$sample57 = false;
+	boolean fixedFlag$sample77 = false;
+	boolean fixedFlag$sample95 = false;
+	boolean fixedProbFlag$sample113 = false;
+	boolean fixedProbFlag$sample130 = false;
+	boolean fixedProbFlag$sample147 = false;
+	boolean fixedProbFlag$sample164 = false;
+	boolean fixedProbFlag$sample180 = false;
+	boolean fixedProbFlag$sample185 = false;
+	boolean fixedProbFlag$sample190 = false;
+	boolean fixedProbFlag$sample30 = false;
+	boolean fixedProbFlag$sample36 = false;
+	boolean fixedProbFlag$sample39 = false;
+	boolean fixedProbFlag$sample57 = false;
+	boolean fixedProbFlag$sample77 = false;
+	boolean fixedProbFlag$sample95 = false;
+	double[] initialStateDistribution;
+	int length$cpu_measured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$cpu;
+	double logProbability$cpuMean;
+	double logProbability$cpuVar;
+	double logProbability$initialStateDistribution;
+	double logProbability$m;
+	double logProbability$mem;
+	double logProbability$memMean;
+	double logProbability$memVar;
+	double logProbability$pageFaults;
+	double logProbability$pageFaultsMean;
+	double logProbability$pageFaultsVar;
+	double[] logProbability$sample180;
+	double[] logProbability$sample185;
+	double[] logProbability$sample190;
+	double[] logProbability$sample57;
+	double logProbability$st;
+	double logProbability$var112;
+	double logProbability$var129;
+	double logProbability$var146;
+	double logProbability$var163;
+	double logProbability$var30;
+	double logProbability$var38;
+	double logProbability$var76;
+	double logProbability$var94;
+	double[][] m;
+	double[] mem;
+	double[] memMean;
+	double[] memVar;
+	double[] mem_measured;
+	int noStates;
+	double[] pageFaults;
+	double[] pageFaultsMean;
+	double[] pageFaultsVar;
+	double[] pageFaults_measured;
+	int samples;
+	int[] st;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[] cv$distributionAccumulator$var55;
+	double[] cv$var30$countGlobal;
+	double[] cv$var35$countGlobal;
+	double[] cv$var38$stateProbabilityGlobal;
+	double[] cv$var56$stateProbabilityGlobal;
+	boolean[] guard$sample39gaussian179$global;
+	boolean[] guard$sample39gaussian184$global;
+	boolean[] guard$sample39gaussian189$global;
+	boolean[] guard$sample57gaussian179$global;
+	boolean[] guard$sample57gaussian184$global;
+	boolean[] guard$sample57gaussian189$global;
 
 	public HMMMetrics$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -13597,58 +13598,7 @@ final class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
-	public final void allocateScratch() {
-		{
-			cv$var30$countGlobal = new double[noStates];
-		}
-		{
-			cv$var35$countGlobal = new double[noStates];
-		}
-		{
-			int cv$var31$max = noStates;
-			cv$distributionAccumulator$var55 = new double[cv$var31$max];
-		}
-		{
-			cv$var38$stateProbabilityGlobal = new double[noStates];
-		}
-		{
-			int cv$max_i$var174 = 0;
-			cv$max_i$var174 = Math.max(cv$max_i$var174, ((length$cpu_measured - 0) / 1));
-			guard$sample39gaussian179$global = new boolean[cv$max_i$var174];
-		}
-		{
-			int cv$max_i$var174 = 0;
-			cv$max_i$var174 = Math.max(cv$max_i$var174, ((length$cpu_measured - 0) / 1));
-			guard$sample39gaussian184$global = new boolean[cv$max_i$var174];
-		}
-		{
-			int cv$max_i$var174 = 0;
-			cv$max_i$var174 = Math.max(cv$max_i$var174, ((length$cpu_measured - 0) / 1));
-			guard$sample39gaussian189$global = new boolean[cv$max_i$var174];
-		}
-		{
-			int cv$var31$max = noStates;
-			cv$var56$stateProbabilityGlobal = new double[cv$var31$max];
-		}
-		{
-			int cv$max_i$var174 = 0;
-			cv$max_i$var174 = Math.max(cv$max_i$var174, ((length$cpu_measured - 0) / 1));
-			guard$sample57gaussian179$global = new boolean[cv$max_i$var174];
-		}
-		{
-			int cv$max_i$var174 = 0;
-			cv$max_i$var174 = Math.max(cv$max_i$var174, ((length$cpu_measured - 0) / 1));
-			guard$sample57gaussian184$global = new boolean[cv$max_i$var174];
-		}
-		{
-			int cv$max_i$var174 = 0;
-			cv$max_i$var174 = Math.max(cv$max_i$var174, ((length$cpu_measured - 0) / 1));
-			guard$sample57gaussian189$global = new boolean[cv$max_i$var174];
-		}
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		{
 			v = new double[noStates];
 		}
@@ -13753,6 +13703,57 @@ final class HMMMetrics$SingleThreadCPU extends org.sandwood.runtime.internal.mod
 			logProbability$sample190 = new double[((((length$cpu_measured - 1) - 0) / 1) + 1)];
 		}
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		{
+			cv$var30$countGlobal = new double[noStates];
+		}
+		{
+			cv$var35$countGlobal = new double[noStates];
+		}
+		{
+			int cv$var31$max = noStates;
+			cv$distributionAccumulator$var55 = new double[cv$var31$max];
+		}
+		{
+			cv$var38$stateProbabilityGlobal = new double[noStates];
+		}
+		{
+			int cv$max_i$var174 = 0;
+			cv$max_i$var174 = Math.max(cv$max_i$var174, ((length$cpu_measured - 0) / 1));
+			guard$sample39gaussian179$global = new boolean[cv$max_i$var174];
+		}
+		{
+			int cv$max_i$var174 = 0;
+			cv$max_i$var174 = Math.max(cv$max_i$var174, ((length$cpu_measured - 0) / 1));
+			guard$sample39gaussian184$global = new boolean[cv$max_i$var174];
+		}
+		{
+			int cv$max_i$var174 = 0;
+			cv$max_i$var174 = Math.max(cv$max_i$var174, ((length$cpu_measured - 0) / 1));
+			guard$sample39gaussian189$global = new boolean[cv$max_i$var174];
+		}
+		{
+			int cv$var31$max = noStates;
+			cv$var56$stateProbabilityGlobal = new double[cv$var31$max];
+		}
+		{
+			int cv$max_i$var174 = 0;
+			cv$max_i$var174 = Math.max(cv$max_i$var174, ((length$cpu_measured - 0) / 1));
+			guard$sample57gaussian179$global = new boolean[cv$max_i$var174];
+		}
+		{
+			int cv$max_i$var174 = 0;
+			cv$max_i$var174 = Math.max(cv$max_i$var174, ((length$cpu_measured - 0) / 1));
+			guard$sample57gaussian184$global = new boolean[cv$max_i$var174];
+		}
+		{
+			int cv$max_i$var174 = 0;
+			cv$max_i$var174 = Math.max(cv$max_i$var174, ((length$cpu_measured - 0) / 1));
+			guard$sample57gaussian189$global = new boolean[cv$max_i$var174];
+		}
 	}
 
 	@Override

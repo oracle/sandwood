@@ -1,32 +1,33 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK20$CoreInterface {
-	
+final class Flip1CoinMK20$MultiThreadCPU extends CoreModelMultiThreadCPU implements Flip1CoinMK20$CoreInterface {
+
 	// Declare the variables for the model.
-	private double bias;
-	private boolean constrainedFlag$sample8 = true;
-	private int count1;
-	private int count2;
-	private boolean fixedFlag$sample11 = false;
-	private boolean fixedFlag$sample12 = false;
-	private boolean fixedFlag$sample8 = false;
-	private boolean fixedProbFlag$sample11 = false;
-	private boolean fixedProbFlag$sample12 = false;
-	private boolean fixedProbFlag$sample8 = false;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double logProbability$binomial;
-	private double logProbability$count1;
-	private double logProbability$count2;
-	private int obs1;
-	private int obs2;
-	private boolean system$gibbsForward = true;
-	private int total;
+	double bias;
+	boolean constrainedFlag$sample8 = true;
+	int count1;
+	int count2;
+	boolean fixedFlag$sample11 = false;
+	boolean fixedFlag$sample12 = false;
+	boolean fixedFlag$sample8 = false;
+	boolean fixedProbFlag$sample11 = false;
+	boolean fixedProbFlag$sample12 = false;
+	boolean fixedProbFlag$sample8 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$binomial;
+	double logProbability$count1;
+	double logProbability$count2;
+	int obs1;
+	int obs2;
+	boolean system$gibbsForward = true;
+	int total;
 
 	public Flip1CoinMK20$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -547,15 +548,15 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {}
 
 	// Method to execute the model code conventionally.
 	@Override

@@ -37,6 +37,8 @@ import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.GetTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
 import org.sandwood.compiler.dataflowGraph.tasks.nonReturnTasks.ObserveVariableTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.NamedArrayVariable;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.ObjectVariable;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableImplementation;
@@ -53,9 +55,11 @@ import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.exceptions.ConstraintAlreadySetException;
 import org.sandwood.compiler.exceptions.SandwoodModelException;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
+import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
-public class ArrayVariable<A extends Variable<A>> extends VariableImplementation<ArrayVariable<A>> {
+public class ArrayVariable<A extends Variable<A>> extends VariableImplementation<ArrayVariable<A>>
+        implements ObjectVariable<ArrayVariable<A>> {
 
     public interface ArrayValueInit<V extends Variable<V>> {
         V getValue();
@@ -679,12 +683,12 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         return v;
     }
 
-    public interface InitializationBody<A extends Variable<A>> {
-        ArrayVariable<A> initialize();
+    public interface InitilisationBody<A extends Variable<A>> {
+        ArrayVariable<A> initialise();
     }
 
-    public static <A extends Variable<A>> ArrayVariable<A> getArrayVariable(InitializationBody<A> i) {
-        return i.initialize();
+    public static <A extends Variable<A>> ArrayVariable<A> getArrayVariable(InitilisationBody<A> i) {
+        return i.initialise();
     }
 
     public boolean isSubArray() {
@@ -813,6 +817,14 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         super.setAlias(alias);
         if(childInstance != null)
             childInstance.setAlias(alias);
+    }
+
+    // TODO this name may need repositioning so the name only becomes fixed once we know what the target language is.
+    public static LocalVariableDescription<IntVariable> lengthName = new LocalVariableDescription<>("length",
+            VariableType.IntVariable, false);
+
+    public static <X extends Variable<X>> IRTreeReturn<IntVariable> getLengthTree(IRTreeReturn<ArrayVariable<X>> tree) {
+        return IRTree.getField(tree, lengthName);
     }
 
     /* parent */

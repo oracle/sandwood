@@ -1,24 +1,27 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements UniformBernoulli$CoreInterface {
-	private boolean constrainedFlag$sample5 = true;
-	private boolean fixedFlag$sample5 = false;
-	private boolean fixedProbFlag$sample19 = false;
-	private boolean fixedProbFlag$sample5 = false;
-	private int length$observed;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bernoulli;
-	private double logProbability$output;
-	private double logProbability$prior;
-	private double logProbability$var19;
-	private boolean[] observed;
-	private boolean[] output;
-	private double prior;
-	private boolean system$gibbsForward = true;
+final class UniformBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU implements UniformBernoulli$CoreInterface {
+double a;
+	double b;
+	boolean constrainedFlag$sample5 = true;
+	boolean fixedFlag$sample5 = false;
+	boolean fixedProbFlag$sample19 = false;
+	boolean fixedProbFlag$sample5 = false;
+	int length$observed;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bernoulli;
+	double logProbability$output;
+	double logProbability$prior;
+	double logProbability$var19;
+	boolean[] observed;
+	boolean[] output;
+	double prior;
+	boolean system$gibbsForward = true;
 
 	public UniformBernoulli$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -177,12 +180,12 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 	}
 
 	@Override
-	public final void allocateScratch() {}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		output = new boolean[length$observed];
 	}
+
+	@Override
+	public final void allocateScratch() {}
 
 	@Override
 	public final void forwardGeneration() {

@@ -8,20 +8,20 @@
 
 package org.sandwood.compiler.trees.irTree;
 
-import org.sandwood.compiler.dataflowGraph.variables.VariableType;
+import org.sandwood.compiler.dataflowGraph.variables.ObjectVariable;
+import org.sandwood.compiler.dataflowGraph.variables.Variable;
+import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
-import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.trees.irTree.transformations.TreeTransformation;
-import org.sandwood.compiler.trees.transformationTree.TransGetIntField;
 import org.sandwood.compiler.trees.transformationTree.TransTree;
+import org.sandwood.compiler.trees.transformationTree.TransTreeReturn;
 
-//TODO Rename to IRGetLength and tighten arguments, or think about how to tighten arguments in general.
-public class IRGetIntField extends IRTreeReturn<IntVariable> {
+public class IRGetField<A extends ObjectVariable<A>, X extends Variable<X>> extends IRTreeReturn<X> {
 
-    private final String name;
-    private final IRTreeReturn<?> tree;
+    private final VariableDescription<X> name;
+    private final IRTreeReturn<A> tree;
 
-    IRGetIntField(IRTreeReturn<?> tree, String name) {
+    IRGetField(IRTreeReturn<A> tree, VariableDescription<X> name) {
         super(IRTreeType.GET_FIELD);
         this.name = name;
         this.tree = tree;
@@ -38,8 +38,8 @@ public class IRGetIntField extends IRTreeReturn<IntVariable> {
     }
 
     @Override
-    public TransGetIntField toTransformationTree() {
-        return TransTree.getIntField(tree.toTransformationTree(), name);
+    public TransTreeReturn<X> toTransformationTree() {
+        return TransTree.getField(tree.toTransformationTree(), name);
     }
 
     @Override
@@ -57,20 +57,20 @@ public class IRGetIntField extends IRTreeReturn<IntVariable> {
             return true;
         if((tree == null) || (type != tree.type))
             return false;
-        IRGetIntField other = (IRGetIntField) tree;
+        IRGetField<?,?> other = (IRGetField<?,?>) tree;
         if(!name.equals(other.name))
             return false;
         return tree.equivalent(other.tree);
     }
 
     @Override
-    public IRGetIntField applyTransformation(TreeTransformation t) {
-        return new IRGetIntField(t.transformReturn(tree), name);
+    public IRTreeReturn<X> applyTransformation(TreeTransformation t) {
+        return new IRGetField<>(t.transformReturn(tree), name);
     }
 
     @Override
-    public Type<IntVariable> getOutputType() {
-        return VariableType.IntVariable;
+    public Type<X> getOutputType() {
+        return name.type;
     }
 
     @Override

@@ -1,41 +1,42 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements LDATest$CoreInterface {
-	private double[] alpha;
-	private double[] beta;
-	private boolean[] constrainedFlag$sample42;
-	private boolean[] constrainedFlag$sample58;
-	private boolean[][] constrainedFlag$sample90;
-	private double[][] cv$var42$countGlobal;
-	private double[][] cv$var57$countGlobal;
-	private double[][] cv$var88$stateProbabilityGlobal;
-	private int[][] documents;
-	private boolean fixedFlag$sample42 = false;
-	private boolean fixedFlag$sample58 = false;
-	private boolean fixedProbFlag$sample42 = false;
-	private boolean fixedProbFlag$sample58 = false;
-	private int[] length$documents;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$phi;
-	private double[][] logProbability$sample90;
-	private double[][] logProbability$sample93;
-	private double logProbability$theta;
-	private double logProbability$var42;
-	private double logProbability$var57;
-	private double logProbability$w;
-	private int noTopics;
-	private double[][] phi;
-	private boolean system$gibbsForward = true;
-	private double[][] theta;
-	private int vocabSize;
-	private int[][] w;
-	private int[][] z;
+final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LDATest$CoreInterface {
+double[] alpha;
+	double[] beta;
+	boolean[] constrainedFlag$sample42;
+	boolean[] constrainedFlag$sample58;
+	boolean[][] constrainedFlag$sample90;
+	int[][] documents;
+	boolean fixedFlag$sample42 = false;
+	boolean fixedFlag$sample58 = false;
+	boolean fixedProbFlag$sample42 = false;
+	boolean fixedProbFlag$sample58 = false;
+	int[] length$documents;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$phi;
+	double[][] logProbability$sample90;
+	double[][] logProbability$sample93;
+	double logProbability$theta;
+	double logProbability$var42;
+	double logProbability$var57;
+	double logProbability$w;
+	int noTopics;
+	double[][] phi;
+	boolean system$gibbsForward = true;
+	double[][] theta;
+	int vocabSize;
+	int[][] w;
+	int[][] z;
+	double[][] cv$var42$countGlobal;
+	double[][] cv$var57$countGlobal;
+	double[][] cv$var88$stateProbabilityGlobal;
 
 	public LDATest$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -336,27 +337,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void allocateScratch() {
-		{
-			int cv$threadCount = threadCount();
-			cv$var42$countGlobal = new double[cv$threadCount][];
-			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				cv$var42$countGlobal[cv$index] = new double[vocabSize];
-		}
-		{
-			int cv$threadCount = threadCount();
-			cv$var57$countGlobal = new double[cv$threadCount][];
-			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				cv$var57$countGlobal[cv$index] = new double[noTopics];
-		}
-		int cv$threadCount = threadCount();
-		cv$var88$stateProbabilityGlobal = new double[cv$threadCount][];
-		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			cv$var88$stateProbabilityGlobal[cv$index] = new double[noTopics];
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		alpha = new double[noTopics];
 		beta = new double[vocabSize];
 		if(!fixedFlag$sample42) {
@@ -387,6 +368,26 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
 			logProbability$sample93[i$var71] = new double[length$documents[i$var71]];
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		{
+			int cv$threadCount = threadCount();
+			cv$var42$countGlobal = new double[cv$threadCount][];
+			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+				cv$var42$countGlobal[cv$index] = new double[vocabSize];
+		}
+		{
+			int cv$threadCount = threadCount();
+			cv$var57$countGlobal = new double[cv$threadCount][];
+			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+				cv$var57$countGlobal[cv$index] = new double[noTopics];
+		}
+		int cv$threadCount = threadCount();
+		cv$var88$stateProbabilityGlobal = new double[cv$threadCount][];
+		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+			cv$var88$stateProbabilityGlobal[cv$index] = new double[noTopics];
 	}
 
 	@Override
