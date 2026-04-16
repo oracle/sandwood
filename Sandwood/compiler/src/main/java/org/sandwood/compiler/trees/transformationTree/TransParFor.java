@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
-import org.sandwood.compiler.dataflowGraph.variables.rng.RandomNumberGenerator;
+import org.sandwood.compiler.dataflowGraph.variables.internal.RandomNumberGenerator;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.trees.outputTree.OutputTree;
 import org.sandwood.compiler.trees.transformationTree.transformers.Transformer;

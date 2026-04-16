@@ -1,11 +1,13 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Conditional3$CoreInterface {
-	
+final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implements Conditional3$CoreInterface {
+
 	// Declare the variables for the model.
+<<<<<<< Upstream, based on POW
 	private double bias;
 	private boolean constrainedFlag$sample16 = true;
 	private boolean constrainedFlag$sample4 = true;
@@ -27,6 +29,30 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	private boolean system$gibbsForward = true;
 	private double value;
 	private double var14;
+=======
+	double bias;
+	boolean constrainedFlag$sample16 = true;
+	boolean constrainedFlag$sample4 = true;
+	boolean fixedFlag$sample16 = false;
+	boolean fixedFlag$sample4 = false;
+	boolean fixedProbFlag$sample16 = false;
+	boolean fixedProbFlag$sample20 = false;
+	boolean fixedProbFlag$sample4 = false;
+	boolean guard;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bernoulli;
+	double logProbability$bias;
+	double logProbability$guard;
+	double logProbability$sample16;
+	double logProbability$value;
+	double logProbability$var14;
+	double observedValue;
+	boolean system$gibbsForward = true;
+	double value;
+	double var14;
+	double[] cv$var4$stateProbabilityGlobal;
+>>>>>>> daee89e Adding in a class to hold just the state. This will be worked on further as the code generation progresses. Commit before adding inner classes to the outer classes. Updating output class structure checkpoint Checkpoint in the restructuring of the output classes to increase the shared code. Finished restructuring the classes, time to start using inner classes. Updates to tree structure Changing the structure of get field so that it can be used to get other types of field, read for getting data out of the scratch and model data classes. Removing unused imports Adding nodes to allow fields in an object ot be set. Moving rng package so that we can add other internal only variable types. Updates to the handling of transformations. Moving from sets to lists of generics Updating the structure of inner class. Changing the passing of fields to sub classes. Updating class structure
 
 	public Conditional3$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -226,7 +252,7 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Calculate a proposed variance.
 		// 
-		// The original value of the sample
+						// The original value of the sample
 		double cv$var = (((var14 < 0)?(-var14):var14) * 40.0);
 		
 		// Ensure the variance is at least 0.01
@@ -262,10 +288,10 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Set an accumulator to record the consumer distributions not seen. Initially set
 		// to 1 as seen values will be deducted from this value.
 		// 
-		// An accumulator to allow the value for each distribution to be constructed before
+						// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Set the current value to the current state of the tree.
+						// Set the current value to the current state of the tree.
 		// 
 		// The original value of the sample
 		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(value, var14, 1.0) + (((0.0 <= var14) && (var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
@@ -296,7 +322,7 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Set an accumulator to record the consumer distributions not seen. Initially set
 		// to 1 as seen values will be deducted from this value.
 		// 
-		// An accumulator to allow the value for each distribution to be constructed before
+						// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		double cv$ratio = ((DistributionSampling.logProbabilityBeta(value, cv$proposedValue, 1.0) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY)) - cv$originalProbability);
 		
@@ -328,7 +354,7 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// 
 		// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "0".
+						// Substituted "cv$valuePos" with its value "0".
 		guard = false;
 		bias = var14;
 		
@@ -337,9 +363,9 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		// 
@@ -392,9 +418,9 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		// 
@@ -461,30 +487,30 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Unrolled loop
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			cv$var4$stateProbabilityGlobal[0] = 0.5;
 			
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			cv$var4$stateProbabilityGlobal[1] = 0.5;
 		} else {
 			// Unrolled loop
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			cv$var4$stateProbabilityGlobal[0] = Math.exp((cv$var4$stateProbabilityGlobal[0] - cv$logSum));
 			
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			cv$var4$stateProbabilityGlobal[1] = Math.exp((cv$var4$stateProbabilityGlobal[1] - cv$logSum));
 		}
 		
 		// Set array values that are not computed for the input to negative infinity.
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		for(int cv$indexName = 2; cv$indexName < cv$var4$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Get a local reference to the scratch space.
 			cv$var4$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the new value of the sample.
 		// 
-		// cv$numStates's comment
+								// cv$numStates's comment
 		// variable marginalization
 		guard = (DistributionSampling.sampleCategorical(RNG$, cv$var4$stateProbabilityGlobal, 2) == 1);
 		
@@ -513,7 +539,13 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
+<<<<<<< Upstream, based on POW
 				// Accumulator for sample probabilities for a specific instance of the random variable.
+=======
+				// Store the value of the function call, so the function call is only made once.
+				// 
+												// The sample value to calculate the probability of generating
+>>>>>>> daee89e Adding in a class to hold just the state. This will be worked on further as the code generation progresses. Commit before adding inner classes to the outer classes. Updating output class structure checkpoint Checkpoint in the restructuring of the output classes to increase the shared code. Finished restructuring the classes, time to start using inner classes. Updates to tree structure Changing the structure of get field so that it can be used to get other types of field, read for getting data out of the scratch and model data classes. Removing unused imports Adding nodes to allow fields in an object ot be set. Moving rng package so that we can add other internal only variable types. Updates to the handling of transformations. Moving from sets to lists of generics Updating the structure of inner class. Changing the passing of fields to sub classes. Updating class structure
 				// 
 				// Scale the probability relative to the observed distribution space.
 				// 
@@ -527,8 +559,24 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				// 
 				// Store the value of the function call, so the function call is only made once.
 				// 
+<<<<<<< Upstream, based on POW
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (((0.0 <= var14) && (var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY);
+=======
+												// The sample value to calculate the probability of generating
+				double cv$distributionAccumulator = (((0.0 <= var14) && (var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY);
+				
+				// Add the probability of this sample task to the sample task accumulator.
+				// 
+				// Accumulator for sample probabilities for a specific instance of the random variable.
+				cv$sampleAccumulator = cv$distributionAccumulator;
+				
+				// Store the sample task probability
+				logProbability$sample16 = cv$distributionAccumulator;
+				
+				// Update the variable probability
+				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
+>>>>>>> daee89e Adding in a class to hold just the state. This will be worked on further as the code generation progresses. Commit before adding inner classes to the outer classes. Updating output class structure checkpoint Checkpoint in the restructuring of the output classes to increase the shared code. Finished restructuring the classes, time to start using inner classes. Updates to tree structure Changing the structure of get field so that it can be used to get other types of field, read for getting data out of the scratch and model data classes. Removing unused imports Adding nodes to allow fields in an object ot be set. Moving rng package so that we can add other internal only variable types. Updates to the handling of transformations. Moving from sets to lists of generics Updating the structure of inner class. Changing the passing of fields to sub classes. Updating class structure
 			}
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
@@ -806,6 +854,13 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// Allocate scratch space
+		allocateScratch();
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -817,13 +872,6 @@ final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// 
 		// Allocation of cv$var4$stateProbabilityGlobal for single threaded execution
 		cv$var4$stateProbabilityGlobal = new double[2];
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// Allocate scratch space
-		allocateScratch();
 	}
 
 	// Method to execute the model code conventionally.

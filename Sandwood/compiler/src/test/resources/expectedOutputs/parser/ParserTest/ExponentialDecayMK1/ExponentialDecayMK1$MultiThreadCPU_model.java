@@ -1,30 +1,31 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ExponentialDecayMK1$CoreInterface {
-	
+final class ExponentialDecayMK1$MultiThreadCPU extends CoreModelMultiThreadCPU implements ExponentialDecayMK1$CoreInterface {
+
 	// Declare the variables for the model.
-	private double a;
-	private double b;
-	private boolean constrainedFlag$sample6 = true;
-	private double[] decay;
-	private double[] decayDetected;
-	private boolean fixedFlag$sample6 = false;
-	private boolean fixedProbFlag$sample19 = false;
-	private boolean fixedProbFlag$sample6 = false;
-	private int length$decayDetected;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$decay;
-	private double logProbability$exponential;
-	private double logProbability$rate;
-	private double logProbability$var19;
-	private double rate;
-	private int samples;
-	private boolean system$gibbsForward = true;
+	double a;
+	double b;
+	boolean constrainedFlag$sample6 = true;
+	double[] decay;
+	double[] decayDetected;
+	boolean fixedFlag$sample6 = false;
+	boolean fixedProbFlag$sample19 = false;
+	boolean fixedProbFlag$sample6 = false;
+	int length$decayDetected;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$decay;
+	double logProbability$exponential;
+	double logProbability$rate;
+	double logProbability$var19;
+	double rate;
+	int samples;
+	boolean system$gibbsForward = true;
 
 	public ExponentialDecayMK1$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -424,17 +425,17 @@ final class ExponentialDecayMK1$MultiThreadCPU extends org.sandwood.runtime.inte
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		decay = new double[length$decayDetected];
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		decay = new double[length$decayDetected];
-	}
 
 	// Method to execute the model code conventionally.
 	@Override

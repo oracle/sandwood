@@ -1,43 +1,44 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements LDATest$CoreInterface {
-	
+final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LDATest$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[] alpha;
-	private double[] beta;
-	private boolean[] constrainedFlag$sample42;
-	private boolean[] constrainedFlag$sample58;
-	private boolean[][] constrainedFlag$sample90;
-	private double[][] cv$var42$countGlobal;
-	private double[][] cv$var57$countGlobal;
-	private double[][] cv$var88$stateProbabilityGlobal;
-	private int[][] documents;
-	private boolean fixedFlag$sample42 = false;
-	private boolean fixedFlag$sample58 = false;
-	private boolean fixedProbFlag$sample42 = false;
-	private boolean fixedProbFlag$sample58 = false;
-	private int[] length$documents;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$phi;
-	private double logProbability$theta;
-	private double logProbability$var42;
-	private double logProbability$var57;
-	private double logProbability$var91;
-	private double logProbability$w;
-	private double logProbability$z;
-	private int noTopics;
-	private double[][] phi;
-	private boolean system$gibbsForward = true;
-	private double[][] theta;
-	private int vocabSize;
-	private int[][] w;
-	private int[][] z;
+	double[] alpha;
+	double[] beta;
+	boolean[] constrainedFlag$sample42;
+	boolean[] constrainedFlag$sample58;
+	boolean[][] constrainedFlag$sample90;
+	int[][] documents;
+	boolean fixedFlag$sample42 = false;
+	boolean fixedFlag$sample58 = false;
+	boolean fixedProbFlag$sample42 = false;
+	boolean fixedProbFlag$sample58 = false;
+	int[] length$documents;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$phi;
+	double logProbability$theta;
+	double logProbability$var42;
+	double logProbability$var57;
+	double logProbability$var91;
+	double logProbability$w;
+	double logProbability$z;
+	int noTopics;
+	double[][] phi;
+	boolean system$gibbsForward = true;
+	double[][] theta;
+	int vocabSize;
+	int[][] w;
+	int[][] z;
+	double[][] cv$var42$countGlobal;
+	double[][] cv$var57$countGlobal;
+	double[][] cv$var88$stateProbabilityGlobal;
 
 	public LDATest$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -320,7 +321,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Increment the sample counter with the value sampled by sample task 90 of random
 				// variable var87
 				// 
-				// Substituted "i$var71" with its value "var56".
+												// Substituted "i$var71" with its value "var56".
 				cv$countLocal[z[var56][j]] = (cv$countLocal[z[var56][j]] + 1.0);
 			}
 		}
@@ -345,7 +346,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// variable marginalization
 		// 
-		// cv$numStates's comment
+				// cv$numStates's comment
 		// Calculate the number of states to evaluate.
 		int cv$numStates = Math.max(0, noTopics);
 		
@@ -385,10 +386,10 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
 			// 
-			// An accumulator to allow the value for each distribution to be constructed before
+									// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			cv$stateProbabilityLocal[cv$valuePos] = (((((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[w[i$var71][j]])) && (var89[w[i$var71][j]] <= 1.0))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY) + (((((cv$valuePos < noTopics) && (0 < noTopics)) && (0.0 <= var86[cv$valuePos])) && (var86[cv$valuePos] <= 1.0))?Math.log(var86[cv$valuePos]):Double.NEGATIVE_INFINITY));
 		}
 		if(constrainedFlag$sample90[i$var71][j]) {
@@ -754,6 +755,56 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// Constructor for alpha
+		alpha = new double[noTopics];
+		
+		// Constructor for beta
+		beta = new double[vocabSize];
+		
+		// If phi has not been set already allocate space.
+		if(!fixedFlag$sample42) {
+			// Constructor for phi
+			phi = new double[noTopics][];
+			for(int var41 = 0; var41 < noTopics; var41 += 1)
+				phi[var41] = new double[vocabSize];
+		}
+		
+		// If theta has not been set already allocate space.
+		if(!fixedFlag$sample58) {
+			// Constructor for theta
+			theta = new double[length$documents.length][];
+			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
+				theta[var56] = new double[noTopics];
+		}
+		
+		// Constructor for w
+		w = new int[length$documents.length][];
+		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
+			w[i$var71] = new int[length$documents[i$var71]];
+		
+		// Constructor for z
+		z = new int[length$documents.length][];
+		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
+			z[i$var71] = new int[length$documents[i$var71]];
+		
+		// Constructor for constrainedFlag$sample90
+		constrainedFlag$sample90 = new boolean[length$documents.length][];
+		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
+			constrainedFlag$sample90[i$var71] = new boolean[length$documents[i$var71]];
+		
+		// Constructor for constrainedFlag$sample42
+		constrainedFlag$sample42 = new boolean[noTopics];
+		
+		// Constructor for constrainedFlag$sample58
+		constrainedFlag$sample58 = new boolean[length$documents.length];
+		
+		// Allocate scratch space
+		allocateScratch();
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -801,56 +852,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Variable to record the maximum value of Task Get 88. Initially set to the value
 			// of putTask 59.
 			cv$var88$stateProbabilityGlobal[cv$index] = new double[noTopics];
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// Constructor for alpha
-		alpha = new double[noTopics];
-		
-		// Constructor for beta
-		beta = new double[vocabSize];
-		
-		// If phi has not been set already allocate space.
-		if(!fixedFlag$sample42) {
-			// Constructor for phi
-			phi = new double[noTopics][];
-			for(int var41 = 0; var41 < noTopics; var41 += 1)
-				phi[var41] = new double[vocabSize];
-		}
-		
-		// If theta has not been set already allocate space.
-		if(!fixedFlag$sample58) {
-			// Constructor for theta
-			theta = new double[length$documents.length][];
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
-				theta[var56] = new double[noTopics];
-		}
-		
-		// Constructor for w
-		w = new int[length$documents.length][];
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-			w[i$var71] = new int[length$documents[i$var71]];
-		
-		// Constructor for z
-		z = new int[length$documents.length][];
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-			z[i$var71] = new int[length$documents[i$var71]];
-		
-		// Constructor for constrainedFlag$sample90
-		constrainedFlag$sample90 = new boolean[length$documents.length][];
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-			constrainedFlag$sample90[i$var71] = new boolean[length$documents[i$var71]];
-		
-		// Constructor for constrainedFlag$sample42
-		constrainedFlag$sample42 = new boolean[noTopics];
-		
-		// Constructor for constrainedFlag$sample58
-		constrainedFlag$sample58 = new boolean[length$documents.length];
-		
-		// Allocate scratch space
-		allocateScratch();
 	}
 
 	// Method to execute the model code conventionally.

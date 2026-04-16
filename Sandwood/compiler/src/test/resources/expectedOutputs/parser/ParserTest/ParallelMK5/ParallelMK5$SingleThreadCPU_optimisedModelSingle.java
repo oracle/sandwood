@@ -1,28 +1,29 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ParallelMK5$CoreInterface {
-	
+final class ParallelMK5$SingleThreadCPU extends CoreModelSingleThreadCPU implements ParallelMK5$CoreInterface {
+
 	// Declare the variables for the model.
-	private boolean[][] constrainedFlag$sample61;
-	private boolean fixedFlag$sample61 = false;
-	private boolean fixedProbFlag$sample103 = false;
-	private boolean fixedProbFlag$sample61 = false;
-	private int[] generated;
-	private double[][] indirection1;
-	private double[][] indirection2;
-	private int length$observed;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$generated;
-	private double logProbability$indirection1;
-	private double logProbability$indirection2;
-	private double[][] logProbability$sample61;
-	private double logProbability$var101;
-	private int[] observed;
-	private boolean system$gibbsForward = true;
+	boolean[][] constrainedFlag$sample61;
+	boolean fixedFlag$sample61 = false;
+	boolean fixedProbFlag$sample103 = false;
+	boolean fixedProbFlag$sample61 = false;
+	int[] generated;
+	double[][] indirection1;
+	double[][] indirection2;
+	int length$observed;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$generated;
+	double logProbability$indirection1;
+	double logProbability$indirection2;
+	double[][] logProbability$sample61;
+	double logProbability$var101;
+	int[] observed;
+	boolean system$gibbsForward = true;
 
 	public ParallelMK5$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -154,7 +155,7 @@ final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private final void drawValueSample61(int i, int j) {
 		indirection1[i][j] = DistributionSampling.sampleUniform(RNG$);
 		
-		// Substituted "l" with its value "i".
+						// Substituted "l" with its value "i".
 		// 
 		// Substituted "k" with its value "j".
 		indirection2[j][i] = indirection1[i][j];
@@ -204,10 +205,10 @@ final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
 			// 
-			// An accumulator to allow the value for each distribution to be constructed before
+									// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Set the current value to the current state of the tree.
+									// Set the current value to the current state of the tree.
 			cv$originalProbability = ((((((0.0 <= generated[j]) && (generated[j] < 10)) && (0.0 <= var99[generated[j]])) && (var99[generated[j]] <= 1.0))?Math.log(var99[generated[j]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$originalValue) && (cv$originalValue < 1.0))?0.0:Double.NEGATIVE_INFINITY));
 		}
 		
@@ -215,7 +216,7 @@ final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		if(constrainedFlag$sample61[i][j]) {
 			indirection1[i][j] = cv$proposedValue;
 			
-			// Substituted "l" with its value "i".
+									// Substituted "l" with its value "i".
 			// 
 			// Substituted "k" with its value "j".
 			indirection2[j][i] = indirection1[i][j];
@@ -250,7 +251,7 @@ final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
 			// 
-			// An accumulator to allow the value for each distribution to be constructed before
+									// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			double cv$ratio = (((((((0.0 <= generated[j]) && (generated[j] < 10)) && (0.0 <= var99[generated[j]])) && (var99[generated[j]] <= 1.0))?Math.log(var99[generated[j]]):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY)) - cv$originalProbability);
 			
@@ -265,7 +266,7 @@ final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				// intermediate variables.
 				indirection1[i][j] = cv$originalValue;
 				
-				// Substituted "l" with its value "i".
+												// Substituted "l" with its value "i".
 				// 
 				// Substituted "k" with its value "j".
 				indirection2[j][i] = indirection1[i][j];
@@ -468,15 +469,9 @@ final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for generated
 		generated = new int[length$observed];
 		
@@ -503,6 +498,12 @@ final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		for(int i = 0; i < 10; i += 1)
 			logProbability$sample61[i] = new double[length$observed];
 	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override

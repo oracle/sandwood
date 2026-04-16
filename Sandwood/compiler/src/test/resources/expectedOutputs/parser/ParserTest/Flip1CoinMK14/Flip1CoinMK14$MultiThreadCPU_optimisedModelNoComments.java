@@ -1,8 +1,10 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
+<<<<<<< Upstream, based on POW
 final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK14$CoreInterface {
 	private double b;
 	private double bias;
@@ -24,6 +26,30 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$var35;
 	private int samples;
 	private boolean system$gibbsForward = true;
+=======
+final class Flip1CoinMK14$MultiThreadCPU extends CoreModelMultiThreadCPU implements Flip1CoinMK14$CoreInterface {
+double b;
+	double bias;
+	double[] c;
+	boolean constrainedFlag$sample8 = true;
+	boolean fixedFlag$sample8 = false;
+	boolean fixedProbFlag$sample37 = false;
+	boolean fixedProbFlag$sample8 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	boolean guard1;
+	int length$flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$b;
+	double logProbability$bernoulli;
+	double logProbability$bias;
+	double logProbability$flips;
+	double logProbability$sample8;
+	double logProbability$var35;
+	int samples;
+	boolean system$gibbsForward = true;
+>>>>>>> daee89e Adding in a class to hold just the state. This will be worked on further as the code generation progresses. Commit before adding inner classes to the outer classes. Updating output class structure checkpoint Checkpoint in the restructuring of the output classes to increase the shared code. Finished restructuring the classes, time to start using inner classes. Updates to tree structure Changing the structure of get field so that it can be used to get other types of field, read for getting data out of the scratch and model data classes. Removing unused imports Adding nodes to allow fields in an object ot be set. Moving rng package so that we can add other internal only variable types. Updates to the handling of transformations. Moving from sets to lists of generics Updating the structure of inner class. Changing the passing of fields to sub classes. Updating class structure
 
 	public Flip1CoinMK14$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -246,14 +272,14 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void allocateScratch() {}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		if(!guard1)
 			c = new double[1];
 		flips = new boolean[length$flipsMeasured];
 	}
+
+	@Override
+	public final void allocateScratch() {}
 
 	@Override
 	public final void forwardGeneration() {

@@ -1,40 +1,41 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Deterministic2$CoreInterface {
-	private int[] a;
-	private int[] b;
-	private boolean[] constrainedFlag$sample29;
-	private boolean[] constrainedFlag$sample55;
-	private double[] cv$distributionAccumulator$var53;
-	private double[][] cv$var29$countGlobal;
-	private double[] cv$var54$stateProbabilityGlobal;
-	private double[][] distribution$sample55;
-	private boolean fixedFlag$sample29 = false;
-	private boolean fixedFlag$sample55 = false;
-	private boolean fixedProbFlag$sample29 = false;
-	private boolean fixedProbFlag$sample55 = false;
-	private boolean fixedProbFlag$sample75 = false;
-	private boolean[] flips;
-	private boolean[] flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$a;
-	private double logProbability$b;
-	private double logProbability$flips;
-	private double logProbability$m;
-	private double[] logProbability$sample55;
-	private double[] logProbability$sample75;
-	private double logProbability$var29;
-	private double[][] m;
-	private int n;
-	private int states;
-	private boolean system$gibbsForward = true;
-	private double[] v;
+final class Deterministic2$MultiThreadCPU extends CoreModelMultiThreadCPU implements Deterministic2$CoreInterface {
+int[] a;
+	int[] b;
+	boolean[] constrainedFlag$sample29;
+	boolean[] constrainedFlag$sample55;
+	double[][] distribution$sample55;
+	boolean fixedFlag$sample29 = false;
+	boolean fixedFlag$sample55 = false;
+	boolean fixedProbFlag$sample29 = false;
+	boolean fixedProbFlag$sample55 = false;
+	boolean fixedProbFlag$sample75 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$a;
+	double logProbability$b;
+	double logProbability$flips;
+	double logProbability$m;
+	double[] logProbability$sample55;
+	double[] logProbability$sample75;
+	double logProbability$var29;
+	double[][] m;
+	int n;
+	int states;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[] cv$distributionAccumulator$var53;
+	double[][] cv$var29$countGlobal;
+	double[] cv$var54$stateProbabilityGlobal;
 
 	public Deterministic2$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -1457,27 +1458,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void allocateScratch() {
-		{
-			{
-				int cv$threadCount = threadCount();
-				cv$var29$countGlobal = new double[cv$threadCount][];
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					cv$var29$countGlobal[cv$index] = new double[5];
-			}
-		}
-		{
-			int cv$var30$max = 5;
-			cv$distributionAccumulator$var53 = new double[cv$var30$max];
-		}
-		{
-			int cv$var30$max = 5;
-			cv$var54$stateProbabilityGlobal = new double[cv$var30$max];
-		}
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		{
 			v = new double[5];
 		}
@@ -1517,6 +1498,26 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 			logProbability$sample75 = new double[((((n - 1) - 0) / 1) + 1)];
 		}
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		{
+			{
+				int cv$threadCount = threadCount();
+				cv$var29$countGlobal = new double[cv$threadCount][];
+				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+					cv$var29$countGlobal[cv$index] = new double[5];
+			}
+		}
+		{
+			int cv$var30$max = 5;
+			cv$distributionAccumulator$var53 = new double[cv$var30$max];
+		}
+		{
+			int cv$var30$max = 5;
+			cv$var54$stateProbabilityGlobal = new double[cv$var30$max];
+		}
 	}
 
 	@Override

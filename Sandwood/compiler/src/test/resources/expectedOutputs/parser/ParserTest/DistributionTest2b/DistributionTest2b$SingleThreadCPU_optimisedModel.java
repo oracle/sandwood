@@ -1,47 +1,48 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DistributionTest2b$CoreInterface {
-	
+final class DistributionTest2b$SingleThreadCPU extends CoreModelSingleThreadCPU implements DistributionTest2b$CoreInterface {
+
 	// Declare the variables for the model.
-	private boolean[] constrainedFlag$sample23;
-	private boolean[] constrainedFlag$sample36;
-	private boolean constrainedFlag$sample5 = true;
-	private boolean constrainedFlag$sample9 = true;
-	private double[] cv$var23$stateProbabilityGlobal;
-	private double[] cv$var36$stateProbabilityGlobal;
-	private double[] cv$var5$stateProbabilityGlobal;
-	private double[] cv$var9$stateProbabilityGlobal;
-	private double[][] distribution$sample23;
-	private double[] distribution$sample5;
-	private double[] distribution$sample9;
-	private boolean fixedFlag$sample23 = false;
-	private boolean fixedFlag$sample5 = false;
-	private boolean fixedFlag$sample9 = false;
-	private boolean fixedProbFlag$sample23 = false;
-	private boolean fixedProbFlag$sample5 = false;
-	private boolean fixedProbFlag$sample9 = false;
-	private int length$value;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$c;
-	private double[] logProbability$sample23;
-	private double[] logProbability$sample43;
-	private double logProbability$v;
-	private double logProbability$v1;
-	private double logProbability$v2;
-	private double logProbability$v3;
-	private double logProbability$var9;
-	private int size;
-	private boolean system$gibbsForward = true;
-	private boolean[] v;
-	private int v1;
-	private int[] v2;
-	private int[] v3;
-	private boolean[] value;
-	private double[] weightings;
+	boolean[] constrainedFlag$sample23;
+	boolean[] constrainedFlag$sample36;
+	boolean constrainedFlag$sample5 = true;
+	boolean constrainedFlag$sample9 = true;
+	double[][] distribution$sample23;
+	double[] distribution$sample5;
+	double[] distribution$sample9;
+	boolean fixedFlag$sample23 = false;
+	boolean fixedFlag$sample5 = false;
+	boolean fixedFlag$sample9 = false;
+	boolean fixedProbFlag$sample23 = false;
+	boolean fixedProbFlag$sample5 = false;
+	boolean fixedProbFlag$sample9 = false;
+	int length$value;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$c;
+	double[] logProbability$sample23;
+	double[] logProbability$sample43;
+	double logProbability$v;
+	double logProbability$v1;
+	double logProbability$v2;
+	double logProbability$v3;
+	double logProbability$var9;
+	int size;
+	boolean system$gibbsForward = true;
+	boolean[] v;
+	int v1;
+	int[] v2;
+	int[] v3;
+	boolean[] value;
+	double[] weightings;
+	double[] cv$var23$stateProbabilityGlobal;
+	double[] cv$var36$stateProbabilityGlobal;
+	double[] cv$var5$stateProbabilityGlobal;
+	double[] cv$var9$stateProbabilityGlobal;
 
 	public DistributionTest2b$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -330,7 +331,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			double cv$accumulatedProbabilities = (((((cv$valuePos < $var196) && (0 < $var196)) && (0.0 <= weightings[cv$valuePos])) && (weightings[cv$valuePos] <= 1.0))?Math.log(weightings[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Mark that the sample has observed constrained data.
@@ -391,7 +392,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 							// Substituted "j" with its value "i".
 							cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value6) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[i]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 						else
-							// Substituted "j" with its value "i".
+																					// Substituted "j" with its value "i".
 							cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value6) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[i]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + Math.log(cv$probabilitySample5Value6)) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[i]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 					}
 					
@@ -418,7 +419,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
 			// Record the reached probability density.
 			// 
@@ -515,7 +516,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			double cv$accumulatedProbabilities = (((((cv$valuePos < $var224) && (0 < $var224)) && (0.0 <= weightings[cv$valuePos])) && (weightings[cv$valuePos] <= 1.0))?Math.log(weightings[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Mark that the sample has observed constrained data.
@@ -536,7 +537,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 					if(fixedFlag$sample9) {
 						// Constructing a random variable input for use later.
 						// 
-						// Value of the variable at this index
+																		// Value of the variable at this index
 						double var41 = ((double)v1 / (v2[0] + cv$valuePos));
 						
 						// Substituted "j" with its value "0".
@@ -570,7 +571,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 									// Substituted "j" with its value "0".
 									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample9Value10) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[0]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 								else
-									// Substituted "j" with its value "0".
+																											// Substituted "j" with its value "0".
 									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample9Value10) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[0]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + Math.log(cv$probabilitySample9Value10)) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[0]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 							}
 							
@@ -586,7 +587,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 						if(fixedFlag$sample9) {
 							// Constructing a random variable input for use later.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							double var41 = ((double)index$sample5$4 / (v2[0] + cv$valuePos));
 							
 							// Record the probability of sample task 43 generating output with current configuration.
@@ -601,7 +602,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 									// Substituted "j" with its value "0".
 									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[0]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 								else
-									// Substituted "j" with its value "0".
+																											// Substituted "j" with its value "0".
 									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[0]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + Math.log(cv$probabilitySample5Value5)) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[0]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 							}
 							
@@ -630,7 +631,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 										// Substituted "j" with its value "0".
 										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample9Value15) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[0]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 									else
-										// Substituted "j" with its value "0".
+																														// Substituted "j" with its value "0".
 										cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample9Value15) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[0]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + Math.log(cv$probabilitySample9Value15)) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[0]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 								}
 								
@@ -769,7 +770,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
 			// Record the reached probability density.
 			// 
@@ -826,7 +827,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 			} else {
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					// Get a local reference to the scratch space.
+															// Get a local reference to the scratch space.
 					cv$var36$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var36$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
@@ -864,7 +865,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			double cv$accumulatedProbabilities = (((((cv$valuePos < $var142) && (0 < $var142)) && (0.0 <= weightings[cv$valuePos])) && (weightings[cv$valuePos] <= 1.0))?Math.log(weightings[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			for(int j = 0; j < size; j += 1) {
 				// Mark that the sample has observed constrained data.
@@ -884,9 +885,9 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 					if(fixedFlag$sample9) {
 						// Constructing a random variable input for use later.
 						// 
-						// Substituted "j" with its value "0".
+																		// Substituted "j" with its value "0".
 						// 
-						// Value of the variable at this index
+																		// Value of the variable at this index
 						double var41 = ((double)cv$valuePos / (v2[0] + v3[0]));
 						
 						// Substituted "j" with its value "0".
@@ -907,7 +908,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 							// 
 							// Substituted "j" with its value "0".
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							double var41 = ((double)cv$valuePos / (index$sample9$4 + v3[0]));
 							
 							// Record the probability of sample task 43 generating output with current configuration.
@@ -922,7 +923,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 									// Substituted "j" with its value "0".
 									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample9Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[0]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 								else
-									// Substituted "j" with its value "0".
+																											// Substituted "j" with its value "0".
 									cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample9Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[0]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + Math.log(cv$probabilitySample9Value5)) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[0]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 							}
 							
@@ -940,7 +941,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 					if(fixedFlag$sample23) {
 						// Constructing a random variable input for use later.
 						// 
-						// Value of the variable at this index
+																		// Value of the variable at this index
 						double var41 = ((double)cv$valuePos / (v2[j] + v3[j]));
 						
 						// Record the probability of sample task 43 generating output with current configuration.
@@ -966,7 +967,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 							
 							// Constructing a random variable input for use later.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							double var41 = ((double)cv$valuePos / (index$sample23$12 + v3[j]));
 							
 							// Record the probability of sample task 43 generating output with current configuration.
@@ -1005,7 +1006,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
 			// Record the reached probability density.
 			// 
@@ -1063,7 +1064,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 			} else {
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					// Local copy of the probability array
+															// Local copy of the probability array
 					distribution$sample5[cv$indexName] = Math.exp((cv$var5$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
@@ -1097,7 +1098,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			double cv$accumulatedProbabilities = (((((cv$valuePos < $var175) && (0 < $var175)) && (0.0 <= weightings[cv$valuePos])) && (weightings[cv$valuePos] <= 1.0))?Math.log(weightings[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Substituted "j" with its value "0".
@@ -1161,7 +1162,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 								// Substituted "j" with its value "0".
 								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[0]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 							else
-								// Substituted "j" with its value "0".
+																								// Substituted "j" with its value "0".
 								cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[0]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + Math.log(cv$probabilitySample5Value5)) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[0]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 						}
 						
@@ -1189,7 +1190,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
 			// Record the reached probability density.
 			// 
@@ -1247,7 +1248,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 			} else {
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					// Local copy of the probability array
+															// Local copy of the probability array
 					distribution$sample9[cv$indexName] = Math.exp((cv$var9$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
@@ -1370,7 +1371,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 				// Enumerating the possible arguments for Bernoulli 42.
 				if(fixedFlag$sample5) {
 					if(fixedFlag$sample9) {
-						// Substituted "j" with its value "0".
+																		// Substituted "j" with its value "0".
 						double var41 = ((double)v1 / (v2[0] + v3[0]));
 						
 						// Store the value of the function call, so the function call is only made once.
@@ -1413,7 +1414,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 						// Update the probability of sampling this value from the distribution value.
 						double cv$probabilitySample5Value4 = distribution$sample5[index$sample5$3];
 						if(fixedFlag$sample9) {
-							// Substituted "j" with its value "0".
+																					// Substituted "j" with its value "0".
 							double var41 = ((double)index$sample5$3 / (v2[0] + v3[0]));
 							
 							// Store the value of the function call, so the function call is only made once.
@@ -1612,7 +1613,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 				// 
 				// Store the value of the function call, so the function call is only made once.
 				// 
-				// The sample value to calculate the probability of generating
+												// The sample value to calculate the probability of generating
 				// 
 				// Scale the probability relative to the observed distribution space.
 				// 
@@ -1626,7 +1627,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 				// 
 				// Store the value of the function call, so the function call is only made once.
 				// 
-				// The sample value to calculate the probability of generating
+												// The sample value to calculate the probability of generating
 				double cv$distributionAccumulator = ((((((0.0 <= v1) && (v1 < weightings.length)) && (0 < weightings.length)) && (0.0 <= weightings[v1])) && (weightings[v1] <= 1.0))?Math.log(weightings[v1]):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this sample task to the sample task accumulator.
@@ -1996,7 +1997,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -2010,7 +2011,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = ((((((0.0 <= v1) && (v1 < weightings.length)) && (0 < weightings.length)) && (0.0 <= weightings[v1])) && (weightings[v1] <= 1.0))?Math.log(weightings[v1]):Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this sample task to the sample task accumulator.
@@ -2185,36 +2186,9 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var5$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var5$stateProbabilityGlobal for single threaded execution
-		cv$var5$stateProbabilityGlobal = new double[weightings.length];
-		
-		// Constructor for cv$var9$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var9$stateProbabilityGlobal for single threaded execution
-		cv$var9$stateProbabilityGlobal = new double[weightings.length];
-		
-		// Constructor for cv$var23$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var23$stateProbabilityGlobal for single threaded execution
-		cv$var23$stateProbabilityGlobal = new double[weightings.length];
-		
-		// Constructor for cv$var36$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var36$stateProbabilityGlobal for single threaded execution
-		cv$var36$stateProbabilityGlobal = new double[weightings.length];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// If v2 has not been set already allocate space.
 		if((!fixedFlag$sample9 || !fixedFlag$sample23))
 			// Constructor for v2
@@ -2253,6 +2227,33 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 		allocateScratch();
 	}
 
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var5$stateProbabilityGlobal
+		// 
+		// Allocation of cv$var5$stateProbabilityGlobal for single threaded execution
+		cv$var5$stateProbabilityGlobal = new double[weightings.length];
+		
+		// Constructor for cv$var9$stateProbabilityGlobal
+		// 
+		// Allocation of cv$var9$stateProbabilityGlobal for single threaded execution
+		cv$var9$stateProbabilityGlobal = new double[weightings.length];
+		
+		// Constructor for cv$var23$stateProbabilityGlobal
+		// 
+		// Allocation of cv$var23$stateProbabilityGlobal for single threaded execution
+		cv$var23$stateProbabilityGlobal = new double[weightings.length];
+		
+		// Constructor for cv$var36$stateProbabilityGlobal
+		// 
+		// Allocation of cv$var36$stateProbabilityGlobal for single threaded execution
+		cv$var36$stateProbabilityGlobal = new double[weightings.length];
+	}
+
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
@@ -2280,7 +2281,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 		for(int index$c = 0; index$c < weightings.length; index$c += 1)
 			// Save the probability of each value
 			// 
-			// cv$distribution$sample5's comment
+												// cv$distribution$sample5's comment
 			// Create local copy of variable probabilities.
 			distribution$sample5[index$c] = ((((0 < weightings.length) && (0.0 <= weightings[index$c])) && (weightings[index$c] <= 1.0))?weightings[index$c]:0.0);
 		
@@ -2289,7 +2290,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 			for(int index$var8 = 0; index$var8 < weightings.length; index$var8 += 1)
 				// Save the probability of each value
 				// 
-				// cv$distribution$sample9's comment
+																// cv$distribution$sample9's comment
 				// Create local copy of variable probabilities.
 				distribution$sample9[index$var8] = ((((0 < weightings.length) && (0.0 <= weightings[index$var8])) && (weightings[index$var8] <= 1.0))?weightings[index$var8]:0.0);
 		}

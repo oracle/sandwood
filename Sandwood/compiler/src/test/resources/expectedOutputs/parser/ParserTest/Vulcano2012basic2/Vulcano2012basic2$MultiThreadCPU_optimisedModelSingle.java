@@ -1,46 +1,47 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Vulcano2012basic2$CoreInterface {
-	
+final class Vulcano2012basic2$MultiThreadCPU extends CoreModelMultiThreadCPU implements Vulcano2012basic2$CoreInterface {
+
 	// Declare the variables for the model.
-	private int[][] Avail;
-	private int[][] ObsSales;
-	private int[][] Sales;
-	private int T;
-	private boolean[] constrainedFlag$sample26;
-	private double[] exped;
-	private double[] expedNorm;
-	private boolean fixedFlag$sample26 = false;
-	private boolean fixedFlag$sample82 = false;
-	private boolean fixedProbFlag$sample149 = false;
-	private boolean fixedProbFlag$sample26 = false;
-	private boolean fixedProbFlag$sample82 = false;
-	private boolean[] guard$sample26multinomial148$global;
-	private boolean[][] guard$sample26put123$global;
-	private boolean[][] guard$sample26put146$global;
-	private boolean[] guard$sample26put68$global;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$Sales;
-	private double logProbability$exped;
-	private double logProbability$expedNorm;
-	private double logProbability$sales_sum;
-	private double[] logProbability$sample26;
-	private double[] logProbability$sample82;
-	private double logProbability$sum;
-	private double logProbability$ut;
-	private double logProbability$weekly_sales;
-	private int noProducts;
-	private double r;
-	private int[] sales_sum;
-	private double sum;
-	private boolean system$gibbsForward = true;
-	private double[] ut;
-	private double[][] weekly_rates;
-	private double[][] weekly_ut;
+	int[][] Avail;
+	int[][] ObsSales;
+	int[][] Sales;
+	int T;
+	boolean[] constrainedFlag$sample26;
+	double[] exped;
+	double[] expedNorm;
+	boolean fixedFlag$sample26 = false;
+	boolean fixedFlag$sample82 = false;
+	boolean fixedProbFlag$sample149 = false;
+	boolean fixedProbFlag$sample26 = false;
+	boolean fixedProbFlag$sample82 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$Sales;
+	double logProbability$exped;
+	double logProbability$expedNorm;
+	double logProbability$sales_sum;
+	double[] logProbability$sample26;
+	double[] logProbability$sample82;
+	double logProbability$sum;
+	double logProbability$ut;
+	double logProbability$weekly_sales;
+	int noProducts;
+	double r;
+	int[] sales_sum;
+	double sum;
+	boolean system$gibbsForward = true;
+	double[] ut;
+	double[][] weekly_rates;
+	double[][] weekly_ut;
+	boolean[] guard$sample26multinomial148$global;
+	boolean[][] guard$sample26put123$global;
+	boolean[][] guard$sample26put146$global;
+	boolean[] guard$sample26put68$global;
 
 	public Vulcano2012basic2$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -257,7 +258,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 		// 
 		// Looking for a path between Sample 26 and consumer double[] 41.
 		// 
-		// Substituted "j$var38" with its value "j$var20".
+						// Substituted "j$var38" with its value "j$var20".
 		exped[j$var20] = Math.exp(ut[j$var20]);
 		
 		// Guards to ensure that sum is only updated when there is a valid path.
@@ -277,7 +278,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// l$var50's comment
+												// l$var50's comment
 			// Set the right hand term to a value from the array exped
 			reduceVar$sum$15 = (reduceVar$sum$15 + exped[cv$reduction46Index]);
 		
@@ -311,13 +312,13 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 				// variable instance.
 				guard$sample26put68$global[j$var63] = true;
 				
-				// sum's comment
+								// sum's comment
 				// Write out the new sample value.
 				expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$15));
 			}
 		}
 		
-		// Substituted "j$var38" with its value "j$var20".
+						// Substituted "j$var38" with its value "j$var20".
 		// 
 		// Substituted "j$var63" with its value "j$var20".
 		if(!guard$sample26put68$global[j$var20]) {
@@ -329,9 +330,9 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Substituted "j$var63" with its value "j$var20".
 			guard$sample26put68$global[j$var20] = true;
 			
-			// Substituted "j$var63" with its value "j$var20".
+									// Substituted "j$var63" with its value "j$var20".
 			// 
-			// sum's comment
+						// sum's comment
 			// Write out the new sample value.
 			expedNorm[j$var20] = (exped[j$var20] / (r * reduceVar$sum$15));
 		}
@@ -343,51 +344,51 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
 				// Set the flags to false
 				// 
-				// Guard to check that at most one copy of the code is executed for a given random
+												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				guard$sample26put123$global[t$var105][j$var63] = false;
 		}
 		for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
 			// Set the flags to false
 			// 
-			// Guard to check that at most one copy of the code is executed for a given random
+									// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
 			// 
 			// Substituted "j$var63" with its value "j$var20".
 			guard$sample26put123$global[t$var105][j$var20] = false;
 		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-				// Guard to check that at most one copy of the code is executed for a given random
+												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				if(!guard$sample26put123$global[t$var105][j$var63]) {
 					// The body will execute, so should not be executed again
 					// 
-					// Guard to check that at most one copy of the code is executed for a given random
+															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					guard$sample26put123$global[t$var105][j$var63] = true;
 					
-					// Substituted "j$var116" with its value "j$var63".
+															// Substituted "j$var116" with its value "j$var63".
 					weekly_ut[t$var105][j$var63] = (expedNorm[j$var63] * Avail[t$var105][j$var63]);
 				}
 			}
 		}
 		for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-			// Guard to check that at most one copy of the code is executed for a given random
+									// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
 			// 
 			// Substituted "j$var63" with its value "j$var20".
 			if(!guard$sample26put123$global[t$var105][j$var20]) {
 				// The body will execute, so should not be executed again
 				// 
-				// Guard to check that at most one copy of the code is executed for a given random
+												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				// 
 				// Substituted "j$var63" with its value "j$var20".
 				guard$sample26put123$global[t$var105][j$var20] = true;
 				
-				// Substituted "j$var116" with its value "j$var63".
+												// Substituted "j$var116" with its value "j$var63".
 				// 
-				// Substituted "j$var63" with its value "j$var20".
+												// Substituted "j$var63" with its value "j$var20".
 				weekly_ut[t$var105][j$var20] = (expedNorm[j$var20] * Avail[t$var105][j$var20]);
 			}
 		}
@@ -415,7 +416,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
 			// 
-			// j$var140's comment
+						// j$var140's comment
 			// Substituted "j$var63" with its value "j$var20".
 			guard$sample26put146$global[t$var105][j$var20] = false;
 		for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
@@ -442,7 +443,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
 						// 
-						// l$var129's comment
+																								// l$var129's comment
 						// Set the right hand term to a value from the array weekly_ut
 						reduceVar$denom$30 = (reduceVar$denom$30 + weekly_ut[t$var105][cv$reduction128Index]);
 					weekly_rates[t$var105][j$var140] = (weekly_ut[t$var105][j$var140] / reduceVar$denom$30);
@@ -477,11 +478,11 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
 						// 
-						// l$var129's comment
+																								// l$var129's comment
 						// Set the right hand term to a value from the array weekly_ut
 						reduceVar$denom$31 = (reduceVar$denom$31 + weekly_ut[t$var105][cv$reduction128Index]);
 					
-					// Substituted "j$var140" with its value "j$var63".
+															// Substituted "j$var140" with its value "j$var63".
 					weekly_rates[t$var105][j$var63] = (weekly_ut[t$var105][j$var63] / reduceVar$denom$31);
 				}
 			}
@@ -510,7 +511,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
 						// 
-						// l$var129's comment
+																								// l$var129's comment
 						// Set the right hand term to a value from the array weekly_ut
 						reduceVar$denom$32 = (reduceVar$denom$32 + weekly_ut[t$var105][cv$reduction128Index]);
 					weekly_rates[t$var105][j$var140] = (weekly_ut[t$var105][j$var140] / reduceVar$denom$32);
@@ -521,7 +522,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
 			// 
-			// j$var140's comment
+						// j$var140's comment
 			// Substituted "j$var63" with its value "j$var20".
 			if(!guard$sample26put146$global[t$var105][j$var20]) {
 				// The body will execute, so should not be executed again
@@ -529,7 +530,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				// 
-				// j$var140's comment
+								// j$var140's comment
 				// Substituted "j$var63" with its value "j$var20".
 				guard$sample26put146$global[t$var105][j$var20] = true;
 				
@@ -546,11 +547,11 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
-					// l$var129's comment
+																				// l$var129's comment
 					// Set the right hand term to a value from the array weekly_ut
 					reduceVar$denom$33 = (reduceVar$denom$33 + weekly_ut[t$var105][cv$reduction128Index]);
 				
-				// j$var140's comment
+																// j$var140's comment
 				// Substituted "j$var63" with its value "j$var20".
 				weekly_rates[t$var105][j$var20] = (weekly_ut[t$var105][j$var20] / reduceVar$denom$33);
 			}
@@ -621,7 +622,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 				}
 			}
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-				// Substituted "j$var116" with its value "j$var63".
+												// Substituted "j$var116" with its value "j$var63".
 				if(!guard$sample26multinomial148$global[t$var105]) {
 					// The body will execute, so should not be executed again
 					// 
@@ -726,7 +727,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Looking for a path between Sample 26 and consumer double[] 41.
 			// 
-			// Substituted "j$var38" with its value "j$var20".
+									// Substituted "j$var38" with its value "j$var20".
 			exped[j$var20] = Math.exp(ut[j$var20]);
 			
 			// Guards to ensure that sum is only updated when there is a valid path.
@@ -746,7 +747,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// l$var50's comment
+																// l$var50's comment
 				// Set the right hand term to a value from the array exped
 				reduceVar$sum$11 = (reduceVar$sum$11 + exped[cv$reduction46Index]);
 			
@@ -780,13 +781,13 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 					// variable instance.
 					guard$sample26put68$global[j$var63] = true;
 					
-					// sum's comment
+										// sum's comment
 					// Write out the new sample value.
 					expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$11));
 				}
 			}
 			
-			// Substituted "j$var38" with its value "j$var20".
+									// Substituted "j$var38" with its value "j$var20".
 			// 
 			// Substituted "j$var63" with its value "j$var20".
 			if(!guard$sample26put68$global[j$var20]) {
@@ -798,9 +799,9 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 				// Substituted "j$var63" with its value "j$var20".
 				guard$sample26put68$global[j$var20] = true;
 				
-				// Substituted "j$var63" with its value "j$var20".
+												// Substituted "j$var63" with its value "j$var20".
 				// 
-				// sum's comment
+								// sum's comment
 				// Write out the new sample value.
 				expedNorm[j$var20] = (exped[j$var20] / (r * reduceVar$sum$11));
 			}
@@ -812,51 +813,51 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 				for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
 					// Set the flags to false
 					// 
-					// Guard to check that at most one copy of the code is executed for a given random
+															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					guard$sample26put123$global[t$var105][j$var63] = false;
 			}
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
 				// Set the flags to false
 				// 
-				// Guard to check that at most one copy of the code is executed for a given random
+												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				// 
 				// Substituted "j$var63" with its value "j$var20".
 				guard$sample26put123$global[t$var105][j$var20] = false;
 			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
 				for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-					// Guard to check that at most one copy of the code is executed for a given random
+															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					if(!guard$sample26put123$global[t$var105][j$var63]) {
 						// The body will execute, so should not be executed again
 						// 
-						// Guard to check that at most one copy of the code is executed for a given random
+																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
 						guard$sample26put123$global[t$var105][j$var63] = true;
 						
-						// Substituted "j$var116" with its value "j$var63".
+																		// Substituted "j$var116" with its value "j$var63".
 						weekly_ut[t$var105][j$var63] = (expedNorm[j$var63] * Avail[t$var105][j$var63]);
 					}
 				}
 			}
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-				// Guard to check that at most one copy of the code is executed for a given random
+												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				// 
 				// Substituted "j$var63" with its value "j$var20".
 				if(!guard$sample26put123$global[t$var105][j$var20]) {
 					// The body will execute, so should not be executed again
 					// 
-					// Guard to check that at most one copy of the code is executed for a given random
+															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					// 
 					// Substituted "j$var63" with its value "j$var20".
 					guard$sample26put123$global[t$var105][j$var20] = true;
 					
-					// Substituted "j$var116" with its value "j$var63".
+															// Substituted "j$var116" with its value "j$var63".
 					// 
-					// Substituted "j$var63" with its value "j$var20".
+															// Substituted "j$var63" with its value "j$var20".
 					weekly_ut[t$var105][j$var20] = (expedNorm[j$var20] * Avail[t$var105][j$var20]);
 				}
 			}
@@ -884,7 +885,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				// 
-				// j$var140's comment
+								// j$var140's comment
 				// Substituted "j$var63" with its value "j$var20".
 				guard$sample26put146$global[t$var105][j$var20] = false;
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
@@ -911,7 +912,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// l$var129's comment
+																												// l$var129's comment
 							// Set the right hand term to a value from the array weekly_ut
 							reduceVar$denom$20 = (reduceVar$denom$20 + weekly_ut[t$var105][cv$reduction128Index]);
 						weekly_rates[t$var105][j$var140] = (weekly_ut[t$var105][j$var140] / reduceVar$denom$20);
@@ -946,11 +947,11 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// l$var129's comment
+																												// l$var129's comment
 							// Set the right hand term to a value from the array weekly_ut
 							reduceVar$denom$21 = (reduceVar$denom$21 + weekly_ut[t$var105][cv$reduction128Index]);
 						
-						// Substituted "j$var140" with its value "j$var63".
+																		// Substituted "j$var140" with its value "j$var63".
 						weekly_rates[t$var105][j$var63] = (weekly_ut[t$var105][j$var63] / reduceVar$denom$21);
 					}
 				}
@@ -979,7 +980,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// l$var129's comment
+																												// l$var129's comment
 							// Set the right hand term to a value from the array weekly_ut
 							reduceVar$denom$22 = (reduceVar$denom$22 + weekly_ut[t$var105][cv$reduction128Index]);
 						weekly_rates[t$var105][j$var140] = (weekly_ut[t$var105][j$var140] / reduceVar$denom$22);
@@ -990,7 +991,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				// 
-				// j$var140's comment
+								// j$var140's comment
 				// Substituted "j$var63" with its value "j$var20".
 				if(!guard$sample26put146$global[t$var105][j$var20]) {
 					// The body will execute, so should not be executed again
@@ -998,7 +999,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					// 
-					// j$var140's comment
+										// j$var140's comment
 					// Substituted "j$var63" with its value "j$var20".
 					guard$sample26put146$global[t$var105][j$var20] = true;
 					
@@ -1015,11 +1016,11 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
 						// 
-						// l$var129's comment
+																								// l$var129's comment
 						// Set the right hand term to a value from the array weekly_ut
 						reduceVar$denom$23 = (reduceVar$denom$23 + weekly_ut[t$var105][cv$reduction128Index]);
 					
-					// j$var140's comment
+																				// j$var140's comment
 					// Substituted "j$var63" with its value "j$var20".
 					weekly_rates[t$var105][j$var20] = (weekly_ut[t$var105][j$var20] / reduceVar$denom$23);
 				}
@@ -1064,7 +1065,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 				}
 			}
 			for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-				// Substituted "j$var116" with its value "j$var63".
+												// Substituted "j$var116" with its value "j$var63".
 				if(!guard$sample26multinomial148$global[t$var105]) {
 					// The body will execute, so should not be executed again
 					// 
@@ -1178,7 +1179,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// Looking for a path between Sample 26 and consumer double[] 41.
 				// 
-				// Substituted "j$var38" with its value "j$var20".
+												// Substituted "j$var38" with its value "j$var20".
 				exped[j$var20] = Math.exp(ut[j$var20]);
 				
 				// Guards to ensure that sum is only updated when there is a valid path.
@@ -1198,7 +1199,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
-					// l$var50's comment
+																				// l$var50's comment
 					// Set the right hand term to a value from the array exped
 					reduceVar$sum$14 = (reduceVar$sum$14 + exped[cv$reduction46Index]);
 				
@@ -1232,13 +1233,13 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 						// variable instance.
 						guard$sample26put68$global[j$var63] = true;
 						
-						// sum's comment
+												// sum's comment
 						// Write out the new sample value.
 						expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$14));
 					}
 				}
 				
-				// Substituted "j$var38" with its value "j$var20".
+												// Substituted "j$var38" with its value "j$var20".
 				// 
 				// Substituted "j$var63" with its value "j$var20".
 				if(!guard$sample26put68$global[j$var20]) {
@@ -1250,9 +1251,9 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 					// Substituted "j$var63" with its value "j$var20".
 					guard$sample26put68$global[j$var20] = true;
 					
-					// Substituted "j$var63" with its value "j$var20".
+															// Substituted "j$var63" with its value "j$var20".
 					// 
-					// sum's comment
+										// sum's comment
 					// Write out the new sample value.
 					expedNorm[j$var20] = (exped[j$var20] / (r * reduceVar$sum$14));
 				}
@@ -1264,51 +1265,51 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 					for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
 						// Set the flags to false
 						// 
-						// Guard to check that at most one copy of the code is executed for a given random
+																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
 						guard$sample26put123$global[t$var105][j$var63] = false;
 				}
 				for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
 					// Set the flags to false
 					// 
-					// Guard to check that at most one copy of the code is executed for a given random
+															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					// 
 					// Substituted "j$var63" with its value "j$var20".
 					guard$sample26put123$global[t$var105][j$var20] = false;
 				for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
 					for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-						// Guard to check that at most one copy of the code is executed for a given random
+																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
 						if(!guard$sample26put123$global[t$var105][j$var63]) {
 							// The body will execute, so should not be executed again
 							// 
-							// Guard to check that at most one copy of the code is executed for a given random
+																					// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
 							guard$sample26put123$global[t$var105][j$var63] = true;
 							
-							// Substituted "j$var116" with its value "j$var63".
+																					// Substituted "j$var116" with its value "j$var63".
 							weekly_ut[t$var105][j$var63] = (expedNorm[j$var63] * Avail[t$var105][j$var63]);
 						}
 					}
 				}
 				for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-					// Guard to check that at most one copy of the code is executed for a given random
+															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					// 
 					// Substituted "j$var63" with its value "j$var20".
 					if(!guard$sample26put123$global[t$var105][j$var20]) {
 						// The body will execute, so should not be executed again
 						// 
-						// Guard to check that at most one copy of the code is executed for a given random
+																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
 						// 
 						// Substituted "j$var63" with its value "j$var20".
 						guard$sample26put123$global[t$var105][j$var20] = true;
 						
-						// Substituted "j$var116" with its value "j$var63".
+																		// Substituted "j$var116" with its value "j$var63".
 						// 
-						// Substituted "j$var63" with its value "j$var20".
+																		// Substituted "j$var63" with its value "j$var20".
 						weekly_ut[t$var105][j$var20] = (expedNorm[j$var20] * Avail[t$var105][j$var20]);
 					}
 				}
@@ -1336,7 +1337,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					// 
-					// j$var140's comment
+										// j$var140's comment
 					// Substituted "j$var63" with its value "j$var20".
 					guard$sample26put146$global[t$var105][j$var20] = false;
 				for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
@@ -1363,7 +1364,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 								// 
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
-								// l$var129's comment
+																																// l$var129's comment
 								// Set the right hand term to a value from the array weekly_ut
 								reduceVar$denom$26 = (reduceVar$denom$26 + weekly_ut[t$var105][cv$reduction128Index]);
 							weekly_rates[t$var105][j$var140] = (weekly_ut[t$var105][j$var140] / reduceVar$denom$26);
@@ -1398,11 +1399,11 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 								// 
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
-								// l$var129's comment
+																																// l$var129's comment
 								// Set the right hand term to a value from the array weekly_ut
 								reduceVar$denom$27 = (reduceVar$denom$27 + weekly_ut[t$var105][cv$reduction128Index]);
 							
-							// Substituted "j$var140" with its value "j$var63".
+																					// Substituted "j$var140" with its value "j$var63".
 							weekly_rates[t$var105][j$var63] = (weekly_ut[t$var105][j$var63] / reduceVar$denom$27);
 						}
 					}
@@ -1431,7 +1432,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 								// 
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
-								// l$var129's comment
+																																// l$var129's comment
 								// Set the right hand term to a value from the array weekly_ut
 								reduceVar$denom$28 = (reduceVar$denom$28 + weekly_ut[t$var105][cv$reduction128Index]);
 							weekly_rates[t$var105][j$var140] = (weekly_ut[t$var105][j$var140] / reduceVar$denom$28);
@@ -1442,7 +1443,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					// 
-					// j$var140's comment
+										// j$var140's comment
 					// Substituted "j$var63" with its value "j$var20".
 					if(!guard$sample26put146$global[t$var105][j$var20]) {
 						// The body will execute, so should not be executed again
@@ -1450,7 +1451,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
 						// 
-						// j$var140's comment
+												// j$var140's comment
 						// Substituted "j$var63" with its value "j$var20".
 						guard$sample26put146$global[t$var105][j$var20] = true;
 						
@@ -1467,11 +1468,11 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// l$var129's comment
+																												// l$var129's comment
 							// Set the right hand term to a value from the array weekly_ut
 							reduceVar$denom$29 = (reduceVar$denom$29 + weekly_ut[t$var105][cv$reduction128Index]);
 						
-						// j$var140's comment
+																								// j$var140's comment
 						// Substituted "j$var63" with its value "j$var20".
 						weekly_rates[t$var105][j$var20] = (weekly_ut[t$var105][j$var20] / reduceVar$denom$29);
 					}
@@ -1789,6 +1790,53 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// If ut has not been set already allocate space.
+		if(!fixedFlag$sample26)
+			// Constructor for ut
+			ut = new double[noProducts];
+		
+		// Constructor for exped
+		exped = new double[noProducts];
+		
+		// Constructor for expedNorm
+		expedNorm = new double[noProducts];
+		
+		// Constructor for sales_sum
+		sales_sum = new int[T];
+		
+		// Constructor for Sales
+		Sales = new int[T][];
+		for(int var93 = 0; var93 < T; var93 += 1)
+			Sales[var93] = new int[noProducts];
+		for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+			Sales[t$var105] = new int[noProducts];
+		
+		// Constructor for weekly_rates
+		weekly_rates = new double[T][];
+		for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+			weekly_rates[t$var105] = new double[noProducts];
+		
+		// Constructor for weekly_ut
+		weekly_ut = new double[T][];
+		for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+			weekly_ut[t$var105] = new double[noProducts];
+		
+		// Constructor for constrainedFlag$sample26
+		constrainedFlag$sample26 = new boolean[(noProducts - 1)];
+		
+		// Constructor for logProbability$sample26
+		logProbability$sample26 = new double[(noProducts - 1)];
+		
+		// Constructor for logProbability$sample82
+		logProbability$sample82 = new double[T];
+		
+		// Allocate scratch space
+		allocateScratch();
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -1840,53 +1888,6 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 		guard$sample26multinomial148$global = new boolean[Math.max(0, T)];
 	}
 
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// If ut has not been set already allocate space.
-		if(!fixedFlag$sample26)
-			// Constructor for ut
-			ut = new double[noProducts];
-		
-		// Constructor for exped
-		exped = new double[noProducts];
-		
-		// Constructor for expedNorm
-		expedNorm = new double[noProducts];
-		
-		// Constructor for sales_sum
-		sales_sum = new int[T];
-		
-		// Constructor for Sales
-		Sales = new int[T][];
-		for(int var93 = 0; var93 < T; var93 += 1)
-			Sales[var93] = new int[noProducts];
-		for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-			Sales[t$var105] = new int[noProducts];
-		
-		// Constructor for weekly_rates
-		weekly_rates = new double[T][];
-		for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-			weekly_rates[t$var105] = new double[noProducts];
-		
-		// Constructor for weekly_ut
-		weekly_ut = new double[T][];
-		for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-			weekly_ut[t$var105] = new double[noProducts];
-		
-		// Constructor for constrainedFlag$sample26
-		constrainedFlag$sample26 = new boolean[(noProducts - 1)];
-		
-		// Constructor for logProbability$sample26
-		logProbability$sample26 = new double[(noProducts - 1)];
-		
-		// Constructor for logProbability$sample82
-		logProbability$sample82 = new double[T];
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
@@ -1925,7 +1926,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 			for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// l$var50's comment
+																// l$var50's comment
 				// Set the right hand term to a value from the array exped
 				reduceVar$sum$16 = (reduceVar$sum$16 + exped[cv$reduction46Index]);
 			sum = reduceVar$sum$16;
@@ -1994,7 +1995,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 							for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1)
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
-								// l$var129's comment
+																																// l$var129's comment
 								// Set the right hand term to a value from the array weekly_ut
 								reduceVar$denom$34 = (reduceVar$denom$34 + weekly_ut[t$var105][cv$reduction128Index]);
 							
@@ -2063,7 +2064,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// l$var50's comment
+												// l$var50's comment
 			// Set the right hand term to a value from the array exped
 			reduceVar$sum$20 = (reduceVar$sum$20 + exped[cv$reduction46Index]);
 		sum = reduceVar$sum$20;
@@ -2117,7 +2118,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// l$var129's comment
+																												// l$var129's comment
 							// Set the right hand term to a value from the array weekly_ut
 							reduceVar$denom$38 = (reduceVar$denom$38 + weekly_ut[t$var105][cv$reduction128Index]);
 						
@@ -2181,7 +2182,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// l$var50's comment
+												// l$var50's comment
 			// Set the right hand term to a value from the array exped
 			reduceVar$sum$17 = (reduceVar$sum$17 + exped[cv$reduction46Index]);
 		sum = reduceVar$sum$17;
@@ -2249,7 +2250,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// l$var129's comment
+																												// l$var129's comment
 							// Set the right hand term to a value from the array weekly_ut
 							reduceVar$denom$35 = (reduceVar$denom$35 + weekly_ut[t$var105][cv$reduction128Index]);
 						
@@ -2313,7 +2314,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 			for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// l$var50's comment
+																// l$var50's comment
 				// Set the right hand term to a value from the array exped
 				reduceVar$sum$18 = (reduceVar$sum$18 + exped[cv$reduction46Index]);
 			sum = reduceVar$sum$18;
@@ -2365,7 +2366,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 							for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1)
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
-								// l$var129's comment
+																																// l$var129's comment
 								// Set the right hand term to a value from the array weekly_ut
 								reduceVar$denom$36 = (reduceVar$denom$36 + weekly_ut[t$var105][cv$reduction128Index]);
 							
@@ -2431,7 +2432,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// l$var50's comment
+												// l$var50's comment
 			// Set the right hand term to a value from the array exped
 			reduceVar$sum$19 = (reduceVar$sum$19 + exped[cv$reduction46Index]);
 		sum = reduceVar$sum$19;
@@ -2485,7 +2486,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// l$var129's comment
+																												// l$var129's comment
 							// Set the right hand term to a value from the array weekly_ut
 							reduceVar$denom$37 = (reduceVar$denom$37 + weekly_ut[t$var105][cv$reduction128Index]);
 						
@@ -2678,7 +2679,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// l$var50's comment
+												// l$var50's comment
 			// Set the right hand term to a value from the array exped
 			reduceVar$sum$21 = (reduceVar$sum$21 + exped[cv$reduction46Index]);
 		sum = reduceVar$sum$21;
@@ -2732,7 +2733,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// l$var129's comment
+																												// l$var129's comment
 							// Set the right hand term to a value from the array weekly_ut
 							reduceVar$denom$39 = (reduceVar$denom$39 + weekly_ut[t$var105][cv$reduction128Index]);
 						

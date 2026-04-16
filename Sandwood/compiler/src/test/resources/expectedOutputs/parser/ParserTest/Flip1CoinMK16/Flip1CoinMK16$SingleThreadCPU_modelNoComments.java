@@ -1,21 +1,22 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK16$CoreInterface {
-	private double bias;
-	private boolean constrainedFlag$sample14 = true;
-	private boolean flip;
-	private boolean flipMeasured;
-	private double guard;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bernoulli;
-	private double logProbability$sample14;
-	private double logProbability$sample16;
-	private boolean system$gibbsForward = true;
+final class Flip1CoinMK16$SingleThreadCPU extends CoreModelSingleThreadCPU implements Flip1CoinMK16$CoreInterface {
+double bias;
+	boolean constrainedFlag$sample14 = true;
+	boolean flip;
+	boolean flipMeasured;
+	double guard;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bernoulli;
+	double logProbability$sample14;
+	double logProbability$sample16;
+	boolean system$gibbsForward = true;
 
 	public Flip1CoinMK16$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -192,10 +193,10 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void allocateScratch() {}
+	public final void allocate() {}
 
 	@Override
-	public final void allocator() {}
+	public final void allocateScratch() {}
 
 	@Override
 	public final void forwardGeneration() {

@@ -1,48 +1,49 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements HMM$CoreInterface {
-	private double[] bias;
-	private boolean[] constrainedFlag$sample28;
-	private boolean[] constrainedFlag$sample45;
-	private boolean constrainedFlag$sample53 = true;
-	private boolean[] constrainedFlag$sample71;
-	private double[][] cv$var28$countGlobal;
-	private double[] cv$var52$stateProbabilityGlobal;
-	private double[] cv$var70$stateProbabilityGlobal;
-	private boolean fixedFlag$sample28 = false;
-	private boolean fixedFlag$sample45 = false;
-	private boolean fixedFlag$sample53 = false;
-	private boolean fixedFlag$sample71 = false;
-	private boolean fixedProbFlag$sample28 = false;
-	private boolean fixedProbFlag$sample45 = false;
-	private boolean fixedProbFlag$sample53 = false;
-	private boolean fixedProbFlag$sample71 = false;
-	private boolean fixedProbFlag$sample87 = false;
-	private boolean[] flips;
-	private int length$measured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double logProbability$m;
-	private double[] logProbability$sample71;
-	private double[] logProbability$sample87;
-	private double logProbability$st;
-	private double logProbability$var28;
-	private double logProbability$var44;
-	private double logProbability$var52;
-	private double[][] m;
-	private boolean[] measured;
-	private int samples;
-	private int[] st;
-	private int states;
-	private boolean system$gibbsForward = true;
-	private double[] v;
+final class HMM$MultiThreadCPU extends CoreModelMultiThreadCPU implements HMM$CoreInterface {
+double[] bias;
+	boolean[] constrainedFlag$sample28;
+	boolean[] constrainedFlag$sample45;
+	boolean constrainedFlag$sample53 = true;
+	boolean[] constrainedFlag$sample71;
+	boolean fixedFlag$sample28 = false;
+	boolean fixedFlag$sample45 = false;
+	boolean fixedFlag$sample53 = false;
+	boolean fixedFlag$sample71 = false;
+	boolean fixedProbFlag$sample28 = false;
+	boolean fixedProbFlag$sample45 = false;
+	boolean fixedProbFlag$sample53 = false;
+	boolean fixedProbFlag$sample71 = false;
+	boolean fixedProbFlag$sample87 = false;
+	boolean[] flips;
+	int length$measured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$flips;
+	double logProbability$m;
+	double[] logProbability$sample71;
+	double[] logProbability$sample87;
+	double logProbability$st;
+	double logProbability$var28;
+	double logProbability$var44;
+	double logProbability$var52;
+	double[][] m;
+	boolean[] measured;
+	int samples;
+	int[] st;
+	int states;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[][] cv$var28$countGlobal;
+	double[] cv$var52$stateProbabilityGlobal;
+	double[] cv$var70$stateProbabilityGlobal;
 
 	public HMM$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -476,17 +477,7 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 	}
 
 	@Override
-	public final void allocateScratch() {
-		int cv$threadCount = threadCount();
-		cv$var28$countGlobal = new double[cv$threadCount][];
-		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			cv$var28$countGlobal[cv$index] = new double[states];
-		cv$var52$stateProbabilityGlobal = new double[states];
-		cv$var70$stateProbabilityGlobal = new double[states];
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		v = new double[states];
 		if(!fixedFlag$sample28) {
 			m = new double[states][];
@@ -504,6 +495,16 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		logProbability$sample71 = new double[(length$measured - 1)];
 		logProbability$sample87 = new double[length$measured];
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		int cv$threadCount = threadCount();
+		cv$var28$countGlobal = new double[cv$threadCount][];
+		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+			cv$var28$countGlobal[cv$index] = new double[states];
+		cv$var52$stateProbabilityGlobal = new double[states];
+		cv$var70$stateProbabilityGlobal = new double[states];
 	}
 
 	@Override

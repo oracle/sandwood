@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface HMMMetrics$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface HMMMetrics$CoreInterface extends CoreModel {
 	public double[] get$cpu();
 	public double[] get$cpuMean();
 	public void set$cpuMean(double[] cv$value, boolean allocated$);

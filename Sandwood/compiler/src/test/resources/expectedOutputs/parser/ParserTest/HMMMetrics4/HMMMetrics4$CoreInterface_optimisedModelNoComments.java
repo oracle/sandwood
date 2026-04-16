@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface HMMMetrics4$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface HMMMetrics4$CoreInterface extends CoreModel {
 	public double[][] get$current_metric_mean();
 	public void set$current_metric_mean(double[][] cv$value, boolean allocated$);
 	public double[][] get$current_metric_valid_bias();

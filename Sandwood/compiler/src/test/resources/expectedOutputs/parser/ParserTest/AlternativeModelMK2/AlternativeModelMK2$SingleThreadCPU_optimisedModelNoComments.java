@@ -1,24 +1,25 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements AlternativeModelMK2$CoreInterface {
-	private double bias;
-	private boolean constrainedFlag$sample6 = true;
-	private boolean fixedFlag$sample6 = false;
-	private boolean fixedProbFlag$sample6 = false;
-	private boolean fixedProbFlag$sample8 = false;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double logProbability$binomial;
-	private double logProbability$positiveCount;
-	private int observedPositiveCount;
-	private int observedSampleCount;
-	private int positiveCount;
-	private boolean system$gibbsForward = true;
+final class AlternativeModelMK2$SingleThreadCPU extends CoreModelSingleThreadCPU implements AlternativeModelMK2$CoreInterface {
+double bias;
+	boolean constrainedFlag$sample6 = true;
+	boolean fixedFlag$sample6 = false;
+	boolean fixedProbFlag$sample6 = false;
+	boolean fixedProbFlag$sample8 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$binomial;
+	double logProbability$positiveCount;
+	int observedPositiveCount;
+	int observedSampleCount;
+	int positiveCount;
+	boolean system$gibbsForward = true;
 
 	public AlternativeModelMK2$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -140,10 +141,10 @@ final class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void allocateScratch() {}
+	public final void allocate() {}
 
 	@Override
-	public final void allocator() {}
+	public final void allocateScratch() {}
 
 	@Override
 	public final void forwardGeneration() {
@@ -234,7 +235,7 @@ final class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.int
 		return "/*\n"
 		     + " * Sandwood\n"
 		     + " *\n"
-		     + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+		     + " * Copyright (c) 2019-2025, Oracle and/or its affiliates\n"
 		     + " * \n"
 		     + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
 		     + " */\n"
@@ -245,7 +246,7 @@ final class AlternativeModelMK2$SingleThreadCPU extends org.sandwood.runtime.int
 		     + " * A model for the fairness work.\n"
 		     + " */\n"
 		     + "public model AlternativeModelMK2(/** The number of observed samples */int observedSampleCount, int observedPositiveCount)  {\n"
-		     + "    /** a bias to see how like values are to be collected. */    \n"
+		     + "    /** A bias to see how likely values are to be collected. */    \n"
 		     + "    double bias = beta(1.0, 1.0).sample();\n"
 		     + "        \n"
 		     + "    //Construct a binomial\n"

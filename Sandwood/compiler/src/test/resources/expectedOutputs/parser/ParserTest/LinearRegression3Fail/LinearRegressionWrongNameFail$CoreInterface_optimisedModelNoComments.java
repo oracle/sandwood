@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface LinearRegressionWrongNameFail$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface LinearRegressionWrongNameFail$CoreInterface extends CoreModel {
 	public double get$b0();
 	public void set$b0(double cv$value, boolean allocated$);
 	public double get$b1();

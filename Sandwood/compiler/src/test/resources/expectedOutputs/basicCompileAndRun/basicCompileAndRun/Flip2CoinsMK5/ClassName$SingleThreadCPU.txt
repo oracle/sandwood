@@ -1,29 +1,32 @@
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ClassName$CoreInterface {
-	
+final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implements ClassName$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[] bias;
-	private int coins;
-	private boolean[] constrainedFlag$sample17;
-	private boolean fixedFlag$sample17 = false;
-	private boolean fixedProbFlag$sample17 = false;
-	private boolean fixedProbFlag$sample55 = false;
-	private boolean fixedProbFlag$sample72 = false;
-	private boolean[][][] flips;
-	private boolean[][][] flipsMeasured;
-	private int[][] length$flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double[] logProbability$bernoulli;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double[] logProbability$sample17;
-	private double[] logProbability$sample55;
-	private double[] logProbability$sample72;
-	private boolean system$gibbsForward = true;
+	double a;
+	double b;
+	double[] bias;
+	int coins;
+	boolean[] constrainedFlag$sample17;
+	boolean fixedFlag$sample17 = false;
+	boolean fixedProbFlag$sample17 = false;
+	boolean fixedProbFlag$sample55 = false;
+	boolean fixedProbFlag$sample72 = false;
+	boolean[][][] flips;
+	boolean[][][] flipsMeasured;
+	int[][] length$flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double[] logProbability$bernoulli;
+	double logProbability$bias;
+	double logProbability$flips;
+	double[] logProbability$sample17;
+	double[] logProbability$sample55;
+	double[] logProbability$sample72;
+	boolean system$gibbsForward = true;
 
 	public ClassName$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -482,15 +485,9 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// If bias has not been set already allocate space.
 		if(!fixedFlag$sample17)
 			// Constructor for bias
@@ -520,6 +517,12 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		// Constructor for logProbability$sample72
 		logProbability$sample72 = new double[length$flipsMeasured.length];
 	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override
@@ -739,6 +742,5 @@ final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 
 	@Override
 	public String modelCode() {
-		return null;
-	}
+		return null;	}
 }

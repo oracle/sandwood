@@ -1,27 +1,28 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements RaggedArray3$CoreInterface {
-	private double[][] a;
-	private boolean constrainedFlag$sample39 = true;
-	private double[] cv$var37$countGlobal;
-	private double[] d;
-	private boolean fixedFlag$sample39 = false;
-	private boolean fixedProbFlag$sample39 = false;
-	private boolean fixedProbFlag$sample53 = false;
-	private int length$obs_measured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$d;
-	private double logProbability$obs;
-	private double logProbability$var51;
-	private int[] obs;
-	private int[] obs_measured;
-	private boolean system$gibbsForward = true;
-	private int y;
+final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implements RaggedArray3$CoreInterface {
+double[][] a;
+	boolean constrainedFlag$sample39 = true;
+	double[] d;
+	boolean fixedFlag$sample39 = false;
+	boolean fixedProbFlag$sample39 = false;
+	boolean fixedProbFlag$sample53 = false;
+	int length$obs_measured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$d;
+	double logProbability$obs;
+	double logProbability$var51;
+	int[] obs;
+	int[] obs_measured;
+	boolean system$gibbsForward = true;
+	int y;
+	double[] cv$var37$countGlobal;
 
 	public RaggedArray3$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -189,12 +190,7 @@ final class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void allocateScratch() {
-		cv$var37$countGlobal = new double[3];
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		a = new double[2][];
 		a[0] = new double[2];
 		a[1] = new double[3];
@@ -208,6 +204,11 @@ final class RaggedArray3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		}
 		obs = new int[length$obs_measured];
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		cv$var37$countGlobal = new double[3];
 	}
 
 	@Override

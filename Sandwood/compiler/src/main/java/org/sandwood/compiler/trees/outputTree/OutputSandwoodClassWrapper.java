@@ -41,7 +41,7 @@ import org.sandwood.compiler.names.PackageName;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.Traces;
 
-public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
+public class OutputSandwoodClassWrapper extends OutputSandwoodOuterClass {
     private static class RandomVariableDesc implements Comparable<RandomVariableDesc> {
         public final VariableName name;
         public final VariableName uniqueName;
@@ -89,7 +89,6 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
     }
 
     private final ModelClassName className;
-    private final PackageName packageName;
     private final String comment;
     private final VariableName[] constructorArgs;
     private final List<VariableName> modelInputs; // Inputs in the model signature that are not observed
@@ -112,11 +111,12 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
     private final VariableName modelParam = VariableNames.internalSystemName("model");
     private final CompilationDesc compDesc;
 
-    public OutputSandwoodClassWrapper(ModelClassName className, PackageName packageName, VariableName[] constructorArgs,
+    public OutputSandwoodClassWrapper(ModelClassName name, PackageName packageName, VariableName[] constructorArgs,
             Map<VariableName, FieldDesc<?>> classFields, Traces traces, CompilationDesc compDesc, String comment,
             ExecutionType[] targets) {
-        this.className = className;
-        this.packageName = packageName;
+        super(packageName, name, Map.of(ClassName.wrapperBase, Collections.emptyList()), Collections.emptyList(),
+                Collections.emptyList());
+        this.className = name;
         this.constructorArgs = constructorArgs;
         fieldDescs.putAll(classFields);
         this.traces = traces;
@@ -173,41 +173,32 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
     }
 
     @Override
-    public String getName() {
-        return className.getName();
+    protected void addDeclaration(StringBuilder sb) {
+        sb.append("public final class ");
     }
 
     @Override
-    public PackageName getPackage() {
-        return packageName;
-    }
-
-    @Override
-    public void toJava(StringBuilder sb) {
-
-        if(!packageName.isEmpty())
-            sb.append("package " + packageName + ";\n\n");
-
-        sb.append("import org.sandwood.runtime.model.Model;\n");
-        sb.append("import org.sandwood.runtime.model.ExecutionTarget;\n");
-        sb.append("import org.sandwood.runtime.model.variables.*;\n");
-        sb.append("import org.sandwood.runtime.internal.model.variables.*;\n");
-        sb.append("import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;\n");
-        sb.append("import org.sandwood.common.exceptions.SandwoodException;\n");
-        sb.append("import org.sandwood.runtime.exceptions.SandwoodRuntimeException;\n");
-        sb.append("\n");
-        sb.append("import java.util.Map;\n");
-        sb.append("import java.util.HashMap;\n");
-        sb.append("\n");
-
+    public String getJavaDocComment() {
         if(comment != null)
-            sb.append(comment + "\n");
+            return comment;
         else
-            sb.append("/**\n" + "  * Class representing the Sandwood model " + className + " This is the class that\n"
-                    + "  * all user interactions with the model should occur through.\n" + "  */\n");
+            return "Class representing the Sandwood model " + className + " This is the class that all"
+                    + " user interactions with the model should occur through.";
+    }
+
+    @Override
+    protected void toJavaBody(StringBuilder sb, int indent, Set<String> requiredImports) {
+        requiredImports.add("org.sandwood.runtime.model.Model");
+        requiredImports.add("org.sandwood.runtime.model.ExecutionTarget");
+        requiredImports.add("org.sandwood.runtime.model.variables.*");
+        requiredImports.add("org.sandwood.runtime.internal.model.variables.*");
+        requiredImports.add("org.sandwood.runtime.internal.model.variables.probability.ProbabilityType");
+        requiredImports.add("org.sandwood.common.exceptions.SandwoodException");
+        requiredImports.add("org.sandwood.runtime.exceptions.SandwoodRuntimeException");
+        requiredImports.add("java.util.Map");
+        requiredImports.add("java.util.HashMap");
 
         ClassName interfaceName = className.interfaceName();
-        sb.append("public final class " + className + " extends Model {\n\n");
 
         sb.append("    private " + interfaceName + " " + coreName + " = new "
                 + className.backendName(ExecutionType.SingleThreadCPU) + "(ExecutionTarget.singleThread);\n\n");
@@ -304,9 +295,6 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
         // Construct Helper Methods
         constructHelperMethods(sb);
-
-        sb.append("}\n");
-        sb.append("//END OF CODE\n");
     }
 
     private void constructConfigurationMethods(StringBuilder sb) {
@@ -417,10 +405,11 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
     }
 
     private void constructInferValues(StringBuilder sb) {
-        sb.append("\n    /**\n" + "     * Infer the values of the different elements of the model.\n"
-                + "     * @param iterations The number of iterations to perform when inferring the values.\n"
-                + "     * @param inputs An object containing the parameters required to generate the model parameters.\n"
-                + "     * @return An object containing the computed values for the model.\n" + "     */\n");
+        sb.append("\n");
+        addJavaDocComment(sb, 1, "Infer the values of the different elements of the model.\n"
+                + "@param iterations The number of iterations to perform when inferring the values.\n"
+                + "@param inputs An object containing the parameters required to generate the model parameters.\n"
+                + "@return An object containing the computed values for the model.");
         sb.append("    public " + inferValuesOutputs + " inferValues(int iterations, " + allInputs + " inputs) {\n");
         setAllInputs(sb, "inputs");
         sb.append("        inferValues(iterations);\n");
@@ -429,10 +418,11 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
     }
 
     private void constructGenerateProbabilities(StringBuilder sb) {
-        sb.append("\n    /**\n" + "     * Generate the probabilities of the different elements of the model.\n"
-                + "     * @param iterations How many iterations should be used to generate these values?\n"
-                + "     * @param inputs An object containing the parameters required to generate the probabilities of the model.\n"
-                + "     * @return An object containing the computed probabilities for the model.\n" + "     */\n");
+        sb.append("\n");
+        addJavaDocComment(sb, 1, "Generate the probabilities of the different elements of the model.\n"
+                + "@param iterations How many iterations should be used to generate these values?\n"
+                + "@param inputs An object containing the parameters required to generate the probabilities of the model.\n"
+                + "@return An object containing the computed probabilities for the model.");
         sb.append("    public " + probabilityOutputs + " inferProbabilities(int iterations, " + allInputs
                 + " inputs) {\n");
         setAllInputs(sb, "inputs");
@@ -442,10 +432,11 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
     }
 
     private void constructGenerateLogProbabilities(StringBuilder sb) {
-        sb.append("\n    /**\n" + "     * Generate the log probabilities of the different elements of the model.\n"
-                + "     * @param iterations How many iterations should be used to generate these values?\n"
-                + "     * @param inputs An object containing the parameters required to generate the probabilities of the model.\n"
-                + "     * @return An object containing the computed probabilities for the model.\n" + "     */\n");
+        sb.append("\n");
+        addJavaDocComment(sb, 1, "Generate the log probabilities of the different elements of the model.\n"
+                + "@param iterations How many iterations should be used to generate these values?\n"
+                + "@param inputs An object containing the parameters required to generate the probabilities of the model.\n"
+                + "@return An object containing the computed probabilities for the model.");
         sb.append("    public " + logProbabilityOutputs + " inferLogProbabilities(int iterations, " + allInputs
                 + " inputs) {\n");
         setAllInputs(sb, "inputs");
@@ -455,17 +446,17 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
     }
 
     private void constructGenerateProbabilitiesVarAndMaxIterations(StringBuilder sb) {
-        sb.append("\n    /**\n"
-                + "     * Calculate the probability of each variable and the overall model. This method\n"
-                + "     * will iterate until the variance of the overall model drops below the value provide \n"
-                + "     * for variance, or the maximum number of iterations is reached.\n"
-                + "     * @param variance The maximum variance in the models overall probability.\n"
-                + "     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in\n"
-                + "     * premature termination as the model may not have enough runs to estimate the variance accurately.\n"
-                + "     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not\n"
-                + "     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.\n"
-                + "     * @param inputs An object containing the parameters required to generate the probabilities of the model.\n"
-                + "     * @return An object containing the computed probabilities for the model.\n" + "     */\n");
+        sb.append("\n");
+        addJavaDocComment(sb, 1, "Calculate the probability of each variable and the overall model. This method "
+                + "will iterate until the variance of the overall model drops below the value provide "
+                + "for variance, or the maximum number of iterations is reached.\n"
+                + "@param variance The maximum variance in the models overall probability.\n"
+                + "@param initialIterations The number of iterations to use to start with. Having too low a value here can result in "
+                + "premature termination as the model may not have enough runs to estimate the variance accurately.\n"
+                + "@param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not "
+                + "converged by this point the calculation will terminate anyway, and the result generated so far will be returned.\n"
+                + "@param inputs An object containing the parameters required to generate the probabilities of the model.\n"
+                + "@return An object containing the computed probabilities for the model.");
         sb.append("    public " + probabilityOutputs
                 + " inferProbabilities(double variance, int initialIterations, int maxIterations, " + allInputs
                 + " inputs) {\n");
@@ -476,17 +467,17 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
     }
 
     private void constructGenerateLogProbabilitiesVarAndMaxIterations(StringBuilder sb) {
-        sb.append("\n    /**\n"
-                + "     * Calculate the log probability of each variable and the overall model. This method\n"
-                + "     * will iterate until the variance of the overall model drops below the value provide \n"
-                + "     * for variance, or the maximum number of iterations is reached.\n"
-                + "     * @param variance The maximum variance in the models overall probability.\n"
-                + "     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in\n"
-                + "     * premature termination as the model may not have enough runs to estimate the variance accurately.\n"
-                + "     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not\n"
-                + "     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.\n"
-                + "     * @param inputs An object containing the parameters required to generate the probabilities of the model.\n"
-                + "     * @return An object containing the computed probabilities for the model.\n" + "     */\n");
+        sb.append("\n");
+        addJavaDocComment(sb, 1, "Calculate the log probability of each variable and the overall model. This method "
+                + "will iterate until the variance of the overall model drops below the value provide "
+                + "for variance, or the maximum number of iterations is reached.\n"
+                + "@param variance The maximum variance in the models overall probability.\n"
+                + "@param initialIterations The number of iterations to use to start with. Having too low a value here can result in "
+                + "premature termination as the model may not have enough runs to estimate the variance accurately.\n"
+                + "@param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not "
+                + "converged by this point the calculation will terminate anyway, and the result generated so far will be returned.\n"
+                + "@param inputs An object containing the parameters required to generate the probabilities of the model.\n"
+                + "@return An object containing the computed probabilities for the model.");
         sb.append("    public " + logProbabilityOutputs
                 + " inferLogProbabilities(double variance, int initialIterations, int maxIterations, " + allInputs
                 + " inputs) {\n");
@@ -497,15 +488,15 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
     }
 
     private void constructGenerateProbabilitiesVar(StringBuilder sb) {
-        sb.append("\n    /**\n"
-                + "     * Calculate the probability of each variable and the overall model. This method\n"
-                + "     * will iterate until the variance of the overall model drops below the value provide \n"
-                + "     * for variance, or the maximum number of iterations is reached.\n"
-                + "     * @param variance The maximum variance in the models overall probability.\n"
-                + "     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in\n"
-                + "     * premature termination as the model may not have enough runs to estimate the variance accurately.\n"
-                + "     * @param inputs An object containing the parameters required to generate the probabilities of the model.\n"
-                + "     * @return An object containing the computed probabilities for the model.\n" + "     */\n");
+        sb.append("\n");
+        addJavaDocComment(sb, 1, "Calculate the probability of each variable and the overall model. This method "
+                + "will iterate until the variance of the overall model drops below the value provide "
+                + "for variance, or the maximum number of iterations is reached.\n"
+                + "@param variance The maximum variance in the models overall probability.\n"
+                + "@param initialIterations The number of iterations to use to start with. Having too low a value here can result in "
+                + "premature termination as the model may not have enough runs to estimate the variance accurately.\n"
+                + "@param inputs An object containing the parameters required to generate the probabilities of the model.\n"
+                + "@return An object containing the computed probabilities for the model.");
         sb.append("    public " + probabilityOutputs + " inferProbabilities(double variance, int initialIterations, "
                 + allInputs + " inputs) {\n");
         setAllInputs(sb, "inputs");
@@ -515,15 +506,15 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
     }
 
     private void constructGenerateLogProbabilitiesVar(StringBuilder sb) {
-        sb.append("\n    /**\n"
-                + "     * Calculate the log probability of each variable and the overall model. This method\n"
-                + "     * will iterate until the variance of the overall model drops below the value provide \n"
-                + "     * for variance, or the maximum number of iterations is reached.\n"
-                + "     * @param variance The maximum variance in the models overall probability.\n"
-                + "     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in\n"
-                + "     * premature termination as the model may not have enough runs to estimate the variance accurately.\n"
-                + "     * @param inputs An object containing the parameters required to generate the probabilities of the model.\n"
-                + "     * @return An object containing the computed probabilities for the model.\n" + "     */\n");
+        sb.append("\n");
+        addJavaDocComment(sb, 1, "Calculate the log probability of each variable and the overall model. This method "
+                + "will iterate until the variance of the overall model drops below the value provide "
+                + "for variance, or the maximum number of iterations is reached.\n"
+                + "@param variance The maximum variance in the models overall probability.\n"
+                + "@param initialIterations The number of iterations to use to start with. Having too low a value here can result in "
+                + "premature termination as the model may not have enough runs to estimate the variance accurately.\n"
+                + "@param inputs An object containing the parameters required to generate the probabilities of the model.\n"
+                + "@return An object containing the computed probabilities for the model.");
         sb.append("    public " + logProbabilityOutputs
                 + " inferLogProbabilities(double variance, int initialIterations, " + allInputs + " inputs) {\n");
         setAllInputs(sb, "inputs");
@@ -547,9 +538,11 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
     }
 
     private void constructInfer1Value(StringBuilder sb) {
-        sb.append("\n    /**\n" + "     * Perform a single pass generating values from the model.\n"
-                + "     * @param inputs An object containing the parameters required to run inference on the model.\n"
-                + "     * @return An object containing the values computed by the inference step.\n" + "     */\n");
+        sb.append("\n");
+        addJavaDocComment(sb, 1,
+                "Perform a single pass generating values from the model.\n"
+                        + "@param inputs An object containing the parameters required to run inference on the model.\n"
+                        + "@return An object containing the values computed by the inference step.");
         sb.append("    public " + executeOutputs + " execute(" + executeInputs + " inputs) {\n");
         setExecuteInputs(sb, "inputs");
         sb.append("        execute();\n");
@@ -586,8 +579,8 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         StringBuilder sig = new StringBuilder();
         StringBuilder constructorBody = new StringBuilder();
 
-        sb.append("\n    /**\n" + "     * A class to hold all the outputs from the model after an infer model call.\n"
-                + "     */\n");
+        sb.append("\n");
+        addJavaDocComment(sb, 1, "A class to hold all the outputs from the model after an infer model call.");
 
         sig.append("\n        " + inferValuesOutputs + "(" + className + " " + modelParam + ")");
 
@@ -597,8 +590,8 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
             FieldDesc<?> argDesc = fieldDescs.get(uniqueName.name);
             FieldType ft = argDesc.fieldType;
             if(ft.observed == Observed.FREE && !ft.isPrivate) {
-                fields.append("        /** Field holding the MAP or Sample value of " + arg
-                        + " after an infer model call. */\n");
+                addJavaDocComment(fields, 2,
+                        "Field holding the MAP or Sample value of " + arg + " after an infer model call.");
                 fields.append("        public final " + argDesc.varDesc.type.getJavaType() + "[] " + arg + ";\n");
                 constructorBody.append("            this." + arg + " = " + modelParam + ".getInferredValue("
                         + modelParam + "." + VariableNames.internalName(arg) + ");\n");
@@ -617,8 +610,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         StringBuilder fields = new StringBuilder();
         StringBuilder constructorBody = new StringBuilder();
 
-        sb.append("\n    /**\n" + "     * A class to hold all the outputs from the model after an infer values step.\n"
-                + "     */\n");
+        addJavaDocComment(sb, 1, "A class to hold all the outputs from the model after an infer values step.");
 
         String sig = "\n        " + executeOutputs + "(" + className + " " + modelParam + ")";
 
@@ -627,8 +619,8 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
             VariableDescription<?> uniqueName = traces.getVariable(arg).getUniqueVarDesc();
             FieldDesc<?> argDesc = fieldDescs.get(uniqueName.name);
             if(!argDesc.fieldType.isPrivate) {
-                fields.append(
-                        "        /** Field holding the value of " + arg + " after a convention execution step.*/\n");
+                addJavaDocComment(fields, 2,
+                        "Field holding the value of " + arg + " after a convention execution step.");
                 fields.append("        public final " + argDesc.varDesc.type.getJavaType() + " " + arg + ";\n");
                 constructorBody
                         .append("            this." + arg + " = " + modelParam + "." + arg + ".getSamples()[0];\n");
@@ -648,9 +640,9 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         StringBuilder fields = new StringBuilder();
         StringBuilder constructorBody = new StringBuilder();
 
-        sb.append("\n    /**\n"
-                + "     * A class to hold all the probabilities from the model after a generate probabilities step.\n"
-                + "     */\n");
+        sb.append("\n");
+        addJavaDocComment(sb, 1,
+                "A class to hold all the probabilities from the model after a generate probabilities step.");
 
         constructorBody.append("\n        " + ((useLogs) ? logProbabilityOutputs : probabilityOutputs) + "(" + className
                 + " " + modelParam + ")");
@@ -667,8 +659,8 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
             VariableName arg = rv.name;
             String javaType = fieldDescs.get(VariableNames.logProbabilityName(rv.uniqueName).name).varDesc.type
                     .getJavaType();
-            fields.append("        /** Field holding the " + ((useLogs) ? "log " : "")
-                    + "probability of random variable " + arg + " */\n");
+            addJavaDocComment(fields, 2,
+                    "Field holding the " + ((useLogs) ? "log " : "") + "probability of random variable " + arg);
             fields.append("        public final " + javaType + " " + arg + ";\n");
             constructorBody.append("            this." + arg + " = " + modelParam + "." + arg + ".get"
                     + ((useLogs) ? "Log" : "") + "Probability();\n");
@@ -676,8 +668,8 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
         for(VariableName arg:computedVariables) {
             if(!fieldDescs.get(arg).fieldType.isPrivate) {
-                fields.append("        /** Field holding the " + ((useLogs) ? "log " : "")
-                        + "probability of computed variable " + arg + " */\n");
+                addJavaDocComment(fields, 2,
+                        "Field holding the " + ((useLogs) ? "log " : "") + "probability of computed variable " + arg);
                 fields.append("        public final double " + arg + ";\n");
                 constructorBody.append("            this." + arg + " = " + modelParam + "." + arg + ".get"
                         + ((useLogs) ? "Log" : "") + "Probability();\n");
@@ -686,10 +678,9 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
         constructorBody.append("        }\n\n");
 
-        constructorBody.append(
-                "        /** Method to return " + ((useLogs) ? "log " : "") + "probability of the whole model \n");
-        constructorBody.append(
-                "         *  @return The " + ((useLogs) ? "log " : "") + "probability of the whole model. */\n");
+        addJavaDocComment(constructorBody, 2,
+                "Method to return " + ((useLogs) ? "log " : "") + "probability of the whole model\n" + "@return The "
+                        + ((useLogs) ? "log " : "") + "probability of the whole model.");
         constructorBody.append("        public double getModelProbability() { return "
                 + VariableNames.internalName(((useLogs) ? "logM" : "m") + "odelProbability") + "; }\n");
 
@@ -706,13 +697,12 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         StringBuilder sig = new StringBuilder();
         StringBuilder constructorBody = new StringBuilder();
 
-        sb.append("\n    /**\n"
-                + "     * A class to hold all the inputs for the model. It can be used to parameterize inference of the model probabilities\n"
-                + "     * and probability calculations.\n" + "     */\n");
+        sb.append("\n");
+        addJavaDocComment(sb, 1, "A class to hold all the inputs for the model. It can be used to "
+                + "parameterize inference of the model " + "probabilities and probability calculations.");
 
-        constructorComment.append("\n        /**\n"
-                + "          * A constructor to take all the required values by the model to infer the model\n"
-                + "          * parameters, or to generate probabilities for the model.\n");
+        constructorComment.append("A constructor to take all the required values by the model to "
+                + "infer the model parameters, or to generate probabilities for the model.");
 
         sig.append("        public " + allInputs + "(");
         constructorBody.append("{\n");
@@ -721,10 +711,10 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
             VariableName arg = constructorArgs[0];
             Variable<?> v = traces.getVariable(arg);
             Type<?> type = v.getType();
-            constructorComment.append("          * @param " + arg + " The value to set " + arg + " to.\n");
+            constructorComment.append("\n@param " + arg + " The value to set " + arg + " to.");
             sig.append(type.getJavaType() + " " + arg);
             if(fieldDescs.containsKey(v.getUniqueVarDesc().name)) {
-                fields.append("        /** Field holding the value of model input " + arg + " */\n");
+                addJavaDocComment(fields, 2, "Field holding the value of model input " + arg);
                 fields.append("        public final " + type.getJavaType() + " " + arg + ";\n");
                 constructorBody.append("            this." + arg + " = " + arg + ";\n");
             }
@@ -733,23 +723,23 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
                 arg = constructorArgs[i];
                 v = traces.getVariable(arg);
                 type = v.getType();
-                constructorComment.append("          * @param " + arg + " The value to set " + arg + " to.\n");
+                constructorComment.append("\n@param " + arg + " The value to set " + arg + " to.");
                 sig.append(", " + type.getJavaType() + " " + arg);
                 if(fieldDescs.containsKey(v.getUniqueVarDesc().name)) {
-                    fields.append("        /** Field holding the value of model input " + arg + " */\n");
+                    addJavaDocComment(fields, 2, "Field holding the value of model input " + arg);
                     fields.append("        public final " + type.getJavaType() + " " + arg + ";\n");
                     constructorBody.append("            this." + arg + " = " + arg + ";\n");
                 }
             }
         }
-
-        constructorComment.append("          */\n");
         sig.append(")");
         constructorBody.append("        }\n");
 
         // Concatenate the parts.
         sb.append("    public static class " + allInputs + " {\n");
-        sb.append(fields.toString() + constructorComment + sig + " " + constructorBody);
+        sb.append(fields.toString() + "\n");
+        addJavaDocComment(sb, 2, constructorComment.toString());
+        sb.append(sig + " " + constructorBody);
         sb.append("    }\n");
     }
 
@@ -759,34 +749,33 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         StringBuilder sig = new StringBuilder();
         StringBuilder constructorBody = new StringBuilder();
 
-        sb.append("\n    /**\n"
-                + "     * A class to hold all the values required to perform a value inference on the model.\n"
-                + "     */\n");
+        sb.append("\n");
+        addJavaDocComment(sb, 1, "A class to hold all the values required to perform a value inference on the model.");
 
         // Construct the signature and finish the comments.
-        constructorComment.append("\n        /**\n"
-                + "          * A constructor taking all the values required to set up the model to infer variables.\n");
+        constructorComment
+                .append("A constructor taking all the values required to set up the model to infer variables.");
         sig.append("        public " + executeInputs + "(");
 
         boolean first = true;
 
         for(VariableName arg:constructorArgs) {
             if(modelInputs.contains(arg)) {
-                constructorComment.append("          * @param " + arg + " The value to set " + arg + " to.\n");
+                constructorComment.append("\n@param " + arg + " The value to set " + arg + " to.");
                 if(first)
                     first = false;
                 else
                     sig.append(", ");
                 Type<?> type = traces.getVariable(arg).getType();
                 sig.append(type.getJavaType() + " " + arg);
-                fields.append("        /** Field holding the value of model input " + arg + " */\n");
+                addJavaDocComment(fields, 2, "Field holding the value of model input " + arg);
                 fields.append("        public final " + type.getJavaType() + " " + arg + ";\n");
             }
 
             if(observedShapeableInputs.contains(arg)) {
-                constructorComment.append("          * @param " + VariableNames.shapeName(arg)
+                constructorComment.append("\n@param " + VariableNames.shapeName(arg)
                         + " An integer array describing the shape of variable " + arg
-                        + " to use in the model when generating results.\n");
+                        + " to use in the model when generating results.");
                 if(first)
                     first = false;
                 else
@@ -797,11 +786,10 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
                 VariableName shapeArg = VariableNames.shapeName(arg);
                 shapeArg = (modelInputs.contains(shapeArg)) ? arg : shapeArg;
                 sig.append(typeString + " " + shapeArg);
-                fields.append("        /** Field holding the shape of model input " + arg + " */\n");
+                addJavaDocComment(fields, 2, "Field holding the shape of model input " + arg);
                 fields.append("        public final " + typeString + " " + shapeArg + ";\n");
             }
         }
-        constructorComment.append("          */\n");
         sig.append(")");
 
         // Construct the body.
@@ -817,13 +805,15 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
         // Concatenate the parts.
         sb.append("    public static class " + executeInputs + " {\n");
-        sb.append(fields.toString() + constructorComment + sig + " " + constructorBody);
+        sb.append(fields.toString() + "\n");
+        addJavaDocComment(sb, 2, constructorComment.toString());
+        sb.append(sig + " " + constructorBody);
         sb.append("    }\n");
     }
 
     private void constructConstructors(StringBuilder sb) {
-        sb.append("    //Constructors\n");
-        sb.append("    /**\n" + "     * A constructor for a model where no variable values are set.\n" + "     */\n");
+        sb.append("    // Constructors\n");
+        addJavaDocComment(sb, 1, "A constructor for a model where no variable values are set.");
         // Empty constructor
         sb.append("    public " + className + "() {\n");
         sb.append("        super();\n");
@@ -875,17 +865,16 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
                 StringBuilder sig = new StringBuilder();
 
                 // Construct the signature and finish the comments.
-                comment.append("    /**\n"
-                        + "      * A constructor to set all the required values in the model to infer values. These\n"
-                        + "      * will be values in an untrained model so this will only generate values from the\n"
-                        + "      * default distributions described in the model.\n");
-                sig.append("\n    public " + className + "(");
+                comment.append("A constructor to set all the required values in the model to infer values. These "
+                        + "will be values in an untrained model so this will only generate values from the "
+                        + "default distributions described in the model.");
+                sig.append("    public " + className + "(");
 
                 boolean first = true;
 
                 for(VariableName arg:constructorArgs) {
                     if(modelInputs.contains(arg)) {
-                        comment.append("      * @param " + arg + " The value to set " + arg + " to.\n");
+                        comment.append("\n@param " + arg + " The value to set " + arg + " to.");
                         if(first)
                             first = false;
                         else
@@ -896,9 +885,8 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
                     if(observedShapeableInputs.contains(arg)) {
                         VariableName shapeArg = VariableNames.shapeName(arg);
-                        comment.append(
-                                "      * @param " + shapeArg + " An integer array describing the shape of variable "
-                                        + arg + " to use in the model when generating results.\n");
+                        comment.append("\n@param " + shapeArg + " An integer array describing the shape of variable "
+                                + arg + " to use in the model when generating results.");
                         if(first)
                             first = false;
                         else
@@ -911,7 +899,6 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
                         sig.append(typeString + " " + shapeArg);
                     }
                 }
-                comment.append("      */\n");
                 sig.append(")");
 
                 // Construct the body.
@@ -932,7 +919,9 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
                 body.append("    }\n");
 
                 // Concatenate the parts.
-                sb.append(comment.toString() + sig + " " + body);
+                sb.append("\n");
+                addJavaDocComment(sb, 1, comment.toString());
+                sb.append(sig + " " + body);
             }
         }
 
@@ -942,17 +931,16 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
             StringBuilder sig = new StringBuilder();
             StringBuilder body = new StringBuilder();
 
-            comment.append("    /**\n"
-                    + "      * A constructor to set all the required values in the model to infer the model\n"
-                    + "      * parameters, or to generate probabilities for the model.\n");
+            comment.append("A constructor to set all the required values in the model to infer the model "
+                    + "parameters, or to generate probabilities for the model.\n");
 
-            sig.append("\n    public " + className + "(");
+            sig.append("    public " + className + "(");
             body.append("{\n        this();\n");
 
             VariableName arg = constructorArgs[0];
             Variable<?> v = traces.getVariable(arg);
             Type<?> type = v.getType();
-            comment.append("      * @param " + arg + " The value to set " + arg + " to.\n");
+            comment.append("@param " + arg + " The value to set " + arg + " to.");
             sig.append(type.getJavaType() + " " + arg);
             if(fieldDescs.containsKey(v.getUniqueVarDesc().name))
                 body.append("        this." + arg + ".setValue(" + arg + ");\n");
@@ -961,18 +949,19 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
                 arg = constructorArgs[i];
                 v = traces.getVariable(arg);
                 type = v.getType();
-                comment.append("      * @param " + arg + " The value to set " + arg + " to.\n");
+                comment.append("\n@param " + arg + " The value to set " + arg + " to");
                 sig.append(", " + type.getJavaType() + " " + arg);
                 if(fieldDescs.containsKey(v.getUniqueVarDesc().name))
                     body.append("        this." + arg + ".setValue(" + arg + ");\n");
             }
 
-            comment.append("      */\n");
             sig.append(")");
             body.append("    }\n");
 
             // Concatenate the parts.
-            sb.append(comment.toString() + sig + " " + body);
+            sb.append("\n");
+            addJavaDocComment(sb, 1, comment.toString());
+            sb.append(sig + " " + body);
         }
     }
 
@@ -1283,13 +1272,10 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
     private void computedJavaDoc(StringBuilder sb, String javaType, VariableName name, String comment) {
         if(comment != null)
-            sb.append(comment + "\n");
-        else {
-            sb.append("    /**\n");
-            sb.append("     * Computed variable representing " + name + " of type " + javaType
-                    + " from the Sandwood model \n");
-            sb.append("     */\n");
-        }
+            addJavaDocComment(sb, 1, comment);
+        else
+            addJavaDocComment(sb, 1,
+                    "Computed variable representing " + name + " of type " + javaType + " from the Sandwood model.");
     }
 
     private void constructObservedField(VariableName fieldName, FieldDesc<?> fieldDesc, StringBuilder sb) {
@@ -1491,13 +1477,10 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
     private void observedJavaDoc(StringBuilder sb, String javaType, VariableName name, String comment) {
         if(comment != null)
-            sb.append("    " + comment + "\n");
-        else {
-            sb.append("    /**\n");
-            sb.append("     * Observed variable representing " + name + " of type " + javaType
-                    + " from the Sandwood model \n");
-            sb.append("     */\n");
-        }
+            addJavaDocComment(sb, 1, comment);
+        else
+            addJavaDocComment(sb, 1,
+                    "Observed variable representing " + name + " of type " + javaType + " from the Sandwood model.");
     }
 
     private void constructRandomVariableField(RandomVariableDesc desc, Map<VariableName, FieldDesc<?>> classFields,
@@ -1536,26 +1519,21 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
     private void randomVariableJavaDoc(StringBuilder sb, RandomVariableDesc desc) {
         if(desc.comment != null)
-            sb.append("    " + desc.comment + "\n");
-        else {
-            sb.append("    /**\n");
-            sb.append("     * Random variable representing " + desc.name + " from the Sandwood model \n");
-            sb.append("     */\n");
-        }
+            addJavaDocComment(sb, 1, desc.comment);
+        else
+            addJavaDocComment(sb, 1, "Random variable representing " + desc.name + " from the Sandwood model.");
     }
 
     private void iteratedRandomVariableJavaDoc(StringBuilder sb, RandomVariableDesc desc, String javaType) {
         if(desc.comment != null)
-            sb.append("    " + desc.comment + "\n");
+            addJavaDocComment(sb, 1, desc.comment);
         else {
             int dims = javaType.split("\\[").length - 1;
-            sb.append("    /**\n");
-            sb.append("     * Iterated random variable representing the random variable " + desc.name + " from\n");
-            sb.append("     * the Sandwood model. The random variable is embedded in "
-                    + ((dims == 1) ? "a loop" : (dims + " loops")) + "\n");
-            sb.append("     * so results are returned as " + ((dims == 1) ? "an" : ("a " + dims + "dimensional "))
-                    + "array.\n");
-            sb.append("     */\n");
+            addJavaDocComment(sb, 1,
+                    "Iterated random variable representing the random variable " + desc.name + " from\n"
+                            + "the Sandwood model. The random variable is embedded in "
+                            + ((dims == 1) ? "a loop" : (dims + " loops")) + "\n" + "so results are returned as "
+                            + ((dims == 1) ? "an" : ("a " + dims + "dimensional ")) + "array.");
         }
     }
 }

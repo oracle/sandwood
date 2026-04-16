@@ -1,100 +1,101 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements NoisyOr$CoreInterface {
-	
+final class NoisyOr$MultiThreadCPU extends CoreModelMultiThreadCPU implements NoisyOr$CoreInterface {
+
 	// Declare the variables for the model.
-	private boolean constrainedFlag$sample12 = true;
-	private boolean constrainedFlag$sample15 = true;
-	private boolean constrainedFlag$sample18 = true;
-	private boolean[] constrainedFlag$sample233;
-	private boolean[] constrainedFlag$sample248;
-	private boolean[] constrainedFlag$sample263;
-	private boolean[] constrainedFlag$sample278;
-	private boolean[] constrainedFlag$sample293;
-	private boolean constrainedFlag$sample3 = true;
-	private boolean[] constrainedFlag$sample308;
-	private boolean constrainedFlag$sample6 = true;
-	private boolean constrainedFlag$sample9 = true;
-	private double[] cv$var12$stateProbabilityGlobal;
-	private double[] cv$var15$stateProbabilityGlobal;
-	private double[] cv$var18$stateProbabilityGlobal;
-	private double[][] cv$var225$stateProbabilityGlobal;
-	private double[][] cv$var238$stateProbabilityGlobal;
-	private double[][] cv$var251$stateProbabilityGlobal;
-	private double[][] cv$var264$stateProbabilityGlobal;
-	private double[][] cv$var277$stateProbabilityGlobal;
-	private double[][] cv$var290$stateProbabilityGlobal;
-	private double[] cv$var3$stateProbabilityGlobal;
-	private double[] cv$var6$stateProbabilityGlobal;
-	private double[] cv$var9$stateProbabilityGlobal;
-	private boolean fixedFlag$sample12 = false;
-	private boolean fixedFlag$sample15 = false;
-	private boolean fixedFlag$sample18 = false;
-	private boolean fixedFlag$sample233 = false;
-	private boolean fixedFlag$sample248 = false;
-	private boolean fixedFlag$sample263 = false;
-	private boolean fixedFlag$sample278 = false;
-	private boolean fixedFlag$sample293 = false;
-	private boolean fixedFlag$sample3 = false;
-	private boolean fixedFlag$sample308 = false;
-	private boolean fixedFlag$sample430 = false;
-	private boolean fixedFlag$sample6 = false;
-	private boolean fixedFlag$sample9 = false;
-	private boolean fixedProbFlag$sample12 = false;
-	private boolean fixedProbFlag$sample15 = false;
-	private boolean fixedProbFlag$sample18 = false;
-	private boolean fixedProbFlag$sample233 = false;
-	private boolean fixedProbFlag$sample248 = false;
-	private boolean fixedProbFlag$sample263 = false;
-	private boolean fixedProbFlag$sample278 = false;
-	private boolean fixedProbFlag$sample293 = false;
-	private boolean fixedProbFlag$sample3 = false;
-	private boolean fixedProbFlag$sample308 = false;
-	private boolean fixedProbFlag$sample430 = false;
-	private boolean fixedProbFlag$sample6 = false;
-	private boolean fixedProbFlag$sample9 = false;
-	private boolean flag1;
-	private boolean flag2;
-	private boolean flag3;
-	private boolean flag4;
-	private boolean flag5;
-	private boolean flag6;
-	private boolean[][] issues$var213;
-	private boolean[][] issues$var383;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$flag1;
-	private double logProbability$flag2;
-	private double logProbability$flag3;
-	private double logProbability$flag4;
-	private double logProbability$flag5;
-	private double logProbability$flag6;
-	private double logProbability$issues$var213;
-	private double logProbability$issues$var383;
-	private double logProbability$n13State;
-	private double logProbability$noisyOr;
-	private double[] logProbability$sample233;
-	private double[] logProbability$sample248;
-	private double[] logProbability$sample263;
-	private double[] logProbability$sample278;
-	private double[] logProbability$sample293;
-	private double[] logProbability$sample308;
-	private double[][] logProbability$sample430;
-	private boolean[] n13State;
-	private boolean[] noisyOr;
-	private double[][] p;
-	private double[][] p13;
-	private double prior1;
-	private double prior2;
-	private double prior3;
-	private double prior4;
-	private double prior5;
-	private double prior6;
-	private boolean system$gibbsForward = true;
+	boolean constrainedFlag$sample12 = true;
+	boolean constrainedFlag$sample15 = true;
+	boolean constrainedFlag$sample18 = true;
+	boolean[] constrainedFlag$sample233;
+	boolean[] constrainedFlag$sample248;
+	boolean[] constrainedFlag$sample263;
+	boolean[] constrainedFlag$sample278;
+	boolean[] constrainedFlag$sample293;
+	boolean constrainedFlag$sample3 = true;
+	boolean[] constrainedFlag$sample308;
+	boolean constrainedFlag$sample6 = true;
+	boolean constrainedFlag$sample9 = true;
+	boolean fixedFlag$sample12 = false;
+	boolean fixedFlag$sample15 = false;
+	boolean fixedFlag$sample18 = false;
+	boolean fixedFlag$sample233 = false;
+	boolean fixedFlag$sample248 = false;
+	boolean fixedFlag$sample263 = false;
+	boolean fixedFlag$sample278 = false;
+	boolean fixedFlag$sample293 = false;
+	boolean fixedFlag$sample3 = false;
+	boolean fixedFlag$sample308 = false;
+	boolean fixedFlag$sample430 = false;
+	boolean fixedFlag$sample6 = false;
+	boolean fixedFlag$sample9 = false;
+	boolean fixedProbFlag$sample12 = false;
+	boolean fixedProbFlag$sample15 = false;
+	boolean fixedProbFlag$sample18 = false;
+	boolean fixedProbFlag$sample233 = false;
+	boolean fixedProbFlag$sample248 = false;
+	boolean fixedProbFlag$sample263 = false;
+	boolean fixedProbFlag$sample278 = false;
+	boolean fixedProbFlag$sample293 = false;
+	boolean fixedProbFlag$sample3 = false;
+	boolean fixedProbFlag$sample308 = false;
+	boolean fixedProbFlag$sample430 = false;
+	boolean fixedProbFlag$sample6 = false;
+	boolean fixedProbFlag$sample9 = false;
+	boolean flag1;
+	boolean flag2;
+	boolean flag3;
+	boolean flag4;
+	boolean flag5;
+	boolean flag6;
+	boolean[][] issues$var213;
+	boolean[][] issues$var383;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$flag1;
+	double logProbability$flag2;
+	double logProbability$flag3;
+	double logProbability$flag4;
+	double logProbability$flag5;
+	double logProbability$flag6;
+	double logProbability$issues$var213;
+	double logProbability$issues$var383;
+	double logProbability$n13State;
+	double logProbability$noisyOr;
+	double[] logProbability$sample233;
+	double[] logProbability$sample248;
+	double[] logProbability$sample263;
+	double[] logProbability$sample278;
+	double[] logProbability$sample293;
+	double[] logProbability$sample308;
+	double[][] logProbability$sample430;
+	boolean[] n13State;
+	boolean[] noisyOr;
+	double[][] p;
+	double[][] p13;
+	double prior1;
+	double prior2;
+	double prior3;
+	double prior4;
+	double prior5;
+	double prior6;
+	boolean system$gibbsForward = true;
+	double[] cv$var12$stateProbabilityGlobal;
+	double[] cv$var15$stateProbabilityGlobal;
+	double[] cv$var18$stateProbabilityGlobal;
+	double[][] cv$var225$stateProbabilityGlobal;
+	double[][] cv$var238$stateProbabilityGlobal;
+	double[][] cv$var251$stateProbabilityGlobal;
+	double[][] cv$var264$stateProbabilityGlobal;
+	double[][] cv$var277$stateProbabilityGlobal;
+	double[][] cv$var290$stateProbabilityGlobal;
+	double[] cv$var3$stateProbabilityGlobal;
+	double[] cv$var6$stateProbabilityGlobal;
+	double[] cv$var9$stateProbabilityGlobal;
 
 	public NoisyOr$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -6408,6 +6409,131 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// Constructor for p
+		{
+			p = new double[6][];
+			p[0] = new double[5];
+			p[1] = new double[5];
+			p[2] = new double[5];
+			p[3] = new double[5];
+			p[4] = new double[5];
+			p[5] = new double[5];
+		}
+		
+		// Constructor for noisyOr
+		{
+			noisyOr = new boolean[5];
+		}
+		
+		// If issues$var213 has not been set already allocate space.
+		if((((((!fixedFlag$sample233 || !fixedFlag$sample248) || !fixedFlag$sample263) || !fixedFlag$sample278) || !fixedFlag$sample293) || !fixedFlag$sample308)) {
+			// Constructor for issues$var213
+			{
+				issues$var213 = new boolean[((((5 - 1) - 0) / 1) + 1)][];
+				for(int i$var211 = 0; i$var211 < 5; i$var211 += 1)
+					issues$var213[((i$var211 - 0) / 1)] = new boolean[6];
+			}
+		}
+		
+		// Constructor for p13
+		{
+			p13 = new double[5][];
+			p13[0] = new double[2];
+			p13[1] = new double[2];
+			p13[2] = new double[2];
+			p13[3] = new double[2];
+			p13[4] = new double[2];
+		}
+		
+		// Constructor for n13State
+		{
+			n13State = new boolean[2];
+		}
+		
+		// If issues$var383 has not been set already allocate space.
+		if(!fixedFlag$sample430) {
+			// Constructor for issues$var383
+			{
+				issues$var383 = new boolean[((((2 - 1) - 0) / 1) + 1)][];
+				for(int i$var381 = 0; i$var381 < 2; i$var381 += 1)
+					issues$var383[((i$var381 - 0) / 1)] = new boolean[5];
+			}
+		}
+		
+		// Constructor for constrainedFlag$sample233
+		{
+			constrainedFlag$sample233 = new boolean[((((5 - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample248
+		{
+			constrainedFlag$sample248 = new boolean[((((5 - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample263
+		{
+			constrainedFlag$sample263 = new boolean[((((5 - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample278
+		{
+			constrainedFlag$sample278 = new boolean[((((5 - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample293
+		{
+			constrainedFlag$sample293 = new boolean[((((5 - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample308
+		{
+			constrainedFlag$sample308 = new boolean[((((5 - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for logProbability$sample233
+		{
+			logProbability$sample233 = new double[((((5 - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for logProbability$sample248
+		{
+			logProbability$sample248 = new double[((((5 - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for logProbability$sample263
+		{
+			logProbability$sample263 = new double[((((5 - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for logProbability$sample278
+		{
+			logProbability$sample278 = new double[((((5 - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for logProbability$sample293
+		{
+			logProbability$sample293 = new double[((((5 - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for logProbability$sample308
+		{
+			logProbability$sample308 = new double[((((5 - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for logProbability$sample430
+		{
+			logProbability$sample430 = new double[((((2 - 1) - 0) / 1) + 1)][];
+			for(int i$var381 = 0; i$var381 < 2; i$var381 += 1)
+				logProbability$sample430[((i$var381 - 0) / 1)] = new double[((((5 - 1) - 0) / 1) + 1)];
+		}
+		
+		// Allocate scratch space
+		allocateScratch();
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -6545,131 +6671,6 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					cv$var290$stateProbabilityGlobal[cv$index] = new double[2];
 			}
 		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// Constructor for p
-		{
-			p = new double[6][];
-			p[0] = new double[5];
-			p[1] = new double[5];
-			p[2] = new double[5];
-			p[3] = new double[5];
-			p[4] = new double[5];
-			p[5] = new double[5];
-		}
-		
-		// Constructor for noisyOr
-		{
-			noisyOr = new boolean[5];
-		}
-		
-		// If issues$var213 has not been set already allocate space.
-		if((((((!fixedFlag$sample233 || !fixedFlag$sample248) || !fixedFlag$sample263) || !fixedFlag$sample278) || !fixedFlag$sample293) || !fixedFlag$sample308)) {
-			// Constructor for issues$var213
-			{
-				issues$var213 = new boolean[((((5 - 1) - 0) / 1) + 1)][];
-				for(int i$var211 = 0; i$var211 < 5; i$var211 += 1)
-					issues$var213[((i$var211 - 0) / 1)] = new boolean[6];
-			}
-		}
-		
-		// Constructor for p13
-		{
-			p13 = new double[5][];
-			p13[0] = new double[2];
-			p13[1] = new double[2];
-			p13[2] = new double[2];
-			p13[3] = new double[2];
-			p13[4] = new double[2];
-		}
-		
-		// Constructor for n13State
-		{
-			n13State = new boolean[2];
-		}
-		
-		// If issues$var383 has not been set already allocate space.
-		if(!fixedFlag$sample430) {
-			// Constructor for issues$var383
-			{
-				issues$var383 = new boolean[((((2 - 1) - 0) / 1) + 1)][];
-				for(int i$var381 = 0; i$var381 < 2; i$var381 += 1)
-					issues$var383[((i$var381 - 0) / 1)] = new boolean[5];
-			}
-		}
-		
-		// Constructor for constrainedFlag$sample233
-		{
-			constrainedFlag$sample233 = new boolean[((((5 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample248
-		{
-			constrainedFlag$sample248 = new boolean[((((5 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample263
-		{
-			constrainedFlag$sample263 = new boolean[((((5 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample278
-		{
-			constrainedFlag$sample278 = new boolean[((((5 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample293
-		{
-			constrainedFlag$sample293 = new boolean[((((5 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample308
-		{
-			constrainedFlag$sample308 = new boolean[((((5 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample233
-		{
-			logProbability$sample233 = new double[((((5 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample248
-		{
-			logProbability$sample248 = new double[((((5 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample263
-		{
-			logProbability$sample263 = new double[((((5 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample278
-		{
-			logProbability$sample278 = new double[((((5 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample293
-		{
-			logProbability$sample293 = new double[((((5 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample308
-		{
-			logProbability$sample308 = new double[((((5 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample430
-		{
-			logProbability$sample430 = new double[((((2 - 1) - 0) / 1) + 1)][];
-			for(int i$var381 = 0; i$var381 < 2; i$var381 += 1)
-				logProbability$sample430[((i$var381 - 0) / 1)] = new double[((((5 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Allocate scratch space
-		allocateScratch();
 	}
 
 	// Method to execute the model code conventionally.

@@ -1,25 +1,26 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements RaggedArray5$CoreInterface {
-	private double[][] a;
-	private boolean constrainedFlag$sample39 = true;
-	private double[] d;
-	private boolean fixedFlag$sample39 = false;
-	private boolean fixedProbFlag$sample39 = false;
-	private boolean fixedProbFlag$sample54 = false;
-	private int length$obs_measured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$d;
-	private double logProbability$obs;
-	private double logProbability$var52;
-	private boolean[] obs;
-	private boolean[] obs_measured;
-	private boolean system$gibbsForward = true;
-	private int y;
+final class RaggedArray5$MultiThreadCPU extends CoreModelMultiThreadCPU implements RaggedArray5$CoreInterface {
+double[][] a;
+	boolean constrainedFlag$sample39 = true;
+	double[] d;
+	boolean fixedFlag$sample39 = false;
+	boolean fixedProbFlag$sample39 = false;
+	boolean fixedProbFlag$sample54 = false;
+	int length$obs_measured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$d;
+	double logProbability$obs;
+	double logProbability$var52;
+	boolean[] obs;
+	boolean[] obs_measured;
+	boolean system$gibbsForward = true;
+	int y;
 
 	public RaggedArray5$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -394,10 +395,7 @@ final class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void allocateScratch() {}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		{
 			a = new double[2][];
 			a[0] = new double[2];
@@ -425,6 +423,9 @@ final class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			obs = new boolean[length$obs_measured];
 		}
 	}
+
+	@Override
+	public final void allocateScratch() {}
 
 	@Override
 	public final void forwardGeneration() {

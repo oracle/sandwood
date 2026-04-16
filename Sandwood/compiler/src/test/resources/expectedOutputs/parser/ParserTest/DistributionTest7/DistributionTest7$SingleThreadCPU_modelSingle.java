@@ -1,11 +1,13 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DistributionTest7$CoreInterface {
-	
+final class DistributionTest7$SingleThreadCPU extends CoreModelSingleThreadCPU implements DistributionTest7$CoreInterface {
+
 	// Declare the variables for the model.
+<<<<<<< Upstream, based on POW
 	private double[] bias;
 	private int cat;
 	private boolean constrainedFlag$sample31 = true;
@@ -30,6 +32,33 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 	private int result;
 	private boolean system$gibbsForward = true;
 	private int var43;
+=======
+	double[] bias;
+	int cat;
+	boolean constrainedFlag$sample31 = true;
+	boolean constrainedFlag$sample45 = true;
+	double data;
+	double[] distribution$sample31;
+	boolean fixedFlag$sample31 = false;
+	boolean fixedFlag$sample45 = false;
+	boolean fixedProbFlag$sample31 = false;
+	boolean fixedProbFlag$sample45 = false;
+	boolean fixedProbFlag$sample51 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$cat;
+	double logProbability$data;
+	double logProbability$result;
+	double logProbability$sample45;
+	double logProbability$var43;
+	double observedData;
+	double[] prob;
+	int result;
+	boolean system$gibbsForward = true;
+	int var43;
+	double[] cv$var31$stateProbabilityGlobal;
+	double[] cv$var43$stateProbabilityGlobal;
+>>>>>>> daee89e Adding in a class to hold just the state. This will be worked on further as the code generation progresses. Commit before adding inner classes to the outer classes. Updating output class structure checkpoint Checkpoint in the restructuring of the output classes to increase the shared code. Finished restructuring the classes, time to start using inner classes. Updates to tree structure Changing the structure of get field so that it can be used to get other types of field, read for getting data out of the scratch and model data classes. Removing unused imports Adding nodes to allow fields in an object ot be set. Moving rng package so that we can add other internal only variable types. Updates to the handling of transformations. Moving from sets to lists of generics Updating the structure of inner class. Changing the passing of fields to sub classes. Updating class structure
 
 	public DistributionTest7$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -3794,28 +3823,9 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var31$stateProbabilityGlobal
-		{
-			// Allocation of cv$var31$stateProbabilityGlobal for single threaded execution
-			cv$var31$stateProbabilityGlobal = new double[3];
-		}
-		
-		// Constructor for cv$var43$stateProbabilityGlobal
-		{
-			// Allocation of cv$var43$stateProbabilityGlobal for single threaded execution
-			cv$var43$stateProbabilityGlobal = new double[(10 + 1)];
-		}
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for bias
 		{
 			bias = new double[3];
@@ -3833,6 +3843,25 @@ final class DistributionTest7$SingleThreadCPU extends org.sandwood.runtime.inter
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var31$stateProbabilityGlobal
+		{
+			// Allocation of cv$var31$stateProbabilityGlobal for single threaded execution
+			cv$var31$stateProbabilityGlobal = new double[3];
+		}
+		
+		// Constructor for cv$var43$stateProbabilityGlobal
+		{
+			// Allocation of cv$var43$stateProbabilityGlobal for single threaded execution
+			cv$var43$stateProbabilityGlobal = new double[(10 + 1)];
+		}
 	}
 
 	// Method to execute the model code conventionally.

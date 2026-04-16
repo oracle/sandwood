@@ -16,20 +16,20 @@ import java.util.List;
 
 import org.sandwood.compiler.compilation.util.SandwoodCompileError;
 import org.sandwood.compiler.names.PackageName;
-import org.sandwood.compiler.trees.outputTree.OutputSandwoodClass;
+import org.sandwood.compiler.trees.outputTree.OutputSandwoodOuterClass;
 
 public class OutputSourceBuilder {
 
-    public static List<SandwoodCompileError> buildOutputSource(List<OutputSandwoodClass> classes, String sourceDir,
+    public static List<SandwoodCompileError> buildOutputSource(List<OutputSandwoodOuterClass> classes, String sourceDir,
             String sourceFilename, PackageName packageName) {
         String sourceOut = getSourceDirectory(sourceDir, sourceFilename, packageName);
         return buildOutputSource(classes, sourceOut);
     }
 
     // TODO consider catching the exception and returning false.
-    public static List<SandwoodCompileError> buildOutputSource(List<OutputSandwoodClass> classes, String sourceDir) {
+    public static List<SandwoodCompileError> buildOutputSource(List<OutputSandwoodOuterClass> classes, String sourceDir) {
         try {
-            for(OutputSandwoodClass c:classes)
+            for(OutputSandwoodOuterClass c:classes)
                 c.toFile(sourceDir);
             return Collections.emptyList();
         } catch(IOException e) {

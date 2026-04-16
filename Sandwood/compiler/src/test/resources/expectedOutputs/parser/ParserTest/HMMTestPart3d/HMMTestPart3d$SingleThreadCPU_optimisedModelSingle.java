@@ -1,12 +1,14 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMTestPart3d$CoreInterface {
-	
+final class HMMTestPart3d$SingleThreadCPU extends CoreModelSingleThreadCPU implements HMMTestPart3d$CoreInterface {
+
 	// Declare the variables for the model.
+<<<<<<< Upstream, based on POW
 	private double[] bias;
 	private boolean[] constrainedFlag$sample28;
 	private boolean[] constrainedFlag$sample45;
@@ -46,6 +48,48 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private int[] st2;
 	private boolean system$gibbsForward = true;
 	private double[] v;
+=======
+	double[] bias;
+	boolean[] constrainedFlag$sample28;
+	boolean[] constrainedFlag$sample45;
+	boolean constrainedFlag$sample54 = true;
+	boolean[] constrainedFlag$sample79;
+	boolean fixedFlag$sample28 = false;
+	boolean fixedFlag$sample45 = false;
+	boolean fixedFlag$sample54 = false;
+	boolean fixedFlag$sample79 = false;
+	boolean fixedProbFlag$sample119 = false;
+	boolean fixedProbFlag$sample28 = false;
+	boolean fixedProbFlag$sample45 = false;
+	boolean fixedProbFlag$sample54 = false;
+	boolean fixedProbFlag$sample79 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	int[][] indirection;
+	int length$flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$flips;
+	double logProbability$m;
+	double logProbability$sample54;
+	double[] logProbability$sample79;
+	double logProbability$st;
+	double logProbability$st2;
+	double logProbability$var118;
+	double logProbability$var28;
+	double logProbability$var44;
+	double[][] m;
+	int samples;
+	int[] st;
+	int[] st2;
+	int states;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[] cv$var28$countGlobal;
+	double[] cv$var53$stateProbabilityGlobal;
+	double[] cv$var78$stateProbabilityGlobal;
+>>>>>>> daee89e Adding in a class to hold just the state. This will be worked on further as the code generation progresses. Commit before adding inner classes to the outer classes. Updating output class structure checkpoint Checkpoint in the restructuring of the output classes to increase the shared code. Finished restructuring the classes, time to start using inner classes. Updates to tree structure Changing the structure of get field so that it can be used to get other types of field, read for getting data out of the scratch and model data classes. Removing unused imports Adding nodes to allow fields in an object ot be set. Moving rng package so that we can add other internal only variable types. Updates to the handling of transformations. Moving from sets to lists of generics Updating the structure of inner class. Changing the passing of fields to sub classes. Updating class structure
 
 	public HMMTestPart3d$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -416,7 +460,7 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Increment the sample counter with the value sampled by sample task 54 of random
 			// variable var52
 			// 
-			// A local reference to the scratch space.
+									// A local reference to the scratch space.
 			cv$var28$countGlobal[st[0]] = (cv$var28$countGlobal[st[0]] + 1.0);
 		}
 		
@@ -432,7 +476,7 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Increment the sample counter with the value sampled by sample task 79 of random
 				// variable var77
 				// 
-				// A local reference to the scratch space.
+												// A local reference to the scratch space.
 				cv$var28$countGlobal[st[i$var71]] = (cv$var28$countGlobal[st[i$var71]] + 1.0);
 			}
 		}
@@ -441,7 +485,7 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// 
 			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
-			// A reference local to the function for the sample variable.
+									// A reference local to the function for the sample variable.
 			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var28$countGlobal, m[var27], 2);
 	}
 
@@ -513,9 +557,9 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = (((0.0 <= var51[0]) && (var51[0] <= 1.0))?Math.log(var51[0]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -543,7 +587,7 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var71" with its value "1".
+												// Substituted "i$var71" with its value "1".
 				cv$accumulatedProbabilities = ((((((0.0 <= st[1]) && (st[1] < 2)) && (0.0 <= var76[st[1]])) && (var76[st[1]] <= 1.0))?Math.log(var76[st[1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			for(int i$var71 = 1; i$var71 < samples; i$var71 += 1) {
@@ -642,9 +686,9 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$var53$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
@@ -676,9 +720,9 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
+						// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
+						// Substituted "cv$valuePos" with its value "1".
 		double cv$accumulatedProbabilities = (((0.0 <= var51[1]) && (var51[1] <= 1.0))?Math.log(var51[1]):Double.NEGATIVE_INFINITY);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -706,7 +750,7 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// Substituted "i$var71" with its value "1".
+									// Substituted "i$var71" with its value "1".
 			cv$accumulatedProbabilities = ((((((0.0 <= st[1]) && (st[1] < 2)) && (0.0 <= var76[st[1]])) && (var76[st[1]] <= 1.0))?Math.log(var76[st[1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		}
 		for(int i$var71 = 1; i$var71 < samples; i$var71 += 1) {
@@ -805,9 +849,9 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$var53$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
@@ -851,23 +895,23 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var53$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var53$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var53$stateProbabilityGlobal[0] = Math.exp((cv$var53$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var53$stateProbabilityGlobal[1] = Math.exp((cv$var53$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			for(int cv$indexName = 2; cv$indexName < cv$var53$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var53$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
@@ -877,7 +921,7 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			st[0] = DistributionSampling.sampleCategorical(RNG$, cv$var53$stateProbabilityGlobal, 2);
 			
@@ -925,9 +969,9 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = (((0.0 <= var76[0]) && (var76[0] <= 1.0))?Math.log(var76[0]):Double.NEGATIVE_INFINITY);
 			for(int index$i$3_2 = 1; index$i$3_2 < samples; index$i$3_2 += 1) {
 				if((i$var71 == (indirection[(index$i$3_2 - 1)][index$i$3_2] / index$i$3_2))) {
@@ -1000,9 +1044,9 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			cv$var78$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
@@ -1029,9 +1073,9 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
+						// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
+						// Substituted "cv$valuePos" with its value "1".
 		double cv$accumulatedProbabilities = (((0.0 <= var76[1]) && (var76[1] <= 1.0))?Math.log(var76[1]):Double.NEGATIVE_INFINITY);
 		for(int index$i$3_2 = 1; index$i$3_2 < samples; index$i$3_2 += 1) {
 			if((i$var71 == (indirection[(index$i$3_2 - 1)][index$i$3_2] / index$i$3_2))) {
@@ -1104,9 +1148,9 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		cv$var78$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
@@ -1150,23 +1194,23 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var78$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var78$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var78$stateProbabilityGlobal[0] = Math.exp((cv$var78$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
+												// Get a local reference to the scratch space.
 				cv$var78$stateProbabilityGlobal[1] = Math.exp((cv$var78$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			for(int cv$indexName = 2; cv$indexName < cv$var78$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var78$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
@@ -1176,7 +1220,7 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			st[i$var71] = DistributionSampling.sampleCategorical(RNG$, cv$var78$stateProbabilityGlobal, 2);
 			
@@ -1812,35 +1856,9 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var28$countGlobal
-		// 
-		// Allocation of cv$var28$countGlobal for single threaded execution
-		cv$var28$countGlobal = new double[2];
-		
-		// Constructor for cv$var53$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var53$stateProbabilityGlobal for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 52. Initially set to the value
-		// of putTask 29.
-		cv$var53$stateProbabilityGlobal = new double[2];
-		
-		// Allocation of cv$var78$stateProbabilityGlobal for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 77. Initially set to the value
-		// of putTask 29.
-		cv$var78$stateProbabilityGlobal = new double[2];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for v
 		v = new double[2];
 		
@@ -1887,6 +1905,32 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var28$countGlobal
+		// 
+		// Allocation of cv$var28$countGlobal for single threaded execution
+		cv$var28$countGlobal = new double[2];
+		
+		// Constructor for cv$var53$stateProbabilityGlobal
+		// 
+		// Allocation of cv$var53$stateProbabilityGlobal for single threaded execution
+		// 
+		// Variable to record the maximum value of Task Get 52. Initially set to the value
+		// of putTask 29.
+		cv$var53$stateProbabilityGlobal = new double[2];
+		
+		// Allocation of cv$var78$stateProbabilityGlobal for single threaded execution
+		// 
+		// Variable to record the maximum value of Task Get 77. Initially set to the value
+		// of putTask 29.
+		cv$var78$stateProbabilityGlobal = new double[2];
 	}
 
 	// Method to execute the model code conventionally.

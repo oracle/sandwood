@@ -26,18 +26,18 @@ public class InjectionAttackTest extends GeneratedAPIBuilder {
     @Override
     public CompilationDesc buildClass(CompilationOptions opts) {
         //Allocating initial observed parameters
-        IntVariable observedSampleCount = observeInt("observedSampleCount", "/** The number of observed samples \" + new java.util.Random().nextDouble() + \"*/", location(16, 114, 16, 136));
+        IntVariable observedSampleCount = observeInt("observedSampleCount", "The number of observed samples \" + new java.util.Random().nextDouble() + \"", location(16, 114, 16, 136));
         IntVariable observedPositiveCount = observeInt("observedPositiveCount", location(16, 139, 16, 163));
 
         DoubleVariable bias = beta(doubleVariable(1.0, location(19, 24, 19, 26)), doubleVariable(1.0, location(19, 29, 19, 31)), location(19, 19, 19, 32)).sample(location(19, 34, 19, 41));
         bias.setAlias("bias");
         bias.setLocation(location(19, 12, 19, 15));
-        bias.setComment("/** a bias to see how like values are to be collected. \" + new java.util.Random().nextDouble() + \"*/");
+        bias.setComment("a bias to see how like values are to be collected. \" + new java.util.Random().nextDouble() + \"");
 
         Binomial binomial = binomial(bias, observedSampleCount, location(23, 25, 23, 59));
         binomial.setAlias("binomial");
         binomial.setLocation(location(23, 14, 23, 21));
-        binomial.setComment("/** A binomial distribution for the tests. \" + new java.util.Random().nextDouble() + \" */");
+        binomial.setComment("A binomial distribution for the tests. \" + new java.util.Random().nextDouble() + \"");
 
         IntVariable positiveCount = binomial.sample(location(26, 34, 26, 41));
         positiveCount.setAlias("positiveCount");
@@ -48,7 +48,7 @@ public class InjectionAttackTest extends GeneratedAPIBuilder {
         Variable<?>[] $variableNames = {observedSampleCount, observedPositiveCount, bias, binomial, positiveCount};
         String[] $constructorArgs = {"observedSampleCount", "observedPositiveCount"};
         Set<String> $helperClasses = new HashSet<>();
-        return compileAPI(opts, $variableNames, "InjectionAttackTest", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), "/**\n * A model for the fairness work. \" + new java.util.Random().nextDouble() + \"\n */");
+        return compileAPI(opts, $variableNames, "InjectionAttackTest", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), "A model for the fairness work. \" + new java.util.Random().nextDouble() + \"");
     }
 
     private static String getOriginalModel() {

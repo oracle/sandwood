@@ -23,8 +23,8 @@ import org.sandwood.compiler.compilation.APICompile;
 import org.sandwood.compiler.compilation.CompilationContext.AuxFunctionType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
-import org.sandwood.compiler.names.ClassName;
 import org.sandwood.compiler.names.FunctionName;
+import org.sandwood.compiler.names.ModelClassName;
 import org.sandwood.compiler.names.PackageName;
 import org.sandwood.compiler.trees.outputTree.OutputFunction;
 import org.sandwood.compiler.trees.outputTree.OutputSandwoodClassGenerated;
@@ -33,26 +33,26 @@ import org.sandwood.compiler.trees.transformationTree.visitors.TreeVisitor;
 
 public class TransSandwoodClassGenerated {
 
-    private final ClassName name;
-    private final ClassName extendedClass;
-    private final ClassName[] interfaces;
+    private final ExecutionType target;
+    private final ModelClassName name;
     private final PackageName packageName;
     private final String modelCode;
     // Variable field name |-> Field Descriptor
     private final Map<FunctionName, TransFunction<?>> functions;
-    private final Map<VariableName, TransTreeVoid> fieldTrees;
+    private final Map<VariableName, TransTreeVoid> classFieldTrees, scratchFieldTrees;
     private final List<TransFunction<?>> gettersAndSetters;
 
-    public TransSandwoodClassGenerated(ClassName name, PackageName packageName, ClassName extendedClass,
-            ClassName[] interfaces, String modelCode, Map<FunctionName, TransFunction<?>> functions,
-            Map<VariableName, TransTreeVoid> fieldsTrees, List<TransFunction<?>> gettersAndSetters) {
+    public TransSandwoodClassGenerated(ExecutionType target, ModelClassName name, PackageName packageName,
+            String modelCode, Map<FunctionName, TransFunction<?>> functions,
+            Map<VariableName, TransTreeVoid> classFieldsTrees, Map<VariableName, TransTreeVoid> scratchFieldTrees,
+            List<TransFunction<?>> gettersAndSetters) {
+        this.target = target;
         this.name = name;
-        this.extendedClass = extendedClass;
-        this.interfaces = interfaces;
         this.packageName = packageName;
         this.modelCode = modelCode;
         this.functions = functions;
-        this.fieldTrees = fieldsTrees;
+        this.classFieldTrees = classFieldsTrees;
+        this.scratchFieldTrees = scratchFieldTrees;
         this.gettersAndSetters = gettersAndSetters;
     }
 
@@ -107,12 +107,12 @@ public class TransSandwoodClassGenerated {
             }
 
         // Remove unused fields
-        Map<VariableName, TransTreeVoid> fieldTrees = new HashMap<>(this.fieldTrees);
+        Map<VariableName, TransTreeVoid> fieldTrees = new HashMap<>(this.classFieldTrees);
         for(VariableDescription<?> desc:constants.keySet())
             fieldTrees.remove(desc.name);
 
-        return new TransSandwoodClassGenerated(name, packageName, extendedClass, interfaces, modelCode,
-                optimisedFunctions, fieldTrees, optimisedGettersAndSetters);
+        return new TransSandwoodClassGenerated(target, name, packageName, modelCode, optimisedFunctions,
+                classFieldTrees, scratchFieldTrees, optimisedGettersAndSetters);
     }
 
     private Map<VariableDescription<?>, TransTreeReturn<?>> getConstants(TransFunction<?> initialise) {
@@ -156,12 +156,17 @@ public class TransSandwoodClassGenerated {
         return constants;
     }
 
-    public OutputSandwoodClassGenerated toOutputTree(ExecutionType target) {
+    public OutputSandwoodClassGenerated toOutputTree() {
         // Turn the individual field declarations into a single tree.
-        PriorityQueue<VariableName> fieldNames = new PriorityQueue<>(fieldTrees.keySet());
+        PriorityQueue<VariableName> fieldNames = new PriorityQueue<>(classFieldTrees.keySet());
         List<TransTreeVoid> declarations = new ArrayList<>();
         while(!fieldNames.isEmpty())
-            declarations.add(fieldTrees.get(fieldNames.poll()));
+            declarations.add(classFieldTrees.get(fieldNames.poll()));
+        
+        fieldNames.addAll(scratchFieldTrees.keySet());
+        while(!fieldNames.isEmpty())
+            declarations.add(scratchFieldTrees.get(fieldNames.poll()));
+        
         OutputTree fieldsTree = TransTree.sequential(declarations, "Declare the variables for the model.")
                 .toOutputTree(target);
 
@@ -182,12 +187,12 @@ public class TransSandwoodClassGenerated {
 
         List<OutputFunction> functionList = new ArrayList<>();
         while(!samples.isEmpty()) {
-            TransFunction<?> f = this.functions.get(samples.poll());
+            TransFunction<?> f = functions.get(samples.poll());
             functionList.add(f.toOutputTree(target));
         }
 
         while(!aux.isEmpty()) {
-            TransFunction<?> f = this.functions.get(aux.poll());
+            TransFunction<?> f = functions.get(aux.poll());
             functionList.add(f.toOutputTree(target));
         }
 
@@ -195,7 +200,7 @@ public class TransSandwoodClassGenerated {
         for(TransFunction<?> f:this.gettersAndSetters)
             gettersAndSetters.add(f.toOutputTree(target));
 
-        return new OutputSandwoodClassGenerated(name, packageName, extendedClass, interfaces, functionList, fieldsTree,
+        return OutputSandwoodClassGenerated.getClass(target, name, packageName, functionList, fieldsTree,
                 modelCode, gettersAndSetters);
     }
 }

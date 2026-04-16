@@ -11,24 +11,25 @@ package org.sandwood.compiler.trees.outputTree;
 import java.util.Map;
 import java.util.Set;
 
-import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
+import org.sandwood.compiler.dataflowGraph.variables.ObjectVariable;
+import org.sandwood.compiler.dataflowGraph.variables.Variable;
+import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 
-public class OutputGetIntField extends OutputTreeReturn<IntVariable> {
+public class OutputGetField<A extends ObjectVariable<A>, X extends Variable<X>> extends OutputTreeReturn<X> {
 
-    private final String name;
-    private final OutputTreeReturn<?> tree;
+    private final VariableDescription<X> varDesc;
+    private final OutputTreeReturn<A> tree;
 
-    // TODO tighten up the type of Tree return.
-    OutputGetIntField(OutputTreeReturn<?> tree, String name) {
+    OutputGetField(OutputTreeReturn<A> tree, VariableDescription<X> varDesc) {
         super(OutputTreeType.GET_FIELD);
-        this.name = name;
+        this.varDesc = varDesc;
         this.tree = tree;
     }
 
     @Override
     protected void toJavaInternal(StringBuilder sb, int indent, Set<String> requiredImports) {
         tree.toJava(sb, indent, requiredImports);
-        sb.append("." + name);
+        sb.append("." + varDesc.name);
     }
 
     @Override
@@ -38,12 +39,12 @@ public class OutputGetIntField extends OutputTreeReturn<IntVariable> {
 
     @Override
     public String getDescription() {
-        return "." + name;
+        return "." + varDesc;
     }
 
     @Override
-    protected OutputGetIntField copy(Map<OutputTree, OutputTree> results) {
-        OutputGetIntField g = new OutputGetIntField(tree.copy(results), name);
+    protected OutputGetField<A,X> copy(Map<OutputTree, OutputTree> results) {
+        OutputGetField<A,X> g = new OutputGetField<>(tree.copy(results), varDesc);
         results.put(this, g);
         return g;
     }
@@ -52,7 +53,7 @@ public class OutputGetIntField extends OutputTreeReturn<IntVariable> {
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + name.hashCode();
+        result = prime * result + varDesc.hashCode();
         result = prime * result + tree.hashCode();
         return result;
     }
@@ -63,10 +64,9 @@ public class OutputGetIntField extends OutputTreeReturn<IntVariable> {
             return true;
         if(!super.equals(obj) || (getClass() != obj.getClass()))
             return false;
-        OutputGetIntField other = (OutputGetIntField) obj;
-        if(!name.equals(other.name))
+        OutputGetField<?,?> other = (OutputGetField<?,?>) obj;
+        if(!varDesc.equals(other.varDesc))
             return false;
         return tree.equals(other.tree);
     }
-
 }

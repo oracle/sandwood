@@ -26,18 +26,18 @@ public class AlternativeModelMK2 extends GeneratedAPIBuilder {
     @Override
     public CompilationDesc buildClass(CompilationOptions opts) {
         //Allocating initial observed parameters
-        IntVariable observedSampleCount = observeInt("observedSampleCount", "/** The number of observed samples */", location(14, 71, 14, 93));
+        IntVariable observedSampleCount = observeInt("observedSampleCount", "The number of observed samples", location(14, 71, 14, 93));
         IntVariable observedPositiveCount = observeInt("observedPositiveCount", location(14, 96, 14, 120));
 
         DoubleVariable bias = beta(doubleVariable(1.0, location(16, 24, 16, 26)), doubleVariable(1.0, location(16, 29, 16, 31)), location(16, 19, 16, 32)).sample(location(16, 34, 16, 41));
         bias.setAlias("bias");
         bias.setLocation(location(16, 12, 16, 15));
-        bias.setComment("/** a bias to see how like values are to be collected. */");
+        bias.setComment("A bias to see how likely values are to be collected.");
 
         Binomial binomial = binomial(bias, observedSampleCount, location(20, 25, 20, 59));
         binomial.setAlias("binomial");
         binomial.setLocation(location(20, 14, 20, 21));
-        binomial.setComment("/** A binomial distribution for the tests. */");
+        binomial.setComment("A binomial distribution for the tests.");
 
         IntVariable positiveCount = binomial.sample(location(23, 34, 23, 41));
         positiveCount.setAlias("positiveCount");
@@ -48,14 +48,14 @@ public class AlternativeModelMK2 extends GeneratedAPIBuilder {
         Variable<?>[] $variableNames = {observedSampleCount, observedPositiveCount, bias, binomial, positiveCount};
         String[] $constructorArgs = {"observedSampleCount", "observedPositiveCount"};
         Set<String> $helperClasses = new HashSet<>();
-        return compileAPI(opts, $variableNames, "AlternativeModelMK2", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), "/**\n * A model for the fairness work.\n */");
+        return compileAPI(opts, $variableNames, "AlternativeModelMK2", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), "A model for the fairness work.");
     }
 
     private static String getOriginalModel() {
         return "/*\n"
              + " * Sandwood\n"
              + " *\n"
-             + " * Copyright (c) 2019-2023, Oracle and/or its affiliates\n"
+             + " * Copyright (c) 2019-2025, Oracle and/or its affiliates\n"
              + " * \n"
              + " * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/\n"
              + " */\n"
@@ -66,7 +66,7 @@ public class AlternativeModelMK2 extends GeneratedAPIBuilder {
              + " * A model for the fairness work.\n"
              + " */\n"
              + "public model AlternativeModelMK2(/** The number of observed samples */int observedSampleCount, int observedPositiveCount)  {\n"
-             + "    /** a bias to see how like values are to be collected. */    \n"
+             + "    /** A bias to see how likely values are to be collected. */    \n"
              + "    double bias = beta(1.0, 1.0).sample();\n"
              + "        \n"
              + "    //Construct a binomial\n"

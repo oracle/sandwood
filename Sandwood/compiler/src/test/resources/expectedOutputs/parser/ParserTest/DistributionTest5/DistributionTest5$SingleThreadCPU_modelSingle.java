@@ -1,11 +1,13 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DistributionTest5$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DistributionTest5$CoreInterface {
-	
+final class DistributionTest5$SingleThreadCPU extends CoreModelSingleThreadCPU implements DistributionTest5$CoreInterface {
+
 	// Declare the variables for the model.
+<<<<<<< Upstream, based on POW
 	private boolean constrainedFlag$sample11 = true;
 	private boolean[] constrainedFlag$sample27;
 	private boolean constrainedFlag$sample5 = true;
@@ -42,6 +44,44 @@ final class DistributionTest5$SingleThreadCPU extends org.sandwood.runtime.inter
 	private int[] v3;
 	private boolean[] value;
 	private double[] weightings;
+=======
+	boolean constrainedFlag$sample11 = true;
+	boolean[] constrainedFlag$sample27;
+	boolean constrainedFlag$sample5 = true;
+	double[] distribution$sample11;
+	double[][] distribution$sample27;
+	double[] distribution$sample5;
+	boolean fixedFlag$sample11 = false;
+	boolean fixedFlag$sample27 = false;
+	boolean fixedFlag$sample5 = false;
+	boolean fixedProbFlag$sample11 = false;
+	boolean fixedProbFlag$sample27 = false;
+	boolean fixedProbFlag$sample5 = false;
+	boolean fixedProbFlag$sample70 = false;
+	int length$value;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$sample11;
+	double[] logProbability$sample27;
+	double logProbability$v;
+	double logProbability$v1;
+	double logProbability$v2;
+	double logProbability$v3;
+	double logProbability$var70;
+	int size;
+	boolean system$gibbsForward = true;
+	boolean[] v;
+	int v1;
+	int[] v2;
+	int[] v3;
+	boolean[] value;
+	double[] weightings;
+	double[] cv$var11$stateProbabilityGlobal;
+	double[] cv$var27$stateProbabilityGlobal;
+	double[] cv$var5$stateProbabilityGlobal;
+	boolean[] guard$sample11bernoulli69$global;
+	boolean[] guard$sample27bernoulli69$global;
+>>>>>>> daee89e Adding in a class to hold just the state. This will be worked on further as the code generation progresses. Commit before adding inner classes to the outer classes. Updating output class structure checkpoint Checkpoint in the restructuring of the output classes to increase the shared code. Finished restructuring the classes, time to start using inner classes. Updates to tree structure Changing the structure of get field so that it can be used to get other types of field, read for getting data out of the scratch and model data classes. Removing unused imports Adding nodes to allow fields in an object ot be set. Moving rng package so that we can add other internal only variable types. Updates to the handling of transformations. Moving from sets to lists of generics Updating the structure of inner class. Changing the passing of fields to sub classes. Updating class structure
 
 	public DistributionTest5$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -16509,56 +16549,9 @@ final class DistributionTest5$SingleThreadCPU extends org.sandwood.runtime.inter
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var5$stateProbabilityGlobal
-		{
-			// Allocation of cv$var5$stateProbabilityGlobal for single threaded execution
-			cv$var5$stateProbabilityGlobal = new double[weightings.length];
-		}
-		
-		// Constructor for cv$var11$stateProbabilityGlobal
-		{
-			// Allocation of cv$var11$stateProbabilityGlobal for single threaded execution
-			cv$var11$stateProbabilityGlobal = new double[weightings.length];
-		}
-		
-		// Constructor for guard$sample11bernoulli69$global
-		{
-			// Calculate the largest index of j that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_j = 0;
-			cv$max_j = Math.max(cv$max_j, ((length$value - 0) / 1));
-			
-			// Allocation of guard$sample11bernoulli69$global for single threaded execution
-			guard$sample11bernoulli69$global = new boolean[cv$max_j];
-		}
-		
-		// Constructor for cv$var27$stateProbabilityGlobal
-		{
-			// Allocation of cv$var27$stateProbabilityGlobal for single threaded execution
-			cv$var27$stateProbabilityGlobal = new double[weightings.length];
-		}
-		
-		// Constructor for guard$sample27bernoulli69$global
-		{
-			// Calculate the largest index of j that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_j = 0;
-			cv$max_j = Math.max(cv$max_j, ((length$value - 0) / 1));
-			
-			// Allocation of guard$sample27bernoulli69$global for single threaded execution
-			guard$sample27bernoulli69$global = new boolean[cv$max_j];
-		}
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// If v2 has not been set already allocate space.
 		if((!fixedFlag$sample11 || !fixedFlag$sample27)) {
 			// Constructor for v2
@@ -16606,6 +16599,53 @@ final class DistributionTest5$SingleThreadCPU extends org.sandwood.runtime.inter
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var5$stateProbabilityGlobal
+		{
+			// Allocation of cv$var5$stateProbabilityGlobal for single threaded execution
+			cv$var5$stateProbabilityGlobal = new double[weightings.length];
+		}
+		
+		// Constructor for cv$var11$stateProbabilityGlobal
+		{
+			// Allocation of cv$var11$stateProbabilityGlobal for single threaded execution
+			cv$var11$stateProbabilityGlobal = new double[weightings.length];
+		}
+		
+		// Constructor for guard$sample11bernoulli69$global
+		{
+			// Calculate the largest index of j that is possible and allocate an array to hold
+			// the guard for each of these.
+			int cv$max_j = 0;
+			cv$max_j = Math.max(cv$max_j, ((length$value - 0) / 1));
+			
+			// Allocation of guard$sample11bernoulli69$global for single threaded execution
+			guard$sample11bernoulli69$global = new boolean[cv$max_j];
+		}
+		
+		// Constructor for cv$var27$stateProbabilityGlobal
+		{
+			// Allocation of cv$var27$stateProbabilityGlobal for single threaded execution
+			cv$var27$stateProbabilityGlobal = new double[weightings.length];
+		}
+		
+		// Constructor for guard$sample27bernoulli69$global
+		{
+			// Calculate the largest index of j that is possible and allocate an array to hold
+			// the guard for each of these.
+			int cv$max_j = 0;
+			cv$max_j = Math.max(cv$max_j, ((length$value - 0) / 1));
+			
+			// Allocation of guard$sample27bernoulli69$global for single threaded execution
+			guard$sample27bernoulli69$global = new boolean[cv$max_j];
+		}
 	}
 
 	// Method to execute the model code conventionally.

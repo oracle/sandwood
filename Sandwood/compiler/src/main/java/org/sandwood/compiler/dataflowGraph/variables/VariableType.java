@@ -16,6 +16,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.ArrayProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
+import org.sandwood.compiler.dataflowGraph.variables.internal.RandomNumberGenerator;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Bernoulli;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Beta;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Binomial;
@@ -35,7 +36,6 @@ import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVaria
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.StudentT;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.TruncatedGaussian;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Uniform;
-import org.sandwood.compiler.dataflowGraph.variables.rng.RandomNumberGenerator;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;

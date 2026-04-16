@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface Flip1CoinArrayCopyPass$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface Flip1CoinArrayCopyPass$CoreInterface extends CoreModel {
 	public double get$a();
 	public double get$b();
 	public double[] get$bias();

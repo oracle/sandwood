@@ -1,38 +1,39 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements LinearRegressionTest$CoreInterface {
-	private double bias;
-	private boolean[] constrainedFlag$sample24;
-	private boolean constrainedFlag$sample31 = true;
-	private boolean constrainedFlag$sample35 = true;
-	private boolean fixedFlag$sample24 = false;
-	private boolean fixedFlag$sample31 = false;
-	private boolean fixedFlag$sample35 = false;
-	private boolean fixedProbFlag$sample24 = false;
-	private boolean fixedProbFlag$sample31 = false;
-	private boolean fixedProbFlag$sample35 = false;
-	private boolean fixedProbFlag$sample74 = false;
-	private int k;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double[] logProbability$sample24;
-	private double[] logProbability$sample74;
-	private double logProbability$tau;
-	private double logProbability$weights;
-	private double logProbability$y;
-	private int n;
-	private double[][] phi;
-	private boolean system$gibbsForward = true;
-	private double tau;
-	private double[] weights;
-	private double[][] x;
-	private double[] y;
-	private double[] yMeasured;
+final class LinearRegressionTest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LinearRegressionTest$CoreInterface {
+double bias;
+	boolean[] constrainedFlag$sample24;
+	boolean constrainedFlag$sample31 = true;
+	boolean constrainedFlag$sample35 = true;
+	boolean fixedFlag$sample24 = false;
+	boolean fixedFlag$sample31 = false;
+	boolean fixedFlag$sample35 = false;
+	boolean fixedProbFlag$sample24 = false;
+	boolean fixedProbFlag$sample31 = false;
+	boolean fixedProbFlag$sample35 = false;
+	boolean fixedProbFlag$sample74 = false;
+	int k;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double[] logProbability$sample24;
+	double[] logProbability$sample74;
+	double logProbability$tau;
+	double logProbability$weights;
+	double logProbability$y;
+	int n;
+	double[][] phi;
+	boolean system$gibbsForward = true;
+	double tau;
+	double[] weights;
+	double[][] x;
+	double[] y;
+	double[] yMeasured;
 
 	public LinearRegressionTest$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -342,10 +343,7 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void allocateScratch() {}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		y = new double[x.length];
 		if(!fixedFlag$sample24)
 			weights = new double[x[0].length];
@@ -356,6 +354,9 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 		logProbability$sample24 = new double[x[0].length];
 		logProbability$sample74 = new double[x.length];
 	}
+
+	@Override
+	public final void allocateScratch() {}
 
 	@Override
 	public final void forwardGeneration() {

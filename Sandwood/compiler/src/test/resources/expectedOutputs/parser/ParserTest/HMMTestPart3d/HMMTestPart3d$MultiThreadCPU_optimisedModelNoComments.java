@@ -1,10 +1,12 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
+<<<<<<< Upstream, based on POW
 final class HMMTestPart3d$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements HMMTestPart3d$CoreInterface {
 	private double[] bias;
 	private boolean[] constrainedFlag$sample28;
@@ -45,6 +47,49 @@ final class HMMTestPart3d$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private int[] st2;
 	private boolean system$gibbsForward = true;
 	private double[] v;
+=======
+final class HMMTestPart3d$MultiThreadCPU extends CoreModelMultiThreadCPU implements HMMTestPart3d$CoreInterface {
+double[] bias;
+	boolean[] constrainedFlag$sample28;
+	boolean[] constrainedFlag$sample45;
+	boolean constrainedFlag$sample54 = true;
+	boolean[] constrainedFlag$sample79;
+	boolean fixedFlag$sample28 = false;
+	boolean fixedFlag$sample45 = false;
+	boolean fixedFlag$sample54 = false;
+	boolean fixedFlag$sample79 = false;
+	boolean fixedProbFlag$sample119 = false;
+	boolean fixedProbFlag$sample28 = false;
+	boolean fixedProbFlag$sample45 = false;
+	boolean fixedProbFlag$sample54 = false;
+	boolean fixedProbFlag$sample79 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	int[][] indirection;
+	int length$flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$flips;
+	double logProbability$m;
+	double[] logProbability$sample119;
+	double logProbability$sample54;
+	double[] logProbability$sample79;
+	double logProbability$st;
+	double logProbability$st2;
+	double logProbability$var28;
+	double logProbability$var44;
+	double[][] m;
+	int samples;
+	int[] st;
+	int[] st2;
+	int states;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[][] cv$var28$countGlobal;
+	double[] cv$var53$stateProbabilityGlobal;
+	double[] cv$var78$stateProbabilityGlobal;
+>>>>>>> daee89e Adding in a class to hold just the state. This will be worked on further as the code generation progresses. Commit before adding inner classes to the outer classes. Updating output class structure checkpoint Checkpoint in the restructuring of the output classes to increase the shared code. Finished restructuring the classes, time to start using inner classes. Updates to tree structure Changing the structure of get field so that it can be used to get other types of field, read for getting data out of the scratch and model data classes. Removing unused imports Adding nodes to allow fields in an object ot be set. Moving rng package so that we can add other internal only variable types. Updates to the handling of transformations. Moving from sets to lists of generics Updating the structure of inner class. Changing the passing of fields to sub classes. Updating class structure
 
 	public HMMTestPart3d$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -622,17 +667,7 @@ final class HMMTestPart3d$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void allocateScratch() {
-		int cv$threadCount = threadCount();
-		cv$var28$countGlobal = new double[cv$threadCount][];
-		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			cv$var28$countGlobal[cv$index] = new double[2];
-		cv$var53$stateProbabilityGlobal = new double[2];
-		cv$var78$stateProbabilityGlobal = new double[2];
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		v = new double[2];
 		if(!fixedFlag$sample28) {
 			m = new double[2][];
@@ -654,6 +689,16 @@ final class HMMTestPart3d$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$sample79 = new double[(length$flipsMeasured - 1)];
 		logProbability$sample119 = new double[length$flipsMeasured];
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		int cv$threadCount = threadCount();
+		cv$var28$countGlobal = new double[cv$threadCount][];
+		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+			cv$var28$countGlobal[cv$index] = new double[2];
+		cv$var53$stateProbabilityGlobal = new double[2];
+		cv$var78$stateProbabilityGlobal = new double[2];
 	}
 
 	@Override

@@ -1,4 +1,6 @@
-interface ClassName$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface ClassName$CoreInterface extends CoreModel {
 
 	// Getter for a.
 	public double get$a();

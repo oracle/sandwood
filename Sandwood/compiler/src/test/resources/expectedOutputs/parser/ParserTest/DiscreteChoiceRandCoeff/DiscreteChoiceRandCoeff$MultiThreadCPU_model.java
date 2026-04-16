@@ -1,53 +1,54 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DiscreteChoiceRandCoeff$CoreInterface {
-	
+final class DiscreteChoiceRandCoeff$MultiThreadCPU extends CoreModelMultiThreadCPU implements DiscreteChoiceRandCoeff$CoreInterface {
+
 	// Declare the variables for the model.
-	private int[] ObsChoices;
-	private int[][] Prices;
-	private double b;
-	private double[] beta;
-	private int[] choices;
-	private boolean[] constrainedFlag$sample21;
-	private boolean constrainedFlag$sample28 = true;
-	private boolean constrainedFlag$sample34 = true;
-	private boolean[] constrainedFlag$sample47;
-	private double[][] exped;
-	private boolean fixedFlag$sample21 = false;
-	private boolean fixedFlag$sample28 = false;
-	private boolean fixedFlag$sample34 = false;
-	private boolean fixedFlag$sample47 = false;
-	private boolean fixedProbFlag$sample103 = false;
-	private boolean fixedProbFlag$sample21 = false;
-	private boolean fixedProbFlag$sample28 = false;
-	private boolean fixedProbFlag$sample34 = false;
-	private boolean fixedProbFlag$sample47 = false;
-	private boolean[] guard$sample21categorical102$global;
-	private boolean[][] guard$sample21put101$global;
-	private boolean[][] guard$sample47categorical102$global;
-	private boolean[][][] guard$sample47put101$global;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$b;
-	private double logProbability$beta;
-	private double logProbability$choices;
-	private double logProbability$prob;
-	private double[] logProbability$sample103;
-	private double[] logProbability$sample21;
-	private double[] logProbability$sample47;
-	private double logProbability$sigma;
-	private double logProbability$ut;
-	private int noObs;
-	private int noProducts;
-	private double[][] prob;
-	private double sigma;
-	private boolean system$gibbsForward = true;
-	private double[] ut;
+	int[] ObsChoices;
+	int[][] Prices;
+	double b;
+	double[] beta;
+	int[] choices;
+	boolean[] constrainedFlag$sample21;
+	boolean constrainedFlag$sample28 = true;
+	boolean constrainedFlag$sample34 = true;
+	boolean[] constrainedFlag$sample47;
+	double[][] exped;
+	boolean fixedFlag$sample21 = false;
+	boolean fixedFlag$sample28 = false;
+	boolean fixedFlag$sample34 = false;
+	boolean fixedFlag$sample47 = false;
+	boolean fixedProbFlag$sample103 = false;
+	boolean fixedProbFlag$sample21 = false;
+	boolean fixedProbFlag$sample28 = false;
+	boolean fixedProbFlag$sample34 = false;
+	boolean fixedProbFlag$sample47 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$b;
+	double logProbability$beta;
+	double logProbability$choices;
+	double logProbability$prob;
+	double[] logProbability$sample103;
+	double[] logProbability$sample21;
+	double[] logProbability$sample47;
+	double logProbability$sigma;
+	double logProbability$ut;
+	int noObs;
+	int noProducts;
+	double[][] prob;
+	double sigma;
+	boolean system$gibbsForward = true;
+	double[] ut;
+	boolean[] guard$sample21categorical102$global;
+	boolean[][] guard$sample21put101$global;
+	boolean[][] guard$sample47categorical102$global;
+	boolean[][][] guard$sample47put101$global;
 
 	public DiscreteChoiceRandCoeff$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -2701,6 +2702,73 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// If ut has not been set already allocate space.
+		if(!fixedFlag$sample21) {
+			// Constructor for ut
+			{
+				ut = new double[noProducts];
+			}
+		}
+		
+		// If beta has not been set already allocate space.
+		if(!fixedFlag$sample47) {
+			// Constructor for beta
+			{
+				beta = new double[noObs];
+			}
+		}
+		
+		// Constructor for choices
+		{
+			choices = new int[noObs];
+		}
+		
+		// Constructor for exped
+		{
+			exped = new double[((((noObs - 1) - 0) / 1) + 1)][];
+			for(int i = 0; i < noObs; i += 1)
+				exped[((i - 0) / 1)] = new double[noProducts];
+		}
+		
+		// Constructor for prob
+		{
+			prob = new double[((((noObs - 1) - 0) / 1) + 1)][];
+			for(int i = 0; i < noObs; i += 1)
+				prob[((i - 0) / 1)] = new double[noProducts];
+		}
+		
+		// Constructor for constrainedFlag$sample47
+		{
+			constrainedFlag$sample47 = new boolean[((((noObs - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample21
+		{
+			constrainedFlag$sample21 = new boolean[((((noProducts - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for logProbability$sample21
+		{
+			logProbability$sample21 = new double[((((noProducts - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for logProbability$sample47
+		{
+			logProbability$sample47 = new double[((((noObs - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for logProbability$sample103
+		{
+			logProbability$sample103 = new double[((((noObs - 1) - 0) / 1) + 1)];
+		}
+		
+		// Allocate scratch space
+		allocateScratch();
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -2782,73 +2850,6 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 					guard$sample47categorical102$global[cv$index] = new boolean[cv$max_i];
 			}
 		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// If ut has not been set already allocate space.
-		if(!fixedFlag$sample21) {
-			// Constructor for ut
-			{
-				ut = new double[noProducts];
-			}
-		}
-		
-		// If beta has not been set already allocate space.
-		if(!fixedFlag$sample47) {
-			// Constructor for beta
-			{
-				beta = new double[noObs];
-			}
-		}
-		
-		// Constructor for choices
-		{
-			choices = new int[noObs];
-		}
-		
-		// Constructor for exped
-		{
-			exped = new double[((((noObs - 1) - 0) / 1) + 1)][];
-			for(int i = 0; i < noObs; i += 1)
-				exped[((i - 0) / 1)] = new double[noProducts];
-		}
-		
-		// Constructor for prob
-		{
-			prob = new double[((((noObs - 1) - 0) / 1) + 1)][];
-			for(int i = 0; i < noObs; i += 1)
-				prob[((i - 0) / 1)] = new double[noProducts];
-		}
-		
-		// Constructor for constrainedFlag$sample47
-		{
-			constrainedFlag$sample47 = new boolean[((((noObs - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample21
-		{
-			constrainedFlag$sample21 = new boolean[((((noProducts - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample21
-		{
-			logProbability$sample21 = new double[((((noProducts - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample47
-		{
-			logProbability$sample47 = new double[((((noObs - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample103
-		{
-			logProbability$sample103 = new double[((((noObs - 1) - 0) / 1) + 1)];
-		}
-		
-		// Allocate scratch space
-		allocateScratch();
 	}
 
 	// Method to execute the model code conventionally.

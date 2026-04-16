@@ -1,30 +1,31 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ParallelMK1$CoreInterface {
-	
+final class ParallelMK1$MultiThreadCPU extends CoreModelMultiThreadCPU implements ParallelMK1$CoreInterface {
+
 	// Declare the variables for the model.
-	private boolean[] constrainedFlag$sample20;
-	private boolean fixedFlag$sample20 = false;
-	private boolean fixedProbFlag$sample20 = false;
-	private boolean fixedProbFlag$sample24 = false;
-	private double[] generated;
-	private boolean[][] guard$sample20gaussian23$global;
-	private double[] indirection;
-	private int length$observed;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$generated;
-	private double logProbability$indirection;
-	private double logProbability$sample;
-	private double[] logProbability$sample20;
-	private double[] logProbability$sample24;
-	private double[] observed;
-	private double[] sample;
-	private boolean system$gibbsForward = true;
+	boolean[] constrainedFlag$sample20;
+	boolean fixedFlag$sample20 = false;
+	boolean fixedProbFlag$sample20 = false;
+	boolean fixedProbFlag$sample24 = false;
+	double[] generated;
+	double[] indirection;
+	int length$observed;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$generated;
+	double logProbability$indirection;
+	double logProbability$sample;
+	double[] logProbability$sample20;
+	double[] logProbability$sample24;
+	double[] observed;
+	double[] sample;
+	boolean system$gibbsForward = true;
+	boolean[][] guard$sample20gaussian23$global;
 
 	public ParallelMK1$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -175,7 +176,7 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Set the current value to the current state of the tree.
+									// Set the current value to the current state of the tree.
 			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			
 			// Processing random variable 23.
@@ -238,7 +239,7 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// Substituted "index$i$5_2" with its value "i".
 				// 
-				// Set the current value to the current state of the tree.
+												// Set the current value to the current state of the tree.
 				cv$accumulatedProbabilities = (((0.0 < cv$originalValue)?(DistributionSampling.logProbabilityGaussian(((generated[i] - cv$originalValue) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
@@ -516,30 +517,9 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// 
-		// Constructor for guard$sample20gaussian23$global
-		// Allocation of guard$sample20gaussian23$global for multithreaded execution
-		// 
-		// Get the thread count.
-		int cv$threadCount = threadCount();
-		
-		// Allocate an array to hold a copy per thread
-		guard$sample20gaussian23$global = new boolean[cv$threadCount][];
-		
-		// Populate the array with a copy per thread
-		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			guard$sample20gaussian23$global[cv$index] = new boolean[length$observed];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for generated
 		generated = new double[length$observed];
 		
@@ -562,6 +542,27 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// 
+		// Constructor for guard$sample20gaussian23$global
+		// Allocation of guard$sample20gaussian23$global for multithreaded execution
+		// 
+		// Get the thread count.
+		int cv$threadCount = threadCount();
+		
+		// Allocate an array to hold a copy per thread
+		guard$sample20gaussian23$global = new boolean[cv$threadCount][];
+		
+		// Populate the array with a copy per thread
+		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+			guard$sample20gaussian23$global[cv$index] = new boolean[length$observed];
 	}
 
 	// Method to execute the model code conventionally.

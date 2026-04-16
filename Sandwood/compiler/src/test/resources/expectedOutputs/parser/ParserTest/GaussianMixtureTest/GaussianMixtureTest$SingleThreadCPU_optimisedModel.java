@@ -1,43 +1,45 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements GaussianMixtureTest$CoreInterface {
-	
+final class GaussianMixtureTest$SingleThreadCPU extends CoreModelSingleThreadCPU implements GaussianMixtureTest$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[] alpha;
-	private boolean constrainedFlag$sample17 = true;
-	private boolean[] constrainedFlag$sample34;
-	private boolean[] constrainedFlag$sample52;
-	private boolean[] constrainedFlag$sample68;
-	private double[] cv$var17$countGlobal;
-	private double[] cv$var68$stateProbabilityGlobal;
-	private boolean fixedFlag$sample17 = false;
-	private boolean fixedFlag$sample34 = false;
-	private boolean fixedFlag$sample52 = false;
-	private boolean fixedProbFlag$sample17 = false;
-	private boolean fixedProbFlag$sample34 = false;
-	private boolean fixedProbFlag$sample52 = false;
-	private int length$xMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$mu;
-	private double logProbability$phi;
-	private double[] logProbability$sample68;
-	private double[] logProbability$sample72;
-	private double logProbability$sigma;
-	private double logProbability$var34;
-	private double logProbability$var52;
-	private double logProbability$x;
-	private double[] mu;
-	private double[] phi;
-	private double[] sigma;
-	private boolean system$gibbsForward = true;
-	private double[] x;
-	private double[] xMeasured;
-	private int[] z;
+	double[] alpha;
+	boolean constrainedFlag$sample17 = true;
+	boolean[] constrainedFlag$sample34;
+	boolean[] constrainedFlag$sample52;
+	boolean[] constrainedFlag$sample68;
+	boolean fixedFlag$sample17 = false;
+	boolean fixedFlag$sample34 = false;
+	boolean fixedFlag$sample52 = false;
+	boolean fixedProbFlag$sample17 = false;
+	boolean fixedProbFlag$sample34 = false;
+	boolean fixedProbFlag$sample52 = false;
+	int k;
+	int length$xMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$mu;
+	double logProbability$phi;
+	double[] logProbability$sample68;
+	double[] logProbability$sample72;
+	double logProbability$sigma;
+	double logProbability$var34;
+	double logProbability$var52;
+	double logProbability$x;
+	double[] mu;
+	double[] phi;
+	double[] sigma;
+	boolean system$gibbsForward = true;
+	double[] x;
+	double[] xMeasured;
+	int[] z;
+	double[] cv$var17$countGlobal;
+	double[] cv$var68$stateProbabilityGlobal;
 
 	public GaussianMixtureTest$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -304,7 +306,7 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 				// Increment the sample counter with the value sampled by sample task 68 of random
 				// variable var67
 				// 
-				// A local reference to the scratch space.
+												// A local reference to the scratch space.
 				cv$var17$countGlobal[z[i$var66]] = (cv$var17$countGlobal[z[i$var66]] + 1.0);
 			}
 		}
@@ -313,7 +315,7 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 			// 
 			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
-			// A reference local to the function for the sample variable.
+									// A reference local to the function for the sample variable.
 			Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$var17$countGlobal, phi, 5);
 	}
 
@@ -350,14 +352,14 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 				// 
 				// Add the denominator squared to the sample denominator
 				// 
-				// cv$denominator's comment
+																// cv$denominator's comment
 				// State for tracking the changes that happen to the sampled value between it being
 				// consumed and it being produced.
 				cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
 				
 				// Add the weighting of the sample to the sum.
 				// 
-				// Substituted "cv$numerator" with its value "0.0".
+												// Substituted "cv$numerator" with its value "0.0".
 				cv$sum = (cv$sum + x[i$var66]);
 				
 				// If we have not got the value of sigma yet record it and set a flag so it is not
@@ -426,7 +428,7 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 	private final void inferSample68(int i$var66) {
 		constrainedFlag$sample68[i$var66] = false;
 		
-		// cv$numStates's comment
+				// cv$numStates's comment
 		// variable marginalization
 		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
 			// Write out the new value of the sample.
@@ -444,7 +446,7 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
 			// Record the reached probability density.
 			// 
@@ -458,10 +460,10 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
 			// 
-			// An accumulator to allow the value for each distribution to be constructed before
+									// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			cv$var68$stateProbabilityGlobal[cv$valuePos] = (((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - mu[cv$valuePos]) / Math.sqrt(var70))) - (Math.log(var70) * 0.5)):Double.NEGATIVE_INFINITY) + (((0.0 <= phi[cv$valuePos]) && (phi[cv$valuePos] <= 1.0))?Math.log(phi[cv$valuePos]):Double.NEGATIVE_INFINITY));
 		}
 		if(constrainedFlag$sample68[i$var66]) {
@@ -513,7 +515,7 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 				
 				// Offset values, move to normal space, and sum.
 				// 
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				for(int cv$lseIndex = 0; cv$lseIndex < 5; cv$lseIndex += 1)
 					// Get a local reference to the scratch space.
@@ -529,31 +531,31 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Normalize log space values and move to normal space
 				// 
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
-					// Get a local reference to the scratch space.
+															// Get a local reference to the scratch space.
 					cv$var68$stateProbabilityGlobal[cv$indexName] = 0.2;
 			} else {
 				// Normalize log space values and move to normal space
 				// 
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
-					// Get a local reference to the scratch space.
+															// Get a local reference to the scratch space.
 					cv$var68$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var68$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			for(int cv$indexName = 5; cv$indexName < cv$var68$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var68$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			z[i$var66] = DistributionSampling.sampleCategorical(RNG$, cv$var68$stateProbabilityGlobal, 5);
 		}
@@ -911,26 +913,9 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var17$countGlobal
-		// 
-		// Allocation of cv$var17$countGlobal for single threaded execution
-		cv$var17$countGlobal = new double[5];
-		
-		// Constructor for cv$var68$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var68$stateProbabilityGlobal for single threaded execution
-		cv$var68$stateProbabilityGlobal = new double[5];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for alpha
 		alpha = new double[5];
 		
@@ -972,6 +957,23 @@ final class GaussianMixtureTest$SingleThreadCPU extends org.sandwood.runtime.int
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var17$countGlobal
+		// 
+		// Allocation of cv$var17$countGlobal for single threaded execution
+		cv$var17$countGlobal = new double[5];
+		
+		// Constructor for cv$var68$stateProbabilityGlobal
+		// 
+		// Allocation of cv$var68$stateProbabilityGlobal for single threaded execution
+		cv$var68$stateProbabilityGlobal = new double[5];
 	}
 
 	// Method to execute the model code conventionally.

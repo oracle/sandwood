@@ -11,4 +11,4 @@
  * variable types are parameterised will hopefully remove the need for this class replacing it with an entry in an
  * enumeration at some point in the future.
  */
-package org.sandwood.compiler.dataflowGraph.variables.rng;
+package org.sandwood.compiler.dataflowGraph.variables.internal;

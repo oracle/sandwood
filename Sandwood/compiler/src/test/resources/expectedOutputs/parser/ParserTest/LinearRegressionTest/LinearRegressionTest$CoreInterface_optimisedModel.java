@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface LinearRegressionTest$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface LinearRegressionTest$CoreInterface extends CoreModel {
 
 	// Getter for bias.
 	public double get$bias();

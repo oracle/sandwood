@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface TerminalVariables$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface TerminalVariables$CoreInterface extends CoreModel {
 
 	// Getter for a.
 	public double[][][][][] get$a();

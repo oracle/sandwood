@@ -1,32 +1,33 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Conditional4$CoreInterface {
-	
+final class Conditional4$SingleThreadCPU extends CoreModelSingleThreadCPU implements Conditional4$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[] bias;
-	private boolean constrainedFlag$sample21 = true;
-	private boolean constrainedFlag$sample4 = true;
-	private double[] cv$var4$stateProbabilityGlobal;
-	private boolean fixedFlag$sample21 = false;
-	private boolean fixedFlag$sample4 = false;
-	private boolean fixedProbFlag$sample21 = false;
-	private boolean fixedProbFlag$sample27 = false;
-	private boolean fixedProbFlag$sample4 = false;
-	private boolean guard;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bernoulli;
-	private double logProbability$bias;
-	private double logProbability$guard;
-	private double logProbability$value;
-	private double logProbability$var19;
-	private double observedValue;
-	private boolean system$gibbsForward = true;
-	private double value;
-	private double var19;
+	double[] bias;
+	boolean constrainedFlag$sample21 = true;
+	boolean constrainedFlag$sample4 = true;
+	boolean fixedFlag$sample21 = false;
+	boolean fixedFlag$sample4 = false;
+	boolean fixedProbFlag$sample21 = false;
+	boolean fixedProbFlag$sample27 = false;
+	boolean fixedProbFlag$sample4 = false;
+	boolean guard;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bernoulli;
+	double logProbability$bias;
+	double logProbability$guard;
+	double logProbability$value;
+	double logProbability$var19;
+	double observedValue;
+	boolean system$gibbsForward = true;
+	double value;
+	double var19;
+	double[] cv$var4$stateProbabilityGlobal;
 
 	public Conditional4$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -236,7 +237,7 @@ final class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Calculate a proposed variance.
 		// 
-		// The original value of the sample
+						// The original value of the sample
 		double cv$var = (((var19 < 0)?(-var19):var19) * 40.0);
 		
 		// Ensure the variance is at least 0.01
@@ -272,10 +273,10 @@ final class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Set an accumulator to record the consumer distributions not seen. Initially set
 		// to 1 as seen values will be deducted from this value.
 		// 
-		// An accumulator to allow the value for each distribution to be constructed before
+						// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Set the current value to the current state of the tree.
+						// Set the current value to the current state of the tree.
 		// 
 		// The original value of the sample
 		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(value, var19, 1.0) + (((0.0 <= var19) && (var19 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
@@ -308,7 +309,7 @@ final class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// Set an accumulator to record the consumer distributions not seen. Initially set
 		// to 1 as seen values will be deducted from this value.
 		// 
-		// An accumulator to allow the value for each distribution to be constructed before
+						// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		double cv$ratio = ((DistributionSampling.logProbabilityBeta(value, cv$proposedValue, 1.0) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY)) - cv$originalProbability);
 		
@@ -342,7 +343,7 @@ final class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// 
 		// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "0".
+						// Substituted "cv$valuePos" with its value "0".
 		guard = false;
 		bias[0] = var19;
 		
@@ -353,9 +354,9 @@ final class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		// 
@@ -411,9 +412,9 @@ final class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		// 
@@ -480,30 +481,30 @@ final class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Unrolled loop
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			cv$var4$stateProbabilityGlobal[0] = 0.5;
 			
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			cv$var4$stateProbabilityGlobal[1] = 0.5;
 		} else {
 			// Unrolled loop
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			cv$var4$stateProbabilityGlobal[0] = Math.exp((cv$var4$stateProbabilityGlobal[0] - cv$logSum));
 			
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			cv$var4$stateProbabilityGlobal[1] = Math.exp((cv$var4$stateProbabilityGlobal[1] - cv$logSum));
 		}
 		
 		// Set array values that are not computed for the input to negative infinity.
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		for(int cv$indexName = 2; cv$indexName < cv$var4$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Get a local reference to the scratch space.
 			cv$var4$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the new value of the sample.
 		// 
-		// cv$numStates's comment
+								// cv$numStates's comment
 		// variable marginalization
 		guard = (DistributionSampling.sampleCategorical(RNG$, cv$var4$stateProbabilityGlobal, 2) == 1);
 		
@@ -548,7 +549,7 @@ final class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 				// 
 				// Store the value of the function call, so the function call is only made once.
 				// 
-				// The sample value to calculate the probability of generating
+												// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (((0.0 <= var19) && (var19 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY);
 			}
 			
@@ -823,6 +824,16 @@ final class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// Constructor for bias
+		bias = new double[1];
+		
+		// Allocate scratch space
+		allocateScratch();
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -834,16 +845,6 @@ final class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		// 
 		// Allocation of cv$var4$stateProbabilityGlobal for single threaded execution
 		cv$var4$stateProbabilityGlobal = new double[2];
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// Constructor for bias
-		bias = new double[1];
-		
-		// Allocate scratch space
-		allocateScratch();
 	}
 
 	// Method to execute the model code conventionally.

@@ -10,7 +10,6 @@ package org.sandwood.compiler.dataflowGraph.tasks.arrayTasks;
 
 import static org.sandwood.compiler.trees.irTree.IRTree.arrayGet;
 import static org.sandwood.compiler.trees.irTree.IRTree.forStmt;
-import static org.sandwood.compiler.trees.irTree.IRTree.getIntField;
 import static org.sandwood.compiler.trees.irTree.IRTree.initializeVariable;
 import static org.sandwood.compiler.trees.irTree.IRTree.load;
 import static org.sandwood.compiler.trees.irTree.IRTree.max;
@@ -102,8 +101,8 @@ public class GetArrayTask<A extends Variable<A>> extends GetTask<ArrayVariable<A
             return load(returnLength);
 
         } else {
-            LocalVariableDescription<IntVariable> returnName = VariableNames.localCalcVarName(array, findMax ? "max" : "min",
-                    VariableType.IntVariable);
+            LocalVariableDescription<IntVariable> returnName = VariableNames.localCalcVarName(array,
+                    findMax ? "max" : "min", VariableType.IntVariable);
 
             PriorityQueue<PutTask<ArrayVariable<A>>> p = new PriorityQueue<>(puts);
             PutTask<ArrayVariable<A>> pt = p.poll();
@@ -128,23 +127,25 @@ public class GetArrayTask<A extends Variable<A>> extends GetTask<ArrayVariable<A
         }
     }
 
-    private IRTreeVoid getLength(Stack<GetTask<?>> gets, VariableDescription<IntVariable> returnLength,
-            boolean findMax) {
+    private <C extends Variable<C>> IRTreeVoid getLength(Stack<GetTask<?>> gets,
+            VariableDescription<IntVariable> returnLength, boolean findMax) {
         List<IRTreeVoid> stmts = new ArrayList<>();
         GetTask<A> gt = (GetTask<A>) gets.pop();
         ArrayVariable<A> v = gt.array;
         VariableDescription<ArrayVariable<A>> parentArrayDesc = v.getUniqueVarDesc();
 
-        LocalVariableDescription<IntVariable> length = VariableNames.localCalcVarName(v, "length", VariableType.IntVariable);
-        stmts.add(initializeVariable(length, getIntField(load(parentArrayDesc), "length"), Tree.NoComment));
+        LocalVariableDescription<IntVariable> length = VariableNames.localCalcVarName(v, "length",
+                VariableType.IntVariable);
+        stmts.add(initializeVariable(length, ArrayVariable.getLengthTree(load(parentArrayDesc)), Tree.NoComment));
 
         LocalVariableDescription<IntVariable> index = VariableNames.indexName(parentArrayDesc);
 
         List<IRTreeVoid> bodyStmts = new ArrayList<>();
-        LocalVariableDescription<A> outputName = (LocalVariableDescription<A>)gt.getOutput().getVarDesc();
+        LocalVariableDescription<A> outputName = (LocalVariableDescription<A>) gt.getOutput().getVarDesc();
         bodyStmts.add(initializeVariable(outputName, arrayGet(load(parentArrayDesc), load(index)), Tree.NoComment));
         if(gets.isEmpty()) {
-            IRTreeReturn<IntVariable> localLength = getIntField(load(outputName), "length");
+            IRTreeReturn<IntVariable> localLength = ArrayVariable
+                    .getLengthTree((IRTreeReturn<ArrayVariable<C>>) load(outputName));
             bodyStmts.add(store(returnLength,
                     findMax ? max(localLength, load(returnLength)) : min(localLength, load(returnLength)),
                     Tree.NoComment));
@@ -187,7 +188,7 @@ public class GetArrayTask<A extends Variable<A>> extends GetTask<ArrayVariable<A
             Variable<?> shapeVar = ((ConstructArrayInput<?>) t).shapeVar();
             // If this is a model input just calculate the value
             if(shapeVar == null)
-                return getIntField(getOutput().getForwardIR(compilationCtx), "length");
+                return ArrayVariable.getLengthTree(getOutput().getForwardIR(compilationCtx));
             // Otherwise read it out of the shape parameter
             else {
                 compilationCtx.enterScope(scope());
@@ -220,9 +221,10 @@ public class GetArrayTask<A extends Variable<A>> extends GetTask<ArrayVariable<A
     private <B extends Variable<B>, C extends Variable<C>> IRTreeReturn<IntVariable> dereferenceShapeVar(
             IRTreeReturn<B> shapeTree, Stack<IntVariable> indexes, CompilationContext compilationCtx) {
         if(indexes.isEmpty()) {
-            if(shapeTree.getOutputType().isArray())
-                return getIntField(shapeTree, "length");
-            else
+            if(shapeTree.getOutputType().isArray()) {
+                IRTreeReturn<ArrayVariable<C>> a = (IRTreeReturn<ArrayVariable<C>>) shapeTree;
+                return ArrayVariable.getLengthTree(a);
+            } else
                 return (IRTreeReturn<IntVariable>) shapeTree;
         } else {
             IRTreeReturn<IntVariable> i = indexes.pop().getForwardIR(compilationCtx);

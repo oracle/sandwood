@@ -542,7 +542,7 @@ public abstract class Model implements HasProbability, AutoCloseable {
         if(!allocated) {
             // TODO merge initializeModel and allocate
             // in case an allocation depends on an earlier constant.
-            core.allocator();
+            core.allocate();
             core.initializeModel();
             allocated = true;
         }

@@ -1,8 +1,10 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
+<<<<<<< Upstream, based on POW
 final class DistributionTest5$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DistributionTest5$CoreInterface {
 	private boolean constrainedFlag$sample11 = true;
 	private boolean[] constrainedFlag$sample27;
@@ -40,6 +42,45 @@ final class DistributionTest5$MultiThreadCPU extends org.sandwood.runtime.intern
 	private int[] v3;
 	private boolean[] value;
 	private double[] weightings;
+=======
+final class DistributionTest5$MultiThreadCPU extends CoreModelMultiThreadCPU implements DistributionTest5$CoreInterface {
+boolean constrainedFlag$sample11 = true;
+	boolean[] constrainedFlag$sample27;
+	boolean constrainedFlag$sample5 = true;
+	double[] distribution$sample11;
+	double[][] distribution$sample27;
+	double[] distribution$sample5;
+	boolean fixedFlag$sample11 = false;
+	boolean fixedFlag$sample27 = false;
+	boolean fixedFlag$sample5 = false;
+	boolean fixedProbFlag$sample11 = false;
+	boolean fixedProbFlag$sample27 = false;
+	boolean fixedProbFlag$sample5 = false;
+	boolean fixedProbFlag$sample70 = false;
+	int length$value;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$sample11;
+	double[] logProbability$sample27;
+	double[] logProbability$sample70;
+	double logProbability$v;
+	double logProbability$v1;
+	double logProbability$v2;
+	double logProbability$v3;
+	int size;
+	boolean system$gibbsForward = true;
+	boolean[] v;
+	int v1;
+	int[] v2;
+	int[] v3;
+	boolean[] value;
+	double[] weightings;
+	double[] cv$var11$stateProbabilityGlobal;
+	double[] cv$var27$stateProbabilityGlobal;
+	double[] cv$var5$stateProbabilityGlobal;
+	boolean[] guard$sample11bernoulli69$global;
+	boolean[] guard$sample27bernoulli69$global;
+>>>>>>> daee89e Adding in a class to hold just the state. This will be worked on further as the code generation progresses. Commit before adding inner classes to the outer classes. Updating output class structure checkpoint Checkpoint in the restructuring of the output classes to increase the shared code. Finished restructuring the classes, time to start using inner classes. Updates to tree structure Changing the structure of get field so that it can be used to get other types of field, read for getting data out of the scratch and model data classes. Removing unused imports Adding nodes to allow fields in an object ot be set. Moving rng package so that we can add other internal only variable types. Updates to the handling of transformations. Moving from sets to lists of generics Updating the structure of inner class. Changing the passing of fields to sub classes. Updating class structure
 
 	public DistributionTest5$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -1247,16 +1288,7 @@ final class DistributionTest5$MultiThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	@Override
-	public final void allocateScratch() {
-		cv$var5$stateProbabilityGlobal = new double[weightings.length];
-		cv$var11$stateProbabilityGlobal = new double[weightings.length];
-		guard$sample11bernoulli69$global = new boolean[length$value];
-		cv$var27$stateProbabilityGlobal = new double[weightings.length];
-		guard$sample27bernoulli69$global = new boolean[length$value];
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		if((!fixedFlag$sample11 || !fixedFlag$sample27))
 			v2 = new int[(length$value + 1)];
 		v3 = new int[(length$value + 1)];
@@ -1270,6 +1302,15 @@ final class DistributionTest5$MultiThreadCPU extends org.sandwood.runtime.intern
 		logProbability$sample27 = new double[length$value];
 		logProbability$sample70 = new double[length$value];
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		cv$var5$stateProbabilityGlobal = new double[weightings.length];
+		cv$var11$stateProbabilityGlobal = new double[weightings.length];
+		guard$sample11bernoulli69$global = new boolean[length$value];
+		cv$var27$stateProbabilityGlobal = new double[weightings.length];
+		guard$sample27bernoulli69$global = new boolean[length$value];
 	}
 
 	@Override

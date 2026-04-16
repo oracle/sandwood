@@ -1,83 +1,84 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements TerminalVariables$CoreInterface {
-	
+final class TerminalVariables$SingleThreadCPU extends CoreModelSingleThreadCPU implements TerminalVariables$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[][][][][] a;
-	private int c1;
-	private int c10;
-	private int c11;
-	private int c12;
-	private int c2;
-	private int c3;
-	private int c4;
-	private int c5;
-	private int c6;
-	private int c7;
-	private int c8;
-	private int c9;
-	private double[][] conditionals;
-	private boolean constrainedFlag$sample47 = true;
-	private boolean constrainedFlag$sample52 = true;
-	private boolean constrainedFlag$sample55 = true;
-	private boolean constrainedFlag$sample57 = true;
-	private boolean constrainedFlag$sample62 = true;
-	private boolean constrainedFlag$sample67 = true;
-	private boolean constrainedFlag$sample72 = true;
-	private double[] cv$var45$stateProbabilityGlobal;
-	private double[] cv$var50$stateProbabilityGlobal;
-	private double[] cv$var53$stateProbabilityGlobal;
-	private double[] cv$var55$stateProbabilityGlobal;
-	private double[] cv$var60$stateProbabilityGlobal;
-	private double[] cv$var65$stateProbabilityGlobal;
-	private double[] cv$var70$stateProbabilityGlobal;
-	private int evidence;
-	private boolean fixedFlag$sample47 = false;
-	private boolean fixedFlag$sample52 = false;
-	private boolean fixedFlag$sample55 = false;
-	private boolean fixedFlag$sample57 = false;
-	private boolean fixedFlag$sample60 = false;
-	private boolean fixedFlag$sample62 = false;
-	private boolean fixedFlag$sample636 = false;
-	private boolean fixedFlag$sample65 = false;
-	private boolean fixedFlag$sample67 = false;
-	private boolean fixedFlag$sample70 = false;
-	private boolean fixedFlag$sample72 = false;
-	private boolean fixedFlag$sample75 = false;
-	private boolean fixedProbFlag$sample47 = false;
-	private boolean fixedProbFlag$sample50 = false;
-	private boolean fixedProbFlag$sample52 = false;
-	private boolean fixedProbFlag$sample55 = false;
-	private boolean fixedProbFlag$sample57 = false;
-	private boolean fixedProbFlag$sample60 = false;
-	private boolean fixedProbFlag$sample62 = false;
-	private boolean fixedProbFlag$sample636 = false;
-	private boolean fixedProbFlag$sample65 = false;
-	private boolean fixedProbFlag$sample67 = false;
-	private boolean fixedProbFlag$sample70 = false;
-	private boolean fixedProbFlag$sample72 = false;
-	private boolean fixedProbFlag$sample75 = false;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$c1;
-	private double logProbability$c10;
-	private double logProbability$c11;
-	private double logProbability$c12;
-	private double logProbability$c2;
-	private double logProbability$c3;
-	private double logProbability$c4;
-	private double logProbability$c5;
-	private double logProbability$c6;
-	private double logProbability$c7;
-	private double logProbability$c8;
-	private double logProbability$c9;
-	private double logProbability$terminalVariable;
-	private double[] priors;
-	private boolean system$gibbsForward = true;
-	private int terminalVariable;
+	double[][][][][] a;
+	int c1;
+	int c10;
+	int c11;
+	int c12;
+	int c2;
+	int c3;
+	int c4;
+	int c5;
+	int c6;
+	int c7;
+	int c8;
+	int c9;
+	double[][] conditionals;
+	boolean constrainedFlag$sample47 = true;
+	boolean constrainedFlag$sample52 = true;
+	boolean constrainedFlag$sample55 = true;
+	boolean constrainedFlag$sample57 = true;
+	boolean constrainedFlag$sample62 = true;
+	boolean constrainedFlag$sample67 = true;
+	boolean constrainedFlag$sample72 = true;
+	int evidence;
+	boolean fixedFlag$sample47 = false;
+	boolean fixedFlag$sample52 = false;
+	boolean fixedFlag$sample55 = false;
+	boolean fixedFlag$sample57 = false;
+	boolean fixedFlag$sample60 = false;
+	boolean fixedFlag$sample62 = false;
+	boolean fixedFlag$sample636 = false;
+	boolean fixedFlag$sample65 = false;
+	boolean fixedFlag$sample67 = false;
+	boolean fixedFlag$sample70 = false;
+	boolean fixedFlag$sample72 = false;
+	boolean fixedFlag$sample75 = false;
+	boolean fixedProbFlag$sample47 = false;
+	boolean fixedProbFlag$sample50 = false;
+	boolean fixedProbFlag$sample52 = false;
+	boolean fixedProbFlag$sample55 = false;
+	boolean fixedProbFlag$sample57 = false;
+	boolean fixedProbFlag$sample60 = false;
+	boolean fixedProbFlag$sample62 = false;
+	boolean fixedProbFlag$sample636 = false;
+	boolean fixedProbFlag$sample65 = false;
+	boolean fixedProbFlag$sample67 = false;
+	boolean fixedProbFlag$sample70 = false;
+	boolean fixedProbFlag$sample72 = false;
+	boolean fixedProbFlag$sample75 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$c1;
+	double logProbability$c10;
+	double logProbability$c11;
+	double logProbability$c12;
+	double logProbability$c2;
+	double logProbability$c3;
+	double logProbability$c4;
+	double logProbability$c5;
+	double logProbability$c6;
+	double logProbability$c7;
+	double logProbability$c8;
+	double logProbability$c9;
+	double logProbability$terminalVariable;
+	double[] priors;
+	boolean system$gibbsForward = true;
+	int terminalVariable;
+	double[] cv$var45$stateProbabilityGlobal;
+	double[] cv$var50$stateProbabilityGlobal;
+	double[] cv$var53$stateProbabilityGlobal;
+	double[] cv$var55$stateProbabilityGlobal;
+	double[] cv$var60$stateProbabilityGlobal;
+	double[] cv$var65$stateProbabilityGlobal;
+	double[] cv$var70$stateProbabilityGlobal;
 
 	public TerminalVariables$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -5272,65 +5273,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var45$stateProbabilityGlobal
-		{
-			// Allocation of cv$var45$stateProbabilityGlobal for single threaded execution
-			cv$var45$stateProbabilityGlobal = new double[2];
-		}
-		
-		// Constructor for cv$var50$stateProbabilityGlobal
-		{
-			// Allocation of cv$var50$stateProbabilityGlobal for single threaded execution
-			cv$var50$stateProbabilityGlobal = new double[2];
-		}
-		
-		// Constructor for cv$var53$stateProbabilityGlobal
-		{
-			// Variable to record the maximum value of Task Get 53. Initially set to the value
-			// of putTask 28.
-			int cv$var43$max = 2;
-			
-			// Test if the input to putTask 44 is larger than the current values.
-			cv$var43$max = Math.max(cv$var43$max, 2);
-			
-			// Allocation of cv$var53$stateProbabilityGlobal for single threaded execution
-			cv$var53$stateProbabilityGlobal = new double[cv$var43$max];
-		}
-		
-		// Constructor for cv$var55$stateProbabilityGlobal
-		{
-			// Allocation of cv$var55$stateProbabilityGlobal for single threaded execution
-			cv$var55$stateProbabilityGlobal = new double[2];
-		}
-		
-		// Constructor for cv$var60$stateProbabilityGlobal
-		{
-			// Allocation of cv$var60$stateProbabilityGlobal for single threaded execution
-			cv$var60$stateProbabilityGlobal = new double[2];
-		}
-		
-		// Constructor for cv$var65$stateProbabilityGlobal
-		{
-			// Allocation of cv$var65$stateProbabilityGlobal for single threaded execution
-			cv$var65$stateProbabilityGlobal = new double[2];
-		}
-		
-		// Constructor for cv$var70$stateProbabilityGlobal
-		{
-			// Allocation of cv$var70$stateProbabilityGlobal for single threaded execution
-			cv$var70$stateProbabilityGlobal = new double[2];
-		}
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for priors
 		{
 			priors = new double[2];
@@ -5394,6 +5339,62 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var45$stateProbabilityGlobal
+		{
+			// Allocation of cv$var45$stateProbabilityGlobal for single threaded execution
+			cv$var45$stateProbabilityGlobal = new double[2];
+		}
+		
+		// Constructor for cv$var50$stateProbabilityGlobal
+		{
+			// Allocation of cv$var50$stateProbabilityGlobal for single threaded execution
+			cv$var50$stateProbabilityGlobal = new double[2];
+		}
+		
+		// Constructor for cv$var53$stateProbabilityGlobal
+		{
+			// Variable to record the maximum value of Task Get 53. Initially set to the value
+			// of putTask 28.
+			int cv$var43$max = 2;
+			
+			// Test if the input to putTask 44 is larger than the current values.
+			cv$var43$max = Math.max(cv$var43$max, 2);
+			
+			// Allocation of cv$var53$stateProbabilityGlobal for single threaded execution
+			cv$var53$stateProbabilityGlobal = new double[cv$var43$max];
+		}
+		
+		// Constructor for cv$var55$stateProbabilityGlobal
+		{
+			// Allocation of cv$var55$stateProbabilityGlobal for single threaded execution
+			cv$var55$stateProbabilityGlobal = new double[2];
+		}
+		
+		// Constructor for cv$var60$stateProbabilityGlobal
+		{
+			// Allocation of cv$var60$stateProbabilityGlobal for single threaded execution
+			cv$var60$stateProbabilityGlobal = new double[2];
+		}
+		
+		// Constructor for cv$var65$stateProbabilityGlobal
+		{
+			// Allocation of cv$var65$stateProbabilityGlobal for single threaded execution
+			cv$var65$stateProbabilityGlobal = new double[2];
+		}
+		
+		// Constructor for cv$var70$stateProbabilityGlobal
+		{
+			// Allocation of cv$var70$stateProbabilityGlobal for single threaded execution
+			cv$var70$stateProbabilityGlobal = new double[2];
+		}
 	}
 
 	// Method to execute the model code conventionally.

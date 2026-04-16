@@ -1,53 +1,54 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DiscreteChoiceRandCoeff$CoreInterface {
-	
+final class DiscreteChoiceRandCoeff$MultiThreadCPU extends CoreModelMultiThreadCPU implements DiscreteChoiceRandCoeff$CoreInterface {
+
 	// Declare the variables for the model.
-	private int[] ObsChoices;
-	private int[][] Prices;
-	private double b;
-	private double[] beta;
-	private int[] choices;
-	private boolean[] constrainedFlag$sample21;
-	private boolean constrainedFlag$sample28 = true;
-	private boolean constrainedFlag$sample34 = true;
-	private boolean[] constrainedFlag$sample47;
-	private double[][] exped;
-	private boolean fixedFlag$sample21 = false;
-	private boolean fixedFlag$sample28 = false;
-	private boolean fixedFlag$sample34 = false;
-	private boolean fixedFlag$sample47 = false;
-	private boolean fixedProbFlag$sample103 = false;
-	private boolean fixedProbFlag$sample21 = false;
-	private boolean fixedProbFlag$sample28 = false;
-	private boolean fixedProbFlag$sample34 = false;
-	private boolean fixedProbFlag$sample47 = false;
-	private boolean[] guard$sample21categorical102$global;
-	private boolean[][] guard$sample21put101$global;
-	private boolean[][] guard$sample47categorical102$global;
-	private boolean[][][] guard$sample47put101$global;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$b;
-	private double logProbability$beta;
-	private double logProbability$choices;
-	private double logProbability$prob;
-	private double[] logProbability$sample103;
-	private double[] logProbability$sample21;
-	private double[] logProbability$sample47;
-	private double logProbability$sigma;
-	private double logProbability$ut;
-	private int noObs;
-	private int noProducts;
-	private double[][] prob;
-	private double sigma;
-	private boolean system$gibbsForward = true;
-	private double[] ut;
+	int[] ObsChoices;
+	int[][] Prices;
+	double b;
+	double[] beta;
+	int[] choices;
+	boolean[] constrainedFlag$sample21;
+	boolean constrainedFlag$sample28 = true;
+	boolean constrainedFlag$sample34 = true;
+	boolean[] constrainedFlag$sample47;
+	double[][] exped;
+	boolean fixedFlag$sample21 = false;
+	boolean fixedFlag$sample28 = false;
+	boolean fixedFlag$sample34 = false;
+	boolean fixedFlag$sample47 = false;
+	boolean fixedProbFlag$sample103 = false;
+	boolean fixedProbFlag$sample21 = false;
+	boolean fixedProbFlag$sample28 = false;
+	boolean fixedProbFlag$sample34 = false;
+	boolean fixedProbFlag$sample47 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$b;
+	double logProbability$beta;
+	double logProbability$choices;
+	double logProbability$prob;
+	double[] logProbability$sample103;
+	double[] logProbability$sample21;
+	double[] logProbability$sample47;
+	double logProbability$sigma;
+	double logProbability$ut;
+	int noObs;
+	int noProducts;
+	double[][] prob;
+	double sigma;
+	boolean system$gibbsForward = true;
+	double[] ut;
+	boolean[] guard$sample21categorical102$global;
+	boolean[][] guard$sample21put101$global;
+	boolean[][] guard$sample47categorical102$global;
+	boolean[][][] guard$sample47put101$global;
 
 	public DiscreteChoiceRandCoeff$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -372,7 +373,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 		// 
 		// Looking for a path between Sample 21 and consumer double[] 77.
 		for(int i = 0; i < noObs; i += 1)
-			// Substituted "j$var69" with its value "var20".
+									// Substituted "j$var69" with its value "var20".
 			exped[i][var20] = Math.exp((ut[var20] - (beta[i] * Prices[i][var20])));
 		for(int i = 0; i < noObs; i += 1) {
 			for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
@@ -414,7 +415,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
 						// 
-						// l's comment
+																								// l's comment
 						// Set the right hand term to a value from the array exped
 						reduceVar$sum$30 = (reduceVar$sum$30 + exped[i][cv$reduction82Index]);
 					prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$30);
@@ -448,11 +449,11 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
-					// l's comment
+																				// l's comment
 					// Set the right hand term to a value from the array exped
 					reduceVar$sum$31 = (reduceVar$sum$31 + exped[i][cv$reduction82Index]);
 				
-				// Substituted "j$var97" with its value "var20".
+												// Substituted "j$var97" with its value "var20".
 				prob[i][var20] = (exped[i][var20] / reduceVar$sum$31);
 			}
 		}
@@ -476,7 +477,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 		// 
 		// Looking for a path between Sample 47 and consumer double[] 77.
 		for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
-			// Substituted "i" with its value "var46".
+									// Substituted "i" with its value "var46".
 			exped[var46][j$var69] = Math.exp((ut[j$var69] - (beta[var46] * Prices[var46][j$var69])));
 		
 		// Guards to ensure that prob is only updated when there is a valid path.
@@ -498,7 +499,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 		for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
 			// Set the flags to false
 			// 
-			// Substituted "i" with its value "var46".
+									// Substituted "i" with its value "var46".
 			guard$sample47put101[var46][j$var69] = false;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -524,16 +525,16 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
 						// 
-						// k's comment
+												// k's comment
 						// Set the left hand term of the reduction function to the return variable value.
 						// 
-						// l's comment
+												// l's comment
 						// Set the right hand term to a value from the array exped
 						// 
 						// Substituted "i" with its value "var46".
 						reduceVar$sum$32 = (reduceVar$sum$32 + exped[var46][cv$reduction82Index]);
 					
-					// Substituted "i" with its value "var46".
+															// Substituted "i" with its value "var46".
 					prob[var46][j$var97] = (exped[var46][j$var97] / reduceVar$sum$32);
 				}
 			}
@@ -542,7 +543,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 			if(!guard$sample47put101[var46][j$var69]) {
 				// The body will execute, so should not be executed again
 				// 
-				// Substituted "i" with its value "var46".
+												// Substituted "i" with its value "var46".
 				guard$sample47put101[var46][j$var69] = true;
 				
 				// Reduction of array exped
@@ -558,16 +559,16 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
-					// k's comment
+										// k's comment
 					// Set the left hand term of the reduction function to the return variable value.
 					// 
-					// l's comment
+										// l's comment
 					// Set the right hand term to a value from the array exped
 					// 
 					// Substituted "i" with its value "var46".
 					reduceVar$sum$33 = (reduceVar$sum$33 + exped[var46][cv$reduction82Index]);
 				
-				// Substituted "i" with its value "var46".
+												// Substituted "i" with its value "var46".
 				prob[var46][j$var69] = (exped[var46][j$var69] / reduceVar$sum$33);
 			}
 		}
@@ -635,7 +636,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 				}
 			}
 			for(int i = 0; i < noObs; i += 1) {
-				// Substituted "j$var69" with its value "var20".
+												// Substituted "j$var69" with its value "var20".
 				if(!guard$sample21categorical102$global[i]) {
 					// The body will execute, so should not be executed again
 					// 
@@ -680,7 +681,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 			// 
 			// Looking for a path between Sample 21 and consumer double[] 77.
 			for(int i = 0; i < noObs; i += 1)
-				// Substituted "j$var69" with its value "var20".
+												// Substituted "j$var69" with its value "var20".
 				exped[i][var20] = Math.exp((ut[var20] - (beta[i] * Prices[i][var20])));
 			for(int i = 0; i < noObs; i += 1) {
 				for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
@@ -722,7 +723,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// l's comment
+																												// l's comment
 							// Set the right hand term to a value from the array exped
 							reduceVar$sum$20 = (reduceVar$sum$20 + exped[i][cv$reduction82Index]);
 						prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$20);
@@ -756,11 +757,11 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
 						// 
-						// l's comment
+																								// l's comment
 						// Set the right hand term to a value from the array exped
 						reduceVar$sum$21 = (reduceVar$sum$21 + exped[i][cv$reduction82Index]);
 					
-					// Substituted "j$var97" with its value "var20".
+															// Substituted "j$var97" with its value "var20".
 					prob[i][var20] = (exped[i][var20] / reduceVar$sum$21);
 				}
 			}
@@ -802,7 +803,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 				}
 			}
 			for(int i = 0; i < noObs; i += 1) {
-				// Substituted "j$var69" with its value "var20".
+												// Substituted "j$var69" with its value "var20".
 				if(!guard$sample21categorical102$global[i]) {
 					// The body will execute, so should not be executed again
 					// 
@@ -856,7 +857,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 				// 
 				// Looking for a path between Sample 21 and consumer double[] 77.
 				for(int i = 0; i < noObs; i += 1)
-					// Substituted "j$var69" with its value "var20".
+															// Substituted "j$var69" with its value "var20".
 					exped[i][var20] = Math.exp((ut[var20] - (beta[i] * Prices[i][var20])));
 				for(int i = 0; i < noObs; i += 1) {
 					for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
@@ -898,7 +899,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 								// 
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
-								// l's comment
+																																// l's comment
 								// Set the right hand term to a value from the array exped
 								reduceVar$sum$23 = (reduceVar$sum$23 + exped[i][cv$reduction82Index]);
 							prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$23);
@@ -932,11 +933,11 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// l's comment
+																												// l's comment
 							// Set the right hand term to a value from the array exped
 							reduceVar$sum$24 = (reduceVar$sum$24 + exped[i][cv$reduction82Index]);
 						
-						// Substituted "j$var97" with its value "var20".
+																		// Substituted "j$var97" with its value "var20".
 						prob[i][var20] = (exped[i][var20] / reduceVar$sum$24);
 					}
 				}
@@ -977,14 +978,14 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 				// 
 				// Add the denominator squared to the sample denominator
 				// 
-				// cv$denominator's comment
+																// cv$denominator's comment
 				// State for tracking the changes that happen to the sampled value between it being
 				// consumed and it being produced.
 				cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
 				
 				// Add the weighting of the sample to the sum.
 				// 
-				// Substituted "cv$numerator" with its value "0.0".
+												// Substituted "cv$numerator" with its value "0.0".
 				cv$sum = (cv$sum + beta[var46]);
 				
 				// If we have not got the value of sigma yet record it and set a flag so it is not
@@ -1106,7 +1107,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i" with its value "var46".
+															// Substituted "i" with its value "var46".
 					cv$accumulatedProbabilities = ((((((0.0 <= choices[var46]) && (choices[var46] < noProducts)) && (0.0 <= prob[var46][choices[var46]])) && (prob[var46][choices[var46]] <= 1.0))?Math.log(prob[var46][choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				if(!guard$sample47categorical102[var46]) {
@@ -1131,7 +1132,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i" with its value "var46".
+															// Substituted "i" with its value "var46".
 					cv$accumulatedProbabilities = ((((((0.0 <= choices[var46]) && (choices[var46] < noProducts)) && (0.0 <= prob[var46][choices[var46]])) && (prob[var46][choices[var46]] <= 1.0))?Math.log(prob[var46][choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
@@ -1155,7 +1156,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 				// 
 				// Looking for a path between Sample 47 and consumer double[] 77.
 				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
-					// Substituted "i" with its value "var46".
+															// Substituted "i" with its value "var46".
 					exped[var46][j$var69] = Math.exp((ut[j$var69] - (beta[var46] * Prices[var46][j$var69])));
 				
 				// Guards to ensure that prob is only updated when there is a valid path.
@@ -1177,7 +1178,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
 					// Set the flags to false
 					// 
-					// Substituted "i" with its value "var46".
+															// Substituted "i" with its value "var46".
 					guard$sample47put101[var46][j$var69] = false;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1203,16 +1204,16 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 								// 
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
-								// k's comment
+																// k's comment
 								// Set the left hand term of the reduction function to the return variable value.
 								// 
-								// l's comment
+																// l's comment
 								// Set the right hand term to a value from the array exped
 								// 
 								// Substituted "i" with its value "var46".
 								reduceVar$sum$25 = (reduceVar$sum$25 + exped[var46][cv$reduction82Index]);
 							
-							// Substituted "i" with its value "var46".
+																					// Substituted "i" with its value "var46".
 							prob[var46][j$var97] = (exped[var46][j$var97] / reduceVar$sum$25);
 						}
 					}
@@ -1221,7 +1222,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 					if(!guard$sample47put101[var46][j$var69]) {
 						// The body will execute, so should not be executed again
 						// 
-						// Substituted "i" with its value "var46".
+																		// Substituted "i" with its value "var46".
 						guard$sample47put101[var46][j$var69] = true;
 						
 						// Reduction of array exped
@@ -1237,16 +1238,16 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// k's comment
+														// k's comment
 							// Set the left hand term of the reduction function to the return variable value.
 							// 
-							// l's comment
+														// l's comment
 							// Set the right hand term to a value from the array exped
 							// 
 							// Substituted "i" with its value "var46".
 							reduceVar$sum$26 = (reduceVar$sum$26 + exped[var46][cv$reduction82Index]);
 						
-						// Substituted "i" with its value "var46".
+																		// Substituted "i" with its value "var46".
 						prob[var46][j$var69] = (exped[var46][j$var69] / reduceVar$sum$26);
 					}
 				}
@@ -1292,7 +1293,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i" with its value "var46".
+															// Substituted "i" with its value "var46".
 					cv$accumulatedProbabilities = ((((((0.0 <= choices[var46]) && (choices[var46] < noProducts)) && (0.0 <= prob[var46][choices[var46]])) && (prob[var46][choices[var46]] <= 1.0))?Math.log(prob[var46][choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				if(!guard$sample47categorical102[var46]) {
@@ -1317,7 +1318,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "i" with its value "var46".
+															// Substituted "i" with its value "var46".
 					cv$accumulatedProbabilities = ((((((0.0 <= choices[var46]) && (choices[var46] < noProducts)) && (0.0 <= prob[var46][choices[var46]])) && (prob[var46][choices[var46]] <= 1.0))?Math.log(prob[var46][choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
@@ -1349,7 +1350,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 				// 
 				// Looking for a path between Sample 47 and consumer double[] 77.
 				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
-					// Substituted "i" with its value "var46".
+															// Substituted "i" with its value "var46".
 					exped[var46][j$var69] = Math.exp((ut[j$var69] - (beta[var46] * Prices[var46][j$var69])));
 				
 				// Guards to ensure that prob is only updated when there is a valid path.
@@ -1371,7 +1372,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
 					// Set the flags to false
 					// 
-					// Substituted "i" with its value "var46".
+															// Substituted "i" with its value "var46".
 					guard$sample47put101[var46][j$var69] = false;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1397,16 +1398,16 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 								// 
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
-								// k's comment
+																// k's comment
 								// Set the left hand term of the reduction function to the return variable value.
 								// 
-								// l's comment
+																// l's comment
 								// Set the right hand term to a value from the array exped
 								// 
 								// Substituted "i" with its value "var46".
 								reduceVar$sum$28 = (reduceVar$sum$28 + exped[var46][cv$reduction82Index]);
 							
-							// Substituted "i" with its value "var46".
+																					// Substituted "i" with its value "var46".
 							prob[var46][j$var97] = (exped[var46][j$var97] / reduceVar$sum$28);
 						}
 					}
@@ -1415,7 +1416,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 					if(!guard$sample47put101[var46][j$var69]) {
 						// The body will execute, so should not be executed again
 						// 
-						// Substituted "i" with its value "var46".
+																		// Substituted "i" with its value "var46".
 						guard$sample47put101[var46][j$var69] = true;
 						
 						// Reduction of array exped
@@ -1431,16 +1432,16 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// k's comment
+														// k's comment
 							// Set the left hand term of the reduction function to the return variable value.
 							// 
-							// l's comment
+														// l's comment
 							// Set the right hand term to a value from the array exped
 							// 
 							// Substituted "i" with its value "var46".
 							reduceVar$sum$29 = (reduceVar$sum$29 + exped[var46][cv$reduction82Index]);
 						
-						// Substituted "i" with its value "var46".
+																		// Substituted "i" with its value "var46".
 						prob[var46][j$var69] = (exped[var46][j$var69] / reduceVar$sum$29);
 					}
 				}
@@ -1908,6 +1909,51 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// If ut has not been set already allocate space.
+		if(!fixedFlag$sample21)
+			// Constructor for ut
+			ut = new double[noProducts];
+		
+		// If beta has not been set already allocate space.
+		if(!fixedFlag$sample47)
+			// Constructor for beta
+			beta = new double[noObs];
+		
+		// Constructor for choices
+		choices = new int[noObs];
+		
+		// Constructor for exped
+		exped = new double[noObs][];
+		for(int i = 0; i < noObs; i += 1)
+			exped[i] = new double[noProducts];
+		
+		// Constructor for prob
+		prob = new double[noObs][];
+		for(int i = 0; i < noObs; i += 1)
+			prob[i] = new double[noProducts];
+		
+		// Constructor for constrainedFlag$sample47
+		constrainedFlag$sample47 = new boolean[noObs];
+		
+		// Constructor for constrainedFlag$sample21
+		constrainedFlag$sample21 = new boolean[noProducts];
+		
+		// Constructor for logProbability$sample21
+		logProbability$sample21 = new double[noProducts];
+		
+		// Constructor for logProbability$sample47
+		logProbability$sample47 = new double[noObs];
+		
+		// Constructor for logProbability$sample103
+		logProbability$sample103 = new double[noObs];
+		
+		// Allocate scratch space
+		allocateScratch();
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -1995,51 +2041,6 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 			guard$sample47categorical102$global[cv$index] = new boolean[cv$max_i];
 	}
 
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// If ut has not been set already allocate space.
-		if(!fixedFlag$sample21)
-			// Constructor for ut
-			ut = new double[noProducts];
-		
-		// If beta has not been set already allocate space.
-		if(!fixedFlag$sample47)
-			// Constructor for beta
-			beta = new double[noObs];
-		
-		// Constructor for choices
-		choices = new int[noObs];
-		
-		// Constructor for exped
-		exped = new double[noObs][];
-		for(int i = 0; i < noObs; i += 1)
-			exped[i] = new double[noProducts];
-		
-		// Constructor for prob
-		prob = new double[noObs][];
-		for(int i = 0; i < noObs; i += 1)
-			prob[i] = new double[noProducts];
-		
-		// Constructor for constrainedFlag$sample47
-		constrainedFlag$sample47 = new boolean[noObs];
-		
-		// Constructor for constrainedFlag$sample21
-		constrainedFlag$sample21 = new boolean[noProducts];
-		
-		// Constructor for logProbability$sample21
-		logProbability$sample21 = new double[noProducts];
-		
-		// Constructor for logProbability$sample47
-		logProbability$sample47 = new double[noObs];
-		
-		// Constructor for logProbability$sample103
-		logProbability$sample103 = new double[noObs];
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
@@ -2109,7 +2110,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 							for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
-								// l's comment
+																																// l's comment
 								// Set the right hand term to a value from the array exped
 								reduceVar$sum$34 = (reduceVar$sum$34 + exped[i][cv$reduction82Index]);
 							
@@ -2204,7 +2205,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// l's comment
+																												// l's comment
 							// Set the right hand term to a value from the array exped
 							reduceVar$sum$38 = (reduceVar$sum$38 + exped[i][cv$reduction82Index]);
 						
@@ -2296,7 +2297,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// l's comment
+																												// l's comment
 							// Set the right hand term to a value from the array exped
 							reduceVar$sum$35 = (reduceVar$sum$35 + exped[i][cv$reduction82Index]);
 						
@@ -2389,7 +2390,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 							for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
-								// l's comment
+																																// l's comment
 								// Set the right hand term to a value from the array exped
 								reduceVar$sum$36 = (reduceVar$sum$36 + exped[i][cv$reduction82Index]);
 							
@@ -2483,7 +2484,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// l's comment
+																												// l's comment
 							// Set the right hand term to a value from the array exped
 							reduceVar$sum$37 = (reduceVar$sum$37 + exped[i][cv$reduction82Index]);
 						
@@ -2743,7 +2744,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
-							// l's comment
+																												// l's comment
 							// Set the right hand term to a value from the array exped
 							reduceVar$sum$39 = (reduceVar$sum$39 + exped[i][cv$reduction82Index]);
 						

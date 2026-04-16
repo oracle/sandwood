@@ -6,7 +6,7 @@
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
-package org.sandwood.compiler.dataflowGraph.variables.rng;
+package org.sandwood.compiler.dataflowGraph.variables.internal;
 
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.compiler.dataflowGraph.variables.VariableImplementation;
@@ -20,7 +20,7 @@ import org.sandwood.compiler.srcTools.sourceToSource.Location;
  * @author djgoodma
  *
  */
-public final class RandomNumberGenerator extends VariableImplementation<RandomNumberGenerator> {
+public abstract class RandomNumberGenerator extends VariableImplementation<RandomNumberGenerator> {
 
     private RandomNumberGenerator() {
         super(null);

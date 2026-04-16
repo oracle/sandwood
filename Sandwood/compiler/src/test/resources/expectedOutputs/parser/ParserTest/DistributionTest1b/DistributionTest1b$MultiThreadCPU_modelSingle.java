@@ -1,40 +1,41 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DistributionTest1b$CoreInterface {
-	
+final class DistributionTest1b$MultiThreadCPU extends CoreModelMultiThreadCPU implements DistributionTest1b$CoreInterface {
+
 	// Declare the variables for the model.
-	private boolean constrainedFlag$sample4 = true;
-	private boolean constrainedFlag$sample6 = true;
-	private boolean constrainedFlag$sample7 = true;
-	private double[] cv$var4$stateProbabilityGlobal;
-	private double[] cv$var6$stateProbabilityGlobal;
-	private double[] cv$var7$stateProbabilityGlobal;
-	private double[] distribution$sample4;
-	private double[] distribution$sample6;
-	private boolean fixedFlag$sample4 = false;
-	private boolean fixedFlag$sample6 = false;
-	private boolean fixedFlag$sample7 = false;
-	private boolean fixedProbFlag$sample13 = false;
-	private boolean fixedProbFlag$sample4 = false;
-	private boolean fixedProbFlag$sample6 = false;
-	private boolean fixedProbFlag$sample7 = false;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$c;
-	private double logProbability$v;
-	private double logProbability$v1;
-	private double logProbability$v2;
-	private double logProbability$v3;
-	private boolean system$gibbsForward = true;
-	private boolean v;
-	private int v1;
-	private int v2;
-	private int v3;
-	private boolean value;
-	private double[] weightings;
+	boolean constrainedFlag$sample4 = true;
+	boolean constrainedFlag$sample6 = true;
+	boolean constrainedFlag$sample7 = true;
+	double[] distribution$sample4;
+	double[] distribution$sample6;
+	boolean fixedFlag$sample4 = false;
+	boolean fixedFlag$sample6 = false;
+	boolean fixedFlag$sample7 = false;
+	boolean fixedProbFlag$sample13 = false;
+	boolean fixedProbFlag$sample4 = false;
+	boolean fixedProbFlag$sample6 = false;
+	boolean fixedProbFlag$sample7 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$c;
+	double logProbability$v;
+	double logProbability$v1;
+	double logProbability$v2;
+	double logProbability$v3;
+	boolean system$gibbsForward = true;
+	boolean v;
+	int v1;
+	int v2;
+	int v3;
+	boolean value;
+	double[] weightings;
+	double[] cv$var4$stateProbabilityGlobal;
+	double[] cv$var6$stateProbabilityGlobal;
+	double[] cv$var7$stateProbabilityGlobal;
 
 	public DistributionTest1b$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -1812,6 +1813,23 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// Constructor for distribution$sample4
+		{
+			distribution$sample4 = new double[weightings.length];
+		}
+		
+		// Constructor for distribution$sample6
+		{
+			distribution$sample6 = new double[weightings.length];
+		}
+		
+		// Allocate scratch space
+		allocateScratch();
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -1835,23 +1853,6 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 			// Allocation of cv$var7$stateProbabilityGlobal for single threaded execution
 			cv$var7$stateProbabilityGlobal = new double[weightings.length];
 		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// Constructor for distribution$sample4
-		{
-			distribution$sample4 = new double[weightings.length];
-		}
-		
-		// Constructor for distribution$sample6
-		{
-			distribution$sample6 = new double[weightings.length];
-		}
-		
-		// Allocate scratch space
-		allocateScratch();
 	}
 
 	// Method to execute the model code conventionally.

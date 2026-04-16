@@ -45,7 +45,7 @@ public interface CoreModel extends CurrentProbability, AutoCloseable {
 
     void propagateObservedValues();
 
-    void allocator();
+    void allocate();
 
     void allocateScratch();
 

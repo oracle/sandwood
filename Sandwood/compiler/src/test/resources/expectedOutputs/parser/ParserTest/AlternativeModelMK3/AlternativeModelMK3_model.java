@@ -1,22 +1,20 @@
 package org.sandwood.compiler.tests.parser;
 
-import org.sandwood.runtime.model.Model;
-import org.sandwood.runtime.model.ExecutionTarget;
-import org.sandwood.runtime.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import java.util.HashMap;
+import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
-
-import java.util.Map;
-import java.util.HashMap;
+import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import org.sandwood.runtime.model.ExecutionTarget;
+import org.sandwood.runtime.model.Model;
+import org.sandwood.runtime.model.variables.*;
 
 /**
-  * Class representing the Sandwood model AlternativeModelMK3 This is the class that
-  * all user interactions with the model should occur through.
-  */
+ * Class representing the Sandwood model AlternativeModelMK3 This is the class that
+ * all user interactions with the model should occur through.
+ */
 public final class AlternativeModelMK3 extends Model {
-
     private AlternativeModelMK3$CoreInterface system$c = new AlternativeModelMK3$SingleThreadCPU(ExecutionTarget.singleThread);
 
     private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false, ProbabilityType.UNSKIPPABLE) {
@@ -48,9 +46,7 @@ public final class AlternativeModelMK3 extends Model {
         }
     };
 
-    /**
-     * Computed variable representing bias of type double from the Sandwood model 
-     */
+	/** Computed variable representing bias of type double from the Sandwood model. */
     public final ComputedDouble bias = $bias;
 
     private final ComputedIntegerInternal $positiveCount = new ComputedIntegerInternal(this, "positiveCount", false, true, false, ProbabilityType.UNSKIPPABLE) {
@@ -79,9 +75,9 @@ public final class AlternativeModelMK3 extends Model {
         }
     };
 
-    /**
-     * Computed variable representing positiveCount of type int from the Sandwood model 
-     */
+	/**
+	 * Computed variable representing positiveCount of type int from the Sandwood model.
+	 */
     public final ComputedInteger positiveCount = $positiveCount;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
@@ -98,9 +94,10 @@ public final class AlternativeModelMK3 extends Model {
         protected void setValueInternal(int value) { system$c.set$observedSampleCount(value, allocated); }
     };
 
-    /**
-     * Observed variable representing observedSampleCount of type int from the Sandwood model 
-     */
+	/**
+	 * Observed variable representing observedSampleCount of type int from the Sandwood
+	 * model.
+	 */
     public final ObservedInteger observedSampleCount = $observedSampleCount;
 
     private Map<String, ObservedVariableInternal> $modelInputs = new HashMap<>();
@@ -117,9 +114,10 @@ public final class AlternativeModelMK3 extends Model {
         protected void setValueInternal(int value) { system$c.set$observedPositiveCount(value, allocated); }
     };
 
-    /**
-     * Observed variable representing observedPositiveCount of type int from the Sandwood model 
-     */
+	/**
+	 * Observed variable representing observedPositiveCount of type int from the Sandwood
+	 * model.
+	 */
     public final ObservedInteger observedPositiveCount = $observedPositiveCount;
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
@@ -131,17 +129,13 @@ public final class AlternativeModelMK3 extends Model {
         }
     };
 
-    /**
-     * Random variable representing binomial from the Sandwood model 
-     */
+	/** Random variable representing binomial from the Sandwood model. */
     public final RandomVariable binomial = $binomial;
 
     private HasProbabilityInternal[] $probabilityVariables = {$bias, $positiveCount, $binomial};
 
-    //Constructors
-    /**
-     * A constructor for a model where no variable values are set.
-     */
+    // Constructors
+	/** A constructor for a model where no variable values are set. */
     public AlternativeModelMK3() {
         super();
         //ComputedVariable
@@ -155,24 +149,24 @@ public final class AlternativeModelMK3 extends Model {
         $regularObservedValues.put("observedPositiveCount", $observedPositiveCount);
         init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
-    /**
-      * A constructor to set all the required values in the model to infer values. These
-      * will be values in an untrained model so this will only generate values from the
-      * default distributions described in the model.
-      * @param observedSampleCount The value to set observedSampleCount to.
-      */
 
+	/**
+	 * A constructor to set all the required values in the model to infer values. These
+	 * will be values in an untrained model so this will only generate values from the
+	 * default distributions described in the model.
+	 * @param observedSampleCount The value to set observedSampleCount to.
+	 */
     public AlternativeModelMK3(int observedSampleCount) {
         this();
         this.$observedSampleCount.setValue(observedSampleCount);
     }
-    /**
-      * A constructor to set all the required values in the model to infer the model
-      * parameters, or to generate probabilities for the model.
-      * @param observedSampleCount The value to set observedSampleCount to.
-      * @param observedPositiveCount The value to set observedPositiveCount to.
-      */
 
+	/**
+	 * A constructor to set all the required values in the model to infer the model parameters,
+	 * or to generate probabilities for the model.
+	 * @param observedSampleCount The value to set observedSampleCount to.
+	 * @param observedPositiveCount The value to set observedPositiveCount to
+	 */
     public AlternativeModelMK3(int observedSampleCount, int observedPositiveCount) {
         this();
         this.observedSampleCount.setValue(observedSampleCount);
@@ -214,51 +208,48 @@ public final class AlternativeModelMK3 extends Model {
         newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6(), false);
     }
 
-    /**
-     * A class to hold all the values required to perform a value inference on the model.
-     */
+	/**
+	 * A class to hold all the values required to perform a value inference on the model.
+	 */
     public static class InferValueInputs {
-        /** Field holding the value of model input observedSampleCount */
+		/** Field holding the value of model input observedSampleCount */
         public final int observedSampleCount;
 
-        /**
-          * A constructor taking all the values required to set up the model to infer variables.
-          * @param observedSampleCount The value to set observedSampleCount to.
-          */
+		/**
+		 * A constructor taking all the values required to set up the model to infer variables.
+		 * @param observedSampleCount The value to set observedSampleCount to.
+		 */
         public InferValueInputs(int observedSampleCount) {
             this.observedSampleCount = observedSampleCount;
         }
     }
 
-    /**
-     * A class to hold all the inputs for the model. It can be used to parameterize inference of the model probabilities
-     * and probability calculations.
-     */
+	/**
+	 * A class to hold all the inputs for the model. It can be used to parameterize inference
+	 * of the model probabilities and probability calculations.
+	 */
     public static class AllInputs {
-        /** Field holding the value of model input observedSampleCount */
+		/** Field holding the value of model input observedSampleCount */
         public final int observedSampleCount;
-        /** Field holding the value of model input observedPositiveCount */
+		/** Field holding the value of model input observedPositiveCount */
         public final int observedPositiveCount;
 
-        /**
-          * A constructor to take all the required values by the model to infer the model
-          * parameters, or to generate probabilities for the model.
-          * @param observedSampleCount The value to set observedSampleCount to.
-          * @param observedPositiveCount The value to set observedPositiveCount to.
-          */
+		/**
+		 * A constructor to take all the required values by the model to infer the model parameters,
+		 * or to generate probabilities for the model.
+		 * @param observedSampleCount The value to set observedSampleCount to.
+		 * @param observedPositiveCount The value to set observedPositiveCount to.
+		 */
         public AllInputs(int observedSampleCount, int observedPositiveCount) {
             this.observedSampleCount = observedSampleCount;
             this.observedPositiveCount = observedPositiveCount;
         }
     }
-
-    /**
-     * A class to hold all the outputs from the model after an infer values step.
-     */
+	/** A class to hold all the outputs from the model after an infer values step. */
     public static class InferredValueOutputs {
-        /** Field holding the value of bias after a convention execution step.*/
+		/** Field holding the value of bias after a convention execution step. */
         public final double bias;
-        /** Field holding the value of positiveCount after a convention execution step.*/
+		/** Field holding the value of positiveCount after a convention execution step. */
         public final int positiveCount;
 
         InferredValueOutputs(AlternativeModelMK3 system$model) {
@@ -267,16 +258,17 @@ public final class AlternativeModelMK3 extends Model {
         }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class LogProbabilities {
         private final double $logModelProbability;
-        /** Field holding the log probability of random variable binomial */
+		/** Field holding the log probability of random variable binomial */
         public final double binomial;
-        /** Field holding the log probability of computed variable bias */
+		/** Field holding the log probability of computed variable bias */
         public final double bias;
-        /** Field holding the log probability of computed variable positiveCount */
+		/** Field holding the log probability of computed variable positiveCount */
         public final double positiveCount;
 
         LogProbabilities(AlternativeModelMK3 system$model) {
@@ -286,21 +278,24 @@ public final class AlternativeModelMK3 extends Model {
             this.positiveCount = system$model.positiveCount.getLogProbability();
         }
 
-        /** Method to return log probability of the whole model 
-         *  @return The log probability of the whole model. */
+		/**
+		 * Method to return log probability of the whole model
+		 * @return The log probability of the whole model.
+		 */
         public double getModelProbability() { return $logModelProbability; }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class Probabilities {
         private final double $modelProbability;
-        /** Field holding the probability of random variable binomial */
+		/** Field holding the probability of random variable binomial */
         public final double binomial;
-        /** Field holding the probability of computed variable bias */
+		/** Field holding the probability of computed variable bias */
         public final double bias;
-        /** Field holding the probability of computed variable positiveCount */
+		/** Field holding the probability of computed variable positiveCount */
         public final double positiveCount;
 
         Probabilities(AlternativeModelMK3 system$model) {
@@ -310,16 +305,16 @@ public final class AlternativeModelMK3 extends Model {
             this.positiveCount = system$model.positiveCount.getProbability();
         }
 
-        /** Method to return probability of the whole model 
-         *  @return The probability of the whole model. */
+		/**
+		 * Method to return probability of the whole model
+		 * @return The probability of the whole model.
+		 */
         public double getModelProbability() { return $modelProbability; }
     }
 
-    /**
-     * A class to hold all the outputs from the model after an infer model call.
-     */
+	/** A class to hold all the outputs from the model after an infer model call. */
     public static class InferredModelOutputs {
-        /** Field holding the MAP or Sample value of bias after an infer model call. */
+		/** Field holding the MAP or Sample value of bias after an infer model call. */
         public final double[] bias;
 
         InferredModelOutputs(AlternativeModelMK3 system$model) {
@@ -327,23 +322,25 @@ public final class AlternativeModelMK3 extends Model {
         }
     }
 
-    /**
-     * Perform a single pass generating values from the model.
-     * @param inputs An object containing the parameters required to run inference on the model.
-     * @return An object containing the values computed by the inference step.
-     */
+	/**
+	 * Perform a single pass generating values from the model.
+	 * @param inputs An object containing the parameters required to run inference on
+	 *               the model.
+	 * @return An object containing the values computed by the inference step.
+	 */
     public InferredValueOutputs execute(InferValueInputs inputs) {
         this.observedSampleCount.setValue(inputs.observedSampleCount);
         execute();
         return new InferredValueOutputs(this);
     }
 
-    /**
-     * Infer the values of the different elements of the model.
-     * @param iterations The number of iterations to perform when inferring the values.
-     * @param inputs An object containing the parameters required to generate the model parameters.
-     * @return An object containing the computed values for the model.
-     */
+	/**
+	 * Infer the values of the different elements of the model.
+	 * @param iterations The number of iterations to perform when inferring the values.
+	 * @param inputs An object containing the parameters required to generate the model
+	 *               parameters.
+	 * @return An object containing the computed values for the model.
+	 */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
         this.observedSampleCount.setValue(inputs.observedSampleCount);
         this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
@@ -351,12 +348,13 @@ public final class AlternativeModelMK3 extends Model {
         return new InferredModelOutputs(this);
     }
 
-    /**
-     * Generate the probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
         this.observedSampleCount.setValue(inputs.observedSampleCount);
         this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
@@ -364,16 +362,19 @@ public final class AlternativeModelMK3 extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.observedSampleCount.setValue(inputs.observedSampleCount);
         this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
@@ -381,18 +382,23 @@ public final class AlternativeModelMK3 extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.observedSampleCount.setValue(inputs.observedSampleCount);
         this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
@@ -400,12 +406,13 @@ public final class AlternativeModelMK3 extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Generate the log probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the log probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
         this.observedSampleCount.setValue(inputs.observedSampleCount);
         this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
@@ -413,16 +420,19 @@ public final class AlternativeModelMK3 extends Model {
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.observedSampleCount.setValue(inputs.observedSampleCount);
         this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
@@ -430,18 +440,23 @@ public final class AlternativeModelMK3 extends Model {
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.observedSampleCount.setValue(inputs.observedSampleCount);
         this.$observedPositiveCount.setValue(inputs.observedPositiveCount);
@@ -449,4 +464,3 @@ public final class AlternativeModelMK3 extends Model {
         return new LogProbabilities(this);
     }
 }
-//END OF CODE

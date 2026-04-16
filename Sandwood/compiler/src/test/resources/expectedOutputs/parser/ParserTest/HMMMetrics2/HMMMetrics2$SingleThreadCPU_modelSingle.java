@@ -1,80 +1,81 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMMetrics2$CoreInterface {
-	
+final class HMMMetrics2$SingleThreadCPU extends CoreModelSingleThreadCPU implements HMMMetrics2$CoreInterface {
+
 	// Declare the variables for the model.
-	private boolean[] constrainedFlag$sample104;
-	private boolean[][] constrainedFlag$sample123;
-	private boolean constrainedFlag$sample19 = true;
-	private boolean[] constrainedFlag$sample32;
-	private boolean[] constrainedFlag$sample52;
-	private boolean[] constrainedFlag$sample68;
-	private boolean[] constrainedFlag$sample84;
-	private double[] cv$distributionAccumulator$var120;
-	private double[] cv$var102$stateProbabilityGlobal;
-	private double[] cv$var121$stateProbabilityGlobal;
-	private double[] cv$var19$countGlobal;
-	private double[] cv$var32$countGlobal;
-	private double[][] distribution$sample104;
-	private double[][][] distribution$sample123;
-	private boolean fixedFlag$sample104 = false;
-	private boolean fixedFlag$sample123 = false;
-	private boolean fixedFlag$sample157 = false;
-	private boolean fixedFlag$sample19 = false;
-	private boolean fixedFlag$sample32 = false;
-	private boolean fixedFlag$sample52 = false;
-	private boolean fixedFlag$sample68 = false;
-	private boolean fixedFlag$sample84 = false;
-	private boolean fixedProbFlag$sample104 = false;
-	private boolean fixedProbFlag$sample123 = false;
-	private boolean fixedProbFlag$sample145 = false;
-	private boolean fixedProbFlag$sample157 = false;
-	private boolean fixedProbFlag$sample19 = false;
-	private boolean fixedProbFlag$sample32 = false;
-	private boolean fixedProbFlag$sample52 = false;
-	private boolean fixedProbFlag$sample68 = false;
-	private boolean fixedProbFlag$sample84 = false;
-	private boolean[][] guard$sample104gaussian156$global;
-	private boolean[][] guard$sample123gaussian156$global;
-	private double[] initialStateDistribution;
-	private int[] length$metric;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$initialStateDistribution;
-	private double logProbability$m;
-	private double logProbability$metric_g;
-	private double logProbability$metric_mean;
-	private double logProbability$metric_valid_1d;
-	private double logProbability$metric_valid_bias;
-	private double logProbability$metric_valid_g;
-	private double logProbability$metric_var;
-	private double logProbability$st;
-	private double logProbability$var102;
-	private double logProbability$var121;
-	private double logProbability$var141;
-	private double logProbability$var151;
-	private double logProbability$var32;
-	private double logProbability$var51;
-	private double logProbability$var67;
-	private double logProbability$var83;
-	private double[][] m;
-	private double[][] metric;
-	private double[][] metric_g;
-	private double[] metric_mean;
-	private boolean[][] metric_valid;
-	private double[] metric_valid_bias;
-	private boolean[][] metric_valid_g;
-	private double[] metric_var;
-	private int noSamples;
-	private int noStates;
-	private int[][] st;
-	private boolean system$gibbsForward = true;
-	private double[] v;
-	private double[][] var151;
+	boolean[] constrainedFlag$sample104;
+	boolean[][] constrainedFlag$sample123;
+	boolean constrainedFlag$sample19 = true;
+	boolean[] constrainedFlag$sample32;
+	boolean[] constrainedFlag$sample52;
+	boolean[] constrainedFlag$sample68;
+	boolean[] constrainedFlag$sample84;
+	double[][] distribution$sample104;
+	double[][][] distribution$sample123;
+	boolean fixedFlag$sample104 = false;
+	boolean fixedFlag$sample123 = false;
+	boolean fixedFlag$sample157 = false;
+	boolean fixedFlag$sample19 = false;
+	boolean fixedFlag$sample32 = false;
+	boolean fixedFlag$sample52 = false;
+	boolean fixedFlag$sample68 = false;
+	boolean fixedFlag$sample84 = false;
+	boolean fixedProbFlag$sample104 = false;
+	boolean fixedProbFlag$sample123 = false;
+	boolean fixedProbFlag$sample145 = false;
+	boolean fixedProbFlag$sample157 = false;
+	boolean fixedProbFlag$sample19 = false;
+	boolean fixedProbFlag$sample32 = false;
+	boolean fixedProbFlag$sample52 = false;
+	boolean fixedProbFlag$sample68 = false;
+	boolean fixedProbFlag$sample84 = false;
+	double[] initialStateDistribution;
+	int[] length$metric;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$initialStateDistribution;
+	double logProbability$m;
+	double logProbability$metric_g;
+	double logProbability$metric_mean;
+	double logProbability$metric_valid_1d;
+	double logProbability$metric_valid_bias;
+	double logProbability$metric_valid_g;
+	double logProbability$metric_var;
+	double logProbability$st;
+	double logProbability$var102;
+	double logProbability$var121;
+	double logProbability$var141;
+	double logProbability$var151;
+	double logProbability$var32;
+	double logProbability$var51;
+	double logProbability$var67;
+	double logProbability$var83;
+	double[][] m;
+	double[][] metric;
+	double[][] metric_g;
+	double[] metric_mean;
+	boolean[][] metric_valid;
+	double[] metric_valid_bias;
+	boolean[][] metric_valid_g;
+	double[] metric_var;
+	int noSamples;
+	int noStates;
+	int[][] st;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[][] var151;
+	double[] cv$distributionAccumulator$var120;
+	double[] cv$var102$stateProbabilityGlobal;
+	double[] cv$var121$stateProbabilityGlobal;
+	double[] cv$var19$countGlobal;
+	double[] cv$var32$countGlobal;
+	boolean[][] guard$sample104gaussian156$global;
+	boolean[][] guard$sample123gaussian156$global;
 
 	public HMMMetrics2$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -10149,88 +10150,9 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var19$countGlobal
-		{
-			// Allocation of cv$var19$countGlobal for single threaded execution
-			cv$var19$countGlobal = new double[noStates];
-		}
-		
-		// Constructor for cv$var32$countGlobal
-		{
-			// Allocation of cv$var32$countGlobal for single threaded execution
-			cv$var32$countGlobal = new double[noStates];
-		}
-		
-		// Constructor for cv$distributionAccumulator$var120
-		{
-			// Variable to record the maximum value of Task Get 121. Initially set to the value
-			// of putTask 33.
-			int cv$var33$max = noStates;
-			
-			// Allocation of cv$distributionAccumulator$var120 for single threaded execution
-			cv$distributionAccumulator$var120 = new double[cv$var33$max];
-		}
-		
-		// Constructor for cv$var102$stateProbabilityGlobal
-		{
-			// Allocation of cv$var102$stateProbabilityGlobal for single threaded execution
-			cv$var102$stateProbabilityGlobal = new double[noStates];
-		}
-		
-		// Constructor for guard$sample104gaussian156$global
-		{
-			// Calculate the largest index of sample that is possible and allocate an array to
-			// hold the guard for each of these.
-			int cv$max_sample = 0;
-			
-			// Calculate the largest index of timeStep that is possible and allocate an array
-			// to hold the guard for each of these.
-			int cv$max_timeStep$var136 = 0;
-			for(int sample = 0; sample < length$metric.length; sample += 1)
-				cv$max_timeStep$var136 = Math.max(cv$max_timeStep$var136, ((length$metric[sample] - 0) / 1));
-			cv$max_sample = Math.max(cv$max_sample, ((length$metric.length - 0) / 1));
-			
-			// Allocation of guard$sample104gaussian156$global for single threaded execution
-			guard$sample104gaussian156$global = new boolean[cv$max_sample][cv$max_timeStep$var136];
-		}
-		
-		// Constructor for cv$var121$stateProbabilityGlobal
-		{
-			// Variable to record the maximum value of Task Get 121. Initially set to the value
-			// of putTask 33.
-			int cv$var33$max = noStates;
-			
-			// Allocation of cv$var121$stateProbabilityGlobal for single threaded execution
-			cv$var121$stateProbabilityGlobal = new double[cv$var33$max];
-		}
-		
-		// Constructor for guard$sample123gaussian156$global
-		{
-			// Calculate the largest index of sample that is possible and allocate an array to
-			// hold the guard for each of these.
-			int cv$max_sample = 0;
-			
-			// Calculate the largest index of timeStep that is possible and allocate an array
-			// to hold the guard for each of these.
-			int cv$max_timeStep$var136 = 0;
-			for(int sample = 0; sample < length$metric.length; sample += 1)
-				cv$max_timeStep$var136 = Math.max(cv$max_timeStep$var136, ((length$metric[sample] - 0) / 1));
-			cv$max_sample = Math.max(cv$max_sample, ((length$metric.length - 0) / 1));
-			
-			// Allocation of guard$sample123gaussian156$global for single threaded execution
-			guard$sample123gaussian156$global = new boolean[cv$max_sample][cv$max_timeStep$var136];
-		}
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for v
 		{
 			v = new double[noStates];
@@ -10361,6 +10283,85 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var19$countGlobal
+		{
+			// Allocation of cv$var19$countGlobal for single threaded execution
+			cv$var19$countGlobal = new double[noStates];
+		}
+		
+		// Constructor for cv$var32$countGlobal
+		{
+			// Allocation of cv$var32$countGlobal for single threaded execution
+			cv$var32$countGlobal = new double[noStates];
+		}
+		
+		// Constructor for cv$distributionAccumulator$var120
+		{
+			// Variable to record the maximum value of Task Get 121. Initially set to the value
+			// of putTask 33.
+			int cv$var33$max = noStates;
+			
+			// Allocation of cv$distributionAccumulator$var120 for single threaded execution
+			cv$distributionAccumulator$var120 = new double[cv$var33$max];
+		}
+		
+		// Constructor for cv$var102$stateProbabilityGlobal
+		{
+			// Allocation of cv$var102$stateProbabilityGlobal for single threaded execution
+			cv$var102$stateProbabilityGlobal = new double[noStates];
+		}
+		
+		// Constructor for guard$sample104gaussian156$global
+		{
+			// Calculate the largest index of sample that is possible and allocate an array to
+			// hold the guard for each of these.
+			int cv$max_sample = 0;
+			
+			// Calculate the largest index of timeStep that is possible and allocate an array
+			// to hold the guard for each of these.
+			int cv$max_timeStep$var136 = 0;
+			for(int sample = 0; sample < length$metric.length; sample += 1)
+				cv$max_timeStep$var136 = Math.max(cv$max_timeStep$var136, ((length$metric[sample] - 0) / 1));
+			cv$max_sample = Math.max(cv$max_sample, ((length$metric.length - 0) / 1));
+			
+			// Allocation of guard$sample104gaussian156$global for single threaded execution
+			guard$sample104gaussian156$global = new boolean[cv$max_sample][cv$max_timeStep$var136];
+		}
+		
+		// Constructor for cv$var121$stateProbabilityGlobal
+		{
+			// Variable to record the maximum value of Task Get 121. Initially set to the value
+			// of putTask 33.
+			int cv$var33$max = noStates;
+			
+			// Allocation of cv$var121$stateProbabilityGlobal for single threaded execution
+			cv$var121$stateProbabilityGlobal = new double[cv$var33$max];
+		}
+		
+		// Constructor for guard$sample123gaussian156$global
+		{
+			// Calculate the largest index of sample that is possible and allocate an array to
+			// hold the guard for each of these.
+			int cv$max_sample = 0;
+			
+			// Calculate the largest index of timeStep that is possible and allocate an array
+			// to hold the guard for each of these.
+			int cv$max_timeStep$var136 = 0;
+			for(int sample = 0; sample < length$metric.length; sample += 1)
+				cv$max_timeStep$var136 = Math.max(cv$max_timeStep$var136, ((length$metric[sample] - 0) / 1));
+			cv$max_sample = Math.max(cv$max_sample, ((length$metric.length - 0) / 1));
+			
+			// Allocation of guard$sample123gaussian156$global for single threaded execution
+			guard$sample123gaussian156$global = new boolean[cv$max_sample][cv$max_timeStep$var136];
+		}
 	}
 
 	// Method to execute the model code conventionally.

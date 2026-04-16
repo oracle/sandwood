@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface RaggedArray4$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface RaggedArray4$CoreInterface extends CoreModel {
 	public double[][] get$a();
 	public double[] get$b();
 	public double[] get$d();

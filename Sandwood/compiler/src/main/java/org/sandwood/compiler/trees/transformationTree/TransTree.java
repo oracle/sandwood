@@ -19,6 +19,7 @@ import java.util.Set;
 import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.compilation.ExternalFunction;
 import org.sandwood.compiler.compilation.FunctionType;
+import org.sandwood.compiler.dataflowGraph.variables.ObjectVariable;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -165,6 +166,7 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
         RV_FUNCTION_CALL,
         RV_FUNCTION_CALL_RETURN,
         SCOPE,
+        SET_FIELD,
         SEQUENTIAL,
         STORE,
         SUBTRACT
@@ -278,7 +280,7 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
     }
 
     public T applyConstants(Map<VariableDescription<?>, TransTreeReturn<?>> constants) {
-        return applyConstants(constants, new HashSet<>());
+        return new ApplyConstantsTransformer(constants).transform(this);
     }
 
     private T applyConstants(Map<VariableDescription<?>, TransTreeReturn<?>> constants,
@@ -397,7 +399,7 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
     public T collapseConstants() {
         CollapseConstantsTransformer c = new CollapseConstantsTransformer(new ArgDesc[0],
                 KnownValuesTrans.constructKnownValues(), this);
-        return c.transform(this, new HashSet<>());
+        return c.transform(this);
     }
 
     protected T collapseConstants(ArgDesc<?>[] args, KnownValuesTrans knownValues, Set<TransTree<?>> visitedNodes) {
@@ -458,8 +460,8 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
             case SingleThreadCPU:
                 return toOutputTreeInternal();
             case MultiThreadCPU:
-                T tree = new ParallelIndexes().transform(this, new HashSet<>());
-                tree = new ParFor(tree.getVariableTracking()).transform(tree, new HashSet<>());
+                T tree = new ParallelIndexes().transform(this);
+                tree = new ParFor(tree.getVariableTracking()).transform(tree);
                 return tree.toOutputTreeInternal();
             case GPU:
             default:
@@ -546,8 +548,14 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
         return new TransLocalFunctionCallReturn<>(outputType, name, args);
     }
 
-    public static TransGetIntField getIntField(TransTreeReturn<?> tree, String name) {
-        return new TransGetIntField(tree, name);
+    public static <A extends ObjectVariable<A>, X extends Variable<X>> TransGetField<A,X> getField(TransTreeReturn<A> tree,
+            VariableDescription<X> fieldDesc) {
+        return new TransGetField<>(tree, fieldDesc);
+    }
+
+    public static <A extends ObjectVariable<A>, X extends Variable<X>> TransSetField<A,X> setField(TransTreeReturn<A> tree,
+            VariableDescription<X> fieldDesc, TransTreeReturn<X> value, String comment) {
+        return new TransSetField<>(tree, fieldDesc, value, comment);
     }
 
     public static TransTreeVoid ifElse(TransTreeReturn<BooleanVariable> condition, TransTreeVoid ifBody, String comment,

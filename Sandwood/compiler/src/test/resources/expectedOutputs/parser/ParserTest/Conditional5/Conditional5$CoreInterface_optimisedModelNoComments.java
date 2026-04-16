@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface Conditional5$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface Conditional5$CoreInterface extends CoreModel {
 	public double get$a();
 	public double get$b();
 	public boolean get$guard();

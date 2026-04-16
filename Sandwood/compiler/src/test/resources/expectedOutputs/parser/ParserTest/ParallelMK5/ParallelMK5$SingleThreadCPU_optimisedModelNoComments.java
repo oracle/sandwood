@@ -1,26 +1,27 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ParallelMK5$CoreInterface {
-	private boolean[][] constrainedFlag$sample61;
-	private boolean fixedFlag$sample61 = false;
-	private boolean fixedProbFlag$sample103 = false;
-	private boolean fixedProbFlag$sample61 = false;
-	private int[] generated;
-	private double[][] indirection1;
-	private double[][] indirection2;
-	private int length$observed;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$generated;
-	private double logProbability$indirection1;
-	private double logProbability$indirection2;
-	private double[] logProbability$sample103;
-	private double[][] logProbability$sample61;
-	private int[] observed;
-	private boolean system$gibbsForward = true;
+final class ParallelMK5$SingleThreadCPU extends CoreModelSingleThreadCPU implements ParallelMK5$CoreInterface {
+boolean[][] constrainedFlag$sample61;
+	boolean fixedFlag$sample61 = false;
+	boolean fixedProbFlag$sample103 = false;
+	boolean fixedProbFlag$sample61 = false;
+	int[] generated;
+	double[][] indirection1;
+	double[][] indirection2;
+	int length$observed;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$generated;
+	double logProbability$indirection1;
+	double logProbability$indirection2;
+	double[] logProbability$sample103;
+	double[][] logProbability$sample61;
+	int[] observed;
+	boolean system$gibbsForward = true;
 
 	public ParallelMK5$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -200,10 +201,7 @@ final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void allocateScratch() {}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		generated = new int[length$observed];
 		if(!fixedFlag$sample61) {
 			indirection1 = new double[10][];
@@ -221,6 +219,9 @@ final class ParallelMK5$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			logProbability$sample61[i] = new double[length$observed];
 		logProbability$sample103 = new double[length$observed];
 	}
+
+	@Override
+	public final void allocateScratch() {}
 
 	@Override
 	public final void forwardGeneration() {

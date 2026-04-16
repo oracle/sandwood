@@ -1,32 +1,33 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DiscreteChoice$CoreInterface {
-	private int[] ObsChoices;
-	private int[] choices;
-	private boolean[] constrainedFlag$sample24;
-	private double[] exped;
-	private boolean fixedFlag$sample24 = false;
-	private boolean fixedProbFlag$sample24 = false;
-	private boolean fixedProbFlag$sample78 = false;
-	private boolean[] guard$sample24put65$global;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$choices;
-	private double logProbability$exped;
-	private double logProbability$prob;
-	private double[] logProbability$sample24;
-	private double logProbability$sum;
-	private double logProbability$ut;
-	private double logProbability$var77;
-	private int noObs;
-	private int noProducts;
-	private double[] prob;
-	private double sum;
-	private boolean system$gibbsForward = true;
-	private double[] ut;
+final class DiscreteChoice$SingleThreadCPU extends CoreModelSingleThreadCPU implements DiscreteChoice$CoreInterface {
+int[] ObsChoices;
+	int[] choices;
+	boolean[] constrainedFlag$sample24;
+	double[] exped;
+	boolean fixedFlag$sample24 = false;
+	boolean fixedProbFlag$sample24 = false;
+	boolean fixedProbFlag$sample78 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$choices;
+	double logProbability$exped;
+	double logProbability$prob;
+	double[] logProbability$sample24;
+	double logProbability$sum;
+	double logProbability$ut;
+	double logProbability$var77;
+	int noObs;
+	int noProducts;
+	double[] prob;
+	double sum;
+	boolean system$gibbsForward = true;
+	double[] ut;
+	boolean[] guard$sample24put65$global;
 
 	public DiscreteChoice$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -285,12 +286,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void allocateScratch() {
-		guard$sample24put65$global = new boolean[Math.max(0, noProducts)];
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		if(!fixedFlag$sample24)
 			ut = new double[noProducts];
 		exped = new double[noProducts];
@@ -299,6 +295,11 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 		constrainedFlag$sample24 = new boolean[(noProducts - 1)];
 		logProbability$sample24 = new double[(noProducts - 1)];
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		guard$sample24put65$global = new boolean[Math.max(0, noProducts)];
 	}
 
 	@Override

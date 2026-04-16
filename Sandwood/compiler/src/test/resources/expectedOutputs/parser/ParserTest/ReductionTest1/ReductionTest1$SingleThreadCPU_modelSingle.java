@@ -1,33 +1,34 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ReductionTest1$CoreInterface {
-	
+final class ReductionTest1$SingleThreadCPU extends CoreModelSingleThreadCPU implements ReductionTest1$CoreInterface {
+
 	// Declare the variables for the model.
-	private int[][] ObsArr;
-	private int T;
-	private double[][] TimeFeat;
-	private int[][] arr;
-	private boolean[][] constrainedFlag$sample101;
-	private boolean fixedFlag$sample101 = false;
-	private boolean fixedProbFlag$sample101 = false;
-	private boolean fixedProbFlag$sample165 = false;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$arr;
-	private double[][] logProbability$sample101;
-	private double logProbability$sum_t;
-	private double logProbability$time_coeff;
-	private double logProbability$time_impact;
-	private double logProbability$var158;
-	private int n_ac;
-	private double[][] sum_t;
-	private boolean system$gibbsForward = true;
-	private double[][] time_coeff;
-	private int time_dim;
-	private double[][][] time_impact;
+	int[][] ObsArr;
+	int T;
+	double[][] TimeFeat;
+	int[][] arr;
+	boolean[][] constrainedFlag$sample101;
+	boolean fixedFlag$sample101 = false;
+	boolean fixedProbFlag$sample101 = false;
+	boolean fixedProbFlag$sample165 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$arr;
+	double[][] logProbability$sample101;
+	double logProbability$sum_t;
+	double logProbability$time_coeff;
+	double logProbability$time_impact;
+	double logProbability$var158;
+	int n_ac;
+	double[][] sum_t;
+	boolean system$gibbsForward = true;
+	double[][] time_coeff;
+	int time_dim;
+	double[][][] time_impact;
 
 	public ReductionTest1$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -1058,15 +1059,9 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// If time_coeff has not been set already allocate space.
 		if(!fixedFlag$sample101) {
 			// Constructor for time_coeff
@@ -1118,6 +1113,12 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 				logProbability$sample101[((i$var80 - 0) / 1)] = new double[((((TimeFeat[0].length - 1) - 0) / 1) + 1)];
 		}
 	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override

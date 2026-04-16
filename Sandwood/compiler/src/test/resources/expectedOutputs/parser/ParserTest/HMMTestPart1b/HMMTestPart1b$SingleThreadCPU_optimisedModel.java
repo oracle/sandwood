@@ -1,39 +1,41 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMTestPart1b$CoreInterface {
-	
+final class HMMTestPart1b$SingleThreadCPU extends CoreModelSingleThreadCPU implements HMMTestPart1b$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[] bias;
-	private boolean[] constrainedFlag$sample28;
-	private boolean[] constrainedFlag$sample45;
-	private boolean constrainedFlag$sample50 = true;
-	private double[] cv$var28$countGlobal;
-	private double[] cv$var49$stateProbabilityGlobal;
-	private boolean fixedFlag$sample28 = false;
-	private boolean fixedFlag$sample45 = false;
-	private boolean fixedFlag$sample50 = false;
-	private boolean fixedProbFlag$sample28 = false;
-	private boolean fixedProbFlag$sample45 = false;
-	private boolean fixedProbFlag$sample50 = false;
-	private boolean fixedProbFlag$sample53 = false;
-	private boolean flip;
-	private boolean flipMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double logProbability$flip;
-	private double logProbability$m;
-	private double logProbability$st;
-	private double logProbability$var28;
-	private double logProbability$var44;
-	private double[][] m;
-	private int st;
-	private boolean system$gibbsForward = true;
-	private double[] v;
+	double[] bias;
+	boolean[] constrainedFlag$sample28;
+	boolean[] constrainedFlag$sample45;
+	boolean constrainedFlag$sample50 = true;
+	boolean fixedFlag$sample28 = false;
+	boolean fixedFlag$sample45 = false;
+	boolean fixedFlag$sample50 = false;
+	boolean fixedProbFlag$sample28 = false;
+	boolean fixedProbFlag$sample45 = false;
+	boolean fixedProbFlag$sample50 = false;
+	boolean fixedProbFlag$sample53 = false;
+	boolean flip;
+	boolean flipMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$flip;
+	double logProbability$m;
+	double logProbability$st;
+	double logProbability$var28;
+	double logProbability$var44;
+	double[][] m;
+	int st;
+	int states;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[] cv$var28$countGlobal;
+	double[] cv$var49$stateProbabilityGlobal;
 
 	public HMMTestPart1b$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -299,7 +301,7 @@ final class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Increment the sample counter with the value sampled by sample task 50 of random
 			// variable var48
 			// 
-			// A local reference to the scratch space.
+									// A local reference to the scratch space.
 			cv$var28$countGlobal[st] = (cv$var28$countGlobal[st] + 1.0);
 		}
 		if(constrainedFlag$sample28[var27])
@@ -307,7 +309,7 @@ final class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// 
 			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
-			// A reference local to the function for the sample variable.
+									// A reference local to the function for the sample variable.
 			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var28$countGlobal, m[var27], 2);
 	}
 
@@ -381,9 +383,9 @@ final class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
 			// 
@@ -395,12 +397,12 @@ final class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Set an accumulator to record the consumer distributions not seen. Initially set
 			// to 1 as seen values will be deducted from this value.
 			// 
-			// An accumulator to allow the value for each distribution to be constructed before
+									// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			cv$var49$stateProbabilityGlobal[0] = ((((0.0 <= var50) && (var50 <= 1.0))?Math.log((flip?var50:(1.0 - var50))):Double.NEGATIVE_INFINITY) + (((0.0 <= var47[0]) && (var47[0] <= 1.0))?Math.log(var47[0]):Double.NEGATIVE_INFINITY));
 		}
 		
@@ -426,9 +428,9 @@ final class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
 		// 
@@ -440,12 +442,12 @@ final class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// Set an accumulator to record the consumer distributions not seen. Initially set
 		// to 1 as seen values will be deducted from this value.
 		// 
-		// An accumulator to allow the value for each distribution to be constructed before
+						// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
+						// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
+						// Substituted "cv$valuePos" with its value "1".
 		cv$var49$stateProbabilityGlobal[1] = ((((0.0 <= var50) && (var50 <= 1.0))?Math.log((flip?var50:(1.0 - var50))):Double.NEGATIVE_INFINITY) + (((0.0 <= var47[1]) && (var47[1] <= 1.0))?Math.log(var47[1]):Double.NEGATIVE_INFINITY));
 		
 		// This value is not used before it is set again, so removing the value declaration.
@@ -487,30 +489,30 @@ final class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Unrolled loop
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			cv$var49$stateProbabilityGlobal[0] = 0.5;
 			
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			cv$var49$stateProbabilityGlobal[1] = 0.5;
 		} else {
 			// Unrolled loop
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			cv$var49$stateProbabilityGlobal[0] = Math.exp((cv$var49$stateProbabilityGlobal[0] - cv$logSum));
 			
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			cv$var49$stateProbabilityGlobal[1] = Math.exp((cv$var49$stateProbabilityGlobal[1] - cv$logSum));
 		}
 		
 		// Set array values that are not computed for the input to negative infinity.
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		for(int cv$indexName = 2; cv$indexName < cv$var49$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Get a local reference to the scratch space.
 			cv$var49$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the new value of the sample.
 		// 
-		// cv$numStates's comment
+								// cv$numStates's comment
 		// variable marginalization
 		st = DistributionSampling.sampleCategorical(RNG$, cv$var49$stateProbabilityGlobal, 2);
 	}
@@ -752,7 +754,7 @@ final class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -766,7 +768,7 @@ final class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (((((0.0 <= st) && (st < 2)) && (0.0 <= var47[st])) && (var47[st] <= 1.0))?Math.log(var47[st]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
@@ -911,27 +913,9 @@ final class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var28$countGlobal
-		// 
-		// Allocation of cv$var28$countGlobal for single threaded execution
-		cv$var28$countGlobal = new double[2];
-		
-		// Allocation of cv$var49$stateProbabilityGlobal for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 48. Initially set to the value
-		// of putTask 29.
-		cv$var49$stateProbabilityGlobal = new double[2];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for v
 		v = new double[2];
 		
@@ -956,6 +940,24 @@ final class HMMTestPart1b$SingleThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var28$countGlobal
+		// 
+		// Allocation of cv$var28$countGlobal for single threaded execution
+		cv$var28$countGlobal = new double[2];
+		
+		// Allocation of cv$var49$stateProbabilityGlobal for single threaded execution
+		// 
+		// Variable to record the maximum value of Task Get 48. Initially set to the value
+		// of putTask 29.
+		cv$var49$stateProbabilityGlobal = new double[2];
 	}
 
 	// Method to execute the model code conventionally.

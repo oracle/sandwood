@@ -8,12 +8,14 @@
 
 package org.sandwood.compiler.compilation.inference.metropolisHastings;
 
-import static org.sandwood.compiler.trees.irTree.IRTree.*;
+import static org.sandwood.compiler.trees.irTree.IRTree.conditionalAssignment;
+import static org.sandwood.compiler.trees.irTree.IRTree.constant;
 import static org.sandwood.compiler.trees.irTree.IRTree.functionCallReturn;
 import static org.sandwood.compiler.trees.irTree.IRTree.initializeVariable;
 import static org.sandwood.compiler.trees.irTree.IRTree.lessThan;
 import static org.sandwood.compiler.trees.irTree.IRTree.load;
 import static org.sandwood.compiler.trees.irTree.IRTree.multiplyDD;
+import static org.sandwood.compiler.trees.irTree.IRTree.negate;
 import static org.sandwood.compiler.trees.irTree.IRTree.store;
 
 import java.util.List;
@@ -23,7 +25,6 @@ import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;

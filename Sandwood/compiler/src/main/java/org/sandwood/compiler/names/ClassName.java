@@ -12,19 +12,35 @@ import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.exceptions.CompilerException;
 
 public class ClassName extends Name {
-    protected static final String coreBase = "org.sandwood.runtime.internal.model.CoreModel";
+    public static final ClassName coreBase = new ClassName("org.sandwood.runtime.internal.model.CoreModel", true);
 
-    protected ClassName(String name) {
+    public static final ClassName wrapperBase = new ClassName("org.sandwood.runtime.model.Model", true);
+
+    public final boolean useInImport;
+
+    public ClassName(String name, boolean useInImport) {
         super(name);
         if(name == null)
             throw new CompilerException("Set null class name.");
+        this.useInImport = useInImport;
     }
 
     public static ClassName coreBase(ExecutionType target) {
-        return new ClassName(coreBase + target);
+        return new ClassName(coreBase.getName() + target, true);
     }
 
-    public static ClassName coreBase() {
-        return new ClassName(coreBase);
+    public static ClassName dereferencedName(String name) {
+        return new ClassName(name, false);
+    }
+
+    public static ClassName QualifiedName(PackageName packageName, ClassName outerClassName, ClassName InnerClassName) {
+        if(packageName.isEmpty())
+            return new ClassName(outerClassName + "." + InnerClassName, false);
+        else
+            return new ClassName(packageName + "." + outerClassName + "." + InnerClassName, true);
+    }
+
+    public static ClassName QualifiedName(ClassName outerClassName, ClassName InnerClassName) {
+        return new ClassName(outerClassName + "." + InnerClassName, false);
     }
 }

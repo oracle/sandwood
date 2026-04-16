@@ -1,49 +1,50 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMMTestPart3b$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMTestPart3b$CoreInterface {
-	
+final class HMMTestPart3b$SingleThreadCPU extends CoreModelSingleThreadCPU implements HMMTestPart3b$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[] bias;
-	private boolean[] constrainedFlag$sample28;
-	private boolean[] constrainedFlag$sample45;
-	private boolean constrainedFlag$sample53 = true;
-	private boolean[] constrainedFlag$sample75;
-	private double[] cv$var28$countGlobal;
-	private double[] cv$var52$stateProbabilityGlobal;
-	private double[] cv$var74$stateProbabilityGlobal;
-	private boolean fixedFlag$sample28 = false;
-	private boolean fixedFlag$sample45 = false;
-	private boolean fixedFlag$sample53 = false;
-	private boolean fixedFlag$sample75 = false;
-	private boolean fixedProbFlag$sample28 = false;
-	private boolean fixedProbFlag$sample45 = false;
-	private boolean fixedProbFlag$sample53 = false;
-	private boolean fixedProbFlag$sample75 = false;
-	private boolean fixedProbFlag$sample97 = false;
-	private boolean[] flips;
-	private boolean[] flipsMeasured;
-	private int length$flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double logProbability$m;
-	private double logProbability$st;
-	private double logProbability$var28;
-	private double logProbability$var44;
-	private double logProbability$var52;
-	private double logProbability$var74;
-	private double logProbability$var96;
-	private double[][] m;
-	private int samples;
-	private int[] st;
-	private int states;
-	private boolean system$gibbsForward = true;
-	private double[] v;
+	double[] bias;
+	boolean[] constrainedFlag$sample28;
+	boolean[] constrainedFlag$sample45;
+	boolean constrainedFlag$sample53 = true;
+	boolean[] constrainedFlag$sample75;
+	boolean fixedFlag$sample28 = false;
+	boolean fixedFlag$sample45 = false;
+	boolean fixedFlag$sample53 = false;
+	boolean fixedFlag$sample75 = false;
+	boolean fixedProbFlag$sample28 = false;
+	boolean fixedProbFlag$sample45 = false;
+	boolean fixedProbFlag$sample53 = false;
+	boolean fixedProbFlag$sample75 = false;
+	boolean fixedProbFlag$sample97 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	int length$flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$flips;
+	double logProbability$m;
+	double logProbability$st;
+	double logProbability$var28;
+	double logProbability$var44;
+	double logProbability$var52;
+	double logProbability$var74;
+	double logProbability$var96;
+	double[][] m;
+	int samples;
+	int[] st;
+	int states;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[] cv$var28$countGlobal;
+	double[] cv$var52$stateProbabilityGlobal;
+	double[] cv$var74$stateProbabilityGlobal;
 
 	public HMMTestPart3b$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -1647,42 +1648,9 @@ final class HMMTestPart3b$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var28$countGlobal
-		{
-			// Allocation of cv$var28$countGlobal for single threaded execution
-			cv$var28$countGlobal = new double[2];
-		}
-		
-		// Constructor for cv$var52$stateProbabilityGlobal
-		{
-			// Variable to record the maximum value of Task Get 51. Initially set to the value
-			// of putTask 29.
-			int cv$var29$max = 2;
-			
-			// Allocation of cv$var52$stateProbabilityGlobal for single threaded execution
-			cv$var52$stateProbabilityGlobal = new double[cv$var29$max];
-		}
-		
-		// Constructor for cv$var74$stateProbabilityGlobal
-		{
-			// Variable to record the maximum value of Task Get 73. Initially set to the value
-			// of putTask 29.
-			int cv$var29$max = 2;
-			
-			// Allocation of cv$var74$stateProbabilityGlobal for single threaded execution
-			cv$var74$stateProbabilityGlobal = new double[cv$var29$max];
-		}
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for v
 		{
 			v = new double[2];
@@ -1736,6 +1704,39 @@ final class HMMTestPart3b$SingleThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var28$countGlobal
+		{
+			// Allocation of cv$var28$countGlobal for single threaded execution
+			cv$var28$countGlobal = new double[2];
+		}
+		
+		// Constructor for cv$var52$stateProbabilityGlobal
+		{
+			// Variable to record the maximum value of Task Get 51. Initially set to the value
+			// of putTask 29.
+			int cv$var29$max = 2;
+			
+			// Allocation of cv$var52$stateProbabilityGlobal for single threaded execution
+			cv$var52$stateProbabilityGlobal = new double[cv$var29$max];
+		}
+		
+		// Constructor for cv$var74$stateProbabilityGlobal
+		{
+			// Variable to record the maximum value of Task Get 73. Initially set to the value
+			// of putTask 29.
+			int cv$var29$max = 2;
+			
+			// Allocation of cv$var74$stateProbabilityGlobal for single threaded execution
+			cv$var74$stateProbabilityGlobal = new double[cv$var29$max];
+		}
 	}
 
 	// Method to execute the model code conventionally.

@@ -1,4 +1,6 @@
-interface LinearRegression2Fail$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface LinearRegression2Fail$CoreInterface extends CoreModel {
 	public double get$b0();
 	public void set$b0(double cv$value, boolean allocated$);
 	public double get$b1();

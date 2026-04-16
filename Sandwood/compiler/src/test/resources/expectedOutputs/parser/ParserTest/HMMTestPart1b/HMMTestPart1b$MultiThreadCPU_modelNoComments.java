@@ -1,39 +1,40 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements HMMTestPart1b$CoreInterface {
-	private double[] bias;
-	private boolean[] constrainedFlag$sample28;
-	private boolean[] constrainedFlag$sample45;
-	private boolean constrainedFlag$sample50 = true;
-	private double[][] cv$var28$countGlobal;
-	private double[] cv$var49$stateProbabilityGlobal;
-	private boolean fixedFlag$sample28 = false;
-	private boolean fixedFlag$sample45 = false;
-	private boolean fixedFlag$sample50 = false;
-	private boolean fixedProbFlag$sample28 = false;
-	private boolean fixedProbFlag$sample45 = false;
-	private boolean fixedProbFlag$sample50 = false;
-	private boolean fixedProbFlag$sample53 = false;
-	private boolean flip;
-	private boolean flipMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double logProbability$flip;
-	private double logProbability$m;
-	private double logProbability$st;
-	private double logProbability$var28;
-	private double logProbability$var44;
-	private double[][] m;
-	private int st;
-	private int states;
-	private boolean system$gibbsForward = true;
-	private double[] v;
+final class HMMTestPart1b$MultiThreadCPU extends CoreModelMultiThreadCPU implements HMMTestPart1b$CoreInterface {
+double[] bias;
+	boolean[] constrainedFlag$sample28;
+	boolean[] constrainedFlag$sample45;
+	boolean constrainedFlag$sample50 = true;
+	boolean fixedFlag$sample28 = false;
+	boolean fixedFlag$sample45 = false;
+	boolean fixedFlag$sample50 = false;
+	boolean fixedProbFlag$sample28 = false;
+	boolean fixedProbFlag$sample45 = false;
+	boolean fixedProbFlag$sample50 = false;
+	boolean fixedProbFlag$sample53 = false;
+	boolean flip;
+	boolean flipMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$flip;
+	double logProbability$m;
+	double logProbability$st;
+	double logProbability$var28;
+	double logProbability$var44;
+	double[][] m;
+	int st;
+	int states;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[][] cv$var28$countGlobal;
+	double[] cv$var49$stateProbabilityGlobal;
 
 	public HMMTestPart1b$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -604,23 +605,7 @@ final class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void allocateScratch() {
-		{
-			{
-				int cv$threadCount = threadCount();
-				cv$var28$countGlobal = new double[cv$threadCount][];
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					cv$var28$countGlobal[cv$index] = new double[2];
-			}
-		}
-		{
-			int cv$var29$max = 2;
-			cv$var49$stateProbabilityGlobal = new double[cv$var29$max];
-		}
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		{
 			v = new double[2];
 		}
@@ -643,6 +628,22 @@ final class HMMTestPart1b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			constrainedFlag$sample28 = new boolean[((((2 - 1) - 0) / 1) + 1)];
 		}
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		{
+			{
+				int cv$threadCount = threadCount();
+				cv$var28$countGlobal = new double[cv$threadCount][];
+				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+					cv$var28$countGlobal[cv$index] = new double[2];
+			}
+		}
+		{
+			int cv$var29$max = 2;
+			cv$var49$stateProbabilityGlobal = new double[cv$var29$max];
+		}
 	}
 
 	@Override

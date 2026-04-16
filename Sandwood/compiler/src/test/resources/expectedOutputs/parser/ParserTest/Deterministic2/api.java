@@ -79,7 +79,7 @@ public class Deterministic2 extends GeneratedAPIBuilder {
         Variable<?>[] $variableNames = {n, flipsMeasured, states, v, m, a, b, flips};
         String[] $constructorArgs = {"n", "flipsMeasured"};
         Set<String> $helperClasses = new HashSet<>();
-        return compileAPI(opts, $variableNames, "Deterministic2", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), "/**\n * A model for the fairness work.\n */");
+        return compileAPI(opts, $variableNames, "Deterministic2", $helperClasses, "org.sandwood.compiler.tests.parser", $constructorArgs, getOriginalModel(), "A model for the fairness work.");
     }
 
     private static String getOriginalModel() {

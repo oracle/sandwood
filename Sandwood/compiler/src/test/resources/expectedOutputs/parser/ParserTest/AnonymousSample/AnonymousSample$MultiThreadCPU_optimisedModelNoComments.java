@@ -1,42 +1,43 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements AnonymousSample$CoreInterface {
-	private double[] amounts1;
-	private double[] amounts2;
-	private boolean constrainedFlag$sample15 = true;
-	private boolean constrainedFlag$sample21 = true;
-	private boolean constrainedFlag$sample9 = true;
-	private boolean fixedFlag$sample15 = false;
-	private boolean fixedFlag$sample21 = false;
-	private boolean fixedFlag$sample9 = false;
-	private boolean fixedProbFlag$sample15 = false;
-	private boolean fixedProbFlag$sample21 = false;
-	private boolean fixedProbFlag$sample35 = false;
-	private boolean fixedProbFlag$sample39 = false;
-	private boolean fixedProbFlag$sample9 = false;
-	private int length$obsAmounts1;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$amounts1;
-	private double logProbability$amounts2;
-	private double logProbability$mean1;
-	private double logProbability$mean2;
-	private double logProbability$priorSigma2;
-	private double[] logProbability$sample35;
-	private double[] logProbability$sample39;
-	private double logProbability$var39;
-	private double mean1;
-	private double mean2;
-	private int n;
-	private double[] obsAmounts1;
-	private double[] obsAmounts2;
-	private double priorSigma2;
-	private boolean system$gibbsForward = true;
-	private double[] var39;
+final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU implements AnonymousSample$CoreInterface {
+double[] amounts1;
+	double[] amounts2;
+	boolean constrainedFlag$sample15 = true;
+	boolean constrainedFlag$sample21 = true;
+	boolean constrainedFlag$sample9 = true;
+	boolean fixedFlag$sample15 = false;
+	boolean fixedFlag$sample21 = false;
+	boolean fixedFlag$sample9 = false;
+	boolean fixedProbFlag$sample15 = false;
+	boolean fixedProbFlag$sample21 = false;
+	boolean fixedProbFlag$sample35 = false;
+	boolean fixedProbFlag$sample39 = false;
+	boolean fixedProbFlag$sample9 = false;
+	int length$obsAmounts1;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$amounts1;
+	double logProbability$amounts2;
+	double logProbability$mean1;
+	double logProbability$mean2;
+	double logProbability$priorSigma2;
+	double[] logProbability$sample35;
+	double[] logProbability$sample39;
+	double logProbability$var39;
+	double mean1;
+	double mean2;
+	int n;
+	double[] obsAmounts1;
+	double[] obsAmounts2;
+	double priorSigma2;
+	boolean system$gibbsForward = true;
+	double[] var39;
 
 	public AnonymousSample$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -378,16 +379,16 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void allocateScratch() {}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		amounts1 = new double[length$obsAmounts1];
 		amounts2 = new double[length$obsAmounts1];
 		var39 = new double[length$obsAmounts1];
 		logProbability$sample35 = new double[length$obsAmounts1];
 		logProbability$sample39 = new double[length$obsAmounts1];
 	}
+
+	@Override
+	public final void allocateScratch() {}
 
 	@Override
 	public final void forwardGeneration() {

@@ -1,26 +1,27 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements InjectionAttackTest$CoreInterface {
-	
+final class InjectionAttackTest$MultiThreadCPU extends CoreModelMultiThreadCPU implements InjectionAttackTest$CoreInterface {
+
 	// Declare the variables for the model.
-	private double bias;
-	private boolean constrainedFlag$sample6 = true;
-	private boolean fixedFlag$sample6 = false;
-	private boolean fixedProbFlag$sample6 = false;
-	private boolean fixedProbFlag$sample8 = false;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double logProbability$binomial;
-	private double logProbability$positiveCount;
-	private int observedPositiveCount;
-	private int observedSampleCount;
-	private int positiveCount;
-	private boolean system$gibbsForward = true;
+	double bias;
+	boolean constrainedFlag$sample6 = true;
+	boolean fixedFlag$sample6 = false;
+	boolean fixedProbFlag$sample6 = false;
+	boolean fixedProbFlag$sample8 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$binomial;
+	double logProbability$positiveCount;
+	int observedPositiveCount;
+	int observedSampleCount;
+	int positiveCount;
+	boolean system$gibbsForward = true;
 
 	public InjectionAttackTest$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -151,7 +152,7 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		
 		// Write out the new value of the sample.
 		// 
-		// Include the value sampled by task 8 from random variable binomial.
+						// Include the value sampled by task 8 from random variable binomial.
 		// 
 		// Increment the number of booleans sampled.
 		// 
@@ -336,15 +337,15 @@ final class InjectionAttackTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {}
 
 	// Method to execute the model code conventionally.
 	@Override

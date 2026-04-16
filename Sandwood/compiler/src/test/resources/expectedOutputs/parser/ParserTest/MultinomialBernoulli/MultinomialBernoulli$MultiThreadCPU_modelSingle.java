@@ -1,42 +1,43 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements MultinomialBernoulli$CoreInterface {
-	
+final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU implements MultinomialBernoulli$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[] beta;
-	private boolean constrainedFlag$sample17 = true;
-	private boolean constrainedFlag$sample20 = true;
-	private double[] cv$var17$countGlobal;
-	private boolean fixedFlag$sample17 = false;
-	private boolean fixedFlag$sample20 = false;
-	private boolean fixedProbFlag$sample17 = false;
-	private boolean fixedProbFlag$sample20 = false;
-	private boolean fixedProbFlag$sample48 = false;
-	private boolean fixedProbFlag$sample60 = false;
-	private boolean fixedProbFlag$sample72 = false;
-	private int length;
-	private int length$observed;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$b1;
-	private double logProbability$b2;
-	private double logProbability$b3;
-	private double logProbability$output;
-	private double logProbability$p;
-	private double logProbability$prior;
-	private double logProbability$var48;
-	private double logProbability$var60;
-	private double logProbability$var72;
-	private int n;
-	private boolean[] observed;
-	private boolean[] output;
-	private double[] p;
-	private int[] prior;
-	private boolean system$gibbsForward = true;
+	double[] beta;
+	boolean constrainedFlag$sample17 = true;
+	boolean constrainedFlag$sample20 = true;
+	boolean fixedFlag$sample17 = false;
+	boolean fixedFlag$sample20 = false;
+	boolean fixedProbFlag$sample17 = false;
+	boolean fixedProbFlag$sample20 = false;
+	boolean fixedProbFlag$sample48 = false;
+	boolean fixedProbFlag$sample60 = false;
+	boolean fixedProbFlag$sample72 = false;
+	int length;
+	int length$observed;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$b1;
+	double logProbability$b2;
+	double logProbability$b3;
+	double logProbability$output;
+	double logProbability$p;
+	double logProbability$prior;
+	double logProbability$var48;
+	double logProbability$var60;
+	double logProbability$var72;
+	int n;
+	boolean[] observed;
+	boolean[] output;
+	double[] p;
+	int[] prior;
+	boolean system$gibbsForward = true;
+	double[] cv$var17$countGlobal;
 
 	public MultinomialBernoulli$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -1164,18 +1165,9 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocation of cv$var17$countGlobal for single threaded execution
-		cv$var17$countGlobal = new double[3];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for beta
 		{
 			beta = new double[3];
@@ -1204,6 +1196,15 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocation of cv$var17$countGlobal for single threaded execution
+		cv$var17$countGlobal = new double[3];
 	}
 
 	// Method to execute the model code conventionally.

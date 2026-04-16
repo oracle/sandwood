@@ -8,8 +8,6 @@
 
 package org.sandwood.compiler.trees.transformationTree;
 
-import java.util.HashSet;
-
 import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
@@ -61,7 +59,7 @@ public abstract class TransTreeReturn<X extends Variable<X>> extends TransTree<T
             case SingleThreadCPU:
                 return toOutputTreeReturnInternal();
             case MultiThreadCPU:
-                TransTreeReturn<X> tree = new ParallelIndexes().transform(this, new HashSet<>());
+                TransTreeReturn<X> tree = new ParallelIndexes().transform(this);
                 return tree.toOutputTreeReturnInternal();
             case GPU:
             default:

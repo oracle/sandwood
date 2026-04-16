@@ -39,29 +39,8 @@ public abstract class OutputFunction {
 
     public void generateComment(StringBuilder sb, int indent, String comment) {
         if(comment != Tree.NoComment) {
-            String[] parts = comment.split("\n");
-
-            // Split out bits that already have a new line.
-            for(String part:parts) {
-                addIndent(sb, indent);
-                sb.append("//");
-                int counter = 2;
-
-                // For each of these split them into 80 character lengths.
-                String[] words = part.split(" ");
-                for(String word:words) { // If the comment is more than 80 characters long start a new line.
-                    if(counter > 80) {
-                        sb.append("\n");
-                        addIndent(sb, indent);
-                        sb.append("//");
-                        counter = 2;
-                    }
-
-                    sb.append(" " + word);
-                    counter += word.length() + 1;
-                }
-                sb.append("\n");
-            }
+            addIndent(sb, indent);
+            OutputTree.addFormattedComment(sb, indent, comment, "", "//", "");
         }
     }
 

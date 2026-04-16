@@ -1,41 +1,43 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Deterministic2$CoreInterface {
-	
+final class Deterministic2$MultiThreadCPU extends CoreModelMultiThreadCPU implements Deterministic2$CoreInterface {
+
 	// Declare the variables for the model.
-	private int[] a;
-	private int[] b;
-	private boolean[] constrainedFlag$sample29;
-	private boolean[] constrainedFlag$sample55;
-	private double[] cv$distributionAccumulator$var53;
-	private double[][] cv$var29$countGlobal;
-	private double[] cv$var54$stateProbabilityGlobal;
-	private double[][] distribution$sample55;
-	private boolean fixedFlag$sample29 = false;
-	private boolean fixedFlag$sample55 = false;
-	private boolean fixedProbFlag$sample29 = false;
-	private boolean fixedProbFlag$sample55 = false;
-	private boolean fixedProbFlag$sample75 = false;
-	private boolean[] flips;
-	private boolean[] flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$a;
-	private double logProbability$b;
-	private double logProbability$flips;
-	private double logProbability$m;
-	private double[] logProbability$sample55;
-	private double logProbability$var29;
-	private double logProbability$var74;
-	private double[][] m;
-	private int n;
-	private boolean system$gibbsForward = true;
-	private double[] v;
+	int[] a;
+	int[] b;
+	boolean[] constrainedFlag$sample29;
+	boolean[] constrainedFlag$sample55;
+	double[][] distribution$sample55;
+	boolean fixedFlag$sample29 = false;
+	boolean fixedFlag$sample55 = false;
+	boolean fixedProbFlag$sample29 = false;
+	boolean fixedProbFlag$sample55 = false;
+	boolean fixedProbFlag$sample75 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$a;
+	double logProbability$b;
+	double logProbability$flips;
+	double logProbability$m;
+	double[] logProbability$sample55;
+	double logProbability$var29;
+	double logProbability$var74;
+	double[][] m;
+	int n;
+	int states;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[] cv$distributionAccumulator$var53;
+	double[][] cv$var29$countGlobal;
+	double[] cv$var54$stateProbabilityGlobal;
 
 	public Deterministic2$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -287,7 +289,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Increment the sample counter with the value sampled by sample task 55 of random
 				// variable var53
 				// 
-				// Substituted "i$var46" with its value "1".
+												// Substituted "i$var46" with its value "1".
 				cv$countLocal[a[1]] = (cv$countLocal[a[1]] + 1.0);
 			}
 			for(int i$var46 = 2; i$var46 < n; i$var46 += 1) {
@@ -316,7 +318,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 				for(int cv$loopIndex = 0; cv$loopIndex < 5; cv$loopIndex += 1)
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// Add the probability of this argument configuration.
+															// Add the probability of this argument configuration.
 					// 
 					// Declare and zero an accumulator for tracking the reached source probability space.
 					cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + distribution$sample55[0][cv$loopIndex]);
@@ -331,7 +333,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 					if((1 <= index$i$27)) {
 						// The probability of reaching the consumer with this set of consumer arguments
 						// 
-						// cv$probabilitySample55Value29's comment
+																								// cv$probabilitySample55Value29's comment
 						// Update the probability of sampling this value from the distribution value.
 						// 
 						// Substituted "index$sample55$28" with its value "var28".
@@ -370,16 +372,16 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 			cv$numStates = 5;
 		int index$i$5 = (i$var46 - 1);
 		
-		// index$i$1's comment
+								// index$i$1's comment
 		// Copy of index so that its values can be safely substituted
 		// 
-		// Substituted "index$i$5" with its value "(i$var46 - 1)".
+						// Substituted "index$i$5" with its value "(i$var46 - 1)".
 		// 
-		// Substituted "index$i$5" with its value "(i$var46 - 1)".
+						// Substituted "index$i$5" with its value "(i$var46 - 1)".
 		// 
-		// Substituted "index$i$5" with its value "(i$var46 - 1)".
+						// Substituted "index$i$5" with its value "(i$var46 - 1)".
 		// 
-		// Substituted "index$i$5" with its value "(i$var46 - 1)".
+						// Substituted "index$i$5" with its value "(i$var46 - 1)".
 		if(((1 <= index$i$5) && !(index$i$5 == i$var46)))
 			// variable marginalization
 			cv$numStates = 5;
@@ -413,7 +415,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 				
 				// Constructing a random variable input for use later.
 				// 
-				// Looking for a path between Sample 55 and consumer Bernoulli 73.
+												// Looking for a path between Sample 55 and consumer Bernoulli 73.
 				// 
 				// Value of the variable at this index
 				double var72 = (double)(1 / cv$valuePos);
@@ -426,24 +428,24 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Set an accumulator to record the consumer distributions not seen. Initially set
 				// to 1 as seen values will be deducted from this value.
 				// 
-				// An accumulator to allow the value for each distribution to be constructed before
+												// An accumulator to allow the value for each distribution to be constructed before
 				// it is added to the index probabilities.
 				// 
-				// Value of the variable at this index
+												// Value of the variable at this index
 				cv$stateProbabilityValue = ((((0.0 <= var72) && (var72 <= 1.0))?Math.log((flips[0]?var72:(1.0 - var72))):Double.NEGATIVE_INFINITY) + (((0.0 <= var52[cv$valuePos]) && (var52[cv$valuePos] <= 1.0))?Math.log(var52[cv$valuePos]):Double.NEGATIVE_INFINITY));
 			}
 			int index$i$15 = (i$var46 - 1);
 			
-			// index$i$1's comment
+												// index$i$1's comment
 			// Copy of index so that its values can be safely substituted
 			// 
-			// Substituted "index$i$15" with its value "(i$var46 - 1)".
+									// Substituted "index$i$15" with its value "(i$var46 - 1)".
 			// 
-			// Substituted "index$i$15" with its value "(i$var46 - 1)".
+									// Substituted "index$i$15" with its value "(i$var46 - 1)".
 			// 
-			// Substituted "index$i$15" with its value "(i$var46 - 1)".
+									// Substituted "index$i$15" with its value "(i$var46 - 1)".
 			// 
-			// Substituted "index$i$15" with its value "(i$var46 - 1)".
+									// Substituted "index$i$15" with its value "(i$var46 - 1)".
 			if(((1 <= index$i$15) && !(index$i$15 == i$var46))) {
 				// Enumerating the possible outputs of Categorical 53.
 				for(int index$sample55$16 = 0; index$sample55$16 < 5; index$sample55$16 += 1) {
@@ -461,7 +463,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 					
 					// Constructing a random variable input for use later.
 					// 
-					// Looking for a path between Sample 55 and consumer Bernoulli 73.
+															// Looking for a path between Sample 55 and consumer Bernoulli 73.
 					double var72 = (double)(1 / index$sample55$16);
 					
 					// Variable declaration of cv$accumulatedProbabilities moved.
@@ -469,7 +471,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
 					// 
-					// Value of the variable at this index
+															// Value of the variable at this index
 					// 
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -479,10 +481,10 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
-					// An accumulator to allow the value for each distribution to be constructed before
+															// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
 					// 
-					// Value of the variable at this index
+															// Value of the variable at this index
 					double cv$accumulatedProbabilities = (((((0.0 <= var72) && (var72 <= 1.0))?Math.log((flips[(i$var46 - 1)]?var72:(1.0 - var72))):Double.NEGATIVE_INFINITY) + Math.log(cv$probabilitySample55Value17)) + (((0.0 <= var52[cv$valuePos]) && (var52[cv$valuePos] <= 1.0))?Math.log(var52[cv$valuePos]):Double.NEGATIVE_INFINITY));
 					
 					// Add the values for the source and any standard consumers for this configuration
@@ -517,38 +519,38 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 					scopeVariable$reachedSourceProbability = 1.0;
 				int index$i$41 = (i$var46 - 1);
 				
-				// index$i$1's comment
+																// index$i$1's comment
 				// Copy of index so that its values can be safely substituted
 				// 
-				// index$i$36's comment
+																// index$i$36's comment
 				// Processing sample task 55 of consumer random variable null.
 				// 
 				// Copy of index so that its values can be safely substituted
 				// 
 				// Substituted "index$i$34_4" with its value "index$i$34_2".
 				// 
-				// Substituted "index$i$34_2" with its value "(i$var46 + 1)".
+												// Substituted "index$i$34_2" with its value "(i$var46 + 1)".
 				// 
-				// Substituted "index$i$34_2" with its value "(i$var46 + 1)".
+												// Substituted "index$i$34_2" with its value "(i$var46 + 1)".
 				// 
-				// Substituted "index$i$34_2" with its value "(i$var46 + 1)".
+												// Substituted "index$i$34_2" with its value "(i$var46 + 1)".
 				// 
-				// Substituted "index$i$34_2" with its value "(i$var46 + 1)".
+												// Substituted "index$i$34_2" with its value "(i$var46 + 1)".
 				// 
-				// Substituted "index$i$34_2" with its value "(i$var46 + 1)".
+												// Substituted "index$i$34_2" with its value "(i$var46 + 1)".
 				if((((1 <= index$i$41) && !(index$i$41 == i$var46)) && !(index$i$41 == index$i$34_2))) {
 					// Enumerating the possible outputs of Categorical 53.
 					for(int index$sample55$42 = 0; index$sample55$42 < 5; index$sample55$42 += 1)
 						// Add the probability of this argument configuration.
 						// 
-						// cv$probabilitySample55Value43's comment
+												// cv$probabilitySample55Value43's comment
 						// Update the probability of sampling this value from the distribution value.
 						scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + distribution$sample55[(index$i$41 - 1)][index$sample55$42]);
 				}
 				
 				// Add the current distribution to the distribution accumulator.
 				// 
-				// The probability of reaching the consumer with this set of consumer arguments
+												// The probability of reaching the consumer with this set of consumer arguments
 				// 
 				// Constructing a random variable input for use later.
 				// 
@@ -600,7 +602,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Initialize a log space accumulator to take the product of all the distribution
 				// probabilities.
 				// 
-				// Record the reached distribution.
+												// Record the reached distribution.
 				// 
 				// The probability of reaching the consumer with this set of consumer arguments
 				// 
@@ -720,7 +722,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 						// Substituted "index$i$6_2" with its value "i$var46".
 						int traceTempVariable$var51$6_3 = a[(i$var46 - 1)];
 						
-						// Substituted "index$i$6_2" with its value "i$var46".
+																		// Substituted "index$i$6_2" with its value "i$var46".
 						if(((0 <= traceTempVariable$var51$6_3) && (traceTempVariable$var51$6_3 < 5))) {
 							double[] var52 = m[traceTempVariable$var51$6_3];
 							
@@ -755,7 +757,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 					// Store the sample task probability
 					logProbability$sample55[(i$var46 - 1)] = cv$distributionAccumulator;
 					
-					// Guard to ensure that b is only updated once for this probability.
+															// Guard to ensure that b is only updated once for this probability.
 					if((i$var46 < (n - 1)))
 						// Update the variable probability
 						logProbability$b = (logProbability$b + cv$distributionAccumulator);
@@ -1091,7 +1093,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Store the sample task probability
 				logProbability$sample55[(i$var46 - 1)] = cv$distributionAccumulator;
 				
-				// Guard to ensure that b is only updated once for this probability.
+												// Guard to ensure that b is only updated once for this probability.
 				if((i$var46 < (n - 1)))
 					// Update the variable probability
 					logProbability$b = (logProbability$b + cv$distributionAccumulator);
@@ -1135,7 +1137,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 				double cv$sampleValue = logProbability$sample55[(i$var46 - 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
-				// Guard to ensure that b is only updated once for this probability.
+												// Guard to ensure that b is only updated once for this probability.
 				if((i$var46 < (n - 1)))
 					// Update the variable probability
 					logProbability$b = (logProbability$b + cv$sampleValue);
@@ -1246,44 +1248,9 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var29$countGlobal
-		// 
-		// Allocation of cv$var29$countGlobal for multithreaded execution
-		// 
-		// Get the thread count.
-		int cv$threadCount = threadCount();
-		
-		// Allocate an array to hold a copy per thread
-		cv$var29$countGlobal = new double[cv$threadCount][];
-		
-		// Populate the array with a copy per thread
-		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			cv$var29$countGlobal[cv$index] = new double[5];
-		
-		// Constructor for cv$distributionAccumulator$var53
-		// 
-		// Allocation of cv$distributionAccumulator$var53 for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 53. Initially set to the value
-		// of putTask 30.
-		cv$distributionAccumulator$var53 = new double[5];
-		
-		// Allocation of cv$var54$stateProbabilityGlobal for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 53. Initially set to the value
-		// of putTask 30.
-		cv$var54$stateProbabilityGlobal = new double[5];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for v
 		v = new double[5];
 		
@@ -1322,6 +1289,41 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var29$countGlobal
+		// 
+		// Allocation of cv$var29$countGlobal for multithreaded execution
+		// 
+		// Get the thread count.
+		int cv$threadCount = threadCount();
+		
+		// Allocate an array to hold a copy per thread
+		cv$var29$countGlobal = new double[cv$threadCount][];
+		
+		// Populate the array with a copy per thread
+		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+			cv$var29$countGlobal[cv$index] = new double[5];
+		
+		// Constructor for cv$distributionAccumulator$var53
+		// 
+		// Allocation of cv$distributionAccumulator$var53 for single threaded execution
+		// 
+		// Variable to record the maximum value of Task Get 53. Initially set to the value
+		// of putTask 30.
+		cv$distributionAccumulator$var53 = new double[5];
+		
+		// Allocation of cv$var54$stateProbabilityGlobal for single threaded execution
+		// 
+		// Variable to record the maximum value of Task Get 53. Initially set to the value
+		// of putTask 30.
+		cv$var54$stateProbabilityGlobal = new double[5];
 	}
 
 	// Method to execute the model code conventionally.

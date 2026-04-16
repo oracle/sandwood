@@ -1,45 +1,46 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ReductionTest$CoreInterface {
-	
+final class ReductionTest$SingleThreadCPU extends CoreModelSingleThreadCPU implements ReductionTest$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[] bias;
-	private boolean[] constrainedFlag$sample30;
-	private boolean[] constrainedFlag$sample47;
-	private boolean[] constrainedFlag$sample62;
-	private double[] cv$var30$countGlobal;
-	private double[] cv$var61$stateProbabilityGlobal;
-	private boolean fixedFlag$sample30 = false;
-	private boolean fixedFlag$sample47 = false;
-	private boolean fixedFlag$sample62 = false;
-	private boolean fixedProbFlag$sample30 = false;
-	private boolean fixedProbFlag$sample47 = false;
-	private boolean fixedProbFlag$sample62 = false;
-	private boolean fixedProbFlag$sample87 = false;
-	private boolean[] flips;
-	private boolean[] flipsMeasured;
-	private int length$flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double logProbability$m;
-	private double[] logProbability$sample62;
-	private double[] logProbability$sample87;
-	private double logProbability$st;
-	private double logProbability$var30;
-	private double logProbability$var46;
-	private double[][] m;
-	private int noCats;
-	private int noFlips;
-	private int noStates;
-	private int[] st;
-	private boolean system$gibbsForward = true;
-	private double[] v;
+	double[] bias;
+	boolean[] constrainedFlag$sample30;
+	boolean[] constrainedFlag$sample47;
+	boolean[] constrainedFlag$sample62;
+	boolean fixedFlag$sample30 = false;
+	boolean fixedFlag$sample47 = false;
+	boolean fixedFlag$sample62 = false;
+	boolean fixedProbFlag$sample30 = false;
+	boolean fixedProbFlag$sample47 = false;
+	boolean fixedProbFlag$sample62 = false;
+	boolean fixedProbFlag$sample87 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	int length$flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$flips;
+	double logProbability$m;
+	double[] logProbability$sample62;
+	double[] logProbability$sample87;
+	double logProbability$st;
+	double logProbability$var30;
+	double logProbability$var46;
+	double[][] m;
+	int noCats;
+	int noFlips;
+	int noStates;
+	int[] st;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[] cv$var30$countGlobal;
+	double[] cv$var61$stateProbabilityGlobal;
 
 	public ReductionTest$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -339,7 +340,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Increment the sample counter with the value sampled by sample task 62 of random
 			// variable var60
 			// 
-			// A local reference to the scratch space.
+									// A local reference to the scratch space.
 			cv$var30$countGlobal[st[var29]] = (cv$var30$countGlobal[st[var29]] + 1.0);
 		}
 		if(constrainedFlag$sample30[var29])
@@ -347,7 +348,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// 
 			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
-			// A reference local to the function for the sample variable.
+									// A reference local to the function for the sample variable.
 			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var30$countGlobal, m[var29], noStates);
 	}
 
@@ -380,7 +381,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
-			// j$var80's comment
+												// j$var80's comment
 			// Set the right hand term to a value from the array st
 			reduceVar$var82$0 = (reduceVar$var82$0 + st[cv$reduction78Index]);
 		if((var45 == reduceVar$var82$0)) {
@@ -419,7 +420,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// 
 		// variable marginalization
 		// 
-		// cv$numStates's comment
+				// cv$numStates's comment
 		// Calculate the number of states to evaluate.
 		int cv$numStates = Math.max(0, noStates);
 		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
@@ -434,7 +435,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			double cv$accumulatedProbabilities = (((((cv$valuePos < noStates) && (0 < noStates)) && (0.0 <= var59[cv$valuePos])) && (var59[cv$valuePos] <= 1.0))?Math.log(var59[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Reduction of array st
@@ -450,7 +451,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// j$var80's comment
+																// j$var80's comment
 				// Set the right hand term to a value from the array st
 				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction267Index]);
 			for(int cv$reduction267Index = (i$var58 + 1); cv$reduction267Index < noCats; cv$reduction267Index += 1)
@@ -458,7 +459,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// j$var80's comment
+																// j$var80's comment
 				// Set the right hand term to a value from the array st
 				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction267Index]);
 			
@@ -493,7 +494,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
 			// Record the reached probability density.
 			// 
@@ -550,7 +551,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			} else {
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					// Get a local reference to the scratch space.
+															// Get a local reference to the scratch space.
 					cv$var61$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var61$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
@@ -839,7 +840,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
-					// j$var80's comment
+																				// j$var80's comment
 					// Set the right hand term to a value from the array st
 					reduceVar$var82$2 = (reduceVar$var82$2 + st[cv$reduction78Index]);
 				double var83 = bias[reduceVar$var82$2];
@@ -909,27 +910,9 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var30$countGlobal
-		// 
-		// Allocation of cv$var30$countGlobal for single threaded execution
-		cv$var30$countGlobal = new double[((0.0 <= noCats)?(flipsMeasured.length / noCats):((noCats < 0.0)?(flipsMeasured.length / noCats):flipsMeasured.length))];
-		
-		// Allocation of cv$var61$stateProbabilityGlobal for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 60. Initially set to the value
-		// of putTask 31.
-		cv$var61$stateProbabilityGlobal = new double[((0.0 <= noCats)?(flipsMeasured.length / noCats):((noCats < 0.0)?(flipsMeasured.length / noCats):flipsMeasured.length))];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for v
 		v = new double[(length$flipsMeasured / noCats)];
 		
@@ -973,6 +956,24 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		allocateScratch();
 	}
 
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var30$countGlobal
+		// 
+		// Allocation of cv$var30$countGlobal for single threaded execution
+		cv$var30$countGlobal = new double[((0.0 <= noCats)?(flipsMeasured.length / noCats):((noCats < 0.0)?(flipsMeasured.length / noCats):flipsMeasured.length))];
+		
+		// Allocation of cv$var61$stateProbabilityGlobal for single threaded execution
+		// 
+		// Variable to record the maximum value of Task Get 60. Initially set to the value
+		// of putTask 31.
+		cv$var61$stateProbabilityGlobal = new double[((0.0 <= noCats)?(flipsMeasured.length / noCats):((noCats < 0.0)?(flipsMeasured.length / noCats):flipsMeasured.length))];
+	}
+
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
@@ -1007,7 +1008,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// j$var80's comment
+																// j$var80's comment
 				// Set the right hand term to a value from the array st
 				reduceVar$var82$3 = (reduceVar$var82$3 + st[cv$reduction78Index]);
 			flips[j$var73] = DistributionSampling.sampleBernoulli(RNG$, bias[reduceVar$var82$3]);
@@ -1073,7 +1074,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
-				// j$var80's comment
+																// j$var80's comment
 				// Set the right hand term to a value from the array st
 				reduceVar$var82$4 = (reduceVar$var82$4 + st[cv$reduction78Index]);
 			flips[j$var73] = DistributionSampling.sampleBernoulli(RNG$, bias[reduceVar$var82$4]);

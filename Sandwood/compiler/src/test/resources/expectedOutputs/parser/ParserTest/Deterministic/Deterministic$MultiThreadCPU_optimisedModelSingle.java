@@ -1,39 +1,41 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Deterministic$CoreInterface {
-	
+final class Deterministic$MultiThreadCPU extends CoreModelMultiThreadCPU implements Deterministic$CoreInterface {
+
 	// Declare the variables for the model.
-	private int[] a;
-	private int[] b;
-	private boolean[] constrainedFlag$sample29;
-	private boolean[] constrainedFlag$sample55;
-	private double[][] cv$var29$countGlobal;
-	private double[] cv$var54$stateProbabilityGlobal;
-	private boolean fixedFlag$sample29 = false;
-	private boolean fixedFlag$sample55 = false;
-	private boolean fixedProbFlag$sample29 = false;
-	private boolean fixedProbFlag$sample55 = false;
-	private boolean fixedProbFlag$sample75 = false;
-	private boolean[] flips;
-	private boolean[] flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$a;
-	private double logProbability$b;
-	private double logProbability$flips;
-	private double logProbability$m;
-	private double[] logProbability$sample55;
-	private double logProbability$var29;
-	private double logProbability$var74;
-	private double[][] m;
-	private int n;
-	private boolean system$gibbsForward = true;
-	private double[] v;
+	int[] a;
+	int[] b;
+	boolean[] constrainedFlag$sample29;
+	boolean[] constrainedFlag$sample55;
+	boolean fixedFlag$sample29 = false;
+	boolean fixedFlag$sample55 = false;
+	boolean fixedProbFlag$sample29 = false;
+	boolean fixedProbFlag$sample55 = false;
+	boolean fixedProbFlag$sample75 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$a;
+	double logProbability$b;
+	double logProbability$flips;
+	double logProbability$m;
+	double[] logProbability$sample55;
+	double logProbability$var29;
+	double logProbability$var74;
+	double[][] m;
+	int n;
+	int states;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[][] cv$var29$countGlobal;
+	double[] cv$var54$stateProbabilityGlobal;
 
 	public Deterministic$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -288,7 +290,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private final void inferSample55(int i$var46) {
 		constrainedFlag$sample55[(i$var46 - 1)] = false;
 		
-		// cv$numStates's comment
+				// cv$numStates's comment
 		// variable marginalization
 		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
 			// Guards to ensure that a is only updated when there is a valid path.
@@ -309,7 +311,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			double cv$accumulatedProbabilities = (((0.0 <= var52[cv$valuePos]) && (var52[cv$valuePos] <= 1.0))?Math.log(var52[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			int index$i$3_2 = (i$var46 + 1);
 			if(((index$i$3_2 < n) && (fixedFlag$sample55 || constrainedFlag$sample55[(index$i$3_2 - 1)]))) {
@@ -335,7 +337,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "index$i$3_4" with its value "index$i$3_2".
+												// Substituted "index$i$3_4" with its value "index$i$3_2".
 				cv$accumulatedProbabilities = ((((((0.0 <= a[index$i$3_2]) && (a[index$i$3_2] < 5)) && (0.0 <= sc$var52$1[a[index$i$3_2]])) && (sc$var52$1[a[index$i$3_2]] <= 1.0))?Math.log(sc$var52$1[a[index$i$3_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
@@ -344,7 +346,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// Constructing a random variable input for use later.
 			// 
-			// Looking for a path between Sample 55 and consumer Bernoulli 73.
+									// Looking for a path between Sample 55 and consumer Bernoulli 73.
 			// 
 			// Value of the variable at this index
 			double var72 = (double)(1 / cv$valuePos);
@@ -367,7 +369,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
 			// Record the reached probability density.
 			// 
@@ -423,7 +425,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				
 				// Offset values, move to normal space, and sum.
 				// 
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				for(int cv$lseIndex = 0; cv$lseIndex < 5; cv$lseIndex += 1)
 					// Get a local reference to the scratch space.
@@ -439,24 +441,24 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Normalize log space values and move to normal space
 				// 
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
-					// Get a local reference to the scratch space.
+															// Get a local reference to the scratch space.
 					cv$var54$stateProbabilityGlobal[cv$indexName] = 0.2;
 			} else {
 				// Normalize log space values and move to normal space
 				// 
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
-					// Get a local reference to the scratch space.
+															// Get a local reference to the scratch space.
 					cv$var54$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var54$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			for(int cv$indexName = 5; cv$indexName < cv$var54$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var54$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
@@ -466,7 +468,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
 			a[i$var46] = DistributionSampling.sampleCategorical(RNG$, cv$var54$stateProbabilityGlobal, 5);
 			
@@ -611,7 +613,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// Store the sample task probability
 				logProbability$sample55[(i$var46 - 1)] = cv$distributionAccumulator;
 				
-				// Guard to ensure that b is only updated once for this probability.
+												// Guard to ensure that b is only updated once for this probability.
 				if((i$var46 < (n - 1)))
 					// Update the variable probability
 					logProbability$b = (logProbability$b + cv$distributionAccumulator);
@@ -655,7 +657,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				double cv$sampleValue = logProbability$sample55[(i$var46 - 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
-				// Guard to ensure that b is only updated once for this probability.
+												// Guard to ensure that b is only updated once for this probability.
 				if((i$var46 < (n - 1)))
 					// Update the variable probability
 					logProbability$b = (logProbability$b + cv$sampleValue);
@@ -766,36 +768,9 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var29$countGlobal
-		// 
-		// Allocation of cv$var29$countGlobal for multithreaded execution
-		// 
-		// Get the thread count.
-		int cv$threadCount = threadCount();
-		
-		// Allocate an array to hold a copy per thread
-		cv$var29$countGlobal = new double[cv$threadCount][];
-		
-		// Populate the array with a copy per thread
-		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			cv$var29$countGlobal[cv$index] = new double[5];
-		
-		// Allocation of cv$var54$stateProbabilityGlobal for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 53. Initially set to the value
-		// of putTask 30.
-		cv$var54$stateProbabilityGlobal = new double[5];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for v
 		v = new double[5];
 		
@@ -829,6 +804,33 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var29$countGlobal
+		// 
+		// Allocation of cv$var29$countGlobal for multithreaded execution
+		// 
+		// Get the thread count.
+		int cv$threadCount = threadCount();
+		
+		// Allocate an array to hold a copy per thread
+		cv$var29$countGlobal = new double[cv$threadCount][];
+		
+		// Populate the array with a copy per thread
+		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+			cv$var29$countGlobal[cv$index] = new double[5];
+		
+		// Allocation of cv$var54$stateProbabilityGlobal for single threaded execution
+		// 
+		// Variable to record the maximum value of Task Get 53. Initially set to the value
+		// of putTask 30.
+		cv$var54$stateProbabilityGlobal = new double[5];
 	}
 
 	// Method to execute the model code conventionally.

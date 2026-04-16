@@ -1,12 +1,14 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK12b$CoreInterface {
-	
+final class Flip1CoinMK12b$SingleThreadCPU extends CoreModelSingleThreadCPU implements Flip1CoinMK12b$CoreInterface {
+
 	// Declare the variables for the model.
+<<<<<<< Upstream, based on POW
 	private double bias;
 	private boolean constrainedFlag$sample16 = true;
 	private boolean constrainedFlag$sample28 = true;
@@ -39,6 +41,41 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 	private double var14;
 	private double var26;
 	private double var33;
+=======
+	double bias;
+	boolean constrainedFlag$sample16 = true;
+	boolean constrainedFlag$sample28 = true;
+	boolean constrainedFlag$sample35 = true;
+	boolean fixedFlag$sample16 = false;
+	boolean fixedFlag$sample28 = false;
+	boolean fixedFlag$sample35 = false;
+	boolean fixedProbFlag$sample16 = false;
+	boolean fixedProbFlag$sample28 = false;
+	boolean fixedProbFlag$sample35 = false;
+	boolean fixedProbFlag$sample52 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	boolean guard1;
+	int guard2;
+	int length$flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bernoulli;
+	double logProbability$bias;
+	double logProbability$flips;
+	double logProbability$sample16;
+	double logProbability$sample28;
+	double logProbability$sample35;
+	double logProbability$var14;
+	double logProbability$var26;
+	double logProbability$var33;
+	double logProbability$var48;
+	int samples;
+	boolean system$gibbsForward = true;
+	double var14;
+	double var26;
+	double var33;
+>>>>>>> daee89e Adding in a class to hold just the state. This will be worked on further as the code generation progresses. Commit before adding inner classes to the outer classes. Updating output class structure checkpoint Checkpoint in the restructuring of the output classes to increase the shared code. Finished restructuring the classes, time to start using inner classes. Updates to tree structure Changing the structure of get field so that it can be used to get other types of field, read for getting data out of the scratch and model data classes. Removing unused imports Adding nodes to allow fields in an object ot be set. Moving rng package so that we can add other internal only variable types. Updates to the handling of transformations. Moving from sets to lists of generics Updating the structure of inner class. Changing the passing of fields to sub classes. Updating class structure
 
 	public Flip1CoinMK12b$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -1009,18 +1046,18 @@ final class Flip1CoinMK12b$SingleThreadCPU extends org.sandwood.runtime.internal
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// Constructor for flips
+		flips = new boolean[length$flipsMeasured];
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// Constructor for flips
-		flips = new boolean[length$flipsMeasured];
-	}
 
 	// Method to execute the model code conventionally.
 	@Override

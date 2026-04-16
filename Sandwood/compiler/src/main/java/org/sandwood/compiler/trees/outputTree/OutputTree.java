@@ -16,13 +16,14 @@ import java.util.Set;
 
 import org.sandwood.compiler.compilation.ExternalFunction;
 import org.sandwood.compiler.compilation.FunctionType;
+import org.sandwood.compiler.dataflowGraph.variables.ObjectVariable;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.ArrayType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.RandomVariableType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
-import org.sandwood.compiler.dataflowGraph.variables.rng.RandomNumberGenerator;
+import org.sandwood.compiler.dataflowGraph.variables.internal.RandomNumberGenerator;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
@@ -50,35 +51,69 @@ public abstract class OutputTree extends Tree<OutputTree> {
                 sb.append("\n");
                 addIndent(sb, indent);
             }
-            String[] parts = comment.split("\n");
+            addFormattedComment(sb, indent, comment, "", "//", "");
+            addIndent(sb, indent);
+        }
+    }
+
+    static void addFormattedComment(StringBuilder sb, int indent, String comment, String prefix, String lineBreak,
+            String postfix) {
+
+        String[] parts = comment.split("\n");
+
+        if(parts.length == 1 && parts[0].length() < 80) {
+            if(prefix.length() == 0)
+                sb.append(lineBreak + " " + parts[0] + "\n");
+            else
+                sb.append(prefix + " " + parts[0] + postfix + "\n");
+        } else {
             boolean lastLineEmpty = true;
+            boolean first = true;
+
+            if(!prefix.equals("")) {
+                sb.append(prefix + "\n");
+                addIndent(sb, indent);
+            }
 
             // Split out bits that already have a new line.
             for(String part:parts) {
+                if(first)
+                    first = false;
+                else
+                    addIndent(sb, indent);
+
                 // Test to make sure we only ever have one empty line in a sequence.
                 boolean empty = part.equals("");
                 if(!empty || !lastLineEmpty) {
                     lastLineEmpty = empty;
 
-                    sb.append("//");
-                    int counter = 2;
+                    sb.append(lineBreak);
+                    int counter = lineBreak.length();
 
                     // For each of these split them into 80 character lengths.
                     String[] words = part.split(" ");
+                    int paramIndent = words[0].equals("@param") ? words[0].length() + words[1].length() + 2 : 0;
                     for(String word:words) { // If the comment is more than 80 characters long start a new line.
                         if(counter > 80) {
                             sb.append("\n");
                             addIndent(sb, indent);
-                            sb.append("//");
-                            counter = 2;
+                            sb.append(lineBreak);
+                            counter = lineBreak.length();
+                            for(int i = 0; i < paramIndent; i++)
+                                sb.append(" ");
+                            counter += paramIndent;
                         }
 
                         sb.append(" " + word);
-                        counter += word.length() + 1;
+                        counter += 1 + word.length();
                     }
                     sb.append("\n");
-                    addIndent(sb, indent);
                 }
+            }
+
+            if(!postfix.equals("")) {
+                addIndent(sb, indent);
+                sb.append(postfix + "\n");
             }
         }
     }
@@ -111,6 +146,7 @@ public abstract class OutputTree extends Tree<OutputTree> {
         NOP,
         PAR_FOR_LAMBDA,
         SCOPE,
+        SET_FIELD,
         SEQUENTIAL,
         STORE
     }
@@ -253,8 +289,14 @@ public abstract class OutputTree extends Tree<OutputTree> {
         return OutputFunctionCallReturn.getFunctionCallReturn(name, args);
     }
 
-    public static OutputGetIntField getIntField(OutputTreeReturn<?> tree, String name) {
-        return new OutputGetIntField(tree, name);
+    public static <A extends ObjectVariable<A>, X extends Variable<X>> OutputGetField<A,X> getField(OutputTreeReturn<A> tree,
+            VariableDescription<X> fieldDesc) {
+        return new OutputGetField<>(tree, fieldDesc);
+    }
+
+    public static <A extends ObjectVariable<A>, X extends Variable<X>> OutputSetField<A,X> setField(OutputTreeReturn<A> objectTree,
+            VariableDescription<X> fieldDesc, OutputTreeReturn<X> value, String comment) {
+        return new OutputSetField<>(objectTree, fieldDesc, value, comment);
     }
 
     public static OutputIfElse ifElse(OutputTreeReturn<BooleanVariable> condition, OutputTree ifBody, String ifComment,

@@ -1,22 +1,20 @@
 package org.sandwood.compiler.tests.parser;
 
-import org.sandwood.runtime.model.Model;
-import org.sandwood.runtime.model.ExecutionTarget;
-import org.sandwood.runtime.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import java.util.HashMap;
+import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
-
-import java.util.Map;
-import java.util.HashMap;
+import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import org.sandwood.runtime.model.ExecutionTarget;
+import org.sandwood.runtime.model.Model;
+import org.sandwood.runtime.model.variables.*;
 
 /**
-  * Class representing the Sandwood model GaussianMixtureTest This is the class that
-  * all user interactions with the model should occur through.
-  */
+ * Class representing the Sandwood model GaussianMixtureTest This is the class that
+ * all user interactions with the model should occur through.
+ */
 public final class GaussianMixtureTest extends Model {
-
     private GaussianMixtureTest$CoreInterface system$c = new GaussianMixtureTest$SingleThreadCPU(ExecutionTarget.singleThread);
 
     private final ComputedDoubleArrayInternal $mu = new ComputedDoubleArrayInternal(this, "mu", true, true, false, ProbabilityType.UNSKIPPABLE) {
@@ -48,9 +46,7 @@ public final class GaussianMixtureTest extends Model {
         }
     };
 
-    /**
-     * Computed variable representing mu of type double[] from the Sandwood model 
-     */
+	/** Computed variable representing mu of type double[] from the Sandwood model. */
     public final ComputedDoubleArray mu = $mu;
 
     private final ComputedDoubleArrayInternal $phi = new ComputedDoubleArrayInternal(this, "phi", true, true, false, ProbabilityType.UNSKIPPABLE) {
@@ -82,9 +78,7 @@ public final class GaussianMixtureTest extends Model {
         }
     };
 
-    /**
-     * Computed variable representing phi of type double[] from the Sandwood model 
-     */
+	/** Computed variable representing phi of type double[] from the Sandwood model. */
     public final ComputedDoubleArray phi = $phi;
 
     private final ComputedDoubleArrayInternal $sigma = new ComputedDoubleArrayInternal(this, "sigma", true, true, false, ProbabilityType.UNSKIPPABLE) {
@@ -116,9 +110,7 @@ public final class GaussianMixtureTest extends Model {
         }
     };
 
-    /**
-     * Computed variable representing sigma of type double[] from the Sandwood model 
-     */
+	/** Computed variable representing sigma of type double[] from the Sandwood model. */
     public final ComputedDoubleArray sigma = $sigma;
 
     private final ComputedDoubleArrayInternal $x = new ComputedDoubleArrayInternal(this, "x", false, true, false, ProbabilityType.UNSKIPPABLE) {
@@ -147,9 +139,7 @@ public final class GaussianMixtureTest extends Model {
         }
     };
 
-    /**
-     * Computed variable representing x of type double[] from the Sandwood model 
-     */
+	/** Computed variable representing x of type double[] from the Sandwood model. */
     public final ComputedDoubleArray x = $x;
 
     private final ComputedIntegerArrayInternal $z = new ComputedIntegerArrayInternal(this, "z", true, true, true, ProbabilityType.SKIPPABLE) {
@@ -205,19 +195,17 @@ public final class GaussianMixtureTest extends Model {
         }
     };
 
-    /**
-     * Observed variable representing xMeasured of type double[] from the Sandwood model 
-     */
+	/**
+	 * Observed variable representing xMeasured of type double[] from the Sandwood model.
+	 */
     public final ObservedDoubleArrayShapeable xMeasured = $xMeasured;
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
     private HasProbabilityInternal[] $probabilityVariables = {$mu, $phi, $sigma, $x};
 
-    //Constructors
-    /**
-     * A constructor for a model where no variable values are set.
-     */
+    // Constructors
+	/** A constructor for a model where no variable values are set. */
     public GaussianMixtureTest() {
         super();
         //ComputedVariable
@@ -231,23 +219,24 @@ public final class GaussianMixtureTest extends Model {
         $shapedObservedValues.put("xMeasured", $xMeasured);
         init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
-    /**
-      * A constructor to set all the required values in the model to infer values. These
-      * will be values in an untrained model so this will only generate values from the
-      * default distributions described in the model.
-      * @param xMeasuredShape An integer array describing the shape of variable xMeasured to use in the model when generating results.
-      */
 
+	/**
+	 * A constructor to set all the required values in the model to infer values. These
+	 * will be values in an untrained model so this will only generate values from the
+	 * default distributions described in the model.
+	 * @param xMeasuredShape An integer array describing the shape of variable xMeasured
+	 *                       to use in the model when generating results.
+	 */
     public GaussianMixtureTest(int xMeasuredShape) {
         this();
         this.$xMeasured.setShape(xMeasuredShape);
     }
-    /**
-      * A constructor to set all the required values in the model to infer the model
-      * parameters, or to generate probabilities for the model.
-      * @param xMeasured The value to set xMeasured to.
-      */
 
+	/**
+	 * A constructor to set all the required values in the model to infer the model parameters,
+	 * or to generate probabilities for the model.
+	 * @param xMeasured The value to set xMeasured to.
+	 */
     public GaussianMixtureTest(double[] xMeasured) {
         this();
         this.xMeasured.setValue(xMeasured);
@@ -297,51 +286,49 @@ public final class GaussianMixtureTest extends Model {
         newCore.set$fixedFlag$sample52(oldCore.get$fixedFlag$sample52(), false);
     }
 
-    /**
-     * A class to hold all the values required to perform a value inference on the model.
-     */
+	/**
+	 * A class to hold all the values required to perform a value inference on the model.
+	 */
     public static class InferValueInputs {
-        /** Field holding the shape of model input xMeasured */
+		/** Field holding the shape of model input xMeasured */
         public final int xMeasuredShape;
 
-        /**
-          * A constructor taking all the values required to set up the model to infer variables.
-          * @param xMeasuredShape An integer array describing the shape of variable xMeasured to use in the model when generating results.
-          */
+		/**
+		 * A constructor taking all the values required to set up the model to infer variables.
+		 * @param xMeasuredShape An integer array describing the shape of variable xMeasured
+		 *                       to use in the model when generating results.
+		 */
         public InferValueInputs(int xMeasuredShape) {
             this.xMeasuredShape = xMeasuredShape;
         }
     }
 
-    /**
-     * A class to hold all the inputs for the model. It can be used to parameterize inference of the model probabilities
-     * and probability calculations.
-     */
+	/**
+	 * A class to hold all the inputs for the model. It can be used to parameterize inference
+	 * of the model probabilities and probability calculations.
+	 */
     public static class AllInputs {
-        /** Field holding the value of model input xMeasured */
+		/** Field holding the value of model input xMeasured */
         public final double[] xMeasured;
 
-        /**
-          * A constructor to take all the required values by the model to infer the model
-          * parameters, or to generate probabilities for the model.
-          * @param xMeasured The value to set xMeasured to.
-          */
+		/**
+		 * A constructor to take all the required values by the model to infer the model parameters,
+		 * or to generate probabilities for the model.
+		 * @param xMeasured The value to set xMeasured to.
+		 */
         public AllInputs(double[] xMeasured) {
             this.xMeasured = xMeasured;
         }
     }
-
-    /**
-     * A class to hold all the outputs from the model after an infer values step.
-     */
+	/** A class to hold all the outputs from the model after an infer values step. */
     public static class InferredValueOutputs {
-        /** Field holding the value of mu after a convention execution step.*/
+		/** Field holding the value of mu after a convention execution step. */
         public final double[] mu;
-        /** Field holding the value of phi after a convention execution step.*/
+		/** Field holding the value of phi after a convention execution step. */
         public final double[] phi;
-        /** Field holding the value of sigma after a convention execution step.*/
+		/** Field holding the value of sigma after a convention execution step. */
         public final double[] sigma;
-        /** Field holding the value of x after a convention execution step.*/
+		/** Field holding the value of x after a convention execution step. */
         public final double[] x;
 
         InferredValueOutputs(GaussianMixtureTest system$model) {
@@ -352,18 +339,19 @@ public final class GaussianMixtureTest extends Model {
         }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class LogProbabilities {
         private final double $logModelProbability;
-        /** Field holding the log probability of computed variable mu */
+		/** Field holding the log probability of computed variable mu */
         public final double mu;
-        /** Field holding the log probability of computed variable phi */
+		/** Field holding the log probability of computed variable phi */
         public final double phi;
-        /** Field holding the log probability of computed variable sigma */
+		/** Field holding the log probability of computed variable sigma */
         public final double sigma;
-        /** Field holding the log probability of computed variable x */
+		/** Field holding the log probability of computed variable x */
         public final double x;
 
         LogProbabilities(GaussianMixtureTest system$model) {
@@ -374,23 +362,26 @@ public final class GaussianMixtureTest extends Model {
             this.x = system$model.x.getLogProbability();
         }
 
-        /** Method to return log probability of the whole model 
-         *  @return The log probability of the whole model. */
+		/**
+		 * Method to return log probability of the whole model
+		 * @return The log probability of the whole model.
+		 */
         public double getModelProbability() { return $logModelProbability; }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class Probabilities {
         private final double $modelProbability;
-        /** Field holding the probability of computed variable mu */
+		/** Field holding the probability of computed variable mu */
         public final double mu;
-        /** Field holding the probability of computed variable phi */
+		/** Field holding the probability of computed variable phi */
         public final double phi;
-        /** Field holding the probability of computed variable sigma */
+		/** Field holding the probability of computed variable sigma */
         public final double sigma;
-        /** Field holding the probability of computed variable x */
+		/** Field holding the probability of computed variable x */
         public final double x;
 
         Probabilities(GaussianMixtureTest system$model) {
@@ -401,20 +392,20 @@ public final class GaussianMixtureTest extends Model {
             this.x = system$model.x.getProbability();
         }
 
-        /** Method to return probability of the whole model 
-         *  @return The probability of the whole model. */
+		/**
+		 * Method to return probability of the whole model
+		 * @return The probability of the whole model.
+		 */
         public double getModelProbability() { return $modelProbability; }
     }
 
-    /**
-     * A class to hold all the outputs from the model after an infer model call.
-     */
+	/** A class to hold all the outputs from the model after an infer model call. */
     public static class InferredModelOutputs {
-        /** Field holding the MAP or Sample value of mu after an infer model call. */
+		/** Field holding the MAP or Sample value of mu after an infer model call. */
         public final double[][] mu;
-        /** Field holding the MAP or Sample value of phi after an infer model call. */
+		/** Field holding the MAP or Sample value of phi after an infer model call. */
         public final double[][] phi;
-        /** Field holding the MAP or Sample value of sigma after an infer model call. */
+		/** Field holding the MAP or Sample value of sigma after an infer model call. */
         public final double[][] sigma;
 
         InferredModelOutputs(GaussianMixtureTest system$model) {
@@ -424,119 +415,138 @@ public final class GaussianMixtureTest extends Model {
         }
     }
 
-    /**
-     * Perform a single pass generating values from the model.
-     * @param inputs An object containing the parameters required to run inference on the model.
-     * @return An object containing the values computed by the inference step.
-     */
+	/**
+	 * Perform a single pass generating values from the model.
+	 * @param inputs An object containing the parameters required to run inference on
+	 *               the model.
+	 * @return An object containing the values computed by the inference step.
+	 */
     public InferredValueOutputs execute(InferValueInputs inputs) {
         this.$xMeasured.setShape(inputs.xMeasuredShape);
         execute();
         return new InferredValueOutputs(this);
     }
 
-    /**
-     * Infer the values of the different elements of the model.
-     * @param iterations The number of iterations to perform when inferring the values.
-     * @param inputs An object containing the parameters required to generate the model parameters.
-     * @return An object containing the computed values for the model.
-     */
+	/**
+	 * Infer the values of the different elements of the model.
+	 * @param iterations The number of iterations to perform when inferring the values.
+	 * @param inputs An object containing the parameters required to generate the model
+	 *               parameters.
+	 * @return An object containing the computed values for the model.
+	 */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
         this.$xMeasured.setValue(inputs.xMeasured);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
 
-    /**
-     * Generate the probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
         this.$xMeasured.setValue(inputs.xMeasured);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.$xMeasured.setValue(inputs.xMeasured);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.$xMeasured.setValue(inputs.xMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
 
-    /**
-     * Generate the log probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the log probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
         this.$xMeasured.setValue(inputs.xMeasured);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.$xMeasured.setValue(inputs.xMeasured);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.$xMeasured.setValue(inputs.xMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }
 }
-//END OF CODE

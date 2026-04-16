@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface NullModelMK3$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface NullModelMK3$CoreInterface extends CoreModel {
 	public double get$bias();
 	public void set$bias(double cv$value, boolean allocated$);
 	public double get$eta();

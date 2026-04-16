@@ -1,22 +1,20 @@
 package org.sandwood.compiler.tests.parser;
 
-import org.sandwood.runtime.model.Model;
-import org.sandwood.runtime.model.ExecutionTarget;
-import org.sandwood.runtime.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import java.util.HashMap;
+import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
-
-import java.util.Map;
-import java.util.HashMap;
+import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import org.sandwood.runtime.model.ExecutionTarget;
+import org.sandwood.runtime.model.Model;
+import org.sandwood.runtime.model.variables.*;
 
 /**
-  * Class representing the Sandwood model DiscreteChoice This is the class that
-  * all user interactions with the model should occur through.
-  */
+ * Class representing the Sandwood model DiscreteChoice This is the class that all
+ * user interactions with the model should occur through.
+ */
 public final class DiscreteChoice extends Model {
-
     private DiscreteChoice$CoreInterface system$c = new DiscreteChoice$SingleThreadCPU(ExecutionTarget.singleThread);
 
     private final ComputedIntegerArrayInternal $choices = new ComputedIntegerArrayInternal(this, "choices", false, true, false, ProbabilityType.UNSKIPPABLE) {
@@ -45,9 +43,7 @@ public final class DiscreteChoice extends Model {
         }
     };
 
-    /**
-     * Computed variable representing choices of type int[] from the Sandwood model 
-     */
+	/** Computed variable representing choices of type int[] from the Sandwood model. */
     public final ComputedIntegerArray choices = $choices;
 
     private final ComputedDoubleArrayInternal $exped = new ComputedDoubleArrayInternal(this, "exped", false, false, false, ProbabilityType.UNSKIPPABLE) {
@@ -81,9 +77,7 @@ public final class DiscreteChoice extends Model {
         }
     };
 
-    /**
-     * Computed variable representing exped of type double[] from the Sandwood model 
-     */
+	/** Computed variable representing exped of type double[] from the Sandwood model. */
     public final ComputedDoubleArray exped = $exped;
 
     private final ComputedDoubleArrayInternal $prob = new ComputedDoubleArrayInternal(this, "prob", false, false, false, ProbabilityType.UNSKIPPABLE) {
@@ -117,9 +111,7 @@ public final class DiscreteChoice extends Model {
         }
     };
 
-    /**
-     * Computed variable representing prob of type double[] from the Sandwood model 
-     */
+	/** Computed variable representing prob of type double[] from the Sandwood model. */
     public final ComputedDoubleArray prob = $prob;
 
     private final ComputedDoubleInternal $sum = new ComputedDoubleInternal(this, "sum", false, false, false, ProbabilityType.UNSKIPPABLE) {
@@ -153,9 +145,7 @@ public final class DiscreteChoice extends Model {
         }
     };
 
-    /**
-     * Computed variable representing sum of type double from the Sandwood model 
-     */
+	/** Computed variable representing sum of type double from the Sandwood model. */
     public final ComputedDouble sum = $sum;
 
     private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true, true, false, ProbabilityType.UNSKIPPABLE) {
@@ -187,9 +177,7 @@ public final class DiscreteChoice extends Model {
         }
     };
 
-    /**
-     * Computed variable representing ut of type double[] from the Sandwood model 
-     */
+	/** Computed variable representing ut of type double[] from the Sandwood model. */
     public final ComputedDoubleArray ut = $ut;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
@@ -206,9 +194,7 @@ public final class DiscreteChoice extends Model {
         protected void setValueInternal(int value) { system$c.set$noObs(value, allocated); }
     };
 
-    /**
-     * Observed variable representing noObs of type int from the Sandwood model 
-     */
+	/** Observed variable representing noObs of type int from the Sandwood model. */
     public final ObservedInteger noObs = $noObs;
 
     private final ObservedIntegerInternal $noProducts = new ObservedIntegerInternal(this, "noProducts") {
@@ -223,9 +209,7 @@ public final class DiscreteChoice extends Model {
         protected void setValueInternal(int value) { system$c.set$noProducts(value, allocated); }
     };
 
-    /**
-     * Observed variable representing noProducts of type int from the Sandwood model 
-     */
+	/** Observed variable representing noProducts of type int from the Sandwood model. */
     public final ObservedInteger noProducts = $noProducts;
 
     private Map<String, ObservedVariableInternal> $modelInputs = new HashMap<>();
@@ -242,19 +226,17 @@ public final class DiscreteChoice extends Model {
         protected void setValueInternal(int[] value) { system$c.set$ObsChoices(value, allocated); }
     };
 
-    /**
-     * Observed variable representing ObsChoices of type int[] from the Sandwood model 
-     */
+	/**
+	 * Observed variable representing ObsChoices of type int[] from the Sandwood model.
+	 */
     public final ObservedIntegerArray ObsChoices = $ObsChoices;
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
     private HasProbabilityInternal[] $probabilityVariables = {$choices, $exped, $prob, $sum, $ut};
 
-    //Constructors
-    /**
-     * A constructor for a model where no variable values are set.
-     */
+    // Constructors
+	/** A constructor for a model where no variable values are set. */
     public DiscreteChoice() {
         super();
         //ComputedVariable
@@ -272,27 +254,27 @@ public final class DiscreteChoice extends Model {
         $regularObservedValues.put("ObsChoices", $ObsChoices);
         init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
-    /**
-      * A constructor to set all the required values in the model to infer values. These
-      * will be values in an untrained model so this will only generate values from the
-      * default distributions described in the model.
-      * @param noProducts The value to set noProducts to.
-      * @param noObs The value to set noObs to.
-      */
 
+	/**
+	 * A constructor to set all the required values in the model to infer values. These
+	 * will be values in an untrained model so this will only generate values from the
+	 * default distributions described in the model.
+	 * @param noProducts The value to set noProducts to.
+	 * @param noObs The value to set noObs to.
+	 */
     public DiscreteChoice(int noProducts, int noObs) {
         this();
         this.$noObs.setValue(noObs);
         this.$noProducts.setValue(noProducts);
     }
-    /**
-      * A constructor to set all the required values in the model to infer the model
-      * parameters, or to generate probabilities for the model.
-      * @param noProducts The value to set noProducts to.
-      * @param noObs The value to set noObs to.
-      * @param ObsChoices The value to set ObsChoices to.
-      */
 
+	/**
+	 * A constructor to set all the required values in the model to infer the model parameters,
+	 * or to generate probabilities for the model.
+	 * @param noProducts The value to set noProducts to.
+	 * @param noObs The value to set noObs to
+	 * @param ObsChoices The value to set ObsChoices to
+	 */
     public DiscreteChoice(int noProducts, int noObs, int[] ObsChoices) {
         this();
         this.noProducts.setValue(noProducts);
@@ -337,65 +319,62 @@ public final class DiscreteChoice extends Model {
         newCore.set$fixedFlag$sample24(oldCore.get$fixedFlag$sample24(), false);
     }
 
-    /**
-     * A class to hold all the values required to perform a value inference on the model.
-     */
+	/**
+	 * A class to hold all the values required to perform a value inference on the model.
+	 */
     public static class InferValueInputs {
-        /** Field holding the value of model input noProducts */
+		/** Field holding the value of model input noProducts */
         public final int noProducts;
-        /** Field holding the value of model input noObs */
+		/** Field holding the value of model input noObs */
         public final int noObs;
 
-        /**
-          * A constructor taking all the values required to set up the model to infer variables.
-          * @param noProducts The value to set noProducts to.
-          * @param noObs The value to set noObs to.
-          */
+		/**
+		 * A constructor taking all the values required to set up the model to infer variables.
+		 * @param noProducts The value to set noProducts to.
+		 * @param noObs The value to set noObs to.
+		 */
         public InferValueInputs(int noProducts, int noObs) {
             this.noObs = noObs;
             this.noProducts = noProducts;
         }
     }
 
-    /**
-     * A class to hold all the inputs for the model. It can be used to parameterize inference of the model probabilities
-     * and probability calculations.
-     */
+	/**
+	 * A class to hold all the inputs for the model. It can be used to parameterize inference
+	 * of the model probabilities and probability calculations.
+	 */
     public static class AllInputs {
-        /** Field holding the value of model input noProducts */
+		/** Field holding the value of model input noProducts */
         public final int noProducts;
-        /** Field holding the value of model input noObs */
+		/** Field holding the value of model input noObs */
         public final int noObs;
-        /** Field holding the value of model input ObsChoices */
+		/** Field holding the value of model input ObsChoices */
         public final int[] ObsChoices;
 
-        /**
-          * A constructor to take all the required values by the model to infer the model
-          * parameters, or to generate probabilities for the model.
-          * @param noProducts The value to set noProducts to.
-          * @param noObs The value to set noObs to.
-          * @param ObsChoices The value to set ObsChoices to.
-          */
+		/**
+		 * A constructor to take all the required values by the model to infer the model parameters,
+		 * or to generate probabilities for the model.
+		 * @param noProducts The value to set noProducts to.
+		 * @param noObs The value to set noObs to.
+		 * @param ObsChoices The value to set ObsChoices to.
+		 */
         public AllInputs(int noProducts, int noObs, int[] ObsChoices) {
             this.noProducts = noProducts;
             this.noObs = noObs;
             this.ObsChoices = ObsChoices;
         }
     }
-
-    /**
-     * A class to hold all the outputs from the model after an infer values step.
-     */
+	/** A class to hold all the outputs from the model after an infer values step. */
     public static class InferredValueOutputs {
-        /** Field holding the value of choices after a convention execution step.*/
+		/** Field holding the value of choices after a convention execution step. */
         public final int[] choices;
-        /** Field holding the value of exped after a convention execution step.*/
+		/** Field holding the value of exped after a convention execution step. */
         public final double[] exped;
-        /** Field holding the value of prob after a convention execution step.*/
+		/** Field holding the value of prob after a convention execution step. */
         public final double[] prob;
-        /** Field holding the value of sum after a convention execution step.*/
+		/** Field holding the value of sum after a convention execution step. */
         public final double sum;
-        /** Field holding the value of ut after a convention execution step.*/
+		/** Field holding the value of ut after a convention execution step. */
         public final double[] ut;
 
         InferredValueOutputs(DiscreteChoice system$model) {
@@ -407,20 +386,21 @@ public final class DiscreteChoice extends Model {
         }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class LogProbabilities {
         private final double $logModelProbability;
-        /** Field holding the log probability of computed variable choices */
+		/** Field holding the log probability of computed variable choices */
         public final double choices;
-        /** Field holding the log probability of computed variable exped */
+		/** Field holding the log probability of computed variable exped */
         public final double exped;
-        /** Field holding the log probability of computed variable prob */
+		/** Field holding the log probability of computed variable prob */
         public final double prob;
-        /** Field holding the log probability of computed variable sum */
+		/** Field holding the log probability of computed variable sum */
         public final double sum;
-        /** Field holding the log probability of computed variable ut */
+		/** Field holding the log probability of computed variable ut */
         public final double ut;
 
         LogProbabilities(DiscreteChoice system$model) {
@@ -432,25 +412,28 @@ public final class DiscreteChoice extends Model {
             this.ut = system$model.ut.getLogProbability();
         }
 
-        /** Method to return log probability of the whole model 
-         *  @return The log probability of the whole model. */
+		/**
+		 * Method to return log probability of the whole model
+		 * @return The log probability of the whole model.
+		 */
         public double getModelProbability() { return $logModelProbability; }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class Probabilities {
         private final double $modelProbability;
-        /** Field holding the probability of computed variable choices */
+		/** Field holding the probability of computed variable choices */
         public final double choices;
-        /** Field holding the probability of computed variable exped */
+		/** Field holding the probability of computed variable exped */
         public final double exped;
-        /** Field holding the probability of computed variable prob */
+		/** Field holding the probability of computed variable prob */
         public final double prob;
-        /** Field holding the probability of computed variable sum */
+		/** Field holding the probability of computed variable sum */
         public final double sum;
-        /** Field holding the probability of computed variable ut */
+		/** Field holding the probability of computed variable ut */
         public final double ut;
 
         Probabilities(DiscreteChoice system$model) {
@@ -462,22 +445,22 @@ public final class DiscreteChoice extends Model {
             this.ut = system$model.ut.getProbability();
         }
 
-        /** Method to return probability of the whole model 
-         *  @return The probability of the whole model. */
+		/**
+		 * Method to return probability of the whole model
+		 * @return The probability of the whole model.
+		 */
         public double getModelProbability() { return $modelProbability; }
     }
 
-    /**
-     * A class to hold all the outputs from the model after an infer model call.
-     */
+	/** A class to hold all the outputs from the model after an infer model call. */
     public static class InferredModelOutputs {
-        /** Field holding the MAP or Sample value of exped after an infer model call. */
+		/** Field holding the MAP or Sample value of exped after an infer model call. */
         public final double[][] exped;
-        /** Field holding the MAP or Sample value of prob after an infer model call. */
+		/** Field holding the MAP or Sample value of prob after an infer model call. */
         public final double[][] prob;
-        /** Field holding the MAP or Sample value of sum after an infer model call. */
+		/** Field holding the MAP or Sample value of sum after an infer model call. */
         public final double[] sum;
-        /** Field holding the MAP or Sample value of ut after an infer model call. */
+		/** Field holding the MAP or Sample value of ut after an infer model call. */
         public final double[][] ut;
 
         InferredModelOutputs(DiscreteChoice system$model) {
@@ -488,11 +471,12 @@ public final class DiscreteChoice extends Model {
         }
     }
 
-    /**
-     * Perform a single pass generating values from the model.
-     * @param inputs An object containing the parameters required to run inference on the model.
-     * @return An object containing the values computed by the inference step.
-     */
+	/**
+	 * Perform a single pass generating values from the model.
+	 * @param inputs An object containing the parameters required to run inference on
+	 *               the model.
+	 * @return An object containing the values computed by the inference step.
+	 */
     public InferredValueOutputs execute(InferValueInputs inputs) {
         this.noObs.setValue(inputs.noObs);
         this.noProducts.setValue(inputs.noProducts);
@@ -500,12 +484,13 @@ public final class DiscreteChoice extends Model {
         return new InferredValueOutputs(this);
     }
 
-    /**
-     * Infer the values of the different elements of the model.
-     * @param iterations The number of iterations to perform when inferring the values.
-     * @param inputs An object containing the parameters required to generate the model parameters.
-     * @return An object containing the computed values for the model.
-     */
+	/**
+	 * Infer the values of the different elements of the model.
+	 * @param iterations The number of iterations to perform when inferring the values.
+	 * @param inputs An object containing the parameters required to generate the model
+	 *               parameters.
+	 * @return An object containing the computed values for the model.
+	 */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
         this.noObs.setValue(inputs.noObs);
         this.noProducts.setValue(inputs.noProducts);
@@ -514,12 +499,13 @@ public final class DiscreteChoice extends Model {
         return new InferredModelOutputs(this);
     }
 
-    /**
-     * Generate the probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
         this.noObs.setValue(inputs.noObs);
         this.noProducts.setValue(inputs.noProducts);
@@ -528,16 +514,19 @@ public final class DiscreteChoice extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.noObs.setValue(inputs.noObs);
         this.noProducts.setValue(inputs.noProducts);
@@ -546,18 +535,23 @@ public final class DiscreteChoice extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.noObs.setValue(inputs.noObs);
         this.noProducts.setValue(inputs.noProducts);
@@ -566,12 +560,13 @@ public final class DiscreteChoice extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Generate the log probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the log probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
         this.noObs.setValue(inputs.noObs);
         this.noProducts.setValue(inputs.noProducts);
@@ -580,16 +575,19 @@ public final class DiscreteChoice extends Model {
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.noObs.setValue(inputs.noObs);
         this.noProducts.setValue(inputs.noProducts);
@@ -598,18 +596,23 @@ public final class DiscreteChoice extends Model {
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.noObs.setValue(inputs.noObs);
         this.noProducts.setValue(inputs.noProducts);
@@ -618,4 +621,3 @@ public final class DiscreteChoice extends Model {
         return new LogProbabilities(this);
     }
 }
-//END OF CODE

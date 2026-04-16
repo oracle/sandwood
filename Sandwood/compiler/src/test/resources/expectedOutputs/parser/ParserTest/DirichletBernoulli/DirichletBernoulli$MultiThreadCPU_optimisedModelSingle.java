@@ -1,31 +1,32 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DirichletBernoulli$CoreInterface {
-	
+final class DirichletBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU implements DirichletBernoulli$CoreInterface {
+
 	// Declare the variables for the model.
-	private boolean constrainedFlag$sample17 = true;
-	private boolean fixedFlag$sample17 = false;
-	private boolean fixedProbFlag$sample17 = false;
-	private boolean fixedProbFlag$sample38 = false;
-	private boolean fixedProbFlag$sample51 = false;
-	private int length;
-	private int length$observed;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$b1;
-	private double logProbability$b2;
-	private double logProbability$output;
-	private double logProbability$prior;
-	private double logProbability$var38;
-	private double logProbability$var51;
-	private boolean[] observed;
-	private boolean[] output;
-	private double[] prior;
-	private boolean system$gibbsForward = true;
-	private double[] v;
+	boolean constrainedFlag$sample17 = true;
+	boolean fixedFlag$sample17 = false;
+	boolean fixedProbFlag$sample17 = false;
+	boolean fixedProbFlag$sample38 = false;
+	boolean fixedProbFlag$sample51 = false;
+	int length;
+	int length$observed;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$b1;
+	double logProbability$b2;
+	double logProbability$output;
+	double logProbability$prior;
+	double logProbability$var38;
+	double logProbability$var51;
+	boolean[] observed;
+	boolean[] output;
+	double[] prior;
+	boolean system$gibbsForward = true;
+	double[] v;
 
 	public DirichletBernoulli$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -320,7 +321,7 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Update all the indexes up to the index selected.
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
-				// A reference local to the function for the sample variable.
+												// A reference local to the function for the sample variable.
 				// 
 				// Calculate how much each of the other indexes needs to be adjusted by in order to
 				// maintain that the sum of the indexes is 1.
@@ -328,12 +329,12 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 			
 			// Update the selected index.
 			// 
-			// A reference local to the function for the sample variable.
+									// A reference local to the function for the sample variable.
 			prior[cv$indexToChange] = (prior[cv$indexToChange] + cv$proposedDifference);
 			
 			// Update all the indexes after the index we selected.
 			for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < 2; cv$loopIndex += 1)
-				// A reference local to the function for the sample variable.
+												// A reference local to the function for the sample variable.
 				// 
 				// Calculate how much each of the other indexes needs to be adjusted by in order to
 				// maintain that the sum of the indexes is 1.
@@ -420,7 +421,7 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 				// Update the sample value
 				// Update all the indexes up to the index selected.
 				for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
-					// A reference local to the function for the sample variable.
+															// A reference local to the function for the sample variable.
 					// 
 					// Calculate how much each of the other indexes needs to be adjusted by in order to
 					// maintain that the sum of the indexes is 1.
@@ -428,12 +429,12 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 				
 				// Update the selected index.
 				// 
-				// A reference local to the function for the sample variable.
+												// A reference local to the function for the sample variable.
 				prior[cv$indexToChange] = (prior[cv$indexToChange] - cv$proposedDifference);
 				
 				// Update all the indexes after the index we selected.
 				for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < 2; cv$loopIndex += 1)
-					// A reference local to the function for the sample variable.
+															// A reference local to the function for the sample variable.
 					// 
 					// Calculate how much each of the other indexes needs to be adjusted by in order to
 					// maintain that the sum of the indexes is 1.
@@ -725,15 +726,9 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for v
 		v = new double[2];
 		
@@ -745,6 +740,12 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 		// Constructor for output
 		output = new boolean[length$observed];
 	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override

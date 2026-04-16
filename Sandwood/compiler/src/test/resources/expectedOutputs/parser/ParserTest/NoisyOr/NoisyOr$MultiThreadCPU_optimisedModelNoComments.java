@@ -1,92 +1,99 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements NoisyOr$CoreInterface {
-	private boolean constrainedFlag$sample12 = true;
-	private boolean constrainedFlag$sample15 = true;
-	private boolean constrainedFlag$sample18 = true;
-	private boolean[] constrainedFlag$sample233;
-	private boolean[] constrainedFlag$sample248;
-	private boolean[] constrainedFlag$sample263;
-	private boolean[] constrainedFlag$sample278;
-	private boolean[] constrainedFlag$sample293;
-	private boolean constrainedFlag$sample3 = true;
-	private boolean[] constrainedFlag$sample308;
-	private boolean constrainedFlag$sample6 = true;
-	private boolean constrainedFlag$sample9 = true;
-	private double[] cv$var12$stateProbabilityGlobal;
-	private double[] cv$var15$stateProbabilityGlobal;
-	private double[] cv$var18$stateProbabilityGlobal;
-	private double[][] cv$var225$stateProbabilityGlobal;
-	private double[][] cv$var238$stateProbabilityGlobal;
-	private double[][] cv$var251$stateProbabilityGlobal;
-	private double[][] cv$var264$stateProbabilityGlobal;
-	private double[][] cv$var277$stateProbabilityGlobal;
-	private double[][] cv$var290$stateProbabilityGlobal;
-	private double[] cv$var3$stateProbabilityGlobal;
-	private double[] cv$var6$stateProbabilityGlobal;
-	private double[] cv$var9$stateProbabilityGlobal;
-	private boolean fixedFlag$sample12 = false;
-	private boolean fixedFlag$sample15 = false;
-	private boolean fixedFlag$sample18 = false;
-	private boolean fixedFlag$sample233 = false;
-	private boolean fixedFlag$sample248 = false;
-	private boolean fixedFlag$sample263 = false;
-	private boolean fixedFlag$sample278 = false;
-	private boolean fixedFlag$sample293 = false;
-	private boolean fixedFlag$sample3 = false;
-	private boolean fixedFlag$sample308 = false;
-	private boolean fixedFlag$sample430 = false;
-	private boolean fixedFlag$sample6 = false;
-	private boolean fixedFlag$sample9 = false;
-	private boolean fixedProbFlag$sample12 = false;
-	private boolean fixedProbFlag$sample15 = false;
-	private boolean fixedProbFlag$sample18 = false;
-	private boolean fixedProbFlag$sample233 = false;
-	private boolean fixedProbFlag$sample248 = false;
-	private boolean fixedProbFlag$sample263 = false;
-	private boolean fixedProbFlag$sample278 = false;
-	private boolean fixedProbFlag$sample293 = false;
-	private boolean fixedProbFlag$sample3 = false;
-	private boolean fixedProbFlag$sample308 = false;
-	private boolean fixedProbFlag$sample430 = false;
-	private boolean fixedProbFlag$sample6 = false;
-	private boolean fixedProbFlag$sample9 = false;
-	private boolean flag1;
-	private boolean flag2;
-	private boolean flag3;
-	private boolean flag4;
-	private boolean flag5;
-	private boolean flag6;
-	private boolean[][] issues$var213;
-	private boolean[][] issues$var383;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$flag1;
-	private double logProbability$flag2;
-	private double logProbability$flag3;
-	private double logProbability$flag4;
-	private double logProbability$flag5;
-	private double logProbability$flag6;
-	private double logProbability$issues$var213;
-	private double logProbability$issues$var383;
-	private double logProbability$n13State;
-	private double logProbability$noisyOr;
-	private double[] logProbability$sample233;
-	private double[] logProbability$sample248;
-	private double[] logProbability$sample263;
-	private double[] logProbability$sample278;
-	private double[] logProbability$sample293;
-	private double[] logProbability$sample308;
-	private double[][] logProbability$sample430;
-	private boolean[] n13State;
-	private boolean[] noisyOr;
-	private double[][] p;
-	private double[][] p13;
-	private boolean system$gibbsForward = true;
+final class NoisyOr$MultiThreadCPU extends CoreModelMultiThreadCPU implements NoisyOr$CoreInterface {
+boolean constrainedFlag$sample12 = true;
+	boolean constrainedFlag$sample15 = true;
+	boolean constrainedFlag$sample18 = true;
+	boolean[] constrainedFlag$sample233;
+	boolean[] constrainedFlag$sample248;
+	boolean[] constrainedFlag$sample263;
+	boolean[] constrainedFlag$sample278;
+	boolean[] constrainedFlag$sample293;
+	boolean constrainedFlag$sample3 = true;
+	boolean[] constrainedFlag$sample308;
+	boolean constrainedFlag$sample6 = true;
+	boolean constrainedFlag$sample9 = true;
+	boolean fixedFlag$sample12 = false;
+	boolean fixedFlag$sample15 = false;
+	boolean fixedFlag$sample18 = false;
+	boolean fixedFlag$sample233 = false;
+	boolean fixedFlag$sample248 = false;
+	boolean fixedFlag$sample263 = false;
+	boolean fixedFlag$sample278 = false;
+	boolean fixedFlag$sample293 = false;
+	boolean fixedFlag$sample3 = false;
+	boolean fixedFlag$sample308 = false;
+	boolean fixedFlag$sample430 = false;
+	boolean fixedFlag$sample6 = false;
+	boolean fixedFlag$sample9 = false;
+	boolean fixedProbFlag$sample12 = false;
+	boolean fixedProbFlag$sample15 = false;
+	boolean fixedProbFlag$sample18 = false;
+	boolean fixedProbFlag$sample233 = false;
+	boolean fixedProbFlag$sample248 = false;
+	boolean fixedProbFlag$sample263 = false;
+	boolean fixedProbFlag$sample278 = false;
+	boolean fixedProbFlag$sample293 = false;
+	boolean fixedProbFlag$sample3 = false;
+	boolean fixedProbFlag$sample308 = false;
+	boolean fixedProbFlag$sample430 = false;
+	boolean fixedProbFlag$sample6 = false;
+	boolean fixedProbFlag$sample9 = false;
+	boolean flag1;
+	boolean flag2;
+	boolean flag3;
+	boolean flag4;
+	boolean flag5;
+	boolean flag6;
+	boolean[][] issues$var213;
+	boolean[][] issues$var383;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$flag1;
+	double logProbability$flag2;
+	double logProbability$flag3;
+	double logProbability$flag4;
+	double logProbability$flag5;
+	double logProbability$flag6;
+	double logProbability$issues$var213;
+	double logProbability$issues$var383;
+	double logProbability$n13State;
+	double logProbability$noisyOr;
+	double[] logProbability$sample233;
+	double[] logProbability$sample248;
+	double[] logProbability$sample263;
+	double[] logProbability$sample278;
+	double[] logProbability$sample293;
+	double[] logProbability$sample308;
+	double[][] logProbability$sample430;
+	boolean[] n13State;
+	boolean[] noisyOr;
+	double[][] p;
+	double[][] p13;
+	double prior1;
+	double prior2;
+	double prior3;
+	double prior4;
+	double prior5;
+	double prior6;
+	boolean system$gibbsForward = true;
+	double[] cv$var12$stateProbabilityGlobal;
+	double[] cv$var15$stateProbabilityGlobal;
+	double[] cv$var18$stateProbabilityGlobal;
+	double[][] cv$var225$stateProbabilityGlobal;
+	double[][] cv$var238$stateProbabilityGlobal;
+	double[][] cv$var251$stateProbabilityGlobal;
+	double[][] cv$var264$stateProbabilityGlobal;
+	double[][] cv$var277$stateProbabilityGlobal;
+	double[][] cv$var290$stateProbabilityGlobal;
+	double[] cv$var3$stateProbabilityGlobal;
+	double[] cv$var6$stateProbabilityGlobal;
+	double[] cv$var9$stateProbabilityGlobal;
 
 	public NoisyOr$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -1714,51 +1721,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	}
 
 	@Override
-	public final void allocateScratch() {
-		cv$var3$stateProbabilityGlobal = new double[2];
-		cv$var6$stateProbabilityGlobal = new double[2];
-		cv$var9$stateProbabilityGlobal = new double[2];
-		cv$var12$stateProbabilityGlobal = new double[2];
-		cv$var15$stateProbabilityGlobal = new double[2];
-		cv$var18$stateProbabilityGlobal = new double[2];
-		{
-			int cv$threadCount = threadCount();
-			cv$var225$stateProbabilityGlobal = new double[cv$threadCount][];
-			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				cv$var225$stateProbabilityGlobal[cv$index] = new double[2];
-		}
-		{
-			int cv$threadCount = threadCount();
-			cv$var238$stateProbabilityGlobal = new double[cv$threadCount][];
-			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				cv$var238$stateProbabilityGlobal[cv$index] = new double[2];
-		}
-		{
-			int cv$threadCount = threadCount();
-			cv$var251$stateProbabilityGlobal = new double[cv$threadCount][];
-			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				cv$var251$stateProbabilityGlobal[cv$index] = new double[2];
-		}
-		{
-			int cv$threadCount = threadCount();
-			cv$var264$stateProbabilityGlobal = new double[cv$threadCount][];
-			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				cv$var264$stateProbabilityGlobal[cv$index] = new double[2];
-		}
-		{
-			int cv$threadCount = threadCount();
-			cv$var277$stateProbabilityGlobal = new double[cv$threadCount][];
-			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				cv$var277$stateProbabilityGlobal[cv$index] = new double[2];
-		}
-		int cv$threadCount = threadCount();
-		cv$var290$stateProbabilityGlobal = new double[cv$threadCount][];
-		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			cv$var290$stateProbabilityGlobal[cv$index] = new double[2];
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		p = new double[6][];
 		p[0] = new double[5];
 		p[1] = new double[5];
@@ -1800,6 +1763,50 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$sample430[0] = new double[5];
 		logProbability$sample430[1] = new double[5];
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		cv$var3$stateProbabilityGlobal = new double[2];
+		cv$var6$stateProbabilityGlobal = new double[2];
+		cv$var9$stateProbabilityGlobal = new double[2];
+		cv$var12$stateProbabilityGlobal = new double[2];
+		cv$var15$stateProbabilityGlobal = new double[2];
+		cv$var18$stateProbabilityGlobal = new double[2];
+		{
+			int cv$threadCount = threadCount();
+			cv$var225$stateProbabilityGlobal = new double[cv$threadCount][];
+			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+				cv$var225$stateProbabilityGlobal[cv$index] = new double[2];
+		}
+		{
+			int cv$threadCount = threadCount();
+			cv$var238$stateProbabilityGlobal = new double[cv$threadCount][];
+			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+				cv$var238$stateProbabilityGlobal[cv$index] = new double[2];
+		}
+		{
+			int cv$threadCount = threadCount();
+			cv$var251$stateProbabilityGlobal = new double[cv$threadCount][];
+			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+				cv$var251$stateProbabilityGlobal[cv$index] = new double[2];
+		}
+		{
+			int cv$threadCount = threadCount();
+			cv$var264$stateProbabilityGlobal = new double[cv$threadCount][];
+			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+				cv$var264$stateProbabilityGlobal[cv$index] = new double[2];
+		}
+		{
+			int cv$threadCount = threadCount();
+			cv$var277$stateProbabilityGlobal = new double[cv$threadCount][];
+			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+				cv$var277$stateProbabilityGlobal[cv$index] = new double[2];
+		}
+		int cv$threadCount = threadCount();
+		cv$var290$stateProbabilityGlobal = new double[cv$threadCount][];
+		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+			cv$var290$stateProbabilityGlobal[cv$index] = new double[2];
 	}
 
 	@Override

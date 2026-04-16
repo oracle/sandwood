@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface DistributionTest7$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface DistributionTest7$CoreInterface extends CoreModel {
 	public double[] get$bias();
 	public int get$cat();
 	public void set$cat(int cv$value, boolean allocated$);

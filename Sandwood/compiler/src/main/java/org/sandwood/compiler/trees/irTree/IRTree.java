@@ -19,8 +19,8 @@ import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.compilation.ExternalFunction;
 import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.dataflowGraph.variables.ClassVariableDescription;
-import org.sandwood.compiler.dataflowGraph.variables.GlobalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.ObjectVariable;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -314,18 +314,19 @@ public abstract class IRTree extends Tree<IRTree> {
         return new IRLocalFunctionCallReturn<>(outputType, name, args);
     }
 
-    public static IRGetIntField getIntField(IRTreeReturn<?> tree, String name) {
-        return new IRGetIntField(tree, name);
+    public static <A extends ObjectVariable<A>, X extends Variable<X>> IRGetField<A,X> getField(IRTreeReturn<A> tree,
+            VariableDescription<X> varDesc) {
+        return new IRGetField<>(tree, varDesc);
     }
 
     public static <X extends Variable<X>> IRTreeVoid initializeVariable(Visibility visibility,
             LocalVariableDescription<X> varDesc, IRTreeReturn<X> value, String comment) {
-            return new IRInitialize<>(visibility, varDesc, value, comment);
+        return new IRInitialize<>(visibility, varDesc, value, comment);
     }
 
     public static <X extends Variable<X>> IRTreeVoid initializeVariable(Variable<X> var, IRTreeReturn<X> value,
             String comment) {
-        return initializeVariable((LocalVariableDescription<X>)var.getUniqueVarDesc(), value, comment);
+        return initializeVariable((LocalVariableDescription<X>) var.getUniqueVarDesc(), value, comment);
     }
 
     public static <X extends Variable<X>> IRTreeVoid initializeVariable(LocalVariableDescription<X> varDesc,
@@ -338,20 +339,18 @@ public abstract class IRTree extends Tree<IRTree> {
         return new IRInitializeUnset<>(visibility, varDesc, comment);
     }
 
-    public static <X extends Variable<X>> IRInitializeUnset<X> initializeUnsetVariable(LocalVariableDescription<X> varDesc,
-            String comment) {
+    public static <X extends Variable<X>> IRInitializeUnset<X> initializeUnsetVariable(
+            LocalVariableDescription<X> varDesc, String comment) {
         return initializeUnsetVariable(Visibility.DEFAULT, varDesc, comment);
     }
-    
 
-
-    public static <X extends Variable<X>> IRInitialize<X> initializeField(Visibility visibility, ClassVariableDescription<X> varDesc,
-            IRTreeReturn<X> value, String comment) {
+    public static <X extends Variable<X>> IRInitialize<X> initializeField(Visibility visibility,
+            ClassVariableDescription<X> varDesc, IRTreeReturn<X> value, String comment) {
         return new IRInitialize<>(visibility, varDesc, value, comment);
     }
 
-    public static <X extends Variable<X>> IRInitializeUnset<X> initializeUnsetField(Visibility visibility, ClassVariableDescription<X> varDesc,
-            String comment) {
+    public static <X extends Variable<X>> IRInitializeUnset<X> initializeUnsetField(Visibility visibility,
+            ClassVariableDescription<X> varDesc, String comment) {
         return new IRInitializeUnset<>(visibility, varDesc, comment);
     }
 

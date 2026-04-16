@@ -1,40 +1,41 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Vulcano2012basic$CoreInterface {
-	private int[][] Avail;
-	private int[][] ObsSales;
-	private int[][] Sales;
-	private int T;
-	private boolean[] constrainedFlag$sample26;
-	private double[] exped;
-	private double[] expedNorm;
-	private boolean fixedFlag$sample26 = false;
-	private boolean fixedProbFlag$sample157 = false;
-	private boolean fixedProbFlag$sample26 = false;
-	private boolean[] guard$sample26multinomial156$global;
-	private boolean[][] guard$sample26put131$global;
-	private boolean[][] guard$sample26put154$global;
-	private boolean[] guard$sample26put68$global;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$Sales;
-	private double logProbability$exped;
-	private double logProbability$expedNorm;
-	private double[] logProbability$sample157;
-	private double[] logProbability$sample26;
-	private double logProbability$sum;
-	private double logProbability$ut;
-	private int noProducts;
-	private double r;
-	private int[] sales_sum;
-	private double sum;
-	private boolean system$gibbsForward = true;
-	private double[] ut;
-	private double[][] weekly_rates;
-	private double[][] weekly_ut;
+final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU implements Vulcano2012basic$CoreInterface {
+int[][] Avail;
+	int[][] ObsSales;
+	int[][] Sales;
+	int T;
+	boolean[] constrainedFlag$sample26;
+	double[] exped;
+	double[] expedNorm;
+	boolean fixedFlag$sample26 = false;
+	boolean fixedProbFlag$sample157 = false;
+	boolean fixedProbFlag$sample26 = false;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$Sales;
+	double logProbability$exped;
+	double logProbability$expedNorm;
+	double[] logProbability$sample157;
+	double[] logProbability$sample26;
+	double logProbability$sum;
+	double logProbability$ut;
+	int noProducts;
+	double r;
+	int[] sales_sum;
+	double sum;
+	boolean system$gibbsForward = true;
+	double[] ut;
+	double[][] weekly_rates;
+	double[][] weekly_ut;
+	boolean[] guard$sample26multinomial156$global;
+	boolean[][] guard$sample26put131$global;
+	boolean[][] guard$sample26put154$global;
+	boolean[] guard$sample26put68$global;
 
 	public Vulcano2012basic$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -2019,37 +2020,7 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	@Override
-	public final void allocateScratch() {
-		{
-			int cv$max_j$var63 = 0;
-			cv$max_j$var63 = Math.max(cv$max_j$var63, ((noProducts - 0) / 1));
-			guard$sample26put68$global = new boolean[cv$max_j$var63];
-		}
-		{
-			int cv$max_t$var112 = 0;
-			int cv$max_j$var123 = 0;
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				cv$max_j$var123 = Math.max(cv$max_j$var123, ((noProducts - 0) / 1));
-			cv$max_t$var112 = Math.max(cv$max_t$var112, ((T - 0) / 1));
-			guard$sample26put131$global = new boolean[cv$max_t$var112][cv$max_j$var123];
-		}
-		{
-			int cv$max_t$var112 = 0;
-			int cv$max_j$var147 = 0;
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				cv$max_j$var147 = Math.max(cv$max_j$var147, ((noProducts - 0) / 1));
-			cv$max_t$var112 = Math.max(cv$max_t$var112, ((T - 0) / 1));
-			guard$sample26put154$global = new boolean[cv$max_t$var112][cv$max_j$var147];
-		}
-		{
-			int cv$max_t$var112 = 0;
-			cv$max_t$var112 = Math.max(cv$max_t$var112, ((T - 0) / 1));
-			guard$sample26multinomial156$global = new boolean[cv$max_t$var112];
-		}
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		if(!fixedFlag$sample26) {
 			{
 				ut = new double[noProducts];
@@ -2091,6 +2062,36 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 			logProbability$sample157 = new double[((((T - 1) - 0) / 1) + 1)];
 		}
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		{
+			int cv$max_j$var63 = 0;
+			cv$max_j$var63 = Math.max(cv$max_j$var63, ((noProducts - 0) / 1));
+			guard$sample26put68$global = new boolean[cv$max_j$var63];
+		}
+		{
+			int cv$max_t$var112 = 0;
+			int cv$max_j$var123 = 0;
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				cv$max_j$var123 = Math.max(cv$max_j$var123, ((noProducts - 0) / 1));
+			cv$max_t$var112 = Math.max(cv$max_t$var112, ((T - 0) / 1));
+			guard$sample26put131$global = new boolean[cv$max_t$var112][cv$max_j$var123];
+		}
+		{
+			int cv$max_t$var112 = 0;
+			int cv$max_j$var147 = 0;
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				cv$max_j$var147 = Math.max(cv$max_j$var147, ((noProducts - 0) / 1));
+			cv$max_t$var112 = Math.max(cv$max_t$var112, ((T - 0) / 1));
+			guard$sample26put154$global = new boolean[cv$max_t$var112][cv$max_j$var147];
+		}
+		{
+			int cv$max_t$var112 = 0;
+			cv$max_t$var112 = Math.max(cv$max_t$var112, ((T - 0) / 1));
+			guard$sample26multinomial156$global = new boolean[cv$max_t$var112];
+		}
 	}
 
 	@Override

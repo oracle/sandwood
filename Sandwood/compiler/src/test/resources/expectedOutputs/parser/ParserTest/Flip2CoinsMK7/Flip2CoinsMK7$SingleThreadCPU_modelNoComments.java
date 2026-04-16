@@ -1,28 +1,29 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip2CoinsMK7$CoreInterface {
-	private double a;
-	private double b;
-	private double[] bias;
-	private int coins;
-	private boolean[] constrainedFlag$sample18;
-	private boolean fixedFlag$sample18 = false;
-	private boolean fixedProbFlag$sample18 = false;
-	private boolean fixedProbFlag$sample46 = false;
-	private boolean[][] flips;
-	private boolean[][] flipsMeasured;
-	private int[] length$flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double[] logProbability$bernoulli;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double[] logProbability$sample18;
-	private double[] logProbability$sample46;
-	private boolean system$gibbsForward = true;
+final class Flip2CoinsMK7$SingleThreadCPU extends CoreModelSingleThreadCPU implements Flip2CoinsMK7$CoreInterface {
+double a;
+	double b;
+	double[] bias;
+	int coins;
+	boolean[] constrainedFlag$sample18;
+	boolean fixedFlag$sample18 = false;
+	boolean fixedProbFlag$sample18 = false;
+	boolean fixedProbFlag$sample46 = false;
+	boolean[][] flips;
+	boolean[][] flipsMeasured;
+	int[] length$flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double[] logProbability$bernoulli;
+	double logProbability$bias;
+	double logProbability$flips;
+	double[] logProbability$sample18;
+	double[] logProbability$sample46;
+	boolean system$gibbsForward = true;
 
 	public Flip2CoinsMK7$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -376,10 +377,7 @@ final class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void allocateScratch() {}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		if(!fixedFlag$sample18) {
 			{
 				bias = new double[length$flipsMeasured.length];
@@ -403,6 +401,9 @@ final class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.
 			logProbability$sample46 = new double[((((length$flipsMeasured.length - 1) - 0) / 1) + 1)];
 		}
 	}
+
+	@Override
+	public final void allocateScratch() {}
 
 	@Override
 	public final void forwardGeneration() {

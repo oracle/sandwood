@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface NoisyOr$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface NoisyOr$CoreInterface extends CoreModel {
 	public boolean get$fixedFlag$sample12();
 	public void set$fixedFlag$sample12(boolean cv$value, boolean allocated$);
 	public boolean get$fixedFlag$sample15();

@@ -1,28 +1,29 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ParallelMK1$CoreInterface {
-	private boolean[] constrainedFlag$sample20;
-	private boolean fixedFlag$sample20 = false;
-	private boolean fixedProbFlag$sample20 = false;
-	private boolean fixedProbFlag$sample24 = false;
-	private double[] generated;
-	private boolean[][] guard$sample20gaussian23$global;
-	private double[] indirection;
-	private int length$observed;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$generated;
-	private double logProbability$indirection;
-	private double logProbability$sample;
-	private double[] logProbability$sample20;
-	private double[] logProbability$sample24;
-	private double[] observed;
-	private double[] sample;
-	private boolean system$gibbsForward = true;
+final class ParallelMK1$MultiThreadCPU extends CoreModelMultiThreadCPU implements ParallelMK1$CoreInterface {
+boolean[] constrainedFlag$sample20;
+	boolean fixedFlag$sample20 = false;
+	boolean fixedProbFlag$sample20 = false;
+	boolean fixedProbFlag$sample24 = false;
+	double[] generated;
+	double[] indirection;
+	int length$observed;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$generated;
+	double logProbability$indirection;
+	double logProbability$sample;
+	double[] logProbability$sample20;
+	double[] logProbability$sample24;
+	double[] observed;
+	double[] sample;
+	boolean system$gibbsForward = true;
+	boolean[][] guard$sample20gaussian23$global;
 
 	public ParallelMK1$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -431,19 +432,7 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	}
 
 	@Override
-	public final void allocateScratch() {
-		int cv$max_i = 0;
-		cv$max_i = Math.max(cv$max_i, ((length$observed - 0) / 1));
-		{
-			int cv$threadCount = threadCount();
-			guard$sample20gaussian23$global = new boolean[cv$threadCount][];
-			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-				guard$sample20gaussian23$global[cv$index] = new boolean[cv$max_i];
-		}
-	}
-
-	@Override
-	public final void allocator() {
+	public final void allocate() {
 		{
 			generated = new double[length$observed];
 		}
@@ -465,6 +454,18 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			logProbability$sample24 = new double[((((length$observed - 1) - 0) / 1) + 1)];
 		}
 		allocateScratch();
+	}
+
+	@Override
+	public final void allocateScratch() {
+		int cv$max_i = 0;
+		cv$max_i = Math.max(cv$max_i, ((length$observed - 0) / 1));
+		{
+			int cv$threadCount = threadCount();
+			guard$sample20gaussian23$global = new boolean[cv$threadCount][];
+			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+				guard$sample20gaussian23$global[cv$index] = new boolean[cv$max_i];
+		}
 	}
 
 	@Override

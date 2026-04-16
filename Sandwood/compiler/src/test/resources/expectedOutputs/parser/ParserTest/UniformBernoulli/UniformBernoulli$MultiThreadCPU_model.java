@@ -1,28 +1,29 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements UniformBernoulli$CoreInterface {
-	
+final class UniformBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU implements UniformBernoulli$CoreInterface {
+
 	// Declare the variables for the model.
-	private double a;
-	private double b;
-	private boolean constrainedFlag$sample5 = true;
-	private boolean fixedFlag$sample5 = false;
-	private boolean fixedProbFlag$sample19 = false;
-	private boolean fixedProbFlag$sample5 = false;
-	private int length$observed;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bernoulli;
-	private double logProbability$output;
-	private double logProbability$prior;
-	private double logProbability$var19;
-	private boolean[] observed;
-	private boolean[] output;
-	private double prior;
-	private boolean system$gibbsForward = true;
+	double a;
+	double b;
+	boolean constrainedFlag$sample5 = true;
+	boolean fixedFlag$sample5 = false;
+	boolean fixedProbFlag$sample19 = false;
+	boolean fixedProbFlag$sample5 = false;
+	int length$observed;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bernoulli;
+	double logProbability$output;
+	double logProbability$prior;
+	double logProbability$var19;
+	boolean[] observed;
+	boolean[] output;
+	double prior;
+	boolean system$gibbsForward = true;
 
 	public UniformBernoulli$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -523,17 +524,17 @@ final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.interna
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		output = new boolean[length$observed];
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		output = new boolean[length$observed];
-	}
 
 	// Method to execute the model code conventionally.
 	@Override

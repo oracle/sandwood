@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface Flip1CoinMK1b$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface Flip1CoinMK1b$CoreInterface extends CoreModel {
 	public double get$a();
 	public void set$a(double cv$value, boolean allocated$);
 	public double get$b();

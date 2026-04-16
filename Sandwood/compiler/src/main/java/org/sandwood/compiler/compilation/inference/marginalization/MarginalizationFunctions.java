@@ -16,7 +16,6 @@ import static org.sandwood.compiler.trees.irTree.IRTree.eq;
 import static org.sandwood.compiler.trees.irTree.IRTree.exp;
 import static org.sandwood.compiler.trees.irTree.IRTree.forStmt;
 import static org.sandwood.compiler.trees.irTree.IRTree.functionCallReturn;
-import static org.sandwood.compiler.trees.irTree.IRTree.getIntField;
 import static org.sandwood.compiler.trees.irTree.IRTree.ifElse;
 import static org.sandwood.compiler.trees.irTree.IRTree.initializeVariable;
 import static org.sandwood.compiler.trees.irTree.IRTree.load;
@@ -31,7 +30,6 @@ import org.sandwood.compiler.compilation.util.TreeUtils;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
-import org.sandwood.compiler.dataflowGraph.variables.GlobalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.ScratchVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -180,7 +178,7 @@ public class MarginalizationFunctions<A extends ScalarVariable<A>, B extends Dis
 
         IRTreeVoid zeroLoopBody = arrayPut(targetArray, load(indexName), constant(Double.NEGATIVE_INFINITY),
                 Tree.NoComment);
-        IRTreeVoid zeroLoop = forStmt(zeroLoopBody, load(numStatesName), getIntField(sourceArray, "length"),
+        IRTreeVoid zeroLoop = forStmt(zeroLoopBody, load(numStatesName), ArrayVariable.getLengthTree(sourceArray),
                 constant(1), indexName, true,
                 "Set array values that are not computed for the input to negative infinity.");
         compilationCtx.addTreeToScope(GlobalScope.scope, zeroLoop);

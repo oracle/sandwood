@@ -1,11 +1,13 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK13$CoreInterface {
-	
+final class Flip1CoinMK13$SingleThreadCPU extends CoreModelSingleThreadCPU implements Flip1CoinMK13$CoreInterface {
+
 	// Declare the variables for the model.
+<<<<<<< Upstream, based on POW
 	private double b;
 	private double bias;
 	private boolean constrainedFlag$sample9 = true;
@@ -26,6 +28,29 @@ final class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$var36;
 	private int samples;
 	private boolean system$gibbsForward = true;
+=======
+	double b;
+	double bias;
+	boolean constrainedFlag$sample9 = true;
+	boolean fixedFlag$sample9 = false;
+	boolean fixedProbFlag$sample40 = false;
+	boolean fixedProbFlag$sample9 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	boolean guard1;
+	boolean guard2;
+	int length$flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$b;
+	double logProbability$bernoulli;
+	double logProbability$bias;
+	double logProbability$flips;
+	double logProbability$sample9;
+	double logProbability$var36;
+	int samples;
+	boolean system$gibbsForward = true;
+>>>>>>> daee89e Adding in a class to hold just the state. This will be worked on further as the code generation progresses. Commit before adding inner classes to the outer classes. Updating output class structure checkpoint Checkpoint in the restructuring of the output classes to increase the shared code. Finished restructuring the classes, time to start using inner classes. Updates to tree structure Changing the structure of get field so that it can be used to get other types of field, read for getting data out of the scratch and model data classes. Removing unused imports Adding nodes to allow fields in an object ot be set. Moving rng package so that we can add other internal only variable types. Updates to the handling of transformations. Moving from sets to lists of generics Updating the structure of inner class. Changing the passing of fields to sub classes. Updating class structure
 
 	public Flip1CoinMK13$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -217,7 +242,7 @@ final class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Calculate a proposed variance.
 		// 
-		// The original value of the sample
+						// The original value of the sample
 		double cv$var = (((b < 0)?(-b):b) * 40.0);
 		
 		// Ensure the variance is at least 0.01
@@ -257,7 +282,7 @@ final class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Set the current value to the current state of the tree.
+															// Set the current value to the current state of the tree.
 					// 
 					// The original value of the sample
 					cv$accumulatedProbabilities = ((((0.0 <= b) && (b <= 1.0))?Math.log((flips[var35]?b:(1.0 - b))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
@@ -457,7 +482,7 @@ final class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if(guard1)
-					// b's comment
+										// b's comment
 					// Write out the new value of the sample.
 					bias = cv$originalValue;
 				
@@ -465,12 +490,12 @@ final class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.
 				else {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
 					if(guard2)
-						// b's comment
+												// b's comment
 						// Write out the new value of the sample.
 						bias = (cv$originalValue / 2);
 					// Constraints moved from conditionals in inner loops/scopes/etc.
 					else
-						// b's comment
+												// b's comment
 						// Write out the new value of the sample.
 						bias = (cv$originalValue / 3);
 				}
@@ -764,18 +789,18 @@ final class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 	}
 
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// Constructor for flips
+		flips = new boolean[length$flipsMeasured];
+	}
+
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// Constructor for flips
-		flips = new boolean[length$flipsMeasured];
-	}
 
 	// Method to execute the model code conventionally.
 	@Override

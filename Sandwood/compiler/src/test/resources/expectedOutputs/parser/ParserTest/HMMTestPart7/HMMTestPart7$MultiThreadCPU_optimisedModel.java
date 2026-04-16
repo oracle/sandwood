@@ -1,52 +1,54 @@
 package org.sandwood.compiler.tests.parser;
 
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements HMMTestPart7$CoreInterface {
-	
+final class HMMTestPart7$MultiThreadCPU extends CoreModelMultiThreadCPU implements HMMTestPart7$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[] bias;
-	private boolean[] constrainedFlag$sample28;
-	private boolean[] constrainedFlag$sample45;
-	private boolean constrainedFlag$sample53 = true;
-	private boolean[] constrainedFlag$sample71;
-	private double[] cv$distributionAccumulator$var69;
-	private double[][] cv$var28$countGlobal;
-	private double[] cv$var52$stateProbabilityGlobal;
-	private double[] cv$var70$stateProbabilityGlobal;
-	private double[] distribution$sample53;
-	private double[][] distribution$sample71;
-	private boolean fixedFlag$sample28 = false;
-	private boolean fixedFlag$sample45 = false;
-	private boolean fixedFlag$sample53 = false;
-	private boolean fixedFlag$sample71 = false;
-	private boolean fixedProbFlag$sample28 = false;
-	private boolean fixedProbFlag$sample45 = false;
-	private boolean fixedProbFlag$sample53 = false;
-	private boolean fixedProbFlag$sample71 = false;
-	private boolean fixedProbFlag$sample87 = false;
-	private boolean[] flips;
-	private boolean[] flipsMeasured;
-	private int length$flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double logProbability$m;
-	private double[] logProbability$sample71;
-	private double[] logProbability$sample87;
-	private double logProbability$st;
-	private double logProbability$var28;
-	private double logProbability$var44;
-	private double logProbability$var52;
-	private double[][] m;
-	private int samples;
-	private int[] st;
-	private boolean system$gibbsForward = true;
-	private double[] v;
+	double[] bias;
+	boolean[] constrainedFlag$sample28;
+	boolean[] constrainedFlag$sample45;
+	boolean constrainedFlag$sample53 = true;
+	boolean[] constrainedFlag$sample71;
+	double[] distribution$sample53;
+	double[][] distribution$sample71;
+	boolean fixedFlag$sample28 = false;
+	boolean fixedFlag$sample45 = false;
+	boolean fixedFlag$sample53 = false;
+	boolean fixedFlag$sample71 = false;
+	boolean fixedProbFlag$sample28 = false;
+	boolean fixedProbFlag$sample45 = false;
+	boolean fixedProbFlag$sample53 = false;
+	boolean fixedProbFlag$sample71 = false;
+	boolean fixedProbFlag$sample87 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	int length$flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bias;
+	double logProbability$flips;
+	double logProbability$m;
+	double[] logProbability$sample71;
+	double[] logProbability$sample87;
+	double logProbability$st;
+	double logProbability$var28;
+	double logProbability$var44;
+	double logProbability$var52;
+	double[][] m;
+	int samples;
+	int[] st;
+	int states;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[] cv$distributionAccumulator$var69;
+	double[][] cv$var28$countGlobal;
+	double[] cv$var52$stateProbabilityGlobal;
+	double[] cv$var70$stateProbabilityGlobal;
 
 	public HMMTestPart7$MultiThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -431,7 +433,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						// Increment the sample counter with the value sampled by sample task 71 of random
 						// variable var69
 						// 
-						// Substituted "i$var64" with its value "1".
+																		// Substituted "i$var64" with its value "1".
 						cv$countLocal[st[1]] = (cv$countLocal[st[1]] + 1.0);
 					}
 				} else {
@@ -443,7 +445,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						// Increment the sample counter with the value sampled by sample task 71 of random
 						// variable var69
 						// 
-						// cv$probabilitySample53Value7's comment
+																								// cv$probabilitySample53Value7's comment
 						// Update the probability of sampling this value from the distribution value.
 						// 
 						// Substituted "index$sample53$6" with its value "var27".
@@ -498,7 +500,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						// 
 						// Get the length of the array
 						for(int cv$loopIndex = 0; cv$loopIndex < 5; cv$loopIndex += 1)
-							// The probability of reaching the consumer with this set of consumer arguments
+																					// The probability of reaching the consumer with this set of consumer arguments
 							// 
 							// Add the probability of this argument configuration.
 							// 
@@ -510,7 +512,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					if((var27 < 5)) {
 						// The probability of reaching the consumer with this set of consumer arguments
 						// 
-						// cv$probabilitySample53Value38's comment
+												// cv$probabilitySample53Value38's comment
 						// Update the probability of sampling this value from the distribution value.
 						// 
 						// Add the probability of this argument configuration.
@@ -539,7 +541,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					if((1 <= index$i$45)) {
 						// The probability of reaching the consumer with this set of consumer arguments
 						// 
-						// cv$probabilitySample71Value47's comment
+												// cv$probabilitySample71Value47's comment
 						// Update the probability of sampling this value from the distribution value.
 						// 
 						// Add the probability of this argument configuration.
@@ -689,7 +691,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	private final void inferSample53() {
 		constrainedFlag$sample53 = false;
 		
-		// cv$numStates's comment
+				// cv$numStates's comment
 		// variable marginalization
 		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
 			// Initialize a log space accumulator to take the product of all the distribution
@@ -702,7 +704,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			double cv$accumulatedProbabilities = (((0.0 <= var50[cv$valuePos]) && (var50[cv$valuePos] <= 1.0))?Math.log(var50[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -729,7 +731,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "i$var64" with its value "1".
+												// Substituted "i$var64" with its value "1".
 				cv$accumulatedProbabilities = ((((((0.0 <= st[1]) && (st[1] < 5)) && (0.0 <= var68[st[1]])) && (var68[st[1]] <= 1.0))?Math.log(var68[st[1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
@@ -776,9 +778,9 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				
 				// Add the current distribution to the distribution accumulator.
 				// 
-				// Constructing a random variable input for use later.
+												// Constructing a random variable input for use later.
 				// 
-				// Value of the variable at this index
+												// Value of the variable at this index
 				DistributionSampling.addProbabilityDistributionCategorical(cv$distributionAccumulator$var69, 1.0, m[cv$valuePos], 5);
 				
 				// A local copy of the samples' distribution.
@@ -800,7 +802,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// Add the probability of this argument configuration.
+															// Add the probability of this argument configuration.
 					// 
 					// Declare and zero an accumulator for tracking the reached source probability space.
 					double cv$normalisedDistValue = cv$distributionAccumulator$var69[cv$i];
@@ -824,11 +826,11 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// Initialize a log space accumulator to take the product of all the distribution
 				// probabilities.
 				// 
-				// Record the reached distribution.
+												// Record the reached distribution.
 				// 
 				// The probability of reaching the consumer with this set of consumer arguments
 				// 
-				// Add the probability of this argument configuration.
+												// Add the probability of this argument configuration.
 				// 
 				// Declare and zero an accumulator for tracking the reached source probability space.
 				cv$accumulatedDistributionProbabilities = Math.log(cv$overlap);
@@ -893,7 +895,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				
 				// Offset values, move to normal space, and sum.
 				// 
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				for(int cv$lseIndex = 0; cv$lseIndex < 5; cv$lseIndex += 1)
 					// Get a local reference to the scratch space.
@@ -909,24 +911,24 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Normalize log space values and move to normal space
 				// 
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
-					// Local copy of the probability array
+															// Local copy of the probability array
 					distribution$sample53[cv$indexName] = 0.2;
 			} else {
 				// Normalize log space values and move to normal space
 				// 
-				// cv$numStates's comment
+								// cv$numStates's comment
 				// variable marginalization
 				for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
-					// Local copy of the probability array
+															// Local copy of the probability array
 					distribution$sample53[cv$indexName] = Math.exp((cv$var52$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			for(int cv$indexName = 5; cv$indexName < cv$var52$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Local copy of the probability array
 				distribution$sample53[cv$indexName] = Double.NEGATIVE_INFINITY;
@@ -952,7 +954,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			if(fixedFlag$sample53) {
 				int var27 = st[0];
 				
-				// Substituted "i$var64" with its value "1".
+												// Substituted "i$var64" with its value "1".
 				if(((0 <= var27) && (var27 < 5)))
 					// variable marginalization
 					cv$numStates = 5;
@@ -962,22 +964,22 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		}
 		int index$i$10 = (i$var64 - 1);
 		
-		// index$i$1's comment
+								// index$i$1's comment
 		// Copy of index so that its values can be safely substituted
 		// 
-		// Substituted "index$i$10" with its value "(i$var64 - 1)".
+						// Substituted "index$i$10" with its value "(i$var64 - 1)".
 		// 
-		// Substituted "index$i$10" with its value "(i$var64 - 1)".
+						// Substituted "index$i$10" with its value "(i$var64 - 1)".
 		// 
-		// Substituted "index$i$10" with its value "(i$var64 - 1)".
+						// Substituted "index$i$10" with its value "(i$var64 - 1)".
 		// 
-		// Substituted "index$i$10" with its value "(i$var64 - 1)".
+						// Substituted "index$i$10" with its value "(i$var64 - 1)".
 		// 
-		// Substituted "index$i$10" with its value "(i$var64 - 1)".
+						// Substituted "index$i$10" with its value "(i$var64 - 1)".
 		// 
-		// Substituted "index$i$10" with its value "(i$var64 - 1)".
+						// Substituted "index$i$10" with its value "(i$var64 - 1)".
 		// 
-		// Substituted "index$i$10" with its value "(i$var64 - 1)".
+						// Substituted "index$i$10" with its value "(i$var64 - 1)".
 		if(((1 <= index$i$10) && !(index$i$10 == i$var64)))
 			// variable marginalization
 			cv$numStates = 5;
@@ -1000,7 +1002,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				if(fixedFlag$sample53) {
 					int var27 = st[0];
 					
-					// Substituted "i$var64" with its value "1".
+															// Substituted "i$var64" with its value "1".
 					if(((0 <= var27) && (var27 < 5))) {
 						// Record the reached probability density.
 						// 
@@ -1032,10 +1034,10 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
-						// An accumulator to allow the value for each distribution to be constructed before
+																		// An accumulator to allow the value for each distribution to be constructed before
 						// it is added to the index probabilities.
 						// 
-						// Value of the variable at this index
+																		// Value of the variable at this index
 						cv$stateProbabilityValue = ((((0.0 <= var84) && (var84 <= 1.0))?Math.log((flips[1]?var84:(1.0 - var84))):Double.NEGATIVE_INFINITY) + (((0.0 <= var68[cv$valuePos]) && (var68[cv$valuePos] <= 1.0))?Math.log(var68[cv$valuePos]):Double.NEGATIVE_INFINITY));
 					}
 				} else {
@@ -1067,7 +1069,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						// An accumulator to allow the value for each distribution to be constructed before
 						// it is added to the index probabilities.
 						// 
-						// Value of the variable at this index
+																		// Value of the variable at this index
 						// 
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1077,10 +1079,10 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						// Set an accumulator to record the consumer distributions not seen. Initially set
 						// to 1 as seen values will be deducted from this value.
 						// 
-						// An accumulator to allow the value for each distribution to be constructed before
+																		// An accumulator to allow the value for each distribution to be constructed before
 						// it is added to the index probabilities.
 						// 
-						// Value of the variable at this index
+																		// Value of the variable at this index
 						double cv$accumulatedProbabilities = (((((0.0 <= var84) && (var84 <= 1.0))?Math.log((flips[1]?var84:(1.0 - var84))):Double.NEGATIVE_INFINITY) + Math.log(cv$probabilitySample53Value19)) + (((0.0 <= var68[cv$valuePos]) && (var68[cv$valuePos] <= 1.0))?Math.log(var68[cv$valuePos]):Double.NEGATIVE_INFINITY));
 						
 						// Add the values for the source and any standard consumers for this configuration
@@ -1099,22 +1101,22 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			}
 			int index$i$25 = (i$var64 - 1);
 			
-			// index$i$1's comment
+												// index$i$1's comment
 			// Copy of index so that its values can be safely substituted
 			// 
-			// Substituted "index$i$25" with its value "(i$var64 - 1)".
+									// Substituted "index$i$25" with its value "(i$var64 - 1)".
 			// 
-			// Substituted "index$i$25" with its value "(i$var64 - 1)".
+									// Substituted "index$i$25" with its value "(i$var64 - 1)".
 			// 
-			// Substituted "index$i$25" with its value "(i$var64 - 1)".
+									// Substituted "index$i$25" with its value "(i$var64 - 1)".
 			// 
-			// Substituted "index$i$25" with its value "(i$var64 - 1)".
+									// Substituted "index$i$25" with its value "(i$var64 - 1)".
 			// 
-			// Substituted "index$i$25" with its value "(i$var64 - 1)".
+									// Substituted "index$i$25" with its value "(i$var64 - 1)".
 			// 
-			// Substituted "index$i$25" with its value "(i$var64 - 1)".
+									// Substituted "index$i$25" with its value "(i$var64 - 1)".
 			// 
-			// Substituted "index$i$25" with its value "(i$var64 - 1)".
+									// Substituted "index$i$25" with its value "(i$var64 - 1)".
 			if(((1 <= index$i$25) && !(index$i$25 == i$var64))) {
 				// Enumerating the possible outputs of Categorical 69.
 				for(int index$sample71$26 = 0; index$sample71$26 < 5; index$sample71$26 += 1) {
@@ -1140,7 +1142,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
 					// 
-					// Value of the variable at this index
+															// Value of the variable at this index
 					// 
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1150,10 +1152,10 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
-					// An accumulator to allow the value for each distribution to be constructed before
+															// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
 					// 
-					// Value of the variable at this index
+															// Value of the variable at this index
 					double cv$accumulatedProbabilities = (((((0.0 <= var84) && (var84 <= 1.0))?Math.log((flips[i$var64]?var84:(1.0 - var84))):Double.NEGATIVE_INFINITY) + Math.log(cv$probabilitySample71Value27)) + (((0.0 <= var68[cv$valuePos]) && (var68[cv$valuePos] <= 1.0))?Math.log(var68[cv$valuePos]):Double.NEGATIVE_INFINITY));
 					
 					// Add the values for the source and any standard consumers for this configuration
@@ -1187,7 +1189,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					if(fixedFlag$sample53) {
 						int index$var27$61_1 = st[0];
 						
-						// Substituted "i$var64" with its value "1".
+																		// Substituted "i$var64" with its value "1".
 						if(((0 <= index$var27$61_1) && (index$var27$61_1 < 5)))
 							// Add the probability of this argument configuration.
 							// 
@@ -1198,42 +1200,42 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						for(int index$sample53$57 = 0; index$sample53$57 < 5; index$sample53$57 += 1)
 							// Add the probability of this argument configuration.
 							// 
-							// cv$probabilitySample53Value58's comment
+														// cv$probabilitySample53Value58's comment
 							// Update the probability of sampling this value from the distribution value.
 							scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + distribution$sample53[index$sample53$57]);
 					}
 				}
 				int index$i$64 = (i$var64 - 1);
 				
-				// index$i$54's comment
+																// index$i$54's comment
 				// Copy of index so that its values can be safely substituted
 				// 
-				// Substituted "index$i$52_2" with its value "(i$var64 + 1)".
+												// Substituted "index$i$52_2" with its value "(i$var64 + 1)".
 				// 
-				// Substituted "index$i$52_2" with its value "(i$var64 + 1)".
+												// Substituted "index$i$52_2" with its value "(i$var64 + 1)".
 				// 
-				// Substituted "index$i$52_2" with its value "(i$var64 + 1)".
+												// Substituted "index$i$52_2" with its value "(i$var64 + 1)".
 				// 
-				// Substituted "index$i$52_2" with its value "(i$var64 + 1)".
+												// Substituted "index$i$52_2" with its value "(i$var64 + 1)".
 				// 
-				// Substituted "index$i$52_2" with its value "(i$var64 + 1)".
+												// Substituted "index$i$52_2" with its value "(i$var64 + 1)".
 				// 
-				// Substituted "index$i$52_2" with its value "(i$var64 + 1)".
+												// Substituted "index$i$52_2" with its value "(i$var64 + 1)".
 				// 
-				// Substituted "index$i$52_2" with its value "(i$var64 + 1)".
+												// Substituted "index$i$52_2" with its value "(i$var64 + 1)".
 				if((((1 <= index$i$64) && !(index$i$64 == i$var64)) && !(index$i$64 == index$i$52_2))) {
 					// Enumerating the possible outputs of Categorical 69.
 					for(int index$sample71$65 = 0; index$sample71$65 < 5; index$sample71$65 += 1)
 						// Add the probability of this argument configuration.
 						// 
-						// cv$probabilitySample71Value66's comment
+												// cv$probabilitySample71Value66's comment
 						// Update the probability of sampling this value from the distribution value.
 						scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + distribution$sample71[(index$i$64 - 1)][index$sample71$65]);
 				}
 				
 				// Add the current distribution to the distribution accumulator.
 				// 
-				// Constructing a random variable input for use later.
+												// Constructing a random variable input for use later.
 				// 
 				// Processing random variable 69.
 				// 
@@ -1281,7 +1283,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// Initialize a log space accumulator to take the product of all the distribution
 				// probabilities.
 				// 
-				// Record the reached distribution.
+												// Record the reached distribution.
 				// 
 				// The probability of reaching the consumer with this set of consumer arguments
 				// 
@@ -1502,7 +1504,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						if(fixedFlag$sample53) {
 							int var27 = st[0];
 							
-							// Substituted "i$var64" with its value "1".
+																					// Substituted "i$var64" with its value "1".
 							if(((0 <= var27) && (var27 < 5))) {
 								// Substituted "i$var64" with its value "1".
 								double[] var68 = m[st[0]];
@@ -1650,7 +1652,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					if(fixedFlag$sample53) {
 						int var43 = st[0];
 						
-						// Substituted "j" with its value "0".
+																		// Substituted "j" with its value "0".
 						if(((0 <= var43) && (var43 < 5))) {
 							// Substituted "j" with its value "0".
 							double var84 = bias[st[0]];
@@ -2222,52 +2224,9 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var28$countGlobal
-		// 
-		// Allocation of cv$var28$countGlobal for multithreaded execution
-		// 
-		// Get the thread count.
-		int cv$threadCount = threadCount();
-		
-		// Allocate an array to hold a copy per thread
-		cv$var28$countGlobal = new double[cv$threadCount][];
-		
-		// Populate the array with a copy per thread
-		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			cv$var28$countGlobal[cv$index] = new double[5];
-		
-		// Constructor for cv$distributionAccumulator$var69
-		// 
-		// Allocation of cv$distributionAccumulator$var69 for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 69. Initially set to the value
-		// of putTask 29.
-		cv$distributionAccumulator$var69 = new double[5];
-		
-		// Constructor for cv$var52$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var52$stateProbabilityGlobal for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 51. Initially set to the value
-		// of putTask 29.
-		cv$var52$stateProbabilityGlobal = new double[5];
-		
-		// Allocation of cv$var70$stateProbabilityGlobal for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 69. Initially set to the value
-		// of putTask 29.
-		cv$var70$stateProbabilityGlobal = new double[5];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for v
 		v = new double[5];
 		
@@ -2317,6 +2276,49 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var28$countGlobal
+		// 
+		// Allocation of cv$var28$countGlobal for multithreaded execution
+		// 
+		// Get the thread count.
+		int cv$threadCount = threadCount();
+		
+		// Allocate an array to hold a copy per thread
+		cv$var28$countGlobal = new double[cv$threadCount][];
+		
+		// Populate the array with a copy per thread
+		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+			cv$var28$countGlobal[cv$index] = new double[5];
+		
+		// Constructor for cv$distributionAccumulator$var69
+		// 
+		// Allocation of cv$distributionAccumulator$var69 for single threaded execution
+		// 
+		// Variable to record the maximum value of Task Get 69. Initially set to the value
+		// of putTask 29.
+		cv$distributionAccumulator$var69 = new double[5];
+		
+		// Constructor for cv$var52$stateProbabilityGlobal
+		// 
+		// Allocation of cv$var52$stateProbabilityGlobal for single threaded execution
+		// 
+		// Variable to record the maximum value of Task Get 51. Initially set to the value
+		// of putTask 29.
+		cv$var52$stateProbabilityGlobal = new double[5];
+		
+		// Allocation of cv$var70$stateProbabilityGlobal for single threaded execution
+		// 
+		// Variable to record the maximum value of Task Get 69. Initially set to the value
+		// of putTask 29.
+		cv$var70$stateProbabilityGlobal = new double[5];
 	}
 
 	// Method to execute the model code conventionally.
@@ -2409,7 +2411,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			for(int index$var51 = 0; index$var51 < 5; index$var51 += 1)
 				// Save the probability of each value
 				// 
-				// cv$distribution$sample53's comment
+																// cv$distribution$sample53's comment
 				// Create local copy of variable probabilities.
 				distribution$sample53[index$var51] = (((0.0 <= var50[index$var51]) && (var50[index$var51] <= 1.0))?var50[index$var51]:0.0);
 		}
@@ -2433,7 +2435,7 @@ final class HMMTestPart7$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					if(fixedFlag$sample53) {
 						int var27 = st[0];
 						
-						// Substituted "i$var64" with its value "1".
+																		// Substituted "i$var64" with its value "1".
 						if(((0 <= var27) && (var27 < 5))) {
 							// Substituted "i$var64" with its value "1".
 							double[] var68 = m[st[0]];

@@ -1,36 +1,37 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK19$CoreInterface {
-	
+final class Flip1CoinMK19$SingleThreadCPU extends CoreModelSingleThreadCPU implements Flip1CoinMK19$CoreInterface {
+
 	// Declare the variables for the model.
-	private int a;
-	private int b;
-	private double[][] bias;
-	private boolean constrainedFlag$sample10 = true;
-	private boolean constrainedFlag$sample16 = true;
-	private boolean fixedFlag$sample10 = false;
-	private boolean fixedFlag$sample16 = false;
-	private boolean fixedProbFlag$sample10 = false;
-	private boolean fixedProbFlag$sample16 = false;
-	private boolean fixedProbFlag$sample48 = false;
-	private boolean[] flips;
-	private boolean[] flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bernoulli;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double logProbability$q;
-	private double logProbability$t;
-	private double logProbability$var47;
-	private double q;
-	private int samples;
-	private boolean system$gibbsForward = true;
-	private double t;
+	int a;
+	int b;
+	double[][] bias;
+	boolean constrainedFlag$sample10 = true;
+	boolean constrainedFlag$sample16 = true;
+	boolean fixedFlag$sample10 = false;
+	boolean fixedFlag$sample16 = false;
+	boolean fixedProbFlag$sample10 = false;
+	boolean fixedProbFlag$sample16 = false;
+	boolean fixedProbFlag$sample48 = false;
+	boolean[] flips;
+	boolean[] flipsMeasured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$bernoulli;
+	double logProbability$bias;
+	double logProbability$flips;
+	double logProbability$q;
+	double logProbability$t;
+	double logProbability$var47;
+	double q;
+	int samples;
+	boolean system$gibbsForward = true;
+	double t;
 
 	public Flip1CoinMK19$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -649,15 +650,9 @@ final class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for bias
 		bias = new double[1][];
 		bias[0] = new double[2];
@@ -665,6 +660,12 @@ final class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// Constructor for flips
 		flips = new boolean[samples];
 	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override

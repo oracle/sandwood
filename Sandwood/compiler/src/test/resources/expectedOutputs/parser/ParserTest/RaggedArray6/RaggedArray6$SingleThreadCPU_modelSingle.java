@@ -1,33 +1,34 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements RaggedArray6$CoreInterface {
-	
+final class RaggedArray6$SingleThreadCPU extends CoreModelSingleThreadCPU implements RaggedArray6$CoreInterface {
+
 	// Declare the variables for the model.
-	private double[][] a;
-	private double[] b;
-	private boolean constrainedFlag$sample47 = true;
-	private boolean constrainedFlag$sample50 = true;
-	private double[] cv$var45$stateProbabilityGlobal;
-	private double[] d;
-	private boolean fixedFlag$sample47 = false;
-	private boolean fixedFlag$sample50 = false;
-	private boolean fixedProbFlag$sample47 = false;
-	private boolean fixedProbFlag$sample50 = false;
-	private boolean fixedProbFlag$sample65 = false;
-	private int length$obs_measured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$d;
-	private double logProbability$obs;
-	private double logProbability$var63;
-	private double logProbability$y;
-	private boolean[] obs;
-	private boolean[] obs_measured;
-	private boolean system$gibbsForward = true;
-	private int y;
+	double[][] a;
+	double[] b;
+	boolean constrainedFlag$sample47 = true;
+	boolean constrainedFlag$sample50 = true;
+	double[] d;
+	boolean fixedFlag$sample47 = false;
+	boolean fixedFlag$sample50 = false;
+	boolean fixedProbFlag$sample47 = false;
+	boolean fixedProbFlag$sample50 = false;
+	boolean fixedProbFlag$sample65 = false;
+	int length$obs_measured;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$d;
+	double logProbability$obs;
+	double logProbability$var63;
+	double logProbability$y;
+	boolean[] obs;
+	boolean[] obs_measured;
+	boolean system$gibbsForward = true;
+	int y;
+	double[] cv$var45$stateProbabilityGlobal;
 
 	public RaggedArray6$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -1106,18 +1107,9 @@ final class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocation of cv$var45$stateProbabilityGlobal for single threaded execution
-		cv$var45$stateProbabilityGlobal = new double[2];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for a
 		{
 			a = new double[2][];
@@ -1165,6 +1157,15 @@ final class RaggedArray6$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocation of cv$var45$stateProbabilityGlobal for single threaded execution
+		cv$var45$stateProbabilityGlobal = new double[2];
 	}
 
 	// Method to execute the model code conventionally.

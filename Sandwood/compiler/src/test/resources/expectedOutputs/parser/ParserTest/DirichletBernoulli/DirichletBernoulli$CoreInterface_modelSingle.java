@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface DirichletBernoulli$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface DirichletBernoulli$CoreInterface extends CoreModel {
 
 	// Getter for fixedFlag$sample17.
 	public boolean get$fixedFlag$sample17();

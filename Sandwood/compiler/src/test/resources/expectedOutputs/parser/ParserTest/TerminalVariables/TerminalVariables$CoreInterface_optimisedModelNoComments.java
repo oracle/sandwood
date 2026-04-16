@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface TerminalVariables$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface TerminalVariables$CoreInterface extends CoreModel {
 	public double[][][][][] get$a();
 	public int get$c1();
 	public void set$c1(int cv$value, boolean allocated$);

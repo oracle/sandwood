@@ -1,80 +1,81 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMMetrics2$CoreInterface {
-	
+final class HMMMetrics2$SingleThreadCPU extends CoreModelSingleThreadCPU implements HMMMetrics2$CoreInterface {
+
 	// Declare the variables for the model.
-	private boolean[] constrainedFlag$sample104;
-	private boolean[][] constrainedFlag$sample123;
-	private boolean constrainedFlag$sample19 = true;
-	private boolean[] constrainedFlag$sample32;
-	private boolean[] constrainedFlag$sample52;
-	private boolean[] constrainedFlag$sample68;
-	private boolean[] constrainedFlag$sample84;
-	private double[] cv$distributionAccumulator$var120;
-	private double[] cv$var102$stateProbabilityGlobal;
-	private double[] cv$var121$stateProbabilityGlobal;
-	private double[] cv$var19$countGlobal;
-	private double[] cv$var32$countGlobal;
-	private double[][] distribution$sample104;
-	private double[][][] distribution$sample123;
-	private boolean fixedFlag$sample104 = false;
-	private boolean fixedFlag$sample123 = false;
-	private boolean fixedFlag$sample157 = false;
-	private boolean fixedFlag$sample19 = false;
-	private boolean fixedFlag$sample32 = false;
-	private boolean fixedFlag$sample52 = false;
-	private boolean fixedFlag$sample68 = false;
-	private boolean fixedFlag$sample84 = false;
-	private boolean fixedProbFlag$sample104 = false;
-	private boolean fixedProbFlag$sample123 = false;
-	private boolean fixedProbFlag$sample145 = false;
-	private boolean fixedProbFlag$sample157 = false;
-	private boolean fixedProbFlag$sample19 = false;
-	private boolean fixedProbFlag$sample32 = false;
-	private boolean fixedProbFlag$sample52 = false;
-	private boolean fixedProbFlag$sample68 = false;
-	private boolean fixedProbFlag$sample84 = false;
-	private boolean[][] guard$sample104gaussian156$global;
-	private boolean[][] guard$sample123gaussian156$global;
-	private double[] initialStateDistribution;
-	private int[] length$metric;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$initialStateDistribution;
-	private double logProbability$m;
-	private double logProbability$metric_g;
-	private double logProbability$metric_mean;
-	private double logProbability$metric_valid_1d;
-	private double logProbability$metric_valid_bias;
-	private double logProbability$metric_valid_g;
-	private double logProbability$metric_var;
-	private double logProbability$st;
-	private double logProbability$var102;
-	private double logProbability$var121;
-	private double logProbability$var141;
-	private double logProbability$var151;
-	private double logProbability$var32;
-	private double logProbability$var51;
-	private double logProbability$var67;
-	private double logProbability$var83;
-	private double[][] m;
-	private double[][] metric;
-	private double[][] metric_g;
-	private double[] metric_mean;
-	private boolean[][] metric_valid;
-	private double[] metric_valid_bias;
-	private boolean[][] metric_valid_g;
-	private double[] metric_var;
-	private int noSamples;
-	private int noStates;
-	private int[][] st;
-	private boolean system$gibbsForward = true;
-	private double[] v;
-	private double[][] var151;
+	boolean[] constrainedFlag$sample104;
+	boolean[][] constrainedFlag$sample123;
+	boolean constrainedFlag$sample19 = true;
+	boolean[] constrainedFlag$sample32;
+	boolean[] constrainedFlag$sample52;
+	boolean[] constrainedFlag$sample68;
+	boolean[] constrainedFlag$sample84;
+	double[][] distribution$sample104;
+	double[][][] distribution$sample123;
+	boolean fixedFlag$sample104 = false;
+	boolean fixedFlag$sample123 = false;
+	boolean fixedFlag$sample157 = false;
+	boolean fixedFlag$sample19 = false;
+	boolean fixedFlag$sample32 = false;
+	boolean fixedFlag$sample52 = false;
+	boolean fixedFlag$sample68 = false;
+	boolean fixedFlag$sample84 = false;
+	boolean fixedProbFlag$sample104 = false;
+	boolean fixedProbFlag$sample123 = false;
+	boolean fixedProbFlag$sample145 = false;
+	boolean fixedProbFlag$sample157 = false;
+	boolean fixedProbFlag$sample19 = false;
+	boolean fixedProbFlag$sample32 = false;
+	boolean fixedProbFlag$sample52 = false;
+	boolean fixedProbFlag$sample68 = false;
+	boolean fixedProbFlag$sample84 = false;
+	double[] initialStateDistribution;
+	int[] length$metric;
+	double logProbability$$evidence;
+	double logProbability$$model;
+	double logProbability$initialStateDistribution;
+	double logProbability$m;
+	double logProbability$metric_g;
+	double logProbability$metric_mean;
+	double logProbability$metric_valid_1d;
+	double logProbability$metric_valid_bias;
+	double logProbability$metric_valid_g;
+	double logProbability$metric_var;
+	double logProbability$st;
+	double logProbability$var102;
+	double logProbability$var121;
+	double logProbability$var141;
+	double logProbability$var151;
+	double logProbability$var32;
+	double logProbability$var51;
+	double logProbability$var67;
+	double logProbability$var83;
+	double[][] m;
+	double[][] metric;
+	double[][] metric_g;
+	double[] metric_mean;
+	boolean[][] metric_valid;
+	double[] metric_valid_bias;
+	boolean[][] metric_valid_g;
+	double[] metric_var;
+	int noSamples;
+	int noStates;
+	int[][] st;
+	boolean system$gibbsForward = true;
+	double[] v;
+	double[][] var151;
+	double[] cv$distributionAccumulator$var120;
+	double[] cv$var102$stateProbabilityGlobal;
+	double[] cv$var121$stateProbabilityGlobal;
+	double[] cv$var19$countGlobal;
+	double[] cv$var32$countGlobal;
+	boolean[][] guard$sample104gaussian156$global;
+	boolean[][] guard$sample123gaussian156$global;
 
 	public HMMMetrics2$SingleThreadCPU(ExecutionTarget target) {
 		super(target);
@@ -668,7 +669,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		// 
 		// variable marginalization
 		// 
-		// cv$numStates's comment
+				// cv$numStates's comment
 		// Calculate the number of states to evaluate.
 		int cv$numStates = Math.max(0, noStates);
 		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
@@ -679,7 +680,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			double cv$accumulatedProbabilities = (((((cv$valuePos < noStates) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$valuePos])) && (initialStateDistribution[cv$valuePos] <= 1.0))?Math.log(initialStateDistribution[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -706,7 +707,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					// Value of the variable at this index
 					double[] var119 = m[cv$valuePos];
 					
-					// Substituted "index$sample$2_2" with its value "sample".
+															// Substituted "index$sample$2_2" with its value "sample".
 					cv$accumulatedConsumerProbabilities = (((((0.0 <= st[sample][1]) && (st[sample][1] < noStates)) && (0.0 <= var119[st[sample][1]])) && (var119[st[sample][1]] <= 1.0))?Math.log(var119[st[sample][1]]):Double.NEGATIVE_INFINITY);
 					
 					// Recorded the probability of reaching sample task 123 with the current configuration.
@@ -760,7 +761,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						// Value of the variable at this index
 						double var139 = metric_valid_bias[cv$valuePos];
 						
-						// Substituted "index$sample$8_2" with its value "sample".
+																		// Substituted "index$sample$8_2" with its value "sample".
 						cv$accumulatedConsumerProbabilities = (((0.0 <= var139) && (var139 <= 1.0))?Math.log((metric_valid_g[sample][0]?var139:(1.0 - var139))):Double.NEGATIVE_INFINITY);
 						
 						// Recorded the probability of reaching sample task 145 with the current configuration.
@@ -792,7 +793,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					// Looking for a path between Sample 104 and consumer Gaussian 150.
 					// Set the flags to false
 					// 
-					// Guard to check that at most one copy of the code is executed for a given random
+															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					guard$sample104gaussian156$global[sample][0] = false;
 					
@@ -800,7 +801,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					if(!guard$sample104gaussian156$global[sample][0]) {
 						// The body will execute, so should not be executed again
 						// 
-						// Guard to check that at most one copy of the code is executed for a given random
+																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
 						guard$sample104gaussian156$global[sample][0] = true;
 						
@@ -822,7 +823,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							// Value of the variable at this index
 							double var149 = metric_var[cv$valuePos];
 							
-							// Substituted "index$sample$14_2" with its value "sample".
+																					// Substituted "index$sample$14_2" with its value "sample".
 							// 
 							// Constructing a random variable input for use later.
 							// 
@@ -857,7 +858,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					if(!guard$sample104gaussian156$global[sample][0]) {
 						// The body will execute, so should not be executed again
 						// 
-						// Guard to check that at most one copy of the code is executed for a given random
+																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
 						guard$sample104gaussian156$global[sample][0] = true;
 						
@@ -879,7 +880,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							// Value of the variable at this index
 							double var149 = metric_var[cv$valuePos];
 							
-							// Substituted "index$sample$15_2" with its value "sample".
+																					// Substituted "index$sample$15_2" with its value "sample".
 							// 
 							// Constructing a random variable input for use later.
 							// 
@@ -935,22 +936,22 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// Add the probability of this argument configuration.
+															// Add the probability of this argument configuration.
 					// 
 					// Declare and zero an accumulator for tracking the reached source probability space.
 					cv$reachedDistributionProbability = 1.0;
 					
 					// Add the current distribution to the distribution accumulator.
 					// 
-					// Constructing a random variable input for use later.
+															// Constructing a random variable input for use later.
 					// 
-					// Value of the variable at this index
+															// Value of the variable at this index
 					DistributionSampling.addProbabilityDistributionCategorical(cv$distributionAccumulator$var120, 1.0, m[cv$valuePos], noStates);
 				}
 				
 				// A local copy of the samples' distribution.
 				// 
-				// Substituted "index$sample$66_2" with its value "sample".
+												// Substituted "index$sample$66_2" with its value "sample".
 				double[] cv$sampleDistribution = distribution$sample123[sample][0];
 				
 				// The overlap of the distributions so far.
@@ -1078,11 +1079,11 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			if(fixedFlag$sample104) {
 				int var31 = st[sample][0];
 				
-				// Substituted "timeStep$var113" with its value "1".
+												// Substituted "timeStep$var113" with its value "1".
 				if(((0 <= var31) && (var31 < noStates)))
 					// variable marginalization
 					// 
-					// cv$numStates's comment
+										// cv$numStates's comment
 					// Calculate the number of states to evaluate.
 					cv$numStates = Math.max(0, noStates);
 			} else {
@@ -1097,22 +1098,22 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		if((0 < noStates)) {
 			int index$timeStep$13 = (timeStep$var113 - 1);
 			
-			// index$sample$2's comment
+												// index$sample$2's comment
 			// Copy of index so that its values can be safely substituted
 			// 
-			// Substituted "index$sample$12" with its value "sample".
+									// Substituted "index$sample$12" with its value "sample".
 			// 
-			// Substituted "index$timeStep$13" with its value "(timeStep$var113 - 1)".
+									// Substituted "index$timeStep$13" with its value "(timeStep$var113 - 1)".
 			// 
-			// Substituted "index$timeStep$13" with its value "(timeStep$var113 - 1)".
+									// Substituted "index$timeStep$13" with its value "(timeStep$var113 - 1)".
 			// 
-			// Substituted "index$timeStep$13" with its value "(timeStep$var113 - 1)".
+									// Substituted "index$timeStep$13" with its value "(timeStep$var113 - 1)".
 			// 
-			// Substituted "index$timeStep$13" with its value "(timeStep$var113 - 1)".
+									// Substituted "index$timeStep$13" with its value "(timeStep$var113 - 1)".
 			// 
-			// Substituted "index$timeStep$13" with its value "(timeStep$var113 - 1)".
+									// Substituted "index$timeStep$13" with its value "(timeStep$var113 - 1)".
 			// 
-			// Substituted "index$timeStep$13" with its value "(timeStep$var113 - 1)".
+									// Substituted "index$timeStep$13" with its value "(timeStep$var113 - 1)".
 			if(((1 <= index$timeStep$13) && !(index$timeStep$13 == timeStep$var113)))
 				// variable marginalization
 				cv$numStates = noStates;
@@ -1136,7 +1137,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				if(fixedFlag$sample104) {
 					int var31 = st[sample][0];
 					
-					// Substituted "timeStep$var113" with its value "1".
+															// Substituted "timeStep$var113" with its value "1".
 					if(((0 <= var31) && (var31 < noStates))) {
 						// Record the reached probability density.
 						// 
@@ -1151,7 +1152,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						// An accumulator to allow the value for each distribution to be constructed before
 						// it is added to the index probabilities.
 						// 
-						// Value of the variable at this index
+																		// Value of the variable at this index
 						double cv$accumulatedProbabilities = ((((cv$valuePos < noStates) && (0.0 <= var119[cv$valuePos])) && (var119[cv$valuePos] <= 1.0))?Math.log(var119[cv$valuePos]):Double.NEGATIVE_INFINITY);
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1291,9 +1292,9 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 									}
 								}
 								
-								// Substituted "timeStep$var113" with its value "1".
+																								// Substituted "timeStep$var113" with its value "1".
 								// 
-								// Substituted "timeStep$var136" with its value "1".
+																								// Substituted "timeStep$var136" with its value "1".
 								if(!guard$sample123gaussian156$global[sample][1]) {
 									// The body will execute, so should not be executed again
 									// 
@@ -1376,7 +1377,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						// An accumulator to allow the value for each distribution to be constructed before
 						// it is added to the index probabilities.
 						// 
-						// Value of the variable at this index
+																		// Value of the variable at this index
 						double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample104Value23) + (((0.0 <= var119[cv$valuePos]) && (var119[cv$valuePos] <= 1.0))?Math.log(var119[cv$valuePos]):Double.NEGATIVE_INFINITY));
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1468,9 +1469,9 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 									cv$accumulatedProbabilities = (((0.0 < var149)?(DistributionSampling.logProbabilityGaussian(((var151[sample][1] - metric_mean[cv$valuePos]) / Math.sqrt(var149))) - (Math.log(var149) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 								}
 								
-								// Substituted "timeStep$var113" with its value "1".
+																								// Substituted "timeStep$var113" with its value "1".
 								// 
-								// Substituted "timeStep$var136" with its value "1".
+																								// Substituted "timeStep$var136" with its value "1".
 								if(!guard$sample123gaussian156$global[sample][1]) {
 									// The body will execute, so should not be executed again
 									// 
@@ -1533,22 +1534,22 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			}
 			int index$timeStep$30 = (timeStep$var113 - 1);
 			
-			// index$sample$2's comment
+												// index$sample$2's comment
 			// Copy of index so that its values can be safely substituted
 			// 
-			// Substituted "index$sample$29" with its value "sample".
+									// Substituted "index$sample$29" with its value "sample".
 			// 
-			// Substituted "index$timeStep$30" with its value "(timeStep$var113 - 1)".
+									// Substituted "index$timeStep$30" with its value "(timeStep$var113 - 1)".
 			// 
-			// Substituted "index$timeStep$30" with its value "(timeStep$var113 - 1)".
+									// Substituted "index$timeStep$30" with its value "(timeStep$var113 - 1)".
 			// 
-			// Substituted "index$timeStep$30" with its value "(timeStep$var113 - 1)".
+									// Substituted "index$timeStep$30" with its value "(timeStep$var113 - 1)".
 			// 
-			// Substituted "index$timeStep$30" with its value "(timeStep$var113 - 1)".
+									// Substituted "index$timeStep$30" with its value "(timeStep$var113 - 1)".
 			// 
-			// Substituted "index$timeStep$30" with its value "(timeStep$var113 - 1)".
+									// Substituted "index$timeStep$30" with its value "(timeStep$var113 - 1)".
 			// 
-			// Substituted "index$timeStep$30" with its value "(timeStep$var113 - 1)".
+									// Substituted "index$timeStep$30" with its value "(timeStep$var113 - 1)".
 			if(((1 <= index$timeStep$30) && !(index$timeStep$30 == timeStep$var113))) {
 				// Enumerating the possible outputs of Categorical 120.
 				for(int index$sample123$31 = 0; index$sample123$31 < noStates; index$sample123$31 += 1) {
@@ -1578,7 +1579,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
 					// 
-					// Value of the variable at this index
+															// Value of the variable at this index
 					// 
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1588,10 +1589,10 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					// Set an accumulator to record the consumer distributions not seen. Initially set
 					// to 1 as seen values will be deducted from this value.
 					// 
-					// An accumulator to allow the value for each distribution to be constructed before
+															// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
 					// 
-					// Value of the variable at this index
+															// Value of the variable at this index
 					double cv$accumulatedProbabilities = (((((0.0 <= var139) && (var139 <= 1.0))?Math.log((metric_valid_g[sample][timeStep$var113]?var139:(1.0 - var139))):Double.NEGATIVE_INFINITY) + Math.log(cv$probabilitySample123Value32)) + (((0.0 <= var119[cv$valuePos]) && (var119[cv$valuePos] <= 1.0))?Math.log(var119[cv$valuePos]):Double.NEGATIVE_INFINITY));
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1599,7 +1600,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						// Looking for a path between Sample 123 and consumer Gaussian 150.
 						// Set the flags to false
 						// 
-						// Guard to check that at most one copy of the code is executed for a given random
+																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
 						guard$sample123gaussian156$global[sample][timeStep$var113] = false;
 						
@@ -1607,7 +1608,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						if(!guard$sample123gaussian156$global[sample][timeStep$var113]) {
 							// The body will execute, so should not be executed again
 							// 
-							// Guard to check that at most one copy of the code is executed for a given random
+																					// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
 							guard$sample123gaussian156$global[sample][timeStep$var113] = true;
 							
@@ -1634,7 +1635,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							// 
-							// Substituted "index$sample$68_2" with its value "sample".
+																					// Substituted "index$sample$68_2" with its value "sample".
 							// 
 							// Constructing a random variable input for use later.
 							// 
@@ -1644,7 +1645,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						if(!guard$sample123gaussian156$global[sample][timeStep$var113]) {
 							// The body will execute, so should not be executed again
 							// 
-							// Guard to check that at most one copy of the code is executed for a given random
+																					// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
 							guard$sample123gaussian156$global[sample][timeStep$var113] = true;
 							
@@ -1671,7 +1672,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							// 
-							// Substituted "index$sample$72_2" with its value "sample".
+																					// Substituted "index$sample$72_2" with its value "sample".
 							// 
 							// Constructing a random variable input for use later.
 							// 
@@ -1723,7 +1724,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						if(fixedFlag$sample104) {
 							int index$var31$276_1 = st[sample][0];
 							
-							// Substituted "timeStep$var113" with its value "1".
+																					// Substituted "timeStep$var113" with its value "1".
 							if(((0 <= index$var31$276_1) && (index$var31$276_1 < noStates)))
 								// Add the probability of this argument configuration.
 								// 
@@ -1734,7 +1735,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							for(int index$sample104$272 = 0; index$sample104$272 < noStates; index$sample104$272 += 1)
 								// Add the probability of this argument configuration.
 								// 
-								// cv$probabilitySample104Value273's comment
+																// cv$probabilitySample104Value273's comment
 								// Update the probability of sampling this value from the distribution value.
 								// 
 								// Substituted "index$sample$271" with its value "sample".
@@ -1743,31 +1744,31 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					}
 					int index$timeStep$280 = (timeStep$var113 - 1);
 					
-					// index$timeStep$267's comment
+																				// index$timeStep$267's comment
 					// Copy of index so that its values can be safely substituted
 					// 
-					// index$sample$268's comment
+																				// index$sample$268's comment
 					// Copy of index so that its values can be safely substituted
 					// 
 					// Substituted "index$sample$265_2" with its value "sample".
 					// 
-					// Substituted "index$timeStep$265_3" with its value "(timeStep$var113 + 1)".
+															// Substituted "index$timeStep$265_3" with its value "(timeStep$var113 + 1)".
 					// 
-					// Substituted "index$timeStep$265_3" with its value "(timeStep$var113 + 1)".
+															// Substituted "index$timeStep$265_3" with its value "(timeStep$var113 + 1)".
 					// 
-					// Substituted "index$timeStep$265_3" with its value "(timeStep$var113 + 1)".
+															// Substituted "index$timeStep$265_3" with its value "(timeStep$var113 + 1)".
 					// 
-					// Substituted "index$timeStep$265_3" with its value "(timeStep$var113 + 1)".
+															// Substituted "index$timeStep$265_3" with its value "(timeStep$var113 + 1)".
 					// 
-					// Substituted "index$timeStep$265_3" with its value "(timeStep$var113 + 1)".
+															// Substituted "index$timeStep$265_3" with its value "(timeStep$var113 + 1)".
 					// 
-					// Substituted "index$timeStep$265_3" with its value "(timeStep$var113 + 1)".
+															// Substituted "index$timeStep$265_3" with its value "(timeStep$var113 + 1)".
 					if((((1 <= index$timeStep$280) && !(index$timeStep$280 == timeStep$var113)) && !(index$timeStep$280 == index$timeStep$265_3))) {
 						// Enumerating the possible outputs of Categorical 120.
 						for(int index$sample123$281 = 0; index$sample123$281 < noStates; index$sample123$281 += 1)
 							// Add the probability of this argument configuration.
 							// 
-							// cv$probabilitySample123Value282's comment
+														// cv$probabilitySample123Value282's comment
 							// Update the probability of sampling this value from the distribution value.
 							// 
 							// Substituted "index$sample$279" with its value "sample".
@@ -1783,7 +1784,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					
 					// Add the current distribution to the distribution accumulator.
 					// 
-					// Constructing a random variable input for use later.
+															// Constructing a random variable input for use later.
 					// 
 					// Processing random variable 120.
 					// 
@@ -1924,7 +1925,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				// Increment the sample counter with the value sampled by sample task 104 of random
 				// variable var101
 				// 
-				// A local reference to the scratch space.
+												// A local reference to the scratch space.
 				cv$var19$countGlobal[st[sample][0]] = (cv$var19$countGlobal[st[sample][0]] + 1.0);
 			}
 		}
@@ -1938,7 +1939,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				// 
 				// Get the length of the array
 				for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
-					// A local reference to the scratch space.
+															// A local reference to the scratch space.
 					// 
 					// Add the probability of this argument configuration.
 					// 
@@ -1951,7 +1952,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// 
 			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
-			// A reference local to the function for the sample variable.
+									// A reference local to the function for the sample variable.
 			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var19$countGlobal, initialStateDistribution, noStates);
 	}
 
@@ -1982,7 +1983,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							// Increment the sample counter with the value sampled by sample task 123 of random
 							// variable var120
 							// 
-							// A local reference to the scratch space.
+																					// A local reference to the scratch space.
 							cv$var32$countGlobal[st[sample][1]] = (cv$var32$countGlobal[st[sample][1]] + 1.0);
 						}
 					} else {
@@ -1992,7 +1993,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						// Increment the sample counter with the value sampled by sample task 123 of random
 						// variable var120
 						// 
-						// A local reference to the scratch space.
+																		// A local reference to the scratch space.
 						// 
 						// Substituted "index$sample104$5" with its value "var31".
 						cv$var32$countGlobal[st[sample][1]] = (cv$var32$countGlobal[st[sample][1]] + distribution$sample104[sample][var31]);
@@ -2010,7 +2011,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						// Increment the sample counter with the value sampled by sample task 123 of random
 						// variable var120
 						// 
-						// A local reference to the scratch space.
+																		// A local reference to the scratch space.
 						cv$var32$countGlobal[st[sample][timeStep$var113]] = (cv$var32$countGlobal[st[sample][timeStep$var113]] + 1.0);
 					}
 				}
@@ -2035,7 +2036,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							// 
 							// Get the length of the array
 							for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
-								// A local reference to the scratch space.
+																								// A local reference to the scratch space.
 								// 
 								// Add the probability of this argument configuration.
 								// 
@@ -2045,7 +2046,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					} else {
 						// The probability of reaching the consumer with this set of consumer arguments
 						// 
-						// Substituted "index$sample$41" with its value "sample".
+																		// Substituted "index$sample$41" with its value "sample".
 						// 
 						// Add the probability of this argument configuration.
 						// 
@@ -2058,7 +2059,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						// 
 						// Get the length of the array
 						for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
-							// A local reference to the scratch space.
+																					// A local reference to the scratch space.
 							cv$var32$countGlobal[cv$loopIndex] = (cv$var32$countGlobal[cv$loopIndex] + (distribution$sample123[sample][0][cv$loopIndex] * cv$distributionProbability));
 					}
 				}
@@ -2073,7 +2074,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					if((1 <= index$timeStep$52)) {
 						// The probability of reaching the consumer with this set of consumer arguments
 						// 
-						// Substituted "index$sample$51" with its value "sample".
+																		// Substituted "index$sample$51" with its value "sample".
 						// 
 						// Add the probability of this argument configuration.
 						// 
@@ -2086,7 +2087,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						// 
 						// Get the length of the array
 						for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
-							// A local reference to the scratch space.
+																					// A local reference to the scratch space.
 							cv$var32$countGlobal[cv$loopIndex] = (cv$var32$countGlobal[cv$loopIndex] + (distribution$sample123[sample][(timeStep$var113 - 1)][cv$loopIndex] * cv$distributionProbability));
 					}
 				}
@@ -2097,7 +2098,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// 
 			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
-			// A reference local to the function for the sample variable.
+									// A reference local to the function for the sample variable.
 			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var32$countGlobal, m[var31], noStates);
 	}
 
@@ -2127,7 +2128,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Set the current value to the current state of the tree.
+									// Set the current value to the current state of the tree.
 			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue < 100.0))?-4.605170185988092:Double.NEGATIVE_INFINITY);
 			
 			// Looking for a path between Sample 52 and consumer Gaussian 150.
@@ -2149,7 +2150,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 							int var66 = st[sample][0];
 							
-							// Substituted "timeStep$var136" with its value "0".
+																					// Substituted "timeStep$var136" with its value "0".
 							if(((0 <= var66) && (var66 < noStates))) {
 								// Constructing a random variable input for use later.
 								// 
@@ -2238,15 +2239,15 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						else {
 							// If the second value is -infinity.
 							// 
-							// Constructing a random variable input for use later.
+																					// Constructing a random variable input for use later.
 							// 
 							// Substituted "index$sample104$6" with its value "var50".
 							// 
-							// Constructing a random variable input for use later.
+																					// Constructing a random variable input for use later.
 							// 
 							// Substituted "index$sample104$6" with its value "var50".
 							// 
-							// Constructing a random variable input for use later.
+																					// Constructing a random variable input for use later.
 							// 
 							// Substituted "index$sample104$6" with its value "var50".
 							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
@@ -2307,7 +2308,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						} else {
 							// Update the probability of sampling this value from the distribution value.
 							// 
-							// Substituted "index$sample$15" with its value "sample".
+																					// Substituted "index$sample$15" with its value "sample".
 							// 
 							// Substituted "index$sample123$17" with its value "var50".
 							double cv$probabilitySample123Value18 = distribution$sample123[sample][(timeStep$var136 - 1)][var50];
@@ -2356,15 +2357,15 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							else {
 								// If the second value is -infinity.
 								// 
-								// Constructing a random variable input for use later.
+																								// Constructing a random variable input for use later.
 								// 
 								// Substituted "index$sample123$17" with its value "var50".
 								// 
-								// Constructing a random variable input for use later.
+																								// Constructing a random variable input for use later.
 								// 
 								// Substituted "index$sample123$17" with its value "var50".
 								// 
-								// Constructing a random variable input for use later.
+																								// Constructing a random variable input for use later.
 								// 
 								// Substituted "index$sample123$17" with its value "var50".
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
@@ -2414,7 +2415,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 							int var66 = st[sample][0];
 							
-							// Substituted "timeStep$var136" with its value "0".
+																					// Substituted "timeStep$var136" with its value "0".
 							if(((0 <= var66) && (var66 < noStates))) {
 								// Constructing a random variable input for use later.
 								// 
@@ -2499,15 +2500,15 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						else {
 							// If the second value is -infinity.
 							// 
-							// Constructing a random variable input for use later.
+																					// Constructing a random variable input for use later.
 							// 
 							// Substituted "index$sample104$6" with its value "var50".
 							// 
-							// Constructing a random variable input for use later.
+																					// Constructing a random variable input for use later.
 							// 
 							// Substituted "index$sample104$6" with its value "var50".
 							// 
-							// Constructing a random variable input for use later.
+																					// Constructing a random variable input for use later.
 							// 
 							// Substituted "index$sample104$6" with its value "var50".
 							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
@@ -2566,7 +2567,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						} else {
 							// Update the probability of sampling this value from the distribution value.
 							// 
-							// Substituted "index$sample$15" with its value "sample".
+																					// Substituted "index$sample$15" with its value "sample".
 							// 
 							// Substituted "index$sample123$17" with its value "var50".
 							double cv$probabilitySample123Value18 = distribution$sample123[sample][(timeStep$var136 - 1)][var50];
@@ -2613,15 +2614,15 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							else {
 								// If the second value is -infinity.
 								// 
-								// Constructing a random variable input for use later.
+																								// Constructing a random variable input for use later.
 								// 
 								// Substituted "index$sample123$17" with its value "var50".
 								// 
-								// Constructing a random variable input for use later.
+																								// Constructing a random variable input for use later.
 								// 
 								// Substituted "index$sample123$17" with its value "var50".
 								// 
-								// Constructing a random variable input for use later.
+																								// Constructing a random variable input for use later.
 								// 
 								// Substituted "index$sample123$17" with its value "var50".
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
@@ -2708,11 +2709,11 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 							int var50 = st[sample][0];
 							
-							// Substituted "timeStep$var136" with its value "0".
+																					// Substituted "timeStep$var136" with its value "0".
 							if(((0 <= var50) && (var50 < noStates))) {
 								// Substituted "timeStep$var136" with its value "0".
 								// 
-								// Set the current value to the current state of the tree.
+																								// Set the current value to the current state of the tree.
 								cv$accumulatedConsumerProbabilities = ((0.0 < cv$originalValue)?(DistributionSampling.logProbabilityGaussian(((var151[sample][0] - metric_mean[st[sample][0]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)):Double.NEGATIVE_INFINITY);
 								
 								// Recorded the probability of reaching sample task 157 with the current configuration.
@@ -2756,7 +2757,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						// 
 						// Substituted "timeStep$var136" with its value "0".
 						// 
-						// Set the current value to the current state of the tree.
+																		// Set the current value to the current state of the tree.
 						// 
 						// Constructing a random variable input for use later.
 						// 
@@ -2791,9 +2792,9 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						else {
 							// If the second value is -infinity.
 							// 
-							// The original value of the sample
+																					// The original value of the sample
 							// 
-							// The original value of the sample
+																					// The original value of the sample
 							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
 							else
@@ -2820,7 +2821,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 								double cv$consumerDistributionProbabilityAccumulator = 1.0;
 								int var50 = st[sample][timeStep$var136];
 								if(((0 <= var50) && (var50 < noStates))) {
-									// Set the current value to the current state of the tree.
+																											// Set the current value to the current state of the tree.
 									// 
 									// Constructing a random variable input for use later.
 									cv$accumulatedConsumerProbabilities = ((0.0 < cv$originalValue)?(DistributionSampling.logProbabilityGaussian(((var151[sample][timeStep$var136] - metric_mean[st[sample][timeStep$var136]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)):Double.NEGATIVE_INFINITY);
@@ -2851,7 +2852,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						} else {
 							// Update the probability of sampling this value from the distribution value.
 							// 
-							// Substituted "index$sample$15" with its value "sample".
+																					// Substituted "index$sample$15" with its value "sample".
 							// 
 							// Substituted "index$sample123$17" with its value "var66".
 							double cv$probabilitySample123Value18 = distribution$sample123[sample][(timeStep$var136 - 1)][var66];
@@ -2864,7 +2865,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							// 
-							// Set the current value to the current state of the tree.
+																					// Set the current value to the current state of the tree.
 							// 
 							// Constructing a random variable input for use later.
 							// 
@@ -2899,9 +2900,9 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							else {
 								// If the second value is -infinity.
 								// 
-								// The original value of the sample
+																								// The original value of the sample
 								// 
-								// The original value of the sample
+																								// The original value of the sample
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
 								else
@@ -2949,7 +2950,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 							int var50 = st[sample][0];
 							
-							// Substituted "timeStep$var136" with its value "0".
+																					// Substituted "timeStep$var136" with its value "0".
 							if(((0 <= var50) && (var50 < noStates))) {
 								// Substituted "timeStep$var136" with its value "0".
 								// 
@@ -3032,9 +3033,9 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						else {
 							// If the second value is -infinity.
 							// 
-							// The proposed new value for the sample
+																					// The proposed new value for the sample
 							// 
-							// The proposed new value for the sample
+																					// The proposed new value for the sample
 							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
 							else
@@ -3090,7 +3091,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						} else {
 							// Update the probability of sampling this value from the distribution value.
 							// 
-							// Substituted "index$sample$15" with its value "sample".
+																					// Substituted "index$sample$15" with its value "sample".
 							// 
 							// Substituted "index$sample123$17" with its value "var66".
 							double cv$probabilitySample123Value18 = distribution$sample123[sample][(timeStep$var136 - 1)][var66];
@@ -3136,9 +3137,9 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							else {
 								// If the second value is -infinity.
 								// 
-								// The proposed new value for the sample
+																								// The proposed new value for the sample
 								// 
-								// The proposed new value for the sample
+																								// The proposed new value for the sample
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
 								else
@@ -3258,7 +3259,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				} else {
 					// Update the probability of sampling this value from the distribution value.
 					// 
-					// Substituted "index$sample$14" with its value "sample".
+															// Substituted "index$sample$14" with its value "sample".
 					// 
 					// Substituted "index$sample123$16" with its value "var82".
 					double cv$probabilitySample123Value17 = distribution$sample123[sample][(timeStep$var136 - 1)][var82];
@@ -3421,7 +3422,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							if(fixedFlag$sample104) {
 								int var31 = st[sample][0];
 								
-								// Substituted "timeStep$var113" with its value "1".
+																								// Substituted "timeStep$var113" with its value "1".
 								if(((0 <= var31) && (var31 < noStates))) {
 									// Substituted "timeStep$var113" with its value "1".
 									double[] var119 = m[st[sample][0]];
@@ -3600,7 +3601,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						if(fixedFlag$sample104) {
 							int var82 = st[sample][0];
 							
-							// Substituted "timeStep$var136" with its value "0".
+																					// Substituted "timeStep$var136" with its value "0".
 							if(((0 <= var82) && (var82 < noStates))) {
 								// Substituted "timeStep$var136" with its value "0".
 								double var139 = metric_valid_bias[st[sample][0]];
@@ -3672,7 +3673,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 							for(int index$sample123$13 = 0; index$sample123$13 < noStates; index$sample123$13 += 1) {
 								// Update the probability of sampling this value from the distribution value.
 								// 
-								// Substituted "index$sample$11" with its value "sample".
+																								// Substituted "index$sample$11" with its value "sample".
 								double cv$probabilitySample123Value14 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$13];
 								double var139 = metric_valid_bias[index$sample123$13];
 								
@@ -3816,7 +3817,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 								if((0 <= st[sample][0])) {
 									int var50 = st[sample][0];
 									
-									// Substituted "timeStep$var136" with its value "0".
+																											// Substituted "timeStep$var136" with its value "0".
 									if(((0 <= var50) && (var50 < noStates))) {
 										// Substituted "timeStep$var136" with its value "0".
 										double var149 = metric_var[st[sample][0]];
@@ -3894,7 +3895,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 								for(int index$sample123$49 = 0; index$sample123$49 < noStates; index$sample123$49 += 1) {
 									// Update the probability of sampling this value from the distribution value.
 									// 
-									// Substituted "index$sample$47" with its value "sample".
+																											// Substituted "index$sample$47" with its value "sample".
 									double cv$probabilitySample123Value50 = distribution$sample123[sample][(timeStep$var136 - 1)][index$sample123$49];
 									double var149 = metric_var[index$sample123$49];
 									
@@ -4843,68 +4844,9 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		}
 	}
 
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var19$countGlobal
-		// 
-		// Allocation of cv$var19$countGlobal for single threaded execution
-		cv$var19$countGlobal = new double[noStates];
-		
-		// Constructor for cv$var32$countGlobal
-		// 
-		// Allocation of cv$var32$countGlobal for single threaded execution
-		cv$var32$countGlobal = new double[noStates];
-		
-		// Constructor for cv$distributionAccumulator$var120
-		// 
-		// Allocation of cv$distributionAccumulator$var120 for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 121. Initially set to the value
-		// of putTask 33.
-		cv$distributionAccumulator$var120 = new double[noStates];
-		
-		// Constructor for cv$var102$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var102$stateProbabilityGlobal for single threaded execution
-		cv$var102$stateProbabilityGlobal = new double[noStates];
-		
-		// Constructor for guard$sample104gaussian156$global
-		{
-			// Calculate the largest index of timeStep that is possible and allocate an array
-			// to hold the guard for each of these.
-			int cv$max_timeStep$var136 = 0;
-			for(int sample = 0; sample < length$metric.length; sample += 1)
-				cv$max_timeStep$var136 = Math.max(cv$max_timeStep$var136, length$metric[sample]);
-			
-			// Allocation of guard$sample104gaussian156$global for single threaded execution
-			guard$sample104gaussian156$global = new boolean[length$metric.length][cv$max_timeStep$var136];
-		}
-		
-		// Allocation of cv$var121$stateProbabilityGlobal for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 121. Initially set to the value
-		// of putTask 33.
-		cv$var121$stateProbabilityGlobal = new double[noStates];
-		
-		// Constructor for guard$sample123gaussian156$global
-		// 
-		// Calculate the largest index of timeStep that is possible and allocate an array
-		// to hold the guard for each of these.
-		int cv$max_timeStep$var136 = 0;
-		for(int sample = 0; sample < length$metric.length; sample += 1)
-			cv$max_timeStep$var136 = Math.max(cv$max_timeStep$var136, length$metric[sample]);
-		
-		// Allocation of guard$sample123gaussian156$global for single threaded execution
-		guard$sample123gaussian156$global = new boolean[length$metric.length][cv$max_timeStep$var136];
-	}
-
 	// Method to allocate space for model inputs and outputs.
 	@Override
-	public final void allocator() {
+	public final void allocate() {
 		// Constructor for v
 		v = new double[noStates];
 		
@@ -4995,6 +4937,65 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Allocate scratch space
 		allocateScratch();
+	}
+
+	// Method to allocate space temporary variables used by the inference methods. Allocating
+	// here prevents repeated allocation and deallocation, and makes the code more amenable
+	// to GPU execution.
+	@Override
+	public final void allocateScratch() {
+		// Allocate scratch space.
+		// Constructor for cv$var19$countGlobal
+		// 
+		// Allocation of cv$var19$countGlobal for single threaded execution
+		cv$var19$countGlobal = new double[noStates];
+		
+		// Constructor for cv$var32$countGlobal
+		// 
+		// Allocation of cv$var32$countGlobal for single threaded execution
+		cv$var32$countGlobal = new double[noStates];
+		
+		// Constructor for cv$distributionAccumulator$var120
+		// 
+		// Allocation of cv$distributionAccumulator$var120 for single threaded execution
+		// 
+		// Variable to record the maximum value of Task Get 121. Initially set to the value
+		// of putTask 33.
+		cv$distributionAccumulator$var120 = new double[noStates];
+		
+		// Constructor for cv$var102$stateProbabilityGlobal
+		// 
+		// Allocation of cv$var102$stateProbabilityGlobal for single threaded execution
+		cv$var102$stateProbabilityGlobal = new double[noStates];
+		
+		// Constructor for guard$sample104gaussian156$global
+		{
+			// Calculate the largest index of timeStep that is possible and allocate an array
+			// to hold the guard for each of these.
+			int cv$max_timeStep$var136 = 0;
+			for(int sample = 0; sample < length$metric.length; sample += 1)
+				cv$max_timeStep$var136 = Math.max(cv$max_timeStep$var136, length$metric[sample]);
+			
+			// Allocation of guard$sample104gaussian156$global for single threaded execution
+			guard$sample104gaussian156$global = new boolean[length$metric.length][cv$max_timeStep$var136];
+		}
+		
+		// Allocation of cv$var121$stateProbabilityGlobal for single threaded execution
+		// 
+		// Variable to record the maximum value of Task Get 121. Initially set to the value
+		// of putTask 33.
+		cv$var121$stateProbabilityGlobal = new double[noStates];
+		
+		// Constructor for guard$sample123gaussian156$global
+		// 
+		// Calculate the largest index of timeStep that is possible and allocate an array
+		// to hold the guard for each of these.
+		int cv$max_timeStep$var136 = 0;
+		for(int sample = 0; sample < length$metric.length; sample += 1)
+			cv$max_timeStep$var136 = Math.max(cv$max_timeStep$var136, length$metric[sample]);
+		
+		// Allocation of guard$sample123gaussian156$global for single threaded execution
+		guard$sample123gaussian156$global = new boolean[length$metric.length][cv$max_timeStep$var136];
 	}
 
 	// Method to execute the model code conventionally.
@@ -5111,7 +5112,7 @@ final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 						if(fixedFlag$sample104) {
 							int var31 = st[sample][0];
 							
-							// Substituted "timeStep$var113" with its value "1".
+																					// Substituted "timeStep$var113" with its value "1".
 							if(((0 <= var31) && (var31 < noStates))) {
 								// Substituted "timeStep$var113" with its value "1".
 								double[] var119 = m[st[sample][0]];
