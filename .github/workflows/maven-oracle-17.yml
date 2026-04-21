@@ -11,6 +11,8 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions: {}
+
 jobs:
   test:
     name: Test on java-version 17 and os ${{ matrix.os }}
@@ -20,16 +22,18 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup Oracle Java SE
-      uses: oracle-actions/setup-java@v1
-      with:
-        website: oracle.com
-        release: 17
-        version: 17.0.12
-   
-    - name: Build with Maven
-      run: |
-        mvn -B install --file Sandwood/pom.xml
-        mvn -B install --file SandwoodMavenPlugin/pom.xml
-        mvn -B test --file SandwoodExamples/pom.xml
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Setup Oracle Java SE
+        uses: oracle-actions/setup-java@fff43251af9936a0e6a4d5d0946e14f1680e9b6b # v1.5.0
+        with:
+          website: oracle.com
+          release: 17
+          version: 17.0.12
+
+      - name: Build with Maven
+        run: |
+          mvn -B install --file Sandwood/pom.xml
+          mvn -B install --file SandwoodMavenPlugin/pom.xml
+          mvn -B test --file SandwoodExamples/pom.xml

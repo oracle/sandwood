@@ -12,6 +12,8 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions: {}
+
 jobs:
   test:
     name: Test on java-version ${{ matrix.java_version }} and os ${{ matrix.os }}
@@ -22,16 +24,18 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK termurin
-      uses: actions/setup-java@v3
-      with:
-        java-version: ${{ matrix.java_version }}
-        distribution: 'temurin'
-        cache: maven
-   
-    - name: Build with Maven
-      run: |
-        mvn -B install --file Sandwood/pom.xml
-        mvn -B install --file SandwoodMavenPlugin/pom.xml
-        mvn -B test --file SandwoodExamples/pom.xml
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Set up JDK termurin
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          java-version: ${{ matrix.java_version }}
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build with Maven
+        run: |
+          mvn -B install --file Sandwood/pom.xml
+          mvn -B install --file SandwoodMavenPlugin/pom.xml
+          mvn -B test --file SandwoodExamples/pom.xml
