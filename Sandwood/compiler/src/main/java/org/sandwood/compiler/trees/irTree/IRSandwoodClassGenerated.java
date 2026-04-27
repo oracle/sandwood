@@ -93,7 +93,7 @@ public class IRSandwoodClassGenerated {
                         FunctionName.createFunctionName("getCurrentLogProbability"), new ArgDesc[0], body, true,
                         "Getter for the probability of " + f.varDesc + ".");
             else
-                get = IRTree.returnFunction(Visibility.PUBLIC, f.varDesc.type, FunctionName.getterName(f.varDesc.name),
+                get = IRTree.returnFunction(override?Visibility.PUBLIC:Visibility.DEFAULT, f.varDesc.type, FunctionName.getterName(f.varDesc.name),
                         new ArgDesc[0], body, override, "Getter for " + f.varDesc + ".");
             gettersAndSetters.add(get);
         }
@@ -125,7 +125,7 @@ public class IRSandwoodClassGenerated {
             }
 
             // Add the resulting body to a function.
-            IRVoidFunction set = IRTree.voidFunction(Visibility.PUBLIC, FunctionName.setterName(f.varDesc.name), args,
+            IRVoidFunction set = IRTree.voidFunction(override?Visibility.PUBLIC:Visibility.DEFAULT, FunctionName.setterName(f.varDesc.name), args,
                     body, override, "Setter for " + f.varDesc + ".");
             gettersAndSetters.add(set);
         }

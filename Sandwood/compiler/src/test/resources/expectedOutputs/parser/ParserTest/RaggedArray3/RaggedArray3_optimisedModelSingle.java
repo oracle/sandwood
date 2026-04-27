@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,32 +16,185 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model RaggedArray3 This is the class that all user
  * interactions with the model should occur through.
  */
-public final class RaggedArray3 extends Model {
-    private RaggedArray3$CoreInterface system$c = new RaggedArray3$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class RaggedArray3 extends Model<RaggedArray3.State> {
+	final class State extends CoreModelState {
+
+		// Declare the variables for the model.
+		double[][] a;
+		boolean constrainedFlag$sample39 = true;
+		double[] d;
+		boolean fixedFlag$sample39 = false;
+		boolean fixedProbFlag$sample39 = false;
+		boolean fixedProbFlag$sample53 = false;
+		int length$obs_measured;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$d;
+		double logProbability$obs;
+		double logProbability$var51;
+		int[] obs;
+		int[] obs_measured;
+		boolean system$gibbsForward = true;
+		int y;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// Constructor for a
+			a = new double[2][];
+			a[0] = new double[2];
+			a[1] = new double[3];
+			
+			// If d has not been set already allocate space.
+			if(!fixedFlag$sample39) {
+				// Constructor for d
+				// Allocate a local variable to hold the length of the array.
+				int lengthCV$a$37_0 = -1;
+				
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if((0 == y))
+					lengthCV$a$37_0 = 2;
+				
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if((1 == y))
+					lengthCV$a$37_0 = 3;
+				d = new double[lengthCV$a$37_0];
+			}
+			
+			// Constructor for obs
+			obs = new int[length$obs_measured];
+		}
+
+		// Getter for a.
+		final double[][] get$a() {
+			return a;
+		}
+
+		// Getter for d.
+		final double[] get$d() {
+			return d;
+		}
+
+		// Setter for d.
+		final void set$d(double[] cv$value, boolean allocated$) {
+			// Set flags for all the side effects of d including if probabilities need to be updated.
+			d = cv$value;
+			
+			// Unset the fixed probability flag for sample 39 as it depends on d.
+			fixedProbFlag$sample39 = false;
+			
+			// Unset the fixed probability flag for sample 53 as it depends on d.
+			fixedProbFlag$sample53 = false;
+		}
+
+		// Getter for fixedFlag$sample39.
+		final boolean get$fixedFlag$sample39() {
+			return fixedFlag$sample39;
+		}
+
+		// Setter for fixedFlag$sample39.
+		final void set$fixedFlag$sample39(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample39 including if probabilities
+			// need to be updated.
+			fixedFlag$sample39 = cv$value;
+			
+			// Substituted "fixedFlag$sample39" with its value "cv$value".
+			constrainedFlag$sample39 = (cv$value || constrainedFlag$sample39);
+			
+			// Should the probability of sample 39 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample39" with its value "cv$value".
+			fixedProbFlag$sample39 = (cv$value && fixedProbFlag$sample39);
+			
+			// Should the probability of sample 53 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample39" with its value "cv$value".
+			fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
+		}
+
+		// Getter for length$obs_measured.
+		final int get$length$obs_measured() {
+			return length$obs_measured;
+		}
+
+		// Setter for length$obs_measured.
+		final void set$length$obs_measured(int cv$value, boolean allocated$) {
+			length$obs_measured = cv$value;
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$d.
+		final double get$logProbability$d() {
+			return logProbability$d;
+		}
+
+		// Getter for logProbability$obs.
+		final double get$logProbability$obs() {
+			return logProbability$obs;
+		}
+
+		// Getter for obs.
+		final int[] get$obs() {
+			return obs;
+		}
+
+		// Getter for obs_measured.
+		final int[] get$obs_measured() {
+			return obs_measured;
+		}
+
+		// Setter for obs_measured.
+		final void set$obs_measured(int[] cv$value, boolean allocated$) {
+			obs_measured = cv$value;
+		}
+
+		// Getter for y.
+		final int get$y() {
+			return y;
+		}
+
+		// Setter for y.
+		final void set$y(int cv$value, boolean allocated$) {
+			y = cv$value;
+		}
+	}
 
     private final ComputedDoubleArrayInternal $d = new ComputedDoubleArrayInternal(this, "d", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$d(); }
+        public double[] getValue() { return state.get$d(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$d(value, allocated);
+            state.set$d(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$d(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$d(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample39(fixed, allocated);
+                state.set$fixedFlag$sample39(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample39())
+            if(state.get$fixedFlag$sample39())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -51,7 +206,7 @@ public final class RaggedArray3 extends Model {
 
     private final ComputedIntegerArrayInternal $obs = new ComputedIntegerArrayInternal(this, "obs", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int[] getValue() { return system$c.get$obs(); }
+        public int[] getValue() { return state.get$obs(); }
 
         @Override
         protected void setValueInternal(int[] value) {}
@@ -62,7 +217,7 @@ public final class RaggedArray3 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$obs(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$obs(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -84,12 +239,12 @@ public final class RaggedArray3 extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$y();
+                return state.get$y();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$y(value, allocated); }
+        protected void setValueInternal(int value) { state.set$y(value, allocated); }
     };
 
 	/** Observed variable representing y of type int from the Sandwood model. */
@@ -101,24 +256,24 @@ public final class RaggedArray3 extends Model {
         @Override
         public int[] getValue() {
             synchronized(model) {
-                return system$c.get$obs_measured();
+                return state.get$obs_measured();
             }
         }
 
         @Override
         public void setValueInternal(int[] value) {
-            system$c.set$obs_measured(value, allocated);
-            system$c.set$length$obs_measured(value.length, allocated);
+            state.set$obs_measured(value, allocated);
+            state.set$length$obs_measured(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$obs_measured(shape, allocated);
+            state.set$length$obs_measured(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$obs_measured();
+            return state.get$length$obs_measured();
         }
     };
 
@@ -135,6 +290,7 @@ public final class RaggedArray3 extends Model {
 	/** A constructor for a model where no variable values are set. */
     public RaggedArray3() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("d", $d);
         $computedVariables.put("obs", $obs);
@@ -144,7 +300,9 @@ public final class RaggedArray3 extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("obs_measured", $obs_measured);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        RaggedArray3$SingleThreadCPU core = new RaggedArray3$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -174,42 +332,15 @@ public final class RaggedArray3 extends Model {
     }
     
     @Override
-    protected RaggedArray3$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        RaggedArray3$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new RaggedArray3$SingleThreadCPU(target);
-                break;
+                return new RaggedArray3$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new RaggedArray3$MultiThreadCPU(target);
-                break;
+                return new RaggedArray3$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(RaggedArray3$CoreInterface oldCore, RaggedArray3$CoreInterface newCore) {
-        //Model inputs
-        if(y.isSet())
-            newCore.set$y(oldCore.get$y(), false);
-
-        //Observed arrays
-        if(obs_measured.isSet()) {
-            newCore.set$obs_measured(oldCore.get$obs_measured(), false);
-            newCore.set$length$obs_measured(oldCore.get$length$obs_measured(), false);
-        }
-        else if(obs_measured.shapeSet())
-            newCore.set$length$obs_measured(oldCore.get$length$obs_measured(), false);
-
-        //ComputedVariables
-        if($d.isSet())
-            newCore.set$d(oldCore.get$d(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample39(oldCore.get$fixedFlag$sample39(), false);
     }
 
 	/**

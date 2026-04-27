@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,12 +16,170 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model DirichletBernoulli This is the class that
  * all user interactions with the model should occur through.
  */
-public final class DirichletBernoulli extends Model {
-    private DirichletBernoulli$CoreInterface system$c = new DirichletBernoulli$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class DirichletBernoulli extends Model<DirichletBernoulli.State> {
+	final class State extends CoreModelState {
+
+		// Declare the variables for the model.
+		boolean constrainedFlag$sample17 = true;
+		boolean fixedFlag$sample17 = false;
+		boolean fixedProbFlag$sample17 = false;
+		boolean fixedProbFlag$sample38 = false;
+		boolean fixedProbFlag$sample51 = false;
+		int length;
+		int length$observed;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$b1;
+		double logProbability$b2;
+		double logProbability$output;
+		double logProbability$prior;
+		double logProbability$var38;
+		double logProbability$var51;
+		boolean[] observed;
+		boolean[] output;
+		double[] prior;
+		boolean system$gibbsForward = true;
+		double[] v;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// Constructor for v
+			{
+				v = new double[2];
+			}
+			
+			// If prior has not been set already allocate space.
+			if(!fixedFlag$sample17) {
+				// Constructor for prior
+				{
+					prior = new double[2];
+				}
+			}
+			
+			// Constructor for output
+			{
+				output = new boolean[length$observed];
+			}
+		}
+
+		// Getter for fixedFlag$sample17.
+		final boolean get$fixedFlag$sample17() {
+			return fixedFlag$sample17;
+		}
+
+		// Setter for fixedFlag$sample17.
+		final void set$fixedFlag$sample17(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample17 including if probabilities
+			// need to be updated.
+			fixedFlag$sample17 = cv$value;
+			constrainedFlag$sample17 = (fixedFlag$sample17 || constrainedFlag$sample17);
+			
+			// Should the probability of sample 17 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample17 = (fixedFlag$sample17 && fixedProbFlag$sample17);
+			
+			// Should the probability of sample 38 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample38 = (fixedFlag$sample17 && fixedProbFlag$sample38);
+			
+			// Should the probability of sample 51 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample51 = (fixedFlag$sample17 && fixedProbFlag$sample51);
+		}
+
+		// Getter for length.
+		final int get$length() {
+			return length;
+		}
+
+		// Getter for length$observed.
+		final int get$length$observed() {
+			return length$observed;
+		}
+
+		// Setter for length$observed.
+		final void set$length$observed(int cv$value, boolean allocated$) {
+			length$observed = cv$value;
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$b1.
+		final double get$logProbability$b1() {
+			return logProbability$b1;
+		}
+
+		// Getter for logProbability$b2.
+		final double get$logProbability$b2() {
+			return logProbability$b2;
+		}
+
+		// Getter for logProbability$output.
+		final double get$logProbability$output() {
+			return logProbability$output;
+		}
+
+		// Getter for logProbability$prior.
+		final double get$logProbability$prior() {
+			return logProbability$prior;
+		}
+
+		// Getter for observed.
+		final boolean[] get$observed() {
+			return observed;
+		}
+
+		// Setter for observed.
+		final void set$observed(boolean[] cv$value, boolean allocated$) {
+			observed = cv$value;
+		}
+
+		// Getter for output.
+		final boolean[] get$output() {
+			return output;
+		}
+
+		// Getter for prior.
+		final double[] get$prior() {
+			return prior;
+		}
+
+		// Setter for prior.
+		final void set$prior(double[] cv$value, boolean allocated$) {
+			// Set flags for all the side effects of prior including if probabilities need to
+			// be updated.
+			prior = cv$value;
+			
+			// Unset the fixed probability flag for sample 17 as it depends on prior.
+			fixedProbFlag$sample17 = false;
+			
+			// Unset the fixed probability flag for sample 38 as it depends on prior.
+			fixedProbFlag$sample38 = false;
+			
+			// Unset the fixed probability flag for sample 51 as it depends on prior.
+			fixedProbFlag$sample51 = false;
+		}
+
+		// Getter for v.
+		final double[] get$v() {
+			return v;
+		}
+	}
 
     private final ComputedBooleanArrayInternal $output = new ComputedBooleanArrayInternal(this, "output", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean[] getValue() { return system$c.get$output(); }
+        public boolean[] getValue() { return state.get$output(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {}
@@ -30,7 +190,7 @@ public final class DirichletBernoulli extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$output(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$output(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -50,27 +210,27 @@ public final class DirichletBernoulli extends Model {
 
     private final ComputedDoubleArrayInternal $prior = new ComputedDoubleArrayInternal(this, "prior", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$prior(); }
+        public double[] getValue() { return state.get$prior(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$prior(value, allocated);
+            state.set$prior(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$prior(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$prior(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample17(fixed, allocated);
+                state.set$fixedFlag$sample17(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample17())
+            if(state.get$fixedFlag$sample17())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -88,24 +248,24 @@ public final class DirichletBernoulli extends Model {
         @Override
         public boolean[] getValue() {
             synchronized(model) {
-                return system$c.get$observed();
+                return state.get$observed();
             }
         }
 
         @Override
         public void setValueInternal(boolean[] value) {
-            system$c.set$observed(value, allocated);
-            system$c.set$length$observed(value.length, allocated);
+            state.set$observed(value, allocated);
+            state.set$length$observed(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$observed(shape, allocated);
+            state.set$length$observed(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$observed();
+            return state.get$length$observed();
         }
     };
 
@@ -119,7 +279,7 @@ public final class DirichletBernoulli extends Model {
     private final RandomVariableInternal $b1 = new RandomVariableInternal(this, "b1", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
-            return system$c.get$logProbability$b1();
+            return state.get$logProbability$b1();
         }
     };
 
@@ -129,7 +289,7 @@ public final class DirichletBernoulli extends Model {
     private final RandomVariableInternal $b2 = new RandomVariableInternal(this, "b2", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
-            return system$c.get$logProbability$b2();
+            return state.get$logProbability$b2();
         }
     };
 
@@ -142,13 +302,16 @@ public final class DirichletBernoulli extends Model {
 	/** A constructor for a model where no variable values are set. */
     public DirichletBernoulli() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("output", $output);
         $computedVariables.put("prior", $prior);
 
         //Observed array fields
         $shapedObservedValues.put("observed", $observed);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        DirichletBernoulli$SingleThreadCPU core = new DirichletBernoulli$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -174,39 +337,15 @@ public final class DirichletBernoulli extends Model {
     }
     
     @Override
-    protected DirichletBernoulli$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        DirichletBernoulli$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new DirichletBernoulli$SingleThreadCPU(target);
-                break;
+                return new DirichletBernoulli$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new DirichletBernoulli$MultiThreadCPU(target);
-                break;
+                return new DirichletBernoulli$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(DirichletBernoulli$CoreInterface oldCore, DirichletBernoulli$CoreInterface newCore) {
-
-        //Observed arrays
-        if(observed.isSet()) {
-            newCore.set$observed(oldCore.get$observed(), false);
-            newCore.set$length$observed(oldCore.get$length$observed(), false);
-        }
-        else if(observed.shapeSet())
-            newCore.set$length$observed(oldCore.get$length$observed(), false);
-
-        //ComputedVariables
-        if($prior.isSet())
-            newCore.set$prior(oldCore.get$prior(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17(), false);
     }
 
 	/**

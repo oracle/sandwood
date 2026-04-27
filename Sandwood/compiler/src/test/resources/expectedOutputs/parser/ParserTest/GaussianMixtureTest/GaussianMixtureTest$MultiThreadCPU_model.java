@@ -1,279 +1,75 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.GaussianMixtureTest$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.GaussianMixtureTest.State;
 import org.sandwood.random.internal.Rng;
 import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU implements GaussianMixtureTest$CoreInterface {
+final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double[] alpha;
-	boolean constrainedFlag$sample17 = true;
-	boolean[] constrainedFlag$sample34;
-	boolean[] constrainedFlag$sample52;
-	boolean[] constrainedFlag$sample68;
-	boolean fixedFlag$sample17 = false;
-	boolean fixedFlag$sample34 = false;
-	boolean fixedFlag$sample52 = false;
-	boolean fixedProbFlag$sample17 = false;
-	boolean fixedProbFlag$sample34 = false;
-	boolean fixedProbFlag$sample52 = false;
-	int k;
-	int length$xMeasured;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$mu;
-	double logProbability$phi;
-	double[] logProbability$sample68;
-	double[] logProbability$sample72;
-	double logProbability$sigma;
-	double logProbability$var34;
-	double logProbability$var52;
-	double logProbability$x;
-	double[] mu;
-	double[] phi;
-	double[] sigma;
-	boolean system$gibbsForward = true;
-	double[] x;
-	double[] xMeasured;
-	int[] z;
-	double[] cv$var17$countGlobal;
-	double[][] cv$var68$stateProbabilityGlobal;
+		// Declare the scratch variables for the model.
+		double[] cv$var17$countGlobal;
+		double[][] cv$var68$stateProbabilityGlobal;
 
-	public GaussianMixtureTest$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
-
-	// Getter for alpha.
-	@Override
-	public final double[] get$alpha() {
-		return alpha;
-	}
-
-	// Getter for fixedFlag$sample17.
-	@Override
-	public final boolean get$fixedFlag$sample17() {
-		return fixedFlag$sample17;
-	}
-
-	// Setter for fixedFlag$sample17.
-	@Override
-	public final void set$fixedFlag$sample17(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample17 including if probabilities
-		// need to be updated.
-		fixedFlag$sample17 = cv$value;
-		constrainedFlag$sample17 = (fixedFlag$sample17 || constrainedFlag$sample17);
-		
-		// Should the probability of sample 17 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample17 = (fixedFlag$sample17 && fixedProbFlag$sample17);
-	}
-
-	// Getter for fixedFlag$sample34.
-	@Override
-	public final boolean get$fixedFlag$sample34() {
-		return fixedFlag$sample34;
-	}
-
-	// Setter for fixedFlag$sample34.
-	@Override
-	public final void set$fixedFlag$sample34(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample34 including if probabilities
-		// need to be updated.
-		fixedFlag$sample34 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample34$1 = 0; index$constrainedFlag$sample34$1 < constrainedFlag$sample34.length; index$constrainedFlag$sample34$1 += 1)
-				constrainedFlag$sample34[index$constrainedFlag$sample34$1] = true;
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// Constructor for cv$var17$countGlobal
+			{
+				// Allocation of cv$var17$countGlobal for single threaded execution
+				cv$var17$countGlobal = new double[5];
+			}
+			
+			// Constructor for cv$var68$stateProbabilityGlobal
+			{
+				// Allocation of cv$var68$stateProbabilityGlobal for multithreaded execution
+				{
+					// Get the thread count.
+					int cv$threadCount = threadCount();
+					
+					// Allocate an array to hold a copy per thread
+					cv$var68$stateProbabilityGlobal = new double[cv$threadCount][];
+					
+					// Populate the array with a copy per thread
+					for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+						cv$var68$stateProbabilityGlobal[cv$index] = new double[5];
+				}
+			}
 		}
-		
-		// Should the probability of sample 34 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample34 = (fixedFlag$sample34 && fixedProbFlag$sample34);
 	}
 
-	// Getter for fixedFlag$sample52.
-	@Override
-	public final boolean get$fixedFlag$sample52() {
-		return fixedFlag$sample52;
-	}
 
-	// Setter for fixedFlag$sample52.
-	@Override
-	public final void set$fixedFlag$sample52(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample52 including if probabilities
-		// need to be updated.
-		fixedFlag$sample52 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample52$1 = 0; index$constrainedFlag$sample52$1 < constrainedFlag$sample52.length; index$constrainedFlag$sample52$1 += 1)
-				constrainedFlag$sample52[index$constrainedFlag$sample52$1] = true;
-		}
-		
-		// Should the probability of sample 52 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample52 = (fixedFlag$sample52 && fixedProbFlag$sample52);
-	}
-
-	// Getter for k.
-	@Override
-	public final int get$k() {
-		return k;
-	}
-
-	// Getter for length$xMeasured.
-	@Override
-	public final int get$length$xMeasured() {
-		return length$xMeasured;
-	}
-
-	// Setter for length$xMeasured.
-	@Override
-	public final void set$length$xMeasured(int cv$value, boolean allocated$) {
-		length$xMeasured = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$mu.
-	@Override
-	public final double get$logProbability$mu() {
-		return logProbability$mu;
-	}
-
-	// Getter for logProbability$phi.
-	@Override
-	public final double get$logProbability$phi() {
-		return logProbability$phi;
-	}
-
-	// Getter for logProbability$sigma.
-	@Override
-	public final double get$logProbability$sigma() {
-		return logProbability$sigma;
-	}
-
-	// Getter for logProbability$x.
-	@Override
-	public final double get$logProbability$x() {
-		return logProbability$x;
-	}
-
-	// Getter for mu.
-	@Override
-	public final double[] get$mu() {
-		return mu;
-	}
-
-	// Setter for mu.
-	@Override
-	public final void set$mu(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of mu including if probabilities need to be
-		// updated.
-		mu = cv$value;
-		
-		// Unset the fixed probability flag for sample 34 as it depends on mu.
-		fixedProbFlag$sample34 = false;
-	}
-
-	// Getter for phi.
-	@Override
-	public final double[] get$phi() {
-		return phi;
-	}
-
-	// Setter for phi.
-	@Override
-	public final void set$phi(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of phi including if probabilities need to be
-		// updated.
-		phi = cv$value;
-		
-		// Unset the fixed probability flag for sample 17 as it depends on phi.
-		fixedProbFlag$sample17 = false;
-	}
-
-	// Getter for sigma.
-	@Override
-	public final double[] get$sigma() {
-		return sigma;
-	}
-
-	// Setter for sigma.
-	@Override
-	public final void set$sigma(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of sigma including if probabilities need to
-		// be updated.
-		sigma = cv$value;
-		
-		// Unset the fixed probability flag for sample 52 as it depends on sigma.
-		fixedProbFlag$sample52 = false;
-	}
-
-	// Getter for x.
-	@Override
-	public final double[] get$x() {
-		return x;
-	}
-
-	// Getter for xMeasured.
-	@Override
-	public final double[] get$xMeasured() {
-		return xMeasured;
-	}
-
-	// Setter for xMeasured.
-	@Override
-	public final void set$xMeasured(double[] cv$value, boolean allocated$) {
-		xMeasured = cv$value;
-	}
-
-	// Getter for z.
-	@Override
-	public final int[] get$z() {
-		return z;
-	}
-
-	// Setter for z.
-	@Override
-	public final void set$z(int[] cv$value, boolean allocated$) {
-		z = cv$value;
+	public GaussianMixtureTest$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample17
 	private final void drawValueSample17() {
-		DistributionSampling.sampleDirichlet(RNG$, alpha, k, phi);
+		DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.k, state.phi);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample34
 	private final void drawValueSample34(int var33, int threadID$cv$var33, Rng RNG$) {
-		mu[var33] = ((Math.sqrt(20.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		state.mu[var33] = ((Math.sqrt(20.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample52
 	private final void drawValueSample52(int var51, int threadID$cv$var51, Rng RNG$) {
-		sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+		state.sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample68
 	private final void drawValueSample68(int i$var66, int threadID$cv$i$var66, Rng RNG$) {
-		z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, phi, k);
+		state.z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, state.phi, state.k);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -281,16 +77,16 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 	// to Categorical conjugate prior.
 	private final void inferSample17() {
 		if(true) {
-			constrainedFlag$sample17 = false;
+			state.constrainedFlag$sample17 = false;
 			
 			// A reference local to the function for the sample variable.
-			double[] cv$targetLocal = phi;
+			double[] cv$targetLocal = state.phi;
 			
 			// A local reference to the scratch space.
-			double[] cv$countLocal = cv$var17$countGlobal;
+			double[] cv$countLocal = scratch.cv$var17$countGlobal;
 			
 			// Get the length of the array
-			int cv$arrayLength = k;
+			int cv$arrayLength = state.k;
 			
 			// Initialize the array values to 0.
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
@@ -300,12 +96,12 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 				{
 					{
 						{
-							for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
+							for(int i$var66 = 0; i$var66 < state.length$xMeasured; i$var66 += 1) {
 								// Flag recording if this sample task of the consuming random variable is constrained.
-								boolean cv$sampleConstrained = constrainedFlag$sample68[((i$var66 - 0) / 1)];
+								boolean cv$sampleConstrained = state.constrainedFlag$sample68[((i$var66 - 0) / 1)];
 								if(cv$sampleConstrained) {
 									// Mark that the sample has observed constrained data.
-									constrainedFlag$sample17 = true;
+									state.constrainedFlag$sample17 = true;
 									{
 										{
 											{
@@ -313,7 +109,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 													{
 														// Increment the sample counter with the value sampled by sample task 68 of random
 														// variable var67
-														cv$countLocal[z[((i$var66 - 0) / 1)]] = (cv$countLocal[z[((i$var66 - 0) / 1)]] + 1.0);
+														cv$countLocal[state.z[((i$var66 - 0) / 1)]] = (cv$countLocal[state.z[((i$var66 - 0) / 1)]] + 1.0);
 													}
 												}
 											}
@@ -325,11 +121,11 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 					}
 				}
 			}
-			if(constrainedFlag$sample17)
+			if(state.constrainedFlag$sample17)
 				// Calculate the new sample value
 				// 
 				// Calculate a new sample value and write it into cv$targetLocal.
-				Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$countLocal, cv$targetLocal, k);
+				Conjugates.sampleConjugateDirichletCategorical(state.RNG$, state.alpha, cv$countLocal, cv$targetLocal, state.k);
 		}
 	}
 
@@ -338,7 +134,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 	// to Gaussian conjugate prior.
 	private final void inferSample34(int var33, int threadID$cv$var33, Rng RNG$) {
 		if(true) {
-			constrainedFlag$sample34[((var33 - 0) / 1)] = false;
+			state.constrainedFlag$sample34[((var33 - 0) / 1)] = false;
 			
 			// State to record the weighting of each sample that is consumed. This is the:
 			// sum of the sample denominator*(the sample value - the sample nominator).
@@ -358,8 +154,8 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 					// Looking for a path between Sample 34 and consumer Gaussian 71.
 					{
 						{
-							for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
-								if((var33 == z[((i$var66 - 0) / 1)])) {
+							for(int i$var66 = 0; i$var66 < state.length$xMeasured; i$var66 += 1) {
+								if((var33 == state.z[((i$var66 - 0) / 1)])) {
 									// Processing sample task 72 of consumer random variable null.
 									{
 										{
@@ -367,7 +163,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 											boolean cv$sampleConstrained = true;
 											if(cv$sampleConstrained) {
 												// Mark that the sample has observed constrained data.
-												constrainedFlag$sample34[((var33 - 0) / 1)] = true;
+												state.constrainedFlag$sample34[((var33 - 0) / 1)] = true;
 												{
 													{
 														{
@@ -385,12 +181,12 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 																	cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
 																	
 																	// Add the weighting of the sample to the sum.
-																	cv$sum = (cv$sum + (cv$denominator * (x[i$var66] - cv$numerator)));
+																	cv$sum = (cv$sum + (cv$denominator * (state.x[i$var66] - cv$numerator)));
 																	
 																	// If we have not got the value of sigma yet record it and set a flag so it is not
 																	// recorded again.
 																	if(cv$sigmaNotFound) {
-																		cv$sigmaValue = sigma[z[((i$var66 - 0) / 1)]];
+																		cv$sigmaValue = state.sigma[state.z[((i$var66 - 0) / 1)]];
 																		cv$sigmaNotFound = false;
 																	}
 																}
@@ -407,7 +203,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 					}
 				}
 			}
-			if(constrainedFlag$sample34[((var33 - 0) / 1)]) {
+			if(state.constrainedFlag$sample34[((var33 - 0) / 1)]) {
 				// Write out the value of the sample to a temporary variable prior to updating the
 				// intermediate variables.
 				double var34 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 20.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
@@ -416,7 +212,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 				{
 					{
 						{
-							mu[var33] = var34;
+							state.mu[var33] = var34;
 						}
 					}
 				}
@@ -429,7 +225,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 	// Gamma to Gaussian conjugate prior.
 	private final void inferSample52(int var51, int threadID$cv$var51, Rng RNG$) {
 		if(true) {
-			constrainedFlag$sample52[((var51 - 0) / 1)] = false;
+			state.constrainedFlag$sample52[((var51 - 0) / 1)] = false;
 			
 			// Variable to track the sum of the difference between the samples and the random
 			// variables mean squared.
@@ -443,8 +239,8 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 					// Looking for a path between Sample 52 and consumer Gaussian 71.
 					{
 						{
-							for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
-								if((var51 == z[((i$var66 - 0) / 1)])) {
+							for(int i$var66 = 0; i$var66 < state.length$xMeasured; i$var66 += 1) {
+								if((var51 == state.z[((i$var66 - 0) / 1)])) {
 									// Processing sample task 72 of consumer random variable null.
 									{
 										{
@@ -452,19 +248,19 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 											boolean cv$sampleConstrained = true;
 											if(cv$sampleConstrained) {
 												// Mark that the sample has observed constrained data.
-												constrainedFlag$sample52[((var51 - 0) / 1)] = true;
+												state.constrainedFlag$sample52[((var51 - 0) / 1)] = true;
 												{
 													{
 														{
 															{
 																{
 																	// The mean parameter for Gaussian var71.
-																	double cv$var71$mu = mu[z[((i$var66 - 0) / 1)]];
+																	double cv$var71$mu = state.mu[state.z[((i$var66 - 0) / 1)]];
 																	
 																	// Consume sample task 72 from random variable var71.
 																	// 
 																	// The difference between the mean parameter and the value sampled from the Gaussian.
-																	double cv$var71$diff = (cv$var71$mu - x[i$var66]);
+																	double cv$var71$diff = (cv$var71$mu - state.x[i$var66]);
 																	
 																	// Include this sample by adding the square of the difference to the sum.
 																	cv$sum = (cv$sum + (cv$var71$diff * cv$var71$diff));
@@ -485,7 +281,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 					}
 				}
 			}
-			if(constrainedFlag$sample52[((var51 - 0) / 1)]) {
+			if(state.constrainedFlag$sample52[((var51 - 0) / 1)]) {
 				// Write out the value of the sample to a temporary variable prior to updating the
 				// intermediate variables.
 				double var52 = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 1.0, 1.0, cv$sum, cv$count);
@@ -494,7 +290,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 				{
 					{
 						{
-							sigma[var51] = var52;
+							state.sigma[var51] = var52;
 						}
 					}
 				}
@@ -507,17 +303,17 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 	// marginalization.
 	private final void inferSample68(int i$var66, int threadID$cv$i$var66, Rng RNG$) {
 		if(true) {
-			constrainedFlag$sample68[((i$var66 - 0) / 1)] = false;
+			state.constrainedFlag$sample68[((i$var66 - 0) / 1)] = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
 			{
 				// variable marginalization
-				cv$numStates = Math.max(cv$numStates, k);
+				cv$numStates = Math.max(cv$numStates, state.k);
 			}
 			
 			// Get a local reference to the scratch space.
-			double[] cv$stateProbabilityLocal = cv$var68$stateProbabilityGlobal[threadID$cv$i$var66];
+			double[] cv$stateProbabilityLocal = scratch.cv$var68$stateProbabilityGlobal[threadID$cv$i$var66];
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				// Initialize the summed probabilities to 0.
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -536,14 +332,14 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 				cv$currentValue = cv$valuePos;
 				
 				// Write out the new value of the sample.
-				z[((i$var66 - 0) / 1)] = cv$currentValue;
+				state.z[((i$var66 - 0) / 1)] = cv$currentValue;
 				{
 					// Record the reached probability density.
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < k)) && (0 < k)) && (0.0 <= phi[cv$currentValue])) && (phi[cv$currentValue] <= 1.0))?Math.log(phi[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < state.k)) && (0 < state.k)) && (0.0 <= state.phi[cv$currentValue])) && (state.phi[cv$currentValue] <= 1.0))?Math.log(state.phi[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 71.
 					{
@@ -563,7 +359,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 											boolean cv$sampleConstrained = true;
 											if(cv$sampleConstrained) {
 												// Mark that the sample has observed constrained data.
-												constrainedFlag$sample68[((i$var66 - 0) / 1)] = true;
+												state.constrainedFlag$sample68[((i$var66 - 0) / 1)] = true;
 												
 												// Set an accumulator to sum the probabilities for each possible configuration of
 												// inputs.
@@ -578,20 +374,20 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 															{
 																{
 																	// Constructing a random variable input for use later.
-																	double var69 = mu[cv$currentValue];
+																	double var69 = state.mu[cv$currentValue];
 																	
 																	// Constructing a random variable input for use later.
-																	double var70 = sigma[cv$currentValue];
+																	double var70 = state.sigma[cv$currentValue];
 																	
 																	// Record the probability of sample task 72 generating output with current configuration.
-																	if(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																	if(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((state.x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((state.x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																	else {
 																		// If the second value is -infinity.
 																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY));
+																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((state.x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY));
 																		else
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)));
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((state.x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((state.x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)));
 																	}
 																	
 																	// Recorded the probability of reaching sample task 72 with the current configuration.
@@ -634,7 +430,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 											boolean cv$sampleConstrained = true;
 											if(cv$sampleConstrained) {
 												// Mark that the sample has observed constrained data.
-												constrainedFlag$sample68[((i$var66 - 0) / 1)] = true;
+												state.constrainedFlag$sample68[((i$var66 - 0) / 1)] = true;
 												
 												// Set an accumulator to sum the probabilities for each possible configuration of
 												// inputs.
@@ -649,20 +445,20 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 															{
 																{
 																	// Constructing a random variable input for use later.
-																	double var69 = mu[cv$currentValue];
+																	double var69 = state.mu[cv$currentValue];
 																	
 																	// Constructing a random variable input for use later.
-																	double var70 = sigma[cv$currentValue];
+																	double var70 = state.sigma[cv$currentValue];
 																	
 																	// Record the probability of sample task 72 generating output with current configuration.
-																	if(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																	if(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((state.x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((state.x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																	else {
 																		// If the second value is -infinity.
 																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY));
+																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((state.x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY));
 																		else
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)));
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((state.x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((state.x[i$var66] - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY)));
 																	}
 																	
 																	// Recorded the probability of reaching sample task 72 with the current configuration.
@@ -712,7 +508,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 				// Save the calculated index value into the array of index value probabilities
 				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
-			if(constrainedFlag$sample68[((i$var66 - 0) / 1)]) {
+			if(state.constrainedFlag$sample68[((i$var66 - 0) / 1)]) {
 				// The sum of all the probabilities in log space
 				double cv$logSum = 0.0;
 				
@@ -762,7 +558,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 					cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 				
 				// Write out the new value of the sample.
-				z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
+				state.z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
 			}
 		}
 	}
@@ -772,7 +568,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 	private final void logProbabilityValue$sample17() {
 		// Determine if we need to calculate the values for sample task 17 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample17) {
+		if(!state.fixedProbFlag$sample17) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -788,11 +584,11 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			{
 				{
 					// The sample value to calculate the probability of generating
-					double[] cv$sampleValue = phi;
+					double[] cv$sampleValue = state.phi;
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, alpha, k));
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, state.alpha, state.k));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -827,19 +623,19 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$phi = cv$sampleProbability;
+			state.logProbability$phi = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample17)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample17)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample17 = fixedFlag$sample17;
+			state.fixedProbFlag$sample17 = state.fixedFlag$sample17;
 		} else {
 			// Using cached values.
 			// 
@@ -847,17 +643,17 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$phi;
+			double cv$sampleValue = state.logProbability$phi;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample17)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample17)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -866,7 +662,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 	private final void logProbabilityValue$sample34() {
 		// Determine if we need to calculate the values for sample task 34 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample34) {
+		if(!state.fixedProbFlag$sample34) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -876,7 +672,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var33 = 0; var33 < k; var33 += 1) {
+			for(int var33 = 0; var33 < state.k; var33 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -885,7 +681,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 				{
 					{
 						// The sample value to calculate the probability of generating
-						double cv$sampleValue = mu[var33];
+						double cv$sampleValue = state.mu[var33];
 						{
 							{
 								double var20 = 0.0;
@@ -931,22 +727,22 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the random variable instance probability
-			logProbability$var34 = cv$sampleAccumulator;
+			state.logProbability$var34 = cv$sampleAccumulator;
 			
 			// Update the variable probability
-			logProbability$mu = (logProbability$mu + cv$accumulator);
+			state.logProbability$mu = (state.logProbability$mu + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample34)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample34)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample34 = fixedFlag$sample34;
+			state.fixedProbFlag$sample34 = state.fixedFlag$sample34;
 		} else {
 			// Using cached values.
 			// 
@@ -957,23 +753,23 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var33 = 0; var33 < k; var33 += 1)
+			for(int var33 = 0; var33 < state.k; var33 += 1)
 				// Record that the sample was reached.
 				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var34;
+			double cv$sampleValue = state.logProbability$var34;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$mu = (logProbability$mu + cv$accumulator);
+			state.logProbability$mu = (state.logProbability$mu + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample34)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample34)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -982,7 +778,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 	private final void logProbabilityValue$sample52() {
 		// Determine if we need to calculate the values for sample task 52 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample52) {
+		if(!state.fixedProbFlag$sample52) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -992,7 +788,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var51 = 0; var51 < k; var51 += 1) {
+			for(int var51 = 0; var51 < state.k; var51 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -1001,7 +797,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 				{
 					{
 						// The sample value to calculate the probability of generating
-						double cv$sampleValue = sigma[var51];
+						double cv$sampleValue = state.sigma[var51];
 						{
 							{
 								double var38 = 1.0;
@@ -1047,22 +843,22 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the random variable instance probability
-			logProbability$var52 = cv$sampleAccumulator;
+			state.logProbability$var52 = cv$sampleAccumulator;
 			
 			// Update the variable probability
-			logProbability$sigma = (logProbability$sigma + cv$accumulator);
+			state.logProbability$sigma = (state.logProbability$sigma + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample52)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample52)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample52 = fixedFlag$sample52;
+			state.fixedProbFlag$sample52 = state.fixedFlag$sample52;
 		} else {
 			// Using cached values.
 			// 
@@ -1073,23 +869,23 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var51 = 0; var51 < k; var51 += 1)
+			for(int var51 = 0; var51 < state.k; var51 += 1)
 				// Record that the sample was reached.
 				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var52;
+			double cv$sampleValue = state.logProbability$var52;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$sigma = (logProbability$sigma + cv$accumulator);
+			state.logProbability$sigma = (state.logProbability$sigma + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample52)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample52)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -1102,7 +898,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 		
 		// A guard to check if the sample value is ever reached.
 		boolean cv$sampleReached = false;
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
+		for(int i$var66 = 0; i$var66 < state.length$xMeasured; i$var66 += 1) {
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
@@ -1114,11 +910,11 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			{
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = z[((i$var66 - 0) / 1)];
+					int cv$sampleValue = state.z[((i$var66 - 0) / 1)];
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < k)) && (0 < k)) && (0.0 <= phi[cv$sampleValue])) && (phi[cv$sampleValue] <= 1.0))?Math.log(phi[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.k)) && (0 < state.k)) && (0.0 <= state.phi[cv$sampleValue])) && (state.phi[cv$sampleValue] <= 1.0))?Math.log(state.phi[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1156,11 +952,11 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$sample68[((i$var66 - 0) / 1)] = cv$sampleProbability;
+			state.logProbability$sample68[((i$var66 - 0) / 1)] = cv$sampleProbability;
 		}
 		
 		// Add probability to model
-		logProbability$$model = (logProbability$$model + cv$accumulator);
+		state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 	}
 
 	// Calculate the probability of the samples represented by sample72 using sampled
@@ -1172,7 +968,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 		
 		// A guard to check if the sample value is ever reached.
 		boolean cv$sampleReached = false;
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1) {
+		for(int i$var66 = 0; i$var66 < state.length$xMeasured; i$var66 += 1) {
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
@@ -1184,11 +980,11 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			{
 				{
 					// The sample value to calculate the probability of generating
-					double cv$sampleValue = x[i$var66];
+					double cv$sampleValue = state.x[i$var66];
 					{
 						{
-							double var69 = mu[z[((i$var66 - 0) / 1)]];
-							double var70 = sigma[z[((i$var66 - 0) / 1)]];
+							double var69 = state.mu[state.z[((i$var66 - 0) / 1)]];
+							double var70 = state.sigma[state.z[((i$var66 - 0) / 1)]];
 							
 							// Store the value of the function call, so the function call is only made once.
 							double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var70)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var69) / Math.sqrt(var70))) - (0.5 * Math.log(var70))):Double.NEGATIVE_INFINITY));
@@ -1229,158 +1025,58 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$sample72[((i$var66 - 0) / 1)] = cv$sampleProbability;
+			state.logProbability$sample72[((i$var66 - 0) / 1)] = cv$sampleProbability;
 		}
 		
 		// Update the variable probability
-		logProbability$x = (logProbability$x + cv$accumulator);
+		state.logProbability$x = (state.logProbability$x + cv$accumulator);
 		
 		// Add probability to model
-		logProbability$$model = (logProbability$$model + cv$accumulator);
-		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// Constructor for alpha
-		{
-			alpha = new double[5];
-		}
-		
-		// If phi has not been set already allocate space.
-		if(!fixedFlag$sample17) {
-			// Constructor for phi
-			{
-				phi = new double[5];
-			}
-		}
-		
-		// If mu has not been set already allocate space.
-		if(!fixedFlag$sample34) {
-			// Constructor for mu
-			{
-				mu = new double[5];
-			}
-		}
-		
-		// If sigma has not been set already allocate space.
-		if(!fixedFlag$sample52) {
-			// Constructor for sigma
-			{
-				sigma = new double[5];
-			}
-		}
-		
-		// Constructor for x
-		{
-			x = new double[length$xMeasured];
-		}
-		
-		// Constructor for z
-		{
-			z = new int[((((length$xMeasured - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample52
-		{
-			constrainedFlag$sample52 = new boolean[((((5 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample68
-		{
-			constrainedFlag$sample68 = new boolean[((((length$xMeasured - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample34
-		{
-			constrainedFlag$sample34 = new boolean[((((5 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample68
-		{
-			logProbability$sample68 = new double[((((length$xMeasured - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample72
-		{
-			logProbability$sample72 = new double[((((length$xMeasured - 1) - 0) / 1) + 1)];
-		}
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var17$countGlobal
-		{
-			// Allocation of cv$var17$countGlobal for single threaded execution
-			cv$var17$countGlobal = new double[5];
-		}
-		
-		// Constructor for cv$var68$stateProbabilityGlobal
-		{
-			// Allocation of cv$var68$stateProbabilityGlobal for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				cv$var68$stateProbabilityGlobal = new double[cv$threadCount][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					cv$var68$stateProbabilityGlobal[cv$index] = new double[5];
-			}
-		}
+		state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+		state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, alpha, k, phi);
+		if(!state.fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.k, state.phi);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, k, 1,
+		parallelFor(state.RNG$, 0, state.k, 1,
 			(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1) {
-						if(!fixedFlag$sample34)
-							mu[var33] = ((Math.sqrt(20.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
+						if(!state.fixedFlag$sample34)
+							state.mu[var33] = ((Math.sqrt(20.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, k, 1,
+		parallelFor(state.RNG$, 0, state.k, 1,
 			(int forStart$var51, int forEnd$var51, int threadID$var51, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var51 = forStart$var51; var51 < forEnd$var51; var51 += 1) {
-						if(!fixedFlag$sample52)
-							sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$1, 1.0, 1.0);
+						if(!state.fixedFlag$sample52)
+							state.sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$1, 1.0, 1.0);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$xMeasured, 1,
+		parallelFor(state.RNG$, 0, state.length$xMeasured, 1,
 			(int forStart$i$var66, int forEnd$i$var66, int threadID$i$var66, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var66 = forStart$i$var66; i$var66 < forEnd$i$var66; i$var66 += 1) {
-						z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$1, phi, k);
-						x[i$var66] = ((Math.sqrt(sigma[z[((i$var66 - 0) / 1)]]) * DistributionSampling.sampleGaussian(RNG$1)) + mu[z[((i$var66 - 0) / 1)]]);
+						state.z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$1, state.phi, state.k);
+						state.x[i$var66] = ((Math.sqrt(state.sigma[state.z[((i$var66 - 0) / 1)]]) * DistributionSampling.sampleGaussian(RNG$1)) + state.mu[state.z[((i$var66 - 0) / 1)]]);
 					}
 			}
 		);
@@ -1391,43 +1087,43 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, alpha, k, phi);
+		if(!state.fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.k, state.phi);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, k, 1,
+		parallelFor(state.RNG$, 0, state.k, 1,
 			(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1) {
-						if(!fixedFlag$sample34)
-							mu[var33] = ((Math.sqrt(20.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
+						if(!state.fixedFlag$sample34)
+							state.mu[var33] = ((Math.sqrt(20.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, k, 1,
+		parallelFor(state.RNG$, 0, state.k, 1,
 			(int forStart$var51, int forEnd$var51, int threadID$var51, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var51 = forStart$var51; var51 < forEnd$var51; var51 += 1) {
-						if(!fixedFlag$sample52)
-							sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$1, 1.0, 1.0);
+						if(!state.fixedFlag$sample52)
+							state.sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$1, 1.0, 1.0);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$xMeasured, 1,
+		parallelFor(state.RNG$, 0, state.length$xMeasured, 1,
 			(int forStart$i$var66, int forEnd$i$var66, int threadID$i$var66, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var66 = forStart$i$var66; i$var66 < forEnd$i$var66; i$var66 += 1)
-						z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$1, phi, k);
+						state.z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$1, state.phi, state.k);
 			}
 		);
 	}
@@ -1436,44 +1132,44 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, alpha, k, phi);
+		if(!state.fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.k, state.phi);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, k, 1,
+		parallelFor(state.RNG$, 0, state.k, 1,
 			(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1) {
-						if(!fixedFlag$sample34)
-							mu[var33] = ((Math.sqrt(20.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
+						if(!state.fixedFlag$sample34)
+							state.mu[var33] = ((Math.sqrt(20.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, k, 1,
+		parallelFor(state.RNG$, 0, state.k, 1,
 			(int forStart$var51, int forEnd$var51, int threadID$var51, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var51 = forStart$var51; var51 < forEnd$var51; var51 += 1) {
-						if(!fixedFlag$sample52)
-							sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$1, 1.0, 1.0);
+						if(!state.fixedFlag$sample52)
+							state.sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$1, 1.0, 1.0);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$xMeasured, 1,
+		parallelFor(state.RNG$, 0, state.length$xMeasured, 1,
 			(int forStart$i$var66, int forEnd$i$var66, int threadID$i$var66, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var66 = forStart$i$var66; i$var66 < forEnd$i$var66; i$var66 += 1) {
-						z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$1, phi, k);
-						x[i$var66] = ((Math.sqrt(sigma[z[((i$var66 - 0) / 1)]]) * DistributionSampling.sampleGaussian(RNG$1)) + mu[z[((i$var66 - 0) / 1)]]);
+						state.z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$1, state.phi, state.k);
+						state.x[i$var66] = ((Math.sqrt(state.sigma[state.z[((i$var66 - 0) / 1)]]) * DistributionSampling.sampleGaussian(RNG$1)) + state.mu[state.z[((i$var66 - 0) / 1)]]);
 					}
 			}
 		);
@@ -1483,43 +1179,43 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, alpha, k, phi);
+		if(!state.fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.k, state.phi);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, k, 1,
+		parallelFor(state.RNG$, 0, state.k, 1,
 			(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1) {
-						if(!fixedFlag$sample34)
-							mu[var33] = ((Math.sqrt(20.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
+						if(!state.fixedFlag$sample34)
+							state.mu[var33] = ((Math.sqrt(20.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, k, 1,
+		parallelFor(state.RNG$, 0, state.k, 1,
 			(int forStart$var51, int forEnd$var51, int threadID$var51, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var51 = forStart$var51; var51 < forEnd$var51; var51 += 1) {
-						if(!fixedFlag$sample52)
-							sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$1, 1.0, 1.0);
+						if(!state.fixedFlag$sample52)
+							state.sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$1, 1.0, 1.0);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$xMeasured, 1,
+		parallelFor(state.RNG$, 0, state.length$xMeasured, 1,
 			(int forStart$i$var66, int forEnd$i$var66, int threadID$i$var66, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var66 = forStart$i$var66; i$var66 < forEnd$i$var66; i$var66 += 1)
-						z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$1, phi, k);
+						state.z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$1, state.phi, state.k);
 			}
 		);
 	}
@@ -1529,43 +1225,43 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, alpha, k, phi);
+		if(!state.fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.k, state.phi);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, k, 1,
+		parallelFor(state.RNG$, 0, state.k, 1,
 			(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1) {
-						if(!fixedFlag$sample34)
-							mu[var33] = ((Math.sqrt(20.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
+						if(!state.fixedFlag$sample34)
+							state.mu[var33] = ((Math.sqrt(20.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, k, 1,
+		parallelFor(state.RNG$, 0, state.k, 1,
 			(int forStart$var51, int forEnd$var51, int threadID$var51, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var51 = forStart$var51; var51 < forEnd$var51; var51 += 1) {
-						if(!fixedFlag$sample52)
-							sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$1, 1.0, 1.0);
+						if(!state.fixedFlag$sample52)
+							state.sigma[var51] = DistributionSampling.sampleInverseGamma(RNG$1, 1.0, 1.0);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$xMeasured, 1,
+		parallelFor(state.RNG$, 0, state.length$xMeasured, 1,
 			(int forStart$i$var66, int forEnd$i$var66, int threadID$i$var66, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var66 = forStart$i$var66; i$var66 < forEnd$i$var66; i$var66 += 1)
-						z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$1, phi, k);
+						state.z[((i$var66 - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$1, state.phi, state.k);
 			}
 		);
 	}
@@ -1574,38 +1270,38 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample17)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample17)
 				inferSample17();
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, k, 1,
+			parallelFor(state.RNG$, 0, state.k, 1,
 				(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1) {
-							if(!fixedFlag$sample34)
+							if(!state.fixedFlag$sample34)
 								inferSample34(var33, threadID$var33, RNG$1);
 						}
 				}
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, k, 1,
+			parallelFor(state.RNG$, 0, state.k, 1,
 				(int forStart$var51, int forEnd$var51, int threadID$var51, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var51 = forStart$var51; var51 < forEnd$var51; var51 += 1) {
-							if(!fixedFlag$sample52)
+							if(!state.fixedFlag$sample52)
 								inferSample52(var51, threadID$var51, RNG$1);
 						}
 				}
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, length$xMeasured, 1,
+			parallelFor(state.RNG$, 0, state.length$xMeasured, 1,
 				(int forStart$i$var66, int forEnd$i$var66, int threadID$i$var66, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
@@ -1618,7 +1314,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 		// Infer the samples in reverse chronological order.
 		else {
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, length$xMeasured, 1,
+			parallelFor(state.RNG$, 0, state.length$xMeasured, 1,
 				(int forStart$i$var66, int forEnd$i$var66, int threadID$i$var66, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
@@ -1629,73 +1325,73 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, k, 1,
+			parallelFor(state.RNG$, 0, state.k, 1,
 				(int forStart$var51, int forEnd$var51, int threadID$var51, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var51 = forStart$var51; var51 < forEnd$var51; var51 += 1) {
-							if(!fixedFlag$sample52)
+							if(!state.fixedFlag$sample52)
 								inferSample52(var51, threadID$var51, RNG$1);
 						}
 				}
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, k, 1,
+			parallelFor(state.RNG$, 0, state.k, 1,
 				(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1) {
-							if(!fixedFlag$sample34)
+							if(!state.fixedFlag$sample34)
 								inferSample34(var33, threadID$var33, RNG$1);
 						}
 				}
 			);
-			if(!fixedFlag$sample17)
+			if(!state.fixedFlag$sample17)
 				inferSample17();
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample17)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample17)
 			drawValueSample17();
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, k, 1,
+		parallelFor(state.RNG$, 0, state.k, 1,
 			(int forStart$var33, int forEnd$var33, int threadID$var33, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var33 = forStart$var33; var33 < forEnd$var33; var33 += 1) {
-						if(!constrainedFlag$sample34[((var33 - 0) / 1)])
+						if(!state.constrainedFlag$sample34[((var33 - 0) / 1)])
 							drawValueSample34(var33, threadID$var33, RNG$1);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, k, 1,
+		parallelFor(state.RNG$, 0, state.k, 1,
 			(int forStart$var51, int forEnd$var51, int threadID$var51, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var51 = forStart$var51; var51 < forEnd$var51; var51 += 1) {
-						if(!constrainedFlag$sample52[((var51 - 0) / 1)])
+						if(!state.constrainedFlag$sample52[((var51 - 0) / 1)])
 							drawValueSample52(var51, threadID$var51, RNG$1);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$xMeasured, 1,
+		parallelFor(state.RNG$, 0, state.length$xMeasured, 1,
 			(int forStart$i$var66, int forEnd$i$var66, int threadID$i$var66, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var66 = forStart$i$var66; i$var66 < forEnd$i$var66; i$var66 += 1) {
-						if(!constrainedFlag$sample68[((i$var66 - 0) / 1)])
+						if(!state.constrainedFlag$sample68[((i$var66 - 0) / 1)])
 							drawValueSample68(i$var66, threadID$i$var66, RNG$1);
 					}
 			}
@@ -1710,42 +1406,42 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample17)
-			logProbability$phi = Double.NaN;
-		logProbability$mu = 0.0;
-		if(!fixedProbFlag$sample34)
-			logProbability$var34 = Double.NaN;
-		logProbability$sigma = 0.0;
-		if(!fixedProbFlag$sample52)
-			logProbability$var52 = Double.NaN;
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-			logProbability$sample68[((i$var66 - 0) / 1)] = Double.NaN;
-		logProbability$x = 0.0;
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-			logProbability$sample72[((i$var66 - 0) / 1)] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample17)
+			state.logProbability$phi = Double.NaN;
+		state.logProbability$mu = 0.0;
+		if(!state.fixedProbFlag$sample34)
+			state.logProbability$var34 = Double.NaN;
+		state.logProbability$sigma = 0.0;
+		if(!state.fixedProbFlag$sample52)
+			state.logProbability$var52 = Double.NaN;
+		for(int i$var66 = 0; i$var66 < state.length$xMeasured; i$var66 += 1)
+			state.logProbability$sample68[((i$var66 - 0) / 1)] = Double.NaN;
+		state.logProbability$x = 0.0;
+		for(int i$var66 = 0; i$var66 < state.length$xMeasured; i$var66 += 1)
+			state.logProbability$sample72[((i$var66 - 0) / 1)] = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		k = 5;
+		state.k = 5;
 		for(int i$var13 = 0; i$var13 < 5; i$var13 += 1)
-			alpha[i$var13] = 1.0;
+			state.alpha[i$var13] = 1.0;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample52$1 = 0; index$constrainedFlag$sample52$1 < constrainedFlag$sample52.length; index$constrainedFlag$sample52$1 += 1)
-			constrainedFlag$sample52[index$constrainedFlag$sample52$1] = true;
+		for(int index$constrainedFlag$sample52$1 = 0; index$constrainedFlag$sample52$1 < state.constrainedFlag$sample52.length; index$constrainedFlag$sample52$1 += 1)
+			state.constrainedFlag$sample52[index$constrainedFlag$sample52$1] = true;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample68$1 = 0; index$constrainedFlag$sample68$1 < constrainedFlag$sample68.length; index$constrainedFlag$sample68$1 += 1)
-			constrainedFlag$sample68[index$constrainedFlag$sample68$1] = true;
+		for(int index$constrainedFlag$sample68$1 = 0; index$constrainedFlag$sample68$1 < state.constrainedFlag$sample68.length; index$constrainedFlag$sample68$1 += 1)
+			state.constrainedFlag$sample68[index$constrainedFlag$sample68$1] = true;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample34$1 = 0; index$constrainedFlag$sample34$1 < constrainedFlag$sample34.length; index$constrainedFlag$sample34$1 += 1)
-			constrainedFlag$sample34[index$constrainedFlag$sample34$1] = true;
+		for(int index$constrainedFlag$sample34$1 = 0; index$constrainedFlag$sample34$1 < state.constrainedFlag$sample34.length; index$constrainedFlag$sample34$1 += 1)
+			state.constrainedFlag$sample34[index$constrainedFlag$sample34$1] = true;
 	}
 
 	// Construct the evidence probabilities.
@@ -1755,11 +1451,11 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample17)
+		if(state.fixedFlag$sample17)
 			logProbabilityValue$sample17();
-		if(fixedFlag$sample34)
+		if(state.fixedFlag$sample34)
 			logProbabilityValue$sample34();
-		if(fixedFlag$sample52)
+		if(state.fixedFlag$sample52)
 			logProbabilityValue$sample52();
 		logProbabilityValue$sample72();
 	}
@@ -1811,8 +1507,8 @@ final class GaussianMixtureTest$MultiThreadCPU extends CoreModelMultiThreadCPU i
 	@Override
 	public final void propagateObservedValues() {
 		// Deep copy between arrays
-		double[] cv$source1 = xMeasured;
-		double[] cv$target1 = x;
+		double[] cv$source1 = state.xMeasured;
+		double[] cv$target1 = state.x;
 		int cv$length1 = cv$target1.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			cv$target1[cv$index1] = cv$source1[cv$index1];

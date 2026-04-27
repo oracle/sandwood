@@ -1,643 +1,221 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.HMMMetrics4$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.HMMMetrics4.State;
 import org.sandwood.random.internal.Rng;
 import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implements HMMMetrics4$CoreInterface {
+final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	boolean[][] constrainedFlag$sample134;
-	boolean[][] constrainedFlag$sample162;
-	boolean[][] constrainedFlag$sample190;
-	boolean constrainedFlag$sample20 = true;
-	boolean[] constrainedFlag$sample33;
-	boolean[] constrainedFlag$sample57;
-	boolean[][] constrainedFlag$sample76;
-	double[][] current_metric_mean;
-	double[][] current_metric_valid_bias;
-	double[][] current_metric_var;
-	double[][] distribution$sample57;
-	double[][][] distribution$sample76;
-	boolean fixedFlag$sample134 = false;
-	boolean fixedFlag$sample162 = false;
-	boolean fixedFlag$sample190 = false;
-	boolean fixedFlag$sample20 = false;
-	boolean fixedFlag$sample33 = false;
-	boolean fixedFlag$sample57 = false;
-	boolean fixedFlag$sample76 = false;
-	boolean fixedProbFlag$sample134 = false;
-	boolean fixedProbFlag$sample162 = false;
-	boolean fixedProbFlag$sample190 = false;
-	boolean fixedProbFlag$sample20 = false;
-	boolean fixedProbFlag$sample241 = false;
-	boolean fixedProbFlag$sample256 = false;
-	boolean fixedProbFlag$sample33 = false;
-	boolean fixedProbFlag$sample57 = false;
-	boolean fixedProbFlag$sample76 = false;
-	double[] initialStateDistribution;
-	int[][] length$metric;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$current_metric_mean;
-	double logProbability$current_metric_valid_bias;
-	double logProbability$current_metric_var;
-	double logProbability$initialStateDistribution;
-	double logProbability$m;
-	double logProbability$metric_g;
-	double logProbability$metric_valid_g;
-	double logProbability$metric_valid_inner;
-	double logProbability$st;
-	double logProbability$var130;
-	double logProbability$var157;
-	double logProbability$var184;
-	double logProbability$var232;
-	double logProbability$var245;
-	double logProbability$var33;
-	double logProbability$var55;
-	double logProbability$var74;
-	double[][] m;
-	int max_metric;
-	double[][][] metric;
-	double[][][] metric_g;
-	boolean[][][] metric_valid;
-	boolean[][][] metric_valid_g;
-	int noSamples;
-	int noServers;
-	int noStates;
-	int[][] st;
-	boolean system$gibbsForward = true;
-	double[] v;
-	double[][][] var245;
-	double[][] cv$distributionAccumulator$var73;
-	double[] cv$var20$countGlobal;
-	double[][] cv$var33$countGlobal;
-	double[][] cv$var55$stateProbabilityGlobal;
-	double[][] cv$var74$stateProbabilityGlobal;
-	boolean[][][][] guard$sample57gaussian255$global;
-	boolean[][][][] guard$sample76gaussian255$global;
+		// Declare the scratch variables for the model.
+		double[][] cv$distributionAccumulator$var73;
+		double[] cv$var20$countGlobal;
+		double[][] cv$var33$countGlobal;
+		double[][] cv$var55$stateProbabilityGlobal;
+		double[][] cv$var74$stateProbabilityGlobal;
+		boolean[][][][] guard$sample57gaussian255$global;
+		boolean[][][][] guard$sample76gaussian255$global;
 
-	public HMMMetrics4$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
-
-	// Getter for current_metric_mean.
-	@Override
-	public final double[][] get$current_metric_mean() {
-		return current_metric_mean;
-	}
-
-	// Setter for current_metric_mean.
-	@Override
-	public final void set$current_metric_mean(double[][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of current_metric_mean including if probabilities
-		// need to be updated.
-		current_metric_mean = cv$value;
-		
-		// Unset the fixed probability flag for sample 134 as it depends on current_metric_mean.
-		fixedProbFlag$sample134 = false;
-		
-		// Unset the fixed probability flag for sample 256 as it depends on current_metric_mean.
-		fixedProbFlag$sample256 = false;
-	}
-
-	// Getter for current_metric_valid_bias.
-	@Override
-	public final double[][] get$current_metric_valid_bias() {
-		return current_metric_valid_bias;
-	}
-
-	// Setter for current_metric_valid_bias.
-	@Override
-	public final void set$current_metric_valid_bias(double[][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of current_metric_valid_bias including if probabilities
-		// need to be updated.
-		current_metric_valid_bias = cv$value;
-		
-		// Unset the fixed probability flag for sample 190 as it depends on current_metric_valid_bias.
-		fixedProbFlag$sample190 = false;
-		
-		// Unset the fixed probability flag for sample 241 as it depends on current_metric_valid_bias.
-		fixedProbFlag$sample241 = false;
-	}
-
-	// Getter for current_metric_var.
-	@Override
-	public final double[][] get$current_metric_var() {
-		return current_metric_var;
-	}
-
-	// Setter for current_metric_var.
-	@Override
-	public final void set$current_metric_var(double[][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of current_metric_var including if probabilities
-		// need to be updated.
-		current_metric_var = cv$value;
-		
-		// Unset the fixed probability flag for sample 162 as it depends on current_metric_var.
-		fixedProbFlag$sample162 = false;
-		
-		// Unset the fixed probability flag for sample 256 as it depends on current_metric_var.
-		fixedProbFlag$sample256 = false;
-	}
-
-	// Getter for distribution$sample57.
-	@Override
-	public final double[][] get$distribution$sample57() {
-		return distribution$sample57;
-	}
-
-	// Setter for distribution$sample57.
-	@Override
-	public final void set$distribution$sample57(double[][] cv$value, boolean allocated$) {
-		distribution$sample57 = cv$value;
-	}
-
-	// Getter for distribution$sample76.
-	@Override
-	public final double[][][] get$distribution$sample76() {
-		return distribution$sample76;
-	}
-
-	// Setter for distribution$sample76.
-	@Override
-	public final void set$distribution$sample76(double[][][] cv$value, boolean allocated$) {
-		distribution$sample76 = cv$value;
-	}
-
-	// Getter for fixedFlag$sample134.
-	@Override
-	public final boolean get$fixedFlag$sample134() {
-		return fixedFlag$sample134;
-	}
-
-	// Setter for fixedFlag$sample134.
-	@Override
-	public final void set$fixedFlag$sample134(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample134 including if probabilities
-		// need to be updated.
-		fixedFlag$sample134 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample134$1 = 0; index$constrainedFlag$sample134$1 < constrainedFlag$sample134.length; index$constrainedFlag$sample134$1 += 1) {
-				boolean[] cv$constrainedFlag$sample134$1 = constrainedFlag$sample134[index$constrainedFlag$sample134$1];
-				for(int index$constrainedFlag$sample134$2 = 0; index$constrainedFlag$sample134$2 < cv$constrainedFlag$sample134$1.length; index$constrainedFlag$sample134$2 += 1)
-					cv$constrainedFlag$sample134$1[index$constrainedFlag$sample134$2] = true;
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// Constructor for cv$var20$countGlobal
+			{
+				// Allocation of cv$var20$countGlobal for single threaded execution
+				cv$var20$countGlobal = new double[state.noStates];
+			}
+			
+			// Constructor for cv$var33$countGlobal
+			{
+				// Allocation of cv$var33$countGlobal for multithreaded execution
+				{
+					// Get the thread count.
+					int cv$threadCount = threadCount();
+					
+					// Allocate an array to hold a copy per thread
+					cv$var33$countGlobal = new double[cv$threadCount][];
+					
+					// Populate the array with a copy per thread
+					for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+						cv$var33$countGlobal[cv$index] = new double[state.noStates];
+				}
+			}
+			
+			// Constructor for cv$distributionAccumulator$var73
+			{
+				// Variable to record the maximum value of Task Get 74. Initially set to the value
+				// of putTask 34.
+				int cv$var34$max = state.noStates;
+				
+				// Allocation of cv$distributionAccumulator$var73 for multithreaded execution
+				{
+					// Get the thread count.
+					int cv$threadCount = threadCount();
+					
+					// Allocate an array to hold a copy per thread
+					cv$distributionAccumulator$var73 = new double[cv$threadCount][];
+					
+					// Populate the array with a copy per thread
+					for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+						cv$distributionAccumulator$var73[cv$index] = new double[cv$var34$max];
+				}
+			}
+			
+			// Constructor for cv$var55$stateProbabilityGlobal
+			{
+				// Allocation of cv$var55$stateProbabilityGlobal for multithreaded execution
+				{
+					// Get the thread count.
+					int cv$threadCount = threadCount();
+					
+					// Allocate an array to hold a copy per thread
+					cv$var55$stateProbabilityGlobal = new double[cv$threadCount][];
+					
+					// Populate the array with a copy per thread
+					for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+						cv$var55$stateProbabilityGlobal[cv$index] = new double[state.noStates];
+				}
+			}
+			
+			// Constructor for guard$sample57gaussian255$global
+			{
+				// Calculate the largest index of sample that is possible and allocate an array to
+				// hold the guard for each of these.
+				int cv$max_sample$var196 = 0;
+				
+				// Calculate the largest index of server that is possible and allocate an array to
+				// hold the guard for each of these.
+				int cv$max_server = 0;
+				
+				// Calculate the largest index of timeStep that is possible and allocate an array
+				// to hold the guard for each of these.
+				int cv$max_timeStep$var226 = 0;
+				for(int sample$var196 = 0; sample$var196 < state.length$metric.length; sample$var196 += 1) {
+					for(int server = 0; server < state.length$metric[0].length; server += 1)
+						cv$max_timeStep$var226 = Math.max(cv$max_timeStep$var226, ((state.length$metric[sample$var196][0] - 0) / 1));
+					cv$max_server = Math.max(cv$max_server, ((state.length$metric[0].length - 0) / 1));
+				}
+				cv$max_sample$var196 = Math.max(cv$max_sample$var196, ((state.length$metric.length - 0) / 1));
+				
+				// Allocation of guard$sample57gaussian255$global for multithreaded execution
+				{
+					// Get the thread count.
+					int cv$threadCount = threadCount();
+					
+					// Allocate an array to hold a copy per thread
+					guard$sample57gaussian255$global = new boolean[cv$threadCount][][][];
+					
+					// Populate the array with a copy per thread
+					for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+						guard$sample57gaussian255$global[cv$index] = new boolean[cv$max_sample$var196][cv$max_server][cv$max_timeStep$var226];
+				}
+			}
+			
+			// Constructor for cv$var74$stateProbabilityGlobal
+			{
+				// Variable to record the maximum value of Task Get 74. Initially set to the value
+				// of putTask 34.
+				int cv$var34$max = state.noStates;
+				
+				// Allocation of cv$var74$stateProbabilityGlobal for multithreaded execution
+				{
+					// Get the thread count.
+					int cv$threadCount = threadCount();
+					
+					// Allocate an array to hold a copy per thread
+					cv$var74$stateProbabilityGlobal = new double[cv$threadCount][];
+					
+					// Populate the array with a copy per thread
+					for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+						cv$var74$stateProbabilityGlobal[cv$index] = new double[cv$var34$max];
+				}
+			}
+			
+			// Constructor for guard$sample76gaussian255$global
+			{
+				// Calculate the largest index of sample that is possible and allocate an array to
+				// hold the guard for each of these.
+				int cv$max_sample$var196 = 0;
+				
+				// Calculate the largest index of server that is possible and allocate an array to
+				// hold the guard for each of these.
+				int cv$max_server = 0;
+				
+				// Calculate the largest index of timeStep that is possible and allocate an array
+				// to hold the guard for each of these.
+				int cv$max_timeStep$var226 = 0;
+				for(int sample$var196 = 0; sample$var196 < state.length$metric.length; sample$var196 += 1) {
+					for(int server = 0; server < state.length$metric[0].length; server += 1)
+						cv$max_timeStep$var226 = Math.max(cv$max_timeStep$var226, ((state.length$metric[sample$var196][0] - 0) / 1));
+					cv$max_server = Math.max(cv$max_server, ((state.length$metric[0].length - 0) / 1));
+				}
+				cv$max_sample$var196 = Math.max(cv$max_sample$var196, ((state.length$metric.length - 0) / 1));
+				
+				// Allocation of guard$sample76gaussian255$global for multithreaded execution
+				{
+					// Get the thread count.
+					int cv$threadCount = threadCount();
+					
+					// Allocate an array to hold a copy per thread
+					guard$sample76gaussian255$global = new boolean[cv$threadCount][][][];
+					
+					// Populate the array with a copy per thread
+					for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+						guard$sample76gaussian255$global[cv$index] = new boolean[cv$max_sample$var196][cv$max_server][cv$max_timeStep$var226];
+				}
 			}
 		}
-		
-		// Should the probability of sample 134 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample134 = (fixedFlag$sample134 && fixedProbFlag$sample134);
-		
-		// Should the probability of sample 256 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample256 = (fixedFlag$sample134 && fixedProbFlag$sample256);
 	}
 
-	// Getter for fixedFlag$sample162.
-	@Override
-	public final boolean get$fixedFlag$sample162() {
-		return fixedFlag$sample162;
-	}
 
-	// Setter for fixedFlag$sample162.
-	@Override
-	public final void set$fixedFlag$sample162(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample162 including if probabilities
-		// need to be updated.
-		fixedFlag$sample162 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample162$1 = 0; index$constrainedFlag$sample162$1 < constrainedFlag$sample162.length; index$constrainedFlag$sample162$1 += 1) {
-				boolean[] cv$constrainedFlag$sample162$1 = constrainedFlag$sample162[index$constrainedFlag$sample162$1];
-				for(int index$constrainedFlag$sample162$2 = 0; index$constrainedFlag$sample162$2 < cv$constrainedFlag$sample162$1.length; index$constrainedFlag$sample162$2 += 1)
-					cv$constrainedFlag$sample162$1[index$constrainedFlag$sample162$2] = true;
-			}
-		}
-		
-		// Should the probability of sample 162 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample162 = (fixedFlag$sample162 && fixedProbFlag$sample162);
-		
-		// Should the probability of sample 256 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample256 = (fixedFlag$sample162 && fixedProbFlag$sample256);
-	}
-
-	// Getter for fixedFlag$sample190.
-	@Override
-	public final boolean get$fixedFlag$sample190() {
-		return fixedFlag$sample190;
-	}
-
-	// Setter for fixedFlag$sample190.
-	@Override
-	public final void set$fixedFlag$sample190(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample190 including if probabilities
-		// need to be updated.
-		fixedFlag$sample190 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample190$1 = 0; index$constrainedFlag$sample190$1 < constrainedFlag$sample190.length; index$constrainedFlag$sample190$1 += 1) {
-				boolean[] cv$constrainedFlag$sample190$1 = constrainedFlag$sample190[index$constrainedFlag$sample190$1];
-				for(int index$constrainedFlag$sample190$2 = 0; index$constrainedFlag$sample190$2 < cv$constrainedFlag$sample190$1.length; index$constrainedFlag$sample190$2 += 1)
-					cv$constrainedFlag$sample190$1[index$constrainedFlag$sample190$2] = true;
-			}
-		}
-		
-		// Should the probability of sample 190 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample190 = (fixedFlag$sample190 && fixedProbFlag$sample190);
-		
-		// Should the probability of sample 241 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample241 = (fixedFlag$sample190 && fixedProbFlag$sample241);
-	}
-
-	// Getter for fixedFlag$sample20.
-	@Override
-	public final boolean get$fixedFlag$sample20() {
-		return fixedFlag$sample20;
-	}
-
-	// Setter for fixedFlag$sample20.
-	@Override
-	public final void set$fixedFlag$sample20(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample20 including if probabilities
-		// need to be updated.
-		fixedFlag$sample20 = cv$value;
-		constrainedFlag$sample20 = (fixedFlag$sample20 || constrainedFlag$sample20);
-		
-		// Should the probability of sample 20 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample20 = (fixedFlag$sample20 && fixedProbFlag$sample20);
-		
-		// Should the probability of sample 57 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample57 = (fixedFlag$sample20 && fixedProbFlag$sample57);
-	}
-
-	// Getter for fixedFlag$sample33.
-	@Override
-	public final boolean get$fixedFlag$sample33() {
-		return fixedFlag$sample33;
-	}
-
-	// Setter for fixedFlag$sample33.
-	@Override
-	public final void set$fixedFlag$sample33(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample33 including if probabilities
-		// need to be updated.
-		fixedFlag$sample33 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample33$1 = 0; index$constrainedFlag$sample33$1 < constrainedFlag$sample33.length; index$constrainedFlag$sample33$1 += 1)
-				constrainedFlag$sample33[index$constrainedFlag$sample33$1] = true;
-		}
-		
-		// Should the probability of sample 33 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample33 = (fixedFlag$sample33 && fixedProbFlag$sample33);
-		
-		// Should the probability of sample 76 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample76 = (fixedFlag$sample33 && fixedProbFlag$sample76);
-	}
-
-	// Getter for fixedFlag$sample57.
-	@Override
-	public final boolean get$fixedFlag$sample57() {
-		return fixedFlag$sample57;
-	}
-
-	// Setter for fixedFlag$sample57.
-	@Override
-	public final void set$fixedFlag$sample57(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample57 including if probabilities
-		// need to be updated.
-		fixedFlag$sample57 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample57$1 = 0; index$constrainedFlag$sample57$1 < constrainedFlag$sample57.length; index$constrainedFlag$sample57$1 += 1)
-				constrainedFlag$sample57[index$constrainedFlag$sample57$1] = true;
-		}
-		
-		// Should the probability of sample 57 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample57 = (fixedFlag$sample57 && fixedProbFlag$sample57);
-		
-		// Should the probability of sample 76 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample76 = (fixedFlag$sample57 && fixedProbFlag$sample76);
-		
-		// Should the probability of sample 241 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample241 = (fixedFlag$sample57 && fixedProbFlag$sample241);
-		
-		// Should the probability of sample 256 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample256 = (fixedFlag$sample57 && fixedProbFlag$sample256);
-	}
-
-	// Getter for fixedFlag$sample76.
-	@Override
-	public final boolean get$fixedFlag$sample76() {
-		return fixedFlag$sample76;
-	}
-
-	// Setter for fixedFlag$sample76.
-	@Override
-	public final void set$fixedFlag$sample76(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample76 including if probabilities
-		// need to be updated.
-		fixedFlag$sample76 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample76$1 = 0; index$constrainedFlag$sample76$1 < constrainedFlag$sample76.length; index$constrainedFlag$sample76$1 += 1) {
-				boolean[] cv$constrainedFlag$sample76$1 = constrainedFlag$sample76[index$constrainedFlag$sample76$1];
-				for(int index$constrainedFlag$sample76$2 = 0; index$constrainedFlag$sample76$2 < cv$constrainedFlag$sample76$1.length; index$constrainedFlag$sample76$2 += 1)
-					cv$constrainedFlag$sample76$1[index$constrainedFlag$sample76$2] = true;
-			}
-		}
-		
-		// Should the probability of sample 76 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample76 = (fixedFlag$sample76 && fixedProbFlag$sample76);
-		
-		// Should the probability of sample 241 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample241 = (fixedFlag$sample76 && fixedProbFlag$sample241);
-		
-		// Should the probability of sample 256 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample256 = (fixedFlag$sample76 && fixedProbFlag$sample256);
-	}
-
-	// Getter for initialStateDistribution.
-	@Override
-	public final double[] get$initialStateDistribution() {
-		return initialStateDistribution;
-	}
-
-	// Setter for initialStateDistribution.
-	@Override
-	public final void set$initialStateDistribution(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of initialStateDistribution including if probabilities
-		// need to be updated.
-		initialStateDistribution = cv$value;
-		
-		// Unset the fixed probability flag for sample 20 as it depends on initialStateDistribution.
-		fixedProbFlag$sample20 = false;
-		
-		// Unset the fixed probability flag for sample 57 as it depends on initialStateDistribution.
-		fixedProbFlag$sample57 = false;
-	}
-
-	// Getter for length$metric.
-	@Override
-	public final int[][] get$length$metric() {
-		return length$metric;
-	}
-
-	// Setter for length$metric.
-	@Override
-	public final void set$length$metric(int[][] cv$value, boolean allocated$) {
-		length$metric = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$current_metric_mean.
-	@Override
-	public final double get$logProbability$current_metric_mean() {
-		return logProbability$current_metric_mean;
-	}
-
-	// Getter for logProbability$current_metric_valid_bias.
-	@Override
-	public final double get$logProbability$current_metric_valid_bias() {
-		return logProbability$current_metric_valid_bias;
-	}
-
-	// Getter for logProbability$current_metric_var.
-	@Override
-	public final double get$logProbability$current_metric_var() {
-		return logProbability$current_metric_var;
-	}
-
-	// Getter for logProbability$initialStateDistribution.
-	@Override
-	public final double get$logProbability$initialStateDistribution() {
-		return logProbability$initialStateDistribution;
-	}
-
-	// Getter for logProbability$m.
-	@Override
-	public final double get$logProbability$m() {
-		return logProbability$m;
-	}
-
-	// Getter for logProbability$metric_g.
-	@Override
-	public final double get$logProbability$metric_g() {
-		return logProbability$metric_g;
-	}
-
-	// Getter for logProbability$metric_valid_g.
-	@Override
-	public final double get$logProbability$metric_valid_g() {
-		return logProbability$metric_valid_g;
-	}
-
-	// Getter for logProbability$st.
-	@Override
-	public final double get$logProbability$st() {
-		return logProbability$st;
-	}
-
-	// Getter for m.
-	@Override
-	public final double[][] get$m() {
-		return m;
-	}
-
-	// Setter for m.
-	@Override
-	public final void set$m(double[][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of m including if probabilities need to be updated.
-		m = cv$value;
-		
-		// Unset the fixed probability flag for sample 33 as it depends on m.
-		fixedProbFlag$sample33 = false;
-		
-		// Unset the fixed probability flag for sample 76 as it depends on m.
-		fixedProbFlag$sample76 = false;
-	}
-
-	// Getter for max_metric.
-	@Override
-	public final int get$max_metric() {
-		return max_metric;
-	}
-
-	// Setter for max_metric.
-	@Override
-	public final void set$max_metric(int cv$value, boolean allocated$) {
-		max_metric = cv$value;
-	}
-
-	// Getter for metric.
-	@Override
-	public final double[][][] get$metric() {
-		return metric;
-	}
-
-	// Setter for metric.
-	@Override
-	public final void set$metric(double[][][] cv$value, boolean allocated$) {
-		metric = cv$value;
-	}
-
-	// Getter for metric_g.
-	@Override
-	public final double[][][] get$metric_g() {
-		return metric_g;
-	}
-
-	// Getter for metric_valid.
-	@Override
-	public final boolean[][][] get$metric_valid() {
-		return metric_valid;
-	}
-
-	// Setter for metric_valid.
-	@Override
-	public final void set$metric_valid(boolean[][][] cv$value, boolean allocated$) {
-		metric_valid = cv$value;
-	}
-
-	// Getter for metric_valid_g.
-	@Override
-	public final boolean[][][] get$metric_valid_g() {
-		return metric_valid_g;
-	}
-
-	// Getter for noSamples.
-	@Override
-	public final int get$noSamples() {
-		return noSamples;
-	}
-
-	// Getter for noServers.
-	@Override
-	public final int get$noServers() {
-		return noServers;
-	}
-
-	// Getter for noStates.
-	@Override
-	public final int get$noStates() {
-		return noStates;
-	}
-
-	// Setter for noStates.
-	@Override
-	public final void set$noStates(int cv$value, boolean allocated$) {
-		noStates = cv$value;
-	}
-
-	// Getter for st.
-	@Override
-	public final int[][] get$st() {
-		return st;
-	}
-
-	// Setter for st.
-	@Override
-	public final void set$st(int[][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of st including if probabilities need to be
-		// updated.
-		st = cv$value;
-		
-		// Unset the fixed probability flag for sample 57 as it depends on st.
-		fixedProbFlag$sample57 = false;
-		
-		// Unset the fixed probability flag for sample 76 as it depends on st.
-		fixedProbFlag$sample76 = false;
-		
-		// Unset the fixed probability flag for sample 241 as it depends on st.
-		fixedProbFlag$sample241 = false;
-		
-		// Unset the fixed probability flag for sample 256 as it depends on st.
-		fixedProbFlag$sample256 = false;
-	}
-
-	// Getter for v.
-	@Override
-	public final double[] get$v() {
-		return v;
+	public HMMMetrics4$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample134
 	private final void drawValueSample134(int var119, int var129, int threadID$cv$var129, Rng RNG$) {
-		double[] var120 = current_metric_mean[var119];
-		var120[var129] = (0.0 + (((double)max_metric - 0.0) * DistributionSampling.sampleUniform(RNG$)));
+		double[] var120 = state.current_metric_mean[var119];
+		var120[var129] = (0.0 + (((double)state.max_metric - 0.0) * DistributionSampling.sampleUniform(state.RNG$)));
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample162
 	private final void drawValueSample162(int var146, int var156, int threadID$cv$var156, Rng RNG$) {
-		double[] var147 = current_metric_var[var146];
-		var147[var156] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+		double[] var147 = state.current_metric_var[var146];
+		var147[var156] = DistributionSampling.sampleInverseGamma(state.RNG$, 1.0, 1.0);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample190
 	private final void drawValueSample190(int var173, int var183, int threadID$cv$var183, Rng RNG$) {
-		double[] var174 = current_metric_valid_bias[var173];
-		var174[var183] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		double[] var174 = state.current_metric_valid_bias[var173];
+		var174[var183] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample20
 	private final void drawValueSample20() {
-		DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.noStates, state.initialStateDistribution);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample33
 	private final void drawValueSample33(int var32, int threadID$cv$var32, Rng RNG$) {
-		double[] var33 = m[var32];
-		DistributionSampling.sampleDirichlet(RNG$, v, noStates, var33);
+		double[] var33 = state.m[var32];
+		DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.noStates, var33);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample57
 	private final void drawValueSample57(int sample$var45, int threadID$cv$sample$var45, Rng RNG$) {
 		// Copy of index so that its values can be safely substituted
 		int index$sample$1 = sample$var45;
-		int[] var52 = st[sample$var45];
-		var52[0] = DistributionSampling.sampleCategorical(RNG$, initialStateDistribution, noStates);
+		int[] var52 = state.st[sample$var45];
+		var52[0] = DistributionSampling.sampleCategorical(state.RNG$, state.initialStateDistribution, state.noStates);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample76
@@ -647,15 +225,15 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		
 		// Copy of index so that its values can be safely substituted
 		int index$sample$2 = sample$var45;
-		int[] var67 = st[sample$var45];
-		var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
+		int[] var67 = state.st[sample$var45];
+		var67[timeStep$var66] = DistributionSampling.sampleCategorical(state.RNG$, state.m[state.st[sample$var45][(timeStep$var66 - 1)]], state.noStates);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 134 drawn from Uniform 108. Inference was performed using Metropolis-Hastings.
 	private final void inferSample134(int var119, int var129, int threadID$cv$var129, Rng RNG$) {
 		if(true) {
-			constrainedFlag$sample134[((var119 - 0) / 1)][((var129 - 0) / 1)] = false;
+			state.constrainedFlag$sample134[((var119 - 0) / 1)][((var129 - 0) / 1)] = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -665,7 +243,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			}
 			
 			// The original value of the sample
-			double cv$originalValue = current_metric_mean[var119][var129];
+			double cv$originalValue = state.current_metric_mean[var119][var129];
 			
 			// The probability of the random variable generating the originally sampled value
 			double cv$originalProbability = 0.0;
@@ -678,12 +256,12 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 				cv$var = (0.1 * 0.1);
 			
 			// The proposed new value for the sample
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			
 			// The probability of the random variable generating the new sample value.
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample134[((var119 - 0) / 1)][((var129 - 0) / 1)] || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample134[((var119 - 0) / 1)][((var129 - 0) / 1)] || (cv$valuePos == 0))) {
 					// Initialize the summed probabilities to 0.
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					
@@ -713,7 +291,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						{
 							{
 								{
-									double[] var120 = current_metric_mean[var119];
+									double[] var120 = state.current_metric_mean[var119];
 									var120[var129] = cv$currentValue;
 								}
 							}
@@ -724,7 +302,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 						
 						// Constructing a random variable input for use later.
-						double var107 = (double)max_metric;
+						double var107 = (double)state.max_metric;
 						
 						// An accumulator to allow the value for each distribution to be constructed before
 						// it is added to the index probabilities.
@@ -734,19 +312,19 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						{
 							// Looking for a path between Sample 134 and consumer Gaussian 244.
 							{
-								for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-									for(int server = 0; server < noServers; server += 1) {
-										for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-											if(metric_valid_g[sample$var196][server][timeStep$var226]) {
-												if(fixedFlag$sample57) {
+								for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+									for(int server = 0; server < state.noServers; server += 1) {
+										for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
+											if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
+												if(state.fixedFlag$sample57) {
 													{
-														for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+														for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 															if((sample$var45 == sample$var196)) {
 																if((0 == timeStep$var226)) {
 																	{
 																		double traceTempVariable$var241$11_1 = cv$currentValue;
 																		if((var119 == server)) {
-																			if((var129 == st[sample$var196][timeStep$var226])) {
+																			if((var129 == state.st[sample$var196][timeStep$var226])) {
 																				// Processing sample task 256 of consumer random variable null.
 																				{
 																					{
@@ -754,7 +332,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																						boolean cv$sampleConstrained = true;
 																						if(cv$sampleConstrained) {
 																							// Mark that the sample has observed constrained data.
-																							constrainedFlag$sample134[((var119 - 0) / 1)][((var129 - 0) / 1)] = true;
+																							state.constrainedFlag$sample134[((var119 - 0) / 1)][((var129 - 0) / 1)] = true;
 																							
 																							// Set an accumulator to sum the probabilities for each possible configuration of
 																							// inputs.
@@ -767,29 +345,29 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																								// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																								// the output of Sample task 134.
 																								{
-																									for(int index$sample$29_1 = 0; index$sample$29_1 < noSamples; index$sample$29_1 += 1) {
+																									for(int index$sample$29_1 = 0; index$sample$29_1 < state.noSamples; index$sample$29_1 += 1) {
 																										if((index$sample$29_1 == sample$var196)) {
 																											if((0 == timeStep$var226)) {
 																												{
-																													for(int var146 = 0; var146 < noServers; var146 += 1) {
-																														for(int var156 = 0; var156 < noStates; var156 += 1) {
+																													for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																														for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																															if((var146 == server)) {
-																																if((var156 == st[sample$var196][timeStep$var226])) {
+																																if((var156 == state.st[sample$var196][timeStep$var226])) {
 																																	{
 																																		{
 																																			{
 																																				// Constructing a random variable input for use later.
-																																				double var243 = current_metric_var[server][st[sample$var196][timeStep$var226]];
+																																				double var243 = state.current_metric_var[server][state.st[sample$var196][timeStep$var226]];
 																																				
 																																				// Record the probability of sample task 256 generating output with current configuration.
-																																				if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																				if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																				else {
 																																					// If the second value is -infinity.
 																																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																					else
-																																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																				}
 																																				
 																																				// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -809,32 +387,32 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																								
 																								// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																								// the output of Sample task 134.
-																								if(fixedFlag$sample76) {
+																								if(state.fixedFlag$sample76) {
 																									{
-																										for(int index$sample$31_1 = 0; index$sample$31_1 < noSamples; index$sample$31_1 += 1) {
-																											for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$31_1][0]; timeStep$var66 += 1) {
+																										for(int index$sample$31_1 = 0; index$sample$31_1 < state.noSamples; index$sample$31_1 += 1) {
+																											for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$31_1][0]; timeStep$var66 += 1) {
 																												if((index$sample$31_1 == sample$var196)) {
 																													if((timeStep$var66 == timeStep$var226)) {
 																														{
-																															for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																for(int var156 = 0; var156 < noStates; var156 += 1) {
+																															for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																	if((var146 == server)) {
-																																		if((var156 == st[sample$var196][timeStep$var226])) {
+																																		if((var156 == state.st[sample$var196][timeStep$var226])) {
 																																			{
 																																				{
 																																					{
 																																						// Constructing a random variable input for use later.
-																																						double var243 = current_metric_var[server][st[sample$var196][timeStep$var226]];
+																																						double var243 = state.current_metric_var[server][state.st[sample$var196][timeStep$var226]];
 																																						
 																																						// Record the probability of sample task 256 generating output with current configuration.
-																																						if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																						if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																						else {
 																																							// If the second value is -infinity.
 																																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																							else
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																						}
 																																						
 																																						// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -853,39 +431,39 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										}
 																									}
 																								} else {
-																									for(int index$sample$32 = 0; index$sample$32 < noSamples; index$sample$32 += 1) {
-																										for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$32][0]; timeStep$var66 += 1) {
+																									for(int index$sample$32 = 0; index$sample$32 < state.noSamples; index$sample$32 += 1) {
+																										for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$32][0]; timeStep$var66 += 1) {
 																											if(true) {
 																												// Enumerating the possible outputs of Categorical 73.
-																												for(int index$sample76$34 = 0; index$sample76$34 < noStates; index$sample76$34 += 1) {
+																												for(int index$sample76$34 = 0; index$sample76$34 < state.noStates; index$sample76$34 += 1) {
 																													int distributionTempVariable$var74$36 = index$sample76$34;
 																													
 																													// Update the probability of sampling this value from the distribution value.
-																													double cv$probabilitySample76Value35 = (1.0 * distribution$sample76[((index$sample$32 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$34]);
+																													double cv$probabilitySample76Value35 = (1.0 * state.distribution$sample76[((index$sample$32 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$34]);
 																													{
 																														int traceTempVariable$currentState$37_1 = distributionTempVariable$var74$36;
 																														if((index$sample$32 == sample$var196)) {
 																															if((timeStep$var66 == timeStep$var226)) {
 																																{
-																																	for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																		for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																	for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																		for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																			if((var146 == server)) {
 																																				if((var156 == traceTempVariable$currentState$37_1)) {
 																																					{
 																																						{
 																																							{
 																																								// Constructing a random variable input for use later.
-																																								double var243 = current_metric_var[server][traceTempVariable$currentState$37_1];
+																																								double var243 = state.current_metric_var[server][traceTempVariable$currentState$37_1];
 																																								
 																																								// Record the probability of sample task 256 generating output with current configuration.
-																																								if(((Math.log(cv$probabilitySample76Value35) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value35) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																								if(((Math.log(cv$probabilitySample76Value35) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value35) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																								else {
 																																									// If the second value is -infinity.
 																																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value35) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value35) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																									else
-																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value35) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value35) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value35) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value35) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$11_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																								}
 																																								
 																																								// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -934,14 +512,14 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 														}
 													}
 												} else {
-													for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+													for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 														if(true) {
 															// Enumerating the possible outputs of Categorical 54.
-															for(int index$sample57$7 = 0; index$sample57$7 < noStates; index$sample57$7 += 1) {
+															for(int index$sample57$7 = 0; index$sample57$7 < state.noStates; index$sample57$7 += 1) {
 																int distributionTempVariable$var55$9 = index$sample57$7;
 																
 																// Update the probability of sampling this value from the distribution value.
-																double cv$probabilitySample57Value8 = (1.0 * distribution$sample57[((sample$var45 - 0) / 1)][index$sample57$7]);
+																double cv$probabilitySample57Value8 = (1.0 * state.distribution$sample57[((sample$var45 - 0) / 1)][index$sample57$7]);
 																{
 																	int traceTempVariable$currentState$10_1 = distributionTempVariable$var55$9;
 																	if((sample$var45 == sample$var196)) {
@@ -957,7 +535,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																								boolean cv$sampleConstrained = true;
 																								if(cv$sampleConstrained) {
 																									// Mark that the sample has observed constrained data.
-																									constrainedFlag$sample134[((var119 - 0) / 1)][((var129 - 0) / 1)] = true;
+																									state.constrainedFlag$sample134[((var119 - 0) / 1)][((var129 - 0) / 1)] = true;
 																									
 																									// Set an accumulator to sum the probabilities for each possible configuration of
 																									// inputs.
@@ -974,25 +552,25 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																											if((sample$var45 == sample$var196)) {
 																												if((0 == timeStep$var226)) {
 																													{
-																														for(int var146 = 0; var146 < noServers; var146 += 1) {
-																															for(int var156 = 0; var156 < noStates; var156 += 1) {
+																														for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																															for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																if((var146 == server)) {
 																																	if((var156 == traceTempVariable$currentState$40_1)) {
 																																		{
 																																			{
 																																				{
 																																					// Constructing a random variable input for use later.
-																																					double var243 = current_metric_var[server][traceTempVariable$currentState$40_1];
+																																					double var243 = state.current_metric_var[server][traceTempVariable$currentState$40_1];
 																																					
 																																					// Record the probability of sample task 256 generating output with current configuration.
-																																					if(((Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																					if(((Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																					else {
 																																						// If the second value is -infinity.
 																																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																							cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																							cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																						else
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																					}
 																																					
 																																					// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -1008,38 +586,38 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																												}
 																											}
 																										}
-																										for(int index$sample$41 = 0; index$sample$41 < noSamples; index$sample$41 += 1) {
+																										for(int index$sample$41 = 0; index$sample$41 < state.noSamples; index$sample$41 += 1) {
 																											if(!(index$sample$41 == sample$var45)) {
 																												// Enumerating the possible outputs of Categorical 54.
-																												for(int index$sample57$42 = 0; index$sample57$42 < noStates; index$sample57$42 += 1) {
+																												for(int index$sample57$42 = 0; index$sample57$42 < state.noStates; index$sample57$42 += 1) {
 																													int distributionTempVariable$var55$44 = index$sample57$42;
 																													
 																													// Update the probability of sampling this value from the distribution value.
-																													double cv$probabilitySample57Value43 = (cv$probabilitySample57Value8 * distribution$sample57[((index$sample$41 - 0) / 1)][index$sample57$42]);
+																													double cv$probabilitySample57Value43 = (cv$probabilitySample57Value8 * state.distribution$sample57[((index$sample$41 - 0) / 1)][index$sample57$42]);
 																													{
 																														int traceTempVariable$currentState$45_1 = distributionTempVariable$var55$44;
 																														if((index$sample$41 == sample$var196)) {
 																															if((0 == timeStep$var226)) {
 																																{
-																																	for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																		for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																	for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																		for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																			if((var146 == server)) {
 																																				if((var156 == traceTempVariable$currentState$45_1)) {
 																																					{
 																																						{
 																																							{
 																																								// Constructing a random variable input for use later.
-																																								double var243 = current_metric_var[server][traceTempVariable$currentState$45_1];
+																																								double var243 = state.current_metric_var[server][traceTempVariable$currentState$45_1];
 																																								
 																																								// Record the probability of sample task 256 generating output with current configuration.
-																																								if(((Math.log(cv$probabilitySample57Value43) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value43) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																								if(((Math.log(cv$probabilitySample57Value43) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value43) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																								else {
 																																									// If the second value is -infinity.
 																																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value43) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value43) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																									else
-																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value43) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value43) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value43) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value43) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																								}
 																																								
 																																								// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -1061,32 +639,32 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										
 																										// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																										// the output of Sample task 134.
-																										if(fixedFlag$sample76) {
+																										if(state.fixedFlag$sample76) {
 																											{
-																												for(int index$sample$48_1 = 0; index$sample$48_1 < noSamples; index$sample$48_1 += 1) {
-																													for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$48_1][0]; timeStep$var66 += 1) {
+																												for(int index$sample$48_1 = 0; index$sample$48_1 < state.noSamples; index$sample$48_1 += 1) {
+																													for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$48_1][0]; timeStep$var66 += 1) {
 																														if((index$sample$48_1 == sample$var196)) {
 																															if((timeStep$var66 == timeStep$var226)) {
 																																{
-																																	for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																		for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																	for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																		for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																			if((var146 == server)) {
 																																				if((var156 == traceTempVariable$currentState$10_1)) {
 																																					{
 																																						{
 																																							{
 																																								// Constructing a random variable input for use later.
-																																								double var243 = current_metric_var[server][traceTempVariable$currentState$10_1];
+																																								double var243 = state.current_metric_var[server][traceTempVariable$currentState$10_1];
 																																								
 																																								// Record the probability of sample task 256 generating output with current configuration.
-																																								if(((Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																								if(((Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																								else {
 																																									// If the second value is -infinity.
 																																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																									else
-																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																								}
 																																								
 																																								// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -1105,39 +683,39 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																												}
 																											}
 																										} else {
-																											for(int index$sample$49 = 0; index$sample$49 < noSamples; index$sample$49 += 1) {
-																												for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$49][0]; timeStep$var66 += 1) {
+																											for(int index$sample$49 = 0; index$sample$49 < state.noSamples; index$sample$49 += 1) {
+																												for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$49][0]; timeStep$var66 += 1) {
 																													if(true) {
 																														// Enumerating the possible outputs of Categorical 73.
-																														for(int index$sample76$51 = 0; index$sample76$51 < noStates; index$sample76$51 += 1) {
+																														for(int index$sample76$51 = 0; index$sample76$51 < state.noStates; index$sample76$51 += 1) {
 																															int distributionTempVariable$var74$53 = index$sample76$51;
 																															
 																															// Update the probability of sampling this value from the distribution value.
-																															double cv$probabilitySample76Value52 = (cv$probabilitySample57Value8 * distribution$sample76[((index$sample$49 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$51]);
+																															double cv$probabilitySample76Value52 = (cv$probabilitySample57Value8 * state.distribution$sample76[((index$sample$49 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$51]);
 																															{
 																																int traceTempVariable$currentState$54_1 = distributionTempVariable$var74$53;
 																																if((index$sample$49 == sample$var196)) {
 																																	if((timeStep$var66 == timeStep$var226)) {
 																																		{
-																																			for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																				for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																			for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																				for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																					if((var146 == server)) {
 																																						if((var156 == traceTempVariable$currentState$54_1)) {
 																																							{
 																																								{
 																																									{
 																																										// Constructing a random variable input for use later.
-																																										double var243 = current_metric_var[server][traceTempVariable$currentState$54_1];
+																																										double var243 = state.current_metric_var[server][traceTempVariable$currentState$54_1];
 																																										
 																																										// Record the probability of sample task 256 generating output with current configuration.
-																																										if(((Math.log(cv$probabilitySample76Value52) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value52) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																										if(((Math.log(cv$probabilitySample76Value52) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value52) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																										else {
 																																											// If the second value is -infinity.
 																																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																												cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value52) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																												cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value52) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																											else
-																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value52) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value52) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value52) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value52) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$12_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																										}
 																																										
 																																										// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -1192,20 +770,20 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 										}
 									}
 								}
-								for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-									for(int server = 0; server < noServers; server += 1) {
-										for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-											if(metric_valid_g[sample$var196][server][timeStep$var226]) {
-												if(fixedFlag$sample76) {
+								for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+									for(int server = 0; server < state.noServers; server += 1) {
+										for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
+											if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
+												if(state.fixedFlag$sample76) {
 													{
-														for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-															for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+														for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+															for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 																if((sample$var45 == sample$var196)) {
 																	if((timeStep$var66 == timeStep$var226)) {
 																		{
 																			double traceTempVariable$var241$23_1 = cv$currentValue;
 																			if((var119 == server)) {
-																				if((var129 == st[sample$var196][timeStep$var226])) {
+																				if((var129 == state.st[sample$var196][timeStep$var226])) {
 																					// Processing sample task 256 of consumer random variable null.
 																					{
 																						{
@@ -1213,7 +791,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																							boolean cv$sampleConstrained = true;
 																							if(cv$sampleConstrained) {
 																								// Mark that the sample has observed constrained data.
-																								constrainedFlag$sample134[((var119 - 0) / 1)][((var129 - 0) / 1)] = true;
+																								state.constrainedFlag$sample134[((var119 - 0) / 1)][((var129 - 0) / 1)] = true;
 																								
 																								// Set an accumulator to sum the probabilities for each possible configuration of
 																								// inputs.
@@ -1225,31 +803,31 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																								{
 																									// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																									// the output of Sample task 134.
-																									if(fixedFlag$sample57) {
+																									if(state.fixedFlag$sample57) {
 																										{
-																											for(int index$sample$57_1 = 0; index$sample$57_1 < noSamples; index$sample$57_1 += 1) {
+																											for(int index$sample$57_1 = 0; index$sample$57_1 < state.noSamples; index$sample$57_1 += 1) {
 																												if((index$sample$57_1 == sample$var196)) {
 																													if((0 == timeStep$var226)) {
 																														{
-																															for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																for(int var156 = 0; var156 < noStates; var156 += 1) {
+																															for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																	if((var146 == server)) {
-																																		if((var156 == st[sample$var196][timeStep$var226])) {
+																																		if((var156 == state.st[sample$var196][timeStep$var226])) {
 																																			{
 																																				{
 																																					{
 																																						// Constructing a random variable input for use later.
-																																						double var243 = current_metric_var[server][st[sample$var196][timeStep$var226]];
+																																						double var243 = state.current_metric_var[server][state.st[sample$var196][timeStep$var226]];
 																																						
 																																						// Record the probability of sample task 256 generating output with current configuration.
-																																						if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																						if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																						else {
 																																							// If the second value is -infinity.
 																																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																							else
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																						}
 																																						
 																																						// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -1267,38 +845,38 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																											}
 																										}
 																									} else {
-																										for(int index$sample$58 = 0; index$sample$58 < noSamples; index$sample$58 += 1) {
+																										for(int index$sample$58 = 0; index$sample$58 < state.noSamples; index$sample$58 += 1) {
 																											if(true) {
 																												// Enumerating the possible outputs of Categorical 54.
-																												for(int index$sample57$59 = 0; index$sample57$59 < noStates; index$sample57$59 += 1) {
+																												for(int index$sample57$59 = 0; index$sample57$59 < state.noStates; index$sample57$59 += 1) {
 																													int distributionTempVariable$var55$61 = index$sample57$59;
 																													
 																													// Update the probability of sampling this value from the distribution value.
-																													double cv$probabilitySample57Value60 = (1.0 * distribution$sample57[((index$sample$58 - 0) / 1)][index$sample57$59]);
+																													double cv$probabilitySample57Value60 = (1.0 * state.distribution$sample57[((index$sample$58 - 0) / 1)][index$sample57$59]);
 																													{
 																														int traceTempVariable$currentState$62_1 = distributionTempVariable$var55$61;
 																														if((index$sample$58 == sample$var196)) {
 																															if((0 == timeStep$var226)) {
 																																{
-																																	for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																		for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																	for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																		for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																			if((var146 == server)) {
 																																				if((var156 == traceTempVariable$currentState$62_1)) {
 																																					{
 																																						{
 																																							{
 																																								// Constructing a random variable input for use later.
-																																								double var243 = current_metric_var[server][traceTempVariable$currentState$62_1];
+																																								double var243 = state.current_metric_var[server][traceTempVariable$currentState$62_1];
 																																								
 																																								// Record the probability of sample task 256 generating output with current configuration.
-																																								if(((Math.log(cv$probabilitySample57Value60) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value60) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																								if(((Math.log(cv$probabilitySample57Value60) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value60) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																								else {
 																																									// If the second value is -infinity.
 																																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value60) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value60) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																									else
-																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value60) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value60) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value60) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value60) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																								}
 																																								
 																																								// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -1322,30 +900,30 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																									// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																									// the output of Sample task 134.
 																									{
-																										for(int index$sample$65_1 = 0; index$sample$65_1 < noSamples; index$sample$65_1 += 1) {
-																											for(int index$timeStep$65_2 = 1; index$timeStep$65_2 < length$metric[index$sample$65_1][0]; index$timeStep$65_2 += 1) {
+																										for(int index$sample$65_1 = 0; index$sample$65_1 < state.noSamples; index$sample$65_1 += 1) {
+																											for(int index$timeStep$65_2 = 1; index$timeStep$65_2 < state.length$metric[index$sample$65_1][0]; index$timeStep$65_2 += 1) {
 																												if((index$sample$65_1 == sample$var196)) {
 																													if((index$timeStep$65_2 == timeStep$var226)) {
 																														{
-																															for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																for(int var156 = 0; var156 < noStates; var156 += 1) {
+																															for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																	if((var146 == server)) {
-																																		if((var156 == st[sample$var196][timeStep$var226])) {
+																																		if((var156 == state.st[sample$var196][timeStep$var226])) {
 																																			{
 																																				{
 																																					{
 																																						// Constructing a random variable input for use later.
-																																						double var243 = current_metric_var[server][st[sample$var196][timeStep$var226]];
+																																						double var243 = state.current_metric_var[server][state.st[sample$var196][timeStep$var226]];
 																																						
 																																						// Record the probability of sample task 256 generating output with current configuration.
-																																						if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																						if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																						else {
 																																							// If the second value is -infinity.
 																																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																							else
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$23_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																						}
 																																						
 																																						// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -1392,15 +970,15 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 														}
 													}
 												} else {
-													for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-														for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+													for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+														for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 															if(true) {
 																// Enumerating the possible outputs of Categorical 73.
-																for(int index$sample76$19 = 0; index$sample76$19 < noStates; index$sample76$19 += 1) {
+																for(int index$sample76$19 = 0; index$sample76$19 < state.noStates; index$sample76$19 += 1) {
 																	int distributionTempVariable$var74$21 = index$sample76$19;
 																	
 																	// Update the probability of sampling this value from the distribution value.
-																	double cv$probabilitySample76Value20 = (1.0 * distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$19]);
+																	double cv$probabilitySample76Value20 = (1.0 * state.distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$19]);
 																	{
 																		int traceTempVariable$currentState$22_1 = distributionTempVariable$var74$21;
 																		if((sample$var45 == sample$var196)) {
@@ -1416,7 +994,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																									boolean cv$sampleConstrained = true;
 																									if(cv$sampleConstrained) {
 																										// Mark that the sample has observed constrained data.
-																										constrainedFlag$sample134[((var119 - 0) / 1)][((var129 - 0) / 1)] = true;
+																										state.constrainedFlag$sample134[((var119 - 0) / 1)][((var129 - 0) / 1)] = true;
 																										
 																										// Set an accumulator to sum the probabilities for each possible configuration of
 																										// inputs.
@@ -1428,31 +1006,31 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										{
 																											// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																											// the output of Sample task 134.
-																											if(fixedFlag$sample57) {
+																											if(state.fixedFlag$sample57) {
 																												{
-																													for(int index$sample$67_1 = 0; index$sample$67_1 < noSamples; index$sample$67_1 += 1) {
+																													for(int index$sample$67_1 = 0; index$sample$67_1 < state.noSamples; index$sample$67_1 += 1) {
 																														if((index$sample$67_1 == sample$var196)) {
 																															if((0 == timeStep$var226)) {
 																																{
-																																	for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																		for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																	for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																		for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																			if((var146 == server)) {
 																																				if((var156 == traceTempVariable$currentState$22_1)) {
 																																					{
 																																						{
 																																							{
 																																								// Constructing a random variable input for use later.
-																																								double var243 = current_metric_var[server][traceTempVariable$currentState$22_1];
+																																								double var243 = state.current_metric_var[server][traceTempVariable$currentState$22_1];
 																																								
 																																								// Record the probability of sample task 256 generating output with current configuration.
-																																								if(((Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																								if(((Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																								else {
 																																									// If the second value is -infinity.
 																																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																									else
-																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																								}
 																																								
 																																								// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -1470,38 +1048,38 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																													}
 																												}
 																											} else {
-																												for(int index$sample$68 = 0; index$sample$68 < noSamples; index$sample$68 += 1) {
+																												for(int index$sample$68 = 0; index$sample$68 < state.noSamples; index$sample$68 += 1) {
 																													if(true) {
 																														// Enumerating the possible outputs of Categorical 54.
-																														for(int index$sample57$69 = 0; index$sample57$69 < noStates; index$sample57$69 += 1) {
+																														for(int index$sample57$69 = 0; index$sample57$69 < state.noStates; index$sample57$69 += 1) {
 																															int distributionTempVariable$var55$71 = index$sample57$69;
 																															
 																															// Update the probability of sampling this value from the distribution value.
-																															double cv$probabilitySample57Value70 = (cv$probabilitySample76Value20 * distribution$sample57[((index$sample$68 - 0) / 1)][index$sample57$69]);
+																															double cv$probabilitySample57Value70 = (cv$probabilitySample76Value20 * state.distribution$sample57[((index$sample$68 - 0) / 1)][index$sample57$69]);
 																															{
 																																int traceTempVariable$currentState$72_1 = distributionTempVariable$var55$71;
 																																if((index$sample$68 == sample$var196)) {
 																																	if((0 == timeStep$var226)) {
 																																		{
-																																			for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																				for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																			for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																				for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																					if((var146 == server)) {
 																																						if((var156 == traceTempVariable$currentState$72_1)) {
 																																							{
 																																								{
 																																									{
 																																										// Constructing a random variable input for use later.
-																																										double var243 = current_metric_var[server][traceTempVariable$currentState$72_1];
+																																										double var243 = state.current_metric_var[server][traceTempVariable$currentState$72_1];
 																																										
 																																										// Record the probability of sample task 256 generating output with current configuration.
-																																										if(((Math.log(cv$probabilitySample57Value70) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value70) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																										if(((Math.log(cv$probabilitySample57Value70) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value70) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																										else {
 																																											// If the second value is -infinity.
 																																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																												cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value70) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																												cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value70) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																											else
-																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value70) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value70) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value70) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value70) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																										}
 																																										
 																																										// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -1529,25 +1107,25 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																												if((sample$var45 == sample$var196)) {
 																													if((timeStep$var66 == timeStep$var226)) {
 																														{
-																															for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																for(int var156 = 0; var156 < noStates; var156 += 1) {
+																															for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																	if((var146 == server)) {
 																																		if((var156 == traceTempVariable$currentState$75_1)) {
 																																			{
 																																				{
 																																					{
 																																						// Constructing a random variable input for use later.
-																																						double var243 = current_metric_var[server][traceTempVariable$currentState$75_1];
+																																						double var243 = state.current_metric_var[server][traceTempVariable$currentState$75_1];
 																																						
 																																						// Record the probability of sample task 256 generating output with current configuration.
-																																						if(((Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																						if(((Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																						else {
 																																							// If the second value is -infinity.
 																																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																							else
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																						}
 																																						
 																																						// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -1563,39 +1141,39 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																													}
 																												}
 																											}
-																											for(int index$sample$76 = 0; index$sample$76 < noSamples; index$sample$76 += 1) {
-																												for(int index$timeStep$77 = 1; index$timeStep$77 < length$metric[index$sample$76][0]; index$timeStep$77 += 1) {
+																											for(int index$sample$76 = 0; index$sample$76 < state.noSamples; index$sample$76 += 1) {
+																												for(int index$timeStep$77 = 1; index$timeStep$77 < state.length$metric[index$sample$76][0]; index$timeStep$77 += 1) {
 																													if(!((index$timeStep$77 == timeStep$var66) && (index$sample$76 == sample$var45))) {
 																														// Enumerating the possible outputs of Categorical 73.
-																														for(int index$sample76$78 = 0; index$sample76$78 < noStates; index$sample76$78 += 1) {
+																														for(int index$sample76$78 = 0; index$sample76$78 < state.noStates; index$sample76$78 += 1) {
 																															int distributionTempVariable$var74$80 = index$sample76$78;
 																															
 																															// Update the probability of sampling this value from the distribution value.
-																															double cv$probabilitySample76Value79 = (cv$probabilitySample76Value20 * distribution$sample76[((index$sample$76 - 0) / 1)][((index$timeStep$77 - 1) / 1)][index$sample76$78]);
+																															double cv$probabilitySample76Value79 = (cv$probabilitySample76Value20 * state.distribution$sample76[((index$sample$76 - 0) / 1)][((index$timeStep$77 - 1) / 1)][index$sample76$78]);
 																															{
 																																int traceTempVariable$currentState$81_1 = distributionTempVariable$var74$80;
 																																if((index$sample$76 == sample$var196)) {
 																																	if((index$timeStep$77 == timeStep$var226)) {
 																																		{
-																																			for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																				for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																			for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																				for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																					if((var146 == server)) {
 																																						if((var156 == traceTempVariable$currentState$81_1)) {
 																																							{
 																																								{
 																																									{
 																																										// Constructing a random variable input for use later.
-																																										double var243 = current_metric_var[server][traceTempVariable$currentState$81_1];
+																																										double var243 = state.current_metric_var[server][traceTempVariable$currentState$81_1];
 																																										
 																																										// Record the probability of sample task 256 generating output with current configuration.
-																																										if(((Math.log(cv$probabilitySample76Value79) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value79) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																										if(((Math.log(cv$probabilitySample76Value79) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value79) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																										else {
 																																											// If the second value is -infinity.
 																																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																												cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value79) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																												cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value79) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																											else
-																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value79) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value79) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value79) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value79) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - traceTempVariable$var241$24_1) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																										}
 																																										
 																																										// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -1681,7 +1259,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 					// to be less than or equal as otherwise if the proposed value is not possible and
 					// the random value is 0 an impossible value will be accepted.
 					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$))))) || Double.isNaN(cv$ratio))) {
 							// If it is not revert the changes.
 							// 
 							// Set the sample value
@@ -1694,7 +1272,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 							{
 								{
 									{
-										double[] var120 = current_metric_mean[var119];
+										double[] var120 = state.current_metric_mean[var119];
 										var120[var129] = var130;
 									}
 								}
@@ -1710,7 +1288,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	// by sample task 162 drawn from InverseGamma 135. Inference was performed using Metropolis-Hastings.
 	private final void inferSample162(int var146, int var156, int threadID$cv$var156, Rng RNG$) {
 		if(true) {
-			constrainedFlag$sample162[((var146 - 0) / 1)][((var156 - 0) / 1)] = false;
+			state.constrainedFlag$sample162[((var146 - 0) / 1)][((var156 - 0) / 1)] = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -1720,7 +1298,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			}
 			
 			// The original value of the sample
-			double cv$originalValue = current_metric_var[var146][var156];
+			double cv$originalValue = state.current_metric_var[var146][var156];
 			
 			// The probability of the random variable generating the originally sampled value
 			double cv$originalProbability = 0.0;
@@ -1733,12 +1311,12 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 				cv$var = (0.1 * 0.1);
 			
 			// The proposed new value for the sample
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			
 			// The probability of the random variable generating the new sample value.
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample162[((var146 - 0) / 1)][((var156 - 0) / 1)] || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample162[((var146 - 0) / 1)][((var156 - 0) / 1)] || (cv$valuePos == 0))) {
 					// Initialize the summed probabilities to 0.
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					
@@ -1768,7 +1346,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						{
 							{
 								{
-									double[] var147 = current_metric_var[var146];
+									double[] var147 = state.current_metric_var[var146];
 									var147[var156] = cv$currentValue;
 								}
 							}
@@ -1786,19 +1364,19 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						{
 							// Looking for a path between Sample 162 and consumer Gaussian 244.
 							{
-								for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-									for(int server = 0; server < noServers; server += 1) {
-										for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-											if(metric_valid_g[sample$var196][server][timeStep$var226]) {
-												if(fixedFlag$sample57) {
+								for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+									for(int server = 0; server < state.noServers; server += 1) {
+										for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
+											if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
+												if(state.fixedFlag$sample57) {
 													{
-														for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+														for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 															if((sample$var45 == sample$var196)) {
 																if((0 == timeStep$var226)) {
 																	{
 																		double traceTempVariable$var243$11_1 = cv$currentValue;
 																		if((var146 == server)) {
-																			if((var156 == st[sample$var196][timeStep$var226])) {
+																			if((var156 == state.st[sample$var196][timeStep$var226])) {
 																				// Processing sample task 256 of consumer random variable null.
 																				{
 																					{
@@ -1806,7 +1384,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																						boolean cv$sampleConstrained = true;
 																						if(cv$sampleConstrained) {
 																							// Mark that the sample has observed constrained data.
-																							constrainedFlag$sample162[((var146 - 0) / 1)][((var156 - 0) / 1)] = true;
+																							state.constrainedFlag$sample162[((var146 - 0) / 1)][((var156 - 0) / 1)] = true;
 																							
 																							// Set an accumulator to sum the probabilities for each possible configuration of
 																							// inputs.
@@ -1819,29 +1397,29 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																								// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																								// the output of Sample task 162.
 																								{
-																									for(int index$sample$29_1 = 0; index$sample$29_1 < noSamples; index$sample$29_1 += 1) {
+																									for(int index$sample$29_1 = 0; index$sample$29_1 < state.noSamples; index$sample$29_1 += 1) {
 																										if((index$sample$29_1 == sample$var196)) {
 																											if((0 == timeStep$var226)) {
 																												{
-																													for(int var119 = 0; var119 < noServers; var119 += 1) {
-																														for(int var129 = 0; var129 < noStates; var129 += 1) {
+																													for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																														for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																															if((var119 == server)) {
-																																if((var129 == st[sample$var196][timeStep$var226])) {
+																																if((var129 == state.st[sample$var196][timeStep$var226])) {
 																																	{
 																																		{
 																																			{
 																																				// Constructing a random variable input for use later.
-																																				double var241 = current_metric_mean[server][st[sample$var196][timeStep$var226]];
+																																				double var241 = state.current_metric_mean[server][state.st[sample$var196][timeStep$var226]];
 																																				
 																																				// Record the probability of sample task 256 generating output with current configuration.
-																																				if(((Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																				if(((Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																				else {
 																																					// If the second value is -infinity.
 																																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY));
+																																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY));
 																																					else
-																																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)));
+																																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)));
 																																				}
 																																				
 																																				// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -1861,32 +1439,32 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																								
 																								// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																								// the output of Sample task 162.
-																								if(fixedFlag$sample76) {
+																								if(state.fixedFlag$sample76) {
 																									{
-																										for(int index$sample$31_1 = 0; index$sample$31_1 < noSamples; index$sample$31_1 += 1) {
-																											for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$31_1][0]; timeStep$var66 += 1) {
+																										for(int index$sample$31_1 = 0; index$sample$31_1 < state.noSamples; index$sample$31_1 += 1) {
+																											for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$31_1][0]; timeStep$var66 += 1) {
 																												if((index$sample$31_1 == sample$var196)) {
 																													if((timeStep$var66 == timeStep$var226)) {
 																														{
-																															for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																for(int var129 = 0; var129 < noStates; var129 += 1) {
+																															for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																	if((var119 == server)) {
-																																		if((var129 == st[sample$var196][timeStep$var226])) {
+																																		if((var129 == state.st[sample$var196][timeStep$var226])) {
 																																			{
 																																				{
 																																					{
 																																						// Constructing a random variable input for use later.
-																																						double var241 = current_metric_mean[server][st[sample$var196][timeStep$var226]];
+																																						double var241 = state.current_metric_mean[server][state.st[sample$var196][timeStep$var226]];
 																																						
 																																						// Record the probability of sample task 256 generating output with current configuration.
-																																						if(((Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																						if(((Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																						else {
 																																							// If the second value is -infinity.
 																																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY));
+																																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY));
 																																							else
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)));
+																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)));
 																																						}
 																																						
 																																						// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -1905,39 +1483,39 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										}
 																									}
 																								} else {
-																									for(int index$sample$32 = 0; index$sample$32 < noSamples; index$sample$32 += 1) {
-																										for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$32][0]; timeStep$var66 += 1) {
+																									for(int index$sample$32 = 0; index$sample$32 < state.noSamples; index$sample$32 += 1) {
+																										for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$32][0]; timeStep$var66 += 1) {
 																											if(true) {
 																												// Enumerating the possible outputs of Categorical 73.
-																												for(int index$sample76$34 = 0; index$sample76$34 < noStates; index$sample76$34 += 1) {
+																												for(int index$sample76$34 = 0; index$sample76$34 < state.noStates; index$sample76$34 += 1) {
 																													int distributionTempVariable$var74$36 = index$sample76$34;
 																													
 																													// Update the probability of sampling this value from the distribution value.
-																													double cv$probabilitySample76Value35 = (1.0 * distribution$sample76[((index$sample$32 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$34]);
+																													double cv$probabilitySample76Value35 = (1.0 * state.distribution$sample76[((index$sample$32 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$34]);
 																													{
 																														int traceTempVariable$currentState$37_1 = distributionTempVariable$var74$36;
 																														if((index$sample$32 == sample$var196)) {
 																															if((timeStep$var66 == timeStep$var226)) {
 																																{
-																																	for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																		for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																	for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																		for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																			if((var119 == server)) {
 																																				if((var129 == traceTempVariable$currentState$37_1)) {
 																																					{
 																																						{
 																																							{
 																																								// Constructing a random variable input for use later.
-																																								double var241 = current_metric_mean[server][traceTempVariable$currentState$37_1];
+																																								double var241 = state.current_metric_mean[server][traceTempVariable$currentState$37_1];
 																																								
 																																								// Record the probability of sample task 256 generating output with current configuration.
-																																								if(((Math.log(cv$probabilitySample76Value35) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value35) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																								if(((Math.log(cv$probabilitySample76Value35) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value35) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																								else {
 																																									// If the second value is -infinity.
 																																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value35) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY));
+																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value35) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY));
 																																									else
-																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value35) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value35) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)));
+																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value35) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value35) + ((0.0 < traceTempVariable$var243$11_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$11_1))) - (0.5 * Math.log(traceTempVariable$var243$11_1))):Double.NEGATIVE_INFINITY)));
 																																								}
 																																								
 																																								// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -1986,14 +1564,14 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 														}
 													}
 												} else {
-													for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+													for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 														if(true) {
 															// Enumerating the possible outputs of Categorical 54.
-															for(int index$sample57$7 = 0; index$sample57$7 < noStates; index$sample57$7 += 1) {
+															for(int index$sample57$7 = 0; index$sample57$7 < state.noStates; index$sample57$7 += 1) {
 																int distributionTempVariable$var55$9 = index$sample57$7;
 																
 																// Update the probability of sampling this value from the distribution value.
-																double cv$probabilitySample57Value8 = (1.0 * distribution$sample57[((sample$var45 - 0) / 1)][index$sample57$7]);
+																double cv$probabilitySample57Value8 = (1.0 * state.distribution$sample57[((sample$var45 - 0) / 1)][index$sample57$7]);
 																{
 																	int traceTempVariable$currentState$10_1 = distributionTempVariable$var55$9;
 																	if((sample$var45 == sample$var196)) {
@@ -2009,7 +1587,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																								boolean cv$sampleConstrained = true;
 																								if(cv$sampleConstrained) {
 																									// Mark that the sample has observed constrained data.
-																									constrainedFlag$sample162[((var146 - 0) / 1)][((var156 - 0) / 1)] = true;
+																									state.constrainedFlag$sample162[((var146 - 0) / 1)][((var156 - 0) / 1)] = true;
 																									
 																									// Set an accumulator to sum the probabilities for each possible configuration of
 																									// inputs.
@@ -2026,25 +1604,25 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																											if((sample$var45 == sample$var196)) {
 																												if((0 == timeStep$var226)) {
 																													{
-																														for(int var119 = 0; var119 < noServers; var119 += 1) {
-																															for(int var129 = 0; var129 < noStates; var129 += 1) {
+																														for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																															for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																if((var119 == server)) {
 																																	if((var129 == traceTempVariable$currentState$40_1)) {
 																																		{
 																																			{
 																																				{
 																																					// Constructing a random variable input for use later.
-																																					double var241 = current_metric_mean[server][traceTempVariable$currentState$40_1];
+																																					double var241 = state.current_metric_mean[server][traceTempVariable$currentState$40_1];
 																																					
 																																					// Record the probability of sample task 256 generating output with current configuration.
-																																					if(((Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																					if(((Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																					else {
 																																						// If the second value is -infinity.
 																																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																							cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY));
+																																							cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY));
 																																						else
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)));
+																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)));
 																																					}
 																																					
 																																					// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -2060,38 +1638,38 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																												}
 																											}
 																										}
-																										for(int index$sample$41 = 0; index$sample$41 < noSamples; index$sample$41 += 1) {
+																										for(int index$sample$41 = 0; index$sample$41 < state.noSamples; index$sample$41 += 1) {
 																											if(!(index$sample$41 == sample$var45)) {
 																												// Enumerating the possible outputs of Categorical 54.
-																												for(int index$sample57$42 = 0; index$sample57$42 < noStates; index$sample57$42 += 1) {
+																												for(int index$sample57$42 = 0; index$sample57$42 < state.noStates; index$sample57$42 += 1) {
 																													int distributionTempVariable$var55$44 = index$sample57$42;
 																													
 																													// Update the probability of sampling this value from the distribution value.
-																													double cv$probabilitySample57Value43 = (cv$probabilitySample57Value8 * distribution$sample57[((index$sample$41 - 0) / 1)][index$sample57$42]);
+																													double cv$probabilitySample57Value43 = (cv$probabilitySample57Value8 * state.distribution$sample57[((index$sample$41 - 0) / 1)][index$sample57$42]);
 																													{
 																														int traceTempVariable$currentState$45_1 = distributionTempVariable$var55$44;
 																														if((index$sample$41 == sample$var196)) {
 																															if((0 == timeStep$var226)) {
 																																{
-																																	for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																		for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																	for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																		for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																			if((var119 == server)) {
 																																				if((var129 == traceTempVariable$currentState$45_1)) {
 																																					{
 																																						{
 																																							{
 																																								// Constructing a random variable input for use later.
-																																								double var241 = current_metric_mean[server][traceTempVariable$currentState$45_1];
+																																								double var241 = state.current_metric_mean[server][traceTempVariable$currentState$45_1];
 																																								
 																																								// Record the probability of sample task 256 generating output with current configuration.
-																																								if(((Math.log(cv$probabilitySample57Value43) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value43) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																								if(((Math.log(cv$probabilitySample57Value43) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value43) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																								else {
 																																									// If the second value is -infinity.
 																																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value43) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY));
+																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value43) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY));
 																																									else
-																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value43) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value43) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)));
+																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value43) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value43) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)));
 																																								}
 																																								
 																																								// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -2113,32 +1691,32 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										
 																										// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																										// the output of Sample task 162.
-																										if(fixedFlag$sample76) {
+																										if(state.fixedFlag$sample76) {
 																											{
-																												for(int index$sample$48_1 = 0; index$sample$48_1 < noSamples; index$sample$48_1 += 1) {
-																													for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$48_1][0]; timeStep$var66 += 1) {
+																												for(int index$sample$48_1 = 0; index$sample$48_1 < state.noSamples; index$sample$48_1 += 1) {
+																													for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$48_1][0]; timeStep$var66 += 1) {
 																														if((index$sample$48_1 == sample$var196)) {
 																															if((timeStep$var66 == timeStep$var226)) {
 																																{
-																																	for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																		for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																	for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																		for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																			if((var119 == server)) {
 																																				if((var129 == traceTempVariable$currentState$10_1)) {
 																																					{
 																																						{
 																																							{
 																																								// Constructing a random variable input for use later.
-																																								double var241 = current_metric_mean[server][traceTempVariable$currentState$10_1];
+																																								double var241 = state.current_metric_mean[server][traceTempVariable$currentState$10_1];
 																																								
 																																								// Record the probability of sample task 256 generating output with current configuration.
-																																								if(((Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																								if(((Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																								else {
 																																									// If the second value is -infinity.
 																																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY));
+																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY));
 																																									else
-																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)));
+																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value8) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)));
 																																								}
 																																								
 																																								// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -2157,39 +1735,39 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																												}
 																											}
 																										} else {
-																											for(int index$sample$49 = 0; index$sample$49 < noSamples; index$sample$49 += 1) {
-																												for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$49][0]; timeStep$var66 += 1) {
+																											for(int index$sample$49 = 0; index$sample$49 < state.noSamples; index$sample$49 += 1) {
+																												for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$49][0]; timeStep$var66 += 1) {
 																													if(true) {
 																														// Enumerating the possible outputs of Categorical 73.
-																														for(int index$sample76$51 = 0; index$sample76$51 < noStates; index$sample76$51 += 1) {
+																														for(int index$sample76$51 = 0; index$sample76$51 < state.noStates; index$sample76$51 += 1) {
 																															int distributionTempVariable$var74$53 = index$sample76$51;
 																															
 																															// Update the probability of sampling this value from the distribution value.
-																															double cv$probabilitySample76Value52 = (cv$probabilitySample57Value8 * distribution$sample76[((index$sample$49 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$51]);
+																															double cv$probabilitySample76Value52 = (cv$probabilitySample57Value8 * state.distribution$sample76[((index$sample$49 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$51]);
 																															{
 																																int traceTempVariable$currentState$54_1 = distributionTempVariable$var74$53;
 																																if((index$sample$49 == sample$var196)) {
 																																	if((timeStep$var66 == timeStep$var226)) {
 																																		{
-																																			for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																				for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																			for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																				for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																					if((var119 == server)) {
 																																						if((var129 == traceTempVariable$currentState$54_1)) {
 																																							{
 																																								{
 																																									{
 																																										// Constructing a random variable input for use later.
-																																										double var241 = current_metric_mean[server][traceTempVariable$currentState$54_1];
+																																										double var241 = state.current_metric_mean[server][traceTempVariable$currentState$54_1];
 																																										
 																																										// Record the probability of sample task 256 generating output with current configuration.
-																																										if(((Math.log(cv$probabilitySample76Value52) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value52) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																										if(((Math.log(cv$probabilitySample76Value52) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value52) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																										else {
 																																											// If the second value is -infinity.
 																																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																												cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value52) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY));
+																																												cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value52) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY));
 																																											else
-																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value52) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value52) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)));
+																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value52) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value52) + ((0.0 < traceTempVariable$var243$12_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$12_1))) - (0.5 * Math.log(traceTempVariable$var243$12_1))):Double.NEGATIVE_INFINITY)));
 																																										}
 																																										
 																																										// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -2244,20 +1822,20 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 										}
 									}
 								}
-								for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-									for(int server = 0; server < noServers; server += 1) {
-										for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-											if(metric_valid_g[sample$var196][server][timeStep$var226]) {
-												if(fixedFlag$sample76) {
+								for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+									for(int server = 0; server < state.noServers; server += 1) {
+										for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
+											if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
+												if(state.fixedFlag$sample76) {
 													{
-														for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-															for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+														for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+															for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 																if((sample$var45 == sample$var196)) {
 																	if((timeStep$var66 == timeStep$var226)) {
 																		{
 																			double traceTempVariable$var243$23_1 = cv$currentValue;
 																			if((var146 == server)) {
-																				if((var156 == st[sample$var196][timeStep$var226])) {
+																				if((var156 == state.st[sample$var196][timeStep$var226])) {
 																					// Processing sample task 256 of consumer random variable null.
 																					{
 																						{
@@ -2265,7 +1843,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																							boolean cv$sampleConstrained = true;
 																							if(cv$sampleConstrained) {
 																								// Mark that the sample has observed constrained data.
-																								constrainedFlag$sample162[((var146 - 0) / 1)][((var156 - 0) / 1)] = true;
+																								state.constrainedFlag$sample162[((var146 - 0) / 1)][((var156 - 0) / 1)] = true;
 																								
 																								// Set an accumulator to sum the probabilities for each possible configuration of
 																								// inputs.
@@ -2277,31 +1855,31 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																								{
 																									// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																									// the output of Sample task 162.
-																									if(fixedFlag$sample57) {
+																									if(state.fixedFlag$sample57) {
 																										{
-																											for(int index$sample$57_1 = 0; index$sample$57_1 < noSamples; index$sample$57_1 += 1) {
+																											for(int index$sample$57_1 = 0; index$sample$57_1 < state.noSamples; index$sample$57_1 += 1) {
 																												if((index$sample$57_1 == sample$var196)) {
 																													if((0 == timeStep$var226)) {
 																														{
-																															for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																for(int var129 = 0; var129 < noStates; var129 += 1) {
+																															for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																	if((var119 == server)) {
-																																		if((var129 == st[sample$var196][timeStep$var226])) {
+																																		if((var129 == state.st[sample$var196][timeStep$var226])) {
 																																			{
 																																				{
 																																					{
 																																						// Constructing a random variable input for use later.
-																																						double var241 = current_metric_mean[server][st[sample$var196][timeStep$var226]];
+																																						double var241 = state.current_metric_mean[server][state.st[sample$var196][timeStep$var226]];
 																																						
 																																						// Record the probability of sample task 256 generating output with current configuration.
-																																						if(((Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																						if(((Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																						else {
 																																							// If the second value is -infinity.
 																																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY));
+																																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY));
 																																							else
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)));
+																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)));
 																																						}
 																																						
 																																						// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -2319,38 +1897,38 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																											}
 																										}
 																									} else {
-																										for(int index$sample$58 = 0; index$sample$58 < noSamples; index$sample$58 += 1) {
+																										for(int index$sample$58 = 0; index$sample$58 < state.noSamples; index$sample$58 += 1) {
 																											if(true) {
 																												// Enumerating the possible outputs of Categorical 54.
-																												for(int index$sample57$59 = 0; index$sample57$59 < noStates; index$sample57$59 += 1) {
+																												for(int index$sample57$59 = 0; index$sample57$59 < state.noStates; index$sample57$59 += 1) {
 																													int distributionTempVariable$var55$61 = index$sample57$59;
 																													
 																													// Update the probability of sampling this value from the distribution value.
-																													double cv$probabilitySample57Value60 = (1.0 * distribution$sample57[((index$sample$58 - 0) / 1)][index$sample57$59]);
+																													double cv$probabilitySample57Value60 = (1.0 * state.distribution$sample57[((index$sample$58 - 0) / 1)][index$sample57$59]);
 																													{
 																														int traceTempVariable$currentState$62_1 = distributionTempVariable$var55$61;
 																														if((index$sample$58 == sample$var196)) {
 																															if((0 == timeStep$var226)) {
 																																{
-																																	for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																		for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																	for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																		for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																			if((var119 == server)) {
 																																				if((var129 == traceTempVariable$currentState$62_1)) {
 																																					{
 																																						{
 																																							{
 																																								// Constructing a random variable input for use later.
-																																								double var241 = current_metric_mean[server][traceTempVariable$currentState$62_1];
+																																								double var241 = state.current_metric_mean[server][traceTempVariable$currentState$62_1];
 																																								
 																																								// Record the probability of sample task 256 generating output with current configuration.
-																																								if(((Math.log(cv$probabilitySample57Value60) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value60) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																								if(((Math.log(cv$probabilitySample57Value60) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value60) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																								else {
 																																									// If the second value is -infinity.
 																																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value60) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY));
+																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value60) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY));
 																																									else
-																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value60) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value60) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)));
+																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value60) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value60) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)));
 																																								}
 																																								
 																																								// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -2374,30 +1952,30 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																									// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																									// the output of Sample task 162.
 																									{
-																										for(int index$sample$65_1 = 0; index$sample$65_1 < noSamples; index$sample$65_1 += 1) {
-																											for(int index$timeStep$65_2 = 1; index$timeStep$65_2 < length$metric[index$sample$65_1][0]; index$timeStep$65_2 += 1) {
+																										for(int index$sample$65_1 = 0; index$sample$65_1 < state.noSamples; index$sample$65_1 += 1) {
+																											for(int index$timeStep$65_2 = 1; index$timeStep$65_2 < state.length$metric[index$sample$65_1][0]; index$timeStep$65_2 += 1) {
 																												if((index$sample$65_1 == sample$var196)) {
 																													if((index$timeStep$65_2 == timeStep$var226)) {
 																														{
-																															for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																for(int var129 = 0; var129 < noStates; var129 += 1) {
+																															for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																	if((var119 == server)) {
-																																		if((var129 == st[sample$var196][timeStep$var226])) {
+																																		if((var129 == state.st[sample$var196][timeStep$var226])) {
 																																			{
 																																				{
 																																					{
 																																						// Constructing a random variable input for use later.
-																																						double var241 = current_metric_mean[server][st[sample$var196][timeStep$var226]];
+																																						double var241 = state.current_metric_mean[server][state.st[sample$var196][timeStep$var226]];
 																																						
 																																						// Record the probability of sample task 256 generating output with current configuration.
-																																						if(((Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																						if(((Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																						else {
 																																							// If the second value is -infinity.
 																																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY));
+																																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY));
 																																							else
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)));
+																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$var243$23_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$23_1))) - (0.5 * Math.log(traceTempVariable$var243$23_1))):Double.NEGATIVE_INFINITY)));
 																																						}
 																																						
 																																						// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -2444,15 +2022,15 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 														}
 													}
 												} else {
-													for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-														for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+													for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+														for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 															if(true) {
 																// Enumerating the possible outputs of Categorical 73.
-																for(int index$sample76$19 = 0; index$sample76$19 < noStates; index$sample76$19 += 1) {
+																for(int index$sample76$19 = 0; index$sample76$19 < state.noStates; index$sample76$19 += 1) {
 																	int distributionTempVariable$var74$21 = index$sample76$19;
 																	
 																	// Update the probability of sampling this value from the distribution value.
-																	double cv$probabilitySample76Value20 = (1.0 * distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$19]);
+																	double cv$probabilitySample76Value20 = (1.0 * state.distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$19]);
 																	{
 																		int traceTempVariable$currentState$22_1 = distributionTempVariable$var74$21;
 																		if((sample$var45 == sample$var196)) {
@@ -2468,7 +2046,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																									boolean cv$sampleConstrained = true;
 																									if(cv$sampleConstrained) {
 																										// Mark that the sample has observed constrained data.
-																										constrainedFlag$sample162[((var146 - 0) / 1)][((var156 - 0) / 1)] = true;
+																										state.constrainedFlag$sample162[((var146 - 0) / 1)][((var156 - 0) / 1)] = true;
 																										
 																										// Set an accumulator to sum the probabilities for each possible configuration of
 																										// inputs.
@@ -2480,31 +2058,31 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										{
 																											// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																											// the output of Sample task 162.
-																											if(fixedFlag$sample57) {
+																											if(state.fixedFlag$sample57) {
 																												{
-																													for(int index$sample$67_1 = 0; index$sample$67_1 < noSamples; index$sample$67_1 += 1) {
+																													for(int index$sample$67_1 = 0; index$sample$67_1 < state.noSamples; index$sample$67_1 += 1) {
 																														if((index$sample$67_1 == sample$var196)) {
 																															if((0 == timeStep$var226)) {
 																																{
-																																	for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																		for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																	for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																		for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																			if((var119 == server)) {
 																																				if((var129 == traceTempVariable$currentState$22_1)) {
 																																					{
 																																						{
 																																							{
 																																								// Constructing a random variable input for use later.
-																																								double var241 = current_metric_mean[server][traceTempVariable$currentState$22_1];
+																																								double var241 = state.current_metric_mean[server][traceTempVariable$currentState$22_1];
 																																								
 																																								// Record the probability of sample task 256 generating output with current configuration.
-																																								if(((Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																								if(((Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																								else {
 																																									// If the second value is -infinity.
 																																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY));
+																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY));
 																																									else
-																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)));
+																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)));
 																																								}
 																																								
 																																								// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -2522,38 +2100,38 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																													}
 																												}
 																											} else {
-																												for(int index$sample$68 = 0; index$sample$68 < noSamples; index$sample$68 += 1) {
+																												for(int index$sample$68 = 0; index$sample$68 < state.noSamples; index$sample$68 += 1) {
 																													if(true) {
 																														// Enumerating the possible outputs of Categorical 54.
-																														for(int index$sample57$69 = 0; index$sample57$69 < noStates; index$sample57$69 += 1) {
+																														for(int index$sample57$69 = 0; index$sample57$69 < state.noStates; index$sample57$69 += 1) {
 																															int distributionTempVariable$var55$71 = index$sample57$69;
 																															
 																															// Update the probability of sampling this value from the distribution value.
-																															double cv$probabilitySample57Value70 = (cv$probabilitySample76Value20 * distribution$sample57[((index$sample$68 - 0) / 1)][index$sample57$69]);
+																															double cv$probabilitySample57Value70 = (cv$probabilitySample76Value20 * state.distribution$sample57[((index$sample$68 - 0) / 1)][index$sample57$69]);
 																															{
 																																int traceTempVariable$currentState$72_1 = distributionTempVariable$var55$71;
 																																if((index$sample$68 == sample$var196)) {
 																																	if((0 == timeStep$var226)) {
 																																		{
-																																			for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																				for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																			for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																				for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																					if((var119 == server)) {
 																																						if((var129 == traceTempVariable$currentState$72_1)) {
 																																							{
 																																								{
 																																									{
 																																										// Constructing a random variable input for use later.
-																																										double var241 = current_metric_mean[server][traceTempVariable$currentState$72_1];
+																																										double var241 = state.current_metric_mean[server][traceTempVariable$currentState$72_1];
 																																										
 																																										// Record the probability of sample task 256 generating output with current configuration.
-																																										if(((Math.log(cv$probabilitySample57Value70) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value70) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																										if(((Math.log(cv$probabilitySample57Value70) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value70) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																										else {
 																																											// If the second value is -infinity.
 																																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																												cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value70) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY));
+																																												cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value70) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY));
 																																											else
-																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value70) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value70) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)));
+																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value70) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value70) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)));
 																																										}
 																																										
 																																										// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -2581,25 +2159,25 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																												if((sample$var45 == sample$var196)) {
 																													if((timeStep$var66 == timeStep$var226)) {
 																														{
-																															for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																for(int var129 = 0; var129 < noStates; var129 += 1) {
+																															for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																	if((var119 == server)) {
 																																		if((var129 == traceTempVariable$currentState$75_1)) {
 																																			{
 																																				{
 																																					{
 																																						// Constructing a random variable input for use later.
-																																						double var241 = current_metric_mean[server][traceTempVariable$currentState$75_1];
+																																						double var241 = state.current_metric_mean[server][traceTempVariable$currentState$75_1];
 																																						
 																																						// Record the probability of sample task 256 generating output with current configuration.
-																																						if(((Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																						if(((Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																						else {
 																																							// If the second value is -infinity.
 																																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY));
+																																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY));
 																																							else
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)));
+																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value20) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)));
 																																						}
 																																						
 																																						// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -2615,39 +2193,39 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																													}
 																												}
 																											}
-																											for(int index$sample$76 = 0; index$sample$76 < noSamples; index$sample$76 += 1) {
-																												for(int index$timeStep$77 = 1; index$timeStep$77 < length$metric[index$sample$76][0]; index$timeStep$77 += 1) {
+																											for(int index$sample$76 = 0; index$sample$76 < state.noSamples; index$sample$76 += 1) {
+																												for(int index$timeStep$77 = 1; index$timeStep$77 < state.length$metric[index$sample$76][0]; index$timeStep$77 += 1) {
 																													if(!((index$timeStep$77 == timeStep$var66) && (index$sample$76 == sample$var45))) {
 																														// Enumerating the possible outputs of Categorical 73.
-																														for(int index$sample76$78 = 0; index$sample76$78 < noStates; index$sample76$78 += 1) {
+																														for(int index$sample76$78 = 0; index$sample76$78 < state.noStates; index$sample76$78 += 1) {
 																															int distributionTempVariable$var74$80 = index$sample76$78;
 																															
 																															// Update the probability of sampling this value from the distribution value.
-																															double cv$probabilitySample76Value79 = (cv$probabilitySample76Value20 * distribution$sample76[((index$sample$76 - 0) / 1)][((index$timeStep$77 - 1) / 1)][index$sample76$78]);
+																															double cv$probabilitySample76Value79 = (cv$probabilitySample76Value20 * state.distribution$sample76[((index$sample$76 - 0) / 1)][((index$timeStep$77 - 1) / 1)][index$sample76$78]);
 																															{
 																																int traceTempVariable$currentState$81_1 = distributionTempVariable$var74$80;
 																																if((index$sample$76 == sample$var196)) {
 																																	if((index$timeStep$77 == timeStep$var226)) {
 																																		{
-																																			for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																				for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																			for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																				for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																					if((var119 == server)) {
 																																						if((var129 == traceTempVariable$currentState$81_1)) {
 																																							{
 																																								{
 																																									{
 																																										// Constructing a random variable input for use later.
-																																										double var241 = current_metric_mean[server][traceTempVariable$currentState$81_1];
+																																										double var241 = state.current_metric_mean[server][traceTempVariable$currentState$81_1];
 																																										
 																																										// Record the probability of sample task 256 generating output with current configuration.
-																																										if(((Math.log(cv$probabilitySample76Value79) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value79) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																										if(((Math.log(cv$probabilitySample76Value79) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value79) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																										else {
 																																											// If the second value is -infinity.
 																																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																												cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value79) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY));
+																																												cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value79) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY));
 																																											else
-																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value79) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value79) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)));
+																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value79) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value79) + ((0.0 < traceTempVariable$var243$24_1)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(traceTempVariable$var243$24_1))) - (0.5 * Math.log(traceTempVariable$var243$24_1))):Double.NEGATIVE_INFINITY)));
 																																										}
 																																										
 																																										// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -2733,7 +2311,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 					// to be less than or equal as otherwise if the proposed value is not possible and
 					// the random value is 0 an impossible value will be accepted.
 					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$))))) || Double.isNaN(cv$ratio))) {
 							// If it is not revert the changes.
 							// 
 							// Set the sample value
@@ -2746,7 +2324,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 							{
 								{
 									{
-										double[] var147 = current_metric_var[var146];
+										double[] var147 = state.current_metric_var[var146];
 										var147[var156] = var157;
 									}
 								}
@@ -2763,7 +2341,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	// Bernoulli/Binomial conjugate prior.
 	private final void inferSample190(int var173, int var183, int threadID$cv$var183, Rng RNG$) {
 		if(true) {
-			constrainedFlag$sample190[((var173 - 0) / 1)][((var183 - 0) / 1)] = false;
+			state.constrainedFlag$sample190[((var173 - 0) / 1)][((var183 - 0) / 1)] = false;
 			
 			// Local variable to record the number of true samples.
 			double cv$sum = 0.0;
@@ -2775,17 +2353,17 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 				{
 					// Looking for a path between Sample 190 and consumer Bernoulli 231.
 					{
-						for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-							for(int server = 0; server < noServers; server += 1) {
-								for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-									if(fixedFlag$sample57) {
+						for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+							for(int server = 0; server < state.noServers; server += 1) {
+								for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
+									if(state.fixedFlag$sample57) {
 										{
-											for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+											for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 												if((sample$var45 == sample$var196)) {
 													if((0 == timeStep$var226)) {
 														{
 															if((var173 == server)) {
-																if((var183 == st[sample$var196][timeStep$var226])) {
+																if((var183 == state.st[sample$var196][timeStep$var226])) {
 																	// Processing sample task 241 of consumer random variable null.
 																	{
 																		{
@@ -2793,7 +2371,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																			boolean cv$sampleConstrained = true;
 																			if(cv$sampleConstrained) {
 																				// Mark that the sample has observed constrained data.
-																				constrainedFlag$sample190[((var173 - 0) / 1)][((var183 - 0) / 1)] = true;
+																				state.constrainedFlag$sample190[((var173 - 0) / 1)][((var183 - 0) / 1)] = true;
 																				{
 																					{
 																						{
@@ -2804,7 +2382,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																									cv$count = (cv$count + 1.0);
 																									
 																									// If the sample value was positive increase the count
-																									if(metric_valid_g[sample$var196][server][timeStep$var226])
+																									if(state.metric_valid_g[sample$var196][server][timeStep$var226])
 																										cv$sum = (cv$sum + 1.0);
 																								}
 																							}
@@ -2822,14 +2400,14 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 											}
 										}
 									} else {
-										for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+										for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 											if(true) {
 												// Enumerating the possible outputs of Categorical 54.
-												for(int index$sample57$6 = 0; index$sample57$6 < noStates; index$sample57$6 += 1) {
+												for(int index$sample57$6 = 0; index$sample57$6 < state.noStates; index$sample57$6 += 1) {
 													int distributionTempVariable$var55$8 = index$sample57$6;
 													
 													// Update the probability of sampling this value from the distribution value.
-													double cv$probabilitySample57Value7 = (1.0 * distribution$sample57[((sample$var45 - 0) / 1)][index$sample57$6]);
+													double cv$probabilitySample57Value7 = (1.0 * state.distribution$sample57[((sample$var45 - 0) / 1)][index$sample57$6]);
 													{
 														int traceTempVariable$currentState$9_1 = distributionTempVariable$var55$8;
 														if((sample$var45 == sample$var196)) {
@@ -2844,7 +2422,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																					boolean cv$sampleConstrained = true;
 																					if(cv$sampleConstrained) {
 																						// Mark that the sample has observed constrained data.
-																						constrainedFlag$sample190[((var173 - 0) / 1)][((var183 - 0) / 1)] = true;
+																						state.constrainedFlag$sample190[((var173 - 0) / 1)][((var183 - 0) / 1)] = true;
 																						{
 																							{
 																								{
@@ -2855,7 +2433,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																											cv$count = (cv$count + cv$probabilitySample57Value7);
 																											
 																											// If the sample value was positive increase the count
-																											if(metric_valid_g[sample$var196][server][timeStep$var226])
+																											if(state.metric_valid_g[sample$var196][server][timeStep$var226])
 																												cv$sum = (cv$sum + cv$probabilitySample57Value7);
 																										}
 																									}
@@ -2878,18 +2456,18 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 								}
 							}
 						}
-						for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-							for(int server = 0; server < noServers; server += 1) {
-								for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-									if(fixedFlag$sample76) {
+						for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+							for(int server = 0; server < state.noServers; server += 1) {
+								for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
+									if(state.fixedFlag$sample76) {
 										{
-											for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-												for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+											for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+												for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 													if((sample$var45 == sample$var196)) {
 														if((timeStep$var66 == timeStep$var226)) {
 															{
 																if((var173 == server)) {
-																	if((var183 == st[sample$var196][timeStep$var226])) {
+																	if((var183 == state.st[sample$var196][timeStep$var226])) {
 																		// Processing sample task 241 of consumer random variable null.
 																		{
 																			{
@@ -2897,7 +2475,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																				boolean cv$sampleConstrained = true;
 																				if(cv$sampleConstrained) {
 																					// Mark that the sample has observed constrained data.
-																					constrainedFlag$sample190[((var173 - 0) / 1)][((var183 - 0) / 1)] = true;
+																					state.constrainedFlag$sample190[((var173 - 0) / 1)][((var183 - 0) / 1)] = true;
 																					{
 																						{
 																							{
@@ -2908,7 +2486,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										cv$count = (cv$count + 1.0);
 																										
 																										// If the sample value was positive increase the count
-																										if(metric_valid_g[sample$var196][server][timeStep$var226])
+																										if(state.metric_valid_g[sample$var196][server][timeStep$var226])
 																											cv$sum = (cv$sum + 1.0);
 																									}
 																								}
@@ -2927,15 +2505,15 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 											}
 										}
 									} else {
-										for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-											for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+										for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+											for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 												if(true) {
 													// Enumerating the possible outputs of Categorical 73.
-													for(int index$sample76$18 = 0; index$sample76$18 < noStates; index$sample76$18 += 1) {
+													for(int index$sample76$18 = 0; index$sample76$18 < state.noStates; index$sample76$18 += 1) {
 														int distributionTempVariable$var74$20 = index$sample76$18;
 														
 														// Update the probability of sampling this value from the distribution value.
-														double cv$probabilitySample76Value19 = (1.0 * distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$18]);
+														double cv$probabilitySample76Value19 = (1.0 * state.distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$18]);
 														{
 															int traceTempVariable$currentState$21_1 = distributionTempVariable$var74$20;
 															if((sample$var45 == sample$var196)) {
@@ -2950,7 +2528,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																						boolean cv$sampleConstrained = true;
 																						if(cv$sampleConstrained) {
 																							// Mark that the sample has observed constrained data.
-																							constrainedFlag$sample190[((var173 - 0) / 1)][((var183 - 0) / 1)] = true;
+																							state.constrainedFlag$sample190[((var173 - 0) / 1)][((var183 - 0) / 1)] = true;
 																							{
 																								{
 																									{
@@ -2961,7 +2539,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																												cv$count = (cv$count + cv$probabilitySample76Value19);
 																												
 																												// If the sample value was positive increase the count
-																												if(metric_valid_g[sample$var196][server][timeStep$var226])
+																												if(state.metric_valid_g[sample$var196][server][timeStep$var226])
 																													cv$sum = (cv$sum + cv$probabilitySample76Value19);
 																											}
 																										}
@@ -2988,17 +2566,17 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 					}
 				}
 			}
-			if(constrainedFlag$sample190[((var173 - 0) / 1)][((var183 - 0) / 1)]) {
+			if(state.constrainedFlag$sample190[((var173 - 0) / 1)][((var183 - 0) / 1)]) {
 				// Write out the value of the sample to a temporary variable prior to updating the
 				// intermediate variables.
-				double var184 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+				double var184 = Conjugates.sampleConjugateBetaBinomial(state.RNG$, 1.0, 1.0, cv$sum, cv$count);
 				
 				// Guards to ensure that current_metric_valid_bias is only updated when there is a
 				// valid path.
 				{
 					{
 						{
-							double[] var174 = current_metric_valid_bias[var173];
+							double[] var174 = state.current_metric_valid_bias[var173];
 							var174[var183] = var184;
 						}
 					}
@@ -3012,16 +2590,16 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	// to Categorical conjugate prior.
 	private final void inferSample20() {
 		if(true) {
-			constrainedFlag$sample20 = false;
+			state.constrainedFlag$sample20 = false;
 			
 			// A reference local to the function for the sample variable.
-			double[] cv$targetLocal = initialStateDistribution;
+			double[] cv$targetLocal = state.initialStateDistribution;
 			
 			// A local reference to the scratch space.
-			double[] cv$countLocal = cv$var20$countGlobal;
+			double[] cv$countLocal = scratch.cv$var20$countGlobal;
 			
 			// Get the length of the array
-			int cv$arrayLength = noStates;
+			int cv$arrayLength = state.noStates;
 			
 			// Initialize the array values to 0.
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
@@ -3031,8 +2609,8 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 				{
 					{
 						{
-							for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-								if(fixedFlag$sample57) {
+							for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+								if(state.fixedFlag$sample57) {
 									// Processing sample task 57 of consumer random variable null.
 									{
 										{
@@ -3040,10 +2618,10 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 											int index$sample$3 = sample$var45;
 											
 											// Flag recording if this sample task of the consuming random variable is constrained.
-											boolean cv$sampleConstrained = (fixedFlag$sample57 || constrainedFlag$sample57[((sample$var45 - 0) / 1)]);
+											boolean cv$sampleConstrained = (state.fixedFlag$sample57 || state.constrainedFlag$sample57[((sample$var45 - 0) / 1)]);
 											if(cv$sampleConstrained) {
 												// Mark that the sample has observed constrained data.
-												constrainedFlag$sample20 = true;
+												state.constrainedFlag$sample20 = true;
 												{
 													{
 														{
@@ -3051,7 +2629,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																{
 																	// Increment the sample counter with the value sampled by sample task 57 of random
 																	// variable var54
-																	cv$countLocal[st[sample$var45][0]] = (cv$countLocal[st[sample$var45][0]] + 1.0);
+																	cv$countLocal[state.st[sample$var45][0]] = (cv$countLocal[state.st[sample$var45][0]] + 1.0);
 																}
 															}
 														}
@@ -3071,8 +2649,8 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			{
 				{
 					{
-						for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-							if(!fixedFlag$sample57) {
+						for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+							if(!state.fixedFlag$sample57) {
 								// Processing sample task 57 of consumer random variable null.
 								{
 									{
@@ -3092,7 +2670,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 												
 												// Merge the distribution probabilities into the count
 												for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-													cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample57[((sample$var45 - 0) / 1)][cv$loopIndex] * cv$distributionProbability));
+													cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (state.distribution$sample57[((sample$var45 - 0) / 1)][cv$loopIndex] * cv$distributionProbability));
 											}
 										}
 									}
@@ -3102,11 +2680,11 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 					}
 				}
 			}
-			if(constrainedFlag$sample20)
+			if(state.constrainedFlag$sample20)
 				// Calculate the new sample value
 				// 
 				// Calculate a new sample value and write it into cv$targetLocal.
-				Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, cv$targetLocal, noStates);
+				Conjugates.sampleConjugateDirichletCategorical(state.RNG$, state.v, cv$countLocal, cv$targetLocal, state.noStates);
 		}
 	}
 
@@ -3115,16 +2693,16 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	// to Categorical conjugate prior.
 	private final void inferSample33(int var32, int threadID$cv$var32, Rng RNG$) {
 		if(true) {
-			constrainedFlag$sample33[((var32 - 0) / 1)] = false;
+			state.constrainedFlag$sample33[((var32 - 0) / 1)] = false;
 			
 			// A reference local to the function for the sample variable.
-			double[] cv$targetLocal = m[var32];
+			double[] cv$targetLocal = state.m[var32];
 			
 			// A local reference to the scratch space.
-			double[] cv$countLocal = cv$var33$countGlobal[threadID$cv$var32];
+			double[] cv$countLocal = scratch.cv$var33$countGlobal[threadID$cv$var32];
 			
 			// Get the length of the array
-			int cv$arrayLength = noStates;
+			int cv$arrayLength = state.noStates;
 			
 			// Initialize the array values to 0.
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
@@ -3134,16 +2712,16 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 				{
 					// Looking for a path between Sample 33 and consumer Categorical 73.
 					{
-						for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-							for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
-								if(fixedFlag$sample57) {
+						for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+							for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
+								if(state.fixedFlag$sample57) {
 									{
-										for(int index$sample$3_1 = 0; index$sample$3_1 < noSamples; index$sample$3_1 += 1) {
+										for(int index$sample$3_1 = 0; index$sample$3_1 < state.noSamples; index$sample$3_1 += 1) {
 											if((index$sample$3_1 == sample$var45)) {
 												if((0 == (timeStep$var66 - 1))) {
 													{
-														if((var32 == st[sample$var45][(timeStep$var66 - 1)])) {
-															if(fixedFlag$sample76) {
+														if((var32 == state.st[sample$var45][(timeStep$var66 - 1)])) {
+															if(state.fixedFlag$sample76) {
 																// Processing sample task 76 of consumer random variable null.
 																{
 																	{
@@ -3154,10 +2732,10 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																		int index$sample$24 = sample$var45;
 																		
 																		// Flag recording if this sample task of the consuming random variable is constrained.
-																		boolean cv$sampleConstrained = (fixedFlag$sample76 || constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)]);
+																		boolean cv$sampleConstrained = (state.fixedFlag$sample76 || state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)]);
 																		if(cv$sampleConstrained) {
 																			// Mark that the sample has observed constrained data.
-																			constrainedFlag$sample33[((var32 - 0) / 1)] = true;
+																			state.constrainedFlag$sample33[((var32 - 0) / 1)] = true;
 																			{
 																				{
 																					{
@@ -3165,7 +2743,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																							{
 																								// Increment the sample counter with the value sampled by sample task 76 of random
 																								// variable var73
-																								cv$countLocal[st[sample$var45][timeStep$var66]] = (cv$countLocal[st[sample$var45][timeStep$var66]] + 1.0);
+																								cv$countLocal[state.st[sample$var45][timeStep$var66]] = (cv$countLocal[state.st[sample$var45][timeStep$var66]] + 1.0);
 																							}
 																						}
 																					}
@@ -3182,21 +2760,21 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 										}
 									}
 								} else {
-									for(int index$sample$4 = 0; index$sample$4 < noSamples; index$sample$4 += 1) {
+									for(int index$sample$4 = 0; index$sample$4 < state.noSamples; index$sample$4 += 1) {
 										if(true) {
 											// Enumerating the possible outputs of Categorical 54.
-											for(int index$sample57$5 = 0; index$sample57$5 < noStates; index$sample57$5 += 1) {
+											for(int index$sample57$5 = 0; index$sample57$5 < state.noStates; index$sample57$5 += 1) {
 												int distributionTempVariable$var55$7 = index$sample57$5;
 												
 												// Update the probability of sampling this value from the distribution value.
-												double cv$probabilitySample57Value6 = (1.0 * distribution$sample57[((index$sample$4 - 0) / 1)][index$sample57$5]);
+												double cv$probabilitySample57Value6 = (1.0 * state.distribution$sample57[((index$sample$4 - 0) / 1)][index$sample57$5]);
 												{
 													int traceTempVariable$var71$8_1 = distributionTempVariable$var55$7;
 													if((index$sample$4 == sample$var45)) {
 														if((0 == (timeStep$var66 - 1))) {
 															{
 																if((var32 == traceTempVariable$var71$8_1)) {
-																	if(fixedFlag$sample76) {
+																	if(state.fixedFlag$sample76) {
 																		// Processing sample task 76 of consumer random variable null.
 																		{
 																			{
@@ -3207,10 +2785,10 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																				int index$sample$27 = sample$var45;
 																				
 																				// Flag recording if this sample task of the consuming random variable is constrained.
-																				boolean cv$sampleConstrained = (fixedFlag$sample76 || constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)]);
+																				boolean cv$sampleConstrained = (state.fixedFlag$sample76 || state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)]);
 																				if(cv$sampleConstrained) {
 																					// Mark that the sample has observed constrained data.
-																					constrainedFlag$sample33[((var32 - 0) / 1)] = true;
+																					state.constrainedFlag$sample33[((var32 - 0) / 1)] = true;
 																					{
 																						{
 																							{
@@ -3218,7 +2796,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																									{
 																										// Increment the sample counter with the value sampled by sample task 76 of random
 																										// variable var73
-																										cv$countLocal[st[sample$var45][timeStep$var66]] = (cv$countLocal[st[sample$var45][timeStep$var66]] + cv$probabilitySample57Value6);
+																										cv$countLocal[state.st[sample$var45][timeStep$var66]] = (cv$countLocal[state.st[sample$var45][timeStep$var66]] + cv$probabilitySample57Value6);
 																									}
 																								}
 																							}
@@ -3239,17 +2817,17 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 								}
 							}
 						}
-						for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-							for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
-								if(fixedFlag$sample76) {
+						for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+							for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
+								if(state.fixedFlag$sample76) {
 									{
-										for(int index$sample$13_1 = 0; index$sample$13_1 < noSamples; index$sample$13_1 += 1) {
-											for(int index$timeStep$13_2 = 1; index$timeStep$13_2 < length$metric[index$sample$13_1][0]; index$timeStep$13_2 += 1) {
+										for(int index$sample$13_1 = 0; index$sample$13_1 < state.noSamples; index$sample$13_1 += 1) {
+											for(int index$timeStep$13_2 = 1; index$timeStep$13_2 < state.length$metric[index$sample$13_1][0]; index$timeStep$13_2 += 1) {
 												if((index$sample$13_1 == sample$var45)) {
 													if((index$timeStep$13_2 == (timeStep$var66 - 1))) {
 														{
-															if((var32 == st[sample$var45][(timeStep$var66 - 1)])) {
-																if(fixedFlag$sample76) {
+															if((var32 == state.st[sample$var45][(timeStep$var66 - 1)])) {
+																if(state.fixedFlag$sample76) {
 																	// Processing sample task 76 of consumer random variable null.
 																	{
 																		{
@@ -3260,10 +2838,10 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																			int index$sample$30 = sample$var45;
 																			
 																			// Flag recording if this sample task of the consuming random variable is constrained.
-																			boolean cv$sampleConstrained = (fixedFlag$sample76 || constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)]);
+																			boolean cv$sampleConstrained = (state.fixedFlag$sample76 || state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)]);
 																			if(cv$sampleConstrained) {
 																				// Mark that the sample has observed constrained data.
-																				constrainedFlag$sample33[((var32 - 0) / 1)] = true;
+																				state.constrainedFlag$sample33[((var32 - 0) / 1)] = true;
 																				{
 																					{
 																						{
@@ -3271,7 +2849,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																								{
 																									// Increment the sample counter with the value sampled by sample task 76 of random
 																									// variable var73
-																									cv$countLocal[st[sample$var45][timeStep$var66]] = (cv$countLocal[st[sample$var45][timeStep$var66]] + 1.0);
+																									cv$countLocal[state.st[sample$var45][timeStep$var66]] = (cv$countLocal[state.st[sample$var45][timeStep$var66]] + 1.0);
 																								}
 																							}
 																						}
@@ -3289,22 +2867,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 										}
 									}
 								} else {
-									for(int index$sample$14 = 0; index$sample$14 < noSamples; index$sample$14 += 1) {
-										for(int index$timeStep$15 = 1; index$timeStep$15 < length$metric[index$sample$14][0]; index$timeStep$15 += 1) {
+									for(int index$sample$14 = 0; index$sample$14 < state.noSamples; index$sample$14 += 1) {
+										for(int index$timeStep$15 = 1; index$timeStep$15 < state.length$metric[index$sample$14][0]; index$timeStep$15 += 1) {
 											if(true) {
 												// Enumerating the possible outputs of Categorical 73.
-												for(int index$sample76$16 = 0; index$sample76$16 < noStates; index$sample76$16 += 1) {
+												for(int index$sample76$16 = 0; index$sample76$16 < state.noStates; index$sample76$16 += 1) {
 													int distributionTempVariable$var74$18 = index$sample76$16;
 													
 													// Update the probability of sampling this value from the distribution value.
-													double cv$probabilitySample76Value17 = (1.0 * distribution$sample76[((index$sample$14 - 0) / 1)][((index$timeStep$15 - 1) / 1)][index$sample76$16]);
+													double cv$probabilitySample76Value17 = (1.0 * state.distribution$sample76[((index$sample$14 - 0) / 1)][((index$timeStep$15 - 1) / 1)][index$sample76$16]);
 													{
 														int traceTempVariable$var71$19_1 = distributionTempVariable$var74$18;
 														if((index$sample$14 == sample$var45)) {
 															if((index$timeStep$15 == (timeStep$var66 - 1))) {
 																{
 																	if((var32 == traceTempVariable$var71$19_1)) {
-																		if(fixedFlag$sample76) {
+																		if(state.fixedFlag$sample76) {
 																			// Processing sample task 76 of consumer random variable null.
 																			{
 																				{
@@ -3315,10 +2893,10 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																					int index$sample$33 = sample$var45;
 																					
 																					// Flag recording if this sample task of the consuming random variable is constrained.
-																					boolean cv$sampleConstrained = (fixedFlag$sample76 || constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)]);
+																					boolean cv$sampleConstrained = (state.fixedFlag$sample76 || state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)]);
 																					if(cv$sampleConstrained) {
 																						// Mark that the sample has observed constrained data.
-																						constrainedFlag$sample33[((var32 - 0) / 1)] = true;
+																						state.constrainedFlag$sample33[((var32 - 0) / 1)] = true;
 																						{
 																							{
 																								{
@@ -3326,7 +2904,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										{
 																											// Increment the sample counter with the value sampled by sample task 76 of random
 																											// variable var73
-																											cv$countLocal[st[sample$var45][timeStep$var66]] = (cv$countLocal[st[sample$var45][timeStep$var66]] + cv$probabilitySample76Value17);
+																											cv$countLocal[state.st[sample$var45][timeStep$var66]] = (cv$countLocal[state.st[sample$var45][timeStep$var66]] + cv$probabilitySample76Value17);
 																										}
 																									}
 																								}
@@ -3356,16 +2934,16 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			{
 				// Looking for a path between Sample 33 and consumer Categorical 73.
 				{
-					for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-						for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
-							if(fixedFlag$sample57) {
+					for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+						for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
+							if(state.fixedFlag$sample57) {
 								{
-									for(int index$sample$40_1 = 0; index$sample$40_1 < noSamples; index$sample$40_1 += 1) {
+									for(int index$sample$40_1 = 0; index$sample$40_1 < state.noSamples; index$sample$40_1 += 1) {
 										if((index$sample$40_1 == sample$var45)) {
 											if((0 == (timeStep$var66 - 1))) {
 												{
-													if((var32 == st[sample$var45][(timeStep$var66 - 1)])) {
-														if(!fixedFlag$sample76) {
+													if((var32 == state.st[sample$var45][(timeStep$var66 - 1)])) {
+														if(!state.fixedFlag$sample76) {
 															// Processing sample task 76 of consumer random variable null.
 															{
 																{
@@ -3388,7 +2966,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																			
 																			// Merge the distribution probabilities into the count
 																			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-																				cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
+																				cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (state.distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
 																		}
 																	}
 																}
@@ -3401,21 +2979,21 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 									}
 								}
 							} else {
-								for(int index$sample$41 = 0; index$sample$41 < noSamples; index$sample$41 += 1) {
+								for(int index$sample$41 = 0; index$sample$41 < state.noSamples; index$sample$41 += 1) {
 									if(true) {
 										// Enumerating the possible outputs of Categorical 54.
-										for(int index$sample57$42 = 0; index$sample57$42 < noStates; index$sample57$42 += 1) {
+										for(int index$sample57$42 = 0; index$sample57$42 < state.noStates; index$sample57$42 += 1) {
 											int distributionTempVariable$var55$44 = index$sample57$42;
 											
 											// Update the probability of sampling this value from the distribution value.
-											double cv$probabilitySample57Value43 = (1.0 * distribution$sample57[((index$sample$41 - 0) / 1)][index$sample57$42]);
+											double cv$probabilitySample57Value43 = (1.0 * state.distribution$sample57[((index$sample$41 - 0) / 1)][index$sample57$42]);
 											{
 												int traceTempVariable$var71$45_1 = distributionTempVariable$var55$44;
 												if((index$sample$41 == sample$var45)) {
 													if((0 == (timeStep$var66 - 1))) {
 														{
 															if((var32 == traceTempVariable$var71$45_1)) {
-																if(!fixedFlag$sample76) {
+																if(!state.fixedFlag$sample76) {
 																	// Processing sample task 76 of consumer random variable null.
 																	{
 																		{
@@ -3438,7 +3016,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																					
 																					// Merge the distribution probabilities into the count
 																					for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-																						cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
+																						cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (state.distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
 																				}
 																			}
 																		}
@@ -3455,17 +3033,17 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 							}
 						}
 					}
-					for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-						for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
-							if(fixedFlag$sample76) {
+					for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+						for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
+							if(state.fixedFlag$sample76) {
 								{
-									for(int index$sample$50_1 = 0; index$sample$50_1 < noSamples; index$sample$50_1 += 1) {
-										for(int index$timeStep$50_2 = 1; index$timeStep$50_2 < length$metric[index$sample$50_1][0]; index$timeStep$50_2 += 1) {
+									for(int index$sample$50_1 = 0; index$sample$50_1 < state.noSamples; index$sample$50_1 += 1) {
+										for(int index$timeStep$50_2 = 1; index$timeStep$50_2 < state.length$metric[index$sample$50_1][0]; index$timeStep$50_2 += 1) {
 											if((index$sample$50_1 == sample$var45)) {
 												if((index$timeStep$50_2 == (timeStep$var66 - 1))) {
 													{
-														if((var32 == st[sample$var45][(timeStep$var66 - 1)])) {
-															if(!fixedFlag$sample76) {
+														if((var32 == state.st[sample$var45][(timeStep$var66 - 1)])) {
+															if(!state.fixedFlag$sample76) {
 																// Processing sample task 76 of consumer random variable null.
 																{
 																	{
@@ -3488,7 +3066,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																				
 																				// Merge the distribution probabilities into the count
 																				for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-																					cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
+																					cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (state.distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
 																			}
 																		}
 																	}
@@ -3502,22 +3080,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 									}
 								}
 							} else {
-								for(int index$sample$51 = 0; index$sample$51 < noSamples; index$sample$51 += 1) {
-									for(int index$timeStep$52 = 1; index$timeStep$52 < length$metric[index$sample$51][0]; index$timeStep$52 += 1) {
+								for(int index$sample$51 = 0; index$sample$51 < state.noSamples; index$sample$51 += 1) {
+									for(int index$timeStep$52 = 1; index$timeStep$52 < state.length$metric[index$sample$51][0]; index$timeStep$52 += 1) {
 										if(true) {
 											// Enumerating the possible outputs of Categorical 73.
-											for(int index$sample76$53 = 0; index$sample76$53 < noStates; index$sample76$53 += 1) {
+											for(int index$sample76$53 = 0; index$sample76$53 < state.noStates; index$sample76$53 += 1) {
 												int distributionTempVariable$var74$55 = index$sample76$53;
 												
 												// Update the probability of sampling this value from the distribution value.
-												double cv$probabilitySample76Value54 = (1.0 * distribution$sample76[((index$sample$51 - 0) / 1)][((index$timeStep$52 - 1) / 1)][index$sample76$53]);
+												double cv$probabilitySample76Value54 = (1.0 * state.distribution$sample76[((index$sample$51 - 0) / 1)][((index$timeStep$52 - 1) / 1)][index$sample76$53]);
 												{
 													int traceTempVariable$var71$56_1 = distributionTempVariable$var74$55;
 													if((index$sample$51 == sample$var45)) {
 														if((index$timeStep$52 == (timeStep$var66 - 1))) {
 															{
 																if((var32 == traceTempVariable$var71$56_1)) {
-																	if(!fixedFlag$sample76) {
+																	if(!state.fixedFlag$sample76) {
 																		// Processing sample task 76 of consumer random variable null.
 																		{
 																			{
@@ -3540,7 +3118,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																						
 																						// Merge the distribution probabilities into the count
 																						for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-																							cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
+																							cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (state.distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][cv$loopIndex] * cv$distributionProbability));
 																					}
 																				}
 																			}
@@ -3560,11 +3138,11 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 					}
 				}
 			}
-			if(constrainedFlag$sample33[((var32 - 0) / 1)])
+			if(state.constrainedFlag$sample33[((var32 - 0) / 1)])
 				// Calculate the new sample value
 				// 
 				// Calculate a new sample value and write it into cv$targetLocal.
-				Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, cv$targetLocal, noStates);
+				Conjugates.sampleConjugateDirichletCategorical(state.RNG$, state.v, cv$countLocal, cv$targetLocal, state.noStates);
 		}
 	}
 
@@ -3575,17 +3153,17 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		// Copy of index so that its values can be safely substituted
 		int index$sample$1 = sample$var45;
 		if(true) {
-			constrainedFlag$sample57[((sample$var45 - 0) / 1)] = false;
+			state.constrainedFlag$sample57[((sample$var45 - 0) / 1)] = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
 			{
 				// variable marginalization
-				cv$numStates = Math.max(cv$numStates, noStates);
+				cv$numStates = Math.max(cv$numStates, state.noStates);
 			}
 			
 			// Get a local reference to the scratch space.
-			double[] cv$stateProbabilityLocal = cv$var55$stateProbabilityGlobal[threadID$cv$sample$var45];
+			double[] cv$stateProbabilityLocal = scratch.cv$var55$stateProbabilityGlobal[threadID$cv$sample$var45];
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				// Initialize the summed probabilities to 0.
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -3608,7 +3186,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < noStates)) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$currentValue])) && (initialStateDistribution[cv$currentValue] <= 1.0))?Math.log(initialStateDistribution[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < state.noStates)) && (0 < state.noStates)) && (0.0 <= state.initialStateDistribution[cv$currentValue])) && (state.initialStateDistribution[cv$currentValue] <= 1.0))?Math.log(state.initialStateDistribution[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 73.
 					{
@@ -3616,11 +3194,11 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						{
 							{
 								int traceTempVariable$var71$2_1 = cv$currentValue;
-								for(int index$sample$2_2 = 0; index$sample$2_2 < noSamples; index$sample$2_2 += 1) {
+								for(int index$sample$2_2 = 0; index$sample$2_2 < state.noSamples; index$sample$2_2 += 1) {
 									if((sample$var45 == index$sample$2_2)) {
-										for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$2_2][0]; timeStep$var66 += 1) {
+										for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$2_2][0]; timeStep$var66 += 1) {
 											if((0 == (timeStep$var66 - 1))) {
-												if(fixedFlag$sample76) {
+												if(state.fixedFlag$sample76) {
 													// Processing sample task 76 of consumer random variable null.
 													{
 														{
@@ -3631,10 +3209,10 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 															int index$sample$5 = index$sample$2_2;
 															
 															// Flag recording if this sample task of the consuming random variable is constrained.
-															boolean cv$sampleConstrained = (fixedFlag$sample76 || constrainedFlag$sample76[((index$sample$2_2 - 0) / 1)][((timeStep$var66 - 1) / 1)]);
+															boolean cv$sampleConstrained = (state.fixedFlag$sample76 || state.constrainedFlag$sample76[((index$sample$2_2 - 0) / 1)][((timeStep$var66 - 1) / 1)]);
 															if(cv$sampleConstrained) {
 																// Mark that the sample has observed constrained data.
-																constrainedFlag$sample57[((sample$var45 - 0) / 1)] = true;
+																state.constrainedFlag$sample57[((sample$var45 - 0) / 1)] = true;
 																
 																// Set an accumulator to sum the probabilities for each possible configuration of
 																// inputs.
@@ -3647,23 +3225,23 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																	// Enumerating the possible arguments for the variable Categorical 73 which is consuming
 																	// the output of Sample task 57.
 																	{
-																		for(int var32 = 0; var32 < noStates; var32 += 1) {
+																		for(int var32 = 0; var32 < state.noStates; var32 += 1) {
 																			if((var32 == traceTempVariable$var71$2_1)) {
 																				{
 																					{
 																						{
 																							// Constructing a random variable input for use later.
-																							double[] var72 = m[traceTempVariable$var71$2_1];
+																							double[] var72 = state.m[traceTempVariable$var71$2_1];
 																							
 																							// Record the probability of sample task 76 generating output with current configuration.
-																							if(((Math.log(1.0) + ((((((0.0 <= st[index$sample$2_2][timeStep$var66]) && (st[index$sample$2_2][timeStep$var66] < noStates)) && (0 < noStates)) && (0.0 <= var72[st[index$sample$2_2][timeStep$var66]])) && (var72[st[index$sample$2_2][timeStep$var66]] <= 1.0))?Math.log(var72[st[index$sample$2_2][timeStep$var66]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= st[index$sample$2_2][timeStep$var66]) && (st[index$sample$2_2][timeStep$var66] < noStates)) && (0 < noStates)) && (0.0 <= var72[st[index$sample$2_2][timeStep$var66]])) && (var72[st[index$sample$2_2][timeStep$var66]] <= 1.0))?Math.log(var72[st[index$sample$2_2][timeStep$var66]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							if(((Math.log(1.0) + ((((((0.0 <= state.st[index$sample$2_2][timeStep$var66]) && (state.st[index$sample$2_2][timeStep$var66] < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[state.st[index$sample$2_2][timeStep$var66]])) && (var72[state.st[index$sample$2_2][timeStep$var66]] <= 1.0))?Math.log(var72[state.st[index$sample$2_2][timeStep$var66]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.st[index$sample$2_2][timeStep$var66]) && (state.st[index$sample$2_2][timeStep$var66] < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[state.st[index$sample$2_2][timeStep$var66]])) && (var72[state.st[index$sample$2_2][timeStep$var66]] <= 1.0))?Math.log(var72[state.st[index$sample$2_2][timeStep$var66]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																							else {
 																								// If the second value is -infinity.
 																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= st[index$sample$2_2][timeStep$var66]) && (st[index$sample$2_2][timeStep$var66] < noStates)) && (0 < noStates)) && (0.0 <= var72[st[index$sample$2_2][timeStep$var66]])) && (var72[st[index$sample$2_2][timeStep$var66]] <= 1.0))?Math.log(var72[st[index$sample$2_2][timeStep$var66]]):Double.NEGATIVE_INFINITY));
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.st[index$sample$2_2][timeStep$var66]) && (state.st[index$sample$2_2][timeStep$var66] < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[state.st[index$sample$2_2][timeStep$var66]])) && (var72[state.st[index$sample$2_2][timeStep$var66]] <= 1.0))?Math.log(var72[state.st[index$sample$2_2][timeStep$var66]]):Double.NEGATIVE_INFINITY));
 																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= st[index$sample$2_2][timeStep$var66]) && (st[index$sample$2_2][timeStep$var66] < noStates)) && (0 < noStates)) && (0.0 <= var72[st[index$sample$2_2][timeStep$var66]])) && (var72[st[index$sample$2_2][timeStep$var66]] <= 1.0))?Math.log(var72[st[index$sample$2_2][timeStep$var66]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= st[index$sample$2_2][timeStep$var66]) && (st[index$sample$2_2][timeStep$var66] < noStates)) && (0 < noStates)) && (0.0 <= var72[st[index$sample$2_2][timeStep$var66]])) && (var72[st[index$sample$2_2][timeStep$var66]] <= 1.0))?Math.log(var72[st[index$sample$2_2][timeStep$var66]]):Double.NEGATIVE_INFINITY)));
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.st[index$sample$2_2][timeStep$var66]) && (state.st[index$sample$2_2][timeStep$var66] < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[state.st[index$sample$2_2][timeStep$var66]])) && (var72[state.st[index$sample$2_2][timeStep$var66]] <= 1.0))?Math.log(var72[state.st[index$sample$2_2][timeStep$var66]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.st[index$sample$2_2][timeStep$var66]) && (state.st[index$sample$2_2][timeStep$var66] < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[state.st[index$sample$2_2][timeStep$var66]])) && (var72[state.st[index$sample$2_2][timeStep$var66]] <= 1.0))?Math.log(var72[state.st[index$sample$2_2][timeStep$var66]]):Double.NEGATIVE_INFINITY)));
 																							}
 																							
 																							// Recorded the probability of reaching sample task 76 with the current configuration.
@@ -3709,16 +3287,16 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						{
 							{
 								int traceTempVariable$currentState$8_1 = cv$currentValue;
-								for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+								for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 									if((sample$var45 == sample$var196)) {
-										for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+										for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 											if((0 == timeStep$var226)) {
-												for(int server = 0; server < noServers; server += 1) {
+												for(int server = 0; server < state.noServers; server += 1) {
 													// Flag recording if this sample task of the consuming random variable is constrained.
 													boolean cv$sampleConstrained = true;
 													if(cv$sampleConstrained) {
 														// Mark that the sample has observed constrained data.
-														constrainedFlag$sample57[((sample$var45 - 0) / 1)] = true;
+														state.constrainedFlag$sample57[((sample$var45 - 0) / 1)] = true;
 														
 														// Set an accumulator to sum the probabilities for each possible configuration of
 														// inputs.
@@ -3731,25 +3309,25 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 															// Enumerating the possible arguments for the variable Bernoulli 231 which is consuming
 															// the output of Sample task 57.
 															{
-																for(int var173 = 0; var173 < noServers; var173 += 1) {
-																	for(int var183 = 0; var183 < noStates; var183 += 1) {
+																for(int var173 = 0; var173 < state.noServers; var173 += 1) {
+																	for(int var183 = 0; var183 < state.noStates; var183 += 1) {
 																		if((var173 == server)) {
 																			if((var183 == traceTempVariable$currentState$8_1)) {
 																				{
 																					{
 																						{
 																							// Constructing a random variable input for use later.
-																							double var230 = current_metric_valid_bias[server][traceTempVariable$currentState$8_1];
+																							double var230 = state.current_metric_valid_bias[server][traceTempVariable$currentState$8_1];
 																							
 																							// Record the probability of sample task 241 generating output with current configuration.
-																							if(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							if(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																							else {
 																								// If the second value is -infinity.
 																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
 																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)));
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)));
 																							}
 																							
 																							// Recorded the probability of reaching sample task 241 with the current configuration.
@@ -3795,14 +3373,14 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						{
 							// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							boolean[][][] guard$sample57gaussian255 = guard$sample57gaussian255$global[threadID$cv$sample$var45];
+							boolean[][][] guard$sample57gaussian255 = scratch.guard$sample57gaussian255$global[threadID$cv$sample$var45];
 							{
-								for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+								for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 									if((sample$var45 == sample$var196)) {
-										for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+										for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 											if((0 == timeStep$var226)) {
-												for(int server = 0; server < noServers; server += 1) {
-													if(metric_valid_g[sample$var196][server][timeStep$var226])
+												for(int server = 0; server < state.noServers; server += 1) {
+													if(state.metric_valid_g[sample$var196][server][timeStep$var226])
 														// Set the flags to false
 														guard$sample57gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = false;
 												}
@@ -3812,12 +3390,12 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 								}
 							}
 							{
-								for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+								for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 									if((sample$var45 == sample$var196)) {
-										for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+										for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 											if((0 == timeStep$var226)) {
-												for(int server = 0; server < noServers; server += 1) {
-													if(metric_valid_g[sample$var196][server][timeStep$var226])
+												for(int server = 0; server < state.noServers; server += 1) {
+													if(state.metric_valid_g[sample$var196][server][timeStep$var226])
 														// Set the flags to false
 														guard$sample57gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = false;
 												}
@@ -3828,12 +3406,12 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 							}
 							{
 								int traceTempVariable$currentState$14_1 = cv$currentValue;
-								for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+								for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 									if((sample$var45 == sample$var196)) {
-										for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+										for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 											if((0 == timeStep$var226)) {
-												for(int server = 0; server < noServers; server += 1) {
-													if(metric_valid_g[sample$var196][server][timeStep$var226]) {
+												for(int server = 0; server < state.noServers; server += 1) {
+													if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
 														if(!guard$sample57gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)]) {
 															// The body will execute, so should not be executed again
 															guard$sample57gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = true;
@@ -3845,7 +3423,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																	boolean cv$sampleConstrained = true;
 																	if(cv$sampleConstrained) {
 																		// Mark that the sample has observed constrained data.
-																		constrainedFlag$sample57[((sample$var45 - 0) / 1)] = true;
+																		state.constrainedFlag$sample57[((sample$var45 - 0) / 1)] = true;
 																		
 																		// Set an accumulator to sum the probabilities for each possible configuration of
 																		// inputs.
@@ -3858,8 +3436,8 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																			// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																			// the output of Sample task 57.
 																			{
-																				for(int var119 = 0; var119 < noServers; var119 += 1) {
-																					for(int var129 = 0; var129 < noStates; var129 += 1) {
+																				for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																					for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																						if((var119 == server)) {
 																							if((var129 == traceTempVariable$currentState$14_1)) {
 																								{
@@ -3867,28 +3445,28 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																									if((index$sample$1 == sample$var196)) {
 																										if((0 == timeStep$var226)) {
 																											{
-																												for(int var146 = 0; var146 < noServers; var146 += 1) {
-																													for(int var156 = 0; var156 < noStates; var156 += 1) {
+																												for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																													for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																														if((var146 == server)) {
 																															if((var156 == traceTempVariable$currentState$19_1)) {
 																																{
 																																	{
 																																		{
 																																			// Constructing a random variable input for use later.
-																																			double var241 = current_metric_mean[server][traceTempVariable$currentState$19_1];
+																																			double var241 = state.current_metric_mean[server][traceTempVariable$currentState$19_1];
 																																			
 																																			// Constructing a random variable input for use later.
-																																			double var243 = current_metric_var[server][traceTempVariable$currentState$19_1];
+																																			double var243 = state.current_metric_var[server][traceTempVariable$currentState$19_1];
 																																			
 																																			// Record the probability of sample task 256 generating output with current configuration.
-																																			if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																			if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																			else {
 																																				// If the second value is -infinity.
 																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																			}
 																																			
 																																			// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -3904,41 +3482,41 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										}
 																									}
 																								}
-																								for(int index$sample$20 = 0; index$sample$20 < noSamples; index$sample$20 += 1) {
+																								for(int index$sample$20 = 0; index$sample$20 < state.noSamples; index$sample$20 += 1) {
 																									if(!(index$sample$20 == index$sample$1)) {
 																										// Enumerating the possible outputs of Categorical 54.
-																										for(int index$sample57$21 = 0; index$sample57$21 < noStates; index$sample57$21 += 1) {
+																										for(int index$sample57$21 = 0; index$sample57$21 < state.noStates; index$sample57$21 += 1) {
 																											int distributionTempVariable$var55$23 = index$sample57$21;
 																											
 																											// Update the probability of sampling this value from the distribution value.
-																											double cv$probabilitySample57Value22 = (1.0 * distribution$sample57[((index$sample$20 - 0) / 1)][index$sample57$21]);
+																											double cv$probabilitySample57Value22 = (1.0 * state.distribution$sample57[((index$sample$20 - 0) / 1)][index$sample57$21]);
 																											{
 																												int traceTempVariable$currentState$24_1 = distributionTempVariable$var55$23;
 																												if((index$sample$20 == sample$var196)) {
 																													if((0 == timeStep$var226)) {
 																														{
-																															for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																for(int var156 = 0; var156 < noStates; var156 += 1) {
+																															for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																	if((var146 == server)) {
 																																		if((var156 == traceTempVariable$currentState$24_1)) {
 																																			{
 																																				{
 																																					{
 																																						// Constructing a random variable input for use later.
-																																						double var241 = current_metric_mean[server][traceTempVariable$currentState$24_1];
+																																						double var241 = state.current_metric_mean[server][traceTempVariable$currentState$24_1];
 																																						
 																																						// Constructing a random variable input for use later.
-																																						double var243 = current_metric_var[server][traceTempVariable$currentState$24_1];
+																																						double var243 = state.current_metric_var[server][traceTempVariable$currentState$24_1];
 																																						
 																																						// Record the probability of sample task 256 generating output with current configuration.
-																																						if(((Math.log(cv$probabilitySample57Value22) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value22) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																						if(((Math.log(cv$probabilitySample57Value22) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value22) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																						else {
 																																							// If the second value is -infinity.
 																																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value22) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value22) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																							else
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value22) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value22) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value22) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value22) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																						}
 																																						
 																																						// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -3966,39 +3544,39 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																			// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																			// the output of Sample task 57.
 																			{
-																				for(int var119 = 0; var119 < noServers; var119 += 1) {
-																					for(int var129 = 0; var129 < noStates; var129 += 1) {
+																				for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																					for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																						if((var119 == server)) {
 																							if((var129 == traceTempVariable$currentState$14_1)) {
-																								if(fixedFlag$sample76) {
+																								if(state.fixedFlag$sample76) {
 																									{
-																										for(int index$sample$28_1 = 0; index$sample$28_1 < noSamples; index$sample$28_1 += 1) {
-																											for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$28_1][0]; timeStep$var66 += 1) {
+																										for(int index$sample$28_1 = 0; index$sample$28_1 < state.noSamples; index$sample$28_1 += 1) {
+																											for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$28_1][0]; timeStep$var66 += 1) {
 																												if((index$sample$28_1 == sample$var196)) {
 																													if((timeStep$var66 == timeStep$var226)) {
 																														{
-																															for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																for(int var156 = 0; var156 < noStates; var156 += 1) {
+																															for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																	if((var146 == server)) {
 																																		if((var156 == traceTempVariable$currentState$14_1)) {
 																																			{
 																																				{
 																																					{
 																																						// Constructing a random variable input for use later.
-																																						double var241 = current_metric_mean[server][traceTempVariable$currentState$14_1];
+																																						double var241 = state.current_metric_mean[server][traceTempVariable$currentState$14_1];
 																																						
 																																						// Constructing a random variable input for use later.
-																																						double var243 = current_metric_var[server][traceTempVariable$currentState$14_1];
+																																						double var243 = state.current_metric_var[server][traceTempVariable$currentState$14_1];
 																																						
 																																						// Record the probability of sample task 256 generating output with current configuration.
-																																						if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																						if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																						else {
 																																							// If the second value is -infinity.
 																																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																							else
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																						}
 																																						
 																																						// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -4017,42 +3595,42 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										}
 																									}
 																								} else {
-																									for(int index$sample$29 = 0; index$sample$29 < noSamples; index$sample$29 += 1) {
-																										for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$29][0]; timeStep$var66 += 1) {
+																									for(int index$sample$29 = 0; index$sample$29 < state.noSamples; index$sample$29 += 1) {
+																										for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$29][0]; timeStep$var66 += 1) {
 																											if(true) {
 																												// Enumerating the possible outputs of Categorical 73.
-																												for(int index$sample76$31 = 0; index$sample76$31 < noStates; index$sample76$31 += 1) {
+																												for(int index$sample76$31 = 0; index$sample76$31 < state.noStates; index$sample76$31 += 1) {
 																													int distributionTempVariable$var74$33 = index$sample76$31;
 																													
 																													// Update the probability of sampling this value from the distribution value.
-																													double cv$probabilitySample76Value32 = (1.0 * distribution$sample76[((index$sample$29 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$31]);
+																													double cv$probabilitySample76Value32 = (1.0 * state.distribution$sample76[((index$sample$29 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$31]);
 																													{
 																														int traceTempVariable$currentState$34_1 = distributionTempVariable$var74$33;
 																														if((index$sample$29 == sample$var196)) {
 																															if((timeStep$var66 == timeStep$var226)) {
 																																{
-																																	for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																		for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																	for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																		for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																			if((var146 == server)) {
 																																				if((var156 == traceTempVariable$currentState$34_1)) {
 																																					{
 																																						{
 																																							{
 																																								// Constructing a random variable input for use later.
-																																								double var241 = current_metric_mean[server][traceTempVariable$currentState$34_1];
+																																								double var241 = state.current_metric_mean[server][traceTempVariable$currentState$34_1];
 																																								
 																																								// Constructing a random variable input for use later.
-																																								double var243 = current_metric_var[server][traceTempVariable$currentState$34_1];
+																																								double var243 = state.current_metric_var[server][traceTempVariable$currentState$34_1];
 																																								
 																																								// Record the probability of sample task 256 generating output with current configuration.
-																																								if(((Math.log(cv$probabilitySample76Value32) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value32) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																								if(((Math.log(cv$probabilitySample76Value32) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value32) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																								else {
 																																									// If the second value is -infinity.
 																																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value32) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value32) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																									else
-																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value32) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value32) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value32) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value32) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																								}
 																																								
 																																								// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -4108,12 +3686,12 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 							}
 							{
 								int traceTempVariable$currentState$15_1 = cv$currentValue;
-								for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+								for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 									if((sample$var45 == sample$var196)) {
-										for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+										for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 											if((0 == timeStep$var226)) {
-												for(int server = 0; server < noServers; server += 1) {
-													if(metric_valid_g[sample$var196][server][timeStep$var226]) {
+												for(int server = 0; server < state.noServers; server += 1) {
+													if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
 														if(!guard$sample57gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)]) {
 															// The body will execute, so should not be executed again
 															guard$sample57gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = true;
@@ -4125,7 +3703,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																	boolean cv$sampleConstrained = true;
 																	if(cv$sampleConstrained) {
 																		// Mark that the sample has observed constrained data.
-																		constrainedFlag$sample57[((sample$var45 - 0) / 1)] = true;
+																		state.constrainedFlag$sample57[((sample$var45 - 0) / 1)] = true;
 																		
 																		// Set an accumulator to sum the probabilities for each possible configuration of
 																		// inputs.
@@ -4142,33 +3720,33 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																				if((index$sample$1 == sample$var196)) {
 																					if((0 == timeStep$var226)) {
 																						{
-																							for(int var119 = 0; var119 < noServers; var119 += 1) {
-																								for(int var129 = 0; var129 < noStates; var129 += 1) {
+																							for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																								for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																									if((var119 == server)) {
 																										if((var129 == traceTempVariable$currentState$37_1)) {
 																											{
-																												for(int var146 = 0; var146 < noServers; var146 += 1) {
-																													for(int var156 = 0; var156 < noStates; var156 += 1) {
+																												for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																													for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																														if((var146 == server)) {
 																															if((var156 == traceTempVariable$currentState$37_1)) {
 																																{
 																																	{
 																																		{
 																																			// Constructing a random variable input for use later.
-																																			double var241 = current_metric_mean[server][traceTempVariable$currentState$37_1];
+																																			double var241 = state.current_metric_mean[server][traceTempVariable$currentState$37_1];
 																																			
 																																			// Constructing a random variable input for use later.
-																																			double var243 = current_metric_var[server][traceTempVariable$currentState$37_1];
+																																			double var243 = state.current_metric_var[server][traceTempVariable$currentState$37_1];
 																																			
 																																			// Record the probability of sample task 256 generating output with current configuration.
-																																			if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																			if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																			else {
 																																				// If the second value is -infinity.
 																																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																				else
-																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																			}
 																																			
 																																			// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -4189,46 +3767,46 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																					}
 																				}
 																			}
-																			for(int index$sample$38 = 0; index$sample$38 < noSamples; index$sample$38 += 1) {
+																			for(int index$sample$38 = 0; index$sample$38 < state.noSamples; index$sample$38 += 1) {
 																				if(!(index$sample$38 == index$sample$1)) {
 																					// Enumerating the possible outputs of Categorical 54.
-																					for(int index$sample57$39 = 0; index$sample57$39 < noStates; index$sample57$39 += 1) {
+																					for(int index$sample57$39 = 0; index$sample57$39 < state.noStates; index$sample57$39 += 1) {
 																						int distributionTempVariable$var55$41 = index$sample57$39;
 																						
 																						// Update the probability of sampling this value from the distribution value.
-																						double cv$probabilitySample57Value40 = (1.0 * distribution$sample57[((index$sample$38 - 0) / 1)][index$sample57$39]);
+																						double cv$probabilitySample57Value40 = (1.0 * state.distribution$sample57[((index$sample$38 - 0) / 1)][index$sample57$39]);
 																						{
 																							int traceTempVariable$currentState$42_1 = distributionTempVariable$var55$41;
 																							if((index$sample$38 == sample$var196)) {
 																								if((0 == timeStep$var226)) {
 																									{
-																										for(int var119 = 0; var119 < noServers; var119 += 1) {
-																											for(int var129 = 0; var129 < noStates; var129 += 1) {
+																										for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																											for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																												if((var119 == server)) {
 																													if((var129 == traceTempVariable$currentState$42_1)) {
 																														{
-																															for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																for(int var156 = 0; var156 < noStates; var156 += 1) {
+																															for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																	if((var146 == server)) {
 																																		if((var156 == traceTempVariable$currentState$42_1)) {
 																																			{
 																																				{
 																																					{
 																																						// Constructing a random variable input for use later.
-																																						double var241 = current_metric_mean[server][traceTempVariable$currentState$42_1];
+																																						double var241 = state.current_metric_mean[server][traceTempVariable$currentState$42_1];
 																																						
 																																						// Constructing a random variable input for use later.
-																																						double var243 = current_metric_var[server][traceTempVariable$currentState$42_1];
+																																						double var243 = state.current_metric_var[server][traceTempVariable$currentState$42_1];
 																																						
 																																						// Record the probability of sample task 256 generating output with current configuration.
-																																						if(((Math.log(cv$probabilitySample57Value40) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value40) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																						if(((Math.log(cv$probabilitySample57Value40) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value40) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																						else {
 																																							// If the second value is -infinity.
 																																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value40) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value40) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																							else
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value40) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value40) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value40) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value40) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																						}
 																																						
 																																						// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -4255,40 +3833,40 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																			
 																			// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																			// the output of Sample task 57.
-																			if(fixedFlag$sample76) {
+																			if(state.fixedFlag$sample76) {
 																				{
-																					for(int index$sample$47_1 = 0; index$sample$47_1 < noSamples; index$sample$47_1 += 1) {
-																						for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$47_1][0]; timeStep$var66 += 1) {
+																					for(int index$sample$47_1 = 0; index$sample$47_1 < state.noSamples; index$sample$47_1 += 1) {
+																						for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$47_1][0]; timeStep$var66 += 1) {
 																							if((index$sample$47_1 == sample$var196)) {
 																								if((timeStep$var66 == timeStep$var226)) {
 																									{
-																										for(int var119 = 0; var119 < noServers; var119 += 1) {
-																											for(int var129 = 0; var129 < noStates; var129 += 1) {
+																										for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																											for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																												if((var119 == server)) {
 																													if((var129 == traceTempVariable$currentState$15_1)) {
 																														{
-																															for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																for(int var156 = 0; var156 < noStates; var156 += 1) {
+																															for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																	if((var146 == server)) {
 																																		if((var156 == traceTempVariable$currentState$15_1)) {
 																																			{
 																																				{
 																																					{
 																																						// Constructing a random variable input for use later.
-																																						double var241 = current_metric_mean[server][traceTempVariable$currentState$15_1];
+																																						double var241 = state.current_metric_mean[server][traceTempVariable$currentState$15_1];
 																																						
 																																						// Constructing a random variable input for use later.
-																																						double var243 = current_metric_var[server][traceTempVariable$currentState$15_1];
+																																						double var243 = state.current_metric_var[server][traceTempVariable$currentState$15_1];
 																																						
 																																						// Record the probability of sample task 256 generating output with current configuration.
-																																						if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																						if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																						else {
 																																							// If the second value is -infinity.
 																																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																								cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																							else
-																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																						}
 																																						
 																																						// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -4312,47 +3890,47 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																					}
 																				}
 																			} else {
-																				for(int index$sample$48 = 0; index$sample$48 < noSamples; index$sample$48 += 1) {
-																					for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$48][0]; timeStep$var66 += 1) {
+																				for(int index$sample$48 = 0; index$sample$48 < state.noSamples; index$sample$48 += 1) {
+																					for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$48][0]; timeStep$var66 += 1) {
 																						if(true) {
 																							// Enumerating the possible outputs of Categorical 73.
-																							for(int index$sample76$50 = 0; index$sample76$50 < noStates; index$sample76$50 += 1) {
+																							for(int index$sample76$50 = 0; index$sample76$50 < state.noStates; index$sample76$50 += 1) {
 																								int distributionTempVariable$var74$52 = index$sample76$50;
 																								
 																								// Update the probability of sampling this value from the distribution value.
-																								double cv$probabilitySample76Value51 = (1.0 * distribution$sample76[((index$sample$48 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$50]);
+																								double cv$probabilitySample76Value51 = (1.0 * state.distribution$sample76[((index$sample$48 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$50]);
 																								{
 																									int traceTempVariable$currentState$53_1 = distributionTempVariable$var74$52;
 																									if((index$sample$48 == sample$var196)) {
 																										if((timeStep$var66 == timeStep$var226)) {
 																											{
-																												for(int var119 = 0; var119 < noServers; var119 += 1) {
-																													for(int var129 = 0; var129 < noStates; var129 += 1) {
+																												for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																													for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																														if((var119 == server)) {
 																															if((var129 == traceTempVariable$currentState$53_1)) {
 																																{
-																																	for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																		for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																	for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																		for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																			if((var146 == server)) {
 																																				if((var156 == traceTempVariable$currentState$53_1)) {
 																																					{
 																																						{
 																																							{
 																																								// Constructing a random variable input for use later.
-																																								double var241 = current_metric_mean[server][traceTempVariable$currentState$53_1];
+																																								double var241 = state.current_metric_mean[server][traceTempVariable$currentState$53_1];
 																																								
 																																								// Constructing a random variable input for use later.
-																																								double var243 = current_metric_var[server][traceTempVariable$currentState$53_1];
+																																								double var243 = state.current_metric_var[server][traceTempVariable$currentState$53_1];
 																																								
 																																								// Record the probability of sample task 256 generating output with current configuration.
-																																								if(((Math.log(cv$probabilitySample76Value51) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value51) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																								if(((Math.log(cv$probabilitySample76Value51) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value51) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																								else {
 																																									// If the second value is -infinity.
 																																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value51) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value51) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																									else
-																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value51) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value51) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value51) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value51) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																								}
 																																								
 																																								// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -4428,11 +4006,11 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 					{
 						{
 							int traceTempVariable$var71$66_1 = cv$currentValue;
-							for(int index$sample$66_2 = 0; index$sample$66_2 < noSamples; index$sample$66_2 += 1) {
+							for(int index$sample$66_2 = 0; index$sample$66_2 < state.noSamples; index$sample$66_2 += 1) {
 								if((sample$var45 == index$sample$66_2)) {
-									for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$66_2][0]; timeStep$var66 += 1) {
+									for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$66_2][0]; timeStep$var66 += 1) {
 										if((0 == (timeStep$var66 - 1))) {
-											if(!fixedFlag$sample76) {
+											if(!state.fixedFlag$sample76) {
 												// Processing sample task 76 of consumer random variable null.
 												{
 													{
@@ -4444,10 +4022,10 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 														
 														// A local array to hold the accumulated distributions of the sample tasks for each
 														// configuration of distributions.
-														double[] cv$accumulatedConsumerDistributions = cv$distributionAccumulator$var73[threadID$cv$sample$var45];
+														double[] cv$accumulatedConsumerDistributions = scratch.cv$distributionAccumulator$var73[threadID$cv$sample$var45];
 														
 														// Zero all the elements in the distribution accumulator
-														for(int cv$i = 0; cv$i < noStates; cv$i += 1)
+														for(int cv$i = 0; cv$i < state.noStates; cv$i += 1)
 															cv$accumulatedConsumerDistributions[cv$i] = 0.0;
 														
 														// Zero an accumulator to track the probabilities reached.
@@ -4456,7 +4034,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 														// Enumerating the possible arguments for the variable Categorical 73 which is consuming
 														// the output of Sample task 57.
 														{
-															for(int var32 = 0; var32 < noStates; var32 += 1) {
+															for(int var32 = 0; var32 < state.noStates; var32 += 1) {
 																if((var32 == traceTempVariable$var71$66_1)) {
 																	{
 																		// Declare and zero an accumulator for tracking the reached source probability space.
@@ -4467,7 +4045,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																		}
 																		
 																		// Constructing a random variable input for use later.
-																		double[] var72 = m[traceTempVariable$var71$66_1];
+																		double[] var72 = state.m[traceTempVariable$var71$66_1];
 																		
 																		// The probability of reaching the consumer with this set of consumer arguments
 																		double cv$distributionProbability = (scopeVariable$reachedSourceProbability * 1.0);
@@ -4476,20 +4054,20 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																		cv$reachedDistributionProbability = (cv$reachedDistributionProbability + cv$distributionProbability);
 																		
 																		// Add the current distribution to the distribution accumulator.
-																		DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, var72, noStates);
+																		DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, var72, state.noStates);
 																	}
 																}
 															}
 														}
 														
 														// A local copy of the samples' distribution.
-														double[] cv$sampleDistribution = distribution$sample76[((index$sample$66_2 - 0) / 1)][((timeStep$var66 - 1) / 1)];
+														double[] cv$sampleDistribution = state.distribution$sample76[((index$sample$66_2 - 0) / 1)][((timeStep$var66 - 1) / 1)];
 														
 														// The overlap of the distributions so far.
 														double cv$overlap = 0.0;
 														
 														// Calculate the overlap for each element in the distribution
-														for(int cv$i = 0; cv$i < noStates; cv$i += 1) {
+														for(int cv$i = 0; cv$i < state.noStates; cv$i += 1) {
 															// Normalise the values in the calculated distribution
 															double cv$normalisedDistValue = (cv$accumulatedConsumerDistributions[cv$i] / cv$reachedDistributionProbability);
 															
@@ -4523,10 +4101,10 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 				// Save the calculated index value into the array of index value probabilities
 				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
-			if(constrainedFlag$sample57[((sample$var45 - 0) / 1)]) {
+			if(state.constrainedFlag$sample57[((sample$var45 - 0) / 1)]) {
 				// Set the calculated probabilities to be the distribution values, and normalize
 				// Local copy of the probability array
-				double[] cv$localProbability = distribution$sample57[((sample$var45 - 0) / 1)];
+				double[] cv$localProbability = state.distribution$sample57[((sample$var45 - 0) / 1)];
 				
 				// The sum of all the probabilities in log space
 				double cv$logSum = 0.0;
@@ -4589,7 +4167,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		// Copy of index so that its values can be safely substituted
 		int index$sample$2 = sample$var45;
 		if(true) {
-			constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = false;
+			state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -4597,16 +4175,16 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			// Exploring all the possible state counts for random variable 73.
 			// 
 			// Enumerating the possible arguments for Categorical 73.
-			if(fixedFlag$sample57) {
+			if(state.fixedFlag$sample57) {
 				{
-					for(int index$sample$3_1 = 0; index$sample$3_1 < noSamples; index$sample$3_1 += 1) {
+					for(int index$sample$3_1 = 0; index$sample$3_1 < state.noSamples; index$sample$3_1 += 1) {
 						if((index$sample$3_1 == sample$var45)) {
 							if((0 == (timeStep$var66 - 1))) {
 								{
-									for(int var32 = 0; var32 < noStates; var32 += 1) {
-										if((var32 == st[sample$var45][(timeStep$var66 - 1)]))
+									for(int var32 = 0; var32 < state.noStates; var32 += 1) {
+										if((var32 == state.st[sample$var45][(timeStep$var66 - 1)]))
 											// variable marginalization
-											cv$numStates = Math.max(cv$numStates, noStates);
+											cv$numStates = Math.max(cv$numStates, state.noStates);
 									}
 								}
 							}
@@ -4614,23 +4192,23 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 					}
 				}
 			} else {
-				for(int index$sample$4 = 0; index$sample$4 < noSamples; index$sample$4 += 1) {
+				for(int index$sample$4 = 0; index$sample$4 < state.noSamples; index$sample$4 += 1) {
 					if(true) {
 						// Enumerating the possible outputs of Categorical 54.
-						for(int index$sample57$5 = 0; index$sample57$5 < noStates; index$sample57$5 += 1) {
+						for(int index$sample57$5 = 0; index$sample57$5 < state.noStates; index$sample57$5 += 1) {
 							int distributionTempVariable$var55$7 = index$sample57$5;
 							
 							// Update the probability of sampling this value from the distribution value.
-							double cv$probabilitySample57Value6 = (1.0 * distribution$sample57[((index$sample$4 - 0) / 1)][index$sample57$5]);
+							double cv$probabilitySample57Value6 = (1.0 * state.distribution$sample57[((index$sample$4 - 0) / 1)][index$sample57$5]);
 							{
 								int traceTempVariable$var71$8_1 = distributionTempVariable$var55$7;
 								if((index$sample$4 == sample$var45)) {
 									if((0 == (timeStep$var66 - 1))) {
 										{
-											for(int var32 = 0; var32 < noStates; var32 += 1) {
+											for(int var32 = 0; var32 < state.noStates; var32 += 1) {
 												if((var32 == traceTempVariable$var71$8_1))
 													// variable marginalization
-													cv$numStates = Math.max(cv$numStates, noStates);
+													cv$numStates = Math.max(cv$numStates, state.noStates);
 											}
 										}
 									}
@@ -4646,33 +4224,33 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 				if((index$sample$2 == sample$var45)) {
 					if((index$timeStep$1 == (timeStep$var66 - 1))) {
 						{
-							for(int var32 = 0; var32 < noStates; var32 += 1) {
-								if((var32 == st[sample$var45][(timeStep$var66 - 1)]))
+							for(int var32 = 0; var32 < state.noStates; var32 += 1) {
+								if((var32 == state.st[sample$var45][(timeStep$var66 - 1)]))
 									// variable marginalization
-									cv$numStates = Math.max(cv$numStates, noStates);
+									cv$numStates = Math.max(cv$numStates, state.noStates);
 							}
 						}
 					}
 				}
 			}
-			for(int index$sample$12 = 0; index$sample$12 < noSamples; index$sample$12 += 1) {
-				for(int index$timeStep$13 = 1; index$timeStep$13 < length$metric[index$sample$12][0]; index$timeStep$13 += 1) {
+			for(int index$sample$12 = 0; index$sample$12 < state.noSamples; index$sample$12 += 1) {
+				for(int index$timeStep$13 = 1; index$timeStep$13 < state.length$metric[index$sample$12][0]; index$timeStep$13 += 1) {
 					if(!((index$timeStep$13 == index$timeStep$1) && (index$sample$12 == index$sample$2))) {
 						// Enumerating the possible outputs of Categorical 73.
-						for(int index$sample76$14 = 0; index$sample76$14 < noStates; index$sample76$14 += 1) {
+						for(int index$sample76$14 = 0; index$sample76$14 < state.noStates; index$sample76$14 += 1) {
 							int distributionTempVariable$var74$16 = index$sample76$14;
 							
 							// Update the probability of sampling this value from the distribution value.
-							double cv$probabilitySample76Value15 = (1.0 * distribution$sample76[((index$sample$12 - 0) / 1)][((index$timeStep$13 - 1) / 1)][index$sample76$14]);
+							double cv$probabilitySample76Value15 = (1.0 * state.distribution$sample76[((index$sample$12 - 0) / 1)][((index$timeStep$13 - 1) / 1)][index$sample76$14]);
 							{
 								int traceTempVariable$var71$17_1 = distributionTempVariable$var74$16;
 								if((index$sample$12 == sample$var45)) {
 									if((index$timeStep$13 == (timeStep$var66 - 1))) {
 										{
-											for(int var32 = 0; var32 < noStates; var32 += 1) {
+											for(int var32 = 0; var32 < state.noStates; var32 += 1) {
 												if((var32 == traceTempVariable$var71$17_1))
 													// variable marginalization
-													cv$numStates = Math.max(cv$numStates, noStates);
+													cv$numStates = Math.max(cv$numStates, state.noStates);
 											}
 										}
 									}
@@ -4684,7 +4262,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			}
 			
 			// Get a local reference to the scratch space.
-			double[] cv$stateProbabilityLocal = cv$var74$stateProbabilityGlobal[threadID$cv$sample$var45];
+			double[] cv$stateProbabilityLocal = scratch.cv$var74$stateProbabilityGlobal[threadID$cv$sample$var45];
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				// Exploring all the possible distribution values for random variable 73 creating
 				// sample task 76.
@@ -4705,23 +4283,23 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 				cv$currentValue = cv$valuePos;
 				
 				// Enumerating the possible arguments for Categorical 73.
-				if(fixedFlag$sample57) {
+				if(state.fixedFlag$sample57) {
 					{
-						for(int index$sample$20_1 = 0; index$sample$20_1 < noSamples; index$sample$20_1 += 1) {
+						for(int index$sample$20_1 = 0; index$sample$20_1 < state.noSamples; index$sample$20_1 += 1) {
 							if((index$sample$20_1 == sample$var45)) {
 								if((0 == (timeStep$var66 - 1))) {
 									{
-										for(int var32 = 0; var32 < noStates; var32 += 1) {
-											if((var32 == st[sample$var45][(timeStep$var66 - 1)])) {
+										for(int var32 = 0; var32 < state.noStates; var32 += 1) {
+											if((var32 == state.st[sample$var45][(timeStep$var66 - 1)])) {
 												// Record the reached probability density.
 												cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 												
 												// Constructing a random variable input for use later.
-												double[] var72 = m[st[sample$var45][(timeStep$var66 - 1)]];
+												double[] var72 = state.m[state.st[sample$var45][(timeStep$var66 - 1)]];
 												
 												// An accumulator to allow the value for each distribution to be constructed before
 												// it is added to the index probabilities.
-												double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < noStates)) && (0 < noStates)) && (0.0 <= var72[cv$currentValue])) && (var72[cv$currentValue] <= 1.0))?Math.log(var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
+												double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[cv$currentValue])) && (var72[cv$currentValue] <= 1.0))?Math.log(var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
 												
 												// Processing random variable 73.
 												{
@@ -4739,16 +4317,16 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 													{
 														{
 															int traceTempVariable$currentState$41_1 = cv$currentValue;
-															for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+															for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 																if((sample$var45 == sample$var196)) {
-																	for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+																	for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																		if((timeStep$var66 == timeStep$var226)) {
-																			for(int server = 0; server < noServers; server += 1) {
+																			for(int server = 0; server < state.noServers; server += 1) {
 																				// Flag recording if this sample task of the consuming random variable is constrained.
 																				boolean cv$sampleConstrained = true;
 																				if(cv$sampleConstrained) {
 																					// Mark that the sample has observed constrained data.
-																					constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
+																					state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
 																					
 																					// Set an accumulator to sum the probabilities for each possible configuration of
 																					// inputs.
@@ -4761,25 +4339,25 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																						// Enumerating the possible arguments for the variable Bernoulli 231 which is consuming
 																						// the output of Sample task 76.
 																						{
-																							for(int var173 = 0; var173 < noServers; var173 += 1) {
-																								for(int var183 = 0; var183 < noStates; var183 += 1) {
+																							for(int var173 = 0; var173 < state.noServers; var173 += 1) {
+																								for(int var183 = 0; var183 < state.noStates; var183 += 1) {
 																									if((var173 == server)) {
 																										if((var183 == traceTempVariable$currentState$41_1)) {
 																											{
 																												{
 																													{
 																														// Constructing a random variable input for use later.
-																														double var230 = current_metric_valid_bias[server][traceTempVariable$currentState$41_1];
+																														double var230 = state.current_metric_valid_bias[server][traceTempVariable$currentState$41_1];
 																														
 																														// Record the probability of sample task 241 generating output with current configuration.
-																														if(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																														if(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																														else {
 																															// If the second value is -infinity.
 																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
+																																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
 																															else
-																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)));
+																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)));
 																														}
 																														
 																														// Recorded the probability of reaching sample task 241 with the current configuration.
@@ -4825,14 +4403,14 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 													{
 														// Guard to check that at most one copy of the code is executed for a given random
 														// variable instance.
-														boolean[][][] guard$sample76gaussian255 = guard$sample76gaussian255$global[threadID$cv$sample$var45];
+														boolean[][][] guard$sample76gaussian255 = scratch.guard$sample76gaussian255$global[threadID$cv$sample$var45];
 														{
-															for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+															for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 																if((sample$var45 == sample$var196)) {
-																	for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+																	for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																		if((timeStep$var66 == timeStep$var226)) {
-																			for(int server = 0; server < noServers; server += 1) {
-																				if(metric_valid_g[sample$var196][server][timeStep$var226])
+																			for(int server = 0; server < state.noServers; server += 1) {
+																				if(state.metric_valid_g[sample$var196][server][timeStep$var226])
 																					// Set the flags to false
 																					guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = false;
 																			}
@@ -4842,12 +4420,12 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 															}
 														}
 														{
-															for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+															for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 																if((sample$var45 == sample$var196)) {
-																	for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+																	for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																		if((timeStep$var66 == timeStep$var226)) {
-																			for(int server = 0; server < noServers; server += 1) {
-																				if(metric_valid_g[sample$var196][server][timeStep$var226])
+																			for(int server = 0; server < state.noServers; server += 1) {
+																				if(state.metric_valid_g[sample$var196][server][timeStep$var226])
 																					// Set the flags to false
 																					guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = false;
 																			}
@@ -4858,12 +4436,12 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 														}
 														{
 															int traceTempVariable$currentState$65_1 = cv$currentValue;
-															for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+															for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 																if((sample$var45 == sample$var196)) {
-																	for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+																	for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																		if((timeStep$var66 == timeStep$var226)) {
-																			for(int server = 0; server < noServers; server += 1) {
-																				if(metric_valid_g[sample$var196][server][timeStep$var226]) {
+																			for(int server = 0; server < state.noServers; server += 1) {
+																				if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
 																					if(!guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)]) {
 																						// The body will execute, so should not be executed again
 																						guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = true;
@@ -4875,7 +4453,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																								boolean cv$sampleConstrained = true;
 																								if(cv$sampleConstrained) {
 																									// Mark that the sample has observed constrained data.
-																									constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
+																									state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
 																									
 																									// Set an accumulator to sum the probabilities for each possible configuration of
 																									// inputs.
@@ -4888,37 +4466,37 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																										// the output of Sample task 76.
 																										{
-																											for(int var119 = 0; var119 < noServers; var119 += 1) {
-																												for(int var129 = 0; var129 < noStates; var129 += 1) {
+																											for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																												for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																													if((var119 == server)) {
 																														if((var129 == traceTempVariable$currentState$65_1)) {
 																															{
-																																for(int index$sample$82_1 = 0; index$sample$82_1 < noSamples; index$sample$82_1 += 1) {
+																																for(int index$sample$82_1 = 0; index$sample$82_1 < state.noSamples; index$sample$82_1 += 1) {
 																																	if((index$sample$82_1 == sample$var196)) {
 																																		if((0 == timeStep$var226)) {
 																																			{
-																																				for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																					for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																				for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																					for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																						if((var146 == server)) {
 																																							if((var156 == traceTempVariable$currentState$65_1)) {
 																																								{
 																																									{
 																																										{
 																																											// Constructing a random variable input for use later.
-																																											double var241 = current_metric_mean[server][traceTempVariable$currentState$65_1];
+																																											double var241 = state.current_metric_mean[server][traceTempVariable$currentState$65_1];
 																																											
 																																											// Constructing a random variable input for use later.
-																																											double var243 = current_metric_var[server][traceTempVariable$currentState$65_1];
+																																											double var243 = state.current_metric_var[server][traceTempVariable$currentState$65_1];
 																																											
 																																											// Record the probability of sample task 256 generating output with current configuration.
-																																											if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																											if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																											else {
 																																												// If the second value is -infinity.
 																																												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																												else
-																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																											}
 																																											
 																																											// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -4944,8 +4522,8 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																										// the output of Sample task 76.
 																										{
-																											for(int var119 = 0; var119 < noServers; var119 += 1) {
-																												for(int var129 = 0; var129 < noStates; var129 += 1) {
+																											for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																												for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																													if((var119 == server)) {
 																														if((var129 == traceTempVariable$currentState$65_1)) {
 																															{
@@ -4953,28 +4531,28 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																																if((index$sample$2 == sample$var196)) {
 																																	if((index$timeStep$1 == timeStep$var226)) {
 																																		{
-																																			for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																				for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																			for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																				for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																					if((var146 == server)) {
 																																						if((var156 == traceTempVariable$currentState$85_1)) {
 																																							{
 																																								{
 																																									{
 																																										// Constructing a random variable input for use later.
-																																										double var241 = current_metric_mean[server][traceTempVariable$currentState$85_1];
+																																										double var241 = state.current_metric_mean[server][traceTempVariable$currentState$85_1];
 																																										
 																																										// Constructing a random variable input for use later.
-																																										double var243 = current_metric_var[server][traceTempVariable$currentState$85_1];
+																																										double var243 = state.current_metric_var[server][traceTempVariable$currentState$85_1];
 																																										
 																																										// Record the probability of sample task 256 generating output with current configuration.
-																																										if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																										if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																										else {
 																																											// If the second value is -infinity.
 																																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																											else
-																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																										}
 																																										
 																																										// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -4990,42 +4568,42 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																																	}
 																																}
 																															}
-																															for(int index$sample$86 = 0; index$sample$86 < noSamples; index$sample$86 += 1) {
-																																for(int index$timeStep$87 = 1; index$timeStep$87 < length$metric[index$sample$86][0]; index$timeStep$87 += 1) {
+																															for(int index$sample$86 = 0; index$sample$86 < state.noSamples; index$sample$86 += 1) {
+																																for(int index$timeStep$87 = 1; index$timeStep$87 < state.length$metric[index$sample$86][0]; index$timeStep$87 += 1) {
 																																	if(!((index$timeStep$87 == index$timeStep$1) && (index$sample$86 == index$sample$2))) {
 																																		// Enumerating the possible outputs of Categorical 73.
-																																		for(int index$sample76$88 = 0; index$sample76$88 < noStates; index$sample76$88 += 1) {
+																																		for(int index$sample76$88 = 0; index$sample76$88 < state.noStates; index$sample76$88 += 1) {
 																																			int distributionTempVariable$var74$90 = index$sample76$88;
 																																			
 																																			// Update the probability of sampling this value from the distribution value.
-																																			double cv$probabilitySample76Value89 = (1.0 * distribution$sample76[((index$sample$86 - 0) / 1)][((index$timeStep$87 - 1) / 1)][index$sample76$88]);
+																																			double cv$probabilitySample76Value89 = (1.0 * state.distribution$sample76[((index$sample$86 - 0) / 1)][((index$timeStep$87 - 1) / 1)][index$sample76$88]);
 																																			{
 																																				int traceTempVariable$currentState$91_1 = distributionTempVariable$var74$90;
 																																				if((index$sample$86 == sample$var196)) {
 																																					if((index$timeStep$87 == timeStep$var226)) {
 																																						{
-																																							for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																								for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																							for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																								for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																									if((var146 == server)) {
 																																										if((var156 == traceTempVariable$currentState$91_1)) {
 																																											{
 																																												{
 																																													{
 																																														// Constructing a random variable input for use later.
-																																														double var241 = current_metric_mean[server][traceTempVariable$currentState$91_1];
+																																														double var241 = state.current_metric_mean[server][traceTempVariable$currentState$91_1];
 																																														
 																																														// Constructing a random variable input for use later.
-																																														double var243 = current_metric_var[server][traceTempVariable$currentState$91_1];
+																																														double var243 = state.current_metric_var[server][traceTempVariable$currentState$91_1];
 																																														
 																																														// Record the probability of sample task 256 generating output with current configuration.
-																																														if(((Math.log(cv$probabilitySample76Value89) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value89) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																														if(((Math.log(cv$probabilitySample76Value89) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value89) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																														else {
 																																															// If the second value is -infinity.
 																																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																																cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value89) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																																cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value89) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																															else
-																																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value89) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value89) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value89) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value89) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																														}
 																																														
 																																														// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -5080,12 +4658,12 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 														}
 														{
 															int traceTempVariable$currentState$69_1 = cv$currentValue;
-															for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+															for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 																if((sample$var45 == sample$var196)) {
-																	for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+																	for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																		if((timeStep$var66 == timeStep$var226)) {
-																			for(int server = 0; server < noServers; server += 1) {
-																				if(metric_valid_g[sample$var196][server][timeStep$var226]) {
+																			for(int server = 0; server < state.noServers; server += 1) {
+																				if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
 																					if(!guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)]) {
 																						// The body will execute, so should not be executed again
 																						guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = true;
@@ -5097,7 +4675,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																								boolean cv$sampleConstrained = true;
 																								if(cv$sampleConstrained) {
 																									// Mark that the sample has observed constrained data.
-																									constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
+																									state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
 																									
 																									// Set an accumulator to sum the probabilities for each possible configuration of
 																									// inputs.
@@ -5110,37 +4688,37 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																										// the output of Sample task 76.
 																										{
-																											for(int index$sample$153_1 = 0; index$sample$153_1 < noSamples; index$sample$153_1 += 1) {
+																											for(int index$sample$153_1 = 0; index$sample$153_1 < state.noSamples; index$sample$153_1 += 1) {
 																												if((index$sample$153_1 == sample$var196)) {
 																													if((0 == timeStep$var226)) {
 																														{
-																															for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																for(int var129 = 0; var129 < noStates; var129 += 1) {
+																															for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																	if((var119 == server)) {
 																																		if((var129 == traceTempVariable$currentState$69_1)) {
 																																			{
-																																				for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																					for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																				for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																					for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																						if((var146 == server)) {
 																																							if((var156 == traceTempVariable$currentState$69_1)) {
 																																								{
 																																									{
 																																										{
 																																											// Constructing a random variable input for use later.
-																																											double var241 = current_metric_mean[server][traceTempVariable$currentState$69_1];
+																																											double var241 = state.current_metric_mean[server][traceTempVariable$currentState$69_1];
 																																											
 																																											// Constructing a random variable input for use later.
-																																											double var243 = current_metric_var[server][traceTempVariable$currentState$69_1];
+																																											double var243 = state.current_metric_var[server][traceTempVariable$currentState$69_1];
 																																											
 																																											// Record the probability of sample task 256 generating output with current configuration.
-																																											if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																											if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																											else {
 																																												// If the second value is -infinity.
 																																												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																												else
-																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																											}
 																																											
 																																											// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -5170,33 +4748,33 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																											if((index$sample$2 == sample$var196)) {
 																												if((index$timeStep$1 == timeStep$var226)) {
 																													{
-																														for(int var119 = 0; var119 < noServers; var119 += 1) {
-																															for(int var129 = 0; var129 < noStates; var129 += 1) {
+																														for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																															for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																if((var119 == server)) {
 																																	if((var129 == traceTempVariable$currentState$156_1)) {
 																																		{
-																																			for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																				for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																			for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																				for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																					if((var146 == server)) {
 																																						if((var156 == traceTempVariable$currentState$156_1)) {
 																																							{
 																																								{
 																																									{
 																																										// Constructing a random variable input for use later.
-																																										double var241 = current_metric_mean[server][traceTempVariable$currentState$156_1];
+																																										double var241 = state.current_metric_mean[server][traceTempVariable$currentState$156_1];
 																																										
 																																										// Constructing a random variable input for use later.
-																																										double var243 = current_metric_var[server][traceTempVariable$currentState$156_1];
+																																										double var243 = state.current_metric_var[server][traceTempVariable$currentState$156_1];
 																																										
 																																										// Record the probability of sample task 256 generating output with current configuration.
-																																										if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																										if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																										else {
 																																											// If the second value is -infinity.
 																																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																											else
-																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																										}
 																																										
 																																										// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -5217,47 +4795,47 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																												}
 																											}
 																										}
-																										for(int index$sample$157 = 0; index$sample$157 < noSamples; index$sample$157 += 1) {
-																											for(int index$timeStep$158 = 1; index$timeStep$158 < length$metric[index$sample$157][0]; index$timeStep$158 += 1) {
+																										for(int index$sample$157 = 0; index$sample$157 < state.noSamples; index$sample$157 += 1) {
+																											for(int index$timeStep$158 = 1; index$timeStep$158 < state.length$metric[index$sample$157][0]; index$timeStep$158 += 1) {
 																												if(!((index$timeStep$158 == index$timeStep$1) && (index$sample$157 == index$sample$2))) {
 																													// Enumerating the possible outputs of Categorical 73.
-																													for(int index$sample76$159 = 0; index$sample76$159 < noStates; index$sample76$159 += 1) {
+																													for(int index$sample76$159 = 0; index$sample76$159 < state.noStates; index$sample76$159 += 1) {
 																														int distributionTempVariable$var74$161 = index$sample76$159;
 																														
 																														// Update the probability of sampling this value from the distribution value.
-																														double cv$probabilitySample76Value160 = (1.0 * distribution$sample76[((index$sample$157 - 0) / 1)][((index$timeStep$158 - 1) / 1)][index$sample76$159]);
+																														double cv$probabilitySample76Value160 = (1.0 * state.distribution$sample76[((index$sample$157 - 0) / 1)][((index$timeStep$158 - 1) / 1)][index$sample76$159]);
 																														{
 																															int traceTempVariable$currentState$162_1 = distributionTempVariable$var74$161;
 																															if((index$sample$157 == sample$var196)) {
 																																if((index$timeStep$158 == timeStep$var226)) {
 																																	{
-																																		for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																			for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																		for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																			for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																				if((var119 == server)) {
 																																					if((var129 == traceTempVariable$currentState$162_1)) {
 																																						{
-																																							for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																								for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																							for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																								for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																									if((var146 == server)) {
 																																										if((var156 == traceTempVariable$currentState$162_1)) {
 																																											{
 																																												{
 																																													{
 																																														// Constructing a random variable input for use later.
-																																														double var241 = current_metric_mean[server][traceTempVariable$currentState$162_1];
+																																														double var241 = state.current_metric_mean[server][traceTempVariable$currentState$162_1];
 																																														
 																																														// Constructing a random variable input for use later.
-																																														double var243 = current_metric_var[server][traceTempVariable$currentState$162_1];
+																																														double var243 = state.current_metric_var[server][traceTempVariable$currentState$162_1];
 																																														
 																																														// Record the probability of sample task 256 generating output with current configuration.
-																																														if(((Math.log(cv$probabilitySample76Value160) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value160) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																														if(((Math.log(cv$probabilitySample76Value160) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value160) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																														else {
 																																															// If the second value is -infinity.
 																																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																																cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value160) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																																cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value160) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																															else
-																																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value160) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value160) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value160) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value160) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																														}
 																																														
 																																														// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -5332,30 +4910,30 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						}
 					}
 				} else {
-					for(int index$sample$21 = 0; index$sample$21 < noSamples; index$sample$21 += 1) {
+					for(int index$sample$21 = 0; index$sample$21 < state.noSamples; index$sample$21 += 1) {
 						if(true) {
 							// Enumerating the possible outputs of Categorical 54.
-							for(int index$sample57$22 = 0; index$sample57$22 < noStates; index$sample57$22 += 1) {
+							for(int index$sample57$22 = 0; index$sample57$22 < state.noStates; index$sample57$22 += 1) {
 								int distributionTempVariable$var55$24 = index$sample57$22;
 								
 								// Update the probability of sampling this value from the distribution value.
-								double cv$probabilitySample57Value23 = (1.0 * distribution$sample57[((index$sample$21 - 0) / 1)][index$sample57$22]);
+								double cv$probabilitySample57Value23 = (1.0 * state.distribution$sample57[((index$sample$21 - 0) / 1)][index$sample57$22]);
 								{
 									int traceTempVariable$var71$25_1 = distributionTempVariable$var55$24;
 									if((index$sample$21 == sample$var45)) {
 										if((0 == (timeStep$var66 - 1))) {
 											{
-												for(int var32 = 0; var32 < noStates; var32 += 1) {
+												for(int var32 = 0; var32 < state.noStates; var32 += 1) {
 													if((var32 == traceTempVariable$var71$25_1)) {
 														// Record the reached probability density.
 														cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample57Value23);
 														
 														// Constructing a random variable input for use later.
-														double[] var72 = m[traceTempVariable$var71$25_1];
+														double[] var72 = state.m[traceTempVariable$var71$25_1];
 														
 														// An accumulator to allow the value for each distribution to be constructed before
 														// it is added to the index probabilities.
-														double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample57Value23) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < noStates)) && (0 < noStates)) && (0.0 <= var72[cv$currentValue])) && (var72[cv$currentValue] <= 1.0))?Math.log(var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
+														double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample57Value23) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[cv$currentValue])) && (var72[cv$currentValue] <= 1.0))?Math.log(var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
 														
 														// Processing random variable 73.
 														{
@@ -5373,16 +4951,16 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 															{
 																{
 																	int traceTempVariable$currentState$42_1 = cv$currentValue;
-																	for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+																	for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 																		if((sample$var45 == sample$var196)) {
-																			for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+																			for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																				if((timeStep$var66 == timeStep$var226)) {
-																					for(int server = 0; server < noServers; server += 1) {
+																					for(int server = 0; server < state.noServers; server += 1) {
 																						// Flag recording if this sample task of the consuming random variable is constrained.
 																						boolean cv$sampleConstrained = true;
 																						if(cv$sampleConstrained) {
 																							// Mark that the sample has observed constrained data.
-																							constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
+																							state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
 																							
 																							// Set an accumulator to sum the probabilities for each possible configuration of
 																							// inputs.
@@ -5395,25 +4973,25 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																								// Enumerating the possible arguments for the variable Bernoulli 231 which is consuming
 																								// the output of Sample task 76.
 																								{
-																									for(int var173 = 0; var173 < noServers; var173 += 1) {
-																										for(int var183 = 0; var183 < noStates; var183 += 1) {
+																									for(int var173 = 0; var173 < state.noServers; var173 += 1) {
+																										for(int var183 = 0; var183 < state.noStates; var183 += 1) {
 																											if((var173 == server)) {
 																												if((var183 == traceTempVariable$currentState$42_1)) {
 																													{
 																														{
 																															{
 																																// Constructing a random variable input for use later.
-																																double var230 = current_metric_valid_bias[server][traceTempVariable$currentState$42_1];
+																																double var230 = state.current_metric_valid_bias[server][traceTempVariable$currentState$42_1];
 																																
 																																// Record the probability of sample task 241 generating output with current configuration.
-																																if(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																if(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																else {
 																																	// If the second value is -infinity.
 																																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
+																																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
 																																	else
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)));
+																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)));
 																																}
 																																
 																																// Recorded the probability of reaching sample task 241 with the current configuration.
@@ -5459,14 +5037,14 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 															{
 																// Guard to check that at most one copy of the code is executed for a given random
 																// variable instance.
-																boolean[][][] guard$sample76gaussian255 = guard$sample76gaussian255$global[threadID$cv$sample$var45];
+																boolean[][][] guard$sample76gaussian255 = scratch.guard$sample76gaussian255$global[threadID$cv$sample$var45];
 																{
-																	for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+																	for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 																		if((sample$var45 == sample$var196)) {
-																			for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+																			for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																				if((timeStep$var66 == timeStep$var226)) {
-																					for(int server = 0; server < noServers; server += 1) {
-																						if(metric_valid_g[sample$var196][server][timeStep$var226])
+																					for(int server = 0; server < state.noServers; server += 1) {
+																						if(state.metric_valid_g[sample$var196][server][timeStep$var226])
 																							// Set the flags to false
 																							guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = false;
 																					}
@@ -5476,12 +5054,12 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																	}
 																}
 																{
-																	for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+																	for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 																		if((sample$var45 == sample$var196)) {
-																			for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+																			for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																				if((timeStep$var66 == timeStep$var226)) {
-																					for(int server = 0; server < noServers; server += 1) {
-																						if(metric_valid_g[sample$var196][server][timeStep$var226])
+																					for(int server = 0; server < state.noServers; server += 1) {
+																						if(state.metric_valid_g[sample$var196][server][timeStep$var226])
 																							// Set the flags to false
 																							guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = false;
 																					}
@@ -5492,12 +5070,12 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																}
 																{
 																	int traceTempVariable$currentState$66_1 = cv$currentValue;
-																	for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+																	for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 																		if((sample$var45 == sample$var196)) {
-																			for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+																			for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																				if((timeStep$var66 == timeStep$var226)) {
-																					for(int server = 0; server < noServers; server += 1) {
-																						if(metric_valid_g[sample$var196][server][timeStep$var226]) {
+																					for(int server = 0; server < state.noServers; server += 1) {
+																						if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
 																							if(!guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)]) {
 																								// The body will execute, so should not be executed again
 																								guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = true;
@@ -5509,7 +5087,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										boolean cv$sampleConstrained = true;
 																										if(cv$sampleConstrained) {
 																											// Mark that the sample has observed constrained data.
-																											constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
+																											state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
 																											
 																											// Set an accumulator to sum the probabilities for each possible configuration of
 																											// inputs.
@@ -5522,8 +5100,8 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																												// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																												// the output of Sample task 76.
 																												{
-																													for(int var119 = 0; var119 < noServers; var119 += 1) {
-																														for(int var129 = 0; var129 < noStates; var129 += 1) {
+																													for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																														for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																															if((var119 == server)) {
 																																if((var129 == traceTempVariable$currentState$66_1)) {
 																																	{
@@ -5531,28 +5109,28 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																																		if((index$sample$21 == sample$var196)) {
 																																			if((0 == timeStep$var226)) {
 																																				{
-																																					for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																						for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																					for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																						for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																							if((var146 == server)) {
 																																								if((var156 == traceTempVariable$currentState$95_1)) {
 																																									{
 																																										{
 																																											{
 																																												// Constructing a random variable input for use later.
-																																												double var241 = current_metric_mean[server][traceTempVariable$currentState$95_1];
+																																												double var241 = state.current_metric_mean[server][traceTempVariable$currentState$95_1];
 																																												
 																																												// Constructing a random variable input for use later.
-																																												double var243 = current_metric_var[server][traceTempVariable$currentState$95_1];
+																																												double var243 = state.current_metric_var[server][traceTempVariable$currentState$95_1];
 																																												
 																																												// Record the probability of sample task 256 generating output with current configuration.
-																																												if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																												if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																												else {
 																																													// If the second value is -infinity.
 																																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																													else
-																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																												}
 																																												
 																																												// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -5568,41 +5146,41 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																																			}
 																																		}
 																																	}
-																																	for(int index$sample$96 = 0; index$sample$96 < noSamples; index$sample$96 += 1) {
+																																	for(int index$sample$96 = 0; index$sample$96 < state.noSamples; index$sample$96 += 1) {
 																																		if(!(index$sample$96 == index$sample$21)) {
 																																			// Enumerating the possible outputs of Categorical 54.
-																																			for(int index$sample57$97 = 0; index$sample57$97 < noStates; index$sample57$97 += 1) {
+																																			for(int index$sample57$97 = 0; index$sample57$97 < state.noStates; index$sample57$97 += 1) {
 																																				int distributionTempVariable$var55$99 = index$sample57$97;
 																																				
 																																				// Update the probability of sampling this value from the distribution value.
-																																				double cv$probabilitySample57Value98 = (1.0 * distribution$sample57[((index$sample$96 - 0) / 1)][index$sample57$97]);
+																																				double cv$probabilitySample57Value98 = (1.0 * state.distribution$sample57[((index$sample$96 - 0) / 1)][index$sample57$97]);
 																																				{
 																																					int traceTempVariable$currentState$100_1 = distributionTempVariable$var55$99;
 																																					if((index$sample$96 == sample$var196)) {
 																																						if((0 == timeStep$var226)) {
 																																							{
-																																								for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																									for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																								for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																									for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																										if((var146 == server)) {
 																																											if((var156 == traceTempVariable$currentState$100_1)) {
 																																												{
 																																													{
 																																														{
 																																															// Constructing a random variable input for use later.
-																																															double var241 = current_metric_mean[server][traceTempVariable$currentState$100_1];
+																																															double var241 = state.current_metric_mean[server][traceTempVariable$currentState$100_1];
 																																															
 																																															// Constructing a random variable input for use later.
-																																															double var243 = current_metric_var[server][traceTempVariable$currentState$100_1];
+																																															double var243 = state.current_metric_var[server][traceTempVariable$currentState$100_1];
 																																															
 																																															// Record the probability of sample task 256 generating output with current configuration.
-																																															if(((Math.log(cv$probabilitySample57Value98) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value98) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																															if(((Math.log(cv$probabilitySample57Value98) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value98) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																															else {
 																																																// If the second value is -infinity.
 																																																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																																	cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value98) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																																	cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value98) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																																else
-																																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value98) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value98) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value98) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value98) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																															}
 																																															
 																																															// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -5630,8 +5208,8 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																												// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																												// the output of Sample task 76.
 																												{
-																													for(int var119 = 0; var119 < noServers; var119 += 1) {
-																														for(int var129 = 0; var129 < noStates; var129 += 1) {
+																													for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																														for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																															if((var119 == server)) {
 																																if((var129 == traceTempVariable$currentState$66_1)) {
 																																	{
@@ -5639,28 +5217,28 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																																		if((index$sample$2 == sample$var196)) {
 																																			if((index$timeStep$1 == timeStep$var226)) {
 																																				{
-																																					for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																						for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																					for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																						for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																							if((var146 == server)) {
 																																								if((var156 == traceTempVariable$currentState$104_1)) {
 																																									{
 																																										{
 																																											{
 																																												// Constructing a random variable input for use later.
-																																												double var241 = current_metric_mean[server][traceTempVariable$currentState$104_1];
+																																												double var241 = state.current_metric_mean[server][traceTempVariable$currentState$104_1];
 																																												
 																																												// Constructing a random variable input for use later.
-																																												double var243 = current_metric_var[server][traceTempVariable$currentState$104_1];
+																																												double var243 = state.current_metric_var[server][traceTempVariable$currentState$104_1];
 																																												
 																																												// Record the probability of sample task 256 generating output with current configuration.
-																																												if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																												if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																												else {
 																																													// If the second value is -infinity.
 																																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																													else
-																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																												}
 																																												
 																																												// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -5676,42 +5254,42 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																																			}
 																																		}
 																																	}
-																																	for(int index$sample$105 = 0; index$sample$105 < noSamples; index$sample$105 += 1) {
-																																		for(int index$timeStep$106 = 1; index$timeStep$106 < length$metric[index$sample$105][0]; index$timeStep$106 += 1) {
+																																	for(int index$sample$105 = 0; index$sample$105 < state.noSamples; index$sample$105 += 1) {
+																																		for(int index$timeStep$106 = 1; index$timeStep$106 < state.length$metric[index$sample$105][0]; index$timeStep$106 += 1) {
 																																			if(!((index$timeStep$106 == index$timeStep$1) && (index$sample$105 == index$sample$2))) {
 																																				// Enumerating the possible outputs of Categorical 73.
-																																				for(int index$sample76$107 = 0; index$sample76$107 < noStates; index$sample76$107 += 1) {
+																																				for(int index$sample76$107 = 0; index$sample76$107 < state.noStates; index$sample76$107 += 1) {
 																																					int distributionTempVariable$var74$109 = index$sample76$107;
 																																					
 																																					// Update the probability of sampling this value from the distribution value.
-																																					double cv$probabilitySample76Value108 = (1.0 * distribution$sample76[((index$sample$105 - 0) / 1)][((index$timeStep$106 - 1) / 1)][index$sample76$107]);
+																																					double cv$probabilitySample76Value108 = (1.0 * state.distribution$sample76[((index$sample$105 - 0) / 1)][((index$timeStep$106 - 1) / 1)][index$sample76$107]);
 																																					{
 																																						int traceTempVariable$currentState$110_1 = distributionTempVariable$var74$109;
 																																						if((index$sample$105 == sample$var196)) {
 																																							if((index$timeStep$106 == timeStep$var226)) {
 																																								{
-																																									for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																										for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																									for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																										for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																											if((var146 == server)) {
 																																												if((var156 == traceTempVariable$currentState$110_1)) {
 																																													{
 																																														{
 																																															{
 																																																// Constructing a random variable input for use later.
-																																																double var241 = current_metric_mean[server][traceTempVariable$currentState$110_1];
+																																																double var241 = state.current_metric_mean[server][traceTempVariable$currentState$110_1];
 																																																
 																																																// Constructing a random variable input for use later.
-																																																double var243 = current_metric_var[server][traceTempVariable$currentState$110_1];
+																																																double var243 = state.current_metric_var[server][traceTempVariable$currentState$110_1];
 																																																
 																																																// Record the probability of sample task 256 generating output with current configuration.
-																																																if(((Math.log(cv$probabilitySample76Value108) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value108) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																																if(((Math.log(cv$probabilitySample76Value108) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value108) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																																else {
 																																																	// If the second value is -infinity.
 																																																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																																		cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value108) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																																		cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value108) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																																	else
-																																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value108) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value108) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value108) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value108) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																																}
 																																																
 																																																// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -5766,12 +5344,12 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																}
 																{
 																	int traceTempVariable$currentState$70_1 = cv$currentValue;
-																	for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+																	for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 																		if((sample$var45 == sample$var196)) {
-																			for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+																			for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																				if((timeStep$var66 == timeStep$var226)) {
-																					for(int server = 0; server < noServers; server += 1) {
-																						if(metric_valid_g[sample$var196][server][timeStep$var226]) {
+																					for(int server = 0; server < state.noServers; server += 1) {
+																						if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
 																							if(!guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)]) {
 																								// The body will execute, so should not be executed again
 																								guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = true;
@@ -5783,7 +5361,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										boolean cv$sampleConstrained = true;
 																										if(cv$sampleConstrained) {
 																											// Mark that the sample has observed constrained data.
-																											constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
+																											state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
 																											
 																											// Set an accumulator to sum the probabilities for each possible configuration of
 																											// inputs.
@@ -5800,33 +5378,33 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																													if((index$sample$21 == sample$var196)) {
 																														if((0 == timeStep$var226)) {
 																															{
-																																for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																	for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																	for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																		if((var119 == server)) {
 																																			if((var129 == traceTempVariable$currentState$167_1)) {
 																																				{
-																																					for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																						for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																					for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																						for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																							if((var146 == server)) {
 																																								if((var156 == traceTempVariable$currentState$167_1)) {
 																																									{
 																																										{
 																																											{
 																																												// Constructing a random variable input for use later.
-																																												double var241 = current_metric_mean[server][traceTempVariable$currentState$167_1];
+																																												double var241 = state.current_metric_mean[server][traceTempVariable$currentState$167_1];
 																																												
 																																												// Constructing a random variable input for use later.
-																																												double var243 = current_metric_var[server][traceTempVariable$currentState$167_1];
+																																												double var243 = state.current_metric_var[server][traceTempVariable$currentState$167_1];
 																																												
 																																												// Record the probability of sample task 256 generating output with current configuration.
-																																												if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																												if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																												else {
 																																													// If the second value is -infinity.
 																																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																													else
-																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																												}
 																																												
 																																												// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -5847,46 +5425,46 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																														}
 																													}
 																												}
-																												for(int index$sample$168 = 0; index$sample$168 < noSamples; index$sample$168 += 1) {
+																												for(int index$sample$168 = 0; index$sample$168 < state.noSamples; index$sample$168 += 1) {
 																													if(!(index$sample$168 == index$sample$21)) {
 																														// Enumerating the possible outputs of Categorical 54.
-																														for(int index$sample57$169 = 0; index$sample57$169 < noStates; index$sample57$169 += 1) {
+																														for(int index$sample57$169 = 0; index$sample57$169 < state.noStates; index$sample57$169 += 1) {
 																															int distributionTempVariable$var55$171 = index$sample57$169;
 																															
 																															// Update the probability of sampling this value from the distribution value.
-																															double cv$probabilitySample57Value170 = (1.0 * distribution$sample57[((index$sample$168 - 0) / 1)][index$sample57$169]);
+																															double cv$probabilitySample57Value170 = (1.0 * state.distribution$sample57[((index$sample$168 - 0) / 1)][index$sample57$169]);
 																															{
 																																int traceTempVariable$currentState$172_1 = distributionTempVariable$var55$171;
 																																if((index$sample$168 == sample$var196)) {
 																																	if((0 == timeStep$var226)) {
 																																		{
-																																			for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																				for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																			for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																				for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																					if((var119 == server)) {
 																																						if((var129 == traceTempVariable$currentState$172_1)) {
 																																							{
-																																								for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																									for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																								for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																									for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																										if((var146 == server)) {
 																																											if((var156 == traceTempVariable$currentState$172_1)) {
 																																												{
 																																													{
 																																														{
 																																															// Constructing a random variable input for use later.
-																																															double var241 = current_metric_mean[server][traceTempVariable$currentState$172_1];
+																																															double var241 = state.current_metric_mean[server][traceTempVariable$currentState$172_1];
 																																															
 																																															// Constructing a random variable input for use later.
-																																															double var243 = current_metric_var[server][traceTempVariable$currentState$172_1];
+																																															double var243 = state.current_metric_var[server][traceTempVariable$currentState$172_1];
 																																															
 																																															// Record the probability of sample task 256 generating output with current configuration.
-																																															if(((Math.log(cv$probabilitySample57Value170) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value170) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																															if(((Math.log(cv$probabilitySample57Value170) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value170) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																															else {
 																																																// If the second value is -infinity.
 																																																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																																	cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value170) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																																	cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value170) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																																else
-																																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value170) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value170) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value170) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value170) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																															}
 																																															
 																																															// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -5918,33 +5496,33 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																													if((index$sample$2 == sample$var196)) {
 																														if((index$timeStep$1 == timeStep$var226)) {
 																															{
-																																for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																	for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																	for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																		if((var119 == server)) {
 																																			if((var129 == traceTempVariable$currentState$177_1)) {
 																																				{
-																																					for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																						for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																					for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																						for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																							if((var146 == server)) {
 																																								if((var156 == traceTempVariable$currentState$177_1)) {
 																																									{
 																																										{
 																																											{
 																																												// Constructing a random variable input for use later.
-																																												double var241 = current_metric_mean[server][traceTempVariable$currentState$177_1];
+																																												double var241 = state.current_metric_mean[server][traceTempVariable$currentState$177_1];
 																																												
 																																												// Constructing a random variable input for use later.
-																																												double var243 = current_metric_var[server][traceTempVariable$currentState$177_1];
+																																												double var243 = state.current_metric_var[server][traceTempVariable$currentState$177_1];
 																																												
 																																												// Record the probability of sample task 256 generating output with current configuration.
-																																												if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																												if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																												else {
 																																													// If the second value is -infinity.
 																																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																													else
-																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																												}
 																																												
 																																												// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -5965,47 +5543,47 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																														}
 																													}
 																												}
-																												for(int index$sample$178 = 0; index$sample$178 < noSamples; index$sample$178 += 1) {
-																													for(int index$timeStep$179 = 1; index$timeStep$179 < length$metric[index$sample$178][0]; index$timeStep$179 += 1) {
+																												for(int index$sample$178 = 0; index$sample$178 < state.noSamples; index$sample$178 += 1) {
+																													for(int index$timeStep$179 = 1; index$timeStep$179 < state.length$metric[index$sample$178][0]; index$timeStep$179 += 1) {
 																														if(!((index$timeStep$179 == index$timeStep$1) && (index$sample$178 == index$sample$2))) {
 																															// Enumerating the possible outputs of Categorical 73.
-																															for(int index$sample76$180 = 0; index$sample76$180 < noStates; index$sample76$180 += 1) {
+																															for(int index$sample76$180 = 0; index$sample76$180 < state.noStates; index$sample76$180 += 1) {
 																																int distributionTempVariable$var74$182 = index$sample76$180;
 																																
 																																// Update the probability of sampling this value from the distribution value.
-																																double cv$probabilitySample76Value181 = (1.0 * distribution$sample76[((index$sample$178 - 0) / 1)][((index$timeStep$179 - 1) / 1)][index$sample76$180]);
+																																double cv$probabilitySample76Value181 = (1.0 * state.distribution$sample76[((index$sample$178 - 0) / 1)][((index$timeStep$179 - 1) / 1)][index$sample76$180]);
 																																{
 																																	int traceTempVariable$currentState$183_1 = distributionTempVariable$var74$182;
 																																	if((index$sample$178 == sample$var196)) {
 																																		if((index$timeStep$179 == timeStep$var226)) {
 																																			{
-																																				for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																					for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																				for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																					for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																						if((var119 == server)) {
 																																							if((var129 == traceTempVariable$currentState$183_1)) {
 																																								{
-																																									for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																										for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																									for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																										for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																											if((var146 == server)) {
 																																												if((var156 == traceTempVariable$currentState$183_1)) {
 																																													{
 																																														{
 																																															{
 																																																// Constructing a random variable input for use later.
-																																																double var241 = current_metric_mean[server][traceTempVariable$currentState$183_1];
+																																																double var241 = state.current_metric_mean[server][traceTempVariable$currentState$183_1];
 																																																
 																																																// Constructing a random variable input for use later.
-																																																double var243 = current_metric_var[server][traceTempVariable$currentState$183_1];
+																																																double var243 = state.current_metric_var[server][traceTempVariable$currentState$183_1];
 																																																
 																																																// Record the probability of sample task 256 generating output with current configuration.
-																																																if(((Math.log(cv$probabilitySample76Value181) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value181) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																																if(((Math.log(cv$probabilitySample76Value181) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value181) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																																else {
 																																																	// If the second value is -infinity.
 																																																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																																		cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value181) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																																		cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value181) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																																	else
-																																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value181) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value181) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value181) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value181) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																																}
 																																																
 																																																// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -6089,17 +5667,17 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 					if((index$sample$2 == sample$var45)) {
 						if((index$timeStep$1 == (timeStep$var66 - 1))) {
 							{
-								for(int var32 = 0; var32 < noStates; var32 += 1) {
+								for(int var32 = 0; var32 < state.noStates; var32 += 1) {
 									if((var32 == traceTempVariable$var71$28_1)) {
 										// Record the reached probability density.
 										cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 										
 										// Constructing a random variable input for use later.
-										double[] var72 = m[traceTempVariable$var71$28_1];
+										double[] var72 = state.m[traceTempVariable$var71$28_1];
 										
 										// An accumulator to allow the value for each distribution to be constructed before
 										// it is added to the index probabilities.
-										double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < noStates)) && (0 < noStates)) && (0.0 <= var72[cv$currentValue])) && (var72[cv$currentValue] <= 1.0))?Math.log(var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
+										double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[cv$currentValue])) && (var72[cv$currentValue] <= 1.0))?Math.log(var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
 										
 										// Processing random variable 73.
 										{
@@ -6117,16 +5695,16 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 											{
 												{
 													int traceTempVariable$currentState$43_1 = cv$currentValue;
-													for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+													for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 														if((sample$var45 == sample$var196)) {
-															for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+															for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																if((timeStep$var66 == timeStep$var226)) {
-																	for(int server = 0; server < noServers; server += 1) {
+																	for(int server = 0; server < state.noServers; server += 1) {
 																		// Flag recording if this sample task of the consuming random variable is constrained.
 																		boolean cv$sampleConstrained = true;
 																		if(cv$sampleConstrained) {
 																			// Mark that the sample has observed constrained data.
-																			constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
+																			state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
 																			
 																			// Set an accumulator to sum the probabilities for each possible configuration of
 																			// inputs.
@@ -6139,25 +5717,25 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																				// Enumerating the possible arguments for the variable Bernoulli 231 which is consuming
 																				// the output of Sample task 76.
 																				{
-																					for(int var173 = 0; var173 < noServers; var173 += 1) {
-																						for(int var183 = 0; var183 < noStates; var183 += 1) {
+																					for(int var173 = 0; var173 < state.noServers; var173 += 1) {
+																						for(int var183 = 0; var183 < state.noStates; var183 += 1) {
 																							if((var173 == server)) {
 																								if((var183 == traceTempVariable$currentState$43_1)) {
 																									{
 																										{
 																											{
 																												// Constructing a random variable input for use later.
-																												double var230 = current_metric_valid_bias[server][traceTempVariable$currentState$43_1];
+																												double var230 = state.current_metric_valid_bias[server][traceTempVariable$currentState$43_1];
 																												
 																												// Record the probability of sample task 241 generating output with current configuration.
-																												if(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												if(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																												else {
 																													// If the second value is -infinity.
 																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
+																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
 																													else
-																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)));
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)));
 																												}
 																												
 																												// Recorded the probability of reaching sample task 241 with the current configuration.
@@ -6203,14 +5781,14 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 											{
 												// Guard to check that at most one copy of the code is executed for a given random
 												// variable instance.
-												boolean[][][] guard$sample76gaussian255 = guard$sample76gaussian255$global[threadID$cv$sample$var45];
+												boolean[][][] guard$sample76gaussian255 = scratch.guard$sample76gaussian255$global[threadID$cv$sample$var45];
 												{
-													for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+													for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 														if((sample$var45 == sample$var196)) {
-															for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+															for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																if((timeStep$var66 == timeStep$var226)) {
-																	for(int server = 0; server < noServers; server += 1) {
-																		if(metric_valid_g[sample$var196][server][timeStep$var226])
+																	for(int server = 0; server < state.noServers; server += 1) {
+																		if(state.metric_valid_g[sample$var196][server][timeStep$var226])
 																			// Set the flags to false
 																			guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = false;
 																	}
@@ -6220,12 +5798,12 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 													}
 												}
 												{
-													for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+													for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 														if((sample$var45 == sample$var196)) {
-															for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+															for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																if((timeStep$var66 == timeStep$var226)) {
-																	for(int server = 0; server < noServers; server += 1) {
-																		if(metric_valid_g[sample$var196][server][timeStep$var226])
+																	for(int server = 0; server < state.noServers; server += 1) {
+																		if(state.metric_valid_g[sample$var196][server][timeStep$var226])
 																			// Set the flags to false
 																			guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = false;
 																	}
@@ -6236,12 +5814,12 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 												}
 												{
 													int traceTempVariable$currentState$67_1 = cv$currentValue;
-													for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+													for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 														if((sample$var45 == sample$var196)) {
-															for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+															for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																if((timeStep$var66 == timeStep$var226)) {
-																	for(int server = 0; server < noServers; server += 1) {
-																		if(metric_valid_g[sample$var196][server][timeStep$var226]) {
+																	for(int server = 0; server < state.noServers; server += 1) {
+																		if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
 																			if(!guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)]) {
 																				// The body will execute, so should not be executed again
 																				guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = true;
@@ -6253,7 +5831,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																						boolean cv$sampleConstrained = true;
 																						if(cv$sampleConstrained) {
 																							// Mark that the sample has observed constrained data.
-																							constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
+																							state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
 																							
 																							// Set an accumulator to sum the probabilities for each possible configuration of
 																							// inputs.
@@ -6266,38 +5844,38 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																								// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																								// the output of Sample task 76.
 																								{
-																									for(int var119 = 0; var119 < noServers; var119 += 1) {
-																										for(int var129 = 0; var129 < noStates; var129 += 1) {
+																									for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																										for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																											if((var119 == server)) {
 																												if((var129 == traceTempVariable$currentState$67_1)) {
-																													if(fixedFlag$sample57) {
+																													if(state.fixedFlag$sample57) {
 																														{
-																															for(int index$sample$114_1 = 0; index$sample$114_1 < noSamples; index$sample$114_1 += 1) {
+																															for(int index$sample$114_1 = 0; index$sample$114_1 < state.noSamples; index$sample$114_1 += 1) {
 																																if((index$sample$114_1 == sample$var196)) {
 																																	if((0 == timeStep$var226)) {
 																																		{
-																																			for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																				for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																			for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																				for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																					if((var146 == server)) {
 																																						if((var156 == traceTempVariable$currentState$67_1)) {
 																																							{
 																																								{
 																																									{
 																																										// Constructing a random variable input for use later.
-																																										double var241 = current_metric_mean[server][traceTempVariable$currentState$67_1];
+																																										double var241 = state.current_metric_mean[server][traceTempVariable$currentState$67_1];
 																																										
 																																										// Constructing a random variable input for use later.
-																																										double var243 = current_metric_var[server][traceTempVariable$currentState$67_1];
+																																										double var243 = state.current_metric_var[server][traceTempVariable$currentState$67_1];
 																																										
 																																										// Record the probability of sample task 256 generating output with current configuration.
-																																										if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																										if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																										else {
 																																											// If the second value is -infinity.
 																																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																											else
-																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																										}
 																																										
 																																										// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -6315,41 +5893,41 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																															}
 																														}
 																													} else {
-																														for(int index$sample$115 = 0; index$sample$115 < noSamples; index$sample$115 += 1) {
+																														for(int index$sample$115 = 0; index$sample$115 < state.noSamples; index$sample$115 += 1) {
 																															if(true) {
 																																// Enumerating the possible outputs of Categorical 54.
-																																for(int index$sample57$116 = 0; index$sample57$116 < noStates; index$sample57$116 += 1) {
+																																for(int index$sample57$116 = 0; index$sample57$116 < state.noStates; index$sample57$116 += 1) {
 																																	int distributionTempVariable$var55$118 = index$sample57$116;
 																																	
 																																	// Update the probability of sampling this value from the distribution value.
-																																	double cv$probabilitySample57Value117 = (1.0 * distribution$sample57[((index$sample$115 - 0) / 1)][index$sample57$116]);
+																																	double cv$probabilitySample57Value117 = (1.0 * state.distribution$sample57[((index$sample$115 - 0) / 1)][index$sample57$116]);
 																																	{
 																																		int traceTempVariable$currentState$119_1 = distributionTempVariable$var55$118;
 																																		if((index$sample$115 == sample$var196)) {
 																																			if((0 == timeStep$var226)) {
 																																				{
-																																					for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																						for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																					for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																						for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																							if((var146 == server)) {
 																																								if((var156 == traceTempVariable$currentState$119_1)) {
 																																									{
 																																										{
 																																											{
 																																												// Constructing a random variable input for use later.
-																																												double var241 = current_metric_mean[server][traceTempVariable$currentState$119_1];
+																																												double var241 = state.current_metric_mean[server][traceTempVariable$currentState$119_1];
 																																												
 																																												// Constructing a random variable input for use later.
-																																												double var243 = current_metric_var[server][traceTempVariable$currentState$119_1];
+																																												double var243 = state.current_metric_var[server][traceTempVariable$currentState$119_1];
 																																												
 																																												// Record the probability of sample task 256 generating output with current configuration.
-																																												if(((Math.log(cv$probabilitySample57Value117) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value117) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																												if(((Math.log(cv$probabilitySample57Value117) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value117) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																												else {
 																																													// If the second value is -infinity.
 																																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value117) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value117) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																													else
-																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value117) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value117) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value117) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value117) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																												}
 																																												
 																																												// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -6378,8 +5956,8 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																								// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																								// the output of Sample task 76.
 																								{
-																									for(int var119 = 0; var119 < noServers; var119 += 1) {
-																										for(int var129 = 0; var129 < noStates; var129 += 1) {
+																									for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																										for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																											if((var119 == server)) {
 																												if((var129 == traceTempVariable$currentState$67_1)) {
 																													{
@@ -6387,28 +5965,28 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																														if((index$sample$2 == sample$var196)) {
 																															if((index$timeStep$1 == timeStep$var226)) {
 																																{
-																																	for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																		for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																	for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																		for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																			if((var146 == server)) {
 																																				if((var156 == traceTempVariable$currentState$123_1)) {
 																																					{
 																																						{
 																																							{
 																																								// Constructing a random variable input for use later.
-																																								double var241 = current_metric_mean[server][traceTempVariable$currentState$123_1];
+																																								double var241 = state.current_metric_mean[server][traceTempVariable$currentState$123_1];
 																																								
 																																								// Constructing a random variable input for use later.
-																																								double var243 = current_metric_var[server][traceTempVariable$currentState$123_1];
+																																								double var243 = state.current_metric_var[server][traceTempVariable$currentState$123_1];
 																																								
 																																								// Record the probability of sample task 256 generating output with current configuration.
-																																								if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																								if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																								else {
 																																									// If the second value is -infinity.
 																																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																										cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																										cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																									else
-																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																								}
 																																								
 																																								// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -6424,42 +6002,42 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																															}
 																														}
 																													}
-																													for(int index$sample$124 = 0; index$sample$124 < noSamples; index$sample$124 += 1) {
-																														for(int index$timeStep$125 = 1; index$timeStep$125 < length$metric[index$sample$124][0]; index$timeStep$125 += 1) {
+																													for(int index$sample$124 = 0; index$sample$124 < state.noSamples; index$sample$124 += 1) {
+																														for(int index$timeStep$125 = 1; index$timeStep$125 < state.length$metric[index$sample$124][0]; index$timeStep$125 += 1) {
 																															if(!((index$timeStep$125 == index$timeStep$1) && (index$sample$124 == index$sample$2))) {
 																																// Enumerating the possible outputs of Categorical 73.
-																																for(int index$sample76$126 = 0; index$sample76$126 < noStates; index$sample76$126 += 1) {
+																																for(int index$sample76$126 = 0; index$sample76$126 < state.noStates; index$sample76$126 += 1) {
 																																	int distributionTempVariable$var74$128 = index$sample76$126;
 																																	
 																																	// Update the probability of sampling this value from the distribution value.
-																																	double cv$probabilitySample76Value127 = (1.0 * distribution$sample76[((index$sample$124 - 0) / 1)][((index$timeStep$125 - 1) / 1)][index$sample76$126]);
+																																	double cv$probabilitySample76Value127 = (1.0 * state.distribution$sample76[((index$sample$124 - 0) / 1)][((index$timeStep$125 - 1) / 1)][index$sample76$126]);
 																																	{
 																																		int traceTempVariable$currentState$129_1 = distributionTempVariable$var74$128;
 																																		if((index$sample$124 == sample$var196)) {
 																																			if((index$timeStep$125 == timeStep$var226)) {
 																																				{
-																																					for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																						for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																					for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																						for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																							if((var146 == server)) {
 																																								if((var156 == traceTempVariable$currentState$129_1)) {
 																																									{
 																																										{
 																																											{
 																																												// Constructing a random variable input for use later.
-																																												double var241 = current_metric_mean[server][traceTempVariable$currentState$129_1];
+																																												double var241 = state.current_metric_mean[server][traceTempVariable$currentState$129_1];
 																																												
 																																												// Constructing a random variable input for use later.
-																																												double var243 = current_metric_var[server][traceTempVariable$currentState$129_1];
+																																												double var243 = state.current_metric_var[server][traceTempVariable$currentState$129_1];
 																																												
 																																												// Record the probability of sample task 256 generating output with current configuration.
-																																												if(((Math.log(cv$probabilitySample76Value127) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value127) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																												if(((Math.log(cv$probabilitySample76Value127) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value127) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																												else {
 																																													// If the second value is -infinity.
 																																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value127) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value127) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																													else
-																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value127) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value127) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value127) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value127) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																												}
 																																												
 																																												// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -6514,12 +6092,12 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 												}
 												{
 													int traceTempVariable$currentState$71_1 = cv$currentValue;
-													for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+													for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 														if((sample$var45 == sample$var196)) {
-															for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+															for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																if((timeStep$var66 == timeStep$var226)) {
-																	for(int server = 0; server < noServers; server += 1) {
-																		if(metric_valid_g[sample$var196][server][timeStep$var226]) {
+																	for(int server = 0; server < state.noServers; server += 1) {
+																		if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
 																			if(!guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)]) {
 																				// The body will execute, so should not be executed again
 																				guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = true;
@@ -6531,7 +6109,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																						boolean cv$sampleConstrained = true;
 																						if(cv$sampleConstrained) {
 																							// Mark that the sample has observed constrained data.
-																							constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
+																							state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
 																							
 																							// Set an accumulator to sum the probabilities for each possible configuration of
 																							// inputs.
@@ -6543,39 +6121,39 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																							{
 																								// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																								// the output of Sample task 76.
-																								if(fixedFlag$sample57) {
+																								if(state.fixedFlag$sample57) {
 																									{
-																										for(int index$sample$188_1 = 0; index$sample$188_1 < noSamples; index$sample$188_1 += 1) {
+																										for(int index$sample$188_1 = 0; index$sample$188_1 < state.noSamples; index$sample$188_1 += 1) {
 																											if((index$sample$188_1 == sample$var196)) {
 																												if((0 == timeStep$var226)) {
 																													{
-																														for(int var119 = 0; var119 < noServers; var119 += 1) {
-																															for(int var129 = 0; var129 < noStates; var129 += 1) {
+																														for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																															for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																if((var119 == server)) {
 																																	if((var129 == traceTempVariable$currentState$71_1)) {
 																																		{
-																																			for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																				for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																			for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																				for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																					if((var146 == server)) {
 																																						if((var156 == traceTempVariable$currentState$71_1)) {
 																																							{
 																																								{
 																																									{
 																																										// Constructing a random variable input for use later.
-																																										double var241 = current_metric_mean[server][traceTempVariable$currentState$71_1];
+																																										double var241 = state.current_metric_mean[server][traceTempVariable$currentState$71_1];
 																																										
 																																										// Constructing a random variable input for use later.
-																																										double var243 = current_metric_var[server][traceTempVariable$currentState$71_1];
+																																										double var243 = state.current_metric_var[server][traceTempVariable$currentState$71_1];
 																																										
 																																										// Record the probability of sample task 256 generating output with current configuration.
-																																										if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																										if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																										else {
 																																											// If the second value is -infinity.
 																																											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																												cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																											else
-																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																										}
 																																										
 																																										// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -6598,46 +6176,46 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										}
 																									}
 																								} else {
-																									for(int index$sample$189 = 0; index$sample$189 < noSamples; index$sample$189 += 1) {
+																									for(int index$sample$189 = 0; index$sample$189 < state.noSamples; index$sample$189 += 1) {
 																										if(true) {
 																											// Enumerating the possible outputs of Categorical 54.
-																											for(int index$sample57$190 = 0; index$sample57$190 < noStates; index$sample57$190 += 1) {
+																											for(int index$sample57$190 = 0; index$sample57$190 < state.noStates; index$sample57$190 += 1) {
 																												int distributionTempVariable$var55$192 = index$sample57$190;
 																												
 																												// Update the probability of sampling this value from the distribution value.
-																												double cv$probabilitySample57Value191 = (1.0 * distribution$sample57[((index$sample$189 - 0) / 1)][index$sample57$190]);
+																												double cv$probabilitySample57Value191 = (1.0 * state.distribution$sample57[((index$sample$189 - 0) / 1)][index$sample57$190]);
 																												{
 																													int traceTempVariable$currentState$193_1 = distributionTempVariable$var55$192;
 																													if((index$sample$189 == sample$var196)) {
 																														if((0 == timeStep$var226)) {
 																															{
-																																for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																	for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																	for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																		if((var119 == server)) {
 																																			if((var129 == traceTempVariable$currentState$193_1)) {
 																																				{
-																																					for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																						for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																					for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																						for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																							if((var146 == server)) {
 																																								if((var156 == traceTempVariable$currentState$193_1)) {
 																																									{
 																																										{
 																																											{
 																																												// Constructing a random variable input for use later.
-																																												double var241 = current_metric_mean[server][traceTempVariable$currentState$193_1];
+																																												double var241 = state.current_metric_mean[server][traceTempVariable$currentState$193_1];
 																																												
 																																												// Constructing a random variable input for use later.
-																																												double var243 = current_metric_var[server][traceTempVariable$currentState$193_1];
+																																												double var243 = state.current_metric_var[server][traceTempVariable$currentState$193_1];
 																																												
 																																												// Record the probability of sample task 256 generating output with current configuration.
-																																												if(((Math.log(cv$probabilitySample57Value191) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value191) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																												if(((Math.log(cv$probabilitySample57Value191) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value191) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																												else {
 																																													// If the second value is -infinity.
 																																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value191) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value191) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																													else
-																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value191) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value191) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value191) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value191) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																												}
 																																												
 																																												// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -6670,33 +6248,33 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																									if((index$sample$2 == sample$var196)) {
 																										if((index$timeStep$1 == timeStep$var226)) {
 																											{
-																												for(int var119 = 0; var119 < noServers; var119 += 1) {
-																													for(int var129 = 0; var129 < noStates; var129 += 1) {
+																												for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																													for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																														if((var119 == server)) {
 																															if((var129 == traceTempVariable$currentState$198_1)) {
 																																{
-																																	for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																		for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																	for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																		for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																			if((var146 == server)) {
 																																				if((var156 == traceTempVariable$currentState$198_1)) {
 																																					{
 																																						{
 																																							{
 																																								// Constructing a random variable input for use later.
-																																								double var241 = current_metric_mean[server][traceTempVariable$currentState$198_1];
+																																								double var241 = state.current_metric_mean[server][traceTempVariable$currentState$198_1];
 																																								
 																																								// Constructing a random variable input for use later.
-																																								double var243 = current_metric_var[server][traceTempVariable$currentState$198_1];
+																																								double var243 = state.current_metric_var[server][traceTempVariable$currentState$198_1];
 																																								
 																																								// Record the probability of sample task 256 generating output with current configuration.
-																																								if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																								if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																								else {
 																																									// If the second value is -infinity.
 																																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																										cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																										cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																									else
-																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																								}
 																																								
 																																								// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -6717,47 +6295,47 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										}
 																									}
 																								}
-																								for(int index$sample$199 = 0; index$sample$199 < noSamples; index$sample$199 += 1) {
-																									for(int index$timeStep$200 = 1; index$timeStep$200 < length$metric[index$sample$199][0]; index$timeStep$200 += 1) {
+																								for(int index$sample$199 = 0; index$sample$199 < state.noSamples; index$sample$199 += 1) {
+																									for(int index$timeStep$200 = 1; index$timeStep$200 < state.length$metric[index$sample$199][0]; index$timeStep$200 += 1) {
 																										if(!((index$timeStep$200 == index$timeStep$1) && (index$sample$199 == index$sample$2))) {
 																											// Enumerating the possible outputs of Categorical 73.
-																											for(int index$sample76$201 = 0; index$sample76$201 < noStates; index$sample76$201 += 1) {
+																											for(int index$sample76$201 = 0; index$sample76$201 < state.noStates; index$sample76$201 += 1) {
 																												int distributionTempVariable$var74$203 = index$sample76$201;
 																												
 																												// Update the probability of sampling this value from the distribution value.
-																												double cv$probabilitySample76Value202 = (1.0 * distribution$sample76[((index$sample$199 - 0) / 1)][((index$timeStep$200 - 1) / 1)][index$sample76$201]);
+																												double cv$probabilitySample76Value202 = (1.0 * state.distribution$sample76[((index$sample$199 - 0) / 1)][((index$timeStep$200 - 1) / 1)][index$sample76$201]);
 																												{
 																													int traceTempVariable$currentState$204_1 = distributionTempVariable$var74$203;
 																													if((index$sample$199 == sample$var196)) {
 																														if((index$timeStep$200 == timeStep$var226)) {
 																															{
-																																for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																	for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																	for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																		if((var119 == server)) {
 																																			if((var129 == traceTempVariable$currentState$204_1)) {
 																																				{
-																																					for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																						for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																					for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																						for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																							if((var146 == server)) {
 																																								if((var156 == traceTempVariable$currentState$204_1)) {
 																																									{
 																																										{
 																																											{
 																																												// Constructing a random variable input for use later.
-																																												double var241 = current_metric_mean[server][traceTempVariable$currentState$204_1];
+																																												double var241 = state.current_metric_mean[server][traceTempVariable$currentState$204_1];
 																																												
 																																												// Constructing a random variable input for use later.
-																																												double var243 = current_metric_var[server][traceTempVariable$currentState$204_1];
+																																												double var243 = state.current_metric_var[server][traceTempVariable$currentState$204_1];
 																																												
 																																												// Record the probability of sample task 256 generating output with current configuration.
-																																												if(((Math.log(cv$probabilitySample76Value202) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value202) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																												if(((Math.log(cv$probabilitySample76Value202) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value202) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																												else {
 																																													// If the second value is -infinity.
 																																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value202) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																														cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value202) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																													else
-																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value202) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value202) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value202) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value202) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																												}
 																																												
 																																												// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -6830,31 +6408,31 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						}
 					}
 				}
-				for(int index$sample$29 = 0; index$sample$29 < noSamples; index$sample$29 += 1) {
-					for(int index$timeStep$30 = 1; index$timeStep$30 < length$metric[index$sample$29][0]; index$timeStep$30 += 1) {
+				for(int index$sample$29 = 0; index$sample$29 < state.noSamples; index$sample$29 += 1) {
+					for(int index$timeStep$30 = 1; index$timeStep$30 < state.length$metric[index$sample$29][0]; index$timeStep$30 += 1) {
 						if(!((index$timeStep$30 == index$timeStep$1) && (index$sample$29 == index$sample$2))) {
 							// Enumerating the possible outputs of Categorical 73.
-							for(int index$sample76$31 = 0; index$sample76$31 < noStates; index$sample76$31 += 1) {
+							for(int index$sample76$31 = 0; index$sample76$31 < state.noStates; index$sample76$31 += 1) {
 								int distributionTempVariable$var74$33 = index$sample76$31;
 								
 								// Update the probability of sampling this value from the distribution value.
-								double cv$probabilitySample76Value32 = (1.0 * distribution$sample76[((index$sample$29 - 0) / 1)][((index$timeStep$30 - 1) / 1)][index$sample76$31]);
+								double cv$probabilitySample76Value32 = (1.0 * state.distribution$sample76[((index$sample$29 - 0) / 1)][((index$timeStep$30 - 1) / 1)][index$sample76$31]);
 								{
 									int traceTempVariable$var71$34_1 = distributionTempVariable$var74$33;
 									if((index$sample$29 == sample$var45)) {
 										if((index$timeStep$30 == (timeStep$var66 - 1))) {
 											{
-												for(int var32 = 0; var32 < noStates; var32 += 1) {
+												for(int var32 = 0; var32 < state.noStates; var32 += 1) {
 													if((var32 == traceTempVariable$var71$34_1)) {
 														// Record the reached probability density.
 														cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample76Value32);
 														
 														// Constructing a random variable input for use later.
-														double[] var72 = m[traceTempVariable$var71$34_1];
+														double[] var72 = state.m[traceTempVariable$var71$34_1];
 														
 														// An accumulator to allow the value for each distribution to be constructed before
 														// it is added to the index probabilities.
-														double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample76Value32) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < noStates)) && (0 < noStates)) && (0.0 <= var72[cv$currentValue])) && (var72[cv$currentValue] <= 1.0))?Math.log(var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
+														double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample76Value32) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[cv$currentValue])) && (var72[cv$currentValue] <= 1.0))?Math.log(var72[cv$currentValue]):Double.NEGATIVE_INFINITY));
 														
 														// Processing random variable 73.
 														{
@@ -6872,16 +6450,16 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 															{
 																{
 																	int traceTempVariable$currentState$44_1 = distributionTempVariable$var74$33;
-																	for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+																	for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 																		if((sample$var45 == sample$var196)) {
-																			for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+																			for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																				if((timeStep$var66 == timeStep$var226)) {
-																					for(int server = 0; server < noServers; server += 1) {
+																					for(int server = 0; server < state.noServers; server += 1) {
 																						// Flag recording if this sample task of the consuming random variable is constrained.
 																						boolean cv$sampleConstrained = true;
 																						if(cv$sampleConstrained) {
 																							// Mark that the sample has observed constrained data.
-																							constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
+																							state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
 																							
 																							// Set an accumulator to sum the probabilities for each possible configuration of
 																							// inputs.
@@ -6894,25 +6472,25 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																								// Enumerating the possible arguments for the variable Bernoulli 231 which is consuming
 																								// the output of Sample task 76.
 																								{
-																									for(int var173 = 0; var173 < noServers; var173 += 1) {
-																										for(int var183 = 0; var183 < noStates; var183 += 1) {
+																									for(int var173 = 0; var173 < state.noServers; var173 += 1) {
+																										for(int var183 = 0; var183 < state.noStates; var183 += 1) {
 																											if((var173 == server)) {
 																												if((var183 == traceTempVariable$currentState$44_1)) {
 																													{
 																														{
 																															{
 																																// Constructing a random variable input for use later.
-																																double var230 = current_metric_valid_bias[server][traceTempVariable$currentState$44_1];
+																																double var230 = state.current_metric_valid_bias[server][traceTempVariable$currentState$44_1];
 																																
 																																// Record the probability of sample task 241 generating output with current configuration.
-																																if(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																if(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																else {
 																																	// If the second value is -infinity.
 																																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
+																																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
 																																	else
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)));
+																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY)));
 																																}
 																																
 																																// Recorded the probability of reaching sample task 241 with the current configuration.
@@ -6958,14 +6536,14 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 															{
 																// Guard to check that at most one copy of the code is executed for a given random
 																// variable instance.
-																boolean[][][] guard$sample76gaussian255 = guard$sample76gaussian255$global[threadID$cv$sample$var45];
+																boolean[][][] guard$sample76gaussian255 = scratch.guard$sample76gaussian255$global[threadID$cv$sample$var45];
 																{
-																	for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+																	for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 																		if((sample$var45 == sample$var196)) {
-																			for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+																			for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																				if((timeStep$var66 == timeStep$var226)) {
-																					for(int server = 0; server < noServers; server += 1) {
-																						if(metric_valid_g[sample$var196][server][timeStep$var226])
+																					for(int server = 0; server < state.noServers; server += 1) {
+																						if(state.metric_valid_g[sample$var196][server][timeStep$var226])
 																							// Set the flags to false
 																							guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = false;
 																					}
@@ -6975,12 +6553,12 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																	}
 																}
 																{
-																	for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+																	for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 																		if((sample$var45 == sample$var196)) {
-																			for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+																			for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																				if((timeStep$var66 == timeStep$var226)) {
-																					for(int server = 0; server < noServers; server += 1) {
-																						if(metric_valid_g[sample$var196][server][timeStep$var226])
+																					for(int server = 0; server < state.noServers; server += 1) {
+																						if(state.metric_valid_g[sample$var196][server][timeStep$var226])
 																							// Set the flags to false
 																							guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = false;
 																					}
@@ -6991,12 +6569,12 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																}
 																{
 																	int traceTempVariable$currentState$68_1 = distributionTempVariable$var74$33;
-																	for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+																	for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 																		if((sample$var45 == sample$var196)) {
-																			for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+																			for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																				if((timeStep$var66 == timeStep$var226)) {
-																					for(int server = 0; server < noServers; server += 1) {
-																						if(metric_valid_g[sample$var196][server][timeStep$var226]) {
+																					for(int server = 0; server < state.noServers; server += 1) {
+																						if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
 																							if(!guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)]) {
 																								// The body will execute, so should not be executed again
 																								guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = true;
@@ -7008,7 +6586,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										boolean cv$sampleConstrained = true;
 																										if(cv$sampleConstrained) {
 																											// Mark that the sample has observed constrained data.
-																											constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
+																											state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
 																											
 																											// Set an accumulator to sum the probabilities for each possible configuration of
 																											// inputs.
@@ -7021,38 +6599,38 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																												// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																												// the output of Sample task 76.
 																												{
-																													for(int var119 = 0; var119 < noServers; var119 += 1) {
-																														for(int var129 = 0; var129 < noStates; var129 += 1) {
+																													for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																														for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																															if((var119 == server)) {
 																																if((var129 == traceTempVariable$currentState$68_1)) {
-																																	if(fixedFlag$sample57) {
+																																	if(state.fixedFlag$sample57) {
 																																		{
-																																			for(int index$sample$133_1 = 0; index$sample$133_1 < noSamples; index$sample$133_1 += 1) {
+																																			for(int index$sample$133_1 = 0; index$sample$133_1 < state.noSamples; index$sample$133_1 += 1) {
 																																				if((index$sample$133_1 == sample$var196)) {
 																																					if((0 == timeStep$var226)) {
 																																						{
-																																							for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																								for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																							for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																								for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																									if((var146 == server)) {
 																																										if((var156 == traceTempVariable$currentState$68_1)) {
 																																											{
 																																												{
 																																													{
 																																														// Constructing a random variable input for use later.
-																																														double var241 = current_metric_mean[server][traceTempVariable$currentState$68_1];
+																																														double var241 = state.current_metric_mean[server][traceTempVariable$currentState$68_1];
 																																														
 																																														// Constructing a random variable input for use later.
-																																														double var243 = current_metric_var[server][traceTempVariable$currentState$68_1];
+																																														double var243 = state.current_metric_var[server][traceTempVariable$currentState$68_1];
 																																														
 																																														// Record the probability of sample task 256 generating output with current configuration.
-																																														if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																														if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																														else {
 																																															// If the second value is -infinity.
 																																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																															else
-																																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																														}
 																																														
 																																														// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -7070,41 +6648,41 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																																			}
 																																		}
 																																	} else {
-																																		for(int index$sample$134 = 0; index$sample$134 < noSamples; index$sample$134 += 1) {
+																																		for(int index$sample$134 = 0; index$sample$134 < state.noSamples; index$sample$134 += 1) {
 																																			if(true) {
 																																				// Enumerating the possible outputs of Categorical 54.
-																																				for(int index$sample57$135 = 0; index$sample57$135 < noStates; index$sample57$135 += 1) {
+																																				for(int index$sample57$135 = 0; index$sample57$135 < state.noStates; index$sample57$135 += 1) {
 																																					int distributionTempVariable$var55$137 = index$sample57$135;
 																																					
 																																					// Update the probability of sampling this value from the distribution value.
-																																					double cv$probabilitySample57Value136 = (1.0 * distribution$sample57[((index$sample$134 - 0) / 1)][index$sample57$135]);
+																																					double cv$probabilitySample57Value136 = (1.0 * state.distribution$sample57[((index$sample$134 - 0) / 1)][index$sample57$135]);
 																																					{
 																																						int traceTempVariable$currentState$138_1 = distributionTempVariable$var55$137;
 																																						if((index$sample$134 == sample$var196)) {
 																																							if((0 == timeStep$var226)) {
 																																								{
-																																									for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																										for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																									for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																										for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																											if((var146 == server)) {
 																																												if((var156 == traceTempVariable$currentState$138_1)) {
 																																													{
 																																														{
 																																															{
 																																																// Constructing a random variable input for use later.
-																																																double var241 = current_metric_mean[server][traceTempVariable$currentState$138_1];
+																																																double var241 = state.current_metric_mean[server][traceTempVariable$currentState$138_1];
 																																																
 																																																// Constructing a random variable input for use later.
-																																																double var243 = current_metric_var[server][traceTempVariable$currentState$138_1];
+																																																double var243 = state.current_metric_var[server][traceTempVariable$currentState$138_1];
 																																																
 																																																// Record the probability of sample task 256 generating output with current configuration.
-																																																if(((Math.log(cv$probabilitySample57Value136) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value136) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																																if(((Math.log(cv$probabilitySample57Value136) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value136) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																																else {
 																																																	// If the second value is -infinity.
 																																																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																																		cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value136) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																																		cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value136) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																																	else
-																																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value136) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value136) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value136) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value136) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																																}
 																																																
 																																																// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -7133,8 +6711,8 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																												// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																												// the output of Sample task 76.
 																												{
-																													for(int var119 = 0; var119 < noServers; var119 += 1) {
-																														for(int var129 = 0; var129 < noStates; var129 += 1) {
+																													for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																														for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																															if((var119 == server)) {
 																																if((var129 == traceTempVariable$currentState$68_1)) {
 																																	{
@@ -7142,28 +6720,28 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																																		if((index$sample$2 == sample$var196)) {
 																																			if((index$timeStep$1 == timeStep$var226)) {
 																																				{
-																																					for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																						for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																					for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																						for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																							if((var146 == server)) {
 																																								if((var156 == traceTempVariable$currentState$142_1)) {
 																																									{
 																																										{
 																																											{
 																																												// Constructing a random variable input for use later.
-																																												double var241 = current_metric_mean[server][traceTempVariable$currentState$142_1];
+																																												double var241 = state.current_metric_mean[server][traceTempVariable$currentState$142_1];
 																																												
 																																												// Constructing a random variable input for use later.
-																																												double var243 = current_metric_var[server][traceTempVariable$currentState$142_1];
+																																												double var243 = state.current_metric_var[server][traceTempVariable$currentState$142_1];
 																																												
 																																												// Record the probability of sample task 256 generating output with current configuration.
-																																												if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																												if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																												else {
 																																													// If the second value is -infinity.
 																																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																													else
-																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																												}
 																																												
 																																												// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -7184,28 +6762,28 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																																		if((index$sample$29 == sample$var196)) {
 																																			if((index$timeStep$30 == timeStep$var226)) {
 																																				{
-																																					for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																						for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																					for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																						for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																							if((var146 == server)) {
 																																								if((var156 == traceTempVariable$currentState$143_1)) {
 																																									{
 																																										{
 																																											{
 																																												// Constructing a random variable input for use later.
-																																												double var241 = current_metric_mean[server][traceTempVariable$currentState$143_1];
+																																												double var241 = state.current_metric_mean[server][traceTempVariable$currentState$143_1];
 																																												
 																																												// Constructing a random variable input for use later.
-																																												double var243 = current_metric_var[server][traceTempVariable$currentState$143_1];
+																																												double var243 = state.current_metric_var[server][traceTempVariable$currentState$143_1];
 																																												
 																																												// Record the probability of sample task 256 generating output with current configuration.
-																																												if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																												if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																												else {
 																																													// If the second value is -infinity.
 																																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																													else
-																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																												}
 																																												
 																																												// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -7221,42 +6799,42 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																																			}
 																																		}
 																																	}
-																																	for(int index$sample$144 = 0; index$sample$144 < noSamples; index$sample$144 += 1) {
-																																		for(int index$timeStep$145 = 1; index$timeStep$145 < length$metric[index$sample$144][0]; index$timeStep$145 += 1) {
+																																	for(int index$sample$144 = 0; index$sample$144 < state.noSamples; index$sample$144 += 1) {
+																																		for(int index$timeStep$145 = 1; index$timeStep$145 < state.length$metric[index$sample$144][0]; index$timeStep$145 += 1) {
 																																			if((!((index$timeStep$145 == index$timeStep$1) && (index$sample$144 == index$sample$2)) && !((index$timeStep$145 == index$timeStep$30) && (index$sample$144 == index$sample$29)))) {
 																																				// Enumerating the possible outputs of Categorical 73.
-																																				for(int index$sample76$146 = 0; index$sample76$146 < noStates; index$sample76$146 += 1) {
+																																				for(int index$sample76$146 = 0; index$sample76$146 < state.noStates; index$sample76$146 += 1) {
 																																					int distributionTempVariable$var74$148 = index$sample76$146;
 																																					
 																																					// Update the probability of sampling this value from the distribution value.
-																																					double cv$probabilitySample76Value147 = (1.0 * distribution$sample76[((index$sample$144 - 0) / 1)][((index$timeStep$145 - 1) / 1)][index$sample76$146]);
+																																					double cv$probabilitySample76Value147 = (1.0 * state.distribution$sample76[((index$sample$144 - 0) / 1)][((index$timeStep$145 - 1) / 1)][index$sample76$146]);
 																																					{
 																																						int traceTempVariable$currentState$149_1 = distributionTempVariable$var74$148;
 																																						if((index$sample$144 == sample$var196)) {
 																																							if((index$timeStep$145 == timeStep$var226)) {
 																																								{
-																																									for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																										for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																									for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																										for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																											if((var146 == server)) {
 																																												if((var156 == traceTempVariable$currentState$149_1)) {
 																																													{
 																																														{
 																																															{
 																																																// Constructing a random variable input for use later.
-																																																double var241 = current_metric_mean[server][traceTempVariable$currentState$149_1];
+																																																double var241 = state.current_metric_mean[server][traceTempVariable$currentState$149_1];
 																																																
 																																																// Constructing a random variable input for use later.
-																																																double var243 = current_metric_var[server][traceTempVariable$currentState$149_1];
+																																																double var243 = state.current_metric_var[server][traceTempVariable$currentState$149_1];
 																																																
 																																																// Record the probability of sample task 256 generating output with current configuration.
-																																																if(((Math.log(cv$probabilitySample76Value147) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value147) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																																if(((Math.log(cv$probabilitySample76Value147) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value147) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																																else {
 																																																	// If the second value is -infinity.
 																																																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																																		cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value147) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																																		cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value147) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																																	else
-																																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value147) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value147) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value147) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value147) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																																}
 																																																
 																																																// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -7311,12 +6889,12 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																}
 																{
 																	int traceTempVariable$currentState$72_1 = distributionTempVariable$var74$33;
-																	for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+																	for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 																		if((sample$var45 == sample$var196)) {
-																			for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+																			for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 																				if((timeStep$var66 == timeStep$var226)) {
-																					for(int server = 0; server < noServers; server += 1) {
-																						if(metric_valid_g[sample$var196][server][timeStep$var226]) {
+																					for(int server = 0; server < state.noServers; server += 1) {
+																						if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
 																							if(!guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)]) {
 																								// The body will execute, so should not be executed again
 																								guard$sample76gaussian255[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = true;
@@ -7328,7 +6906,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																										boolean cv$sampleConstrained = true;
 																										if(cv$sampleConstrained) {
 																											// Mark that the sample has observed constrained data.
-																											constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
+																											state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = true;
 																											
 																											// Set an accumulator to sum the probabilities for each possible configuration of
 																											// inputs.
@@ -7340,39 +6918,39 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																											{
 																												// Enumerating the possible arguments for the variable Gaussian 244 which is consuming
 																												// the output of Sample task 76.
-																												if(fixedFlag$sample57) {
+																												if(state.fixedFlag$sample57) {
 																													{
-																														for(int index$sample$209_1 = 0; index$sample$209_1 < noSamples; index$sample$209_1 += 1) {
+																														for(int index$sample$209_1 = 0; index$sample$209_1 < state.noSamples; index$sample$209_1 += 1) {
 																															if((index$sample$209_1 == sample$var196)) {
 																																if((0 == timeStep$var226)) {
 																																	{
-																																		for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																			for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																		for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																			for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																				if((var119 == server)) {
 																																					if((var129 == traceTempVariable$currentState$72_1)) {
 																																						{
-																																							for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																								for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																							for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																								for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																									if((var146 == server)) {
 																																										if((var156 == traceTempVariable$currentState$72_1)) {
 																																											{
 																																												{
 																																													{
 																																														// Constructing a random variable input for use later.
-																																														double var241 = current_metric_mean[server][traceTempVariable$currentState$72_1];
+																																														double var241 = state.current_metric_mean[server][traceTempVariable$currentState$72_1];
 																																														
 																																														// Constructing a random variable input for use later.
-																																														double var243 = current_metric_var[server][traceTempVariable$currentState$72_1];
+																																														double var243 = state.current_metric_var[server][traceTempVariable$currentState$72_1];
 																																														
 																																														// Record the probability of sample task 256 generating output with current configuration.
-																																														if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																														if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																														else {
 																																															// If the second value is -infinity.
 																																															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																															else
-																																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																														}
 																																														
 																																														// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -7395,46 +6973,46 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																														}
 																													}
 																												} else {
-																													for(int index$sample$210 = 0; index$sample$210 < noSamples; index$sample$210 += 1) {
+																													for(int index$sample$210 = 0; index$sample$210 < state.noSamples; index$sample$210 += 1) {
 																														if(true) {
 																															// Enumerating the possible outputs of Categorical 54.
-																															for(int index$sample57$211 = 0; index$sample57$211 < noStates; index$sample57$211 += 1) {
+																															for(int index$sample57$211 = 0; index$sample57$211 < state.noStates; index$sample57$211 += 1) {
 																																int distributionTempVariable$var55$213 = index$sample57$211;
 																																
 																																// Update the probability of sampling this value from the distribution value.
-																																double cv$probabilitySample57Value212 = (1.0 * distribution$sample57[((index$sample$210 - 0) / 1)][index$sample57$211]);
+																																double cv$probabilitySample57Value212 = (1.0 * state.distribution$sample57[((index$sample$210 - 0) / 1)][index$sample57$211]);
 																																{
 																																	int traceTempVariable$currentState$214_1 = distributionTempVariable$var55$213;
 																																	if((index$sample$210 == sample$var196)) {
 																																		if((0 == timeStep$var226)) {
 																																			{
-																																				for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																					for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																				for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																					for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																						if((var119 == server)) {
 																																							if((var129 == traceTempVariable$currentState$214_1)) {
 																																								{
-																																									for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																										for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																									for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																										for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																											if((var146 == server)) {
 																																												if((var156 == traceTempVariable$currentState$214_1)) {
 																																													{
 																																														{
 																																															{
 																																																// Constructing a random variable input for use later.
-																																																double var241 = current_metric_mean[server][traceTempVariable$currentState$214_1];
+																																																double var241 = state.current_metric_mean[server][traceTempVariable$currentState$214_1];
 																																																
 																																																// Constructing a random variable input for use later.
-																																																double var243 = current_metric_var[server][traceTempVariable$currentState$214_1];
+																																																double var243 = state.current_metric_var[server][traceTempVariable$currentState$214_1];
 																																																
 																																																// Record the probability of sample task 256 generating output with current configuration.
-																																																if(((Math.log(cv$probabilitySample57Value212) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value212) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																																if(((Math.log(cv$probabilitySample57Value212) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample57Value212) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																																else {
 																																																	// If the second value is -infinity.
 																																																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																																		cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value212) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																																		cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value212) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																																	else
-																																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value212) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value212) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample57Value212) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample57Value212) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																																}
 																																																
 																																																// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -7467,33 +7045,33 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																													if((index$sample$2 == sample$var196)) {
 																														if((index$timeStep$1 == timeStep$var226)) {
 																															{
-																																for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																	for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																	for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																		if((var119 == server)) {
 																																			if((var129 == traceTempVariable$currentState$219_1)) {
 																																				{
-																																					for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																						for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																					for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																						for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																							if((var146 == server)) {
 																																								if((var156 == traceTempVariable$currentState$219_1)) {
 																																									{
 																																										{
 																																											{
 																																												// Constructing a random variable input for use later.
-																																												double var241 = current_metric_mean[server][traceTempVariable$currentState$219_1];
+																																												double var241 = state.current_metric_mean[server][traceTempVariable$currentState$219_1];
 																																												
 																																												// Constructing a random variable input for use later.
-																																												double var243 = current_metric_var[server][traceTempVariable$currentState$219_1];
+																																												double var243 = state.current_metric_var[server][traceTempVariable$currentState$219_1];
 																																												
 																																												// Record the probability of sample task 256 generating output with current configuration.
-																																												if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																												if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																												else {
 																																													// If the second value is -infinity.
 																																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																													else
-																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																												}
 																																												
 																																												// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -7519,33 +7097,33 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																													if((index$sample$29 == sample$var196)) {
 																														if((index$timeStep$30 == timeStep$var226)) {
 																															{
-																																for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																	for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																	for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																		if((var119 == server)) {
 																																			if((var129 == traceTempVariable$currentState$220_1)) {
 																																				{
-																																					for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																						for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																					for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																						for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																							if((var146 == server)) {
 																																								if((var156 == traceTempVariable$currentState$220_1)) {
 																																									{
 																																										{
 																																											{
 																																												// Constructing a random variable input for use later.
-																																												double var241 = current_metric_mean[server][traceTempVariable$currentState$220_1];
+																																												double var241 = state.current_metric_mean[server][traceTempVariable$currentState$220_1];
 																																												
 																																												// Constructing a random variable input for use later.
-																																												double var243 = current_metric_var[server][traceTempVariable$currentState$220_1];
+																																												double var243 = state.current_metric_var[server][traceTempVariable$currentState$220_1];
 																																												
 																																												// Record the probability of sample task 256 generating output with current configuration.
-																																												if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																												if(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																												else {
 																																													// If the second value is -infinity.
 																																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																													else
-																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																												}
 																																												
 																																												// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -7566,47 +7144,47 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																														}
 																													}
 																												}
-																												for(int index$sample$221 = 0; index$sample$221 < noSamples; index$sample$221 += 1) {
-																													for(int index$timeStep$222 = 1; index$timeStep$222 < length$metric[index$sample$221][0]; index$timeStep$222 += 1) {
+																												for(int index$sample$221 = 0; index$sample$221 < state.noSamples; index$sample$221 += 1) {
+																													for(int index$timeStep$222 = 1; index$timeStep$222 < state.length$metric[index$sample$221][0]; index$timeStep$222 += 1) {
 																														if((!((index$timeStep$222 == index$timeStep$1) && (index$sample$221 == index$sample$2)) && !((index$timeStep$222 == index$timeStep$30) && (index$sample$221 == index$sample$29)))) {
 																															// Enumerating the possible outputs of Categorical 73.
-																															for(int index$sample76$223 = 0; index$sample76$223 < noStates; index$sample76$223 += 1) {
+																															for(int index$sample76$223 = 0; index$sample76$223 < state.noStates; index$sample76$223 += 1) {
 																																int distributionTempVariable$var74$225 = index$sample76$223;
 																																
 																																// Update the probability of sampling this value from the distribution value.
-																																double cv$probabilitySample76Value224 = (1.0 * distribution$sample76[((index$sample$221 - 0) / 1)][((index$timeStep$222 - 1) / 1)][index$sample76$223]);
+																																double cv$probabilitySample76Value224 = (1.0 * state.distribution$sample76[((index$sample$221 - 0) / 1)][((index$timeStep$222 - 1) / 1)][index$sample76$223]);
 																																{
 																																	int traceTempVariable$currentState$226_1 = distributionTempVariable$var74$225;
 																																	if((index$sample$221 == sample$var196)) {
 																																		if((index$timeStep$222 == timeStep$var226)) {
 																																			{
-																																				for(int var119 = 0; var119 < noServers; var119 += 1) {
-																																					for(int var129 = 0; var129 < noStates; var129 += 1) {
+																																				for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																																					for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																																						if((var119 == server)) {
 																																							if((var129 == traceTempVariable$currentState$226_1)) {
 																																								{
-																																									for(int var146 = 0; var146 < noServers; var146 += 1) {
-																																										for(int var156 = 0; var156 < noStates; var156 += 1) {
+																																									for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																																										for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																											if((var146 == server)) {
 																																												if((var156 == traceTempVariable$currentState$226_1)) {
 																																													{
 																																														{
 																																															{
 																																																// Constructing a random variable input for use later.
-																																																double var241 = current_metric_mean[server][traceTempVariable$currentState$226_1];
+																																																double var241 = state.current_metric_mean[server][traceTempVariable$currentState$226_1];
 																																																
 																																																// Constructing a random variable input for use later.
-																																																double var243 = current_metric_var[server][traceTempVariable$currentState$226_1];
+																																																double var243 = state.current_metric_var[server][traceTempVariable$currentState$226_1];
 																																																
 																																																// Record the probability of sample task 256 generating output with current configuration.
-																																																if(((Math.log(cv$probabilitySample76Value224) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value224) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																																if(((Math.log(cv$probabilitySample76Value224) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample76Value224) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																																else {
 																																																	// If the second value is -infinity.
 																																																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																																		cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value224) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
+																																																		cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value224) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
 																																																	else
-																																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value224) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value224) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
+																																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample76Value224) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample76Value224) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY)));
 																																																}
 																																																
 																																																// Recorded the probability of reaching sample task 256 with the current configuration.
@@ -7690,9 +7268,9 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 					{
 						{
 							int traceTempVariable$var71$265_1 = cv$currentValue;
-							for(int index$sample$265_2 = 0; index$sample$265_2 < noSamples; index$sample$265_2 += 1) {
+							for(int index$sample$265_2 = 0; index$sample$265_2 < state.noSamples; index$sample$265_2 += 1) {
 								if((sample$var45 == index$sample$265_2)) {
-									for(int index$timeStep$265_3 = 1; index$timeStep$265_3 < length$metric[index$sample$265_2][0]; index$timeStep$265_3 += 1) {
+									for(int index$timeStep$265_3 = 1; index$timeStep$265_3 < state.length$metric[index$sample$265_2][0]; index$timeStep$265_3 += 1) {
 										if((timeStep$var66 == (index$timeStep$265_3 - 1))) {
 											// Processing sample task 76 of consumer random variable null.
 											{
@@ -7705,10 +7283,10 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 													
 													// A local array to hold the accumulated distributions of the sample tasks for each
 													// configuration of distributions.
-													double[] cv$accumulatedConsumerDistributions = cv$distributionAccumulator$var73[threadID$cv$sample$var45];
+													double[] cv$accumulatedConsumerDistributions = scratch.cv$distributionAccumulator$var73[threadID$cv$sample$var45];
 													
 													// Zero all the elements in the distribution accumulator
-													for(int cv$i = 0; cv$i < noStates; cv$i += 1)
+													for(int cv$i = 0; cv$i < state.noStates; cv$i += 1)
 														cv$accumulatedConsumerDistributions[cv$i] = 0.0;
 													
 													// Zero an accumulator to track the probabilities reached.
@@ -7717,21 +7295,21 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 													// Enumerating the possible arguments for the variable Categorical 73 which is consuming
 													// the output of Sample task 76.
 													{
-														for(int var32 = 0; var32 < noStates; var32 += 1) {
+														for(int var32 = 0; var32 < state.noStates; var32 += 1) {
 															if((var32 == traceTempVariable$var71$265_1)) {
 																{
 																	// Declare and zero an accumulator for tracking the reached source probability space.
 																	double scopeVariable$reachedSourceProbability = 0.0;
 																	
 																	// Enumerating the possible arguments for Categorical 73.
-																	if(fixedFlag$sample57) {
+																	if(state.fixedFlag$sample57) {
 																		{
-																			for(int index$sample$270_1 = 0; index$sample$270_1 < noSamples; index$sample$270_1 += 1) {
+																			for(int index$sample$270_1 = 0; index$sample$270_1 < state.noSamples; index$sample$270_1 += 1) {
 																				if((index$sample$270_1 == sample$var45)) {
 																					if((0 == (timeStep$var66 - 1))) {
 																						{
-																							for(int index$var32$276_1 = 0; index$var32$276_1 < noStates; index$var32$276_1 += 1) {
-																								if((index$var32$276_1 == st[sample$var45][(timeStep$var66 - 1)]))
+																							for(int index$var32$276_1 = 0; index$var32$276_1 < state.noStates; index$var32$276_1 += 1) {
+																								if((index$var32$276_1 == state.st[sample$var45][(timeStep$var66 - 1)]))
 																									// Add the probability of this argument configuration.
 																									scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + 1.0);
 																							}
@@ -7741,20 +7319,20 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																			}
 																		}
 																	} else {
-																		for(int index$sample$271 = 0; index$sample$271 < noSamples; index$sample$271 += 1) {
+																		for(int index$sample$271 = 0; index$sample$271 < state.noSamples; index$sample$271 += 1) {
 																			if(true) {
 																				// Enumerating the possible outputs of Categorical 54.
-																				for(int index$sample57$272 = 0; index$sample57$272 < noStates; index$sample57$272 += 1) {
+																				for(int index$sample57$272 = 0; index$sample57$272 < state.noStates; index$sample57$272 += 1) {
 																					int distributionTempVariable$var55$274 = index$sample57$272;
 																					
 																					// Update the probability of sampling this value from the distribution value.
-																					double cv$probabilitySample57Value273 = (1.0 * distribution$sample57[((index$sample$271 - 0) / 1)][index$sample57$272]);
+																					double cv$probabilitySample57Value273 = (1.0 * state.distribution$sample57[((index$sample$271 - 0) / 1)][index$sample57$272]);
 																					{
 																						int traceTempVariable$var71$275_1 = distributionTempVariable$var55$274;
 																						if((index$sample$271 == sample$var45)) {
 																							if((0 == (timeStep$var66 - 1))) {
 																								{
-																									for(int index$var32$277_1 = 0; index$var32$277_1 < noStates; index$var32$277_1 += 1) {
+																									for(int index$var32$277_1 = 0; index$var32$277_1 < state.noStates; index$var32$277_1 += 1) {
 																										if((index$var32$277_1 == traceTempVariable$var71$275_1))
 																											// Add the probability of this argument configuration.
 																											scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + cv$probabilitySample57Value273);
@@ -7774,7 +7352,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																		if((index$sample$2 == sample$var45)) {
 																			if((index$timeStep$1 == (timeStep$var66 - 1))) {
 																				{
-																					for(int index$var32$285_1 = 0; index$var32$285_1 < noStates; index$var32$285_1 += 1) {
+																					for(int index$var32$285_1 = 0; index$var32$285_1 < state.noStates; index$var32$285_1 += 1) {
 																						if((index$var32$285_1 == traceTempVariable$var71$278_1))
 																							// Add the probability of this argument configuration.
 																							scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + 1.0);
@@ -7783,21 +7361,21 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																			}
 																		}
 																	}
-																	for(int index$sample$279 = 0; index$sample$279 < noSamples; index$sample$279 += 1) {
-																		for(int index$timeStep$280 = 1; index$timeStep$280 < length$metric[index$sample$279][0]; index$timeStep$280 += 1) {
+																	for(int index$sample$279 = 0; index$sample$279 < state.noSamples; index$sample$279 += 1) {
+																		for(int index$timeStep$280 = 1; index$timeStep$280 < state.length$metric[index$sample$279][0]; index$timeStep$280 += 1) {
 																			if((!((index$timeStep$280 == index$timeStep$1) && (index$sample$279 == index$sample$2)) && !((index$timeStep$280 == index$timeStep$267) && (index$sample$279 == index$sample$268)))) {
 																				// Enumerating the possible outputs of Categorical 73.
-																				for(int index$sample76$281 = 0; index$sample76$281 < noStates; index$sample76$281 += 1) {
+																				for(int index$sample76$281 = 0; index$sample76$281 < state.noStates; index$sample76$281 += 1) {
 																					int distributionTempVariable$var74$283 = index$sample76$281;
 																					
 																					// Update the probability of sampling this value from the distribution value.
-																					double cv$probabilitySample76Value282 = (1.0 * distribution$sample76[((index$sample$279 - 0) / 1)][((index$timeStep$280 - 1) / 1)][index$sample76$281]);
+																					double cv$probabilitySample76Value282 = (1.0 * state.distribution$sample76[((index$sample$279 - 0) / 1)][((index$timeStep$280 - 1) / 1)][index$sample76$281]);
 																					{
 																						int traceTempVariable$var71$284_1 = distributionTempVariable$var74$283;
 																						if((index$sample$279 == sample$var45)) {
 																							if((index$timeStep$280 == (timeStep$var66 - 1))) {
 																								{
-																									for(int index$var32$286_1 = 0; index$var32$286_1 < noStates; index$var32$286_1 += 1) {
+																									for(int index$var32$286_1 = 0; index$var32$286_1 < state.noStates; index$var32$286_1 += 1) {
 																										if((index$var32$286_1 == traceTempVariable$var71$284_1))
 																											// Add the probability of this argument configuration.
 																											scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + cv$probabilitySample76Value282);
@@ -7812,7 +7390,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																	}
 																	
 																	// Constructing a random variable input for use later.
-																	double[] var72 = m[traceTempVariable$var71$265_1];
+																	double[] var72 = state.m[traceTempVariable$var71$265_1];
 																	
 																	// The probability of reaching the consumer with this set of consumer arguments
 																	double cv$distributionProbability = (scopeVariable$reachedSourceProbability * 1.0);
@@ -7821,20 +7399,20 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																	cv$reachedDistributionProbability = (cv$reachedDistributionProbability + cv$distributionProbability);
 																	
 																	// Add the current distribution to the distribution accumulator.
-																	DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, var72, noStates);
+																	DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, cv$distributionProbability, var72, state.noStates);
 																}
 															}
 														}
 													}
 													
 													// A local copy of the samples' distribution.
-													double[] cv$sampleDistribution = distribution$sample76[((index$sample$265_2 - 0) / 1)][((index$timeStep$265_3 - 1) / 1)];
+													double[] cv$sampleDistribution = state.distribution$sample76[((index$sample$265_2 - 0) / 1)][((index$timeStep$265_3 - 1) / 1)];
 													
 													// The overlap of the distributions so far.
 													double cv$overlap = 0.0;
 													
 													// Calculate the overlap for each element in the distribution
-													for(int cv$i = 0; cv$i < noStates; cv$i += 1) {
+													for(int cv$i = 0; cv$i < state.noStates; cv$i += 1) {
 														// Normalise the values in the calculated distribution
 														double cv$normalisedDistValue = (cv$accumulatedConsumerDistributions[cv$i] / cv$reachedDistributionProbability);
 														
@@ -7867,10 +7445,10 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 				// Save the calculated index value into the array of index value probabilities
 				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
-			if(constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)]) {
+			if(state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)]) {
 				// Set the calculated probabilities to be the distribution values, and normalize
 				// Local copy of the probability array
-				double[] cv$localProbability = distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)];
+				double[] cv$localProbability = state.distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)];
 				
 				// The sum of all the probabilities in log space
 				double cv$logSum = 0.0;
@@ -7928,7 +7506,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	private final void logProbabilityDistribution$sample241() {
 		// Determine if we need to calculate the values for sample task 241 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample241) {
+		if(!state.fixedProbFlag$sample241) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -7938,9 +7516,9 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+				for(int server = 0; server < state.noServers; server += 1) {
+					for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 						// An accumulator for log probabilities.
 						double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 						
@@ -7952,21 +7530,21 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						{
 							{
 								// The sample value to calculate the probability of generating
-								boolean cv$sampleValue = metric_valid_g[sample$var196][server][timeStep$var226];
+								boolean cv$sampleValue = state.metric_valid_g[sample$var196][server][timeStep$var226];
 								
 								// Enumerating the possible arguments for Bernoulli 231.
-								if(fixedFlag$sample57) {
+								if(state.fixedFlag$sample57) {
 									{
-										for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+										for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 											if((sample$var45 == sample$var196)) {
 												if((0 == timeStep$var226)) {
 													{
-														for(int var173 = 0; var173 < noServers; var173 += 1) {
-															for(int var183 = 0; var183 < noStates; var183 += 1) {
+														for(int var173 = 0; var173 < state.noServers; var173 += 1) {
+															for(int var183 = 0; var183 < state.noStates; var183 += 1) {
 																if((var173 == server)) {
-																	if((var183 == st[sample$var196][timeStep$var226])) {
+																	if((var183 == state.st[sample$var196][timeStep$var226])) {
 																		{
-																			double var230 = current_metric_valid_bias[server][st[sample$var196][timeStep$var226]];
+																			double var230 = state.current_metric_valid_bias[server][state.st[sample$var196][timeStep$var226]];
 																			
 																			// Store the value of the function call, so the function call is only made once.
 																			double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((cv$sampleValue?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
@@ -7995,25 +7573,25 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 										}
 									}
 								} else {
-									for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+									for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 										if(true) {
 											// Enumerating the possible outputs of Categorical 54.
-											for(int index$sample57$4 = 0; index$sample57$4 < noStates; index$sample57$4 += 1) {
+											for(int index$sample57$4 = 0; index$sample57$4 < state.noStates; index$sample57$4 += 1) {
 												int distributionTempVariable$var55$6 = index$sample57$4;
 												
 												// Update the probability of sampling this value from the distribution value.
-												double cv$probabilitySample57Value5 = (1.0 * distribution$sample57[((sample$var45 - 0) / 1)][index$sample57$4]);
+												double cv$probabilitySample57Value5 = (1.0 * state.distribution$sample57[((sample$var45 - 0) / 1)][index$sample57$4]);
 												{
 													int traceTempVariable$currentState$7_1 = distributionTempVariable$var55$6;
 													if((sample$var45 == sample$var196)) {
 														if((0 == timeStep$var226)) {
 															{
-																for(int var173 = 0; var173 < noServers; var173 += 1) {
-																	for(int var183 = 0; var183 < noStates; var183 += 1) {
+																for(int var173 = 0; var173 < state.noServers; var173 += 1) {
+																	for(int var183 = 0; var183 < state.noStates; var183 += 1) {
 																		if((var173 == server)) {
 																			if((var183 == traceTempVariable$currentState$7_1)) {
 																				{
-																					double var230 = current_metric_valid_bias[server][traceTempVariable$currentState$7_1];
+																					double var230 = state.current_metric_valid_bias[server][traceTempVariable$currentState$7_1];
 																					
 																					// Store the value of the function call, so the function call is only made once.
 																					double cv$weightedProbability = (Math.log(cv$probabilitySample57Value5) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((cv$sampleValue?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
@@ -8046,19 +7624,19 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 								}
 								
 								// Enumerating the possible arguments for Bernoulli 231.
-								if(fixedFlag$sample76) {
+								if(state.fixedFlag$sample76) {
 									{
-										for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-											for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+										for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+											for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 												if((sample$var45 == sample$var196)) {
 													if((timeStep$var66 == timeStep$var226)) {
 														{
-															for(int var173 = 0; var173 < noServers; var173 += 1) {
-																for(int var183 = 0; var183 < noStates; var183 += 1) {
+															for(int var173 = 0; var173 < state.noServers; var173 += 1) {
+																for(int var183 = 0; var183 < state.noStates; var183 += 1) {
 																	if((var173 == server)) {
-																		if((var183 == st[sample$var196][timeStep$var226])) {
+																		if((var183 == state.st[sample$var196][timeStep$var226])) {
 																			{
-																				double var230 = current_metric_valid_bias[server][st[sample$var196][timeStep$var226]];
+																				double var230 = state.current_metric_valid_bias[server][state.st[sample$var196][timeStep$var226]];
 																				
 																				// Store the value of the function call, so the function call is only made once.
 																				double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((cv$sampleValue?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
@@ -8088,26 +7666,26 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 										}
 									}
 								} else {
-									for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-										for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+									for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+										for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 											if(true) {
 												// Enumerating the possible outputs of Categorical 73.
-												for(int index$sample76$13 = 0; index$sample76$13 < noStates; index$sample76$13 += 1) {
+												for(int index$sample76$13 = 0; index$sample76$13 < state.noStates; index$sample76$13 += 1) {
 													int distributionTempVariable$var74$15 = index$sample76$13;
 													
 													// Update the probability of sampling this value from the distribution value.
-													double cv$probabilitySample76Value14 = (1.0 * distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$13]);
+													double cv$probabilitySample76Value14 = (1.0 * state.distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$13]);
 													{
 														int traceTempVariable$currentState$16_1 = distributionTempVariable$var74$15;
 														if((sample$var45 == sample$var196)) {
 															if((timeStep$var66 == timeStep$var226)) {
 																{
-																	for(int var173 = 0; var173 < noServers; var173 += 1) {
-																		for(int var183 = 0; var183 < noStates; var183 += 1) {
+																	for(int var173 = 0; var173 < state.noServers; var173 += 1) {
+																		for(int var183 = 0; var183 < state.noStates; var183 += 1) {
 																			if((var173 == server)) {
 																				if((var183 == traceTempVariable$currentState$16_1)) {
 																					{
-																						double var230 = current_metric_valid_bias[server][traceTempVariable$currentState$16_1];
+																						double var230 = state.current_metric_valid_bias[server][traceTempVariable$currentState$16_1];
 																						
 																						// Store the value of the function call, so the function call is only made once.
 																						double cv$weightedProbability = (Math.log(cv$probabilitySample76Value14) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((cv$sampleValue?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
@@ -8166,13 +7744,13 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var232 = cv$accumulator;
+				state.logProbability$var232 = cv$accumulator;
 			
 			// Guard to ensure that metric_valid_g is only updated once for this probability.
 			boolean cv$guard$metric_valid_g = false;
 			
 			// Update the variable probability
-			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			state.logProbability$metric_valid_inner = (state.logProbability$metric_valid_inner + cv$accumulator);
 			
 			// Add probability to constructed variables from the combined probability
 			{
@@ -8183,18 +7761,18 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						cv$guard$metric_valid_g = true;
 						
 						// Update the variable probability
-						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+						state.logProbability$metric_valid_g = (state.logProbability$metric_valid_g + cv$accumulator);
 					}
 				}
 			}
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample241 = ((fixedFlag$sample57 && fixedFlag$sample76) && fixedFlag$sample190);
+			state.fixedProbFlag$sample241 = ((state.fixedFlag$sample57 && state.fixedFlag$sample76) && state.fixedFlag$sample190);
 		} else {
 			// Using cached values.
 			// 
@@ -8205,14 +7783,14 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1)
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+				for(int server = 0; server < state.noServers; server += 1) {
+					for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1)
 						// Record that the sample was reached.
 						cv$sampleReached = true;
 				}
 			}
-			double cv$sampleValue = logProbability$var232;
+			double cv$sampleValue = state.logProbability$var232;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
@@ -8220,7 +7798,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			boolean cv$guard$metric_valid_g = false;
 			
 			// Update the variable probability
-			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			state.logProbability$metric_valid_inner = (state.logProbability$metric_valid_inner + cv$accumulator);
 			
 			// Add probability to constructed variables from the combined probability
 			{
@@ -8231,14 +7809,14 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						cv$guard$metric_valid_g = true;
 						
 						// Update the variable probability
-						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+						state.logProbability$metric_valid_g = (state.logProbability$metric_valid_g + cv$accumulator);
 					}
 				}
 			}
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -8247,7 +7825,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	private final void logProbabilityDistribution$sample256() {
 		// Determine if we need to calculate the values for sample task 256 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample256) {
+		if(!state.fixedProbFlag$sample256) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -8257,10 +7835,10 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-						if(metric_valid_g[sample$var196][server][timeStep$var226]) {
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+				for(int server = 0; server < state.noServers; server += 1) {
+					for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
+						if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
 							// An accumulator for log probabilities.
 							double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 							
@@ -8272,31 +7850,31 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 							{
 								{
 									// The sample value to calculate the probability of generating
-									double cv$sampleValue = var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)];
+									double cv$sampleValue = state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)];
 									
 									// Enumerating the possible arguments for Gaussian 244.
-									if(fixedFlag$sample57) {
+									if(state.fixedFlag$sample57) {
 										{
-											for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+											for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 												if((sample$var45 == sample$var196)) {
 													if((0 == timeStep$var226)) {
 														{
-															for(int var119 = 0; var119 < noServers; var119 += 1) {
-																for(int var129 = 0; var129 < noStates; var129 += 1) {
+															for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																	if((var119 == server)) {
-																		if((var129 == st[sample$var196][timeStep$var226])) {
+																		if((var129 == state.st[sample$var196][timeStep$var226])) {
 																			{
-																				for(int index$sample$10_1 = 0; index$sample$10_1 < noSamples; index$sample$10_1 += 1) {
+																				for(int index$sample$10_1 = 0; index$sample$10_1 < state.noSamples; index$sample$10_1 += 1) {
 																					if((index$sample$10_1 == sample$var196)) {
 																						if((0 == timeStep$var226)) {
 																							{
-																								for(int var146 = 0; var146 < noServers; var146 += 1) {
-																									for(int var156 = 0; var156 < noStates; var156 += 1) {
+																								for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																									for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																										if((var146 == server)) {
-																											if((var156 == st[sample$var196][timeStep$var226])) {
+																											if((var156 == state.st[sample$var196][timeStep$var226])) {
 																												{
-																													double var241 = current_metric_mean[server][st[sample$var196][timeStep$var226]];
-																													double var243 = current_metric_var[server][st[sample$var196][timeStep$var226]];
+																													double var241 = state.current_metric_mean[server][state.st[sample$var196][timeStep$var226]];
+																													double var243 = state.current_metric_var[server][state.st[sample$var196][timeStep$var226]];
 																													
 																													// Store the value of the function call, so the function call is only made once.
 																													double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
@@ -8334,21 +7912,21 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 											}
 										}
 									} else {
-										for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+										for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 											if(true) {
 												// Enumerating the possible outputs of Categorical 54.
-												for(int index$sample57$4 = 0; index$sample57$4 < noStates; index$sample57$4 += 1) {
+												for(int index$sample57$4 = 0; index$sample57$4 < state.noStates; index$sample57$4 += 1) {
 													int distributionTempVariable$var55$6 = index$sample57$4;
 													
 													// Update the probability of sampling this value from the distribution value.
-													double cv$probabilitySample57Value5 = (1.0 * distribution$sample57[((sample$var45 - 0) / 1)][index$sample57$4]);
+													double cv$probabilitySample57Value5 = (1.0 * state.distribution$sample57[((sample$var45 - 0) / 1)][index$sample57$4]);
 													{
 														int traceTempVariable$currentState$7_1 = distributionTempVariable$var55$6;
 														if((sample$var45 == sample$var196)) {
 															if((0 == timeStep$var226)) {
 																{
-																	for(int var119 = 0; var119 < noServers; var119 += 1) {
-																		for(int var129 = 0; var129 < noStates; var129 += 1) {
+																	for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																		for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																			if((var119 == server)) {
 																				if((var129 == traceTempVariable$currentState$7_1)) {
 																					{
@@ -8356,13 +7934,13 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																						if((sample$var45 == sample$var196)) {
 																							if((0 == timeStep$var226)) {
 																								{
-																									for(int var146 = 0; var146 < noServers; var146 += 1) {
-																										for(int var156 = 0; var156 < noStates; var156 += 1) {
+																									for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																										for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																											if((var146 == server)) {
 																												if((var156 == traceTempVariable$currentState$11_1)) {
 																													{
-																														double var241 = current_metric_mean[server][traceTempVariable$currentState$11_1];
-																														double var243 = current_metric_var[server][traceTempVariable$currentState$11_1];
+																														double var241 = state.current_metric_mean[server][traceTempVariable$currentState$11_1];
+																														double var243 = state.current_metric_var[server][traceTempVariable$currentState$11_1];
 																														
 																														// Store the value of the function call, so the function call is only made once.
 																														double cv$weightedProbability = (Math.log(cv$probabilitySample57Value5) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
@@ -8389,26 +7967,26 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																							}
 																						}
 																					}
-																					for(int index$sample$12 = 0; index$sample$12 < noSamples; index$sample$12 += 1) {
+																					for(int index$sample$12 = 0; index$sample$12 < state.noSamples; index$sample$12 += 1) {
 																						if(!(index$sample$12 == sample$var45)) {
 																							// Enumerating the possible outputs of Categorical 54.
-																							for(int index$sample57$13 = 0; index$sample57$13 < noStates; index$sample57$13 += 1) {
+																							for(int index$sample57$13 = 0; index$sample57$13 < state.noStates; index$sample57$13 += 1) {
 																								int distributionTempVariable$var55$15 = index$sample57$13;
 																								
 																								// Update the probability of sampling this value from the distribution value.
-																								double cv$probabilitySample57Value14 = (cv$probabilitySample57Value5 * distribution$sample57[((index$sample$12 - 0) / 1)][index$sample57$13]);
+																								double cv$probabilitySample57Value14 = (cv$probabilitySample57Value5 * state.distribution$sample57[((index$sample$12 - 0) / 1)][index$sample57$13]);
 																								{
 																									int traceTempVariable$currentState$16_1 = distributionTempVariable$var55$15;
 																									if((index$sample$12 == sample$var196)) {
 																										if((0 == timeStep$var226)) {
 																											{
-																												for(int var146 = 0; var146 < noServers; var146 += 1) {
-																													for(int var156 = 0; var156 < noStates; var156 += 1) {
+																												for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																													for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																														if((var146 == server)) {
 																															if((var156 == traceTempVariable$currentState$16_1)) {
 																																{
-																																	double var241 = current_metric_mean[server][traceTempVariable$currentState$16_1];
-																																	double var243 = current_metric_var[server][traceTempVariable$currentState$16_1];
+																																	double var241 = state.current_metric_mean[server][traceTempVariable$currentState$16_1];
+																																	double var243 = state.current_metric_var[server][traceTempVariable$currentState$16_1];
 																																	
 																																	// Store the value of the function call, so the function call is only made once.
 																																	double cv$weightedProbability = (Math.log(cv$probabilitySample57Value14) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
@@ -8452,30 +8030,30 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 									}
 									
 									// Enumerating the possible arguments for Gaussian 244.
-									if(fixedFlag$sample57) {
+									if(state.fixedFlag$sample57) {
 										{
-											for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+											for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 												if((sample$var45 == sample$var196)) {
 													if((0 == timeStep$var226)) {
 														{
-															for(int var119 = 0; var119 < noServers; var119 += 1) {
-																for(int var129 = 0; var129 < noStates; var129 += 1) {
+															for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																	if((var119 == server)) {
-																		if((var129 == st[sample$var196][timeStep$var226])) {
-																			if(fixedFlag$sample76) {
+																		if((var129 == state.st[sample$var196][timeStep$var226])) {
+																			if(state.fixedFlag$sample76) {
 																				{
-																					for(int index$sample$28_1 = 0; index$sample$28_1 < noSamples; index$sample$28_1 += 1) {
-																						for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$28_1][0]; timeStep$var66 += 1) {
+																					for(int index$sample$28_1 = 0; index$sample$28_1 < state.noSamples; index$sample$28_1 += 1) {
+																						for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$28_1][0]; timeStep$var66 += 1) {
 																							if((index$sample$28_1 == sample$var196)) {
 																								if((timeStep$var66 == timeStep$var226)) {
 																									{
-																										for(int var146 = 0; var146 < noServers; var146 += 1) {
-																											for(int var156 = 0; var156 < noStates; var156 += 1) {
+																										for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																											for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																												if((var146 == server)) {
-																													if((var156 == st[sample$var196][timeStep$var226])) {
+																													if((var156 == state.st[sample$var196][timeStep$var226])) {
 																														{
-																															double var241 = current_metric_mean[server][st[sample$var196][timeStep$var226]];
-																															double var243 = current_metric_var[server][st[sample$var196][timeStep$var226]];
+																															double var241 = state.current_metric_mean[server][state.st[sample$var196][timeStep$var226]];
+																															double var243 = state.current_metric_var[server][state.st[sample$var196][timeStep$var226]];
 																															
 																															// Store the value of the function call, so the function call is only made once.
 																															double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
@@ -8505,27 +8083,27 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																					}
 																				}
 																			} else {
-																				for(int index$sample$29 = 0; index$sample$29 < noSamples; index$sample$29 += 1) {
-																					for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$29][0]; timeStep$var66 += 1) {
+																				for(int index$sample$29 = 0; index$sample$29 < state.noSamples; index$sample$29 += 1) {
+																					for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$29][0]; timeStep$var66 += 1) {
 																						if(true) {
 																							// Enumerating the possible outputs of Categorical 73.
-																							for(int index$sample76$31 = 0; index$sample76$31 < noStates; index$sample76$31 += 1) {
+																							for(int index$sample76$31 = 0; index$sample76$31 < state.noStates; index$sample76$31 += 1) {
 																								int distributionTempVariable$var74$33 = index$sample76$31;
 																								
 																								// Update the probability of sampling this value from the distribution value.
-																								double cv$probabilitySample76Value32 = (1.0 * distribution$sample76[((index$sample$29 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$31]);
+																								double cv$probabilitySample76Value32 = (1.0 * state.distribution$sample76[((index$sample$29 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$31]);
 																								{
 																									int traceTempVariable$currentState$34_1 = distributionTempVariable$var74$33;
 																									if((index$sample$29 == sample$var196)) {
 																										if((timeStep$var66 == timeStep$var226)) {
 																											{
-																												for(int var146 = 0; var146 < noServers; var146 += 1) {
-																													for(int var156 = 0; var156 < noStates; var156 += 1) {
+																												for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																													for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																														if((var146 == server)) {
 																															if((var156 == traceTempVariable$currentState$34_1)) {
 																																{
-																																	double var241 = current_metric_mean[server][traceTempVariable$currentState$34_1];
-																																	double var243 = current_metric_var[server][traceTempVariable$currentState$34_1];
+																																	double var241 = state.current_metric_mean[server][traceTempVariable$currentState$34_1];
+																																	double var243 = state.current_metric_var[server][traceTempVariable$currentState$34_1];
 																																	
 																																	// Store the value of the function call, so the function call is only made once.
 																																	double cv$weightedProbability = (Math.log(cv$probabilitySample76Value32) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
@@ -8567,37 +8145,37 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 											}
 										}
 									} else {
-										for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+										for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 											if(true) {
 												// Enumerating the possible outputs of Categorical 54.
-												for(int index$sample57$22 = 0; index$sample57$22 < noStates; index$sample57$22 += 1) {
+												for(int index$sample57$22 = 0; index$sample57$22 < state.noStates; index$sample57$22 += 1) {
 													int distributionTempVariable$var55$24 = index$sample57$22;
 													
 													// Update the probability of sampling this value from the distribution value.
-													double cv$probabilitySample57Value23 = (1.0 * distribution$sample57[((sample$var45 - 0) / 1)][index$sample57$22]);
+													double cv$probabilitySample57Value23 = (1.0 * state.distribution$sample57[((sample$var45 - 0) / 1)][index$sample57$22]);
 													{
 														int traceTempVariable$currentState$25_1 = distributionTempVariable$var55$24;
 														if((sample$var45 == sample$var196)) {
 															if((0 == timeStep$var226)) {
 																{
-																	for(int var119 = 0; var119 < noServers; var119 += 1) {
-																		for(int var129 = 0; var129 < noStates; var129 += 1) {
+																	for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																		for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																			if((var119 == server)) {
 																				if((var129 == traceTempVariable$currentState$25_1)) {
-																					if(fixedFlag$sample76) {
+																					if(state.fixedFlag$sample76) {
 																						{
-																							for(int index$sample$35_1 = 0; index$sample$35_1 < noSamples; index$sample$35_1 += 1) {
-																								for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$35_1][0]; timeStep$var66 += 1) {
+																							for(int index$sample$35_1 = 0; index$sample$35_1 < state.noSamples; index$sample$35_1 += 1) {
+																								for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$35_1][0]; timeStep$var66 += 1) {
 																									if((index$sample$35_1 == sample$var196)) {
 																										if((timeStep$var66 == timeStep$var226)) {
 																											{
-																												for(int var146 = 0; var146 < noServers; var146 += 1) {
-																													for(int var156 = 0; var156 < noStates; var156 += 1) {
+																												for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																													for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																														if((var146 == server)) {
 																															if((var156 == traceTempVariable$currentState$25_1)) {
 																																{
-																																	double var241 = current_metric_mean[server][traceTempVariable$currentState$25_1];
-																																	double var243 = current_metric_var[server][traceTempVariable$currentState$25_1];
+																																	double var241 = state.current_metric_mean[server][traceTempVariable$currentState$25_1];
+																																	double var243 = state.current_metric_var[server][traceTempVariable$currentState$25_1];
 																																	
 																																	// Store the value of the function call, so the function call is only made once.
 																																	double cv$weightedProbability = (Math.log(cv$probabilitySample57Value23) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
@@ -8627,27 +8205,27 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																							}
 																						}
 																					} else {
-																						for(int index$sample$36 = 0; index$sample$36 < noSamples; index$sample$36 += 1) {
-																							for(int timeStep$var66 = 1; timeStep$var66 < length$metric[index$sample$36][0]; timeStep$var66 += 1) {
+																						for(int index$sample$36 = 0; index$sample$36 < state.noSamples; index$sample$36 += 1) {
+																							for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[index$sample$36][0]; timeStep$var66 += 1) {
 																								if(true) {
 																									// Enumerating the possible outputs of Categorical 73.
-																									for(int index$sample76$38 = 0; index$sample76$38 < noStates; index$sample76$38 += 1) {
+																									for(int index$sample76$38 = 0; index$sample76$38 < state.noStates; index$sample76$38 += 1) {
 																										int distributionTempVariable$var74$40 = index$sample76$38;
 																										
 																										// Update the probability of sampling this value from the distribution value.
-																										double cv$probabilitySample76Value39 = (cv$probabilitySample57Value23 * distribution$sample76[((index$sample$36 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$38]);
+																										double cv$probabilitySample76Value39 = (cv$probabilitySample57Value23 * state.distribution$sample76[((index$sample$36 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$38]);
 																										{
 																											int traceTempVariable$currentState$41_1 = distributionTempVariable$var74$40;
 																											if((index$sample$36 == sample$var196)) {
 																												if((timeStep$var66 == timeStep$var226)) {
 																													{
-																														for(int var146 = 0; var146 < noServers; var146 += 1) {
-																															for(int var156 = 0; var156 < noStates; var156 += 1) {
+																														for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																															for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																if((var146 == server)) {
 																																	if((var156 == traceTempVariable$currentState$41_1)) {
 																																		{
-																																			double var241 = current_metric_mean[server][traceTempVariable$currentState$41_1];
-																																			double var243 = current_metric_var[server][traceTempVariable$currentState$41_1];
+																																			double var241 = state.current_metric_mean[server][traceTempVariable$currentState$41_1];
+																																			double var243 = state.current_metric_var[server][traceTempVariable$currentState$41_1];
 																																			
 																																			// Store the value of the function call, so the function call is only made once.
 																																			double cv$weightedProbability = (Math.log(cv$probabilitySample76Value39) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
@@ -8693,30 +8271,30 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 									}
 									
 									// Enumerating the possible arguments for Gaussian 244.
-									if(fixedFlag$sample76) {
+									if(state.fixedFlag$sample76) {
 										{
-											for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-												for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+											for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+												for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 													if((sample$var45 == sample$var196)) {
 														if((timeStep$var66 == timeStep$var226)) {
 															{
-																for(int var119 = 0; var119 < noServers; var119 += 1) {
-																	for(int var129 = 0; var129 < noStates; var129 += 1) {
+																for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																	for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																		if((var119 == server)) {
-																			if((var129 == st[sample$var196][timeStep$var226])) {
+																			if((var129 == state.st[sample$var196][timeStep$var226])) {
 																				{
-																					for(int index$sample$55_1 = 0; index$sample$55_1 < noSamples; index$sample$55_1 += 1) {
-																						for(int index$timeStep$55_2 = 1; index$timeStep$55_2 < length$metric[index$sample$55_1][0]; index$timeStep$55_2 += 1) {
+																					for(int index$sample$55_1 = 0; index$sample$55_1 < state.noSamples; index$sample$55_1 += 1) {
+																						for(int index$timeStep$55_2 = 1; index$timeStep$55_2 < state.length$metric[index$sample$55_1][0]; index$timeStep$55_2 += 1) {
 																							if((index$sample$55_1 == sample$var196)) {
 																								if((index$timeStep$55_2 == timeStep$var226)) {
 																									{
-																										for(int var146 = 0; var146 < noServers; var146 += 1) {
-																											for(int var156 = 0; var156 < noStates; var156 += 1) {
+																										for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																											for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																												if((var146 == server)) {
-																													if((var156 == st[sample$var196][timeStep$var226])) {
+																													if((var156 == state.st[sample$var196][timeStep$var226])) {
 																														{
-																															double var241 = current_metric_mean[server][st[sample$var196][timeStep$var226]];
-																															double var243 = current_metric_var[server][st[sample$var196][timeStep$var226]];
+																															double var241 = state.current_metric_mean[server][state.st[sample$var196][timeStep$var226]];
+																															double var243 = state.current_metric_var[server][state.st[sample$var196][timeStep$var226]];
 																															
 																															// Store the value of the function call, so the function call is only made once.
 																															double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
@@ -8756,22 +8334,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 											}
 										}
 									} else {
-										for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-											for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+										for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+											for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 												if(true) {
 													// Enumerating the possible outputs of Categorical 73.
-													for(int index$sample76$49 = 0; index$sample76$49 < noStates; index$sample76$49 += 1) {
+													for(int index$sample76$49 = 0; index$sample76$49 < state.noStates; index$sample76$49 += 1) {
 														int distributionTempVariable$var74$51 = index$sample76$49;
 														
 														// Update the probability of sampling this value from the distribution value.
-														double cv$probabilitySample76Value50 = (1.0 * distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$49]);
+														double cv$probabilitySample76Value50 = (1.0 * state.distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$49]);
 														{
 															int traceTempVariable$currentState$52_1 = distributionTempVariable$var74$51;
 															if((sample$var45 == sample$var196)) {
 																if((timeStep$var66 == timeStep$var226)) {
 																	{
-																		for(int var119 = 0; var119 < noServers; var119 += 1) {
-																			for(int var129 = 0; var129 < noStates; var129 += 1) {
+																		for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																			for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																				if((var119 == server)) {
 																					if((var129 == traceTempVariable$currentState$52_1)) {
 																						{
@@ -8779,13 +8357,13 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																							if((sample$var45 == sample$var196)) {
 																								if((timeStep$var66 == timeStep$var226)) {
 																									{
-																										for(int var146 = 0; var146 < noServers; var146 += 1) {
-																											for(int var156 = 0; var156 < noStates; var156 += 1) {
+																										for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																											for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																												if((var146 == server)) {
 																													if((var156 == traceTempVariable$currentState$56_1)) {
 																														{
-																															double var241 = current_metric_mean[server][traceTempVariable$currentState$56_1];
-																															double var243 = current_metric_var[server][traceTempVariable$currentState$56_1];
+																															double var241 = state.current_metric_mean[server][traceTempVariable$currentState$56_1];
+																															double var243 = state.current_metric_var[server][traceTempVariable$currentState$56_1];
 																															
 																															// Store the value of the function call, so the function call is only made once.
 																															double cv$weightedProbability = (Math.log(cv$probabilitySample76Value50) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
@@ -8812,27 +8390,27 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																								}
 																							}
 																						}
-																						for(int index$sample$57 = 0; index$sample$57 < noSamples; index$sample$57 += 1) {
-																							for(int index$timeStep$58 = 1; index$timeStep$58 < length$metric[index$sample$57][0]; index$timeStep$58 += 1) {
+																						for(int index$sample$57 = 0; index$sample$57 < state.noSamples; index$sample$57 += 1) {
+																							for(int index$timeStep$58 = 1; index$timeStep$58 < state.length$metric[index$sample$57][0]; index$timeStep$58 += 1) {
 																								if(!((index$timeStep$58 == timeStep$var66) && (index$sample$57 == sample$var45))) {
 																									// Enumerating the possible outputs of Categorical 73.
-																									for(int index$sample76$59 = 0; index$sample76$59 < noStates; index$sample76$59 += 1) {
+																									for(int index$sample76$59 = 0; index$sample76$59 < state.noStates; index$sample76$59 += 1) {
 																										int distributionTempVariable$var74$61 = index$sample76$59;
 																										
 																										// Update the probability of sampling this value from the distribution value.
-																										double cv$probabilitySample76Value60 = (cv$probabilitySample76Value50 * distribution$sample76[((index$sample$57 - 0) / 1)][((index$timeStep$58 - 1) / 1)][index$sample76$59]);
+																										double cv$probabilitySample76Value60 = (cv$probabilitySample76Value50 * state.distribution$sample76[((index$sample$57 - 0) / 1)][((index$timeStep$58 - 1) / 1)][index$sample76$59]);
 																										{
 																											int traceTempVariable$currentState$62_1 = distributionTempVariable$var74$61;
 																											if((index$sample$57 == sample$var196)) {
 																												if((index$timeStep$58 == timeStep$var226)) {
 																													{
-																														for(int var146 = 0; var146 < noServers; var146 += 1) {
-																															for(int var156 = 0; var156 < noStates; var156 += 1) {
+																														for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																															for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																if((var146 == server)) {
 																																	if((var156 == traceTempVariable$currentState$62_1)) {
 																																		{
-																																			double var241 = current_metric_mean[server][traceTempVariable$currentState$62_1];
-																																			double var243 = current_metric_var[server][traceTempVariable$currentState$62_1];
+																																			double var241 = state.current_metric_mean[server][traceTempVariable$currentState$62_1];
+																																			double var243 = state.current_metric_var[server][traceTempVariable$currentState$62_1];
 																																			
 																																			// Store the value of the function call, so the function call is only made once.
 																																			double cv$weightedProbability = (Math.log(cv$probabilitySample76Value60) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
@@ -8878,30 +8456,30 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 									}
 									
 									// Enumerating the possible arguments for Gaussian 244.
-									if(fixedFlag$sample76) {
+									if(state.fixedFlag$sample76) {
 										{
-											for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-												for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+											for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+												for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 													if((sample$var45 == sample$var196)) {
 														if((timeStep$var66 == timeStep$var226)) {
 															{
-																for(int var119 = 0; var119 < noServers; var119 += 1) {
-																	for(int var129 = 0; var129 < noStates; var129 += 1) {
+																for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																	for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																		if((var119 == server)) {
-																			if((var129 == st[sample$var196][timeStep$var226])) {
-																				if(fixedFlag$sample57) {
+																			if((var129 == state.st[sample$var196][timeStep$var226])) {
+																				if(state.fixedFlag$sample57) {
 																					{
-																						for(int index$sample$75_1 = 0; index$sample$75_1 < noSamples; index$sample$75_1 += 1) {
+																						for(int index$sample$75_1 = 0; index$sample$75_1 < state.noSamples; index$sample$75_1 += 1) {
 																							if((index$sample$75_1 == sample$var196)) {
 																								if((0 == timeStep$var226)) {
 																									{
-																										for(int var146 = 0; var146 < noServers; var146 += 1) {
-																											for(int var156 = 0; var156 < noStates; var156 += 1) {
+																										for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																											for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																												if((var146 == server)) {
-																													if((var156 == st[sample$var196][timeStep$var226])) {
+																													if((var156 == state.st[sample$var196][timeStep$var226])) {
 																														{
-																															double var241 = current_metric_mean[server][st[sample$var196][timeStep$var226]];
-																															double var243 = current_metric_var[server][st[sample$var196][timeStep$var226]];
+																															double var241 = state.current_metric_mean[server][state.st[sample$var196][timeStep$var226]];
+																															double var243 = state.current_metric_var[server][state.st[sample$var196][timeStep$var226]];
 																															
 																															// Store the value of the function call, so the function call is only made once.
 																															double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
@@ -8930,26 +8508,26 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																						}
 																					}
 																				} else {
-																					for(int index$sample$76 = 0; index$sample$76 < noSamples; index$sample$76 += 1) {
+																					for(int index$sample$76 = 0; index$sample$76 < state.noSamples; index$sample$76 += 1) {
 																						if(true) {
 																							// Enumerating the possible outputs of Categorical 54.
-																							for(int index$sample57$77 = 0; index$sample57$77 < noStates; index$sample57$77 += 1) {
+																							for(int index$sample57$77 = 0; index$sample57$77 < state.noStates; index$sample57$77 += 1) {
 																								int distributionTempVariable$var55$79 = index$sample57$77;
 																								
 																								// Update the probability of sampling this value from the distribution value.
-																								double cv$probabilitySample57Value78 = (1.0 * distribution$sample57[((index$sample$76 - 0) / 1)][index$sample57$77]);
+																								double cv$probabilitySample57Value78 = (1.0 * state.distribution$sample57[((index$sample$76 - 0) / 1)][index$sample57$77]);
 																								{
 																									int traceTempVariable$currentState$80_1 = distributionTempVariable$var55$79;
 																									if((index$sample$76 == sample$var196)) {
 																										if((0 == timeStep$var226)) {
 																											{
-																												for(int var146 = 0; var146 < noServers; var146 += 1) {
-																													for(int var156 = 0; var156 < noStates; var156 += 1) {
+																												for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																													for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																														if((var146 == server)) {
 																															if((var156 == traceTempVariable$currentState$80_1)) {
 																																{
-																																	double var241 = current_metric_mean[server][traceTempVariable$currentState$80_1];
-																																	double var243 = current_metric_var[server][traceTempVariable$currentState$80_1];
+																																	double var241 = state.current_metric_mean[server][traceTempVariable$currentState$80_1];
+																																	double var243 = state.current_metric_var[server][traceTempVariable$currentState$80_1];
 																																	
 																																	// Store the value of the function call, so the function call is only made once.
 																																	double cv$weightedProbability = (Math.log(cv$probabilitySample57Value78) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
@@ -8991,37 +8569,37 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 											}
 										}
 									} else {
-										for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-											for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+										for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+											for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 												if(true) {
 													// Enumerating the possible outputs of Categorical 73.
-													for(int index$sample76$69 = 0; index$sample76$69 < noStates; index$sample76$69 += 1) {
+													for(int index$sample76$69 = 0; index$sample76$69 < state.noStates; index$sample76$69 += 1) {
 														int distributionTempVariable$var74$71 = index$sample76$69;
 														
 														// Update the probability of sampling this value from the distribution value.
-														double cv$probabilitySample76Value70 = (1.0 * distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$69]);
+														double cv$probabilitySample76Value70 = (1.0 * state.distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)][index$sample76$69]);
 														{
 															int traceTempVariable$currentState$72_1 = distributionTempVariable$var74$71;
 															if((sample$var45 == sample$var196)) {
 																if((timeStep$var66 == timeStep$var226)) {
 																	{
-																		for(int var119 = 0; var119 < noServers; var119 += 1) {
-																			for(int var129 = 0; var129 < noStates; var129 += 1) {
+																		for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+																			for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 																				if((var119 == server)) {
 																					if((var129 == traceTempVariable$currentState$72_1)) {
-																						if(fixedFlag$sample57) {
+																						if(state.fixedFlag$sample57) {
 																							{
-																								for(int index$sample$81_1 = 0; index$sample$81_1 < noSamples; index$sample$81_1 += 1) {
+																								for(int index$sample$81_1 = 0; index$sample$81_1 < state.noSamples; index$sample$81_1 += 1) {
 																									if((index$sample$81_1 == sample$var196)) {
 																										if((0 == timeStep$var226)) {
 																											{
-																												for(int var146 = 0; var146 < noServers; var146 += 1) {
-																													for(int var156 = 0; var156 < noStates; var156 += 1) {
+																												for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																													for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																														if((var146 == server)) {
 																															if((var156 == traceTempVariable$currentState$72_1)) {
 																																{
-																																	double var241 = current_metric_mean[server][traceTempVariable$currentState$72_1];
-																																	double var243 = current_metric_var[server][traceTempVariable$currentState$72_1];
+																																	double var241 = state.current_metric_mean[server][traceTempVariable$currentState$72_1];
+																																	double var243 = state.current_metric_var[server][traceTempVariable$currentState$72_1];
 																																	
 																																	// Store the value of the function call, so the function call is only made once.
 																																	double cv$weightedProbability = (Math.log(cv$probabilitySample76Value70) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
@@ -9050,26 +8628,26 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 																								}
 																							}
 																						} else {
-																							for(int index$sample$82 = 0; index$sample$82 < noSamples; index$sample$82 += 1) {
+																							for(int index$sample$82 = 0; index$sample$82 < state.noSamples; index$sample$82 += 1) {
 																								if(true) {
 																									// Enumerating the possible outputs of Categorical 54.
-																									for(int index$sample57$83 = 0; index$sample57$83 < noStates; index$sample57$83 += 1) {
+																									for(int index$sample57$83 = 0; index$sample57$83 < state.noStates; index$sample57$83 += 1) {
 																										int distributionTempVariable$var55$85 = index$sample57$83;
 																										
 																										// Update the probability of sampling this value from the distribution value.
-																										double cv$probabilitySample57Value84 = (cv$probabilitySample76Value70 * distribution$sample57[((index$sample$82 - 0) / 1)][index$sample57$83]);
+																										double cv$probabilitySample57Value84 = (cv$probabilitySample76Value70 * state.distribution$sample57[((index$sample$82 - 0) / 1)][index$sample57$83]);
 																										{
 																											int traceTempVariable$currentState$86_1 = distributionTempVariable$var55$85;
 																											if((index$sample$82 == sample$var196)) {
 																												if((0 == timeStep$var226)) {
 																													{
-																														for(int var146 = 0; var146 < noServers; var146 += 1) {
-																															for(int var156 = 0; var156 < noStates; var156 += 1) {
+																														for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+																															for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 																																if((var146 == server)) {
 																																	if((var156 == traceTempVariable$currentState$86_1)) {
 																																		{
-																																			double var241 = current_metric_mean[server][traceTempVariable$currentState$86_1];
-																																			double var243 = current_metric_var[server][traceTempVariable$currentState$86_1];
+																																			double var241 = state.current_metric_mean[server][traceTempVariable$currentState$86_1];
+																																			double var243 = state.current_metric_var[server][traceTempVariable$currentState$86_1];
 																																			
 																																			// Store the value of the function call, so the function call is only made once.
 																																			double cv$weightedProbability = (Math.log(cv$probabilitySample57Value84) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
@@ -9141,7 +8719,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var245 = cv$accumulator;
+				state.logProbability$var245 = cv$accumulator;
 			
 			// Guard to ensure that metric_g is only updated once for this probability.
 			boolean cv$guard$metric_g = false;
@@ -9155,18 +8733,18 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						cv$guard$metric_g = true;
 						
 						// Update the variable probability
-						logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
+						state.logProbability$metric_g = (state.logProbability$metric_g + cv$accumulator);
 					}
 				}
 			}
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample256 = (((fixedFlag$sample57 && fixedFlag$sample76) && fixedFlag$sample134) && fixedFlag$sample162);
+			state.fixedProbFlag$sample256 = (((state.fixedFlag$sample57 && state.fixedFlag$sample76) && state.fixedFlag$sample134) && state.fixedFlag$sample162);
 		} else {
 			// Using cached values.
 			// 
@@ -9177,16 +8755,16 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-						if(metric_valid_g[sample$var196][server][timeStep$var226])
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+				for(int server = 0; server < state.noServers; server += 1) {
+					for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
+						if(state.metric_valid_g[sample$var196][server][timeStep$var226])
 							// Record that the sample was reached.
 							cv$sampleReached = true;
 					}
 				}
 			}
-			double cv$sampleValue = logProbability$var245;
+			double cv$sampleValue = state.logProbability$var245;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
@@ -9202,14 +8780,14 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						cv$guard$metric_g = true;
 						
 						// Update the variable probability
-						logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
+						state.logProbability$metric_g = (state.logProbability$metric_g + cv$accumulator);
 					}
 				}
 			}
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -9218,10 +8796,10 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	private final void logProbabilityDistribution$sample57() {
 		// Determine if we need to calculate the values for sample task 57 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample57) {
+		if(!state.fixedProbFlag$sample57) {
 			// Update the probability if the distribution is fixed to a specific value. If it
 			// is not the value is implicitly log(1.0) so has no effect.
-			if(fixedFlag$sample57) {
+			if(state.fixedFlag$sample57) {
 				// Generating probabilities for sample task
 				// Accumulator for probabilities of instances of the random variable
 				double cv$accumulator = 0.0;
@@ -9231,7 +8809,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 				
 				// A guard to check if the sample value is ever reached.
 				boolean cv$sampleReached = false;
-				for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+				for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 					// An accumulator for log probabilities.
 					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 					
@@ -9243,11 +8821,11 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 					{
 						{
 							// The sample value to calculate the probability of generating
-							int cv$sampleValue = st[sample$var45][0];
+							int cv$sampleValue = state.st[sample$var45][0];
 							{
 								{
 									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$sampleValue])) && (initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+									double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noStates)) && (0 < state.noStates)) && (0.0 <= state.initialStateDistribution[cv$sampleValue])) && (state.initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(state.initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 									
 									// Add the probability of this sample task to the distribution accumulator.
 									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -9289,24 +8867,24 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 				// erroneously over written.
 				if(cv$sampleReached)
 					// Store the random variable instance probability
-					logProbability$var55 = cv$accumulator;
+					state.logProbability$var55 = cv$accumulator;
 				
 				// Make sure all the inputs have been fixed so the variable is not a distribution.
-				if(fixedFlag$sample57)
+				if(state.fixedFlag$sample57)
 					// Update the variable probability
-					logProbability$st = (logProbability$st + cv$accumulator);
+					state.logProbability$st = (state.logProbability$st + cv$accumulator);
 				
 				// Add probability to model
-				logProbability$$model = (logProbability$$model + cv$accumulator);
+				state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 				
 				// If this value is fixed, add it to the probability of this model producing the fixed
 				// values
-				if(fixedFlag$sample57)
-					logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+				if(state.fixedFlag$sample57)
+					state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 				
 				// Now the probability is calculated store if it can be cached or if it needs to be
 				// recalculated next time.
-				fixedProbFlag$sample57 = (fixedFlag$sample57 && fixedFlag$sample20);
+				state.fixedProbFlag$sample57 = (state.fixedFlag$sample57 && state.fixedFlag$sample20);
 			}
 		} else {
 			// Using cached values.
@@ -9318,25 +8896,25 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1)
+			for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1)
 				// Record that the sample was reached.
 				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var55;
+			double cv$sampleValue = state.logProbability$var55;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
-			if(fixedFlag$sample57)
+			if(state.fixedFlag$sample57)
 				// Update the variable probability
-				logProbability$st = (logProbability$st + cv$accumulator);
+				state.logProbability$st = (state.logProbability$st + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample57)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample57)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -9345,10 +8923,10 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	private final void logProbabilityDistribution$sample76() {
 		// Determine if we need to calculate the values for sample task 76 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample76) {
+		if(!state.fixedProbFlag$sample76) {
 			// Update the probability if the distribution is fixed to a specific value. If it
 			// is not the value is implicitly log(1.0) so has no effect.
-			if(fixedFlag$sample76) {
+			if(state.fixedFlag$sample76) {
 				// Generating probabilities for sample task
 				// Accumulator for probabilities of instances of the random variable
 				double cv$accumulator = 0.0;
@@ -9358,8 +8936,8 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 				
 				// A guard to check if the sample value is ever reached.
 				boolean cv$sampleReached = false;
-				for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-					for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+				for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+					for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 						// An accumulator for log probabilities.
 						double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 						
@@ -9377,22 +8955,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						{
 							{
 								// The sample value to calculate the probability of generating
-								int cv$sampleValue = st[sample$var45][timeStep$var66];
+								int cv$sampleValue = state.st[sample$var45][timeStep$var66];
 								
 								// Enumerating the possible arguments for Categorical 73.
-								if(fixedFlag$sample57) {
+								if(state.fixedFlag$sample57) {
 									{
-										for(int index$sample$4_1 = 0; index$sample$4_1 < noSamples; index$sample$4_1 += 1) {
+										for(int index$sample$4_1 = 0; index$sample$4_1 < state.noSamples; index$sample$4_1 += 1) {
 											if((index$sample$4_1 == sample$var45)) {
 												if((0 == (timeStep$var66 - 1))) {
 													{
-														for(int var32 = 0; var32 < noStates; var32 += 1) {
-															if((var32 == st[sample$var45][(timeStep$var66 - 1)])) {
+														for(int var32 = 0; var32 < state.noStates; var32 += 1) {
+															if((var32 == state.st[sample$var45][(timeStep$var66 - 1)])) {
 																{
-																	double[] var72 = m[st[sample$var45][(timeStep$var66 - 1)]];
+																	double[] var72 = state.m[state.st[sample$var45][(timeStep$var66 - 1)]];
 																	
 																	// Store the value of the function call, so the function call is only made once.
-																	double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+																	double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 																	
 																	// Add the probability of this sample task to the distribution accumulator.
 																	if((cv$weightedProbability < cv$distributionAccumulator))
@@ -9416,26 +8994,26 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 										}
 									}
 								} else {
-									for(int index$sample$5 = 0; index$sample$5 < noSamples; index$sample$5 += 1) {
+									for(int index$sample$5 = 0; index$sample$5 < state.noSamples; index$sample$5 += 1) {
 										if(true) {
 											// Enumerating the possible outputs of Categorical 54.
-											for(int index$sample57$6 = 0; index$sample57$6 < noStates; index$sample57$6 += 1) {
+											for(int index$sample57$6 = 0; index$sample57$6 < state.noStates; index$sample57$6 += 1) {
 												int distributionTempVariable$var55$8 = index$sample57$6;
 												
 												// Update the probability of sampling this value from the distribution value.
-												double cv$probabilitySample57Value7 = (1.0 * distribution$sample57[((index$sample$5 - 0) / 1)][index$sample57$6]);
+												double cv$probabilitySample57Value7 = (1.0 * state.distribution$sample57[((index$sample$5 - 0) / 1)][index$sample57$6]);
 												{
 													int traceTempVariable$var71$9_1 = distributionTempVariable$var55$8;
 													if((index$sample$5 == sample$var45)) {
 														if((0 == (timeStep$var66 - 1))) {
 															{
-																for(int var32 = 0; var32 < noStates; var32 += 1) {
+																for(int var32 = 0; var32 < state.noStates; var32 += 1) {
 																	if((var32 == traceTempVariable$var71$9_1)) {
 																		{
-																			double[] var72 = m[traceTempVariable$var71$9_1];
+																			double[] var72 = state.m[traceTempVariable$var71$9_1];
 																			
 																			// Store the value of the function call, so the function call is only made once.
-																			double cv$weightedProbability = (Math.log(cv$probabilitySample57Value7) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+																			double cv$weightedProbability = (Math.log(cv$probabilitySample57Value7) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 																			
 																			// Add the probability of this sample task to the distribution accumulator.
 																			if((cv$weightedProbability < cv$distributionAccumulator))
@@ -9467,13 +9045,13 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 									if((index$sample$2 == sample$var45)) {
 										if((index$timeStep$1 == (timeStep$var66 - 1))) {
 											{
-												for(int var32 = 0; var32 < noStates; var32 += 1) {
-													if((var32 == st[sample$var45][(timeStep$var66 - 1)])) {
+												for(int var32 = 0; var32 < state.noStates; var32 += 1) {
+													if((var32 == state.st[sample$var45][(timeStep$var66 - 1)])) {
 														{
-															double[] var72 = m[st[sample$var45][(timeStep$var66 - 1)]];
+															double[] var72 = state.m[state.st[sample$var45][(timeStep$var66 - 1)]];
 															
 															// Store the value of the function call, so the function call is only made once.
-															double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+															double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 															
 															// Add the probability of this sample task to the distribution accumulator.
 															if((cv$weightedProbability < cv$distributionAccumulator))
@@ -9495,20 +9073,20 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 										}
 									}
 								}
-								if(fixedFlag$sample76) {
+								if(state.fixedFlag$sample76) {
 									{
-										for(int index$sample$13_1 = 0; index$sample$13_1 < noSamples; index$sample$13_1 += 1) {
-											for(int index$timeStep$13_2 = 1; index$timeStep$13_2 < length$metric[index$sample$13_1][0]; index$timeStep$13_2 += 1) {
+										for(int index$sample$13_1 = 0; index$sample$13_1 < state.noSamples; index$sample$13_1 += 1) {
+											for(int index$timeStep$13_2 = 1; index$timeStep$13_2 < state.length$metric[index$sample$13_1][0]; index$timeStep$13_2 += 1) {
 												if((index$sample$13_1 == sample$var45)) {
 													if((index$timeStep$13_2 == (timeStep$var66 - 1))) {
 														{
-															for(int var32 = 0; var32 < noStates; var32 += 1) {
-																if((var32 == st[sample$var45][(timeStep$var66 - 1)])) {
+															for(int var32 = 0; var32 < state.noStates; var32 += 1) {
+																if((var32 == state.st[sample$var45][(timeStep$var66 - 1)])) {
 																	{
-																		double[] var72 = m[st[sample$var45][(timeStep$var66 - 1)]];
+																		double[] var72 = state.m[state.st[sample$var45][(timeStep$var66 - 1)]];
 																		
 																		// Store the value of the function call, so the function call is only made once.
-																		double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+																		double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 																		
 																		// Add the probability of this sample task to the distribution accumulator.
 																		if((cv$weightedProbability < cv$distributionAccumulator))
@@ -9533,27 +9111,27 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 										}
 									}
 								} else {
-									for(int index$sample$14 = 0; index$sample$14 < noSamples; index$sample$14 += 1) {
-										for(int index$timeStep$15 = 1; index$timeStep$15 < length$metric[index$sample$14][0]; index$timeStep$15 += 1) {
+									for(int index$sample$14 = 0; index$sample$14 < state.noSamples; index$sample$14 += 1) {
+										for(int index$timeStep$15 = 1; index$timeStep$15 < state.length$metric[index$sample$14][0]; index$timeStep$15 += 1) {
 											if(!((index$timeStep$15 == index$timeStep$1) && (index$sample$14 == index$sample$2))) {
 												// Enumerating the possible outputs of Categorical 73.
-												for(int index$sample76$16 = 0; index$sample76$16 < noStates; index$sample76$16 += 1) {
+												for(int index$sample76$16 = 0; index$sample76$16 < state.noStates; index$sample76$16 += 1) {
 													int distributionTempVariable$var74$18 = index$sample76$16;
 													
 													// Update the probability of sampling this value from the distribution value.
-													double cv$probabilitySample76Value17 = (1.0 * distribution$sample76[((index$sample$14 - 0) / 1)][((index$timeStep$15 - 1) / 1)][index$sample76$16]);
+													double cv$probabilitySample76Value17 = (1.0 * state.distribution$sample76[((index$sample$14 - 0) / 1)][((index$timeStep$15 - 1) / 1)][index$sample76$16]);
 													{
 														int traceTempVariable$var71$19_1 = distributionTempVariable$var74$18;
 														if((index$sample$14 == sample$var45)) {
 															if((index$timeStep$15 == (timeStep$var66 - 1))) {
 																{
-																	for(int var32 = 0; var32 < noStates; var32 += 1) {
+																	for(int var32 = 0; var32 < state.noStates; var32 += 1) {
 																		if((var32 == traceTempVariable$var71$19_1)) {
 																			{
-																				double[] var72 = m[traceTempVariable$var71$19_1];
+																				double[] var72 = state.m[traceTempVariable$var71$19_1];
 																				
 																				// Store the value of the function call, so the function call is only made once.
-																				double cv$weightedProbability = (Math.log(cv$probabilitySample76Value17) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+																				double cv$weightedProbability = (Math.log(cv$probabilitySample76Value17) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 																				
 																				// Add the probability of this sample task to the distribution accumulator.
 																				if((cv$weightedProbability < cv$distributionAccumulator))
@@ -9606,24 +9184,24 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 				// erroneously over written.
 				if(cv$sampleReached)
 					// Store the random variable instance probability
-					logProbability$var74 = cv$accumulator;
+					state.logProbability$var74 = cv$accumulator;
 				
 				// Make sure all the inputs have been fixed so the variable is not a distribution.
-				if(fixedFlag$sample76)
+				if(state.fixedFlag$sample76)
 					// Update the variable probability
-					logProbability$st = (logProbability$st + cv$accumulator);
+					state.logProbability$st = (state.logProbability$st + cv$accumulator);
 				
 				// Add probability to model
-				logProbability$$model = (logProbability$$model + cv$accumulator);
+				state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 				
 				// If this value is fixed, add it to the probability of this model producing the fixed
 				// values
-				if(fixedFlag$sample76)
-					logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+				if(state.fixedFlag$sample76)
+					state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 				
 				// Now the probability is calculated store if it can be cached or if it needs to be
 				// recalculated next time.
-				fixedProbFlag$sample76 = ((fixedFlag$sample76 && fixedFlag$sample33) && fixedFlag$sample57);
+				state.fixedProbFlag$sample76 = ((state.fixedFlag$sample76 && state.fixedFlag$sample33) && state.fixedFlag$sample57);
 			}
 		} else {
 			// Using cached values.
@@ -9635,27 +9213,27 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-				for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
+			for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+				for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1)
 					// Record that the sample was reached.
 					cv$sampleReached = true;
 			}
-			double cv$sampleValue = logProbability$var74;
+			double cv$sampleValue = state.logProbability$var74;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
-			if(fixedFlag$sample76)
+			if(state.fixedFlag$sample76)
 				// Update the variable probability
-				logProbability$st = (logProbability$st + cv$accumulator);
+				state.logProbability$st = (state.logProbability$st + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample76)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample76)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -9664,7 +9242,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	private final void logProbabilityValue$sample134() {
 		// Determine if we need to calculate the values for sample task 134 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample134) {
+		if(!state.fixedProbFlag$sample134) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -9674,8 +9252,8 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var119 = 0; var119 < noServers; var119 += 1) {
-				for(int var129 = 0; var129 < noStates; var129 += 1) {
+			for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+				for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 					// An accumulator for log probabilities.
 					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 					
@@ -9684,11 +9262,11 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 					{
 						{
 							// The sample value to calculate the probability of generating
-							double cv$sampleValue = current_metric_mean[var119][var129];
+							double cv$sampleValue = state.current_metric_mean[var119][var129];
 							{
 								{
 									double var106 = 0.0;
-									double var107 = (double)max_metric;
+									double var107 = (double)state.max_metric;
 									
 									// Store the value of the function call, so the function call is only made once.
 									double cv$weightedProbability = (Math.log(1.0) + (((var106 <= cv$sampleValue) && (cv$sampleValue < var107))?(-Math.log((var107 - var106))):Double.NEGATIVE_INFINITY));
@@ -9734,22 +9312,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var130 = cv$sampleAccumulator;
+				state.logProbability$var130 = cv$sampleAccumulator;
 			
 			// Update the variable probability
-			logProbability$current_metric_mean = (logProbability$current_metric_mean + cv$accumulator);
+			state.logProbability$current_metric_mean = (state.logProbability$current_metric_mean + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample134)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample134)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample134 = fixedFlag$sample134;
+			state.fixedProbFlag$sample134 = state.fixedFlag$sample134;
 		} else {
 			// Using cached values.
 			// 
@@ -9760,25 +9338,25 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var119 = 0; var119 < noServers; var119 += 1) {
-				for(int var129 = 0; var129 < noStates; var129 += 1)
+			for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+				for(int var129 = 0; var129 < state.noStates; var129 += 1)
 					// Record that the sample was reached.
 					cv$sampleReached = true;
 			}
-			double cv$sampleValue = logProbability$var130;
+			double cv$sampleValue = state.logProbability$var130;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$current_metric_mean = (logProbability$current_metric_mean + cv$accumulator);
+			state.logProbability$current_metric_mean = (state.logProbability$current_metric_mean + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample134)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample134)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -9787,7 +9365,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	private final void logProbabilityValue$sample162() {
 		// Determine if we need to calculate the values for sample task 162 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample162) {
+		if(!state.fixedProbFlag$sample162) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -9797,8 +9375,8 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var146 = 0; var146 < noServers; var146 += 1) {
-				for(int var156 = 0; var156 < noStates; var156 += 1) {
+			for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+				for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 					// An accumulator for log probabilities.
 					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 					
@@ -9807,7 +9385,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 					{
 						{
 							// The sample value to calculate the probability of generating
-							double cv$sampleValue = current_metric_var[var146][var156];
+							double cv$sampleValue = state.current_metric_var[var146][var156];
 							{
 								{
 									double var133 = 1.0;
@@ -9857,22 +9435,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var157 = cv$sampleAccumulator;
+				state.logProbability$var157 = cv$sampleAccumulator;
 			
 			// Update the variable probability
-			logProbability$current_metric_var = (logProbability$current_metric_var + cv$accumulator);
+			state.logProbability$current_metric_var = (state.logProbability$current_metric_var + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample162)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample162)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample162 = fixedFlag$sample162;
+			state.fixedProbFlag$sample162 = state.fixedFlag$sample162;
 		} else {
 			// Using cached values.
 			// 
@@ -9883,25 +9461,25 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var146 = 0; var146 < noServers; var146 += 1) {
-				for(int var156 = 0; var156 < noStates; var156 += 1)
+			for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+				for(int var156 = 0; var156 < state.noStates; var156 += 1)
 					// Record that the sample was reached.
 					cv$sampleReached = true;
 			}
-			double cv$sampleValue = logProbability$var157;
+			double cv$sampleValue = state.logProbability$var157;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$current_metric_var = (logProbability$current_metric_var + cv$accumulator);
+			state.logProbability$current_metric_var = (state.logProbability$current_metric_var + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample162)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample162)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -9910,7 +9488,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	private final void logProbabilityValue$sample190() {
 		// Determine if we need to calculate the values for sample task 190 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample190) {
+		if(!state.fixedProbFlag$sample190) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -9920,8 +9498,8 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var173 = 0; var173 < noServers; var173 += 1) {
-				for(int var183 = 0; var183 < noStates; var183 += 1) {
+			for(int var173 = 0; var173 < state.noServers; var173 += 1) {
+				for(int var183 = 0; var183 < state.noStates; var183 += 1) {
 					// An accumulator for log probabilities.
 					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 					
@@ -9930,7 +9508,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 					{
 						{
 							// The sample value to calculate the probability of generating
-							double cv$sampleValue = current_metric_valid_bias[var173][var183];
+							double cv$sampleValue = state.current_metric_valid_bias[var173][var183];
 							{
 								{
 									double var160 = 1.0;
@@ -9980,22 +9558,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var184 = cv$sampleAccumulator;
+				state.logProbability$var184 = cv$sampleAccumulator;
 			
 			// Update the variable probability
-			logProbability$current_metric_valid_bias = (logProbability$current_metric_valid_bias + cv$accumulator);
+			state.logProbability$current_metric_valid_bias = (state.logProbability$current_metric_valid_bias + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample190)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample190)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample190 = fixedFlag$sample190;
+			state.fixedProbFlag$sample190 = state.fixedFlag$sample190;
 		} else {
 			// Using cached values.
 			// 
@@ -10006,25 +9584,25 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var173 = 0; var173 < noServers; var173 += 1) {
-				for(int var183 = 0; var183 < noStates; var183 += 1)
+			for(int var173 = 0; var173 < state.noServers; var173 += 1) {
+				for(int var183 = 0; var183 < state.noStates; var183 += 1)
 					// Record that the sample was reached.
 					cv$sampleReached = true;
 			}
-			double cv$sampleValue = logProbability$var184;
+			double cv$sampleValue = state.logProbability$var184;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$current_metric_valid_bias = (logProbability$current_metric_valid_bias + cv$accumulator);
+			state.logProbability$current_metric_valid_bias = (state.logProbability$current_metric_valid_bias + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample190)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample190)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -10033,7 +9611,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	private final void logProbabilityValue$sample20() {
 		// Determine if we need to calculate the values for sample task 20 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample20) {
+		if(!state.fixedProbFlag$sample20) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -10049,11 +9627,11 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			{
 				{
 					// The sample value to calculate the probability of generating
-					double[] cv$sampleValue = initialStateDistribution;
+					double[] cv$sampleValue = state.initialStateDistribution;
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, noStates));
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, state.v, state.noStates));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -10088,19 +9666,19 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$initialStateDistribution = cv$sampleProbability;
+			state.logProbability$initialStateDistribution = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample20)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample20)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample20 = fixedFlag$sample20;
+			state.fixedProbFlag$sample20 = state.fixedFlag$sample20;
 		} else {
 			// Using cached values.
 			// 
@@ -10108,17 +9686,17 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$initialStateDistribution;
+			double cv$sampleValue = state.logProbability$initialStateDistribution;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample20)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample20)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -10127,7 +9705,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	private final void logProbabilityValue$sample241() {
 		// Determine if we need to calculate the values for sample task 241 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample241) {
+		if(!state.fixedProbFlag$sample241) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -10137,9 +9715,9 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+				for(int server = 0; server < state.noServers; server += 1) {
+					for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 						// An accumulator for log probabilities.
 						double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 						
@@ -10148,10 +9726,10 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						{
 							{
 								// The sample value to calculate the probability of generating
-								boolean cv$sampleValue = metric_valid_g[sample$var196][server][timeStep$var226];
+								boolean cv$sampleValue = state.metric_valid_g[sample$var196][server][timeStep$var226];
 								{
 									{
-										double var230 = current_metric_valid_bias[server][st[sample$var196][timeStep$var226]];
+										double var230 = state.current_metric_valid_bias[server][state.st[sample$var196][timeStep$var226]];
 										
 										// Store the value of the function call, so the function call is only made once.
 										double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((cv$sampleValue?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
@@ -10198,13 +9776,13 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var232 = cv$accumulator;
+				state.logProbability$var232 = cv$accumulator;
 			
 			// Guard to ensure that metric_valid_g is only updated once for this probability.
 			boolean cv$guard$metric_valid_g = false;
 			
 			// Update the variable probability
-			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			state.logProbability$metric_valid_inner = (state.logProbability$metric_valid_inner + cv$accumulator);
 			
 			// Add probability to constructed variables from the combined probability
 			{
@@ -10215,18 +9793,18 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						cv$guard$metric_valid_g = true;
 						
 						// Update the variable probability
-						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+						state.logProbability$metric_valid_g = (state.logProbability$metric_valid_g + cv$accumulator);
 					}
 				}
 			}
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample241 = ((fixedFlag$sample57 && fixedFlag$sample76) && fixedFlag$sample190);
+			state.fixedProbFlag$sample241 = ((state.fixedFlag$sample57 && state.fixedFlag$sample76) && state.fixedFlag$sample190);
 		} else {
 			// Using cached values.
 			// 
@@ -10237,14 +9815,14 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1)
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+				for(int server = 0; server < state.noServers; server += 1) {
+					for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1)
 						// Record that the sample was reached.
 						cv$sampleReached = true;
 				}
 			}
-			double cv$sampleValue = logProbability$var232;
+			double cv$sampleValue = state.logProbability$var232;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
@@ -10252,7 +9830,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			boolean cv$guard$metric_valid_g = false;
 			
 			// Update the variable probability
-			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$accumulator);
+			state.logProbability$metric_valid_inner = (state.logProbability$metric_valid_inner + cv$accumulator);
 			
 			// Add probability to constructed variables from the combined probability
 			{
@@ -10263,14 +9841,14 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						cv$guard$metric_valid_g = true;
 						
 						// Update the variable probability
-						logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$accumulator);
+						state.logProbability$metric_valid_g = (state.logProbability$metric_valid_g + cv$accumulator);
 					}
 				}
 			}
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -10279,7 +9857,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	private final void logProbabilityValue$sample256() {
 		// Determine if we need to calculate the values for sample task 256 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample256) {
+		if(!state.fixedProbFlag$sample256) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -10289,10 +9867,10 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-						if(metric_valid_g[sample$var196][server][timeStep$var226]) {
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+				for(int server = 0; server < state.noServers; server += 1) {
+					for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
+						if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
 							// An accumulator for log probabilities.
 							double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 							
@@ -10301,11 +9879,11 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 							{
 								{
 									// The sample value to calculate the probability of generating
-									double cv$sampleValue = var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)];
+									double cv$sampleValue = state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)];
 									{
 										{
-											double var241 = current_metric_mean[server][st[sample$var196][timeStep$var226]];
-											double var243 = current_metric_var[server][st[sample$var196][timeStep$var226]];
+											double var241 = state.current_metric_mean[server][state.st[sample$var196][timeStep$var226]];
+											double var243 = state.current_metric_var[server][state.st[sample$var196][timeStep$var226]];
 											
 											// Store the value of the function call, so the function call is only made once.
 											double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var241) / Math.sqrt(var243))) - (0.5 * Math.log(var243))):Double.NEGATIVE_INFINITY));
@@ -10353,7 +9931,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var245 = cv$accumulator;
+				state.logProbability$var245 = cv$accumulator;
 			
 			// Guard to ensure that metric_g is only updated once for this probability.
 			boolean cv$guard$metric_g = false;
@@ -10367,18 +9945,18 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						cv$guard$metric_g = true;
 						
 						// Update the variable probability
-						logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
+						state.logProbability$metric_g = (state.logProbability$metric_g + cv$accumulator);
 					}
 				}
 			}
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample256 = (((fixedFlag$sample57 && fixedFlag$sample76) && fixedFlag$sample134) && fixedFlag$sample162);
+			state.fixedProbFlag$sample256 = (((state.fixedFlag$sample57 && state.fixedFlag$sample76) && state.fixedFlag$sample134) && state.fixedFlag$sample162);
 		} else {
 			// Using cached values.
 			// 
@@ -10389,16 +9967,16 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-						if(metric_valid_g[sample$var196][server][timeStep$var226])
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+				for(int server = 0; server < state.noServers; server += 1) {
+					for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
+						if(state.metric_valid_g[sample$var196][server][timeStep$var226])
 							// Record that the sample was reached.
 							cv$sampleReached = true;
 					}
 				}
 			}
-			double cv$sampleValue = logProbability$var245;
+			double cv$sampleValue = state.logProbability$var245;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
@@ -10414,14 +9992,14 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						cv$guard$metric_g = true;
 						
 						// Update the variable probability
-						logProbability$metric_g = (logProbability$metric_g + cv$accumulator);
+						state.logProbability$metric_g = (state.logProbability$metric_g + cv$accumulator);
 					}
 				}
 			}
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -10430,7 +10008,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	private final void logProbabilityValue$sample33() {
 		// Determine if we need to calculate the values for sample task 33 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample33) {
+		if(!state.fixedProbFlag$sample33) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -10440,7 +10018,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var32 = 0; var32 < noStates; var32 += 1) {
+			for(int var32 = 0; var32 < state.noStates; var32 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -10449,11 +10027,11 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 				{
 					{
 						// The sample value to calculate the probability of generating
-						double[] cv$sampleValue = m[var32];
+						double[] cv$sampleValue = state.m[var32];
 						{
 							{
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, noStates));
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, state.v, state.noStates));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -10495,22 +10073,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var33 = cv$sampleAccumulator;
+				state.logProbability$var33 = cv$sampleAccumulator;
 			
 			// Update the variable probability
-			logProbability$m = (logProbability$m + cv$accumulator);
+			state.logProbability$m = (state.logProbability$m + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample33)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample33)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample33 = fixedFlag$sample33;
+			state.fixedProbFlag$sample33 = state.fixedFlag$sample33;
 		} else {
 			// Using cached values.
 			// 
@@ -10521,23 +10099,23 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var32 = 0; var32 < noStates; var32 += 1)
+			for(int var32 = 0; var32 < state.noStates; var32 += 1)
 				// Record that the sample was reached.
 				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var33;
+			double cv$sampleValue = state.logProbability$var33;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$m = (logProbability$m + cv$accumulator);
+			state.logProbability$m = (state.logProbability$m + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample33)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample33)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -10546,7 +10124,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	private final void logProbabilityValue$sample57() {
 		// Determine if we need to calculate the values for sample task 57 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample57) {
+		if(!state.fixedProbFlag$sample57) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -10556,7 +10134,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+			for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -10568,11 +10146,11 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 				{
 					{
 						// The sample value to calculate the probability of generating
-						int cv$sampleValue = st[sample$var45][0];
+						int cv$sampleValue = state.st[sample$var45][0];
 						{
 							{
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$sampleValue])) && (initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noStates)) && (0 < state.noStates)) && (0.0 <= state.initialStateDistribution[cv$sampleValue])) && (state.initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(state.initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -10614,22 +10192,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var55 = cv$accumulator;
+				state.logProbability$var55 = cv$accumulator;
 			
 			// Update the variable probability
-			logProbability$st = (logProbability$st + cv$accumulator);
+			state.logProbability$st = (state.logProbability$st + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample57)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample57)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample57 = (fixedFlag$sample57 && fixedFlag$sample20);
+			state.fixedProbFlag$sample57 = (state.fixedFlag$sample57 && state.fixedFlag$sample20);
 		} else {
 			// Using cached values.
 			// 
@@ -10640,23 +10218,23 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1)
+			for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1)
 				// Record that the sample was reached.
 				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var55;
+			double cv$sampleValue = state.logProbability$var55;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$st = (logProbability$st + cv$accumulator);
+			state.logProbability$st = (state.logProbability$st + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample57)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample57)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -10665,7 +10243,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	private final void logProbabilityValue$sample76() {
 		// Determine if we need to calculate the values for sample task 76 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample76) {
+		if(!state.fixedProbFlag$sample76) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -10675,8 +10253,8 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-				for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+			for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+				for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 					// An accumulator for log probabilities.
 					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 					
@@ -10691,13 +10269,13 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 					{
 						{
 							// The sample value to calculate the probability of generating
-							int cv$sampleValue = st[sample$var45][timeStep$var66];
+							int cv$sampleValue = state.st[sample$var45][timeStep$var66];
 							{
 								{
-									double[] var72 = m[st[sample$var45][(timeStep$var66 - 1)]];
+									double[] var72 = state.m[state.st[sample$var45][(timeStep$var66 - 1)]];
 									
 									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+									double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 									
 									// Add the probability of this sample task to the distribution accumulator.
 									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -10740,22 +10318,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var74 = cv$accumulator;
+				state.logProbability$var74 = cv$accumulator;
 			
 			// Update the variable probability
-			logProbability$st = (logProbability$st + cv$accumulator);
+			state.logProbability$st = (state.logProbability$st + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample76)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample76)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample76 = ((fixedFlag$sample76 && fixedFlag$sample33) && fixedFlag$sample57);
+			state.fixedProbFlag$sample76 = ((state.fixedFlag$sample76 && state.fixedFlag$sample33) && state.fixedFlag$sample57);
 		} else {
 			// Using cached values.
 			// 
@@ -10766,405 +10344,85 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-				for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
+			for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+				for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1)
 					// Record that the sample was reached.
 					cv$sampleReached = true;
 			}
-			double cv$sampleValue = logProbability$var74;
+			double cv$sampleValue = state.logProbability$var74;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$st = (logProbability$st + cv$accumulator);
+			state.logProbability$st = (state.logProbability$st + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample76)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// Constructor for v
-		{
-			v = new double[noStates];
-		}
-		
-		// If initialStateDistribution has not been set already allocate space.
-		if(!fixedFlag$sample20) {
-			// Constructor for initialStateDistribution
-			{
-				initialStateDistribution = new double[noStates];
-			}
-		}
-		
-		// If m has not been set already allocate space.
-		if(!fixedFlag$sample33) {
-			// Constructor for m
-			{
-				m = new double[noStates][];
-				for(int var32 = 0; var32 < noStates; var32 += 1)
-					m[var32] = new double[noStates];
-			}
-		}
-		
-		// If st has not been set already allocate space.
-		if((!fixedFlag$sample57 || !fixedFlag$sample76)) {
-			// Constructor for st
-			{
-				st = new int[length$metric.length][];
-				for(int sample$var45 = 0; sample$var45 < length$metric.length; sample$var45 += 1)
-					st[sample$var45] = new int[length$metric[sample$var45][0]];
-			}
-		}
-		
-		// Constructor for metric_g
-		{
-			metric_g = new double[length$metric.length][][];
-			for(int var90 = 0; var90 < length$metric.length; var90 += 1) {
-				double[][] subarray$0 = new double[length$metric[0].length][];
-				metric_g[var90] = subarray$0;
-			}
-			for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
-				for(int server = 0; server < length$metric[0].length; server += 1) {
-					double[][] subarray$1 = metric_g[sample$var196];
-					subarray$1[server] = new double[length$metric[sample$var196][0]];
-				}
-			}
-		}
-		
-		// Constructor for metric_valid_g
-		{
-			metric_valid_g = new boolean[length$metric.length][][];
-			for(int var103 = 0; var103 < length$metric.length; var103 += 1) {
-				boolean[][] subarray$0 = new boolean[length$metric[0].length][];
-				metric_valid_g[var103] = subarray$0;
-			}
-			for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
-				for(int server = 0; server < length$metric[0].length; server += 1) {
-					boolean[][] subarray$1 = metric_valid_g[sample$var196];
-					subarray$1[server] = new boolean[length$metric[sample$var196][0]];
-				}
-			}
-		}
-		
-		// If current_metric_mean has not been set already allocate space.
-		if(!fixedFlag$sample134) {
-			// Constructor for current_metric_mean
-			{
-				current_metric_mean = new double[length$metric[0].length][];
-				for(int var119 = 0; var119 < length$metric[0].length; var119 += 1)
-					current_metric_mean[var119] = new double[noStates];
-			}
-		}
-		
-		// If current_metric_var has not been set already allocate space.
-		if(!fixedFlag$sample162) {
-			// Constructor for current_metric_var
-			{
-				current_metric_var = new double[length$metric[0].length][];
-				for(int var146 = 0; var146 < length$metric[0].length; var146 += 1)
-					current_metric_var[var146] = new double[noStates];
-			}
-		}
-		
-		// If current_metric_valid_bias has not been set already allocate space.
-		if(!fixedFlag$sample190) {
-			// Constructor for current_metric_valid_bias
-			{
-				current_metric_valid_bias = new double[length$metric[0].length][];
-				for(int var173 = 0; var173 < length$metric[0].length; var173 += 1)
-					current_metric_valid_bias[var173] = new double[noStates];
-			}
-		}
-		
-		// Constructor for var245
-		{
-			var245 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][][];
-			for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
-				double[][] subarray$0 = new double[((((length$metric[0].length - 1) - 0) / 1) + 1)][];
-				var245[((sample$var196 - 0) / 1)] = subarray$0;
-				for(int server = 0; server < length$metric[0].length; server += 1)
-					subarray$0[((server - 0) / 1)] = new double[((((length$metric[sample$var196][0] - 1) - 0) / 1) + 1)];
-			}
-		}
-		
-		// Constructor for distribution$sample76
-		{
-			distribution$sample76 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][][];
-			for(int sample$var45 = 0; sample$var45 < length$metric.length; sample$var45 += 1) {
-				double[][] subarray$0 = new double[((((length$metric[sample$var45][0] - 1) - 1) / 1) + 1)][];
-				distribution$sample76[((sample$var45 - 0) / 1)] = subarray$0;
-				for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
-					subarray$0[((timeStep$var66 - 1) / 1)] = new double[noStates];
-			}
-		}
-		
-		// Constructor for distribution$sample57
-		{
-			distribution$sample57 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][];
-			for(int sample$var45 = 0; sample$var45 < length$metric.length; sample$var45 += 1)
-				distribution$sample57[((sample$var45 - 0) / 1)] = new double[noStates];
-		}
-		
-		// Constructor for constrainedFlag$sample190
-		{
-			constrainedFlag$sample190 = new boolean[((((length$metric[0].length - 1) - 0) / 1) + 1)][];
-			for(int var173 = 0; var173 < length$metric[0].length; var173 += 1)
-				constrainedFlag$sample190[((var173 - 0) / 1)] = new boolean[((((noStates - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample76
-		{
-			constrainedFlag$sample76 = new boolean[((((length$metric.length - 1) - 0) / 1) + 1)][];
-			for(int sample$var45 = 0; sample$var45 < length$metric.length; sample$var45 += 1)
-				constrainedFlag$sample76[((sample$var45 - 0) / 1)] = new boolean[((((length$metric[sample$var45][0] - 1) - 1) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample57
-		{
-			constrainedFlag$sample57 = new boolean[((((length$metric.length - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample134
-		{
-			constrainedFlag$sample134 = new boolean[((((length$metric[0].length - 1) - 0) / 1) + 1)][];
-			for(int var119 = 0; var119 < length$metric[0].length; var119 += 1)
-				constrainedFlag$sample134[((var119 - 0) / 1)] = new boolean[((((noStates - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample162
-		{
-			constrainedFlag$sample162 = new boolean[((((length$metric[0].length - 1) - 0) / 1) + 1)][];
-			for(int var146 = 0; var146 < length$metric[0].length; var146 += 1)
-				constrainedFlag$sample162[((var146 - 0) / 1)] = new boolean[((((noStates - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample33
-		{
-			constrainedFlag$sample33 = new boolean[((((noStates - 1) - 0) / 1) + 1)];
-		}
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var20$countGlobal
-		{
-			// Allocation of cv$var20$countGlobal for single threaded execution
-			cv$var20$countGlobal = new double[noStates];
-		}
-		
-		// Constructor for cv$var33$countGlobal
-		{
-			// Allocation of cv$var33$countGlobal for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				cv$var33$countGlobal = new double[cv$threadCount][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					cv$var33$countGlobal[cv$index] = new double[noStates];
-			}
-		}
-		
-		// Constructor for cv$distributionAccumulator$var73
-		{
-			// Variable to record the maximum value of Task Get 74. Initially set to the value
-			// of putTask 34.
-			int cv$var34$max = noStates;
-			
-			// Allocation of cv$distributionAccumulator$var73 for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				cv$distributionAccumulator$var73 = new double[cv$threadCount][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					cv$distributionAccumulator$var73[cv$index] = new double[cv$var34$max];
-			}
-		}
-		
-		// Constructor for cv$var55$stateProbabilityGlobal
-		{
-			// Allocation of cv$var55$stateProbabilityGlobal for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				cv$var55$stateProbabilityGlobal = new double[cv$threadCount][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					cv$var55$stateProbabilityGlobal[cv$index] = new double[noStates];
-			}
-		}
-		
-		// Constructor for guard$sample57gaussian255$global
-		{
-			// Calculate the largest index of sample that is possible and allocate an array to
-			// hold the guard for each of these.
-			int cv$max_sample$var196 = 0;
-			
-			// Calculate the largest index of server that is possible and allocate an array to
-			// hold the guard for each of these.
-			int cv$max_server = 0;
-			
-			// Calculate the largest index of timeStep that is possible and allocate an array
-			// to hold the guard for each of these.
-			int cv$max_timeStep$var226 = 0;
-			for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
-				for(int server = 0; server < length$metric[0].length; server += 1)
-					cv$max_timeStep$var226 = Math.max(cv$max_timeStep$var226, ((length$metric[sample$var196][0] - 0) / 1));
-				cv$max_server = Math.max(cv$max_server, ((length$metric[0].length - 0) / 1));
-			}
-			cv$max_sample$var196 = Math.max(cv$max_sample$var196, ((length$metric.length - 0) / 1));
-			
-			// Allocation of guard$sample57gaussian255$global for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				guard$sample57gaussian255$global = new boolean[cv$threadCount][][][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					guard$sample57gaussian255$global[cv$index] = new boolean[cv$max_sample$var196][cv$max_server][cv$max_timeStep$var226];
-			}
-		}
-		
-		// Constructor for cv$var74$stateProbabilityGlobal
-		{
-			// Variable to record the maximum value of Task Get 74. Initially set to the value
-			// of putTask 34.
-			int cv$var34$max = noStates;
-			
-			// Allocation of cv$var74$stateProbabilityGlobal for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				cv$var74$stateProbabilityGlobal = new double[cv$threadCount][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					cv$var74$stateProbabilityGlobal[cv$index] = new double[cv$var34$max];
-			}
-		}
-		
-		// Constructor for guard$sample76gaussian255$global
-		{
-			// Calculate the largest index of sample that is possible and allocate an array to
-			// hold the guard for each of these.
-			int cv$max_sample$var196 = 0;
-			
-			// Calculate the largest index of server that is possible and allocate an array to
-			// hold the guard for each of these.
-			int cv$max_server = 0;
-			
-			// Calculate the largest index of timeStep that is possible and allocate an array
-			// to hold the guard for each of these.
-			int cv$max_timeStep$var226 = 0;
-			for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
-				for(int server = 0; server < length$metric[0].length; server += 1)
-					cv$max_timeStep$var226 = Math.max(cv$max_timeStep$var226, ((length$metric[sample$var196][0] - 0) / 1));
-				cv$max_server = Math.max(cv$max_server, ((length$metric[0].length - 0) / 1));
-			}
-			cv$max_sample$var196 = Math.max(cv$max_sample$var196, ((length$metric.length - 0) / 1));
-			
-			// Allocation of guard$sample76gaussian255$global for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				guard$sample76gaussian255$global = new boolean[cv$threadCount][][][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					guard$sample76gaussian255$global[cv$index] = new boolean[cv$max_sample$var196][cv$max_server][cv$max_timeStep$var226];
-			}
+			if(state.fixedFlag$sample76)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!state.fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.noStates, state.initialStateDistribution);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noStates, 1,
+		parallelFor(state.RNG$, 0, state.noStates, 1,
 			(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1) {
-						double[] var33 = m[var32];
-						if(!fixedFlag$sample33)
-							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, var33);
+						double[] var33 = state.m[var32];
+						if(!state.fixedFlag$sample33)
+							DistributionSampling.sampleDirichlet(RNG$1, state.v, state.noStates, var33);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noSamples, 1,
+		parallelFor(state.RNG$, 0, state.noSamples, 1,
 			(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
-						int[] var52 = st[sample$var45];
-						if(!fixedFlag$sample57)
-							var52[0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution, noStates);
-						int[] var67 = st[sample$var45];
-						for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
-							if(!fixedFlag$sample76)
-								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
+						int[] var52 = state.st[sample$var45];
+						if(!state.fixedFlag$sample57)
+							var52[0] = DistributionSampling.sampleCategorical(RNG$1, state.initialStateDistribution, state.noStates);
+						int[] var67 = state.st[sample$var45];
+						for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
+							if(!state.fixedFlag$sample76)
+								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, state.m[state.st[sample$var45][(timeStep$var66 - 1)]], state.noStates);
 						}
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$var119, int forEnd$var119, int threadID$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var119 = forStart$var119; var119 < forEnd$var119; var119 += 1) {
-						double[] var120 = current_metric_mean[var119];
+						double[] var120 = state.current_metric_mean[var119];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var129 = forStart$var129; var129 < forEnd$var129; var129 += 1) {
-										if(!fixedFlag$sample134)
-											var120[var129] = (0.0 + (((double)max_metric - 0.0) * DistributionSampling.sampleUniform(RNG$2)));
+										if(!state.fixedFlag$sample134)
+											var120[var129] = (0.0 + (((double)state.max_metric - 0.0) * DistributionSampling.sampleUniform(RNG$2)));
 									}
 							}
 						);
@@ -11173,22 +10431,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$var146, int forEnd$var146, int threadID$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var146 = forStart$var146; var146 < forEnd$var146; var146 += 1) {
-						double[] var147 = current_metric_var[var146];
+						double[] var147 = state.current_metric_var[var146];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var156 = forStart$var156; var156 < forEnd$var156; var156 += 1) {
-										if(!fixedFlag$sample162)
+										if(!state.fixedFlag$sample162)
 											var147[var156] = DistributionSampling.sampleInverseGamma(RNG$2, 1.0, 1.0);
 									}
 							}
@@ -11198,22 +10456,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$var173, int forEnd$var173, int threadID$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var173 = forStart$var173; var173 < forEnd$var173; var173 += 1) {
-						double[] var174 = current_metric_valid_bias[var173];
+						double[] var174 = state.current_metric_valid_bias[var173];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var183 = forStart$var183; var183 < forEnd$var183; var183 += 1) {
-										if(!fixedFlag$sample190)
+										if(!state.fixedFlag$sample190)
 											var174[var183] = DistributionSampling.sampleBeta(RNG$2, 1.0, 1.0);
 									}
 							}
@@ -11223,7 +10481,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noSamples, 1,
+		parallelFor(state.RNG$, 0, state.noSamples, 1,
 			(int forStart$index$sample$var196, int forEnd$index$sample$var196, int threadID$index$sample$var196, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -11231,11 +10489,11 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 					for(int index$sample$var196 = forStart$index$sample$var196; index$sample$var196 < forEnd$index$sample$var196; index$sample$var196 += 1) {
 						int sample$var196 = index$sample$var196;
 						int threadID$sample$var196 = threadID$index$sample$var196;
-						boolean[][] var215 = metric_valid_g[sample$var196];
-						double[][] var211 = metric_g[sample$var196];
+						boolean[][] var215 = state.metric_valid_g[sample$var196];
+						double[][] var211 = state.metric_g[sample$var196];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noServers, 1,
+						parallelFor(RNG$1, 0, state.noServers, 1,
 							(int forStart$index$server, int forEnd$index$server, int threadID$index$server, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
@@ -11243,20 +10501,20 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 									for(int index$server = forStart$index$server; index$server < forEnd$index$server; index$server += 1) {
 										int server = index$server;
 										int threadID$server = threadID$index$server;
-										boolean[] metric_valid_inner = metric_valid_g[sample$var196][server];
+										boolean[] metric_valid_inner = state.metric_valid_g[sample$var196][server];
 										double[] metric_inner = var211[server];
 										
 										//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-										parallelFor(RNG$2, 0, length$metric[sample$var196][0], 1,
+										parallelFor(RNG$2, 0, state.length$metric[sample$var196][0], 1,
 											(int forStart$timeStep$var226, int forEnd$timeStep$var226, int threadID$timeStep$var226, org.sandwood.random.internal.Rng RNG$3) -> { 
 												
 													// Inner loop for running batches of iterations, each batch has its own random number
 													// generator.
 													for(int timeStep$var226 = forStart$timeStep$var226; timeStep$var226 < forEnd$timeStep$var226; timeStep$var226 += 1) {
-														metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
+														metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$3, state.current_metric_valid_bias[server][state.st[sample$var196][timeStep$var226]]);
 														if(metric_valid_inner[timeStep$var226]) {
-															var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = ((Math.sqrt(current_metric_var[server][st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$3)) + current_metric_mean[server][st[sample$var196][timeStep$var226]]);
-															metric_inner[timeStep$var226] = var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)];
+															state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = ((Math.sqrt(state.current_metric_var[server][state.st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$3)) + state.current_metric_mean[server][state.st[sample$var196][timeStep$var226]]);
+															metric_inner[timeStep$var226] = state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)];
 														}
 													}
 											}
@@ -11274,44 +10532,44 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!state.fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.noStates, state.initialStateDistribution);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noStates, 1,
+		parallelFor(state.RNG$, 0, state.noStates, 1,
 			(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1) {
-						double[] var33 = m[var32];
-						if(!fixedFlag$sample33)
-							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, var33);
+						double[] var33 = state.m[var32];
+						if(!state.fixedFlag$sample33)
+							DistributionSampling.sampleDirichlet(RNG$1, state.v, state.noStates, var33);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noSamples, 1,
+		parallelFor(state.RNG$, 0, state.noSamples, 1,
 			(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
 						// Create local copy of variable probabilities.
-						double[] cv$distribution$sample57 = distribution$sample57[((sample$var45 - 0) / 1)];
-						for(int index$var54 = 0; index$var54 < noStates; index$var54 += 1) {
+						double[] cv$distribution$sample57 = state.distribution$sample57[((sample$var45 - 0) / 1)];
+						for(int index$var54 = 0; index$var54 < state.noStates; index$var54 += 1) {
 							// Probability for this value
-							double cv$value = ((((((0.0 <= index$var54) && (index$var54 < noStates)) && (0 < noStates)) && (0.0 <= initialStateDistribution[index$var54])) && (initialStateDistribution[index$var54] <= 1.0))?initialStateDistribution[index$var54]:0.0);
-							if(!fixedFlag$sample57)
+							double cv$value = ((((((0.0 <= index$var54) && (index$var54 < state.noStates)) && (0 < state.noStates)) && (0.0 <= state.initialStateDistribution[index$var54])) && (state.initialStateDistribution[index$var54] <= 1.0))?state.initialStateDistribution[index$var54]:0.0);
+							if(!state.fixedFlag$sample57)
 								// Save the probability of each value
 								cv$distribution$sample57[index$var54] = cv$value;
 						}
-						for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+						for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 							// Create local copy of variable probabilities.
-							double[] cv$distribution$sample76 = distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)];
-							for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1) {
-								if(!fixedFlag$sample76)
+							double[] cv$distribution$sample76 = state.distribution$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)];
+							for(int index$var73 = 0; index$var73 < state.noStates; index$var73 += 1) {
+								if(!state.fixedFlag$sample76)
 									// Zero the probability of each value
 									cv$distribution$sample76[index$var73] = 0.0;
 							}
@@ -11319,20 +10577,20 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 							// Iterate through possible values for var73's arguments.
 							// 
 							// Enumerating the possible arguments for Categorical 73.
-							if(fixedFlag$sample57) {
+							if(state.fixedFlag$sample57) {
 								{
-									for(int index$sample$1_1 = 0; index$sample$1_1 < noSamples; index$sample$1_1 += 1) {
+									for(int index$sample$1_1 = 0; index$sample$1_1 < state.noSamples; index$sample$1_1 += 1) {
 										if((index$sample$1_1 == sample$var45)) {
 											if((0 == (timeStep$var66 - 1))) {
 												{
-													for(int var32 = 0; var32 < noStates; var32 += 1) {
-														if((var32 == st[sample$var45][(timeStep$var66 - 1)])) {
+													for(int var32 = 0; var32 < state.noStates; var32 += 1) {
+														if((var32 == state.st[sample$var45][(timeStep$var66 - 1)])) {
 															{
-																double[] var72 = m[st[sample$var45][(timeStep$var66 - 1)]];
-																for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1) {
-																	if(!fixedFlag$sample76)
+																double[] var72 = state.m[state.st[sample$var45][(timeStep$var66 - 1)]];
+																for(int index$var73 = 0; index$var73 < state.noStates; index$var73 += 1) {
+																	if(!state.fixedFlag$sample76)
 																		// Save the probability of each value
-																		cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] + (1.0 * ((((((0.0 <= index$var73) && (index$var73 < noStates)) && (0 < noStates)) && (0.0 <= var72[index$var73])) && (var72[index$var73] <= 1.0))?var72[index$var73]:0.0)));
+																		cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] + (1.0 * ((((((0.0 <= index$var73) && (index$var73 < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[index$var73])) && (var72[index$var73] <= 1.0))?var72[index$var73]:0.0)));
 																}
 															}
 														}
@@ -11343,27 +10601,27 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 									}
 								}
 							} else {
-								for(int index$sample$2 = 0; index$sample$2 < noSamples; index$sample$2 += 1) {
+								for(int index$sample$2 = 0; index$sample$2 < state.noSamples; index$sample$2 += 1) {
 									if(true) {
 										// Enumerating the possible outputs of Categorical 54.
-										for(int index$sample57$3 = 0; index$sample57$3 < noStates; index$sample57$3 += 1) {
+										for(int index$sample57$3 = 0; index$sample57$3 < state.noStates; index$sample57$3 += 1) {
 											int distributionTempVariable$var55$5 = index$sample57$3;
 											
 											// Update the probability of sampling this value from the distribution value.
-											double cv$probabilitySample57Value4 = (1.0 * distribution$sample57[((index$sample$2 - 0) / 1)][index$sample57$3]);
+											double cv$probabilitySample57Value4 = (1.0 * state.distribution$sample57[((index$sample$2 - 0) / 1)][index$sample57$3]);
 											{
 												int traceTempVariable$var71$6_1 = distributionTempVariable$var55$5;
 												if((index$sample$2 == sample$var45)) {
 													if((0 == (timeStep$var66 - 1))) {
 														{
-															for(int var32 = 0; var32 < noStates; var32 += 1) {
+															for(int var32 = 0; var32 < state.noStates; var32 += 1) {
 																if((var32 == traceTempVariable$var71$6_1)) {
 																	{
-																		double[] var72 = m[traceTempVariable$var71$6_1];
-																		for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1) {
-																			if(!fixedFlag$sample76)
+																		double[] var72 = state.m[traceTempVariable$var71$6_1];
+																		for(int index$var73 = 0; index$var73 < state.noStates; index$var73 += 1) {
+																			if(!state.fixedFlag$sample76)
 																				// Save the probability of each value
-																				cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] + (cv$probabilitySample57Value4 * ((((((0.0 <= index$var73) && (index$var73 < noStates)) && (0 < noStates)) && (0.0 <= var72[index$var73])) && (var72[index$var73] <= 1.0))?var72[index$var73]:0.0)));
+																				cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] + (cv$probabilitySample57Value4 * ((((((0.0 <= index$var73) && (index$var73 < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[index$var73])) && (var72[index$var73] <= 1.0))?var72[index$var73]:0.0)));
 																		}
 																	}
 																}
@@ -11378,21 +10636,21 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 							}
 							
 							// Enumerating the possible arguments for Categorical 73.
-							if(fixedFlag$sample76) {
+							if(state.fixedFlag$sample76) {
 								{
-									for(int index$sample$9_1 = 0; index$sample$9_1 < noSamples; index$sample$9_1 += 1) {
-										for(int index$timeStep$9_2 = 1; index$timeStep$9_2 < length$metric[index$sample$9_1][0]; index$timeStep$9_2 += 1) {
+									for(int index$sample$9_1 = 0; index$sample$9_1 < state.noSamples; index$sample$9_1 += 1) {
+										for(int index$timeStep$9_2 = 1; index$timeStep$9_2 < state.length$metric[index$sample$9_1][0]; index$timeStep$9_2 += 1) {
 											if((index$sample$9_1 == sample$var45)) {
 												if((index$timeStep$9_2 == (timeStep$var66 - 1))) {
 													{
-														for(int var32 = 0; var32 < noStates; var32 += 1) {
-															if((var32 == st[sample$var45][(timeStep$var66 - 1)])) {
+														for(int var32 = 0; var32 < state.noStates; var32 += 1) {
+															if((var32 == state.st[sample$var45][(timeStep$var66 - 1)])) {
 																{
-																	double[] var72 = m[st[sample$var45][(timeStep$var66 - 1)]];
-																	for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1) {
-																		if(!fixedFlag$sample76)
+																	double[] var72 = state.m[state.st[sample$var45][(timeStep$var66 - 1)]];
+																	for(int index$var73 = 0; index$var73 < state.noStates; index$var73 += 1) {
+																		if(!state.fixedFlag$sample76)
 																			// Save the probability of each value
-																			cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] + (1.0 * ((((((0.0 <= index$var73) && (index$var73 < noStates)) && (0 < noStates)) && (0.0 <= var72[index$var73])) && (var72[index$var73] <= 1.0))?var72[index$var73]:0.0)));
+																			cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] + (1.0 * ((((((0.0 <= index$var73) && (index$var73 < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[index$var73])) && (var72[index$var73] <= 1.0))?var72[index$var73]:0.0)));
 																	}
 																}
 															}
@@ -11404,28 +10662,28 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 									}
 								}
 							} else {
-								for(int index$sample$10 = 0; index$sample$10 < noSamples; index$sample$10 += 1) {
-									for(int index$timeStep$11 = 1; index$timeStep$11 < length$metric[index$sample$10][0]; index$timeStep$11 += 1) {
+								for(int index$sample$10 = 0; index$sample$10 < state.noSamples; index$sample$10 += 1) {
+									for(int index$timeStep$11 = 1; index$timeStep$11 < state.length$metric[index$sample$10][0]; index$timeStep$11 += 1) {
 										if(true) {
 											// Enumerating the possible outputs of Categorical 73.
-											for(int index$sample76$12 = 0; index$sample76$12 < noStates; index$sample76$12 += 1) {
+											for(int index$sample76$12 = 0; index$sample76$12 < state.noStates; index$sample76$12 += 1) {
 												int distributionTempVariable$var74$14 = index$sample76$12;
 												
 												// Update the probability of sampling this value from the distribution value.
-												double cv$probabilitySample76Value13 = (1.0 * distribution$sample76[((index$sample$10 - 0) / 1)][((index$timeStep$11 - 1) / 1)][index$sample76$12]);
+												double cv$probabilitySample76Value13 = (1.0 * state.distribution$sample76[((index$sample$10 - 0) / 1)][((index$timeStep$11 - 1) / 1)][index$sample76$12]);
 												{
 													int traceTempVariable$var71$15_1 = distributionTempVariable$var74$14;
 													if((index$sample$10 == sample$var45)) {
 														if((index$timeStep$11 == (timeStep$var66 - 1))) {
 															{
-																for(int var32 = 0; var32 < noStates; var32 += 1) {
+																for(int var32 = 0; var32 < state.noStates; var32 += 1) {
 																	if((var32 == traceTempVariable$var71$15_1)) {
 																		{
-																			double[] var72 = m[traceTempVariable$var71$15_1];
-																			for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1) {
-																				if(!fixedFlag$sample76)
+																			double[] var72 = state.m[traceTempVariable$var71$15_1];
+																			for(int index$var73 = 0; index$var73 < state.noStates; index$var73 += 1) {
+																				if(!state.fixedFlag$sample76)
 																					// Save the probability of each value
-																					cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] + (cv$probabilitySample76Value13 * ((((((0.0 <= index$var73) && (index$var73 < noStates)) && (0 < noStates)) && (0.0 <= var72[index$var73])) && (var72[index$var73] <= 1.0))?var72[index$var73]:0.0)));
+																					cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] + (cv$probabilitySample76Value13 * ((((((0.0 <= index$var73) && (index$var73 < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[index$var73])) && (var72[index$var73] <= 1.0))?var72[index$var73]:0.0)));
 																			}
 																		}
 																	}
@@ -11442,13 +10700,13 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 							
 							// Sum the values in the array
 							double cv$var73$sum = 0.0;
-							for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1) {
-								if(!fixedFlag$sample76)
+							for(int index$var73 = 0; index$var73 < state.noStates; index$var73 += 1) {
+								if(!state.fixedFlag$sample76)
 									// sum the probability of each value
 									cv$var73$sum = (cv$var73$sum + cv$distribution$sample76[index$var73]);
 							}
-							for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1) {
-								if(!fixedFlag$sample76)
+							for(int index$var73 = 0; index$var73 < state.noStates; index$var73 += 1) {
+								if(!state.fixedFlag$sample76)
 									// Normalise the probability of each value
 									cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] / cv$var73$sum);
 							}
@@ -11458,23 +10716,23 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$var119, int forEnd$var119, int threadID$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var119 = forStart$var119; var119 < forEnd$var119; var119 += 1) {
-						double[] var120 = current_metric_mean[var119];
+						double[] var120 = state.current_metric_mean[var119];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var129 = forStart$var129; var129 < forEnd$var129; var129 += 1) {
-										if(!fixedFlag$sample134)
-											var120[var129] = (0.0 + (((double)max_metric - 0.0) * DistributionSampling.sampleUniform(RNG$2)));
+										if(!state.fixedFlag$sample134)
+											var120[var129] = (0.0 + (((double)state.max_metric - 0.0) * DistributionSampling.sampleUniform(RNG$2)));
 									}
 							}
 						);
@@ -11483,22 +10741,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$var146, int forEnd$var146, int threadID$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var146 = forStart$var146; var146 < forEnd$var146; var146 += 1) {
-						double[] var147 = current_metric_var[var146];
+						double[] var147 = state.current_metric_var[var146];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var156 = forStart$var156; var156 < forEnd$var156; var156 += 1) {
-										if(!fixedFlag$sample162)
+										if(!state.fixedFlag$sample162)
 											var147[var156] = DistributionSampling.sampleInverseGamma(RNG$2, 1.0, 1.0);
 									}
 							}
@@ -11508,22 +10766,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$var173, int forEnd$var173, int threadID$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var173 = forStart$var173; var173 < forEnd$var173; var173 += 1) {
-						double[] var174 = current_metric_valid_bias[var173];
+						double[] var174 = state.current_metric_valid_bias[var173];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var183 = forStart$var183; var183 < forEnd$var183; var183 += 1) {
-										if(!fixedFlag$sample190)
+										if(!state.fixedFlag$sample190)
 											var174[var183] = DistributionSampling.sampleBeta(RNG$2, 1.0, 1.0);
 									}
 							}
@@ -11537,60 +10795,60 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!state.fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.noStates, state.initialStateDistribution);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noStates, 1,
+		parallelFor(state.RNG$, 0, state.noStates, 1,
 			(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1) {
-						double[] var33 = m[var32];
-						if(!fixedFlag$sample33)
-							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, var33);
+						double[] var33 = state.m[var32];
+						if(!state.fixedFlag$sample33)
+							DistributionSampling.sampleDirichlet(RNG$1, state.v, state.noStates, var33);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noSamples, 1,
+		parallelFor(state.RNG$, 0, state.noSamples, 1,
 			(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
-						int[] var52 = st[sample$var45];
-						if(!fixedFlag$sample57)
-							var52[0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution, noStates);
-						int[] var67 = st[sample$var45];
-						for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
-							if(!fixedFlag$sample76)
-								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
+						int[] var52 = state.st[sample$var45];
+						if(!state.fixedFlag$sample57)
+							var52[0] = DistributionSampling.sampleCategorical(RNG$1, state.initialStateDistribution, state.noStates);
+						int[] var67 = state.st[sample$var45];
+						for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
+							if(!state.fixedFlag$sample76)
+								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, state.m[state.st[sample$var45][(timeStep$var66 - 1)]], state.noStates);
 						}
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$var119, int forEnd$var119, int threadID$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var119 = forStart$var119; var119 < forEnd$var119; var119 += 1) {
-						double[] var120 = current_metric_mean[var119];
+						double[] var120 = state.current_metric_mean[var119];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var129 = forStart$var129; var129 < forEnd$var129; var129 += 1) {
-										if(!fixedFlag$sample134)
-											var120[var129] = (0.0 + (((double)max_metric - 0.0) * DistributionSampling.sampleUniform(RNG$2)));
+										if(!state.fixedFlag$sample134)
+											var120[var129] = (0.0 + (((double)state.max_metric - 0.0) * DistributionSampling.sampleUniform(RNG$2)));
 									}
 							}
 						);
@@ -11599,22 +10857,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$var146, int forEnd$var146, int threadID$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var146 = forStart$var146; var146 < forEnd$var146; var146 += 1) {
-						double[] var147 = current_metric_var[var146];
+						double[] var147 = state.current_metric_var[var146];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var156 = forStart$var156; var156 < forEnd$var156; var156 += 1) {
-										if(!fixedFlag$sample162)
+										if(!state.fixedFlag$sample162)
 											var147[var156] = DistributionSampling.sampleInverseGamma(RNG$2, 1.0, 1.0);
 									}
 							}
@@ -11624,22 +10882,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$var173, int forEnd$var173, int threadID$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var173 = forStart$var173; var173 < forEnd$var173; var173 += 1) {
-						double[] var174 = current_metric_valid_bias[var173];
+						double[] var174 = state.current_metric_valid_bias[var173];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var183 = forStart$var183; var183 < forEnd$var183; var183 += 1) {
-										if(!fixedFlag$sample190)
+										if(!state.fixedFlag$sample190)
 											var174[var183] = DistributionSampling.sampleBeta(RNG$2, 1.0, 1.0);
 									}
 							}
@@ -11649,7 +10907,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noSamples, 1,
+		parallelFor(state.RNG$, 0, state.noSamples, 1,
 			(int forStart$index$sample$var196, int forEnd$index$sample$var196, int threadID$index$sample$var196, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -11657,11 +10915,11 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 					for(int index$sample$var196 = forStart$index$sample$var196; index$sample$var196 < forEnd$index$sample$var196; index$sample$var196 += 1) {
 						int sample$var196 = index$sample$var196;
 						int threadID$sample$var196 = threadID$index$sample$var196;
-						boolean[][] var215 = metric_valid_g[sample$var196];
-						double[][] var211 = metric_g[sample$var196];
+						boolean[][] var215 = state.metric_valid_g[sample$var196];
+						double[][] var211 = state.metric_g[sample$var196];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noServers, 1,
+						parallelFor(RNG$1, 0, state.noServers, 1,
 							(int forStart$index$server, int forEnd$index$server, int threadID$index$server, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
@@ -11669,20 +10927,20 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 									for(int index$server = forStart$index$server; index$server < forEnd$index$server; index$server += 1) {
 										int server = index$server;
 										int threadID$server = threadID$index$server;
-										boolean[] metric_valid_inner = metric_valid_g[sample$var196][server];
+										boolean[] metric_valid_inner = state.metric_valid_g[sample$var196][server];
 										double[] metric_inner = var211[server];
 										
 										//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-										parallelFor(RNG$2, 0, length$metric[sample$var196][0], 1,
+										parallelFor(RNG$2, 0, state.length$metric[sample$var196][0], 1,
 											(int forStart$timeStep$var226, int forEnd$timeStep$var226, int threadID$timeStep$var226, org.sandwood.random.internal.Rng RNG$3) -> { 
 												
 													// Inner loop for running batches of iterations, each batch has its own random number
 													// generator.
 													for(int timeStep$var226 = forStart$timeStep$var226; timeStep$var226 < forEnd$timeStep$var226; timeStep$var226 += 1) {
-														metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
+														metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$3, state.current_metric_valid_bias[server][state.st[sample$var196][timeStep$var226]]);
 														if(metric_valid_inner[timeStep$var226]) {
-															var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = ((Math.sqrt(current_metric_var[server][st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$3)) + current_metric_mean[server][st[sample$var196][timeStep$var226]]);
-															metric_inner[timeStep$var226] = var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)];
+															state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = ((Math.sqrt(state.current_metric_var[server][state.st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$3)) + state.current_metric_mean[server][state.st[sample$var196][timeStep$var226]]);
+															metric_inner[timeStep$var226] = state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)];
 														}
 													}
 											}
@@ -11699,60 +10957,60 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!state.fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.noStates, state.initialStateDistribution);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noStates, 1,
+		parallelFor(state.RNG$, 0, state.noStates, 1,
 			(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1) {
-						double[] var33 = m[var32];
-						if(!fixedFlag$sample33)
-							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, var33);
+						double[] var33 = state.m[var32];
+						if(!state.fixedFlag$sample33)
+							DistributionSampling.sampleDirichlet(RNG$1, state.v, state.noStates, var33);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noSamples, 1,
+		parallelFor(state.RNG$, 0, state.noSamples, 1,
 			(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
-						int[] var52 = st[sample$var45];
-						if(!fixedFlag$sample57)
-							var52[0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution, noStates);
-						int[] var67 = st[sample$var45];
-						for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
-							if(!fixedFlag$sample76)
-								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
+						int[] var52 = state.st[sample$var45];
+						if(!state.fixedFlag$sample57)
+							var52[0] = DistributionSampling.sampleCategorical(RNG$1, state.initialStateDistribution, state.noStates);
+						int[] var67 = state.st[sample$var45];
+						for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
+							if(!state.fixedFlag$sample76)
+								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, state.m[state.st[sample$var45][(timeStep$var66 - 1)]], state.noStates);
 						}
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$var119, int forEnd$var119, int threadID$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var119 = forStart$var119; var119 < forEnd$var119; var119 += 1) {
-						double[] var120 = current_metric_mean[var119];
+						double[] var120 = state.current_metric_mean[var119];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var129 = forStart$var129; var129 < forEnd$var129; var129 += 1) {
-										if(!fixedFlag$sample134)
-											var120[var129] = (0.0 + (((double)max_metric - 0.0) * DistributionSampling.sampleUniform(RNG$2)));
+										if(!state.fixedFlag$sample134)
+											var120[var129] = (0.0 + (((double)state.max_metric - 0.0) * DistributionSampling.sampleUniform(RNG$2)));
 									}
 							}
 						);
@@ -11761,22 +11019,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$var146, int forEnd$var146, int threadID$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var146 = forStart$var146; var146 < forEnd$var146; var146 += 1) {
-						double[] var147 = current_metric_var[var146];
+						double[] var147 = state.current_metric_var[var146];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var156 = forStart$var156; var156 < forEnd$var156; var156 += 1) {
-										if(!fixedFlag$sample162)
+										if(!state.fixedFlag$sample162)
 											var147[var156] = DistributionSampling.sampleInverseGamma(RNG$2, 1.0, 1.0);
 									}
 							}
@@ -11786,22 +11044,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$var173, int forEnd$var173, int threadID$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var173 = forStart$var173; var173 < forEnd$var173; var173 += 1) {
-						double[] var174 = current_metric_valid_bias[var173];
+						double[] var174 = state.current_metric_valid_bias[var173];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var183 = forStart$var183; var183 < forEnd$var183; var183 += 1) {
-										if(!fixedFlag$sample190)
+										if(!state.fixedFlag$sample190)
 											var174[var183] = DistributionSampling.sampleBeta(RNG$2, 1.0, 1.0);
 									}
 							}
@@ -11816,60 +11074,60 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!state.fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.noStates, state.initialStateDistribution);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noStates, 1,
+		parallelFor(state.RNG$, 0, state.noStates, 1,
 			(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1) {
-						double[] var33 = m[var32];
-						if(!fixedFlag$sample33)
-							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, var33);
+						double[] var33 = state.m[var32];
+						if(!state.fixedFlag$sample33)
+							DistributionSampling.sampleDirichlet(RNG$1, state.v, state.noStates, var33);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noSamples, 1,
+		parallelFor(state.RNG$, 0, state.noSamples, 1,
 			(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
-						int[] var52 = st[sample$var45];
-						if(!fixedFlag$sample57)
-							var52[0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution, noStates);
-						int[] var67 = st[sample$var45];
-						for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
-							if(!fixedFlag$sample76)
-								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
+						int[] var52 = state.st[sample$var45];
+						if(!state.fixedFlag$sample57)
+							var52[0] = DistributionSampling.sampleCategorical(RNG$1, state.initialStateDistribution, state.noStates);
+						int[] var67 = state.st[sample$var45];
+						for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
+							if(!state.fixedFlag$sample76)
+								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, state.m[state.st[sample$var45][(timeStep$var66 - 1)]], state.noStates);
 						}
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$var119, int forEnd$var119, int threadID$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var119 = forStart$var119; var119 < forEnd$var119; var119 += 1) {
-						double[] var120 = current_metric_mean[var119];
+						double[] var120 = state.current_metric_mean[var119];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var129 = forStart$var129; var129 < forEnd$var129; var129 += 1) {
-										if(!fixedFlag$sample134)
-											var120[var129] = (0.0 + (((double)max_metric - 0.0) * DistributionSampling.sampleUniform(RNG$2)));
+										if(!state.fixedFlag$sample134)
+											var120[var129] = (0.0 + (((double)state.max_metric - 0.0) * DistributionSampling.sampleUniform(RNG$2)));
 									}
 							}
 						);
@@ -11878,22 +11136,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$var146, int forEnd$var146, int threadID$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var146 = forStart$var146; var146 < forEnd$var146; var146 += 1) {
-						double[] var147 = current_metric_var[var146];
+						double[] var147 = state.current_metric_var[var146];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var156 = forStart$var156; var156 < forEnd$var156; var156 += 1) {
-										if(!fixedFlag$sample162)
+										if(!state.fixedFlag$sample162)
 											var147[var156] = DistributionSampling.sampleInverseGamma(RNG$2, 1.0, 1.0);
 									}
 							}
@@ -11903,22 +11161,22 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$var173, int forEnd$var173, int threadID$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var173 = forStart$var173; var173 < forEnd$var173; var173 += 1) {
-						double[] var174 = current_metric_valid_bias[var173];
+						double[] var174 = state.current_metric_valid_bias[var173];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var183 = forStart$var183; var183 < forEnd$var183; var183 += 1) {
-										if(!fixedFlag$sample190)
+										if(!state.fixedFlag$sample190)
 											var174[var183] = DistributionSampling.sampleBeta(RNG$2, 1.0, 1.0);
 									}
 							}
@@ -11932,34 +11190,34 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample20)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample20)
 				inferSample20();
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noStates, 1,
+			parallelFor(state.RNG$, 0, state.noStates, 1,
 				(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1) {
-							if(!fixedFlag$sample33)
+							if(!state.fixedFlag$sample33)
 								inferSample33(var32, threadID$var32, RNG$1);
 						}
 				}
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noSamples, 1,
+			parallelFor(state.RNG$, 0, state.noSamples, 1,
 				(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
-							if(!fixedFlag$sample57)
+							if(!state.fixedFlag$sample57)
 								inferSample57(sample$var45, threadID$sample$var45, RNG$1);
-							for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
-								if(!fixedFlag$sample76)
+							for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
+								if(!state.fixedFlag$sample76)
 									inferSample76(sample$var45, timeStep$var66, threadID$sample$var45, RNG$1);
 							}
 						}
@@ -11967,7 +11225,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$index$var119, int forEnd$index$var119, int threadID$index$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
@@ -11977,13 +11235,13 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 							int threadID$var119 = threadID$index$var119;
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int var129 = forStart$var129; var129 < forEnd$var129; var129 += 1) {
-											if(!fixedFlag$sample134)
+											if(!state.fixedFlag$sample134)
 												inferSample134(var119, var129, threadID$var129, RNG$2);
 										}
 								}
@@ -11993,7 +11251,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$index$var146, int forEnd$index$var146, int threadID$index$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
@@ -12003,13 +11261,13 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 							int threadID$var146 = threadID$index$var146;
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int var156 = forStart$var156; var156 < forEnd$var156; var156 += 1) {
-											if(!fixedFlag$sample162)
+											if(!state.fixedFlag$sample162)
 												inferSample162(var146, var156, threadID$var156, RNG$2);
 										}
 								}
@@ -12019,7 +11277,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$index$var173, int forEnd$index$var173, int threadID$index$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
@@ -12029,13 +11287,13 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 							int threadID$var173 = threadID$index$var173;
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int var183 = forStart$var183; var183 < forEnd$var183; var183 += 1) {
-											if(!fixedFlag$sample190)
+											if(!state.fixedFlag$sample190)
 												inferSample190(var173, var183, threadID$var183, RNG$2);
 										}
 								}
@@ -12047,7 +11305,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		// Infer the samples in reverse chronological order.
 		else {
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$index$var173, int forEnd$index$var173, int threadID$index$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
@@ -12057,13 +11315,13 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 							int threadID$var173 = threadID$index$var173;
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int var183 = forStart$var183; var183 < forEnd$var183; var183 += 1) {
-											if(!fixedFlag$sample190)
+											if(!state.fixedFlag$sample190)
 												inferSample190(var173, var183, threadID$var183, RNG$2);
 										}
 								}
@@ -12073,7 +11331,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$index$var146, int forEnd$index$var146, int threadID$index$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
@@ -12083,13 +11341,13 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 							int threadID$var146 = threadID$index$var146;
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int var156 = forStart$var156; var156 < forEnd$var156; var156 += 1) {
-											if(!fixedFlag$sample162)
+											if(!state.fixedFlag$sample162)
 												inferSample162(var146, var156, threadID$var156, RNG$2);
 										}
 								}
@@ -12099,7 +11357,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$index$var119, int forEnd$index$var119, int threadID$index$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
@@ -12109,13 +11367,13 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 							int threadID$var119 = threadID$index$var119;
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int var129 = forStart$var129; var129 < forEnd$var129; var129 += 1) {
-											if(!fixedFlag$sample134)
+											if(!state.fixedFlag$sample134)
 												inferSample134(var119, var129, threadID$var129, RNG$2);
 										}
 								}
@@ -12125,67 +11383,67 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noSamples, 1,
+			parallelFor(state.RNG$, 0, state.noSamples, 1,
 				(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
-							for(int timeStep$var66 = (length$metric[sample$var45][0] - ((((length$metric[sample$var45][0] - 1) - 1) % 1) + 1)); timeStep$var66 >= ((1 - 1) + 1); timeStep$var66 -= 1) {
-								if(!fixedFlag$sample76)
+							for(int timeStep$var66 = (state.length$metric[sample$var45][0] - ((((state.length$metric[sample$var45][0] - 1) - 1) % 1) + 1)); timeStep$var66 >= ((1 - 1) + 1); timeStep$var66 -= 1) {
+								if(!state.fixedFlag$sample76)
 									inferSample76(sample$var45, timeStep$var66, threadID$sample$var45, RNG$1);
 							}
-							if(!fixedFlag$sample57)
+							if(!state.fixedFlag$sample57)
 								inferSample57(sample$var45, threadID$sample$var45, RNG$1);
 						}
 				}
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noStates, 1,
+			parallelFor(state.RNG$, 0, state.noStates, 1,
 				(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1) {
-							if(!fixedFlag$sample33)
+							if(!state.fixedFlag$sample33)
 								inferSample33(var32, threadID$var32, RNG$1);
 						}
 				}
 			);
-			if(!fixedFlag$sample20)
+			if(!state.fixedFlag$sample20)
 				inferSample20();
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample20)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample20)
 			drawValueSample20();
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noStates, 1,
+		parallelFor(state.RNG$, 0, state.noStates, 1,
 			(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1) {
-						if(!constrainedFlag$sample33[((var32 - 0) / 1)])
+						if(!state.constrainedFlag$sample33[((var32 - 0) / 1)])
 							drawValueSample33(var32, threadID$var32, RNG$1);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noSamples, 1,
+		parallelFor(state.RNG$, 0, state.noSamples, 1,
 			(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
-						if(!constrainedFlag$sample57[((sample$var45 - 0) / 1)])
+						if(!state.constrainedFlag$sample57[((sample$var45 - 0) / 1)])
 							drawValueSample57(sample$var45, threadID$sample$var45, RNG$1);
-						for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
-							if(!constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)])
+						for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
+							if(!state.constrainedFlag$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)])
 								drawValueSample76(sample$var45, timeStep$var66, threadID$sample$var45, RNG$1);
 						}
 					}
@@ -12193,7 +11451,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$index$var119, int forEnd$index$var119, int threadID$index$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -12203,13 +11461,13 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						int threadID$var119 = threadID$index$var119;
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var129 = forStart$var129; var129 < forEnd$var129; var129 += 1) {
-										if(!constrainedFlag$sample134[((var119 - 0) / 1)][((var129 - 0) / 1)])
+										if(!state.constrainedFlag$sample134[((var119 - 0) / 1)][((var129 - 0) / 1)])
 											drawValueSample134(var119, var129, threadID$var129, RNG$2);
 									}
 							}
@@ -12219,7 +11477,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$index$var146, int forEnd$index$var146, int threadID$index$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -12229,13 +11487,13 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						int threadID$var146 = threadID$index$var146;
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var156 = forStart$var156; var156 < forEnd$var156; var156 += 1) {
-										if(!constrainedFlag$sample162[((var146 - 0) / 1)][((var156 - 0) / 1)])
+										if(!state.constrainedFlag$sample162[((var146 - 0) / 1)][((var156 - 0) / 1)])
 											drawValueSample162(var146, var156, threadID$var156, RNG$2);
 									}
 							}
@@ -12245,7 +11503,7 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$index$var173, int forEnd$index$var173, int threadID$index$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -12255,13 +11513,13 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 						int threadID$var173 = threadID$index$var173;
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var183 = forStart$var183; var183 < forEnd$var183; var183 += 1) {
-										if(!constrainedFlag$sample190[((var173 - 0) / 1)][((var183 - 0) / 1)])
+										if(!state.constrainedFlag$sample190[((var173 - 0) / 1)][((var183 - 0) / 1)])
 											drawValueSample190(var173, var183, threadID$var183, RNG$2);
 									}
 							}
@@ -12279,80 +11537,80 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample20)
-			logProbability$initialStateDistribution = Double.NaN;
-		logProbability$m = 0.0;
-		if(!fixedProbFlag$sample33)
-			logProbability$var33 = Double.NaN;
-		logProbability$st = 0.0;
-		if(!fixedProbFlag$sample57)
-			logProbability$var55 = Double.NaN;
-		if(!fixedProbFlag$sample76)
-			logProbability$var74 = Double.NaN;
-		logProbability$current_metric_mean = 0.0;
-		if(!fixedProbFlag$sample134)
-			logProbability$var130 = Double.NaN;
-		logProbability$current_metric_var = 0.0;
-		if(!fixedProbFlag$sample162)
-			logProbability$var157 = Double.NaN;
-		logProbability$current_metric_valid_bias = 0.0;
-		if(!fixedProbFlag$sample190)
-			logProbability$var184 = Double.NaN;
-		logProbability$metric_valid_inner = 0.0;
-		logProbability$metric_valid_g = 0.0;
-		if(!fixedProbFlag$sample241)
-			logProbability$var232 = Double.NaN;
-		logProbability$metric_g = 0.0;
-		if(!fixedProbFlag$sample256)
-			logProbability$var245 = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample20)
+			state.logProbability$initialStateDistribution = Double.NaN;
+		state.logProbability$m = 0.0;
+		if(!state.fixedProbFlag$sample33)
+			state.logProbability$var33 = Double.NaN;
+		state.logProbability$st = 0.0;
+		if(!state.fixedProbFlag$sample57)
+			state.logProbability$var55 = Double.NaN;
+		if(!state.fixedProbFlag$sample76)
+			state.logProbability$var74 = Double.NaN;
+		state.logProbability$current_metric_mean = 0.0;
+		if(!state.fixedProbFlag$sample134)
+			state.logProbability$var130 = Double.NaN;
+		state.logProbability$current_metric_var = 0.0;
+		if(!state.fixedProbFlag$sample162)
+			state.logProbability$var157 = Double.NaN;
+		state.logProbability$current_metric_valid_bias = 0.0;
+		if(!state.fixedProbFlag$sample190)
+			state.logProbability$var184 = Double.NaN;
+		state.logProbability$metric_valid_inner = 0.0;
+		state.logProbability$metric_valid_g = 0.0;
+		if(!state.fixedProbFlag$sample241)
+			state.logProbability$var232 = Double.NaN;
+		state.logProbability$metric_g = 0.0;
+		if(!state.fixedProbFlag$sample256)
+			state.logProbability$var245 = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		noSamples = length$metric.length;
-		for(int var16 = 0; var16 < noStates; var16 += 1)
-			v[var16] = 0.1;
-		noServers = length$metric[0].length;
+		state.noSamples = state.length$metric.length;
+		for(int var16 = 0; var16 < state.noStates; var16 += 1)
+			state.v[var16] = 0.1;
+		state.noServers = state.length$metric[0].length;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample190$1 = 0; index$constrainedFlag$sample190$1 < constrainedFlag$sample190.length; index$constrainedFlag$sample190$1 += 1) {
-			boolean[] cv$constrainedFlag$sample190$1 = constrainedFlag$sample190[index$constrainedFlag$sample190$1];
+		for(int index$constrainedFlag$sample190$1 = 0; index$constrainedFlag$sample190$1 < state.constrainedFlag$sample190.length; index$constrainedFlag$sample190$1 += 1) {
+			boolean[] cv$constrainedFlag$sample190$1 = state.constrainedFlag$sample190[index$constrainedFlag$sample190$1];
 			for(int index$constrainedFlag$sample190$2 = 0; index$constrainedFlag$sample190$2 < cv$constrainedFlag$sample190$1.length; index$constrainedFlag$sample190$2 += 1)
 				cv$constrainedFlag$sample190$1[index$constrainedFlag$sample190$2] = true;
 		}
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample76$1 = 0; index$constrainedFlag$sample76$1 < constrainedFlag$sample76.length; index$constrainedFlag$sample76$1 += 1) {
-			boolean[] cv$constrainedFlag$sample76$1 = constrainedFlag$sample76[index$constrainedFlag$sample76$1];
+		for(int index$constrainedFlag$sample76$1 = 0; index$constrainedFlag$sample76$1 < state.constrainedFlag$sample76.length; index$constrainedFlag$sample76$1 += 1) {
+			boolean[] cv$constrainedFlag$sample76$1 = state.constrainedFlag$sample76[index$constrainedFlag$sample76$1];
 			for(int index$constrainedFlag$sample76$2 = 0; index$constrainedFlag$sample76$2 < cv$constrainedFlag$sample76$1.length; index$constrainedFlag$sample76$2 += 1)
 				cv$constrainedFlag$sample76$1[index$constrainedFlag$sample76$2] = true;
 		}
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample57$1 = 0; index$constrainedFlag$sample57$1 < constrainedFlag$sample57.length; index$constrainedFlag$sample57$1 += 1)
-			constrainedFlag$sample57[index$constrainedFlag$sample57$1] = true;
+		for(int index$constrainedFlag$sample57$1 = 0; index$constrainedFlag$sample57$1 < state.constrainedFlag$sample57.length; index$constrainedFlag$sample57$1 += 1)
+			state.constrainedFlag$sample57[index$constrainedFlag$sample57$1] = true;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample134$1 = 0; index$constrainedFlag$sample134$1 < constrainedFlag$sample134.length; index$constrainedFlag$sample134$1 += 1) {
-			boolean[] cv$constrainedFlag$sample134$1 = constrainedFlag$sample134[index$constrainedFlag$sample134$1];
+		for(int index$constrainedFlag$sample134$1 = 0; index$constrainedFlag$sample134$1 < state.constrainedFlag$sample134.length; index$constrainedFlag$sample134$1 += 1) {
+			boolean[] cv$constrainedFlag$sample134$1 = state.constrainedFlag$sample134[index$constrainedFlag$sample134$1];
 			for(int index$constrainedFlag$sample134$2 = 0; index$constrainedFlag$sample134$2 < cv$constrainedFlag$sample134$1.length; index$constrainedFlag$sample134$2 += 1)
 				cv$constrainedFlag$sample134$1[index$constrainedFlag$sample134$2] = true;
 		}
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample162$1 = 0; index$constrainedFlag$sample162$1 < constrainedFlag$sample162.length; index$constrainedFlag$sample162$1 += 1) {
-			boolean[] cv$constrainedFlag$sample162$1 = constrainedFlag$sample162[index$constrainedFlag$sample162$1];
+		for(int index$constrainedFlag$sample162$1 = 0; index$constrainedFlag$sample162$1 < state.constrainedFlag$sample162.length; index$constrainedFlag$sample162$1 += 1) {
+			boolean[] cv$constrainedFlag$sample162$1 = state.constrainedFlag$sample162[index$constrainedFlag$sample162$1];
 			for(int index$constrainedFlag$sample162$2 = 0; index$constrainedFlag$sample162$2 < cv$constrainedFlag$sample162$1.length; index$constrainedFlag$sample162$2 += 1)
 				cv$constrainedFlag$sample162$1[index$constrainedFlag$sample162$2] = true;
 		}
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample33$1 = 0; index$constrainedFlag$sample33$1 < constrainedFlag$sample33.length; index$constrainedFlag$sample33$1 += 1)
-			constrainedFlag$sample33[index$constrainedFlag$sample33$1] = true;
+		for(int index$constrainedFlag$sample33$1 = 0; index$constrainedFlag$sample33$1 < state.constrainedFlag$sample33.length; index$constrainedFlag$sample33$1 += 1)
+			state.constrainedFlag$sample33[index$constrainedFlag$sample33$1] = true;
 	}
 
 	// Construct the evidence probabilities.
@@ -12362,15 +11620,15 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample20)
+		if(state.fixedFlag$sample20)
 			logProbabilityValue$sample20();
-		if(fixedFlag$sample33)
+		if(state.fixedFlag$sample33)
 			logProbabilityValue$sample33();
-		if(fixedFlag$sample134)
+		if(state.fixedFlag$sample134)
 			logProbabilityValue$sample134();
-		if(fixedFlag$sample162)
+		if(state.fixedFlag$sample162)
 			logProbabilityValue$sample162();
-		if(fixedFlag$sample190)
+		if(state.fixedFlag$sample190)
 			logProbabilityValue$sample190();
 		logProbabilityValue$sample241();
 		logProbabilityValue$sample256();
@@ -12432,8 +11690,8 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 	public final void propogateObservedValues() {
 		{
 			// Deep copy between arrays
-			boolean[][][] cv$source1 = metric_valid;
-			boolean[][][] cv$target1 = metric_valid_g;
+			boolean[][][] cv$source1 = state.metric_valid;
+			boolean[][][] cv$target1 = state.metric_valid_g;
 			int cv$length1 = cv$target1.length;
 			for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 				boolean[][] cv$source2 = cv$source1[cv$index1];
@@ -12450,8 +11708,8 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 		}
 		{
 			// Deep copy between arrays
-			double[][][] cv$source1 = metric;
-			double[][][] cv$target1 = metric_g;
+			double[][][] cv$source1 = state.metric;
+			double[][][] cv$target1 = state.metric_g;
 			int cv$length1 = cv$target1.length;
 			for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 				double[][] cv$source2 = cv$source1[cv$index1];
@@ -12466,19 +11724,19 @@ final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU implement
 				}
 			}
 		}
-		for(int sample$var196 = (noSamples - ((((noSamples - 1) - 0) % 1) + 1)); sample$var196 >= ((0 - 1) + 1); sample$var196 -= 1) {
-			for(int server = (noServers - ((((noServers - 1) - 0) % 1) + 1)); server >= ((0 - 1) + 1); server -= 1) {
-				for(int timeStep$var226 = (length$metric[sample$var196][0] - ((((length$metric[sample$var196][0] - 1) - 0) % 1) + 1)); timeStep$var226 >= ((0 - 1) + 1); timeStep$var226 -= 1) {
-					if(metric_valid_g[sample$var196][server][timeStep$var226]) {
+		for(int sample$var196 = (state.noSamples - ((((state.noSamples - 1) - 0) % 1) + 1)); sample$var196 >= ((0 - 1) + 1); sample$var196 -= 1) {
+			for(int server = (state.noServers - ((((state.noServers - 1) - 0) % 1) + 1)); server >= ((0 - 1) + 1); server -= 1) {
+				for(int timeStep$var226 = (state.length$metric[sample$var196][0] - ((((state.length$metric[sample$var196][0] - 1) - 0) % 1) + 1)); timeStep$var226 >= ((0 - 1) + 1); timeStep$var226 -= 1) {
+					if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
 						{
 							{
 								{
 									{
 										double[][] var211;
-										var211 = metric_g[sample$var196];
+										var211 = state.metric_g[sample$var196];
 										double[] metric_inner;
-										metric_inner = metric_g[sample$var196][server];
-										var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = metric_inner[timeStep$var226];
+										metric_inner = state.metric_g[sample$var196][server];
+										state.var245[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = metric_inner[timeStep$var226];
 									}
 								}
 							}

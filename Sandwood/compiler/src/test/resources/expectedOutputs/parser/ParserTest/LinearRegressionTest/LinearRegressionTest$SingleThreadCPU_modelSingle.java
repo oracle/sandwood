@@ -1,272 +1,42 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.LinearRegressionTest$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.LinearRegressionTest.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU implements LinearRegressionTest$CoreInterface {
+final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double bias;
-	boolean[] constrainedFlag$sample24;
-	boolean constrainedFlag$sample31 = true;
-	boolean constrainedFlag$sample35 = true;
-	boolean fixedFlag$sample24 = false;
-	boolean fixedFlag$sample31 = false;
-	boolean fixedFlag$sample35 = false;
-	boolean fixedProbFlag$sample24 = false;
-	boolean fixedProbFlag$sample31 = false;
-	boolean fixedProbFlag$sample35 = false;
-	boolean fixedProbFlag$sample74 = false;
-	int k;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$bias;
-	double[] logProbability$sample24;
-	double logProbability$tau;
-	double logProbability$var73;
-	double logProbability$weights;
-	double logProbability$y;
-	int n;
-	double[][] phi;
-	boolean system$gibbsForward = true;
-	double tau;
-	double[] weights;
-	double[][] x;
-	double[] y;
-	double[] yMeasured;
-
-	public LinearRegressionTest$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	// Getter for bias.
-	@Override
-	public final double get$bias() {
-		return bias;
-	}
 
-	// Setter for bias.
-	@Override
-	public final void set$bias(double cv$value, boolean allocated$) {
-		// Set flags for all the side effects of bias including if probabilities need to be
-		// updated.
-		bias = cv$value;
-		
-		// Unset the fixed probability flag for sample 31 as it depends on bias.
-		fixedProbFlag$sample31 = false;
-		
-		// Unset the fixed probability flag for sample 74 as it depends on bias.
-		fixedProbFlag$sample74 = false;
-	}
-
-	// Getter for fixedFlag$sample24.
-	@Override
-	public final boolean get$fixedFlag$sample24() {
-		return fixedFlag$sample24;
-	}
-
-	// Setter for fixedFlag$sample24.
-	@Override
-	public final void set$fixedFlag$sample24(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample24 including if probabilities
-		// need to be updated.
-		fixedFlag$sample24 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample24$1 = 0; index$constrainedFlag$sample24$1 < constrainedFlag$sample24.length; index$constrainedFlag$sample24$1 += 1)
-				constrainedFlag$sample24[index$constrainedFlag$sample24$1] = true;
-		}
-		
-		// Should the probability of sample 24 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample24 = (fixedFlag$sample24 && fixedProbFlag$sample24);
-		
-		// Should the probability of sample 74 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample74 = (fixedFlag$sample24 && fixedProbFlag$sample74);
-	}
-
-	// Getter for fixedFlag$sample31.
-	@Override
-	public final boolean get$fixedFlag$sample31() {
-		return fixedFlag$sample31;
-	}
-
-	// Setter for fixedFlag$sample31.
-	@Override
-	public final void set$fixedFlag$sample31(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample31 including if probabilities
-		// need to be updated.
-		fixedFlag$sample31 = cv$value;
-		constrainedFlag$sample31 = (fixedFlag$sample31 || constrainedFlag$sample31);
-		
-		// Should the probability of sample 31 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample31 = (fixedFlag$sample31 && fixedProbFlag$sample31);
-		
-		// Should the probability of sample 74 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample74 = (fixedFlag$sample31 && fixedProbFlag$sample74);
-	}
-
-	// Getter for fixedFlag$sample35.
-	@Override
-	public final boolean get$fixedFlag$sample35() {
-		return fixedFlag$sample35;
-	}
-
-	// Setter for fixedFlag$sample35.
-	@Override
-	public final void set$fixedFlag$sample35(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample35 including if probabilities
-		// need to be updated.
-		fixedFlag$sample35 = cv$value;
-		constrainedFlag$sample35 = (fixedFlag$sample35 || constrainedFlag$sample35);
-		
-		// Should the probability of sample 35 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample35 = (fixedFlag$sample35 && fixedProbFlag$sample35);
-		
-		// Should the probability of sample 74 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample74 = (fixedFlag$sample35 && fixedProbFlag$sample74);
-	}
-
-	// Getter for k.
-	@Override
-	public final int get$k() {
-		return k;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$bias.
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	// Getter for logProbability$tau.
-	@Override
-	public final double get$logProbability$tau() {
-		return logProbability$tau;
-	}
-
-	// Getter for logProbability$weights.
-	@Override
-	public final double get$logProbability$weights() {
-		return logProbability$weights;
-	}
-
-	// Getter for logProbability$y.
-	@Override
-	public final double get$logProbability$y() {
-		return logProbability$y;
-	}
-
-	// Getter for n.
-	@Override
-	public final int get$n() {
-		return n;
-	}
-
-	// Getter for tau.
-	@Override
-	public final double get$tau() {
-		return tau;
-	}
-
-	// Setter for tau.
-	@Override
-	public final void set$tau(double cv$value, boolean allocated$) {
-		// Set flags for all the side effects of tau including if probabilities need to be
-		// updated.
-		tau = cv$value;
-		
-		// Unset the fixed probability flag for sample 35 as it depends on tau.
-		fixedProbFlag$sample35 = false;
-		
-		// Unset the fixed probability flag for sample 74 as it depends on tau.
-		fixedProbFlag$sample74 = false;
-	}
-
-	// Getter for weights.
-	@Override
-	public final double[] get$weights() {
-		return weights;
-	}
-
-	// Setter for weights.
-	@Override
-	public final void set$weights(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of weights including if probabilities need to
-		// be updated.
-		weights = cv$value;
-		
-		// Unset the fixed probability flag for sample 24 as it depends on weights.
-		fixedProbFlag$sample24 = false;
-		
-		// Unset the fixed probability flag for sample 74 as it depends on weights.
-		fixedProbFlag$sample74 = false;
-	}
-
-	// Getter for x.
-	@Override
-	public final double[][] get$x() {
-		return x;
-	}
-
-	// Setter for x.
-	@Override
-	public final void set$x(double[][] cv$value, boolean allocated$) {
-		x = cv$value;
-	}
-
-	// Getter for y.
-	@Override
-	public final double[] get$y() {
-		return y;
-	}
-
-	// Getter for yMeasured.
-	@Override
-	public final double[] get$yMeasured() {
-		return yMeasured;
-	}
-
-	// Setter for yMeasured.
-	@Override
-	public final void set$yMeasured(double[] cv$value, boolean allocated$) {
-		yMeasured = cv$value;
+	public LinearRegressionTest$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample24
 	private final void drawValueSample24(int var23) {
-		weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		state.weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		
 		// Guards to ensure that phi is only updated when there is a valid path.
 		// 
 		// Looking for a path between Sample 24 and consumer double[] 60.
 		{
 			{
-				for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
+				for(int j$var55 = 0; j$var55 < state.k; j$var55 += 1) {
 					if((var23 == j$var55)) {
-						for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
-							phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+						for(int i$var45 = 0; i$var45 < state.n; i$var45 += 1)
+							state.phi[((i$var45 - 0) / 1)][j$var55] = (state.weights[j$var55] * state.x[i$var45][j$var55]);
 					}
 				}
 			}
@@ -275,12 +45,12 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 
 	// Pick a value from the distribution for the unconditioned variable from sample31
 	private final void drawValueSample31() {
-		bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		state.bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample35
 	private final void drawValueSample35() {
-		tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
+		state.tau = DistributionSampling.sampleInverseGamma(state.RNG$, 3.0, 1.0);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -288,7 +58,7 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 	// to Gaussian conjugate prior.
 	private final void inferSample24(int var23) {
 		if(true) {
-			constrainedFlag$sample24[((var23 - 0) / 1)] = false;
+			state.constrainedFlag$sample24[((var23 - 0) / 1)] = false;
 			
 			// State to record the weighting of each sample that is consumed. This is the:
 			// sum of the sample denominator*(the sample value - the sample nominator).
@@ -308,10 +78,10 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 					// Looking for a path between Sample 24 and consumer Gaussian 72.
 					{
 						{
-							for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
+							for(int j$var55 = 0; j$var55 < state.k; j$var55 += 1) {
 								if((var23 == j$var55)) {
-									for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-										if(((0 <= j$var55) && (j$var55 < k))) {
+									for(int i$var45 = 0; i$var45 < state.n; i$var45 += 1) {
+										if(((0 <= j$var55) && (j$var55 < state.k))) {
 											// Processing sample task 74 of consumer random variable null.
 											{
 												{
@@ -319,7 +89,7 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 													boolean cv$sampleConstrained = true;
 													if(cv$sampleConstrained) {
 														// Mark that the sample has observed constrained data.
-														constrainedFlag$sample24[((var23 - 0) / 1)] = true;
+														state.constrainedFlag$sample24[((var23 - 0) / 1)] = true;
 														{
 															{
 																{
@@ -329,9 +99,9 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 																			// consumed and it being produced.
 																			double cv$denominator = 1.0;
 																			double cv$numerator = 0.0;
-																			cv$numerator = (cv$numerator * x[i$var45][j$var55]);
-																			cv$denominator = (cv$denominator * x[i$var45][j$var55]);
-																			if((0 < k)) {
+																			cv$numerator = (cv$numerator * state.x[i$var45][j$var55]);
+																			cv$denominator = (cv$denominator * state.x[i$var45][j$var55]);
+																			if((0 < state.k)) {
 																				// Reduction of array phi
 																				// 
 																				// A generated name to prevent name collisions if the reduction is implemented more
@@ -345,19 +115,19 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 																					double i$var67 = reduceVar$var70$0;
 																					
 																					// Set the right hand term to a value from the array phi
-																					double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction162Index];
+																					double j$var68 = state.phi[((i$var45 - 0) / 1)][cv$reduction162Index];
 																					
 																					// Execute the reduction function, saving the result into the return value.
 																					// 
 																					// Copy the result of the reduction into the variable returned by the reduction.
 																					reduceVar$var70$0 = (i$var67 + j$var68);
 																				}
-																				for(int cv$reduction162Index = (j$var55 + 1); cv$reduction162Index < k; cv$reduction162Index += 1) {
+																				for(int cv$reduction162Index = (j$var55 + 1); cv$reduction162Index < state.k; cv$reduction162Index += 1) {
 																					// Set the left hand term of the reduction function to the return variable value.
 																					double i$var67 = reduceVar$var70$0;
 																					
 																					// Set the right hand term to a value from the array phi
-																					double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction162Index];
+																					double j$var68 = state.phi[((i$var45 - 0) / 1)][cv$reduction162Index];
 																					
 																					// Execute the reduction function, saving the result into the return value.
 																					// 
@@ -367,7 +137,7 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 																				double cv$reduced65 = reduceVar$var70$0;
 																				cv$numerator = (cv$numerator + cv$reduced65);
 																			}
-																			cv$numerator = (cv$numerator + bias);
+																			cv$numerator = (cv$numerator + state.bias);
 																			
 																			// Record the value of a sample generated by a consuming sample 74 of random variable
 																			// var72.
@@ -376,12 +146,12 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 																			cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
 																			
 																			// Add the weighting of the sample to the sum.
-																			cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
+																			cv$sum = (cv$sum + (cv$denominator * (state.y[i$var45] - cv$numerator)));
 																			
 																			// If we have not got the value of sigma yet record it and set a flag so it is not
 																			// recorded again.
 																			if(cv$sigmaNotFound) {
-																				cv$sigmaValue = tau;
+																				cv$sigmaValue = state.tau;
 																				cv$sigmaNotFound = false;
 																			}
 																		}
@@ -400,16 +170,16 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 					}
 				}
 			}
-			if(constrainedFlag$sample24[((var23 - 0) / 1)]) {
+			if(state.constrainedFlag$sample24[((var23 - 0) / 1)]) {
 				// Write out the value of the sample to a temporary variable prior to updating the
 				// intermediate variables.
-				double var24 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+				double var24 = Conjugates.sampleConjugateGaussianGaussian(state.RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 				
 				// Guards to ensure that weights is only updated when there is a valid path.
 				{
 					{
 						{
-							weights[var23] = var24;
+							state.weights[var23] = var24;
 						}
 					}
 				}
@@ -419,10 +189,10 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 				// Looking for a path between Sample 24 and consumer double[] 60.
 				{
 					{
-						for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
+						for(int j$var55 = 0; j$var55 < state.k; j$var55 += 1) {
 							if((var23 == j$var55)) {
-								for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
-									phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+								for(int i$var45 = 0; i$var45 < state.n; i$var45 += 1)
+									state.phi[((i$var45 - 0) / 1)][j$var55] = (state.weights[j$var55] * state.x[i$var45][j$var55]);
 							}
 						}
 					}
@@ -436,7 +206,7 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 	// to Gaussian conjugate prior.
 	private final void inferSample31() {
 		if(true) {
-			constrainedFlag$sample31 = false;
+			state.constrainedFlag$sample31 = false;
 			
 			// State to record the weighting of each sample that is consumed. This is the:
 			// sum of the sample denominator*(the sample value - the sample nominator).
@@ -455,12 +225,12 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 				{
 					{
 						{
-							for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+							for(int i$var45 = 0; i$var45 < state.n; i$var45 += 1) {
 								// Flag recording if this sample task of the consuming random variable is constrained.
 								boolean cv$sampleConstrained = true;
 								if(cv$sampleConstrained) {
 									// Mark that the sample has observed constrained data.
-									constrainedFlag$sample31 = true;
+									state.constrainedFlag$sample31 = true;
 									{
 										{
 											{
@@ -479,12 +249,12 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 														double reduceVar$var70$1 = 0.0;
 														
 														// For each index in the array to be reduced
-														for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+														for(int cv$reduction65Index = 0; cv$reduction65Index < state.k; cv$reduction65Index += 1) {
 															// Set the left hand term of the reduction function to the return variable value.
 															double i$var67 = reduceVar$var70$1;
 															
 															// Set the right hand term to a value from the array phi
-															double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+															double j$var68 = state.phi[((i$var45 - 0) / 1)][cv$reduction65Index];
 															
 															// Execute the reduction function, saving the result into the return value.
 															// 
@@ -500,12 +270,12 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
 														
 														// Add the weighting of the sample to the sum.
-														cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
+														cv$sum = (cv$sum + (cv$denominator * (state.y[i$var45] - cv$numerator)));
 														
 														// If we have not got the value of sigma yet record it and set a flag so it is not
 														// recorded again.
 														if(cv$sigmaNotFound) {
-															cv$sigmaValue = tau;
+															cv$sigmaValue = state.tau;
 															cv$sigmaNotFound = false;
 														}
 													}
@@ -519,9 +289,9 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 					}
 				}
 			}
-			if(constrainedFlag$sample31)
+			if(state.constrainedFlag$sample31)
 				// Write out the new value of the sample.
-				bias = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+				state.bias = Conjugates.sampleConjugateGaussianGaussian(state.RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 		}
 	}
 
@@ -530,7 +300,7 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 	// Gamma to Gaussian conjugate prior.
 	private final void inferSample35() {
 		if(true) {
-			constrainedFlag$sample35 = false;
+			state.constrainedFlag$sample35 = false;
 			
 			// Variable to track the sum of the difference between the samples and the random
 			// variables mean squared.
@@ -543,12 +313,12 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 				{
 					{
 						{
-							for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+							for(int i$var45 = 0; i$var45 < state.n; i$var45 += 1) {
 								// Flag recording if this sample task of the consuming random variable is constrained.
 								boolean cv$sampleConstrained = true;
 								if(cv$sampleConstrained) {
 									// Mark that the sample has observed constrained data.
-									constrainedFlag$sample35 = true;
+									state.constrainedFlag$sample35 = true;
 									{
 										{
 											{
@@ -562,12 +332,12 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 														double reduceVar$var70$2 = 0.0;
 														
 														// For each index in the array to be reduced
-														for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+														for(int cv$reduction65Index = 0; cv$reduction65Index < state.k; cv$reduction65Index += 1) {
 															// Set the left hand term of the reduction function to the return variable value.
 															double i$var67 = reduceVar$var70$2;
 															
 															// Set the right hand term to a value from the array phi
-															double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+															double j$var68 = state.phi[((i$var45 - 0) / 1)][cv$reduction65Index];
 															
 															// Execute the reduction function, saving the result into the return value.
 															// 
@@ -576,12 +346,12 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 														}
 														
 														// The mean parameter for Gaussian var72.
-														double cv$var72$mu = (reduceVar$var70$2 + bias);
+														double cv$var72$mu = (reduceVar$var70$2 + state.bias);
 														
 														// Consume sample task 74 from random variable var72.
 														// 
 														// The difference between the mean parameter and the value sampled from the Gaussian.
-														double cv$var72$diff = (cv$var72$mu - y[i$var45]);
+														double cv$var72$diff = (cv$var72$mu - state.y[i$var45]);
 														
 														// Include this sample by adding the square of the difference to the sum.
 														cv$sum = (cv$sum + (cv$var72$diff * cv$var72$diff));
@@ -599,9 +369,9 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 					}
 				}
 			}
-			if(constrainedFlag$sample35)
+			if(state.constrainedFlag$sample35)
 				// Write out the new value of the sample.
-				tau = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 3.0, 1.0, cv$sum, cv$count);
+				state.tau = Conjugates.sampleConjugateInverseGammaGaussian(state.RNG$, 3.0, 1.0, cv$sum, cv$count);
 		}
 	}
 
@@ -610,7 +380,7 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 	private final void logProbabilityValue$sample24() {
 		// Determine if we need to calculate the values for sample task 24 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample24) {
+		if(!state.fixedProbFlag$sample24) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -620,7 +390,7 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var23 = 0; var23 < k; var23 += 1) {
+			for(int var23 = 0; var23 < state.k; var23 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -629,7 +399,7 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 				{
 					{
 						// The sample value to calculate the probability of generating
-						double cv$sampleValue = weights[var23];
+						double cv$sampleValue = state.weights[var23];
 						{
 							{
 								double var10 = 0.0;
@@ -673,7 +443,7 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 				// erroneously over written.
 				if(cv$sampleReached)
 					// Store the sample task probability
-					logProbability$sample24[((var23 - 0) / 1)] = cv$sampleProbability;
+					state.logProbability$sample24[((var23 - 0) / 1)] = cv$sampleProbability;
 			}
 			
 			// Add the probability of this instance of the random variable to the probability
@@ -681,19 +451,19 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Update the variable probability
-			logProbability$weights = (logProbability$weights + cv$accumulator);
+			state.logProbability$weights = (state.logProbability$weights + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample24)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample24)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample24 = fixedFlag$sample24;
+			state.fixedProbFlag$sample24 = state.fixedFlag$sample24;
 		} else {
 			// Using cached values.
 			// 
@@ -704,8 +474,8 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var23 = 0; var23 < k; var23 += 1) {
-				double cv$sampleValue = logProbability$sample24[((var23 - 0) / 1)];
+			for(int var23 = 0; var23 < state.k; var23 += 1) {
+				double cv$sampleValue = state.logProbability$sample24[((var23 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Record that the sample was reached.
@@ -714,15 +484,15 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$weights = (logProbability$weights + cv$accumulator);
+			state.logProbability$weights = (state.logProbability$weights + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample24)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample24)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -731,7 +501,7 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 	private final void logProbabilityValue$sample31() {
 		// Determine if we need to calculate the values for sample task 31 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample31) {
+		if(!state.fixedProbFlag$sample31) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -747,7 +517,7 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 			{
 				{
 					// The sample value to calculate the probability of generating
-					double cv$sampleValue = bias;
+					double cv$sampleValue = state.bias;
 					{
 						{
 							double var28 = 0.0;
@@ -789,19 +559,19 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$bias = cv$sampleProbability;
+			state.logProbability$bias = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample31)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample31)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample31 = fixedFlag$sample31;
+			state.fixedProbFlag$sample31 = state.fixedFlag$sample31;
 		} else {
 			// Using cached values.
 			// 
@@ -809,17 +579,17 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$bias;
+			double cv$sampleValue = state.logProbability$bias;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample31)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample31)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -828,7 +598,7 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 	private final void logProbabilityValue$sample35() {
 		// Determine if we need to calculate the values for sample task 35 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample35) {
+		if(!state.fixedProbFlag$sample35) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -844,7 +614,7 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 			{
 				{
 					// The sample value to calculate the probability of generating
-					double cv$sampleValue = tau;
+					double cv$sampleValue = state.tau;
 					{
 						{
 							double var32 = 3.0;
@@ -886,19 +656,19 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$tau = cv$sampleProbability;
+			state.logProbability$tau = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample35)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample35)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample35 = fixedFlag$sample35;
+			state.fixedProbFlag$sample35 = state.fixedFlag$sample35;
 		} else {
 			// Using cached values.
 			// 
@@ -906,17 +676,17 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$tau;
+			double cv$sampleValue = state.logProbability$tau;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample35)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample35)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -925,7 +695,7 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 	private final void logProbabilityValue$sample74() {
 		// Determine if we need to calculate the values for sample task 74 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample74) {
+		if(!state.fixedProbFlag$sample74) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -935,7 +705,7 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+			for(int i$var45 = 0; i$var45 < state.n; i$var45 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -944,7 +714,7 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 				{
 					{
 						// The sample value to calculate the probability of generating
-						double cv$sampleValue = y[i$var45];
+						double cv$sampleValue = state.y[i$var45];
 						{
 							{
 								// Reduction of array phi
@@ -955,22 +725,22 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 								double reduceVar$var70$3 = 0.0;
 								
 								// For each index in the array to be reduced
-								for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+								for(int cv$reduction65Index = 0; cv$reduction65Index < state.k; cv$reduction65Index += 1) {
 									// Set the left hand term of the reduction function to the return variable value.
 									double i$var67 = reduceVar$var70$3;
 									
 									// Set the right hand term to a value from the array phi
-									double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+									double j$var68 = state.phi[((i$var45 - 0) / 1)][cv$reduction65Index];
 									
 									// Execute the reduction function, saving the result into the return value.
 									// 
 									// Copy the result of the reduction into the variable returned by the reduction.
 									reduceVar$var70$3 = (i$var67 + j$var68);
 								}
-								double var71 = (reduceVar$var70$3 + bias);
+								double var71 = (reduceVar$var70$3 + state.bias);
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < tau)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var71) / Math.sqrt(tau))) - (0.5 * Math.log(tau))):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < state.tau)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var71) / Math.sqrt(state.tau))) - (0.5 * Math.log(state.tau))):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1012,18 +782,18 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var73 = cv$accumulator;
+				state.logProbability$var73 = cv$accumulator;
 			
 			// Update the variable probability
-			logProbability$y = (logProbability$y + cv$accumulator);
+			state.logProbability$y = (state.logProbability$y + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample74 = ((fixedFlag$sample24 && fixedFlag$sample31) && fixedFlag$sample35);
+			state.fixedProbFlag$sample74 = ((state.fixedFlag$sample24 && state.fixedFlag$sample31) && state.fixedFlag$sample35);
 		} else {
 			// Using cached values.
 			// 
@@ -1034,77 +804,37 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
+			for(int i$var45 = 0; i$var45 < state.n; i$var45 += 1)
 				// Record that the sample was reached.
 				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var73;
+			double cv$sampleValue = state.logProbability$var73;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$y = (logProbability$y + cv$accumulator);
+			state.logProbability$y = (state.logProbability$y + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// Constructor for y
-		{
-			y = new double[x.length];
-		}
-		
-		// If weights has not been set already allocate space.
-		if(!fixedFlag$sample24) {
-			// Constructor for weights
-			{
-				weights = new double[x[0].length];
-			}
-		}
-		
-		// Constructor for phi
-		{
-			phi = new double[((((x.length - 1) - 0) / 1) + 1)][];
-			for(int i$var45 = 0; i$var45 < x.length; i$var45 += 1)
-				phi[((i$var45 - 0) / 1)] = new double[x[0].length];
-		}
-		
-		// Constructor for constrainedFlag$sample24
-		{
-			constrainedFlag$sample24 = new boolean[((((x[0].length - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample24
-		{
-			logProbability$sample24 = new double[((((x[0].length - 1) - 0) / 1) + 1)];
-		}
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		for(int var23 = 0; var23 < k; var23 += 1) {
-			if(!fixedFlag$sample24)
-				weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var23 = 0; var23 < state.k; var23 += 1) {
+			if(!state.fixedFlag$sample24)
+				state.weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		if(!fixedFlag$sample31)
-			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample35)
-			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
-		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-			for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
-				if(!fixedFlag$sample24)
-					phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+		if(!state.fixedFlag$sample31)
+			state.bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
+		if(!state.fixedFlag$sample35)
+			state.tau = DistributionSampling.sampleInverseGamma(state.RNG$, 3.0, 1.0);
+		for(int i$var45 = 0; i$var45 < state.n; i$var45 += 1) {
+			for(int j$var55 = 0; j$var55 < state.k; j$var55 += 1) {
+				if(!state.fixedFlag$sample24)
+					state.phi[((i$var45 - 0) / 1)][j$var55] = (state.weights[j$var55] * state.x[i$var45][j$var55]);
 			}
 			
 			// Reduction of array phi
@@ -1115,19 +845,19 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 			double reduceVar$var70$4 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+			for(int cv$reduction65Index = 0; cv$reduction65Index < state.k; cv$reduction65Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
 				double i$var67 = reduceVar$var70$4;
 				
 				// Set the right hand term to a value from the array phi
-				double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+				double j$var68 = state.phi[((i$var45 - 0) / 1)][cv$reduction65Index];
 				
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				reduceVar$var70$4 = (i$var67 + j$var68);
 			}
-			y[i$var45] = ((Math.sqrt(tau) * DistributionSampling.sampleGaussian(RNG$)) + (reduceVar$var70$4 + bias));
+			state.y[i$var45] = ((Math.sqrt(state.tau) * DistributionSampling.sampleGaussian(state.RNG$)) + (reduceVar$var70$4 + state.bias));
 		}
 	}
 
@@ -1136,17 +866,17 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		for(int var23 = 0; var23 < k; var23 += 1) {
-			if(!fixedFlag$sample24)
-				weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var23 = 0; var23 < state.k; var23 += 1) {
+			if(!state.fixedFlag$sample24)
+				state.weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		if(!fixedFlag$sample31)
-			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample35)
-			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
-		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-			for(int j$var55 = 0; j$var55 < k; j$var55 += 1)
-				phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+		if(!state.fixedFlag$sample31)
+			state.bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
+		if(!state.fixedFlag$sample35)
+			state.tau = DistributionSampling.sampleInverseGamma(state.RNG$, 3.0, 1.0);
+		for(int i$var45 = 0; i$var45 < state.n; i$var45 += 1) {
+			for(int j$var55 = 0; j$var55 < state.k; j$var55 += 1)
+				state.phi[((i$var45 - 0) / 1)][j$var55] = (state.weights[j$var55] * state.x[i$var45][j$var55]);
 		}
 	}
 
@@ -1154,17 +884,17 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		for(int var23 = 0; var23 < k; var23 += 1) {
-			if(!fixedFlag$sample24)
-				weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var23 = 0; var23 < state.k; var23 += 1) {
+			if(!state.fixedFlag$sample24)
+				state.weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		if(!fixedFlag$sample31)
-			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample35)
-			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
-		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-			for(int j$var55 = 0; j$var55 < k; j$var55 += 1)
-				phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+		if(!state.fixedFlag$sample31)
+			state.bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
+		if(!state.fixedFlag$sample35)
+			state.tau = DistributionSampling.sampleInverseGamma(state.RNG$, 3.0, 1.0);
+		for(int i$var45 = 0; i$var45 < state.n; i$var45 += 1) {
+			for(int j$var55 = 0; j$var55 < state.k; j$var55 += 1)
+				state.phi[((i$var45 - 0) / 1)][j$var55] = (state.weights[j$var55] * state.x[i$var45][j$var55]);
 			
 			// Reduction of array phi
 			// 
@@ -1174,19 +904,19 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 			double reduceVar$var70$5 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+			for(int cv$reduction65Index = 0; cv$reduction65Index < state.k; cv$reduction65Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
 				double i$var67 = reduceVar$var70$5;
 				
 				// Set the right hand term to a value from the array phi
-				double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+				double j$var68 = state.phi[((i$var45 - 0) / 1)][cv$reduction65Index];
 				
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				reduceVar$var70$5 = (i$var67 + j$var68);
 			}
-			y[i$var45] = ((Math.sqrt(tau) * DistributionSampling.sampleGaussian(RNG$)) + (reduceVar$var70$5 + bias));
+			state.y[i$var45] = ((Math.sqrt(state.tau) * DistributionSampling.sampleGaussian(state.RNG$)) + (reduceVar$var70$5 + state.bias));
 		}
 	}
 
@@ -1194,18 +924,18 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		for(int var23 = 0; var23 < k; var23 += 1) {
-			if(!fixedFlag$sample24)
-				weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var23 = 0; var23 < state.k; var23 += 1) {
+			if(!state.fixedFlag$sample24)
+				state.weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		if(!fixedFlag$sample31)
-			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample35)
-			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
-		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-			for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
-				if(!fixedFlag$sample24)
-					phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+		if(!state.fixedFlag$sample31)
+			state.bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
+		if(!state.fixedFlag$sample35)
+			state.tau = DistributionSampling.sampleInverseGamma(state.RNG$, 3.0, 1.0);
+		for(int i$var45 = 0; i$var45 < state.n; i$var45 += 1) {
+			for(int j$var55 = 0; j$var55 < state.k; j$var55 += 1) {
+				if(!state.fixedFlag$sample24)
+					state.phi[((i$var45 - 0) / 1)][j$var55] = (state.weights[j$var55] * state.x[i$var45][j$var55]);
 			}
 		}
 	}
@@ -1215,17 +945,17 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		for(int var23 = 0; var23 < k; var23 += 1) {
-			if(!fixedFlag$sample24)
-				weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var23 = 0; var23 < state.k; var23 += 1) {
+			if(!state.fixedFlag$sample24)
+				state.weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		if(!fixedFlag$sample31)
-			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample35)
-			tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
-		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-			for(int j$var55 = 0; j$var55 < k; j$var55 += 1)
-				phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+		if(!state.fixedFlag$sample31)
+			state.bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
+		if(!state.fixedFlag$sample35)
+			state.tau = DistributionSampling.sampleInverseGamma(state.RNG$, 3.0, 1.0);
+		for(int i$var45 = 0; i$var45 < state.n; i$var45 += 1) {
+			for(int j$var55 = 0; j$var55 < state.k; j$var55 += 1)
+				state.phi[((i$var45 - 0) / 1)][j$var55] = (state.weights[j$var55] * state.x[i$var45][j$var55]);
 		}
 	}
 
@@ -1233,37 +963,37 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			for(int var23 = 0; var23 < k; var23 += 1) {
-				if(!fixedFlag$sample24)
+		if(state.system$gibbsForward) {
+			for(int var23 = 0; var23 < state.k; var23 += 1) {
+				if(!state.fixedFlag$sample24)
 					inferSample24(var23);
 			}
-			if(!fixedFlag$sample31)
+			if(!state.fixedFlag$sample31)
 				inferSample31();
-			if(!fixedFlag$sample35)
+			if(!state.fixedFlag$sample35)
 				inferSample35();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample35)
+			if(!state.fixedFlag$sample35)
 				inferSample35();
-			if(!fixedFlag$sample31)
+			if(!state.fixedFlag$sample31)
 				inferSample31();
-			for(int var23 = (k - ((((k - 1) - 0) % 1) + 1)); var23 >= ((0 - 1) + 1); var23 -= 1) {
-				if(!fixedFlag$sample24)
+			for(int var23 = (state.k - ((((state.k - 1) - 0) % 1) + 1)); var23 >= ((0 - 1) + 1); var23 -= 1) {
+				if(!state.fixedFlag$sample24)
 					inferSample24(var23);
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		for(int var23 = 0; var23 < k; var23 += 1) {
-			if(!constrainedFlag$sample24[((var23 - 0) / 1)])
+		state.system$gibbsForward = !state.system$gibbsForward;
+		for(int var23 = 0; var23 < state.k; var23 += 1) {
+			if(!state.constrainedFlag$sample24[((var23 - 0) / 1)])
 				drawValueSample24(var23);
 		}
-		if(!constrainedFlag$sample31)
+		if(!state.constrainedFlag$sample31)
 			drawValueSample31();
-		if(!constrainedFlag$sample35)
+		if(!state.constrainedFlag$sample35)
 			drawValueSample35();
 	}
 
@@ -1275,32 +1005,32 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$weights = 0.0;
-		if(!fixedProbFlag$sample24) {
-			for(int var23 = 0; var23 < k; var23 += 1)
-				logProbability$sample24[((var23 - 0) / 1)] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$weights = 0.0;
+		if(!state.fixedProbFlag$sample24) {
+			for(int var23 = 0; var23 < state.k; var23 += 1)
+				state.logProbability$sample24[((var23 - 0) / 1)] = Double.NaN;
 		}
-		if(!fixedProbFlag$sample31)
-			logProbability$bias = Double.NaN;
-		if(!fixedProbFlag$sample35)
-			logProbability$tau = Double.NaN;
-		logProbability$y = 0.0;
-		if(!fixedProbFlag$sample74)
-			logProbability$var73 = Double.NaN;
+		if(!state.fixedProbFlag$sample31)
+			state.logProbability$bias = Double.NaN;
+		if(!state.fixedProbFlag$sample35)
+			state.logProbability$tau = Double.NaN;
+		state.logProbability$y = 0.0;
+		if(!state.fixedProbFlag$sample74)
+			state.logProbability$var73 = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		n = x.length;
-		k = x[0].length;
+		state.n = state.x.length;
+		state.k = state.x[0].length;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample24$1 = 0; index$constrainedFlag$sample24$1 < constrainedFlag$sample24.length; index$constrainedFlag$sample24$1 += 1)
-			constrainedFlag$sample24[index$constrainedFlag$sample24$1] = true;
+		for(int index$constrainedFlag$sample24$1 = 0; index$constrainedFlag$sample24$1 < state.constrainedFlag$sample24.length; index$constrainedFlag$sample24$1 += 1)
+			state.constrainedFlag$sample24[index$constrainedFlag$sample24$1] = true;
 	}
 
 	// Construct the evidence probabilities.
@@ -1310,11 +1040,11 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample24)
+		if(state.fixedFlag$sample24)
 			logProbabilityValue$sample24();
-		if(fixedFlag$sample31)
+		if(state.fixedFlag$sample31)
 			logProbabilityValue$sample31();
-		if(fixedFlag$sample35)
+		if(state.fixedFlag$sample35)
 			logProbabilityValue$sample35();
 		logProbabilityValue$sample74();
 	}
@@ -1364,8 +1094,8 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 	@Override
 	public final void propagateObservedValues() {
 		// Deep copy between arrays
-		double[] cv$source1 = yMeasured;
-		double[] cv$target1 = y;
+		double[] cv$source1 = state.yMeasured;
+		double[] cv$target1 = state.y;
 		int cv$length1 = cv$target1.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			cv$target1[cv$index1] = cv$source1[cv$index1];
@@ -1377,9 +1107,9 @@ final class LinearRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCP
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-			for(int j$var55 = 0; j$var55 < k; j$var55 += 1)
-				phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+		for(int i$var45 = 0; i$var45 < state.n; i$var45 += 1) {
+			for(int j$var55 = 0; j$var55 < state.k; j$var55 += 1)
+				state.phi[((i$var45 - 0) / 1)][j$var55] = (state.weights[j$var55] * state.x[i$var45][j$var55]);
 		}
 	}
 

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -11,32 +13,215 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.variables.*;
 
 /** A model for the fairness work. */
-public final class Deterministic2 extends Model {
-    private Deterministic2$CoreInterface system$c = new Deterministic2$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class Deterministic2 extends Model<Deterministic2.State> {
+	final class State extends CoreModelState {
+int[] a;
+		int[] b;
+		boolean[] constrainedFlag$sample29;
+		boolean[] constrainedFlag$sample55;
+		double[][] distribution$sample55;
+		boolean fixedFlag$sample29 = false;
+		boolean fixedFlag$sample55 = false;
+		boolean fixedProbFlag$sample29 = false;
+		boolean fixedProbFlag$sample55 = false;
+		boolean fixedProbFlag$sample75 = false;
+		boolean[] flips;
+		boolean[] flipsMeasured;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$a;
+		double logProbability$b;
+		double logProbability$flips;
+		double logProbability$m;
+		double[] logProbability$sample55;
+		double[] logProbability$sample75;
+		double logProbability$var29;
+		double[][] m;
+		int n;
+		int states;
+		boolean system$gibbsForward = true;
+		double[] v;
+
+		@Override
+		public final void allocate() {
+			{
+				v = new double[5];
+			}
+			if(!fixedFlag$sample29) {
+				{
+					m = new double[5][];
+					for(int var28 = 0; var28 < 5; var28 += 1)
+						m[var28] = new double[5];
+				}
+			}
+			if(!fixedFlag$sample55) {
+				{
+					a = new int[n];
+				}
+			}
+			{
+				b = new int[n];
+			}
+			{
+				flips = new boolean[n];
+			}
+			{
+				distribution$sample55 = new double[((((n - 1) - 1) / 1) + 1)][];
+				for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
+					distribution$sample55[((i$var46 - 1) / 1)] = new double[5];
+			}
+			{
+				constrainedFlag$sample29 = new boolean[((((5 - 1) - 0) / 1) + 1)];
+			}
+			{
+				constrainedFlag$sample55 = new boolean[((((n - 1) - 1) / 1) + 1)];
+			}
+			{
+				logProbability$sample55 = new double[((((n - 1) - 1) / 1) + 1)];
+			}
+			{
+				logProbability$sample75 = new double[((((n - 1) - 0) / 1) + 1)];
+			}
+		}
+
+		final int[] get$a() {
+			return a;
+		}
+
+		final void set$a(int[] cv$value, boolean allocated$) {
+			a = cv$value;
+			fixedProbFlag$sample55 = false;
+			fixedProbFlag$sample75 = false;
+		}
+
+		final int[] get$b() {
+			return b;
+		}
+
+		final double[][] get$distribution$sample55() {
+			return distribution$sample55;
+		}
+
+		final void set$distribution$sample55(double[][] cv$value, boolean allocated$) {
+			distribution$sample55 = cv$value;
+		}
+
+		final boolean get$fixedFlag$sample29() {
+			return fixedFlag$sample29;
+		}
+
+		final void set$fixedFlag$sample29(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample29 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample29$1 = 0; index$constrainedFlag$sample29$1 < constrainedFlag$sample29.length; index$constrainedFlag$sample29$1 += 1)
+					constrainedFlag$sample29[index$constrainedFlag$sample29$1] = true;
+			}
+			fixedProbFlag$sample29 = (fixedFlag$sample29 && fixedProbFlag$sample29);
+			fixedProbFlag$sample55 = (fixedFlag$sample29 && fixedProbFlag$sample55);
+		}
+
+		final boolean get$fixedFlag$sample55() {
+			return fixedFlag$sample55;
+		}
+
+		final void set$fixedFlag$sample55(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample55 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample55$1 = 0; index$constrainedFlag$sample55$1 < constrainedFlag$sample55.length; index$constrainedFlag$sample55$1 += 1)
+					constrainedFlag$sample55[index$constrainedFlag$sample55$1] = true;
+			}
+			fixedProbFlag$sample55 = (fixedFlag$sample55 && fixedProbFlag$sample55);
+			fixedProbFlag$sample75 = (fixedFlag$sample55 && fixedProbFlag$sample75);
+		}
+
+		final boolean[] get$flips() {
+			return flips;
+		}
+
+		final boolean[] get$flipsMeasured() {
+			return flipsMeasured;
+		}
+
+		final void set$flipsMeasured(boolean[] cv$value, boolean allocated$) {
+			flipsMeasured = cv$value;
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$a() {
+			return logProbability$a;
+		}
+
+		final double get$logProbability$b() {
+			return logProbability$b;
+		}
+
+		final double get$logProbability$flips() {
+			return logProbability$flips;
+		}
+
+		final double get$logProbability$m() {
+			return logProbability$m;
+		}
+
+		final double[][] get$m() {
+			return m;
+		}
+
+		final void set$m(double[][] cv$value, boolean allocated$) {
+			m = cv$value;
+			fixedProbFlag$sample29 = false;
+			fixedProbFlag$sample55 = false;
+		}
+
+		final int get$n() {
+			return n;
+		}
+
+		final void set$n(int cv$value, boolean allocated$) {
+			n = cv$value;
+		}
+
+		final int get$states() {
+			return states;
+		}
+
+		final double[] get$v() {
+			return v;
+		}
+	}
 
     private final ComputedIntegerArrayInternal $a = new ComputedIntegerArrayInternal(this, "a", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int[] getValue() { return system$c.get$a(); }
+        public int[] getValue() { return state.get$a(); }
 
         @Override
         protected void setValueInternal(int[] value) {
-            system$c.set$a(value, allocated);
+            state.set$a(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$a(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$a(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample55(fixed, allocated);
+                state.set$fixedFlag$sample55(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample55())
+            if(state.get$fixedFlag$sample55())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -48,7 +233,7 @@ public final class Deterministic2 extends Model {
 
     private final ComputedIntegerArrayInternal $b = new ComputedIntegerArrayInternal(this, "b", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int[] getValue() { return system$c.get$b(); }
+        public int[] getValue() { return state.get$b(); }
 
         @Override
         protected void setValueInternal(int[] value) {}
@@ -59,18 +244,18 @@ public final class Deterministic2 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$b(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$b(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample55(fixed, allocated);
+                state.set$fixedFlag$sample55(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample55())
+            if(state.get$fixedFlag$sample55())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -82,7 +267,7 @@ public final class Deterministic2 extends Model {
 
     private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean[] getValue() { return system$c.get$flips(); }
+        public boolean[] getValue() { return state.get$flips(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {}
@@ -93,7 +278,7 @@ public final class Deterministic2 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$flips(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$flips(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -111,16 +296,16 @@ public final class Deterministic2 extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        public double[][] getValue() { return system$c.get$m(); }
+        public double[][] getValue() { return state.get$m(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$m(value, allocated);
+            state.set$m(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$m(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$m(); }
 
         @Override
         public double[][][] constructArray(int iterations) {
@@ -130,13 +315,13 @@ public final class Deterministic2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample29(fixed, allocated);
+                state.set$fixedFlag$sample29(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample29())
+            if(state.get$fixedFlag$sample29())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -152,12 +337,12 @@ public final class Deterministic2 extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$n();
+                return state.get$n();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$n(value, allocated); }
+        protected void setValueInternal(int value) { state.set$n(value, allocated); }
     };
 
 	/** Observed variable representing n of type int from the Sandwood model. */
@@ -169,12 +354,12 @@ public final class Deterministic2 extends Model {
         @Override
         public boolean[] getValue() {
             synchronized(model) {
-                return system$c.get$flipsMeasured();
+                return state.get$flipsMeasured();
             }
         }
 
         @Override
-        protected void setValueInternal(boolean[] value) { system$c.set$flipsMeasured(value, allocated); }
+        protected void setValueInternal(boolean[] value) { state.set$flipsMeasured(value, allocated); }
     };
 
 	/**
@@ -191,6 +376,7 @@ public final class Deterministic2 extends Model {
 	/** A constructor for a model where no variable values are set. */
     public Deterministic2() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("a", $a);
         $computedVariables.put("b", $b);
@@ -202,7 +388,9 @@ public final class Deterministic2 extends Model {
 
         //Observed scalar fields
         $regularObservedValues.put("flipsMeasured", $flipsMeasured);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        Deterministic2$SingleThreadCPU core = new Deterministic2$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -229,41 +417,15 @@ public final class Deterministic2 extends Model {
     }
     
     @Override
-    protected Deterministic2$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        Deterministic2$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new Deterministic2$SingleThreadCPU(target);
-                break;
+                return new Deterministic2$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new Deterministic2$MultiThreadCPU(target);
-                break;
+                return new Deterministic2$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(Deterministic2$CoreInterface oldCore, Deterministic2$CoreInterface newCore) {
-        //Model inputs
-        if(n.isSet())
-            newCore.set$n(oldCore.get$n(), false);
-
-        //Observed scalars
-        if(flipsMeasured.isSet())
-            newCore.set$flipsMeasured(oldCore.get$flipsMeasured(), false);
-
-        //ComputedVariables
-        if($a.isSet())
-            newCore.set$a(oldCore.get$a(), false);
-        if($m.isSet())
-            newCore.set$m(oldCore.get$m(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample29(oldCore.get$fixedFlag$sample29(), false);
-        newCore.set$fixedFlag$sample55(oldCore.get$fixedFlag$sample55(), false);
     }
 
 	/**

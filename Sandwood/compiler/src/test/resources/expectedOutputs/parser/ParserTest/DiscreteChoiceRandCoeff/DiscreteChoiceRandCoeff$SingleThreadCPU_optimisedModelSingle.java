@@ -1,405 +1,119 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.DiscreteChoiceRandCoeff$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.DiscreteChoiceRandCoeff.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThreadCPU implements DiscreteChoiceRandCoeff$CoreInterface {
+final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	int[] ObsChoices;
-	int[][] Prices;
-	double b;
-	double[] beta;
-	int[] choices;
-	boolean[] constrainedFlag$sample21;
-	boolean constrainedFlag$sample28 = true;
-	boolean constrainedFlag$sample34 = true;
-	boolean[] constrainedFlag$sample47;
-	double[][] exped;
-	boolean fixedFlag$sample21 = false;
-	boolean fixedFlag$sample28 = false;
-	boolean fixedFlag$sample34 = false;
-	boolean fixedFlag$sample47 = false;
-	boolean fixedProbFlag$sample103 = false;
-	boolean fixedProbFlag$sample21 = false;
-	boolean fixedProbFlag$sample28 = false;
-	boolean fixedProbFlag$sample34 = false;
-	boolean fixedProbFlag$sample47 = false;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$b;
-	double logProbability$beta;
-	double logProbability$choices;
-	double logProbability$prob;
-	double[] logProbability$sample21;
-	double[] logProbability$sample47;
-	double logProbability$sigma;
-	double logProbability$ut;
-	double logProbability$var102;
-	int noObs;
-	int noProducts;
-	double[][] prob;
-	double sigma;
-	boolean system$gibbsForward = true;
-	double[] ut;
-	boolean[] guard$sample21categorical102$global;
-	boolean[][] guard$sample21put101$global;
-	boolean[] guard$sample47categorical102$global;
-	boolean[][] guard$sample47put101$global;
+		// Declare the scratch variables for the model.
+		boolean[] guard$sample21categorical102$global;
+		boolean[][] guard$sample21put101$global;
+		boolean[] guard$sample47categorical102$global;
+		boolean[][] guard$sample47put101$global;
 
-	public DiscreteChoiceRandCoeff$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
-
-	// Getter for ObsChoices.
-	@Override
-	public final int[] get$ObsChoices() {
-		return ObsChoices;
-	}
-
-	// Setter for ObsChoices.
-	@Override
-	public final void set$ObsChoices(int[] cv$value, boolean allocated$) {
-		ObsChoices = cv$value;
-	}
-
-	// Getter for Prices.
-	@Override
-	public final int[][] get$Prices() {
-		return Prices;
-	}
-
-	// Setter for Prices.
-	@Override
-	public final void set$Prices(int[][] cv$value, boolean allocated$) {
-		Prices = cv$value;
-	}
-
-	// Getter for b.
-	@Override
-	public final double get$b() {
-		return b;
-	}
-
-	// Setter for b.
-	@Override
-	public final void set$b(double cv$value, boolean allocated$) {
-		// Set flags for all the side effects of b including if probabilities need to be updated.
-		b = cv$value;
-		
-		// Unset the fixed probability flag for sample 28 as it depends on b.
-		fixedProbFlag$sample28 = false;
-		
-		// Unset the fixed probability flag for sample 47 as it depends on b.
-		fixedProbFlag$sample47 = false;
-	}
-
-	// Getter for beta.
-	@Override
-	public final double[] get$beta() {
-		return beta;
-	}
-
-	// Setter for beta.
-	@Override
-	public final void set$beta(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of beta including if probabilities need to be
-		// updated.
-		beta = cv$value;
-		
-		// Unset the fixed probability flag for sample 47 as it depends on beta.
-		fixedProbFlag$sample47 = false;
-		
-		// Unset the fixed probability flag for sample 103 as it depends on beta.
-		fixedProbFlag$sample103 = false;
-	}
-
-	// Getter for choices.
-	@Override
-	public final int[] get$choices() {
-		return choices;
-	}
-
-	// Getter for fixedFlag$sample21.
-	@Override
-	public final boolean get$fixedFlag$sample21() {
-		return fixedFlag$sample21;
-	}
-
-	// Setter for fixedFlag$sample21.
-	@Override
-	public final void set$fixedFlag$sample21(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample21 including if probabilities
-		// need to be updated.
-		fixedFlag$sample21 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample21$1 = 0; index$constrainedFlag$sample21$1 < constrainedFlag$sample21.length; index$constrainedFlag$sample21$1 += 1)
-				constrainedFlag$sample21[index$constrainedFlag$sample21$1] = true;
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// Constructor for guard$sample21put101$global
+			{
+				// Calculate the largest index of j that is possible and allocate an array to hold
+				// the guard for each of these.
+				int cv$max_j$var97 = 0;
+				if((0 < state.noObs))
+					// Calculate the largest index of j that is possible and allocate an array to hold
+					// the guard for each of these.
+					cv$max_j$var97 = Math.max(0, state.noProducts);
+				
+				// Allocation of guard$sample21put101$global for single threaded execution
+				// 
+				// Calculate the largest index of i that is possible and allocate an array to hold
+				// the guard for each of these.
+				guard$sample21put101$global = new boolean[Math.max(0, state.noObs)][cv$max_j$var97];
+			}
+			
+			// Constructor for guard$sample21categorical102$global
+			// 
+			// Allocation of guard$sample21categorical102$global for single threaded execution
+			// 
+			// Calculate the largest index of i that is possible and allocate an array to hold
+			// the guard for each of these.
+			guard$sample21categorical102$global = new boolean[Math.max(0, state.noObs)];
+			
+			// Constructor for guard$sample47put101$global
+			// 
+			// Calculate the largest index of j that is possible and allocate an array to hold
+			// the guard for each of these.
+			int cv$max_j$var97 = 0;
+			if((0 < state.noObs))
+				// Calculate the largest index of j that is possible and allocate an array to hold
+				// the guard for each of these.
+				cv$max_j$var97 = Math.max(0, state.noProducts);
+			
+			// Allocation of guard$sample47put101$global for single threaded execution
+			// 
+			// Calculate the largest index of i that is possible and allocate an array to hold
+			// the guard for each of these.
+			guard$sample47put101$global = new boolean[Math.max(0, state.noObs)][cv$max_j$var97];
+			
+			// Allocation of guard$sample47categorical102$global for single threaded execution
+			// 
+			// Calculate the largest index of i that is possible and allocate an array to hold
+			// the guard for each of these.
+			guard$sample47categorical102$global = new boolean[Math.max(0, state.noObs)];
 		}
-		
-		// Should the probability of sample 21 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample21" with its value "cv$value".
-		fixedProbFlag$sample21 = (cv$value && fixedProbFlag$sample21);
-		
-		// Should the probability of sample 103 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample21" with its value "cv$value".
-		fixedProbFlag$sample103 = (cv$value && fixedProbFlag$sample103);
 	}
 
-	// Getter for fixedFlag$sample28.
-	@Override
-	public final boolean get$fixedFlag$sample28() {
-		return fixedFlag$sample28;
-	}
 
-	// Setter for fixedFlag$sample28.
-	@Override
-	public final void set$fixedFlag$sample28(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample28 including if probabilities
-		// need to be updated.
-		fixedFlag$sample28 = cv$value;
-		
-		// Substituted "fixedFlag$sample28" with its value "cv$value".
-		constrainedFlag$sample28 = (cv$value || constrainedFlag$sample28);
-		
-		// Should the probability of sample 28 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample28" with its value "cv$value".
-		fixedProbFlag$sample28 = (cv$value && fixedProbFlag$sample28);
-		
-		// Should the probability of sample 47 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample28" with its value "cv$value".
-		fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
-	}
-
-	// Getter for fixedFlag$sample34.
-	@Override
-	public final boolean get$fixedFlag$sample34() {
-		return fixedFlag$sample34;
-	}
-
-	// Setter for fixedFlag$sample34.
-	@Override
-	public final void set$fixedFlag$sample34(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample34 including if probabilities
-		// need to be updated.
-		fixedFlag$sample34 = cv$value;
-		
-		// Substituted "fixedFlag$sample34" with its value "cv$value".
-		constrainedFlag$sample34 = (cv$value || constrainedFlag$sample34);
-		
-		// Should the probability of sample 34 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample34" with its value "cv$value".
-		fixedProbFlag$sample34 = (cv$value && fixedProbFlag$sample34);
-		
-		// Should the probability of sample 47 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample34" with its value "cv$value".
-		fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
-	}
-
-	// Getter for fixedFlag$sample47.
-	@Override
-	public final boolean get$fixedFlag$sample47() {
-		return fixedFlag$sample47;
-	}
-
-	// Setter for fixedFlag$sample47.
-	@Override
-	public final void set$fixedFlag$sample47(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample47 including if probabilities
-		// need to be updated.
-		fixedFlag$sample47 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
-				constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
-		}
-		
-		// Should the probability of sample 47 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample47" with its value "cv$value".
-		fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
-		
-		// Should the probability of sample 103 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample47" with its value "cv$value".
-		fixedProbFlag$sample103 = (cv$value && fixedProbFlag$sample103);
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$b.
-	@Override
-	public final double get$logProbability$b() {
-		return logProbability$b;
-	}
-
-	// Getter for logProbability$beta.
-	@Override
-	public final double get$logProbability$beta() {
-		return logProbability$beta;
-	}
-
-	// Getter for logProbability$choices.
-	@Override
-	public final double get$logProbability$choices() {
-		return logProbability$choices;
-	}
-
-	// Getter for logProbability$prob.
-	@Override
-	public final double get$logProbability$prob() {
-		return logProbability$prob;
-	}
-
-	// Getter for logProbability$sigma.
-	@Override
-	public final double get$logProbability$sigma() {
-		return logProbability$sigma;
-	}
-
-	// Getter for logProbability$ut.
-	@Override
-	public final double get$logProbability$ut() {
-		return logProbability$ut;
-	}
-
-	// Getter for noObs.
-	@Override
-	public final int get$noObs() {
-		return noObs;
-	}
-
-	// Setter for noObs.
-	@Override
-	public final void set$noObs(int cv$value, boolean allocated$) {
-		noObs = cv$value;
-	}
-
-	// Getter for noProducts.
-	@Override
-	public final int get$noProducts() {
-		return noProducts;
-	}
-
-	// Setter for noProducts.
-	@Override
-	public final void set$noProducts(int cv$value, boolean allocated$) {
-		noProducts = cv$value;
-	}
-
-	// Getter for prob.
-	@Override
-	public final double[][] get$prob() {
-		return prob;
-	}
-
-	// Getter for sigma.
-	@Override
-	public final double get$sigma() {
-		return sigma;
-	}
-
-	// Setter for sigma.
-	@Override
-	public final void set$sigma(double cv$value, boolean allocated$) {
-		// Set flags for all the side effects of sigma including if probabilities need to
-		// be updated.
-		sigma = cv$value;
-		
-		// Unset the fixed probability flag for sample 34 as it depends on sigma.
-		fixedProbFlag$sample34 = false;
-		
-		// Unset the fixed probability flag for sample 47 as it depends on sigma.
-		fixedProbFlag$sample47 = false;
-	}
-
-	// Getter for ut.
-	@Override
-	public final double[] get$ut() {
-		return ut;
-	}
-
-	// Setter for ut.
-	@Override
-	public final void set$ut(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of ut including if probabilities need to be
-		// updated.
-		ut = cv$value;
-		
-		// Unset the fixed probability flag for sample 21 as it depends on ut.
-		fixedProbFlag$sample21 = false;
-		
-		// Unset the fixed probability flag for sample 103 as it depends on ut.
-		fixedProbFlag$sample103 = false;
+	public DiscreteChoiceRandCoeff$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample21
 	private final void drawValueSample21(int var20) {
-		ut[var20] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		state.ut[var20] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
 		
 		// Guards to ensure that exped is only updated when there is a valid path.
 		// 
 		// Looking for a path between Sample 21 and consumer double[] 77.
-		for(int i = 0; i < noObs; i += 1)
+		for(int i = 0; i < state.noObs; i += 1)
 									// Substituted "j$var69" with its value "var20".
-			exped[i][var20] = Math.exp((ut[var20] - (beta[i] * Prices[i][var20])));
-		for(int i = 0; i < noObs; i += 1) {
-			for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+			state.exped[i][var20] = Math.exp((state.ut[var20] - (state.beta[i] * state.Prices[i][var20])));
+		for(int i = 0; i < state.noObs; i += 1) {
+			for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample21put101$global[i][j$var97] = false;
+				scratch.guard$sample21put101$global[i][j$var97] = false;
 		}
-		for(int i = 0; i < noObs; i += 1)
+		for(int i = 0; i < state.noObs; i += 1)
 			// Set the flags to false
 			// 
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
 			// 
 			// Substituted "j$var97" with its value "var20".
-			guard$sample21put101$global[i][var20] = false;
-		for(int i = 0; i < noObs; i += 1) {
-			for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+			scratch.guard$sample21put101$global[i][var20] = false;
+		for(int i = 0; i < state.noObs; i += 1) {
+			for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample21put101$global[i][j$var97]) {
+				if(!scratch.guard$sample21put101$global[i][j$var97]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample21put101$global[i][j$var97] = true;
+					scratch.guard$sample21put101$global[i][j$var97] = true;
 					
 					// Reduction of array exped
 					// 
@@ -409,31 +123,31 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 					double reduceVar$sum$10 = 0.0;
 					
 					// For each index in the array to be reduced
-					for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+					for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 						// Execute the reduction function, saving the result into the return value.
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
 						// 
 																								// l's comment
 						// Set the right hand term to a value from the array exped
-						reduceVar$sum$10 = (reduceVar$sum$10 + exped[i][cv$reduction82Index]);
-					prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$10);
+						reduceVar$sum$10 = (reduceVar$sum$10 + state.exped[i][cv$reduction82Index]);
+					state.prob[i][j$var97] = (state.exped[i][j$var97] / reduceVar$sum$10);
 				}
 			}
 		}
-		for(int i = 0; i < noObs; i += 1) {
+		for(int i = 0; i < state.noObs; i += 1) {
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
 			// 
 			// Substituted "j$var97" with its value "var20".
-			if(!guard$sample21put101$global[i][var20]) {
+			if(!scratch.guard$sample21put101$global[i][var20]) {
 				// The body will execute, so should not be executed again
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				// 
 				// Substituted "j$var97" with its value "var20".
-				guard$sample21put101$global[i][var20] = true;
+				scratch.guard$sample21put101$global[i][var20] = true;
 				
 				// Reduction of array exped
 				// 
@@ -443,69 +157,69 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 				double reduceVar$sum$11 = 0.0;
 				
 				// For each index in the array to be reduced
-				for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+				for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 					// Execute the reduction function, saving the result into the return value.
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
 																				// l's comment
 					// Set the right hand term to a value from the array exped
-					reduceVar$sum$11 = (reduceVar$sum$11 + exped[i][cv$reduction82Index]);
+					reduceVar$sum$11 = (reduceVar$sum$11 + state.exped[i][cv$reduction82Index]);
 				
 												// Substituted "j$var97" with its value "var20".
-				prob[i][var20] = (exped[i][var20] / reduceVar$sum$11);
+				state.prob[i][var20] = (state.exped[i][var20] / reduceVar$sum$11);
 			}
 		}
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample28
 	private final void drawValueSample28() {
-		b = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		state.b = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample34
 	private final void drawValueSample34() {
-		sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
+		state.sigma = DistributionSampling.sampleInverseGamma(state.RNG$, 2.0, 2.0);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample47
 	private final void drawValueSample47(int var46) {
-		beta[var46] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$)) + b);
+		state.beta[var46] = ((Math.sqrt(state.sigma) * DistributionSampling.sampleGaussian(state.RNG$)) + state.b);
 		
 		// Guards to ensure that exped is only updated when there is a valid path.
 		// 
 		// Looking for a path between Sample 47 and consumer double[] 77.
-		for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
+		for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1)
 									// Substituted "i" with its value "var46".
-			exped[var46][j$var69] = Math.exp((ut[j$var69] - (beta[var46] * Prices[var46][j$var69])));
+			state.exped[var46][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[var46] * state.Prices[var46][j$var69])));
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((0 < noProducts)) {
-			for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+		if((0 < state.noProducts)) {
+			for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample47put101$global[var46][j$var97] = false;
+				scratch.guard$sample47put101$global[var46][j$var97] = false;
 		}
-		for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
+		for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1)
 			// Set the flags to false
 			// 
 									// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
-			guard$sample47put101$global[var46][j$var69] = false;
+			scratch.guard$sample47put101$global[var46][j$var69] = false;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((0 < noProducts)) {
-			for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+		if((0 < state.noProducts)) {
+			for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample47put101$global[var46][j$var97]) {
+				if(!scratch.guard$sample47put101$global[var46][j$var97]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample47put101$global[var46][j$var97] = true;
+					scratch.guard$sample47put101$global[var46][j$var97] = true;
 					
 					// Reduction of array exped
 					// 
@@ -515,7 +229,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 					double reduceVar$sum$12 = 0.0;
 					
 					// For each index in the array to be reduced
-					for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+					for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 						// Execute the reduction function, saving the result into the return value.
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
@@ -527,20 +241,20 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 						// Set the right hand term to a value from the array exped
 						// 
 						// Substituted "i" with its value "var46".
-						reduceVar$sum$12 = (reduceVar$sum$12 + exped[var46][cv$reduction82Index]);
+						reduceVar$sum$12 = (reduceVar$sum$12 + state.exped[var46][cv$reduction82Index]);
 					
 															// Substituted "i" with its value "var46".
-					prob[var46][j$var97] = (exped[var46][j$var97] / reduceVar$sum$12);
+					state.prob[var46][j$var97] = (state.exped[var46][j$var97] / reduceVar$sum$12);
 				}
 			}
 		}
-		for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-			if(!guard$sample47put101$global[var46][j$var69]) {
+		for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+			if(!scratch.guard$sample47put101$global[var46][j$var69]) {
 				// The body will execute, so should not be executed again
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample47put101$global[var46][j$var69] = true;
+				scratch.guard$sample47put101$global[var46][j$var69] = true;
 				
 				// Reduction of array exped
 				// 
@@ -550,7 +264,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 				double reduceVar$sum$13 = 0.0;
 				
 				// For each index in the array to be reduced
-				for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+				for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 					// Execute the reduction function, saving the result into the return value.
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
@@ -562,10 +276,10 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 					// Set the right hand term to a value from the array exped
 					// 
 					// Substituted "i" with its value "var46".
-					reduceVar$sum$13 = (reduceVar$sum$13 + exped[var46][cv$reduction82Index]);
+					reduceVar$sum$13 = (reduceVar$sum$13 + state.exped[var46][cv$reduction82Index]);
 				
 												// Substituted "i" with its value "var46".
-				prob[var46][j$var69] = (exped[var46][j$var69] / reduceVar$sum$13);
+				state.prob[var46][j$var69] = (state.exped[var46][j$var69] / reduceVar$sum$13);
 			}
 		}
 	}
@@ -573,10 +287,10 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 21 drawn from Gaussian 9. Inference was performed using Metropolis-Hastings.
 	private final void inferSample21(int var20) {
-		constrainedFlag$sample21[var20] = false;
+		state.constrainedFlag$sample21[var20] = false;
 		
 		// The original value of the sample
-		double cv$originalValue = ut[var20];
+		double cv$originalValue = state.ut[var20];
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -591,30 +305,30 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			cv$var = 0.010000000000000002;
 		
 		// The proposed new value for the sample
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 		{
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
 			// Set the current value to the current state of the tree.
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
-			for(int i = 0; i < noObs; i += 1)
+			for(int i = 0; i < state.noObs; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample21categorical102$global[i] = false;
-			for(int i = 0; i < noObs; i += 1) {
+				scratch.guard$sample21categorical102$global[i] = false;
+			for(int i = 0; i < state.noObs; i += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample21categorical102$global[i]) {
+				if(!scratch.guard$sample21categorical102$global[i]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample21categorical102$global[i] = true;
+					scratch.guard$sample21categorical102$global[i] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample21[var20] = true;
+					state.constrainedFlag$sample21[var20] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -628,20 +342,20 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 					// Declaration comment was:
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
-					cv$accumulatedProbabilities = ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0.0 <= prob[i][choices[i]])) && (prob[i][choices[i]] <= 1.0))?Math.log(prob[i][choices[i]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0.0 <= state.prob[i][state.choices[i]])) && (state.prob[i][state.choices[i]] <= 1.0))?Math.log(state.prob[i][state.choices[i]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
-			for(int i = 0; i < noObs; i += 1) {
+			for(int i = 0; i < state.noObs; i += 1) {
 												// Substituted "j$var69" with its value "var20".
-				if(!guard$sample21categorical102$global[i]) {
+				if(!scratch.guard$sample21categorical102$global[i]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample21categorical102$global[i] = true;
+					scratch.guard$sample21categorical102$global[i] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample21[var20] = true;
+					state.constrainedFlag$sample21[var20] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -655,7 +369,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 					// Declaration comment was:
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
-					cv$accumulatedProbabilities = ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0.0 <= prob[i][choices[i]])) && (prob[i][choices[i]] <= 1.0))?Math.log(prob[i][choices[i]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0.0 <= state.prob[i][state.choices[i]])) && (state.prob[i][state.choices[i]] <= 1.0))?Math.log(state.prob[i][state.choices[i]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
 			
@@ -669,42 +383,42 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(constrainedFlag$sample21[var20]) {
+		if(state.constrainedFlag$sample21[var20]) {
 			// Guards to ensure that ut is only updated when there is a valid path.
-			ut[var20] = cv$proposedValue;
+			state.ut[var20] = cv$proposedValue;
 			
 			// Guards to ensure that exped is only updated when there is a valid path.
 			// 
 			// Looking for a path between Sample 21 and consumer double[] 77.
-			for(int i = 0; i < noObs; i += 1)
+			for(int i = 0; i < state.noObs; i += 1)
 												// Substituted "j$var69" with its value "var20".
-				exped[i][var20] = Math.exp((ut[var20] - (beta[i] * Prices[i][var20])));
-			for(int i = 0; i < noObs; i += 1) {
-				for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+				state.exped[i][var20] = Math.exp((state.ut[var20] - (state.beta[i] * state.Prices[i][var20])));
+			for(int i = 0; i < state.noObs; i += 1) {
+				for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample21put101$global[i][j$var97] = false;
+					scratch.guard$sample21put101$global[i][j$var97] = false;
 			}
-			for(int i = 0; i < noObs; i += 1)
+			for(int i = 0; i < state.noObs; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				// 
 				// Substituted "j$var97" with its value "var20".
-				guard$sample21put101$global[i][var20] = false;
-			for(int i = 0; i < noObs; i += 1) {
-				for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+				scratch.guard$sample21put101$global[i][var20] = false;
+			for(int i = 0; i < state.noObs; i += 1) {
+				for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					if(!guard$sample21put101$global[i][j$var97]) {
+					if(!scratch.guard$sample21put101$global[i][j$var97]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample21put101$global[i][j$var97] = true;
+						scratch.guard$sample21put101$global[i][j$var97] = true;
 						
 						// Reduction of array exped
 						// 
@@ -714,31 +428,31 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 						double reduceVar$sum$0 = 0.0;
 						
 						// For each index in the array to be reduced
-						for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+						for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
 																												// l's comment
 							// Set the right hand term to a value from the array exped
-							reduceVar$sum$0 = (reduceVar$sum$0 + exped[i][cv$reduction82Index]);
-						prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$0);
+							reduceVar$sum$0 = (reduceVar$sum$0 + state.exped[i][cv$reduction82Index]);
+						state.prob[i][j$var97] = (state.exped[i][j$var97] / reduceVar$sum$0);
 					}
 				}
 			}
-			for(int i = 0; i < noObs; i += 1) {
+			for(int i = 0; i < state.noObs; i += 1) {
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				// 
 				// Substituted "j$var97" with its value "var20".
-				if(!guard$sample21put101$global[i][var20]) {
+				if(!scratch.guard$sample21put101$global[i][var20]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					// 
 					// Substituted "j$var97" with its value "var20".
-					guard$sample21put101$global[i][var20] = true;
+					scratch.guard$sample21put101$global[i][var20] = true;
 					
 					// Reduction of array exped
 					// 
@@ -748,40 +462,40 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 					double reduceVar$sum$1 = 0.0;
 					
 					// For each index in the array to be reduced
-					for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+					for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 						// Execute the reduction function, saving the result into the return value.
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
 						// 
 																								// l's comment
 						// Set the right hand term to a value from the array exped
-						reduceVar$sum$1 = (reduceVar$sum$1 + exped[i][cv$reduction82Index]);
+						reduceVar$sum$1 = (reduceVar$sum$1 + state.exped[i][cv$reduction82Index]);
 					
 															// Substituted "j$var97" with its value "var20".
-					prob[i][var20] = (exped[i][var20] / reduceVar$sum$1);
+					state.prob[i][var20] = (state.exped[i][var20] / reduceVar$sum$1);
 				}
 			}
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
-			for(int i = 0; i < noObs; i += 1)
+			for(int i = 0; i < state.noObs; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample21categorical102$global[i] = false;
-			for(int i = 0; i < noObs; i += 1) {
+				scratch.guard$sample21categorical102$global[i] = false;
+			for(int i = 0; i < state.noObs; i += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample21categorical102$global[i]) {
+				if(!scratch.guard$sample21categorical102$global[i]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample21categorical102$global[i] = true;
+					scratch.guard$sample21categorical102$global[i] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample21[var20] = true;
+					state.constrainedFlag$sample21[var20] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -795,20 +509,20 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 					// Declaration comment was:
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
-					cv$accumulatedProbabilities = ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0.0 <= prob[i][choices[i]])) && (prob[i][choices[i]] <= 1.0))?Math.log(prob[i][choices[i]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0.0 <= state.prob[i][state.choices[i]])) && (state.prob[i][state.choices[i]] <= 1.0))?Math.log(state.prob[i][state.choices[i]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
-			for(int i = 0; i < noObs; i += 1) {
+			for(int i = 0; i < state.noObs; i += 1) {
 												// Substituted "j$var69" with its value "var20".
-				if(!guard$sample21categorical102$global[i]) {
+				if(!scratch.guard$sample21categorical102$global[i]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample21categorical102$global[i] = true;
+					scratch.guard$sample21categorical102$global[i] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample21[var20] = true;
+					state.constrainedFlag$sample21[var20] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -822,7 +536,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 					// Declaration comment was:
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
-					cv$accumulatedProbabilities = ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0.0 <= prob[i][choices[i]])) && (prob[i][choices[i]] <= 1.0))?Math.log(prob[i][choices[i]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0.0 <= state.prob[i][state.choices[i]])) && (state.prob[i][state.choices[i]] <= 1.0))?Math.log(state.prob[i][state.choices[i]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
 			
@@ -839,7 +553,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			// Test if the probability of the sample is sufficient to keep the value. This needs
 			// to be less than or equal as otherwise if the proposed value is not possible and
 			// the random value is 0 an impossible value will be accepted.
-			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(state.RNG$))) || Double.isNaN(cv$ratio))) {
 				// If it is not revert the changes.
 				// 
 				// Set the sample value
@@ -847,40 +561,40 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 				// 
 				// Write out the value of the sample to a temporary variable prior to updating the
 				// intermediate variables.
-				ut[var20] = cv$originalValue;
+				state.ut[var20] = cv$originalValue;
 				
 				// Guards to ensure that exped is only updated when there is a valid path.
 				// 
 				// Looking for a path between Sample 21 and consumer double[] 77.
-				for(int i = 0; i < noObs; i += 1)
+				for(int i = 0; i < state.noObs; i += 1)
 															// Substituted "j$var69" with its value "var20".
-					exped[i][var20] = Math.exp((ut[var20] - (beta[i] * Prices[i][var20])));
-				for(int i = 0; i < noObs; i += 1) {
-					for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+					state.exped[i][var20] = Math.exp((state.ut[var20] - (state.beta[i] * state.Prices[i][var20])));
+				for(int i = 0; i < state.noObs; i += 1) {
+					for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
 						// Set the flags to false
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample21put101$global[i][j$var97] = false;
+						scratch.guard$sample21put101$global[i][j$var97] = false;
 				}
-				for(int i = 0; i < noObs; i += 1)
+				for(int i = 0; i < state.noObs; i += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					// 
 					// Substituted "j$var97" with its value "var20".
-					guard$sample21put101$global[i][var20] = false;
-				for(int i = 0; i < noObs; i += 1) {
-					for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+					scratch.guard$sample21put101$global[i][var20] = false;
+				for(int i = 0; i < state.noObs; i += 1) {
+					for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						if(!guard$sample21put101$global[i][j$var97]) {
+						if(!scratch.guard$sample21put101$global[i][j$var97]) {
 							// The body will execute, so should not be executed again
 							// 
 							// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							guard$sample21put101$global[i][j$var97] = true;
+							scratch.guard$sample21put101$global[i][j$var97] = true;
 							
 							// Reduction of array exped
 							// 
@@ -890,31 +604,31 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 							double reduceVar$sum$3 = 0.0;
 							
 							// For each index in the array to be reduced
-							for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+							for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 								// Execute the reduction function, saving the result into the return value.
 								// 
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
 																																// l's comment
 								// Set the right hand term to a value from the array exped
-								reduceVar$sum$3 = (reduceVar$sum$3 + exped[i][cv$reduction82Index]);
-							prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$3);
+								reduceVar$sum$3 = (reduceVar$sum$3 + state.exped[i][cv$reduction82Index]);
+							state.prob[i][j$var97] = (state.exped[i][j$var97] / reduceVar$sum$3);
 						}
 					}
 				}
-				for(int i = 0; i < noObs; i += 1) {
+				for(int i = 0; i < state.noObs; i += 1) {
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					// 
 					// Substituted "j$var97" with its value "var20".
-					if(!guard$sample21put101$global[i][var20]) {
+					if(!scratch.guard$sample21put101$global[i][var20]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
 						// 
 						// Substituted "j$var97" with its value "var20".
-						guard$sample21put101$global[i][var20] = true;
+						scratch.guard$sample21put101$global[i][var20] = true;
 						
 						// Reduction of array exped
 						// 
@@ -924,17 +638,17 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 						double reduceVar$sum$4 = 0.0;
 						
 						// For each index in the array to be reduced
-						for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+						for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
 																												// l's comment
 							// Set the right hand term to a value from the array exped
-							reduceVar$sum$4 = (reduceVar$sum$4 + exped[i][cv$reduction82Index]);
+							reduceVar$sum$4 = (reduceVar$sum$4 + state.exped[i][cv$reduction82Index]);
 						
 																		// Substituted "j$var97" with its value "var20".
-						prob[i][var20] = (exped[i][var20] / reduceVar$sum$4);
+						state.prob[i][var20] = (state.exped[i][var20] / reduceVar$sum$4);
 					}
 				}
 			}
@@ -945,7 +659,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 	// by sample task 28 drawn from Gaussian 27. Inference was performed using a Gaussian
 	// to Gaussian conjugate prior.
 	private final void inferSample28() {
-		constrainedFlag$sample28 = false;
+		state.constrainedFlag$sample28 = false;
 		
 		// State to record the weighting of each sample that is consumed. This is the:
 		// sum of the sample denominator*(the sample value - the sample nominator).
@@ -963,11 +677,11 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 		// Processing random variable 35.
 		// 
 		// Processing sample task 47 of consumer random variable null.
-		for(int var46 = 0; var46 < noObs; var46 += 1) {
+		for(int var46 = 0; var46 < state.noObs; var46 += 1) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((fixedFlag$sample47 || constrainedFlag$sample47[var46])) {
+			if((state.fixedFlag$sample47 || state.constrainedFlag$sample47[var46])) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample28 = true;
+				state.constrainedFlag$sample28 = true;
 				
 				// Record the value of a sample generated by a consuming sample 47 of random variable
 				// var35.
@@ -982,26 +696,26 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 				// Add the weighting of the sample to the sum.
 				// 
 												// Substituted "cv$numerator" with its value "0.0".
-				cv$sum = (cv$sum + beta[var46]);
+				cv$sum = (cv$sum + state.beta[var46]);
 				
 				// If we have not got the value of sigma yet record it and set a flag so it is not
 				// recorded again.
 				if(cv$sigmaNotFound) {
-					cv$sigmaValue = sigma;
+					cv$sigmaValue = state.sigma;
 					cv$sigmaNotFound = false;
 				}
 			}
 		}
-		if(constrainedFlag$sample28)
+		if(state.constrainedFlag$sample28)
 			// Write out the new value of the sample.
-			b = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+			state.b = Conjugates.sampleConjugateGaussianGaussian(state.RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 34 drawn from InverseGamma 33. Inference was performed using a Inverse
 	// Gamma to Gaussian conjugate prior.
 	private final void inferSample34() {
-		constrainedFlag$sample34 = false;
+		state.constrainedFlag$sample34 = false;
 		
 		// Variable to track the sum of the difference between the samples and the random
 		// variables mean squared.
@@ -1013,18 +727,18 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 		// Processing random variable 35.
 		// 
 		// Processing sample task 47 of consumer random variable null.
-		for(int var46 = 0; var46 < noObs; var46 += 1) {
+		for(int var46 = 0; var46 < state.noObs; var46 += 1) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((fixedFlag$sample47 || constrainedFlag$sample47[var46])) {
+			if((state.fixedFlag$sample47 || state.constrainedFlag$sample47[var46])) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample34 = true;
+				state.constrainedFlag$sample34 = true;
 				
 				// Consume sample task 47 from random variable var35.
 				// 
 				// The difference between the mean parameter and the value sampled from the Gaussian.
 				// 
 				// The mean parameter for Gaussian var35.
-				double cv$var35$diff = (b - beta[var46]);
+				double cv$var35$diff = (state.b - state.beta[var46]);
 				
 				// Include this sample by adding the square of the difference to the sum.
 				cv$sum = (cv$sum + (cv$var35$diff * cv$var35$diff));
@@ -1033,18 +747,18 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 				cv$count = (cv$count + 1);
 			}
 		}
-		if(constrainedFlag$sample34)
+		if(state.constrainedFlag$sample34)
 			// Write out the new value of the sample.
-			sigma = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 2.0, 2.0, cv$sum, cv$count);
+			state.sigma = Conjugates.sampleConjugateInverseGammaGaussian(state.RNG$, 2.0, 2.0, cv$sum, cv$count);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 47 drawn from Gaussian 35. Inference was performed using Metropolis-Hastings.
 	private final void inferSample47(int var46) {
-		constrainedFlag$sample47[var46] = false;
+		state.constrainedFlag$sample47[var46] = false;
 		
 		// The original value of the sample
-		double cv$originalValue = beta[var46];
+		double cv$originalValue = state.beta[var46];
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -1059,30 +773,30 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			cv$var = 0.010000000000000002;
 		
 		// The proposed new value for the sample
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 		{
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
 			// Set the current value to the current state of the tree.
-			double cv$accumulatedProbabilities = ((0.0 < sigma)?(DistributionSampling.logProbabilityGaussian(((cv$originalValue - b) / Math.sqrt(sigma))) - (Math.log(sigma) * 0.5)):Double.NEGATIVE_INFINITY);
+			double cv$accumulatedProbabilities = ((0.0 < state.sigma)?(DistributionSampling.logProbabilityGaussian(((cv$originalValue - state.b) / Math.sqrt(state.sigma))) - (Math.log(state.sigma) * 0.5)):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 < noProducts)) {
+			if((0 < state.noProducts)) {
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample47categorical102$global[var46] = false;
-				if(!guard$sample47categorical102$global[var46]) {
+				scratch.guard$sample47categorical102$global[var46] = false;
+				if(!scratch.guard$sample47categorical102$global[var46]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample47categorical102$global[var46] = true;
+					scratch.guard$sample47categorical102$global[var46] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample47[var46] = true;
+					state.constrainedFlag$sample47[var46] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1098,17 +812,17 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 					// inputs.
 					// 
 															// Substituted "i" with its value "var46".
-					cv$accumulatedProbabilities = ((((((0.0 <= choices[var46]) && (choices[var46] < noProducts)) && (0.0 <= prob[var46][choices[var46]])) && (prob[var46][choices[var46]] <= 1.0))?Math.log(prob[var46][choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((((0.0 <= state.choices[var46]) && (state.choices[var46] < state.noProducts)) && (0.0 <= state.prob[var46][state.choices[var46]])) && (state.prob[var46][state.choices[var46]] <= 1.0))?Math.log(state.prob[var46][state.choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
-				if(!guard$sample47categorical102$global[var46]) {
+				if(!scratch.guard$sample47categorical102$global[var46]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample47categorical102$global[var46] = true;
+					scratch.guard$sample47categorical102$global[var46] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample47[var46] = true;
+					state.constrainedFlag$sample47[var46] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1124,7 +838,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 					// inputs.
 					// 
 															// Substituted "i" with its value "var46".
-					cv$accumulatedProbabilities = ((((((0.0 <= choices[var46]) && (choices[var46] < noProducts)) && (0.0 <= prob[var46][choices[var46]])) && (prob[var46][choices[var46]] <= 1.0))?Math.log(prob[var46][choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((((0.0 <= state.choices[var46]) && (state.choices[var46] < state.noProducts)) && (0.0 <= state.prob[var46][state.choices[var46]])) && (state.prob[var46][state.choices[var46]] <= 1.0))?Math.log(state.prob[var46][state.choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
 			
@@ -1138,44 +852,44 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(constrainedFlag$sample47[var46]) {
+		if(state.constrainedFlag$sample47[var46]) {
 			// Guards to ensure that beta is only updated when there is a valid path.
-			beta[var46] = cv$proposedValue;
+			state.beta[var46] = cv$proposedValue;
 			
 			// Guards to ensure that exped is only updated when there is a valid path.
 			// 
 			// Looking for a path between Sample 47 and consumer double[] 77.
-			for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
+			for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1)
 												// Substituted "i" with its value "var46".
-				exped[var46][j$var69] = Math.exp((ut[j$var69] - (beta[var46] * Prices[var46][j$var69])));
+				state.exped[var46][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[var46] * state.Prices[var46][j$var69])));
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 < noProducts)) {
-				for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+			if((0 < state.noProducts)) {
+				for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample47put101$global[var46][j$var97] = false;
+					scratch.guard$sample47put101$global[var46][j$var97] = false;
 			}
-			for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
+			for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1)
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample47put101$global[var46][j$var69] = false;
+				scratch.guard$sample47put101$global[var46][j$var69] = false;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 < noProducts)) {
-				for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+			if((0 < state.noProducts)) {
+				for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					if(!guard$sample47put101$global[var46][j$var97]) {
+					if(!scratch.guard$sample47put101$global[var46][j$var97]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample47put101$global[var46][j$var97] = true;
+						scratch.guard$sample47put101$global[var46][j$var97] = true;
 						
 						// Reduction of array exped
 						// 
@@ -1185,7 +899,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 						double reduceVar$sum$5 = 0.0;
 						
 						// For each index in the array to be reduced
-						for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+						for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
@@ -1197,20 +911,20 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 							// Set the right hand term to a value from the array exped
 							// 
 							// Substituted "i" with its value "var46".
-							reduceVar$sum$5 = (reduceVar$sum$5 + exped[var46][cv$reduction82Index]);
+							reduceVar$sum$5 = (reduceVar$sum$5 + state.exped[var46][cv$reduction82Index]);
 						
 																		// Substituted "i" with its value "var46".
-						prob[var46][j$var97] = (exped[var46][j$var97] / reduceVar$sum$5);
+						state.prob[var46][j$var97] = (state.exped[var46][j$var97] / reduceVar$sum$5);
 					}
 				}
 			}
-			for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-				if(!guard$sample47put101$global[var46][j$var69]) {
+			for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+				if(!scratch.guard$sample47put101$global[var46][j$var69]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample47put101$global[var46][j$var69] = true;
+					scratch.guard$sample47put101$global[var46][j$var69] = true;
 					
 					// Reduction of array exped
 					// 
@@ -1220,7 +934,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 					double reduceVar$sum$6 = 0.0;
 					
 					// For each index in the array to be reduced
-					for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+					for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 						// Execute the reduction function, saving the result into the return value.
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
@@ -1232,33 +946,33 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 						// Set the right hand term to a value from the array exped
 						// 
 						// Substituted "i" with its value "var46".
-						reduceVar$sum$6 = (reduceVar$sum$6 + exped[var46][cv$reduction82Index]);
+						reduceVar$sum$6 = (reduceVar$sum$6 + state.exped[var46][cv$reduction82Index]);
 					
 															// Substituted "i" with its value "var46".
-					prob[var46][j$var69] = (exped[var46][j$var69] / reduceVar$sum$6);
+					state.prob[var46][j$var69] = (state.exped[var46][j$var69] / reduceVar$sum$6);
 				}
 			}
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
-			double cv$accumulatedProbabilities = ((0.0 < sigma)?(DistributionSampling.logProbabilityGaussian(((cv$proposedValue - b) / Math.sqrt(sigma))) - (Math.log(sigma) * 0.5)):Double.NEGATIVE_INFINITY);
+			double cv$accumulatedProbabilities = ((0.0 < state.sigma)?(DistributionSampling.logProbabilityGaussian(((cv$proposedValue - state.b) / Math.sqrt(state.sigma))) - (Math.log(state.sigma) * 0.5)):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 < noProducts)) {
+			if((0 < state.noProducts)) {
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample47categorical102$global[var46] = false;
-				if(!guard$sample47categorical102$global[var46]) {
+				scratch.guard$sample47categorical102$global[var46] = false;
+				if(!scratch.guard$sample47categorical102$global[var46]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample47categorical102$global[var46] = true;
+					scratch.guard$sample47categorical102$global[var46] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample47[var46] = true;
+					state.constrainedFlag$sample47[var46] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1274,17 +988,17 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 					// inputs.
 					// 
 															// Substituted "i" with its value "var46".
-					cv$accumulatedProbabilities = ((((((0.0 <= choices[var46]) && (choices[var46] < noProducts)) && (0.0 <= prob[var46][choices[var46]])) && (prob[var46][choices[var46]] <= 1.0))?Math.log(prob[var46][choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((((0.0 <= state.choices[var46]) && (state.choices[var46] < state.noProducts)) && (0.0 <= state.prob[var46][state.choices[var46]])) && (state.prob[var46][state.choices[var46]] <= 1.0))?Math.log(state.prob[var46][state.choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
-				if(!guard$sample47categorical102$global[var46]) {
+				if(!scratch.guard$sample47categorical102$global[var46]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample47categorical102$global[var46] = true;
+					scratch.guard$sample47categorical102$global[var46] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample47[var46] = true;
+					state.constrainedFlag$sample47[var46] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1300,7 +1014,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 					// inputs.
 					// 
 															// Substituted "i" with its value "var46".
-					cv$accumulatedProbabilities = ((((((0.0 <= choices[var46]) && (choices[var46] < noProducts)) && (0.0 <= prob[var46][choices[var46]])) && (prob[var46][choices[var46]] <= 1.0))?Math.log(prob[var46][choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((((0.0 <= state.choices[var46]) && (state.choices[var46] < state.noProducts)) && (0.0 <= state.prob[var46][state.choices[var46]])) && (state.prob[var46][state.choices[var46]] <= 1.0))?Math.log(state.prob[var46][state.choices[var46]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
 			
@@ -1317,7 +1031,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			// Test if the probability of the sample is sufficient to keep the value. This needs
 			// to be less than or equal as otherwise if the proposed value is not possible and
 			// the random value is 0 an impossible value will be accepted.
-			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(state.RNG$))) || Double.isNaN(cv$ratio))) {
 				// If it is not revert the changes.
 				// 
 				// Set the sample value
@@ -1325,42 +1039,42 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 				// 
 				// Write out the value of the sample to a temporary variable prior to updating the
 				// intermediate variables.
-				beta[var46] = cv$originalValue;
+				state.beta[var46] = cv$originalValue;
 				
 				// Guards to ensure that exped is only updated when there is a valid path.
 				// 
 				// Looking for a path between Sample 47 and consumer double[] 77.
-				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
+				for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1)
 															// Substituted "i" with its value "var46".
-					exped[var46][j$var69] = Math.exp((ut[j$var69] - (beta[var46] * Prices[var46][j$var69])));
+					state.exped[var46][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[var46] * state.Prices[var46][j$var69])));
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 < noProducts)) {
-					for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+				if((0 < state.noProducts)) {
+					for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
 						// Set the flags to false
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample47put101$global[var46][j$var97] = false;
+						scratch.guard$sample47put101$global[var46][j$var97] = false;
 				}
-				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
+				for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample47put101$global[var46][j$var69] = false;
+					scratch.guard$sample47put101$global[var46][j$var69] = false;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 < noProducts)) {
-					for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+				if((0 < state.noProducts)) {
+					for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						if(!guard$sample47put101$global[var46][j$var97]) {
+						if(!scratch.guard$sample47put101$global[var46][j$var97]) {
 							// The body will execute, so should not be executed again
 							// 
 																					// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							guard$sample47put101$global[var46][j$var97] = true;
+							scratch.guard$sample47put101$global[var46][j$var97] = true;
 							
 							// Reduction of array exped
 							// 
@@ -1370,7 +1084,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 							double reduceVar$sum$8 = 0.0;
 							
 							// For each index in the array to be reduced
-							for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+							for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 								// Execute the reduction function, saving the result into the return value.
 								// 
 								// Copy the result of the reduction into the variable returned by the reduction.
@@ -1382,20 +1096,20 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 								// Set the right hand term to a value from the array exped
 								// 
 								// Substituted "i" with its value "var46".
-								reduceVar$sum$8 = (reduceVar$sum$8 + exped[var46][cv$reduction82Index]);
+								reduceVar$sum$8 = (reduceVar$sum$8 + state.exped[var46][cv$reduction82Index]);
 							
 																					// Substituted "i" with its value "var46".
-							prob[var46][j$var97] = (exped[var46][j$var97] / reduceVar$sum$8);
+							state.prob[var46][j$var97] = (state.exped[var46][j$var97] / reduceVar$sum$8);
 						}
 					}
 				}
-				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-					if(!guard$sample47put101$global[var46][j$var69]) {
+				for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+					if(!scratch.guard$sample47put101$global[var46][j$var69]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample47put101$global[var46][j$var69] = true;
+						scratch.guard$sample47put101$global[var46][j$var69] = true;
 						
 						// Reduction of array exped
 						// 
@@ -1405,7 +1119,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 						double reduceVar$sum$9 = 0.0;
 						
 						// For each index in the array to be reduced
-						for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+						for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
@@ -1417,10 +1131,10 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 							// Set the right hand term to a value from the array exped
 							// 
 							// Substituted "i" with its value "var46".
-							reduceVar$sum$9 = (reduceVar$sum$9 + exped[var46][cv$reduction82Index]);
+							reduceVar$sum$9 = (reduceVar$sum$9 + state.exped[var46][cv$reduction82Index]);
 						
 																		// Substituted "i" with its value "var46".
-						prob[var46][j$var69] = (exped[var46][j$var69] / reduceVar$sum$9);
+						state.prob[var46][j$var69] = (state.exped[var46][j$var69] / reduceVar$sum$9);
 					}
 				}
 			}
@@ -1432,16 +1146,16 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 	private final void logProbabilityValue$sample103() {
 		// Determine if we need to calculate the values for sample task 103 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample103) {
+		if(!state.fixedProbFlag$sample103) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < noObs; i += 1) {
+			for(int i = 0; i < state.noObs; i += 1) {
 				// The sample value to calculate the probability of generating
-				int cv$sampleValue = choices[i];
+				int cv$sampleValue = state.choices[i];
 				
 				// Record that the sample was reached.
 				cv$sampleReached = true;
@@ -1459,7 +1173,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				cv$sampleAccumulator = (cv$sampleAccumulator + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noProducts)) && (0 < noProducts)) && (0.0 <= prob[i][cv$sampleValue])) && (prob[i][cv$sampleValue] <= 1.0))?Math.log(prob[i][cv$sampleValue]):Double.NEGATIVE_INFINITY));
+				cv$sampleAccumulator = (cv$sampleAccumulator + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[i][cv$sampleValue])) && (state.prob[i][cv$sampleValue] <= 1.0))?Math.log(state.prob[i][cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
@@ -1471,7 +1185,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$var102 = cv$sampleAccumulator;
+				state.logProbability$var102 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -1479,7 +1193,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$choices = (logProbability$choices + cv$sampleAccumulator);
+			state.logProbability$choices = (state.logProbability$choices + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -1487,17 +1201,17 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample103 = (fixedFlag$sample21 && fixedFlag$sample47);
+			state.fixedProbFlag$sample103 = (state.fixedFlag$sample21 && state.fixedFlag$sample47);
 		} else {
 			// Using cached values.
 			// 
@@ -1506,15 +1220,15 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$choices = (logProbability$choices + logProbability$var102);
+			state.logProbability$choices = (state.logProbability$choices + state.logProbability$var102);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var102);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var102);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var102);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var102);
 		}
 	}
 
@@ -1523,11 +1237,11 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 	private final void logProbabilityValue$sample21() {
 		// Determine if we need to calculate the values for sample task 21 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample21) {
+		if(!state.fixedProbFlag$sample21) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var20 = 0; var20 < noProducts; var20 += 1) {
+			for(int var20 = 0; var20 < state.noProducts; var20 += 1) {
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
 				// Variable declaration of cv$distributionAccumulator moved.
@@ -1551,18 +1265,18 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((ut[var20] / 3.1622776601683795)) - 1.151292546497023);
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((state.ut[var20] / 3.1622776601683795)) - 1.151292546497023);
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 				
 				// Store the sample task probability
-				logProbability$sample21[var20] = cv$distributionAccumulator;
+				state.logProbability$sample21[var20] = cv$distributionAccumulator;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 < noObs))
+				if((0 < state.noObs))
 					// Update the variable probability
-					logProbability$prob = (logProbability$prob + cv$distributionAccumulator);
+					state.logProbability$prob = (state.logProbability$prob + cv$distributionAccumulator);
 			}
 			
 			// Update the variable probability
@@ -1571,7 +1285,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$ut = (logProbability$ut + cv$sampleAccumulator);
+			state.logProbability$ut = (state.logProbability$ut + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -1579,46 +1293,46 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample21)
+			if(state.fixedFlag$sample21)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample21 = fixedFlag$sample21;
+			state.fixedProbFlag$sample21 = state.fixedFlag$sample21;
 		} else {
 			// Using cached values.
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$rvAccumulator = 0.0;
-			for(int var20 = 0; var20 < noProducts; var20 += 1) {
-				double cv$sampleValue = logProbability$sample21[var20];
+			for(int var20 = 0; var20 < state.noProducts; var20 += 1) {
+				double cv$sampleValue = state.logProbability$sample21[var20];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 < noObs))
+				if((0 < state.noObs))
 					// Update the variable probability
-					logProbability$prob = (logProbability$prob + cv$sampleValue);
+					state.logProbability$prob = (state.logProbability$prob + cv$sampleValue);
 			}
 			
 			// Update the variable probability
-			logProbability$ut = (logProbability$ut + cv$rvAccumulator);
+			state.logProbability$ut = (state.logProbability$ut + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$rvAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample21)
-				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
+			if(state.fixedFlag$sample21)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$rvAccumulator);
 		}
 	}
 
@@ -1627,7 +1341,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 	private final void logProbabilityValue$sample28() {
 		// Determine if we need to calculate the values for sample task 28 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample28) {
+		if(!state.fixedProbFlag$sample28) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -1652,10 +1366,10 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((b / 3.1622776601683795)) - 1.151292546497023);
+			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((state.b / 3.1622776601683795)) - 1.151292546497023);
 			
 			// Store the sample task probability
-			logProbability$b = cv$distributionAccumulator;
+			state.logProbability$b = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -1671,11 +1385,11 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample28)
+			if(state.fixedFlag$sample28)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -1688,11 +1402,11 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample28 = fixedFlag$sample28;
+			state.fixedProbFlag$sample28 = state.fixedFlag$sample28;
 		} else {
 			// Using cached values.
 			// 
@@ -1701,13 +1415,13 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$b);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$b);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample28)
+			if(state.fixedFlag$sample28)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$b);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$b);
 		}
 	}
 
@@ -1716,7 +1430,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 	private final void logProbabilityValue$sample34() {
 		// Determine if we need to calculate the values for sample task 34 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample34) {
+		if(!state.fixedProbFlag$sample34) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -1741,10 +1455,10 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityInverseGamma(sigma, 2.0, 2.0);
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityInverseGamma(state.sigma, 2.0, 2.0);
 			
 			// Store the sample task probability
-			logProbability$sigma = cv$distributionAccumulator;
+			state.logProbability$sigma = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -1760,11 +1474,11 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample34)
+			if(state.fixedFlag$sample34)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -1777,11 +1491,11 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample34 = fixedFlag$sample34;
+			state.fixedProbFlag$sample34 = state.fixedFlag$sample34;
 		} else {
 			// Using cached values.
 			// 
@@ -1790,13 +1504,13 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$sigma);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$sigma);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample34)
+			if(state.fixedFlag$sample34)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$sigma);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$sigma);
 		}
 	}
 
@@ -1805,11 +1519,11 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 	private final void logProbabilityValue$sample47() {
 		// Determine if we need to calculate the values for sample task 47 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample47) {
+		if(!state.fixedProbFlag$sample47) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var46 = 0; var46 < noObs; var46 += 1) {
+			for(int var46 = 0; var46 < state.noObs; var46 += 1) {
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
 				// Variable declaration of cv$distributionAccumulator moved.
@@ -1833,18 +1547,18 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = ((0.0 < sigma)?(DistributionSampling.logProbabilityGaussian(((beta[var46] - b) / Math.sqrt(sigma))) - (Math.log(sigma) * 0.5)):Double.NEGATIVE_INFINITY);
+				double cv$distributionAccumulator = ((0.0 < state.sigma)?(DistributionSampling.logProbabilityGaussian(((state.beta[var46] - state.b) / Math.sqrt(state.sigma))) - (Math.log(state.sigma) * 0.5)):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 				
 				// Store the sample task probability
-				logProbability$sample47[var46] = cv$distributionAccumulator;
+				state.logProbability$sample47[var46] = cv$distributionAccumulator;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 < noProducts))
+				if((0 < state.noProducts))
 					// Update the variable probability
-					logProbability$prob = (logProbability$prob + cv$distributionAccumulator);
+					state.logProbability$prob = (state.logProbability$prob + cv$distributionAccumulator);
 			}
 			
 			// Update the variable probability
@@ -1853,7 +1567,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$beta = (logProbability$beta + cv$sampleAccumulator);
+			state.logProbability$beta = (state.logProbability$beta + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -1861,168 +1575,72 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample47)
+			if(state.fixedFlag$sample47)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample47 = ((fixedFlag$sample47 && fixedFlag$sample28) && fixedFlag$sample34);
+			state.fixedProbFlag$sample47 = ((state.fixedFlag$sample47 && state.fixedFlag$sample28) && state.fixedFlag$sample34);
 		} else {
 			// Using cached values.
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$rvAccumulator = 0.0;
-			for(int var46 = 0; var46 < noObs; var46 += 1) {
-				double cv$sampleValue = logProbability$sample47[var46];
+			for(int var46 = 0; var46 < state.noObs; var46 += 1) {
+				double cv$sampleValue = state.logProbability$sample47[var46];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 < noProducts))
+				if((0 < state.noProducts))
 					// Update the variable probability
-					logProbability$prob = (logProbability$prob + cv$sampleValue);
+					state.logProbability$prob = (state.logProbability$prob + cv$sampleValue);
 			}
 			
 			// Update the variable probability
-			logProbability$beta = (logProbability$beta + cv$rvAccumulator);
+			state.logProbability$beta = (state.logProbability$beta + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$rvAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample47)
-				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
+			if(state.fixedFlag$sample47)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$rvAccumulator);
 		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// If ut has not been set already allocate space.
-		if(!fixedFlag$sample21)
-			// Constructor for ut
-			ut = new double[noProducts];
-		
-		// If beta has not been set already allocate space.
-		if(!fixedFlag$sample47)
-			// Constructor for beta
-			beta = new double[noObs];
-		
-		// Constructor for choices
-		choices = new int[noObs];
-		
-		// Constructor for exped
-		exped = new double[noObs][];
-		for(int i = 0; i < noObs; i += 1)
-			exped[i] = new double[noProducts];
-		
-		// Constructor for prob
-		prob = new double[noObs][];
-		for(int i = 0; i < noObs; i += 1)
-			prob[i] = new double[noProducts];
-		
-		// Constructor for constrainedFlag$sample47
-		constrainedFlag$sample47 = new boolean[noObs];
-		
-		// Constructor for constrainedFlag$sample21
-		constrainedFlag$sample21 = new boolean[noProducts];
-		
-		// Constructor for logProbability$sample21
-		logProbability$sample21 = new double[noProducts];
-		
-		// Constructor for logProbability$sample47
-		logProbability$sample47 = new double[noObs];
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for guard$sample21put101$global
-		{
-			// Calculate the largest index of j that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_j$var97 = 0;
-			if((0 < noObs))
-				// Calculate the largest index of j that is possible and allocate an array to hold
-				// the guard for each of these.
-				cv$max_j$var97 = Math.max(0, noProducts);
-			
-			// Allocation of guard$sample21put101$global for single threaded execution
-			// 
-			// Calculate the largest index of i that is possible and allocate an array to hold
-			// the guard for each of these.
-			guard$sample21put101$global = new boolean[Math.max(0, noObs)][cv$max_j$var97];
-		}
-		
-		// Constructor for guard$sample21categorical102$global
-		// 
-		// Allocation of guard$sample21categorical102$global for single threaded execution
-		// 
-		// Calculate the largest index of i that is possible and allocate an array to hold
-		// the guard for each of these.
-		guard$sample21categorical102$global = new boolean[Math.max(0, noObs)];
-		
-		// Constructor for guard$sample47put101$global
-		// 
-		// Calculate the largest index of j that is possible and allocate an array to hold
-		// the guard for each of these.
-		int cv$max_j$var97 = 0;
-		if((0 < noObs))
-			// Calculate the largest index of j that is possible and allocate an array to hold
-			// the guard for each of these.
-			cv$max_j$var97 = Math.max(0, noProducts);
-		
-		// Allocation of guard$sample47put101$global for single threaded execution
-		// 
-		// Calculate the largest index of i that is possible and allocate an array to hold
-		// the guard for each of these.
-		guard$sample47put101$global = new boolean[Math.max(0, noObs)][cv$max_j$var97];
-		
-		// Allocation of guard$sample47categorical102$global for single threaded execution
-		// 
-		// Calculate the largest index of i that is possible and allocate an array to hold
-		// the guard for each of these.
-		guard$sample47categorical102$global = new boolean[Math.max(0, noObs)];
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample21) {
-			for(int var20 = 0; var20 < noProducts; var20 += 1)
-				ut[var20] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		if(!state.fixedFlag$sample21) {
+			for(int var20 = 0; var20 < state.noProducts; var20 += 1)
+				state.ut[var20] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
 		}
-		if(!fixedFlag$sample28)
-			b = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		if(!fixedFlag$sample34)
-			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
+		if(!state.fixedFlag$sample28)
+			state.b = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+		if(!state.fixedFlag$sample34)
+			state.sigma = DistributionSampling.sampleInverseGamma(state.RNG$, 2.0, 2.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample47) {
-			for(int var46 = 0; var46 < noObs; var46 += 1)
-				beta[var46] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$)) + b);
+		if(!state.fixedFlag$sample47) {
+			for(int var46 = 0; var46 < state.noObs; var46 += 1)
+				state.beta[var46] = ((Math.sqrt(state.sigma) * DistributionSampling.sampleGaussian(state.RNG$)) + state.b);
 		}
-		for(int i = 0; i < noObs; i += 1) {
+		for(int i = 0; i < state.noObs; i += 1) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((!fixedFlag$sample21 || !fixedFlag$sample47)) {
-				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
-					exped[i][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+			if((!state.fixedFlag$sample21 || !state.fixedFlag$sample47)) {
+				for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1)
+					state.exped[i][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 				
 				// Reduction of array exped
 				// 
@@ -2032,16 +1650,16 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 				double reduceVar$sum$14 = 0.0;
 				
 				// For each index in the array to be reduced
-				for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+				for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
 																				// l's comment
 					// Set the right hand term to a value from the array exped
-					reduceVar$sum$14 = (reduceVar$sum$14 + exped[i][cv$reduction82Index]);
-				for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
-					prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$14);
+					reduceVar$sum$14 = (reduceVar$sum$14 + state.exped[i][cv$reduction82Index]);
+				for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
+					state.prob[i][j$var97] = (state.exped[i][j$var97] / reduceVar$sum$14);
 			}
-			choices[i] = DistributionSampling.sampleCategorical(RNG$, prob[i], noProducts);
+			state.choices[i] = DistributionSampling.sampleCategorical(state.RNG$, state.prob[i], state.noProducts);
 		}
 	}
 
@@ -2051,23 +1669,23 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample21) {
-			for(int var20 = 0; var20 < noProducts; var20 += 1)
-				ut[var20] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		if(!state.fixedFlag$sample21) {
+			for(int var20 = 0; var20 < state.noProducts; var20 += 1)
+				state.ut[var20] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
 		}
-		if(!fixedFlag$sample28)
-			b = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		if(!fixedFlag$sample34)
-			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
+		if(!state.fixedFlag$sample28)
+			state.b = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+		if(!state.fixedFlag$sample34)
+			state.sigma = DistributionSampling.sampleInverseGamma(state.RNG$, 2.0, 2.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample47) {
-			for(int var46 = 0; var46 < noObs; var46 += 1)
-				beta[var46] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$)) + b);
+		if(!state.fixedFlag$sample47) {
+			for(int var46 = 0; var46 < state.noObs; var46 += 1)
+				state.beta[var46] = ((Math.sqrt(state.sigma) * DistributionSampling.sampleGaussian(state.RNG$)) + state.b);
 		}
-		for(int i = 0; i < noObs; i += 1) {
-			for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
-				exped[i][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+		for(int i = 0; i < state.noObs; i += 1) {
+			for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1)
+				state.exped[i][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 			
 			// Reduction of array exped
 			// 
@@ -2077,16 +1695,16 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			double reduceVar$sum$18 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+			for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 																// l's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$18 = (reduceVar$sum$18 + exped[i][cv$reduction82Index]);
-			for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
-				prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$18);
+				reduceVar$sum$18 = (reduceVar$sum$18 + state.exped[i][cv$reduction82Index]);
+			for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
+				state.prob[i][j$var97] = (state.exped[i][j$var97] / reduceVar$sum$18);
 		}
 	}
 
@@ -2095,23 +1713,23 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 	@Override
 	public final void forwardGenerationPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample21) {
-			for(int var20 = 0; var20 < noProducts; var20 += 1)
-				ut[var20] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		if(!state.fixedFlag$sample21) {
+			for(int var20 = 0; var20 < state.noProducts; var20 += 1)
+				state.ut[var20] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
 		}
-		if(!fixedFlag$sample28)
-			b = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		if(!fixedFlag$sample34)
-			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
+		if(!state.fixedFlag$sample28)
+			state.b = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+		if(!state.fixedFlag$sample34)
+			state.sigma = DistributionSampling.sampleInverseGamma(state.RNG$, 2.0, 2.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample47) {
-			for(int var46 = 0; var46 < noObs; var46 += 1)
-				beta[var46] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$)) + b);
+		if(!state.fixedFlag$sample47) {
+			for(int var46 = 0; var46 < state.noObs; var46 += 1)
+				state.beta[var46] = ((Math.sqrt(state.sigma) * DistributionSampling.sampleGaussian(state.RNG$)) + state.b);
 		}
-		for(int i = 0; i < noObs; i += 1) {
-			for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
-				exped[i][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+		for(int i = 0; i < state.noObs; i += 1) {
+			for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1)
+				state.exped[i][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 			
 			// Reduction of array exped
 			// 
@@ -2121,17 +1739,17 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			double reduceVar$sum$15 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+			for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 																// l's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$15 = (reduceVar$sum$15 + exped[i][cv$reduction82Index]);
-			for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
-				prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$15);
-			choices[i] = DistributionSampling.sampleCategorical(RNG$, prob[i], noProducts);
+				reduceVar$sum$15 = (reduceVar$sum$15 + state.exped[i][cv$reduction82Index]);
+			for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
+				state.prob[i][j$var97] = (state.exped[i][j$var97] / reduceVar$sum$15);
+			state.choices[i] = DistributionSampling.sampleCategorical(state.RNG$, state.prob[i], state.noProducts);
 		}
 	}
 
@@ -2140,26 +1758,26 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample21) {
-			for(int var20 = 0; var20 < noProducts; var20 += 1)
-				ut[var20] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		if(!state.fixedFlag$sample21) {
+			for(int var20 = 0; var20 < state.noProducts; var20 += 1)
+				state.ut[var20] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
 		}
-		if(!fixedFlag$sample28)
-			b = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		if(!fixedFlag$sample34)
-			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
+		if(!state.fixedFlag$sample28)
+			state.b = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+		if(!state.fixedFlag$sample34)
+			state.sigma = DistributionSampling.sampleInverseGamma(state.RNG$, 2.0, 2.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample47) {
-			for(int var46 = 0; var46 < noObs; var46 += 1)
-				beta[var46] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$)) + b);
+		if(!state.fixedFlag$sample47) {
+			for(int var46 = 0; var46 < state.noObs; var46 += 1)
+				state.beta[var46] = ((Math.sqrt(state.sigma) * DistributionSampling.sampleGaussian(state.RNG$)) + state.b);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((!fixedFlag$sample21 || !fixedFlag$sample47)) {
-			for(int i = 0; i < noObs; i += 1) {
-				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
-					exped[i][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+		if((!state.fixedFlag$sample21 || !state.fixedFlag$sample47)) {
+			for(int i = 0; i < state.noObs; i += 1) {
+				for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1)
+					state.exped[i][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 				
 				// Reduction of array exped
 				// 
@@ -2169,14 +1787,14 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 				double reduceVar$sum$16 = 0.0;
 				
 				// For each index in the array to be reduced
-				for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+				for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
 																				// l's comment
 					// Set the right hand term to a value from the array exped
-					reduceVar$sum$16 = (reduceVar$sum$16 + exped[i][cv$reduction82Index]);
-				for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
-					prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$16);
+					reduceVar$sum$16 = (reduceVar$sum$16 + state.exped[i][cv$reduction82Index]);
+				for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
+					state.prob[i][j$var97] = (state.exped[i][j$var97] / reduceVar$sum$16);
 			}
 		}
 	}
@@ -2187,23 +1805,23 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample21) {
-			for(int var20 = 0; var20 < noProducts; var20 += 1)
-				ut[var20] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		if(!state.fixedFlag$sample21) {
+			for(int var20 = 0; var20 < state.noProducts; var20 += 1)
+				state.ut[var20] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
 		}
-		if(!fixedFlag$sample28)
-			b = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		if(!fixedFlag$sample34)
-			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
+		if(!state.fixedFlag$sample28)
+			state.b = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+		if(!state.fixedFlag$sample34)
+			state.sigma = DistributionSampling.sampleInverseGamma(state.RNG$, 2.0, 2.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample47) {
-			for(int var46 = 0; var46 < noObs; var46 += 1)
-				beta[var46] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$)) + b);
+		if(!state.fixedFlag$sample47) {
+			for(int var46 = 0; var46 < state.noObs; var46 += 1)
+				state.beta[var46] = ((Math.sqrt(state.sigma) * DistributionSampling.sampleGaussian(state.RNG$)) + state.b);
 		}
-		for(int i = 0; i < noObs; i += 1) {
-			for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
-				exped[i][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+		for(int i = 0; i < state.noObs; i += 1) {
+			for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1)
+				state.exped[i][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 			
 			// Reduction of array exped
 			// 
@@ -2213,16 +1831,16 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			double reduceVar$sum$17 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+			for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 																// l's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$17 = (reduceVar$sum$17 + exped[i][cv$reduction82Index]);
-			for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
-				prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$17);
+				reduceVar$sum$17 = (reduceVar$sum$17 + state.exped[i][cv$reduction82Index]);
+			for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
+				state.prob[i][j$var97] = (state.exped[i][j$var97] / reduceVar$sum$17);
 		}
 	}
 
@@ -2230,54 +1848,54 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
+		if(state.system$gibbsForward) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample21) {
-				for(int var20 = 0; var20 < noProducts; var20 += 1)
+			if(!state.fixedFlag$sample21) {
+				for(int var20 = 0; var20 < state.noProducts; var20 += 1)
 					inferSample21(var20);
 			}
-			if(!fixedFlag$sample28)
+			if(!state.fixedFlag$sample28)
 				inferSample28();
-			if(!fixedFlag$sample34)
+			if(!state.fixedFlag$sample34)
 				inferSample34();
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample47) {
-				for(int var46 = 0; var46 < noObs; var46 += 1)
+			if(!state.fixedFlag$sample47) {
+				for(int var46 = 0; var46 < state.noObs; var46 += 1)
 					inferSample47(var46);
 			}
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample47) {
-				for(int var46 = (noObs - 1); var46 >= 0; var46 -= 1)
+			if(!state.fixedFlag$sample47) {
+				for(int var46 = (state.noObs - 1); var46 >= 0; var46 -= 1)
 					inferSample47(var46);
 			}
-			if(!fixedFlag$sample34)
+			if(!state.fixedFlag$sample34)
 				inferSample34();
-			if(!fixedFlag$sample28)
+			if(!state.fixedFlag$sample28)
 				inferSample28();
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample21) {
-				for(int var20 = (noProducts - 1); var20 >= 0; var20 -= 1)
+			if(!state.fixedFlag$sample21) {
+				for(int var20 = (state.noProducts - 1); var20 >= 0; var20 -= 1)
 					inferSample21(var20);
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		for(int var20 = 0; var20 < noProducts; var20 += 1) {
-			if(!constrainedFlag$sample21[var20])
+		state.system$gibbsForward = !state.system$gibbsForward;
+		for(int var20 = 0; var20 < state.noProducts; var20 += 1) {
+			if(!state.constrainedFlag$sample21[var20])
 				drawValueSample21(var20);
 		}
-		if(!constrainedFlag$sample28)
+		if(!state.constrainedFlag$sample28)
 			drawValueSample28();
-		if(!constrainedFlag$sample34)
+		if(!state.constrainedFlag$sample34)
 			drawValueSample34();
-		for(int var46 = 0; var46 < noObs; var46 += 1) {
-			if(!constrainedFlag$sample47[var46])
+		for(int var46 = 0; var46 < state.noObs; var46 += 1) {
+			if(!state.constrainedFlag$sample47[var46])
 				drawValueSample47(var46);
 		}
 	}
@@ -2290,26 +1908,26 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$ut = 0.0;
-		logProbability$prob = 0.0;
-		if(!fixedProbFlag$sample21) {
-			for(int var20 = 0; var20 < noProducts; var20 += 1)
-				logProbability$sample21[var20] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$ut = 0.0;
+		state.logProbability$prob = 0.0;
+		if(!state.fixedProbFlag$sample21) {
+			for(int var20 = 0; var20 < state.noProducts; var20 += 1)
+				state.logProbability$sample21[var20] = Double.NaN;
 		}
-		if(!fixedProbFlag$sample28)
-			logProbability$b = Double.NaN;
-		if(!fixedProbFlag$sample34)
-			logProbability$sigma = Double.NaN;
-		logProbability$beta = 0.0;
-		if(!fixedProbFlag$sample47) {
-			for(int var46 = 0; var46 < noObs; var46 += 1)
-				logProbability$sample47[var46] = Double.NaN;
+		if(!state.fixedProbFlag$sample28)
+			state.logProbability$b = Double.NaN;
+		if(!state.fixedProbFlag$sample34)
+			state.logProbability$sigma = Double.NaN;
+		state.logProbability$beta = 0.0;
+		if(!state.fixedProbFlag$sample47) {
+			for(int var46 = 0; var46 < state.noObs; var46 += 1)
+				state.logProbability$sample47[var46] = Double.NaN;
 		}
-		logProbability$choices = 0.0;
-		if(!fixedProbFlag$sample103)
-			logProbability$var102 = Double.NaN;
+		state.logProbability$choices = 0.0;
+		if(!state.fixedProbFlag$sample103)
+			state.logProbability$var102 = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
@@ -2317,12 +1935,12 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 	@Override
 	public final void initializeModel() {
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
-			constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
+		for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < state.constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
+			state.constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample21$1 = 0; index$constrainedFlag$sample21$1 < constrainedFlag$sample21.length; index$constrainedFlag$sample21$1 += 1)
-			constrainedFlag$sample21[index$constrainedFlag$sample21$1] = true;
+		for(int index$constrainedFlag$sample21$1 = 0; index$constrainedFlag$sample21$1 < state.constrainedFlag$sample21.length; index$constrainedFlag$sample21$1 += 1)
+			state.constrainedFlag$sample21[index$constrainedFlag$sample21$1] = true;
 	}
 
 	// Construct the evidence probabilities.
@@ -2332,13 +1950,13 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample21)
+		if(state.fixedFlag$sample21)
 			logProbabilityValue$sample21();
-		if(fixedFlag$sample28)
+		if(state.fixedFlag$sample28)
 			logProbabilityValue$sample28();
-		if(fixedFlag$sample34)
+		if(state.fixedFlag$sample34)
 			logProbabilityValue$sample34();
-		if(fixedFlag$sample47)
+		if(state.fixedFlag$sample47)
 			logProbabilityValue$sample47();
 		logProbabilityValue$sample103();
 	}
@@ -2392,9 +2010,9 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
-		int cv$length1 = choices.length;
+		int cv$length1 = state.choices.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
-			choices[cv$index1] = ObsChoices[cv$index1];
+			state.choices[cv$index1] = state.ObsChoices[cv$index1];
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
@@ -2403,9 +2021,9 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		for(int i = 0; i < noObs; i += 1) {
-			for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
-				exped[i][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+		for(int i = 0; i < state.noObs; i += 1) {
+			for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1)
+				state.exped[i][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 			
 			// Reduction of array exped
 			// 
@@ -2415,16 +2033,16 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends CoreModelSingleThrea
 			double reduceVar$sum$19 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1)
+			for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 																// l's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$19 = (reduceVar$sum$19 + exped[i][cv$reduction82Index]);
-			for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
-				prob[i][j$var97] = (exped[i][j$var97] / reduceVar$sum$19);
+				reduceVar$sum$19 = (reduceVar$sum$19 + state.exped[i][cv$reduction82Index]);
+			for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
+				state.prob[i][j$var97] = (state.exped[i][j$var97] / reduceVar$sum$19);
 		}
 	}
 

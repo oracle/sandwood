@@ -1,234 +1,67 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.Conditional3$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.Conditional3.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implements Conditional3$CoreInterface {
+final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double bias;
-	boolean constrainedFlag$sample16 = true;
-	boolean constrainedFlag$sample4 = true;
-	boolean fixedFlag$sample16 = false;
-	boolean fixedFlag$sample4 = false;
-	boolean fixedProbFlag$sample16 = false;
-	boolean fixedProbFlag$sample20 = false;
-	boolean fixedProbFlag$sample4 = false;
-	boolean guard;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$bernoulli;
-	double logProbability$bias;
-	double logProbability$guard;
-	double logProbability$value;
-	double logProbability$var14;
-	double observedValue;
-	boolean system$gibbsForward = true;
-	double value;
-	double var14;
-	double[] cv$var4$stateProbabilityGlobal;
+		// Declare the scratch variables for the model.
+		double[] cv$var4$stateProbabilityGlobal;
 
-	public Conditional3$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// 
+			// Constructor for cv$var4$stateProbabilityGlobal
+			// 
+			// Allocation of cv$var4$stateProbabilityGlobal for single threaded execution
+			cv$var4$stateProbabilityGlobal = new double[2];
+		}
 	}
 
-	// Getter for bias.
-	@Override
-	public final double get$bias() {
-		return bias;
-	}
 
-	// Getter for fixedFlag$sample16.
-	@Override
-	public final boolean get$fixedFlag$sample16() {
-		return fixedFlag$sample16;
-	}
-
-	// Setter for fixedFlag$sample16.
-	@Override
-	public final void set$fixedFlag$sample16(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample16 including if probabilities
-		// need to be updated.
-		fixedFlag$sample16 = cv$value;
-		
-		// Substituted "fixedFlag$sample16" with its value "cv$value".
-		constrainedFlag$sample16 = (cv$value || constrainedFlag$sample16);
-		
-		// Should the probability of sample 16 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample16" with its value "cv$value".
-		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
-		
-		// Should the probability of sample 20 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample16" with its value "cv$value".
-		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
-	}
-
-	// Getter for fixedFlag$sample4.
-	@Override
-	public final boolean get$fixedFlag$sample4() {
-		return fixedFlag$sample4;
-	}
-
-	// Setter for fixedFlag$sample4.
-	@Override
-	public final void set$fixedFlag$sample4(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample4 including if probabilities
-		// need to be updated.
-		fixedFlag$sample4 = cv$value;
-		
-		// Substituted "fixedFlag$sample4" with its value "cv$value".
-		constrainedFlag$sample4 = (cv$value || constrainedFlag$sample4);
-		
-		// Should the probability of sample 4 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample4" with its value "cv$value".
-		fixedProbFlag$sample4 = (cv$value && fixedProbFlag$sample4);
-		
-		// Should the probability of sample 16 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample4" with its value "cv$value".
-		fixedProbFlag$sample16 = (cv$value && fixedProbFlag$sample16);
-		
-		// Should the probability of sample 20 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample4" with its value "cv$value".
-		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
-	}
-
-	// Getter for guard.
-	@Override
-	public final boolean get$guard() {
-		return guard;
-	}
-
-	// Setter for guard.
-	@Override
-	public final void set$guard(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of guard including if probabilities need to
-		// be updated.
-		guard = cv$value;
-		
-		// Unset the fixed probability flag for sample 4 as it depends on guard.
-		fixedProbFlag$sample4 = false;
-		
-		// Unset the fixed probability flag for sample 16 as it depends on guard.
-		fixedProbFlag$sample16 = false;
-		
-		// Unset the fixed probability flag for sample 20 as it depends on guard.
-		fixedProbFlag$sample20 = false;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$bernoulli.
-	@Override
-	public final double get$logProbability$bernoulli() {
-		return logProbability$bernoulli;
-	}
-
-	// Getter for logProbability$bias.
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	// Getter for logProbability$guard.
-	@Override
-	public final double get$logProbability$guard() {
-		return logProbability$guard;
-	}
-
-	// Getter for logProbability$value.
-	@Override
-	public final double get$logProbability$value() {
-		return logProbability$value;
-	}
-
-	// Getter for observedValue.
-	@Override
-	public final double get$observedValue() {
-		return observedValue;
-	}
-
-	// Setter for observedValue.
-	@Override
-	public final void set$observedValue(double cv$value, boolean allocated$) {
-		observedValue = cv$value;
-	}
-
-	// Getter for value.
-	@Override
-	public final double get$value() {
-		return value;
-	}
-
-	// Getter for var14.
-	@Override
-	public final double get$var14() {
-		return var14;
-	}
-
-	// Setter for var14.
-	@Override
-	public final void set$var14(double cv$value, boolean allocated$) {
-		// Set flags for all the side effects of var14 including if probabilities need to
-		// be updated.
-		var14 = cv$value;
-		
-		// Unset the fixed probability flag for sample 16 as it depends on var14.
-		fixedProbFlag$sample16 = false;
-		
-		// Unset the fixed probability flag for sample 20 as it depends on var14.
-		fixedProbFlag$sample20 = false;
+	public Conditional3$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample16
 	private final void drawValueSample16() {
-		var14 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
-		bias = var14;
+		state.var14 = (DistributionSampling.sampleUniform(state.RNG$) * 0.5);
+		state.bias = state.var14;
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample4
 	private final void drawValueSample4() {
-		guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
+		state.guard = DistributionSampling.sampleBernoulli(state.RNG$, 0.5);
 		
 		// Guards to ensure that bias is only updated when there is a valid path.
-		if(guard)
-			bias = 0.5;
+		if(state.guard)
+			state.bias = 0.5;
 		else
-			bias = var14;
+			state.bias = state.var14;
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 16 drawn from Uniform 13. Inference was performed using Metropolis-Hastings.
 	private final void inferSample16() {
-		constrainedFlag$sample16 = false;
+		state.constrainedFlag$sample16 = false;
 		
 		// The original value of the sample
-		double cv$originalValue = var14;
+		double cv$originalValue = state.var14;
 		
 		// Calculate a proposed variance.
 		// 
 						// The original value of the sample
-		double cv$var = ((var14 * var14) * 0.010000000000000002);
+		double cv$var = ((state.var14 * state.var14) * 0.010000000000000002);
 		
 		// Ensure the variance is at least 0.01
 		if((cv$var < 0.010000000000000002))
@@ -237,10 +70,10 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// The proposed new value for the sample
 		// 
 		// The original value of the sample
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + var14);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + state.var14);
 		
 		// Mark that the sample has observed constrained data.
-		constrainedFlag$sample16 = true;
+		state.constrainedFlag$sample16 = true;
 		
 		// Variable declaration of cv$originalProbability moved.
 		// Declaration comment was:
@@ -269,16 +102,16 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 						// Set the current value to the current state of the tree.
 		// 
 		// The original value of the sample
-		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(value, var14, 1.0) + (((0.0 <= var14) && (var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
+		double cv$originalProbability = (DistributionSampling.logProbabilityBeta(state.value, state.var14, 1.0) + (((0.0 <= state.var14) && (state.var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
 		
 		// Update Sample and intermediate values
 		// 
 		// Write out the new value of the sample.
-		var14 = cv$proposedValue;
-		bias = cv$proposedValue;
+		state.var14 = cv$proposedValue;
+		state.bias = cv$proposedValue;
 		
 		// Mark that the sample has observed constrained data.
-		constrainedFlag$sample16 = true;
+		state.constrainedFlag$sample16 = true;
 		
 		// The probability ration for the proposed value and the current value.
 		// 
@@ -299,27 +132,27 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// 
 						// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
-		double cv$ratio = ((DistributionSampling.logProbabilityBeta(value, cv$proposedValue, 1.0) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY)) - cv$originalProbability);
+		double cv$ratio = ((DistributionSampling.logProbabilityBeta(state.value, cv$proposedValue, 1.0) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY)) - cv$originalProbability);
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
 		// the random value is 0 an impossible value will be accepted.
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(state.RNG$))) || Double.isNaN(cv$ratio))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
 			// Write out the new value of the sample.
-			var14 = cv$originalValue;
+			state.var14 = cv$originalValue;
 			
 			// Write out the new value of the sample.
-			bias = cv$originalValue;
+			state.bias = cv$originalValue;
 		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 4 drawn from bernoulli. Inference was performed using variable marginalization.
 	private final void inferSample4() {
-		constrainedFlag$sample4 = false;
+		state.constrainedFlag$sample4 = false;
 		
 		// Write out the new value of the sample.
 		// 
@@ -330,11 +163,11 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Value of the variable at this index
 		// 
 						// Substituted "cv$valuePos" with its value "0".
-		guard = false;
-		bias = var14;
+		state.guard = false;
+		state.bias = state.var14;
 		
 		// Mark that the sample has observed constrained data.
-		constrainedFlag$sample4 = true;
+		state.constrainedFlag$sample4 = true;
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
@@ -374,7 +207,7 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Declaration comment was:
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
-		cv$var4$stateProbabilityGlobal[0] = (((((0.0 <= var14) && (var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY) + DistributionSampling.logProbabilityBeta(value, var14, 1.0)) - 0.6931471805599453);
+		scratch.cv$var4$stateProbabilityGlobal[0] = (((((0.0 <= state.var14) && (state.var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY) + DistributionSampling.logProbabilityBeta(state.value, state.var14, 1.0)) - 0.6931471805599453);
 		
 		// Write out the new value of the sample.
 		// 
@@ -385,11 +218,11 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
-		guard = true;
-		bias = 0.5;
+		state.guard = true;
+		state.bias = 0.5;
 		
 		// Mark that the sample has observed constrained data.
-		constrainedFlag$sample4 = true;
+		state.constrainedFlag$sample4 = true;
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
@@ -421,7 +254,7 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Declaration comment was:
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
-		cv$var4$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBeta(value, 0.5, 1.0) - 0.6931471805599453);
+		scratch.cv$var4$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBeta(state.value, 0.5, 1.0) - 0.6931471805599453);
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -433,12 +266,12 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Initialize the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
-		double cv$lseMax = cv$var4$stateProbabilityGlobal[0];
+		double cv$lseMax = scratch.cv$var4$stateProbabilityGlobal[0];
 		
 		// Unrolled loop
 		// 
 		// Get a local reference to the scratch space.
-		double cv$lseElementValue = cv$var4$stateProbabilityGlobal[1];
+		double cv$lseElementValue = scratch.cv$var4$stateProbabilityGlobal[1];
 		if((cv$lseMax < cv$lseElementValue))
 			cv$lseMax = cv$lseElementValue;
 		
@@ -457,43 +290,43 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Get a local reference to the scratch space.
 			// 
 			// Initialize the sum of the array elements
-			cv$logSum = (Math.log((Math.exp((cv$var4$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var4$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
+			cv$logSum = (Math.log((Math.exp((scratch.cv$var4$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((scratch.cv$var4$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
 		
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Unrolled loop
 									// Get a local reference to the scratch space.
-			cv$var4$stateProbabilityGlobal[0] = 0.5;
+			scratch.cv$var4$stateProbabilityGlobal[0] = 0.5;
 			
 									// Get a local reference to the scratch space.
-			cv$var4$stateProbabilityGlobal[1] = 0.5;
+			scratch.cv$var4$stateProbabilityGlobal[1] = 0.5;
 		} else {
 			// Unrolled loop
 									// Get a local reference to the scratch space.
-			cv$var4$stateProbabilityGlobal[0] = Math.exp((cv$var4$stateProbabilityGlobal[0] - cv$logSum));
+			scratch.cv$var4$stateProbabilityGlobal[0] = Math.exp((scratch.cv$var4$stateProbabilityGlobal[0] - cv$logSum));
 			
 									// Get a local reference to the scratch space.
-			cv$var4$stateProbabilityGlobal[1] = Math.exp((cv$var4$stateProbabilityGlobal[1] - cv$logSum));
+			scratch.cv$var4$stateProbabilityGlobal[1] = Math.exp((scratch.cv$var4$stateProbabilityGlobal[1] - cv$logSum));
 		}
 		
 		// Set array values that are not computed for the input to negative infinity.
 		// 
 						// Get a local reference to the scratch space.
-		for(int cv$indexName = 2; cv$indexName < cv$var4$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = 2; cv$indexName < scratch.cv$var4$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Get a local reference to the scratch space.
-			cv$var4$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+			scratch.cv$var4$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the new value of the sample.
 		// 
 								// cv$numStates's comment
 		// variable marginalization
-		guard = (DistributionSampling.sampleCategorical(RNG$, cv$var4$stateProbabilityGlobal, 2) == 1);
+		state.guard = (DistributionSampling.sampleCategorical(state.RNG$, scratch.cv$var4$stateProbabilityGlobal, 2) == 1);
 		
 		// Guards to ensure that bias is only updated when there is a valid path.
-		if(guard)
-			bias = 0.5;
+		if(state.guard)
+			state.bias = 0.5;
 		else
-			bias = var14;
+			state.bias = state.var14;
 	}
 
 	// Calculate the probability of the samples represented by sample16 using sampled
@@ -501,14 +334,14 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	private final void logProbabilityValue$sample16() {
 		// Determine if we need to calculate the values for sample task 16 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample16) {
+		if(!state.fixedProbFlag$sample16) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			if(!guard) {
+			if(!state.guard) {
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				
@@ -529,7 +362,7 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 				// Store the value of the function call, so the function call is only made once.
 				// 
 												// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (((0.0 <= var14) && (var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY);
+				cv$sampleAccumulator = (((0.0 <= state.var14) && (state.var14 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY);
 			}
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
@@ -541,17 +374,17 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$var14 = cv$sampleAccumulator;
+				state.logProbability$var14 = cv$sampleAccumulator;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!guard)
+			if(!state.guard)
 				// Update the variable probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$bias = (logProbability$bias + cv$sampleAccumulator);
+				state.logProbability$bias = (state.logProbability$bias + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -559,42 +392,42 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample16)
+			if(state.fixedFlag$sample16)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample16 = (fixedFlag$sample16 && fixedFlag$sample4);
+			state.fixedProbFlag$sample16 = (state.fixedFlag$sample16 && state.fixedFlag$sample4);
 		} else {
 			// Using cached values.
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!guard)
+			if(!state.guard)
 				// Update the variable probability
 				// 
 				// Variable declaration of cv$accumulator moved.
-				logProbability$bias = (logProbability$bias + logProbability$var14);
+				state.logProbability$bias = (state.logProbability$bias + state.logProbability$var14);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var14);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var14);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample16)
+			if(state.fixedFlag$sample16)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var14);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var14);
 		}
 	}
 
@@ -603,7 +436,7 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	private final void logProbabilityValue$sample20() {
 		// Determine if we need to calculate the values for sample task 20 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample20) {
+		if(!state.fixedProbFlag$sample20) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -628,10 +461,10 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(value, bias, 1.0);
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(state.value, state.bias, 1.0);
 			
 			// Store the sample task probability
-			logProbability$value = cv$distributionAccumulator;
+			state.logProbability$value = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -647,7 +480,7 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// Variable declaration of cv$accumulator moved.
 			// Declaration comment was:
@@ -661,11 +494,11 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample20 = (fixedFlag$sample4 && fixedFlag$sample16);
+			state.fixedProbFlag$sample20 = (state.fixedFlag$sample4 && state.fixedFlag$sample16);
 		} else {
 			// Using cached values.
 			// 
@@ -674,10 +507,10 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$value);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$value);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$value);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$value);
 		}
 	}
 
@@ -685,7 +518,7 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	private final void logProbabilityValue$sample4() {
 		// Determine if we need to calculate the values for sample task 4 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample4) {
+		if(!state.fixedProbFlag$sample4) {
 			// Generating probabilities for sample task
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -704,7 +537,7 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			logProbability$bernoulli = -0.6931471805599453;
+			state.logProbability$bernoulli = -0.6931471805599453;
 			
 			// Store the sample task probability
 			// 
@@ -721,7 +554,7 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			logProbability$guard = -0.6931471805599453;
+			state.logProbability$guard = -0.6931471805599453;
 			
 			// Add probability to model
 			// 
@@ -751,11 +584,11 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			logProbability$$model = (logProbability$$model - 0.6931471805599453);
+			state.logProbability$$model = (state.logProbability$$model - 0.6931471805599453);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample4)
+			if(state.fixedFlag$sample4)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -782,66 +615,46 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				logProbability$$evidence = (logProbability$$evidence - 0.6931471805599453);
+				state.logProbability$$evidence = (state.logProbability$$evidence - 0.6931471805599453);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample4 = fixedFlag$sample4;
+			state.fixedProbFlag$sample4 = state.fixedFlag$sample4;
 		} else {
 			// Using cached values.
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$bernoulli = logProbability$guard;
+			state.logProbability$bernoulli = state.logProbability$guard;
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$guard);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$guard);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample4)
+			if(state.fixedFlag$sample4)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$guard);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$guard);
 		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// Allocate scratch space
-		allocateScratch();
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// 
-		// Constructor for cv$var4$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var4$stateProbabilityGlobal for single threaded execution
-		cv$var4$stateProbabilityGlobal = new double[2];
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample4)
-			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard) {
-			if(!fixedFlag$sample4)
-				bias = 0.5;
+		if(!state.fixedFlag$sample4)
+			state.guard = DistributionSampling.sampleBernoulli(state.RNG$, 0.5);
+		if(state.guard) {
+			if(!state.fixedFlag$sample4)
+				state.bias = 0.5;
 		} else {
-			if(!fixedFlag$sample16)
-				var14 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
-			if((!fixedFlag$sample4 || !fixedFlag$sample16))
-				bias = var14;
+			if(!state.fixedFlag$sample16)
+				state.var14 = (DistributionSampling.sampleUniform(state.RNG$) * 0.5);
+			if((!state.fixedFlag$sample4 || !state.fixedFlag$sample16))
+				state.bias = state.var14;
 		}
-		value = DistributionSampling.sampleBeta(RNG$, bias, 1.0);
+		state.value = DistributionSampling.sampleBeta(state.RNG$, state.bias, 1.0);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -849,15 +662,15 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample4)
-			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard)
-			bias = 0.5;
+		if(!state.fixedFlag$sample4)
+			state.guard = DistributionSampling.sampleBernoulli(state.RNG$, 0.5);
+		if(state.guard)
+			state.bias = 0.5;
 		else {
-			if(!fixedFlag$sample16)
-				var14 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
-			if((!fixedFlag$sample4 || !fixedFlag$sample16))
-				bias = var14;
+			if(!state.fixedFlag$sample16)
+				state.var14 = (DistributionSampling.sampleUniform(state.RNG$) * 0.5);
+			if((!state.fixedFlag$sample4 || !state.fixedFlag$sample16))
+				state.bias = state.var14;
 		}
 	}
 
@@ -865,33 +678,33 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample4)
-			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard)
-			bias = 0.5;
+		if(!state.fixedFlag$sample4)
+			state.guard = DistributionSampling.sampleBernoulli(state.RNG$, 0.5);
+		if(state.guard)
+			state.bias = 0.5;
 		else {
-			if(!fixedFlag$sample16)
-				var14 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
-			if((!fixedFlag$sample4 || !fixedFlag$sample16))
-				bias = var14;
+			if(!state.fixedFlag$sample16)
+				state.var14 = (DistributionSampling.sampleUniform(state.RNG$) * 0.5);
+			if((!state.fixedFlag$sample4 || !state.fixedFlag$sample16))
+				state.bias = state.var14;
 		}
-		value = DistributionSampling.sampleBeta(RNG$, bias, 1.0);
+		state.value = DistributionSampling.sampleBeta(state.RNG$, state.bias, 1.0);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample4)
-			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard) {
-			if(!fixedFlag$sample4)
-				bias = 0.5;
+		if(!state.fixedFlag$sample4)
+			state.guard = DistributionSampling.sampleBernoulli(state.RNG$, 0.5);
+		if(state.guard) {
+			if(!state.fixedFlag$sample4)
+				state.bias = 0.5;
 		} else {
-			if(!fixedFlag$sample16)
-				var14 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
-			if((!fixedFlag$sample4 || !fixedFlag$sample16))
-				bias = var14;
+			if(!state.fixedFlag$sample16)
+				state.var14 = (DistributionSampling.sampleUniform(state.RNG$) * 0.5);
+			if((!state.fixedFlag$sample4 || !state.fixedFlag$sample16))
+				state.bias = state.var14;
 		}
 	}
 
@@ -900,15 +713,15 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample4)
-			guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		if(guard)
-			bias = 0.5;
+		if(!state.fixedFlag$sample4)
+			state.guard = DistributionSampling.sampleBernoulli(state.RNG$, 0.5);
+		if(state.guard)
+			state.bias = 0.5;
 		else {
-			if(!fixedFlag$sample16)
-				var14 = (DistributionSampling.sampleUniform(RNG$) * 0.5);
-			if((!fixedFlag$sample4 || !fixedFlag$sample16))
-				bias = var14;
+			if(!state.fixedFlag$sample16)
+				state.var14 = (DistributionSampling.sampleUniform(state.RNG$) * 0.5);
+			if((!state.fixedFlag$sample4 || !state.fixedFlag$sample16))
+				state.bias = state.var14;
 		}
 	}
 
@@ -916,25 +729,25 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample4)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample4)
 				inferSample4();
-			if((!guard && !fixedFlag$sample16))
+			if((!state.guard && !state.fixedFlag$sample16))
 				inferSample16();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if((!guard && !fixedFlag$sample16))
+			if((!state.guard && !state.fixedFlag$sample16))
 				inferSample16();
-			if(!fixedFlag$sample4)
+			if(!state.fixedFlag$sample4)
 				inferSample4();
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample4)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample4)
 			drawValueSample4();
-		if((!guard && !constrainedFlag$sample16))
+		if((!state.guard && !state.constrainedFlag$sample16))
 			drawValueSample16();
 	}
 
@@ -946,16 +759,16 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$bernoulli = 0.0;
-		if(!fixedProbFlag$sample4)
-			logProbability$guard = Double.NaN;
-		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample16)
-			logProbability$var14 = Double.NaN;
-		if(!fixedProbFlag$sample20)
-			logProbability$value = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$bernoulli = 0.0;
+		if(!state.fixedProbFlag$sample4)
+			state.logProbability$guard = Double.NaN;
+		state.logProbability$bias = 0.0;
+		if(!state.fixedProbFlag$sample16)
+			state.logProbability$var14 = Double.NaN;
+		if(!state.fixedProbFlag$sample20)
+			state.logProbability$value = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
@@ -970,9 +783,9 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample4)
+		if(state.fixedFlag$sample4)
 			logProbabilityValue$sample4();
-		if(fixedFlag$sample16)
+		if(state.fixedFlag$sample16)
 			logProbabilityValue$sample16();
 		logProbabilityValue$sample20();
 	}
@@ -1020,7 +833,7 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	@Override
 	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
-		value = observedValue;
+		state.value = state.observedValue;
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
@@ -1029,11 +842,11 @@ final class Conditional3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		if(guard)
-			bias = 0.5;
+		if(state.guard)
+			state.bias = 0.5;
 		else {
-			if((fixedFlag$sample4 && fixedFlag$sample16))
-				bias = var14;
+			if((state.fixedFlag$sample4 && state.fixedFlag$sample16))
+				state.bias = state.var14;
 		}
 	}
 

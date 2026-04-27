@@ -1,316 +1,96 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.MultinomialBernoulli$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.MultinomialBernoulli.State;
 import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU implements MultinomialBernoulli$CoreInterface {
+final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double[] beta;
-	boolean constrainedFlag$sample17 = true;
-	boolean constrainedFlag$sample20 = true;
-	boolean fixedFlag$sample17 = false;
-	boolean fixedFlag$sample20 = false;
-	boolean fixedProbFlag$sample17 = false;
-	boolean fixedProbFlag$sample20 = false;
-	boolean fixedProbFlag$sample48 = false;
-	boolean fixedProbFlag$sample60 = false;
-	boolean fixedProbFlag$sample72 = false;
-	int length;
-	int length$observed;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$b1;
-	double logProbability$b2;
-	double logProbability$b3;
-	double logProbability$output;
-	double logProbability$p;
-	double logProbability$prior;
-	double logProbability$var48;
-	double logProbability$var60;
-	double logProbability$var72;
-	int n;
-	boolean[] observed;
-	boolean[] output;
-	double[] p;
-	int[] prior;
-	boolean system$gibbsForward = true;
-	double[] cv$var17$countGlobal;
+		// Declare the scratch variables for the model.
+		double[] cv$var17$countGlobal;
 
-	public MultinomialBernoulli$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// 
+			// Constructor for cv$var17$countGlobal
+			// 
+			// Allocation of cv$var17$countGlobal for single threaded execution
+			cv$var17$countGlobal = new double[3];
+		}
 	}
 
-	// Getter for beta.
-	@Override
-	public final double[] get$beta() {
-		return beta;
-	}
 
-	// Getter for fixedFlag$sample17.
-	@Override
-	public final boolean get$fixedFlag$sample17() {
-		return fixedFlag$sample17;
-	}
-
-	// Setter for fixedFlag$sample17.
-	@Override
-	public final void set$fixedFlag$sample17(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample17 including if probabilities
-		// need to be updated.
-		fixedFlag$sample17 = cv$value;
-		
-		// Substituted "fixedFlag$sample17" with its value "cv$value".
-		constrainedFlag$sample17 = (cv$value || constrainedFlag$sample17);
-		
-		// Should the probability of sample 17 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample17" with its value "cv$value".
-		fixedProbFlag$sample17 = (cv$value && fixedProbFlag$sample17);
-		
-		// Should the probability of sample 20 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample17" with its value "cv$value".
-		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
-	}
-
-	// Getter for fixedFlag$sample20.
-	@Override
-	public final boolean get$fixedFlag$sample20() {
-		return fixedFlag$sample20;
-	}
-
-	// Setter for fixedFlag$sample20.
-	@Override
-	public final void set$fixedFlag$sample20(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample20 including if probabilities
-		// need to be updated.
-		fixedFlag$sample20 = cv$value;
-		
-		// Substituted "fixedFlag$sample20" with its value "cv$value".
-		constrainedFlag$sample20 = (cv$value || constrainedFlag$sample20);
-		
-		// Should the probability of sample 20 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample20" with its value "cv$value".
-		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
-		
-		// Should the probability of sample 48 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample20" with its value "cv$value".
-		fixedProbFlag$sample48 = (cv$value && fixedProbFlag$sample48);
-		
-		// Should the probability of sample 60 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample20" with its value "cv$value".
-		fixedProbFlag$sample60 = (cv$value && fixedProbFlag$sample60);
-		
-		// Should the probability of sample 72 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample20" with its value "cv$value".
-		fixedProbFlag$sample72 = (cv$value && fixedProbFlag$sample72);
-	}
-
-	// Getter for length.
-	@Override
-	public final int get$length() {
-		return length;
-	}
-
-	// Getter for length$observed.
-	@Override
-	public final int get$length$observed() {
-		return length$observed;
-	}
-
-	// Setter for length$observed.
-	@Override
-	public final void set$length$observed(int cv$value, boolean allocated$) {
-		length$observed = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$b1.
-	@Override
-	public final double get$logProbability$b1() {
-		return logProbability$b1;
-	}
-
-	// Getter for logProbability$b2.
-	@Override
-	public final double get$logProbability$b2() {
-		return logProbability$b2;
-	}
-
-	// Getter for logProbability$b3.
-	@Override
-	public final double get$logProbability$b3() {
-		return logProbability$b3;
-	}
-
-	// Getter for logProbability$output.
-	@Override
-	public final double get$logProbability$output() {
-		return logProbability$output;
-	}
-
-	// Getter for logProbability$p.
-	@Override
-	public final double get$logProbability$p() {
-		return logProbability$p;
-	}
-
-	// Getter for logProbability$prior.
-	@Override
-	public final double get$logProbability$prior() {
-		return logProbability$prior;
-	}
-
-	// Getter for n.
-	@Override
-	public final int get$n() {
-		return 10;
-	}
-
-	// Getter for observed.
-	@Override
-	public final boolean[] get$observed() {
-		return observed;
-	}
-
-	// Setter for observed.
-	@Override
-	public final void set$observed(boolean[] cv$value, boolean allocated$) {
-		observed = cv$value;
-	}
-
-	// Getter for output.
-	@Override
-	public final boolean[] get$output() {
-		return output;
-	}
-
-	// Getter for p.
-	@Override
-	public final double[] get$p() {
-		return p;
-	}
-
-	// Setter for p.
-	@Override
-	public final void set$p(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of p including if probabilities need to be updated.
-		p = cv$value;
-		
-		// Unset the fixed probability flag for sample 17 as it depends on p.
-		fixedProbFlag$sample17 = false;
-		
-		// Unset the fixed probability flag for sample 20 as it depends on p.
-		fixedProbFlag$sample20 = false;
-	}
-
-	// Getter for prior.
-	@Override
-	public final int[] get$prior() {
-		return prior;
-	}
-
-	// Setter for prior.
-	@Override
-	public final void set$prior(int[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of prior including if probabilities need to
-		// be updated.
-		prior = cv$value;
-		
-		// Unset the fixed probability flag for sample 20 as it depends on prior.
-		fixedProbFlag$sample20 = false;
-		
-		// Unset the fixed probability flag for sample 48 as it depends on prior.
-		fixedProbFlag$sample48 = false;
-		
-		// Unset the fixed probability flag for sample 60 as it depends on prior.
-		fixedProbFlag$sample60 = false;
-		
-		// Unset the fixed probability flag for sample 72 as it depends on prior.
-		fixedProbFlag$sample72 = false;
+	public MultinomialBernoulli$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample17
 	private final void drawValueSample17() {
-		DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
+		DistributionSampling.sampleDirichlet(state.RNG$, state.beta, 3, state.p);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample20
 	private final void drawValueSample20() {
-		DistributionSampling.sampleMultinomial(RNG$, p, 3, 10, prior);
+		DistributionSampling.sampleMultinomial(state.RNG$, state.p, 3, 10, state.prior);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 17 drawn from Dirichlet 16. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
 	private final void inferSample17() {
-		constrainedFlag$sample17 = false;
+		state.constrainedFlag$sample17 = false;
 		
 		// Unrolled loop
 		// 
 		// A local reference to the scratch space.
-		cv$var17$countGlobal[0] = 0.0;
+		scratch.cv$var17$countGlobal[0] = 0.0;
 		
 		// A local reference to the scratch space.
-		cv$var17$countGlobal[1] = 0.0;
+		scratch.cv$var17$countGlobal[1] = 0.0;
 		
 		// A local reference to the scratch space.
-		cv$var17$countGlobal[2] = 0.0;
+		scratch.cv$var17$countGlobal[2] = 0.0;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((fixedFlag$sample20 || constrainedFlag$sample20)) {
+		if((state.fixedFlag$sample20 || state.constrainedFlag$sample20)) {
 			// Processing random variable 19.
 			// 
 			// Processing sample task 20 of consumer random variable null.
 			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample17 = true;
+			state.constrainedFlag$sample17 = true;
 			
 									// A local reference to the scratch space.
-			cv$var17$countGlobal[0] = (cv$var17$countGlobal[0] + prior[0]);
+			scratch.cv$var17$countGlobal[0] = (scratch.cv$var17$countGlobal[0] + state.prior[0]);
 			
 									// A local reference to the scratch space.
-			cv$var17$countGlobal[1] = (cv$var17$countGlobal[1] + prior[1]);
+			scratch.cv$var17$countGlobal[1] = (scratch.cv$var17$countGlobal[1] + state.prior[1]);
 			
 									// A local reference to the scratch space.
-			cv$var17$countGlobal[2] = (cv$var17$countGlobal[2] + prior[2]);
+			scratch.cv$var17$countGlobal[2] = (scratch.cv$var17$countGlobal[2] + state.prior[2]);
 		}
-		if(constrainedFlag$sample17)
+		if(state.constrainedFlag$sample17)
 			// Calculate the new sample value
 			// 
 			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
 									// A reference local to the function for the sample variable.
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, beta, cv$var17$countGlobal, p, 3);
+			Conjugates.sampleConjugateDirichletCategorical(state.RNG$, state.beta, scratch.cv$var17$countGlobal, state.p, 3);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 20 drawn from Multinomial 19. Inference was performed using Metropolis-Hastings.
 	private final void inferSample20() {
-		constrainedFlag$sample20 = false;
+		state.constrainedFlag$sample20 = false;
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -324,33 +104,33 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 		// Unrolled loop
 		// 
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!(prior[0] == 0))
+		if(!(state.prior[0] == 0))
 			// Count how many non zero entries there are.
 			cv$nonZeroCount = 1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!(prior[1] == 0))
+		if(!(state.prior[1] == 0))
 			cv$nonZeroCount = (cv$nonZeroCount + 1);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!(prior[2] == 0))
+		if(!(state.prior[2] == 0))
 			cv$nonZeroCount = (cv$nonZeroCount + 1);
 		
 		// Pick a value in the array to adjust.
-		int cv$sourceIndex = (int)((double)cv$nonZeroCount * DistributionSampling.sampleUniform(RNG$));
+		int cv$sourceIndex = (int)((double)cv$nonZeroCount * DistributionSampling.sampleUniform(state.RNG$));
 		for(int cv$loopIndex = 0; cv$loopIndex <= cv$sourceIndex; cv$loopIndex += 1) {
 									// A reference local to the function for the sample variable.
-			if((prior[cv$loopIndex] == 0))
+			if((state.prior[cv$loopIndex] == 0))
 				cv$sourceIndex = (cv$sourceIndex + 1);
 		}
 		
 		// Select the number of trials to remove from the selected category.
 		// 
 						// A reference local to the function for the sample variable.
-		int cv$changeValue = (int)(((double)prior[cv$sourceIndex] * DistributionSampling.sampleUniform(RNG$)) + 1.0);
+		int cv$changeValue = (int)(((double)state.prior[cv$sourceIndex] * DistributionSampling.sampleUniform(state.RNG$)) + 1.0);
 		
 		// Select the destination of the moved trials.
-		int cv$destinationIndex = (int)(DistributionSampling.sampleUniform(RNG$) * 2.0);
+		int cv$destinationIndex = (int)(DistributionSampling.sampleUniform(state.RNG$) * 2.0);
 		
 		// Ensure the source and target are not equal
 		if((cv$sourceIndex <= cv$destinationIndex))
@@ -360,17 +140,17 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 			// it is added to the index probabilities.
 			// 
 			// A reference local to the function for the sample variable.
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityMultinomial(prior, p, 3, 10);
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityMultinomial(state.prior, state.p, 3, 10);
 			
 			// Processing random variable 25.
 			// 
 			// Processing sample task 48 of consumer random variable b1.
-			for(int i$var47 = 0; i$var47 < length; i$var47 += 3) {
+			for(int i$var47 = 0; i$var47 < state.length; i$var47 += 3) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample20 = true;
+				state.constrainedFlag$sample20 = true;
 				
 				// Constructing a random variable input for use later.
-				double var24 = (double)(prior[0] / 10);
+				double var24 = (double)(state.prior[0] / 10);
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -384,18 +164,18 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = ((((0.0 <= var24) && (var24 <= 1.0))?Math.log((output[i$var47]?var24:(1.0 - var24))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var24) && (var24 <= 1.0))?Math.log((state.output[i$var47]?var24:(1.0 - var24))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Processing random variable 30.
 			// 
 			// Processing sample task 60 of consumer random variable b2.
-			for(int i$var59 = 1; i$var59 < length; i$var59 += 3) {
+			for(int i$var59 = 1; i$var59 < state.length; i$var59 += 3) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample20 = true;
+				state.constrainedFlag$sample20 = true;
 				
 				// Constructing a random variable input for use later.
-				double var29 = (double)(prior[1] / 10);
+				double var29 = (double)(state.prior[1] / 10);
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -409,18 +189,18 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = ((((0.0 <= var29) && (var29 <= 1.0))?Math.log((output[i$var59]?var29:(1.0 - var29))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var29) && (var29 <= 1.0))?Math.log((state.output[i$var59]?var29:(1.0 - var29))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Processing random variable 35.
 			// 
 			// Processing sample task 72 of consumer random variable b3.
-			for(int i$var71 = 2; i$var71 < length; i$var71 += 3) {
+			for(int i$var71 = 2; i$var71 < state.length; i$var71 += 3) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample20 = true;
+				state.constrainedFlag$sample20 = true;
 				
 				// Constructing a random variable input for use later.
-				double var34 = (double)(prior[2] / 10);
+				double var34 = (double)(state.prior[2] / 10);
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -434,7 +214,7 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = ((((0.0 <= var34) && (var34 <= 1.0))?Math.log((output[i$var71]?var34:(1.0 - var34))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var34) && (var34 <= 1.0))?Math.log((state.output[i$var71]?var34:(1.0 - var34))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Initialize an accumulator to take the product of all the distribution probabilities
@@ -447,32 +227,32 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(constrainedFlag$sample20) {
+		if(state.constrainedFlag$sample20) {
 			// Update Sample and intermediate values
 			// 
 			// Update the sample values
 			// 
 									// A reference local to the function for the sample variable.
-			prior[cv$sourceIndex] = (prior[cv$sourceIndex] - cv$changeValue);
+			state.prior[cv$sourceIndex] = (state.prior[cv$sourceIndex] - cv$changeValue);
 			
 									// A reference local to the function for the sample variable.
-			prior[cv$destinationIndex] = (prior[cv$destinationIndex] + cv$changeValue);
+			state.prior[cv$destinationIndex] = (state.prior[cv$destinationIndex] + cv$changeValue);
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
 			// A reference local to the function for the sample variable.
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityMultinomial(prior, p, 3, 10);
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityMultinomial(state.prior, state.p, 3, 10);
 			
 			// Processing random variable 25.
 			// 
 			// Processing sample task 48 of consumer random variable b1.
-			for(int i$var47 = 0; i$var47 < length; i$var47 += 3) {
+			for(int i$var47 = 0; i$var47 < state.length; i$var47 += 3) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample20 = true;
+				state.constrainedFlag$sample20 = true;
 				
 				// Constructing a random variable input for use later.
-				double var24 = (double)(prior[0] / 10);
+				double var24 = (double)(state.prior[0] / 10);
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -486,18 +266,18 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = ((((0.0 <= var24) && (var24 <= 1.0))?Math.log((output[i$var47]?var24:(1.0 - var24))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var24) && (var24 <= 1.0))?Math.log((state.output[i$var47]?var24:(1.0 - var24))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Processing random variable 30.
 			// 
 			// Processing sample task 60 of consumer random variable b2.
-			for(int i$var59 = 1; i$var59 < length; i$var59 += 3) {
+			for(int i$var59 = 1; i$var59 < state.length; i$var59 += 3) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample20 = true;
+				state.constrainedFlag$sample20 = true;
 				
 				// Constructing a random variable input for use later.
-				double var29 = (double)(prior[1] / 10);
+				double var29 = (double)(state.prior[1] / 10);
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -511,18 +291,18 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = ((((0.0 <= var29) && (var29 <= 1.0))?Math.log((output[i$var59]?var29:(1.0 - var29))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var29) && (var29 <= 1.0))?Math.log((state.output[i$var59]?var29:(1.0 - var29))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Processing random variable 35.
 			// 
 			// Processing sample task 72 of consumer random variable b3.
-			for(int i$var71 = 2; i$var71 < length; i$var71 += 3) {
+			for(int i$var71 = 2; i$var71 < state.length; i$var71 += 3) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample20 = true;
+				state.constrainedFlag$sample20 = true;
 				
 				// Constructing a random variable input for use later.
-				double var34 = (double)(prior[2] / 10);
+				double var34 = (double)(state.prior[2] / 10);
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -536,7 +316,7 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = ((((0.0 <= var34) && (var34 <= 1.0))?Math.log((output[i$var71]?var34:(1.0 - var34))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var34) && (var34 <= 1.0))?Math.log((state.output[i$var71]?var34:(1.0 - var34))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Ratio of the probability of proposed and original sample values
@@ -554,7 +334,7 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 			// the random value is 0 an impossible value will be accepted.
 			// 
 			// Substituted "cv$valuePos" with its value "1".
-			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(state.RNG$))) || Double.isNaN(cv$ratio))) {
 				// If it is not revert the sample value and intermediates to their original values.
 				// 
 				// Set the sample value
@@ -563,10 +343,10 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 				// 
 				// Update the sample values
 												// A reference local to the function for the sample variable.
-				prior[cv$sourceIndex] = (prior[cv$sourceIndex] + cv$changeValue);
+				state.prior[cv$sourceIndex] = (state.prior[cv$sourceIndex] + cv$changeValue);
 				
 												// A reference local to the function for the sample variable.
-				prior[cv$destinationIndex] = (prior[cv$destinationIndex] - cv$changeValue);
+				state.prior[cv$destinationIndex] = (state.prior[cv$destinationIndex] - cv$changeValue);
 			}
 		}
 	}
@@ -576,7 +356,7 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 	private final void logProbabilityValue$sample17() {
 		// Determine if we need to calculate the values for sample task 17 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample17) {
+		if(!state.fixedProbFlag$sample17) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -601,10 +381,10 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(p, beta, 3);
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(state.p, state.beta, 3);
 			
 			// Store the sample task probability
-			logProbability$p = cv$distributionAccumulator;
+			state.logProbability$p = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -620,11 +400,11 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample17)
+			if(state.fixedFlag$sample17)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -637,11 +417,11 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample17 = fixedFlag$sample17;
+			state.fixedProbFlag$sample17 = state.fixedFlag$sample17;
 		} else {
 			// Using cached values.
 			// 
@@ -650,13 +430,13 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$p);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$p);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample17)
+			if(state.fixedFlag$sample17)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$p);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$p);
 		}
 	}
 
@@ -665,7 +445,7 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 	private final void logProbabilityValue$sample20() {
 		// Determine if we need to calculate the values for sample task 20 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample20) {
+		if(!state.fixedProbFlag$sample20) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -690,10 +470,10 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityMultinomial(prior, p, 3, 10);
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityMultinomial(state.prior, state.p, 3, 10);
 			
 			// Store the sample task probability
-			logProbability$prior = cv$distributionAccumulator;
+			state.logProbability$prior = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -709,11 +489,11 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample20)
+			if(state.fixedFlag$sample20)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -726,11 +506,11 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample20 = (fixedFlag$sample20 && fixedFlag$sample17);
+			state.fixedProbFlag$sample20 = (state.fixedFlag$sample20 && state.fixedFlag$sample17);
 		} else {
 			// Using cached values.
 			// 
@@ -739,13 +519,13 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$prior);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$prior);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample20)
+			if(state.fixedFlag$sample20)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$prior);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$prior);
 		}
 	}
 
@@ -754,15 +534,15 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 	private final void logProbabilityValue$sample48() {
 		// Determine if we need to calculate the values for sample task 48 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample48) {
+		if(!state.fixedProbFlag$sample48) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i$var47 = 0; i$var47 < length; i$var47 += 3) {
-				double var24 = (double)(prior[0] / 10);
+			for(int i$var47 = 0; i$var47 < state.length; i$var47 += 3) {
+				double var24 = (double)(state.prior[0] / 10);
 				
 				// Record that the sample was reached.
 				cv$sampleReached = true;
@@ -782,15 +562,15 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var24) && (var24 <= 1.0))?Math.log((output[i$var47]?var24:(1.0 - var24))):Double.NEGATIVE_INFINITY));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var24) && (var24 <= 1.0))?Math.log((state.output[i$var47]?var24:(1.0 - var24))):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(cv$sampleReached) {
-				logProbability$b1 = cv$sampleAccumulator;
+				state.logProbability$b1 = cv$sampleAccumulator;
 				
 				// Store the random variable instance probability
-				logProbability$var48 = cv$sampleAccumulator;
+				state.logProbability$var48 = cv$sampleAccumulator;
 			}
 			
 			// Update the variable probability
@@ -799,7 +579,7 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$output = (logProbability$output + cv$sampleAccumulator);
+			state.logProbability$output = (state.logProbability$output + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -807,17 +587,17 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample48 = fixedFlag$sample20;
+			state.fixedProbFlag$sample48 = state.fixedFlag$sample20;
 		} else {
 			// Using cached values.
 			// 
@@ -825,24 +605,24 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 			// this sample
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			if((0 < length))
+			if((0 < state.length))
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 			if(cv$sampleReached)
-				logProbability$b1 = logProbability$var48;
+				state.logProbability$b1 = state.logProbability$var48;
 			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$output = (logProbability$output + logProbability$var48);
+			state.logProbability$output = (state.logProbability$output + state.logProbability$var48);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var48);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var48);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var48);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var48);
 		}
 	}
 
@@ -851,15 +631,15 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 	private final void logProbabilityValue$sample60() {
 		// Determine if we need to calculate the values for sample task 60 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample60) {
+		if(!state.fixedProbFlag$sample60) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i$var59 = 1; i$var59 < length; i$var59 += 3) {
-				double var29 = (double)(prior[1] / 10);
+			for(int i$var59 = 1; i$var59 < state.length; i$var59 += 3) {
+				double var29 = (double)(state.prior[1] / 10);
 				
 				// Record that the sample was reached.
 				cv$sampleReached = true;
@@ -879,15 +659,15 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var29) && (var29 <= 1.0))?Math.log((output[i$var59]?var29:(1.0 - var29))):Double.NEGATIVE_INFINITY));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var29) && (var29 <= 1.0))?Math.log((state.output[i$var59]?var29:(1.0 - var29))):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(cv$sampleReached) {
-				logProbability$b2 = cv$sampleAccumulator;
+				state.logProbability$b2 = cv$sampleAccumulator;
 				
 				// Store the random variable instance probability
-				logProbability$var60 = cv$sampleAccumulator;
+				state.logProbability$var60 = cv$sampleAccumulator;
 			}
 			
 			// Update the variable probability
@@ -896,7 +676,7 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$output = (logProbability$output + cv$sampleAccumulator);
+			state.logProbability$output = (state.logProbability$output + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -904,17 +684,17 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample60 = fixedFlag$sample20;
+			state.fixedProbFlag$sample60 = state.fixedFlag$sample20;
 		} else {
 			// Using cached values.
 			// 
@@ -922,24 +702,24 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 			// this sample
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			if((1 < length))
+			if((1 < state.length))
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 			if(cv$sampleReached)
-				logProbability$b2 = logProbability$var60;
+				state.logProbability$b2 = state.logProbability$var60;
 			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$output = (logProbability$output + logProbability$var60);
+			state.logProbability$output = (state.logProbability$output + state.logProbability$var60);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var60);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var60);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var60);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var60);
 		}
 	}
 
@@ -948,15 +728,15 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 	private final void logProbabilityValue$sample72() {
 		// Determine if we need to calculate the values for sample task 72 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample72) {
+		if(!state.fixedProbFlag$sample72) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i$var71 = 2; i$var71 < length; i$var71 += 3) {
-				double var34 = (double)(prior[2] / 10);
+			for(int i$var71 = 2; i$var71 < state.length; i$var71 += 3) {
+				double var34 = (double)(state.prior[2] / 10);
 				
 				// Record that the sample was reached.
 				cv$sampleReached = true;
@@ -976,15 +756,15 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var34) && (var34 <= 1.0))?Math.log((output[i$var71]?var34:(1.0 - var34))):Double.NEGATIVE_INFINITY));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var34) && (var34 <= 1.0))?Math.log((state.output[i$var71]?var34:(1.0 - var34))):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(cv$sampleReached) {
-				logProbability$b3 = cv$sampleAccumulator;
+				state.logProbability$b3 = cv$sampleAccumulator;
 				
 				// Store the random variable instance probability
-				logProbability$var72 = cv$sampleAccumulator;
+				state.logProbability$var72 = cv$sampleAccumulator;
 			}
 			
 			// Update the variable probability
@@ -993,7 +773,7 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$output = (logProbability$output + cv$sampleAccumulator);
+			state.logProbability$output = (state.logProbability$output + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -1001,17 +781,17 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample72 = fixedFlag$sample20;
+			state.fixedProbFlag$sample72 = state.fixedFlag$sample20;
 		} else {
 			// Using cached values.
 			// 
@@ -1019,101 +799,65 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 			// this sample
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			if((2 < length))
+			if((2 < state.length))
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 			if(cv$sampleReached)
-				logProbability$b3 = logProbability$var72;
+				state.logProbability$b3 = state.logProbability$var72;
 			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$output = (logProbability$output + logProbability$var72);
+			state.logProbability$output = (state.logProbability$output + state.logProbability$var72);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var72);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var72);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var72);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var72);
 		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// Constructor for beta
-		beta = new double[3];
-		
-		// If p has not been set already allocate space.
-		if(!fixedFlag$sample17)
-			// Constructor for p
-			p = new double[3];
-		
-		// If prior has not been set already allocate space.
-		if(!fixedFlag$sample20)
-			// Constructor for prior
-			prior = new int[3];
-		
-		// Constructor for output
-		output = new boolean[length$observed];
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// 
-		// Constructor for cv$var17$countGlobal
-		// 
-		// Allocation of cv$var17$countGlobal for single threaded execution
-		cv$var17$countGlobal = new double[3];
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleMultinomial(RNG$, p, 3, 10, prior);
+		if(!state.fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.beta, 3, state.p);
+		if(!state.fixedFlag$sample20)
+			DistributionSampling.sampleMultinomial(state.RNG$, state.p, 3, 10, state.prior);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length, 3,
+		parallelFor(state.RNG$, 0, state.length, 3,
 			(int forStart$i$var47, int forEnd$i$var47, int threadID$i$var47, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var47 = forStart$i$var47; i$var47 < forEnd$i$var47; i$var47 += 3)
-						output[i$var47] = DistributionSampling.sampleBernoulli(RNG$1, (prior[0] / 10));
+						state.output[i$var47] = DistributionSampling.sampleBernoulli(RNG$1, (state.prior[0] / 10));
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 1, length, 3,
+		parallelFor(state.RNG$, 1, state.length, 3,
 			(int forStart$i$var59, int forEnd$i$var59, int threadID$i$var59, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var59 = forStart$i$var59; i$var59 < forEnd$i$var59; i$var59 += 3)
-						output[i$var59] = DistributionSampling.sampleBernoulli(RNG$1, (prior[1] / 10));
+						state.output[i$var59] = DistributionSampling.sampleBernoulli(RNG$1, (state.prior[1] / 10));
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 2, length, 3,
+		parallelFor(state.RNG$, 2, state.length, 3,
 			(int forStart$i$var71, int forEnd$i$var71, int threadID$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var71 = forStart$i$var71; i$var71 < forEnd$i$var71; i$var71 += 3)
-						output[i$var71] = DistributionSampling.sampleBernoulli(RNG$1, (prior[2] / 10));
+						state.output[i$var71] = DistributionSampling.sampleBernoulli(RNG$1, (state.prior[2] / 10));
 			}
 		);
 	}
@@ -1123,51 +867,51 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleMultinomial(RNG$, p, 3, 10, prior);
+		if(!state.fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.beta, 3, state.p);
+		if(!state.fixedFlag$sample20)
+			DistributionSampling.sampleMultinomial(state.RNG$, state.p, 3, 10, state.prior);
 	}
 
 	// Method to execute the model code conventionally with priming of fixed intermediate
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleMultinomial(RNG$, p, 3, 10, prior);
+		if(!state.fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.beta, 3, state.p);
+		if(!state.fixedFlag$sample20)
+			DistributionSampling.sampleMultinomial(state.RNG$, state.p, 3, 10, state.prior);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length, 3,
+		parallelFor(state.RNG$, 0, state.length, 3,
 			(int forStart$i$var47, int forEnd$i$var47, int threadID$i$var47, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var47 = forStart$i$var47; i$var47 < forEnd$i$var47; i$var47 += 3)
-						output[i$var47] = DistributionSampling.sampleBernoulli(RNG$1, (prior[0] / 10));
+						state.output[i$var47] = DistributionSampling.sampleBernoulli(RNG$1, (state.prior[0] / 10));
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 1, length, 3,
+		parallelFor(state.RNG$, 1, state.length, 3,
 			(int forStart$i$var59, int forEnd$i$var59, int threadID$i$var59, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var59 = forStart$i$var59; i$var59 < forEnd$i$var59; i$var59 += 3)
-						output[i$var59] = DistributionSampling.sampleBernoulli(RNG$1, (prior[1] / 10));
+						state.output[i$var59] = DistributionSampling.sampleBernoulli(RNG$1, (state.prior[1] / 10));
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 2, length, 3,
+		parallelFor(state.RNG$, 2, state.length, 3,
 			(int forStart$i$var71, int forEnd$i$var71, int threadID$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var71 = forStart$i$var71; i$var71 < forEnd$i$var71; i$var71 += 3)
-						output[i$var71] = DistributionSampling.sampleBernoulli(RNG$1, (prior[2] / 10));
+						state.output[i$var71] = DistributionSampling.sampleBernoulli(RNG$1, (state.prior[2] / 10));
 			}
 		);
 	}
@@ -1176,10 +920,10 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleMultinomial(RNG$, p, 3, 10, prior);
+		if(!state.fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.beta, 3, state.p);
+		if(!state.fixedFlag$sample20)
+			DistributionSampling.sampleMultinomial(state.RNG$, state.p, 3, 10, state.prior);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -1187,35 +931,35 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample17)
-			DistributionSampling.sampleDirichlet(RNG$, beta, 3, p);
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleMultinomial(RNG$, p, 3, 10, prior);
+		if(!state.fixedFlag$sample17)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.beta, 3, state.p);
+		if(!state.fixedFlag$sample20)
+			DistributionSampling.sampleMultinomial(state.RNG$, state.p, 3, 10, state.prior);
 	}
 
 	// Method to execute one round of Gibbs sampling.
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample17)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample17)
 				inferSample17();
-			if(!fixedFlag$sample20)
+			if(!state.fixedFlag$sample20)
 				inferSample20();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample20)
+			if(!state.fixedFlag$sample20)
 				inferSample20();
-			if(!fixedFlag$sample17)
+			if(!state.fixedFlag$sample17)
 				inferSample17();
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample17)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample17)
 			drawValueSample17();
-		if(!constrainedFlag$sample20)
+		if(!state.constrainedFlag$sample20)
 			drawValueSample20();
 	}
 
@@ -1227,32 +971,32 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample17)
-			logProbability$p = Double.NaN;
-		if(!fixedProbFlag$sample20)
-			logProbability$prior = Double.NaN;
-		logProbability$b1 = Double.NaN;
-		logProbability$output = 0.0;
-		if(!fixedProbFlag$sample48)
-			logProbability$var48 = Double.NaN;
-		logProbability$b2 = Double.NaN;
-		if(!fixedProbFlag$sample60)
-			logProbability$var60 = Double.NaN;
-		logProbability$b3 = Double.NaN;
-		if(!fixedProbFlag$sample72)
-			logProbability$var72 = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample17)
+			state.logProbability$p = Double.NaN;
+		if(!state.fixedProbFlag$sample20)
+			state.logProbability$prior = Double.NaN;
+		state.logProbability$b1 = Double.NaN;
+		state.logProbability$output = 0.0;
+		if(!state.fixedProbFlag$sample48)
+			state.logProbability$var48 = Double.NaN;
+		state.logProbability$b2 = Double.NaN;
+		if(!state.fixedProbFlag$sample60)
+			state.logProbability$var60 = Double.NaN;
+		state.logProbability$b3 = Double.NaN;
+		if(!state.fixedProbFlag$sample72)
+			state.logProbability$var72 = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		beta[0] = 0.1;
-		beta[1] = 0.1;
-		beta[2] = 0.1;
-		length = length$observed;
+		state.beta[0] = 0.1;
+		state.beta[1] = 0.1;
+		state.beta[2] = 0.1;
+		state.length = state.length$observed;
 	}
 
 	// Construct the evidence probabilities.
@@ -1262,9 +1006,9 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample17)
+		if(state.fixedFlag$sample17)
 			logProbabilityValue$sample17();
-		if(fixedFlag$sample20)
+		if(state.fixedFlag$sample20)
 			logProbabilityValue$sample20();
 		logProbabilityValue$sample48();
 		logProbabilityValue$sample60();
@@ -1320,9 +1064,9 @@ final class MultinomialBernoulli$MultiThreadCPU extends CoreModelMultiThreadCPU 
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
-		int cv$length1 = output.length;
+		int cv$length1 = state.output.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
-			output[cv$index1] = observed[cv$index1];
+			state.output[cv$index1] = state.observed[cv$index1];
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are

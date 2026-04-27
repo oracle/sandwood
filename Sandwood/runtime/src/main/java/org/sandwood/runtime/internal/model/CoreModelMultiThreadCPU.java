@@ -11,12 +11,15 @@ package org.sandwood.runtime.internal.model;
 import org.sandwood.random.internal.Rng;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 import org.sandwood.runtime.internal.model.execution.MultiThreadedCPUExecutionTarget;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.model.ExecutionTarget;
 
 /**
  * A class to hold any boilerplate code associated with Fork-Join execution.
  */
-public abstract class CoreModelMultiThreadCPU<S extends CoreModelScratch> extends CoreModelBase<S> {
+public abstract class CoreModelMultiThreadCPU<STATE extends CoreModelState, SCRATCH extends CoreModelScratch>
+        extends CoreModelBase<STATE, SCRATCH> {
 
     public interface LoopBody {
         void run(int start, int end, int threadId, Rng random);
@@ -43,7 +46,8 @@ public abstract class CoreModelMultiThreadCPU<S extends CoreModelScratch> extend
 
     private final MultiThreadedCPUEngine engine;
 
-    protected CoreModelMultiThreadCPU(ExecutionTarget target) {
+    protected CoreModelMultiThreadCPU(STATE state, ExecutionTarget target) {
+        super(state);
         if(!(target instanceof MultiThreadedCPUExecutionTarget))
             throw new SandwoodRuntimeException(
                     "Core instantiated with execution type that" + "does not extend MultiThreadedCPUExecutionTarget");

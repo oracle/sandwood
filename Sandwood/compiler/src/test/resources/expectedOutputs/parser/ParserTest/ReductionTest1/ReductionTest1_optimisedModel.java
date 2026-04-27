@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,12 +16,229 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model ReductionTest1 This is the class that all
  * user interactions with the model should occur through.
  */
-public final class ReductionTest1 extends Model {
-    private ReductionTest1$CoreInterface system$c = new ReductionTest1$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class ReductionTest1 extends Model<ReductionTest1.State> {
+	final class State extends CoreModelState {
+
+		// Declare the variables for the model.
+		int[][] ObsArr;
+		int T;
+		double[][] TimeFeat;
+		int[][] arr;
+		boolean[][] constrainedFlag$sample101;
+		boolean fixedFlag$sample101 = false;
+		boolean fixedProbFlag$sample101 = false;
+		boolean fixedProbFlag$sample165 = false;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$arr;
+		double[][] logProbability$sample101;
+		double[][] logProbability$sample165;
+		double logProbability$sum_t;
+		double logProbability$time_coeff;
+		double logProbability$time_impact;
+		int n_ac;
+		double[][] sum_t;
+		boolean system$gibbsForward = true;
+		double[][] time_coeff;
+		int time_dim;
+		double[][][] time_impact;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// If time_coeff has not been set already allocate space.
+			if(!fixedFlag$sample101) {
+				// Constructor for time_coeff
+				time_coeff = new double[n_ac][];
+				for(int var18 = 0; var18 < n_ac; var18 += 1)
+					time_coeff[var18] = new double[TimeFeat[0].length];
+				for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
+					time_coeff[i$var80] = new double[TimeFeat[0].length];
+			}
+			
+			// Constructor for sum_t
+			sum_t = new double[T][];
+			for(int var31 = 0; var31 < T; var31 += 1)
+				sum_t[var31] = new double[n_ac];
+			
+			// Constructor for time_impact
+			time_impact = new double[T][][];
+			for(int var44 = 0; var44 < T; var44 += 1) {
+				double[][] subarray$0 = new double[n_ac][];
+				time_impact[var44] = subarray$0;
+				for(int var54 = 0; var54 < n_ac; var54 += 1)
+					subarray$0[var54] = new double[TimeFeat[0].length];
+			}
+			
+			// Constructor for arr
+			arr = new int[T][];
+			for(int var68 = 0; var68 < T; var68 += 1)
+				arr[var68] = new int[n_ac];
+			
+			// Constructor for constrainedFlag$sample101
+			constrainedFlag$sample101 = new boolean[n_ac][];
+			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
+				constrainedFlag$sample101[i$var80] = new boolean[TimeFeat[0].length];
+			
+			// Constructor for logProbability$sample101
+			logProbability$sample101 = new double[n_ac][];
+			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
+				logProbability$sample101[i$var80] = new double[TimeFeat[0].length];
+			
+			// Constructor for logProbability$sample165
+			logProbability$sample165 = new double[(T - 1)][];
+			for(int t = 1; t < T; t += 1)
+				logProbability$sample165[(t - 1)] = new double[n_ac];
+		}
+
+		// Getter for ObsArr.
+		final int[][] get$ObsArr() {
+			return ObsArr;
+		}
+
+		// Setter for ObsArr.
+		final void set$ObsArr(int[][] cv$value, boolean allocated$) {
+			ObsArr = cv$value;
+		}
+
+		// Getter for T.
+		final int get$T() {
+			return T;
+		}
+
+		// Setter for T.
+		final void set$T(int cv$value, boolean allocated$) {
+			T = cv$value;
+		}
+
+		// Getter for TimeFeat.
+		final double[][] get$TimeFeat() {
+			return TimeFeat;
+		}
+
+		// Setter for TimeFeat.
+		final void set$TimeFeat(double[][] cv$value, boolean allocated$) {
+			TimeFeat = cv$value;
+		}
+
+		// Getter for arr.
+		final int[][] get$arr() {
+			return arr;
+		}
+
+		// Getter for fixedFlag$sample101.
+		final boolean get$fixedFlag$sample101() {
+			return fixedFlag$sample101;
+		}
+
+		// Setter for fixedFlag$sample101.
+		final void set$fixedFlag$sample101(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample101 including if probabilities
+			// need to be updated.
+			fixedFlag$sample101 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample101$1 = 0; index$constrainedFlag$sample101$1 < constrainedFlag$sample101.length; index$constrainedFlag$sample101$1 += 1) {
+					boolean[] cv$constrainedFlag$sample101$1 = constrainedFlag$sample101[index$constrainedFlag$sample101$1];
+					for(int index$constrainedFlag$sample101$2 = 0; index$constrainedFlag$sample101$2 < cv$constrainedFlag$sample101$1.length; index$constrainedFlag$sample101$2 += 1)
+						cv$constrainedFlag$sample101$1[index$constrainedFlag$sample101$2] = true;
+				}
+			}
+			
+			// Should the probability of sample 101 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample101" with its value "cv$value".
+			fixedProbFlag$sample101 = (cv$value && fixedProbFlag$sample101);
+			
+			// Should the probability of sample 165 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample101" with its value "cv$value".
+			fixedProbFlag$sample165 = (cv$value && fixedProbFlag$sample165);
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$arr.
+		final double get$logProbability$arr() {
+			return logProbability$arr;
+		}
+
+		// Getter for logProbability$sum_t.
+		final double get$logProbability$sum_t() {
+			return logProbability$sum_t;
+		}
+
+		// Getter for logProbability$time_coeff.
+		final double get$logProbability$time_coeff() {
+			return logProbability$time_coeff;
+		}
+
+		// Getter for logProbability$time_impact.
+		final double get$logProbability$time_impact() {
+			return logProbability$time_impact;
+		}
+
+		// Getter for n_ac.
+		final int get$n_ac() {
+			return n_ac;
+		}
+
+		// Setter for n_ac.
+		final void set$n_ac(int cv$value, boolean allocated$) {
+			n_ac = cv$value;
+		}
+
+		// Getter for sum_t.
+		final double[][] get$sum_t() {
+			return sum_t;
+		}
+
+		// Getter for time_coeff.
+		final double[][] get$time_coeff() {
+			return time_coeff;
+		}
+
+		// Setter for time_coeff.
+		final void set$time_coeff(double[][] cv$value, boolean allocated$) {
+			// Set flags for all the side effects of time_coeff including if probabilities need
+			// to be updated.
+			time_coeff = cv$value;
+			
+			// Unset the fixed probability flag for sample 101 as it depends on time_coeff.
+			fixedProbFlag$sample101 = false;
+			
+			// Unset the fixed probability flag for sample 165 as it depends on time_coeff.
+			fixedProbFlag$sample165 = false;
+		}
+
+		// Getter for time_dim.
+		final int get$time_dim() {
+			return time_dim;
+		}
+
+		// Getter for time_impact.
+		final double[][][] get$time_impact() {
+			return time_impact;
+		}
+	}
 
     private final ComputedObjectArrayInternal<int[]> $arr = new ComputedObjectArrayInternal<int[]>(this, "arr", false, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        public int[][] getValue() { return system$c.get$arr(); }
+        public int[][] getValue() { return state.get$arr(); }
 
         @Override
         protected void setValueInternal(int[][] value) {}
@@ -30,7 +249,7 @@ public final class ReductionTest1 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$arr(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$arr(); }
 
         @Override
         public int[][][] constructArray(int iterations) {
@@ -53,7 +272,7 @@ public final class ReductionTest1 extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $sum_t = new ComputedObjectArrayInternal<double[]>(this, "sum_t", false, false, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        public double[][] getValue() { return system$c.get$sum_t(); }
+        public double[][] getValue() { return state.get$sum_t(); }
 
         @Override
         protected void setValueInternal(double[][] value) {}
@@ -64,7 +283,7 @@ public final class ReductionTest1 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$sum_t(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$sum_t(); }
 
         @Override
         public double[][][] constructArray(int iterations) {
@@ -74,13 +293,13 @@ public final class ReductionTest1 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample101(fixed, allocated);
+                state.set$fixedFlag$sample101(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample101())
+            if(state.get$fixedFlag$sample101())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -94,16 +313,16 @@ public final class ReductionTest1 extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $time_coeff = new ComputedObjectArrayInternal<double[]>(this, "time_coeff", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        public double[][] getValue() { return system$c.get$time_coeff(); }
+        public double[][] getValue() { return state.get$time_coeff(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$time_coeff(value, allocated);
+            state.set$time_coeff(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$time_coeff(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$time_coeff(); }
 
         @Override
         public double[][][] constructArray(int iterations) {
@@ -113,13 +332,13 @@ public final class ReductionTest1 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample101(fixed, allocated);
+                state.set$fixedFlag$sample101(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample101())
+            if(state.get$fixedFlag$sample101())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -134,7 +353,7 @@ public final class ReductionTest1 extends Model {
 
     private final ComputedObjectArrayInternal<double[][]> $time_impact = new ComputedObjectArrayInternal<double[][]>(this, "time_impact", false, false, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 3) {
         @Override
-        public double[][][] getValue() { return system$c.get$time_impact(); }
+        public double[][][] getValue() { return state.get$time_impact(); }
 
         @Override
         protected void setValueInternal(double[][][] value) {}
@@ -145,7 +364,7 @@ public final class ReductionTest1 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$time_impact(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$time_impact(); }
 
         @Override
         public double[][][][] constructArray(int iterations) {
@@ -155,13 +374,13 @@ public final class ReductionTest1 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample101(fixed, allocated);
+                state.set$fixedFlag$sample101(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample101())
+            if(state.get$fixedFlag$sample101())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -180,12 +399,12 @@ public final class ReductionTest1 extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$T();
+                return state.get$T();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$T(value, allocated); }
+        protected void setValueInternal(int value) { state.set$T(value, allocated); }
     };
 
 	/** Observed variable representing T of type int from the Sandwood model. */
@@ -195,12 +414,12 @@ public final class ReductionTest1 extends Model {
         @Override
         public double[][] getValue() {
             synchronized(model) {
-                return system$c.get$TimeFeat();
+                return state.get$TimeFeat();
             }
         }
 
         @Override
-        protected void setValueInternal(double[][] value) { system$c.set$TimeFeat(value, allocated); }
+        protected void setValueInternal(double[][] value) { state.set$TimeFeat(value, allocated); }
     };
 
 	/**
@@ -212,12 +431,12 @@ public final class ReductionTest1 extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$n_ac();
+                return state.get$n_ac();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$n_ac(value, allocated); }
+        protected void setValueInternal(int value) { state.set$n_ac(value, allocated); }
     };
 
 	/** Observed variable representing n_ac of type int from the Sandwood model. */
@@ -229,12 +448,12 @@ public final class ReductionTest1 extends Model {
         @Override
         public int[][] getValue() {
             synchronized(model) {
-                return system$c.get$ObsArr();
+                return state.get$ObsArr();
             }
         }
 
         @Override
-        protected void setValueInternal(int[][] value) { system$c.set$ObsArr(value, allocated); }
+        protected void setValueInternal(int[][] value) { state.set$ObsArr(value, allocated); }
     };
 
 	/** Observed variable representing ObsArr of type int[][] from the Sandwood model. */
@@ -248,6 +467,7 @@ public final class ReductionTest1 extends Model {
 	/** A constructor for a model where no variable values are set. */
     public ReductionTest1() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("arr", $arr);
         $computedVariables.put("sum_t", $sum_t);
@@ -261,7 +481,9 @@ public final class ReductionTest1 extends Model {
 
         //Observed scalar fields
         $regularObservedValues.put("ObsArr", $ObsArr);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        ReductionTest1$SingleThreadCPU core = new ReductionTest1$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -296,42 +518,15 @@ public final class ReductionTest1 extends Model {
     }
     
     @Override
-    protected ReductionTest1$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        ReductionTest1$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new ReductionTest1$SingleThreadCPU(target);
-                break;
+                return new ReductionTest1$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new ReductionTest1$MultiThreadCPU(target);
-                break;
+                return new ReductionTest1$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(ReductionTest1$CoreInterface oldCore, ReductionTest1$CoreInterface newCore) {
-        //Model inputs
-        if(T.isSet())
-            newCore.set$T(oldCore.get$T(), false);
-        if(TimeFeat.isSet())
-            newCore.set$TimeFeat(oldCore.get$TimeFeat(), false);
-        if(n_ac.isSet())
-            newCore.set$n_ac(oldCore.get$n_ac(), false);
-
-        //Observed scalars
-        if(ObsArr.isSet())
-            newCore.set$ObsArr(oldCore.get$ObsArr(), false);
-
-        //ComputedVariables
-        if($time_coeff.isSet())
-            newCore.set$time_coeff(oldCore.get$time_coeff(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample101(oldCore.get$fixedFlag$sample101(), false);
     }
 
 	/**

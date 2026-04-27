@@ -77,7 +77,6 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVaria
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
 import org.sandwood.compiler.exceptions.SandwoodModelException;
-import org.sandwood.compiler.names.ClassName;
 import org.sandwood.compiler.names.FunctionName;
 import org.sandwood.compiler.names.ModelClassName;
 import org.sandwood.compiler.names.PackageName;
@@ -104,7 +103,6 @@ import org.sandwood.compiler.trees.irTree.transformations.ReverseTreeTransformat
 import org.sandwood.compiler.trees.irTree.util.KnownValuesIR;
 import org.sandwood.compiler.trees.outputTree.OutputSandwoodClassGenerated;
 import org.sandwood.compiler.trees.outputTree.OutputSandwoodClassWrapper;
-import org.sandwood.compiler.trees.outputTree.OutputSandwoodInterfaceGenerated;
 import org.sandwood.compiler.trees.transformationTree.TransSandwoodClassGenerated;
 
 public class APICompile {
@@ -137,8 +135,7 @@ public class APICompile {
 
         try {
             PackageName targetPackageName = new PackageName(packageName);
-            ModelClassName className = ModelClassName.modelName(modelName, helperClasses);
-            ClassName modelInterface = className.interfaceName();
+            ModelClassName className = ModelClassName.modelName(modelName, helperClasses);;
 
             // Start the compilation of the model.
             Traces traces = TracesImplementation.getTraces(compDesc, vs);
@@ -219,9 +216,6 @@ public class APICompile {
                     task.invoke();
             }
 
-            compDesc.classes.add(new OutputSandwoodClassWrapper(className, targetPackageName, constructorArgs,
-                    compilationCtx.getClassFields(), traces, compDesc, comment, ExecutionType.supportedTypes));
-
             OutputSandwoodClassGenerated outputCls;
             Iterator<RecursiveTask<OutputSandwoodClassGenerated>> i = tasks.iterator();
             RecursiveTask<OutputSandwoodClassGenerated> task = i.next();
@@ -229,8 +223,9 @@ public class APICompile {
             outputCls = task.join();
 
             compDesc.classes.add(outputCls);
-            
-            compDesc.classes.add(OutputSandwoodInterfaceGenerated.getInterface(outputCls, targetPackageName, modelInterface));
+
+            compDesc.classes.add(OutputSandwoodClassWrapper.getClass(outputCls, className, targetPackageName, constructorArgs,
+                    compilationCtx.getClassFields(), traces, compDesc, comment, ExecutionType.supportedTypes));
 
             while(i.hasNext()) {
                 task = i.next();

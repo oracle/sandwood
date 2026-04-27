@@ -1,169 +1,51 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.ParallelMK3$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.ParallelMK3.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU implements ParallelMK3$CoreInterface {
+final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	boolean constrainedFlag$sample21 = true;
-	boolean fixedFlag$sample21 = false;
-	boolean fixedProbFlag$sample21 = false;
-	boolean fixedProbFlag$sample38 = false;
-	double[] generated;
-	double[] indirection;
-	int length$observed;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$generated;
-	double logProbability$indirection;
-	double logProbability$sample;
-	double logProbability$var38;
-	double[] observed;
-	double[] sample;
-	boolean system$gibbsForward = true;
-	double[] v;
-	boolean[] guard$sample21gaussian37$global;
+		// Declare the scratch variables for the model.
+		boolean[] guard$sample21gaussian37$global;
 
-	public ParallelMK3$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// 
+			// Constructor for guard$sample21gaussian37$global
+			// 
+			// Allocation of guard$sample21gaussian37$global for single threaded execution
+			guard$sample21gaussian37$global = new boolean[state.length$observed];
+		}
 	}
 
-	// Getter for fixedFlag$sample21.
-	@Override
-	public final boolean get$fixedFlag$sample21() {
-		return fixedFlag$sample21;
-	}
 
-	// Setter for fixedFlag$sample21.
-	@Override
-	public final void set$fixedFlag$sample21(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample21 including if probabilities
-		// need to be updated.
-		fixedFlag$sample21 = cv$value;
-		
-		// Substituted "fixedFlag$sample21" with its value "cv$value".
-		constrainedFlag$sample21 = (cv$value || constrainedFlag$sample21);
-		
-		// Should the probability of sample 21 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample21" with its value "cv$value".
-		fixedProbFlag$sample21 = (cv$value && fixedProbFlag$sample21);
-		
-		// Should the probability of sample 38 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample21" with its value "cv$value".
-		fixedProbFlag$sample38 = (cv$value && fixedProbFlag$sample38);
-	}
-
-	// Getter for generated.
-	@Override
-	public final double[] get$generated() {
-		return generated;
-	}
-
-	// Getter for indirection.
-	@Override
-	public final double[] get$indirection() {
-		return indirection;
-	}
-
-	// Getter for length$observed.
-	@Override
-	public final int get$length$observed() {
-		return length$observed;
-	}
-
-	// Setter for length$observed.
-	@Override
-	public final void set$length$observed(int cv$value, boolean allocated$) {
-		length$observed = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$generated.
-	@Override
-	public final double get$logProbability$generated() {
-		return logProbability$generated;
-	}
-
-	// Getter for logProbability$indirection.
-	@Override
-	public final double get$logProbability$indirection() {
-		return logProbability$indirection;
-	}
-
-	// Getter for logProbability$sample.
-	@Override
-	public final double get$logProbability$sample() {
-		return logProbability$sample;
-	}
-
-	// Getter for observed.
-	@Override
-	public final double[] get$observed() {
-		return observed;
-	}
-
-	// Setter for observed.
-	@Override
-	public final void set$observed(double[] cv$value, boolean allocated$) {
-		observed = cv$value;
-	}
-
-	// Getter for sample.
-	@Override
-	public final double[] get$sample() {
-		return sample;
-	}
-
-	// Setter for sample.
-	@Override
-	public final void set$sample(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of sample including if probabilities need to
-		// be updated.
-		sample = cv$value;
-		
-		// Unset the fixed probability flag for sample 21 as it depends on sample.
-		fixedProbFlag$sample21 = false;
-		
-		// Unset the fixed probability flag for sample 38 as it depends on sample.
-		fixedProbFlag$sample38 = false;
-	}
-
-	// Getter for v.
-	@Override
-	public final double[] get$v() {
-		return v;
+	public ParallelMK3$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample21
 	private final void drawValueSample21() {
-		DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
+		DistributionSampling.sampleDirichlet(state.RNG$, state.v, 10, state.sample);
 		
 		// Guards to ensure that indirection is only updated when there is a valid path.
-		for(int i = 0; i < length$observed; i += 1)
-			indirection[i] = sample[i];
+		for(int i = 0; i < state.length$observed; i += 1)
+			state.indirection[i] = state.sample[i];
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 21 drawn from Dirichlet 20. Inference was performed using Metropolis-Hastings.
 	private final void inferSample21() {
-		constrainedFlag$sample21 = false;
+		state.constrainedFlag$sample21 = false;
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -172,13 +54,13 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 		double cv$originalProbability;
 		
 		// Pick a value in the array to adjust.
-		int cv$indexToChange = (int)(DistributionSampling.sampleUniform(RNG$) * 10.0);
+		int cv$indexToChange = (int)(DistributionSampling.sampleUniform(state.RNG$) * 10.0);
 		
 		// Pick how much the value should be moved by. Initially this value is proposed as
 		// a ratio of the current magnitude of the value, we will check to make sure the adjustment
 		// will not make this value too large or other values too small and adjust if required
 		// before it is applied.
-		double cv$movementRatio = ((DistributionSampling.sampleBeta(RNG$, 5, 5) * 1.9999) - 1);
+		double cv$movementRatio = ((DistributionSampling.sampleBeta(state.RNG$, 5, 5) * 1.9999) - 1);
 		
 		// Calculate how much we are going to move the array index cv$indexToChange the by.
 		// 
@@ -192,14 +74,14 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 			// of the array at that index.
 			// 
 			// A reference local to the function for the sample variable.
-			cv$proposedDifference = sample[cv$indexToChange];
+			cv$proposedDifference = state.sample[cv$indexToChange];
 		else {
 			// Calculate the maximum magnitude of the proposed index change.
 			// Initially set the maximum to the amount that the value we are changing could increase
 			// without exceeding 1
 			// 
 			// A reference local to the function for the sample variable.
-			cv$proposedDifference = (1.0 - sample[cv$indexToChange]);
+			cv$proposedDifference = (1.0 - state.sample[cv$indexToChange]);
 			
 			// For the array values up to the index we are going to change calculate the maximum
 			// move possible.
@@ -208,7 +90,7 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 				// support. Based on moving all other values by an equal amount.
 				// 
 				// A reference local to the function for the sample variable.
-				double cv$temp = (sample[cv$loopIndex] * 9);
+				double cv$temp = (state.sample[cv$loopIndex] * 9);
 				
 				// If the maximum move is less than the proposed move update the move size.
 				if((cv$temp < cv$proposedDifference))
@@ -222,7 +104,7 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 				// support. Based on moving all other values by an equal amount.
 				// 
 				// A reference local to the function for the sample variable.
-				double cv$temp = (sample[cv$loopIndex] * 9);
+				double cv$temp = (state.sample[cv$loopIndex] * 9);
 				
 				// If this is less than the proposed increase, change the proposed increase to this
 				// value.
@@ -243,28 +125,28 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 			// it is added to the index probabilities.
 			// 
 			// A reference local to the function for the sample variable.
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(sample, v, 10);
-			for(int i = 0; i < length$observed; i += 1)
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(state.sample, state.v, 10);
+			for(int i = 0; i < state.length$observed; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample21gaussian37$global[i] = false;
-			for(int i = 0; i < length$observed; i += 1) {
+				scratch.guard$sample21gaussian37$global[i] = false;
+			for(int i = 0; i < state.length$observed; i += 1) {
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample21gaussian37$global[i]) {
+				if(!scratch.guard$sample21gaussian37$global[i]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample21gaussian37$global[i] = true;
+					scratch.guard$sample21gaussian37$global[i] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample21 = true;
+					state.constrainedFlag$sample21 = true;
 					
 					// Constructing a random variable input for use later.
-					double var36 = indirection[i];
+					double var36 = state.indirection[i];
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -280,22 +162,22 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 					// inputs.
 					// 
 					// Constructing a random variable input for use later.
-					cv$accumulatedProbabilities = (((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(var36))) - (Math.log(var36) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((state.generated[i] - state.sample[i]) / Math.sqrt(var36))) - (Math.log(var36) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
-			for(int i = 0; i < length$observed; i += 1) {
+			for(int i = 0; i < state.length$observed; i += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample21gaussian37$global[i]) {
-					double traceTempVariable$var36$5_2 = sample[i];
+				if(!scratch.guard$sample21gaussian37$global[i]) {
+					double traceTempVariable$var36$5_2 = state.sample[i];
 					
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample21gaussian37$global[i] = true;
+					scratch.guard$sample21gaussian37$global[i] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample21 = true;
+					state.constrainedFlag$sample21 = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -315,7 +197,7 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "index$i$5_3" with its value "i".
-					cv$accumulatedProbabilities = (((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(traceTempVariable$var36$5_2))) - (Math.log(traceTempVariable$var36$5_2) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((state.generated[i] - state.sample[i]) / Math.sqrt(traceTempVariable$var36$5_2))) - (Math.log(traceTempVariable$var36$5_2) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
 			
@@ -329,7 +211,7 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(constrainedFlag$sample21) {
+		if(state.constrainedFlag$sample21) {
 			// Update Sample and intermediate values
 			// 
 			// Update the sample value
@@ -337,48 +219,48 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 			// Update all the indexes up to the index selected.
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
 												// A reference local to the function for the sample variable.
-				sample[cv$loopIndex] = (sample[cv$loopIndex] - cv$rebalanceValue);
+				state.sample[cv$loopIndex] = (state.sample[cv$loopIndex] - cv$rebalanceValue);
 			
 			// Update the selected index.
 			// 
 									// A reference local to the function for the sample variable.
-			sample[cv$indexToChange] = (sample[cv$indexToChange] + cv$proposedDifference);
+			state.sample[cv$indexToChange] = (state.sample[cv$indexToChange] + cv$proposedDifference);
 			
 			// Update all the indexes after the index we selected.
 			for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < 10; cv$loopIndex += 1)
 												// A reference local to the function for the sample variable.
-				sample[cv$loopIndex] = (sample[cv$loopIndex] - cv$rebalanceValue);
+				state.sample[cv$loopIndex] = (state.sample[cv$loopIndex] - cv$rebalanceValue);
 			
 			// Guards to ensure that indirection is only updated when there is a valid path.
-			for(int i = 0; i < length$observed; i += 1)
-				indirection[i] = sample[i];
+			for(int i = 0; i < state.length$observed; i += 1)
+				state.indirection[i] = state.sample[i];
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
 			// A reference local to the function for the sample variable.
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(sample, v, 10);
-			for(int i = 0; i < length$observed; i += 1)
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(state.sample, state.v, 10);
+			for(int i = 0; i < state.length$observed; i += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample21gaussian37$global[i] = false;
-			for(int i = 0; i < length$observed; i += 1) {
+				scratch.guard$sample21gaussian37$global[i] = false;
+			for(int i = 0; i < state.length$observed; i += 1) {
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample21gaussian37$global[i]) {
+				if(!scratch.guard$sample21gaussian37$global[i]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample21gaussian37$global[i] = true;
+					scratch.guard$sample21gaussian37$global[i] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample21 = true;
+					state.constrainedFlag$sample21 = true;
 					
 					// Constructing a random variable input for use later.
-					double var36 = indirection[i];
+					double var36 = state.indirection[i];
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -394,22 +276,22 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 					// inputs.
 					// 
 					// Constructing a random variable input for use later.
-					cv$accumulatedProbabilities = (((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(var36))) - (Math.log(var36) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((state.generated[i] - state.sample[i]) / Math.sqrt(var36))) - (Math.log(var36) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
-			for(int i = 0; i < length$observed; i += 1) {
+			for(int i = 0; i < state.length$observed; i += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample21gaussian37$global[i]) {
-					double traceTempVariable$var36$5_2 = sample[i];
+				if(!scratch.guard$sample21gaussian37$global[i]) {
+					double traceTempVariable$var36$5_2 = state.sample[i];
 					
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample21gaussian37$global[i] = true;
+					scratch.guard$sample21gaussian37$global[i] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample21 = true;
+					state.constrainedFlag$sample21 = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -429,7 +311,7 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "index$i$5_3" with its value "i".
-					cv$accumulatedProbabilities = (((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(traceTempVariable$var36$5_2))) - (Math.log(traceTempVariable$var36$5_2) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((state.generated[i] - state.sample[i]) / Math.sqrt(traceTempVariable$var36$5_2))) - (Math.log(traceTempVariable$var36$5_2) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
 			
@@ -448,7 +330,7 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 			// the random value is 0 an impossible value will be accepted.
 			// 
 			// Substituted "cv$valuePos" with its value "1".
-			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(state.RNG$))) || Double.isNaN(cv$ratio))) {
 				// If it is not revert the sample value and intermediates to their original values.
 				// 
 				// Set the sample value
@@ -459,21 +341,21 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 				// Update all the indexes up to the index selected.
 				for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
 															// A reference local to the function for the sample variable.
-					sample[cv$loopIndex] = (sample[cv$loopIndex] + cv$rebalanceValue);
+					state.sample[cv$loopIndex] = (state.sample[cv$loopIndex] + cv$rebalanceValue);
 				
 				// Update the selected index.
 				// 
 												// A reference local to the function for the sample variable.
-				sample[cv$indexToChange] = (sample[cv$indexToChange] - cv$proposedDifference);
+				state.sample[cv$indexToChange] = (state.sample[cv$indexToChange] - cv$proposedDifference);
 				
 				// Update all the indexes after the index we selected.
 				for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < 10; cv$loopIndex += 1)
 															// A reference local to the function for the sample variable.
-					sample[cv$loopIndex] = (sample[cv$loopIndex] + cv$rebalanceValue);
+					state.sample[cv$loopIndex] = (state.sample[cv$loopIndex] + cv$rebalanceValue);
 				
 				// Guards to ensure that indirection is only updated when there is a valid path.
-				for(int i = 0; i < length$observed; i += 1)
-					indirection[i] = sample[i];
+				for(int i = 0; i < state.length$observed; i += 1)
+					state.indirection[i] = state.sample[i];
 			}
 		}
 	}
@@ -483,7 +365,7 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 	private final void logProbabilityValue$sample21() {
 		// Determine if we need to calculate the values for sample task 21 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample21) {
+		if(!state.fixedProbFlag$sample21) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -508,13 +390,13 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(sample, v, 10);
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(state.sample, state.v, 10);
 			
 			// Store the sample task probability
-			logProbability$sample = cv$distributionAccumulator;
+			state.logProbability$sample = cv$distributionAccumulator;
 			
 			// Add probability to constructed variables from the combined probability
-			if((0 < length$observed))
+			if((0 < state.length$observed))
 				// Update the variable probability
 				// 
 				// Variable declaration of cv$accumulator moved.
@@ -529,7 +411,7 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$indirection = (logProbability$indirection + cv$distributionAccumulator);
+				state.logProbability$indirection = (state.logProbability$indirection + cv$distributionAccumulator);
 			
 			// Add probability to model
 			// 
@@ -545,11 +427,11 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample21)
+			if(state.fixedFlag$sample21)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -562,33 +444,33 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample21 = fixedFlag$sample21;
+			state.fixedProbFlag$sample21 = state.fixedFlag$sample21;
 		} else {
 			// Using cached values.
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to constructed variables from the combined probability
-			if((0 < length$observed))
+			if((0 < state.length$observed))
 				// Update the variable probability
 				// 
 				// Variable declaration of cv$accumulator moved.
-				logProbability$indirection = (logProbability$indirection + logProbability$sample);
+				state.logProbability$indirection = (state.logProbability$indirection + state.logProbability$sample);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$sample);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$sample);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample21)
+			if(state.fixedFlag$sample21)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$sample);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$sample);
 		}
 	}
 
@@ -597,15 +479,15 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 	private final void logProbabilityValue$sample38() {
 		// Determine if we need to calculate the values for sample task 38 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample38) {
+		if(!state.fixedProbFlag$sample38) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < length$observed; i += 1) {
-				double var36 = indirection[i];
+			for(int i = 0; i < state.length$observed; i += 1) {
+				double var36 = state.indirection[i];
 				
 				// Record that the sample was reached.
 				cv$sampleReached = true;
@@ -625,7 +507,7 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(var36))) - (Math.log(var36) * 0.5)):Double.NEGATIVE_INFINITY));
+				cv$sampleAccumulator = (cv$sampleAccumulator + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((state.generated[i] - state.sample[i]) / Math.sqrt(var36))) - (Math.log(var36) * 0.5)):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
@@ -637,7 +519,7 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$var38 = cv$sampleAccumulator;
+				state.logProbability$var38 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -645,7 +527,7 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$generated = (logProbability$generated + cv$sampleAccumulator);
+			state.logProbability$generated = (state.logProbability$generated + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -653,17 +535,17 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample38 = fixedFlag$sample21;
+			state.fixedProbFlag$sample38 = state.fixedFlag$sample21;
 		} else {
 			// Using cached values.
 			// 
@@ -672,61 +554,27 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$generated = (logProbability$generated + logProbability$var38);
+			state.logProbability$generated = (state.logProbability$generated + state.logProbability$var38);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var38);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var38);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var38);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var38);
 		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// Constructor for generated
-		generated = new double[length$observed];
-		
-		// Constructor for indirection
-		indirection = new double[length$observed];
-		
-		// Constructor for v
-		v = new double[10];
-		
-		// If sample has not been set already allocate space.
-		if(!fixedFlag$sample21)
-			// Constructor for sample
-			sample = new double[10];
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// 
-		// Constructor for guard$sample21gaussian37$global
-		// 
-		// Allocation of guard$sample21gaussian37$global for single threaded execution
-		guard$sample21gaussian37$global = new boolean[length$observed];
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample21)
-			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
-		for(int i = 0; i < length$observed; i += 1) {
-			if(!fixedFlag$sample21)
-				indirection[i] = sample[i];
-			generated[i] = ((Math.sqrt(indirection[i]) * DistributionSampling.sampleGaussian(RNG$)) + sample[i]);
+		if(!state.fixedFlag$sample21)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 10, state.sample);
+		for(int i = 0; i < state.length$observed; i += 1) {
+			if(!state.fixedFlag$sample21)
+				state.indirection[i] = state.sample[i];
+			state.generated[i] = ((Math.sqrt(state.indirection[i]) * DistributionSampling.sampleGaussian(state.RNG$)) + state.sample[i]);
 		}
 	}
 
@@ -735,21 +583,21 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample21)
-			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
-		for(int i = 0; i < length$observed; i += 1)
-			indirection[i] = sample[i];
+		if(!state.fixedFlag$sample21)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 10, state.sample);
+		for(int i = 0; i < state.length$observed; i += 1)
+			state.indirection[i] = state.sample[i];
 	}
 
 	// Method to execute the model code conventionally with priming of fixed intermediate
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample21)
-			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
-		for(int i = 0; i < length$observed; i += 1) {
-			indirection[i] = sample[i];
-			generated[i] = ((Math.sqrt(indirection[i]) * DistributionSampling.sampleGaussian(RNG$)) + sample[i]);
+		if(!state.fixedFlag$sample21)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 10, state.sample);
+		for(int i = 0; i < state.length$observed; i += 1) {
+			state.indirection[i] = state.sample[i];
+			state.generated[i] = ((Math.sqrt(state.indirection[i]) * DistributionSampling.sampleGaussian(state.RNG$)) + state.sample[i]);
 		}
 	}
 
@@ -758,10 +606,10 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample21) {
-			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
-			for(int i = 0; i < length$observed; i += 1)
-				indirection[i] = sample[i];
+		if(!state.fixedFlag$sample21) {
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 10, state.sample);
+			for(int i = 0; i < state.length$observed; i += 1)
+				state.indirection[i] = state.sample[i];
 		}
 	}
 
@@ -770,22 +618,22 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample21)
-			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
-		for(int i = 0; i < length$observed; i += 1)
-			indirection[i] = sample[i];
+		if(!state.fixedFlag$sample21)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 10, state.sample);
+		for(int i = 0; i < state.length$observed; i += 1)
+			state.indirection[i] = state.sample[i];
 	}
 
 	// Method to execute one round of Gibbs sampling.
 	@Override
 	public final void gibbsRound() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample21)
+		if(!state.fixedFlag$sample21)
 			inferSample21();
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample21)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample21)
 			drawValueSample21();
 	}
 
@@ -797,14 +645,14 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$indirection = 0.0;
-		if(!fixedProbFlag$sample21)
-			logProbability$sample = Double.NaN;
-		logProbability$generated = 0.0;
-		if(!fixedProbFlag$sample38)
-			logProbability$var38 = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$indirection = 0.0;
+		if(!state.fixedProbFlag$sample21)
+			state.logProbability$sample = Double.NaN;
+		state.logProbability$generated = 0.0;
+		if(!state.fixedProbFlag$sample38)
+			state.logProbability$var38 = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
@@ -812,7 +660,7 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 	@Override
 	public final void initializeModel() {
 		for(int var17 = 0; var17 < 10; var17 += 1)
-			v[var17] = 0.1;
+			state.v[var17] = 0.1;
 	}
 
 	// Construct the evidence probabilities.
@@ -822,7 +670,7 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample21)
+		if(state.fixedFlag$sample21)
 			logProbabilityValue$sample21();
 		logProbabilityValue$sample38();
 	}
@@ -870,9 +718,9 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
-		int cv$length1 = generated.length;
+		int cv$length1 = state.generated.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
-			generated[cv$index1] = observed[cv$index1];
+			state.generated[cv$index1] = state.observed[cv$index1];
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
@@ -881,8 +729,8 @@ final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU impleme
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		for(int i = 0; i < length$observed; i += 1)
-			indirection[i] = sample[i];
+		for(int i = 0; i < state.length$observed; i += 1)
+			state.indirection[i] = state.sample[i];
 	}
 
 	@Override

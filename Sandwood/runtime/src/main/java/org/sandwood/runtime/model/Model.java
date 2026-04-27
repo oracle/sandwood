@@ -22,10 +22,11 @@ import org.sandwood.random.RandomType;
 import org.sandwood.runtime.exceptions.SandwoodJsonException;
 import org.sandwood.runtime.internal.json.JsonModelDecoder;
 import org.sandwood.runtime.internal.json.JsonModelEncoder;
-import org.sandwood.runtime.internal.model.CoreModel;
+import org.sandwood.runtime.internal.model.CoreModelBase;
 import org.sandwood.runtime.internal.model.auxillary.ForwardPass;
 import org.sandwood.runtime.internal.model.auxillary.GibbsCalculation;
 import org.sandwood.runtime.internal.model.auxillary.ProbabilityCalculation;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.ComputedObjectArrayInternal;
 import org.sandwood.runtime.internal.model.variables.ComputedVariableInternal;
 import org.sandwood.runtime.internal.model.variables.CurrentProbability;
@@ -47,7 +48,7 @@ import org.sandwood.runtime.model.variables.ObservedVariableShapeable;
 /**
  * A class that implements the base functionality of a probabilistic model. All compiled models will extend this class.
  */
-public abstract class Model implements HasProbability, AutoCloseable {
+public abstract class Model<STATE extends CoreModelState> implements HasProbability, AutoCloseable {
     // Has space been allocated. This can only occur after the observed parameters
     // that any array sizes depend on have been set.
     protected boolean allocated = false;
@@ -60,7 +61,7 @@ public abstract class Model implements HasProbability, AutoCloseable {
 
     private boolean distributionsPrimed = false;
 
-    private CoreModel core;
+    protected CoreModelBase<STATE,?> core;
     // Inputs that parameterize the model, for example the bias we wish to use.
     private Map<String, ObservedVariableInternal> modelInputs;
     // Inputs that are only used for training, for example the value of a flipped
@@ -80,10 +81,12 @@ public abstract class Model implements HasProbability, AutoCloseable {
 
     private int thinning = 0;
     private int burnin = 0;
+    
+    protected STATE state;
 
     protected Model() {}
 
-    protected void init(CoreModel core, Map<String, ObservedVariableInternal> modelInputs,
+    protected void init(CoreModelBase<STATE,?> core, Map<String, ObservedVariableInternal> modelInputs,
             Map<String, ObservedVariableInternal> regularObservedVariables,
             Map<String, ObservedVariableShapeableInternal<?>> shapeableObservedVariables,
             Map<String, ComputedVariableInternal> computedVariables, HasProbabilityInternal[] probabilityVariables) {
@@ -105,20 +108,17 @@ public abstract class Model implements HasProbability, AutoCloseable {
         if(!target.isSupported())
             throw new SandwoodException(target + " runtime is not supported on this machine.");
 
-        CoreModel oldCore = core;
+        core.shutdown();
+        
         // This method call also copies the state.
         core = setExecutionTargetInternal(target);
-        core.setRngType(oldCore.getRngType());
         executionTarget = target;
 
-        allocated = false;
-        intermediatesPrimed = false;
-        observationsPropagated = false;
-
-        oldCore.shutdown();
+        if(allocated)
+            core.allocateScratch();
     }
 
-    protected abstract CoreModel setExecutionTargetInternal(ExecutionTarget target);
+    protected abstract CoreModelBase<STATE,?> setExecutionTargetInternal(ExecutionTarget target);
 
     /**
      * Method to determine what type of execution is currently set to be used

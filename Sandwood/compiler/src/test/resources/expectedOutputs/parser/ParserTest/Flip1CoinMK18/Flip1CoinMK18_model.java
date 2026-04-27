@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,12 +16,235 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model Flip1CoinMK18 This is the class that all
  * user interactions with the model should occur through.
  */
-public final class Flip1CoinMK18 extends Model {
-    private Flip1CoinMK18$CoreInterface system$c = new Flip1CoinMK18$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class Flip1CoinMK18 extends Model<Flip1CoinMK18.State> {
+	final class State extends CoreModelState {
+
+		// Declare the variables for the model.
+		int a;
+		int b;
+		double[][][] bias;
+		int c;
+		boolean constrainedFlag$sample11 = true;
+		boolean constrainedFlag$sample17 = true;
+		boolean fixedFlag$sample11 = false;
+		boolean fixedFlag$sample17 = false;
+		boolean fixedProbFlag$sample103 = false;
+		boolean fixedProbFlag$sample11 = false;
+		boolean fixedProbFlag$sample17 = false;
+		boolean[] flips;
+		boolean[] flipsMeasured;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$bernoulli;
+		double logProbability$bias;
+		double logProbability$flips;
+		double logProbability$q;
+		double logProbability$t;
+		double logProbability$var97;
+		double q;
+		int samples;
+		boolean system$gibbsForward = true;
+		double t;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// Constructor for bias
+			{
+				bias = new double[2][][];
+				double[][] subarray$0 = new double[2][];
+				bias[0] = subarray$0;
+				subarray$0[0] = new double[2];
+				subarray$0[1] = new double[2];
+				double[][] subarray$1 = new double[2][];
+				bias[1] = subarray$1;
+				subarray$1[0] = new double[2];
+				subarray$1[1] = new double[2];
+			}
+			
+			// Constructor for flips
+			{
+				flips = new boolean[samples];
+			}
+		}
+
+		// Getter for a.
+		final int get$a() {
+			return a;
+		}
+
+		// Setter for a.
+		final void set$a(int cv$value, boolean allocated$) {
+			a = cv$value;
+		}
+
+		// Getter for b.
+		final int get$b() {
+			return b;
+		}
+
+		// Setter for b.
+		final void set$b(int cv$value, boolean allocated$) {
+			b = cv$value;
+		}
+
+		// Getter for bias.
+		final double[][][] get$bias() {
+			return bias;
+		}
+
+		// Getter for c.
+		final int get$c() {
+			return c;
+		}
+
+		// Setter for c.
+		final void set$c(int cv$value, boolean allocated$) {
+			c = cv$value;
+		}
+
+		// Getter for fixedFlag$sample11.
+		final boolean get$fixedFlag$sample11() {
+			return fixedFlag$sample11;
+		}
+
+		// Setter for fixedFlag$sample11.
+		final void set$fixedFlag$sample11(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample11 including if probabilities
+			// need to be updated.
+			fixedFlag$sample11 = cv$value;
+			constrainedFlag$sample11 = (fixedFlag$sample11 || constrainedFlag$sample11);
+			
+			// Should the probability of sample 11 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample11 = (fixedFlag$sample11 && fixedProbFlag$sample11);
+			
+			// Should the probability of sample 103 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample103 = (fixedFlag$sample11 && fixedProbFlag$sample103);
+		}
+
+		// Getter for fixedFlag$sample17.
+		final boolean get$fixedFlag$sample17() {
+			return fixedFlag$sample17;
+		}
+
+		// Setter for fixedFlag$sample17.
+		final void set$fixedFlag$sample17(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample17 including if probabilities
+			// need to be updated.
+			fixedFlag$sample17 = cv$value;
+			constrainedFlag$sample17 = (fixedFlag$sample17 || constrainedFlag$sample17);
+			
+			// Should the probability of sample 17 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample17 = (fixedFlag$sample17 && fixedProbFlag$sample17);
+			
+			// Should the probability of sample 103 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample103 = (fixedFlag$sample17 && fixedProbFlag$sample103);
+		}
+
+		// Getter for flips.
+		final boolean[] get$flips() {
+			return flips;
+		}
+
+		// Getter for flipsMeasured.
+		final boolean[] get$flipsMeasured() {
+			return flipsMeasured;
+		}
+
+		// Setter for flipsMeasured.
+		final void set$flipsMeasured(boolean[] cv$value, boolean allocated$) {
+			flipsMeasured = cv$value;
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$bernoulli.
+		final double get$logProbability$bernoulli() {
+			return logProbability$bernoulli;
+		}
+
+		// Getter for logProbability$bias.
+		final double get$logProbability$bias() {
+			return logProbability$bias;
+		}
+
+		// Getter for logProbability$flips.
+		final double get$logProbability$flips() {
+			return logProbability$flips;
+		}
+
+		// Getter for logProbability$q.
+		final double get$logProbability$q() {
+			return logProbability$q;
+		}
+
+		// Getter for logProbability$t.
+		final double get$logProbability$t() {
+			return logProbability$t;
+		}
+
+		// Getter for q.
+		final double get$q() {
+			return q;
+		}
+
+		// Setter for q.
+		final void set$q(double cv$value, boolean allocated$) {
+			// Set flags for all the side effects of q including if probabilities need to be updated.
+			q = cv$value;
+			
+			// Unset the fixed probability flag for sample 11 as it depends on q.
+			fixedProbFlag$sample11 = false;
+			
+			// Unset the fixed probability flag for sample 103 as it depends on q.
+			fixedProbFlag$sample103 = false;
+		}
+
+		// Getter for samples.
+		final int get$samples() {
+			return samples;
+		}
+
+		// Setter for samples.
+		final void set$samples(int cv$value, boolean allocated$) {
+			samples = cv$value;
+		}
+
+		// Getter for t.
+		final double get$t() {
+			return t;
+		}
+
+		// Setter for t.
+		final void set$t(double cv$value, boolean allocated$) {
+			// Set flags for all the side effects of t including if probabilities need to be updated.
+			t = cv$value;
+			
+			// Unset the fixed probability flag for sample 17 as it depends on t.
+			fixedProbFlag$sample17 = false;
+			
+			// Unset the fixed probability flag for sample 103 as it depends on t.
+			fixedProbFlag$sample103 = false;
+		}
+	}
 
     private final ComputedObjectArrayInternal<double[][]> $bias = new ComputedObjectArrayInternal<double[][]>(this, "bias", false, false, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 3) {
         @Override
-        public double[][][] getValue() { return system$c.get$bias(); }
+        public double[][][] getValue() { return state.get$bias(); }
 
         @Override
         protected void setValueInternal(double[][][] value) {}
@@ -30,7 +255,7 @@ public final class Flip1CoinMK18 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$bias(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$bias(); }
 
         @Override
         public double[][][][] constructArray(int iterations) {
@@ -40,15 +265,15 @@ public final class Flip1CoinMK18 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample11(fixed, allocated);
-                system$c.set$fixedFlag$sample17(fixed, allocated);
+                state.set$fixedFlag$sample11(fixed, allocated);
+                state.set$fixedFlag$sample17(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample11 = system$c.get$fixedFlag$sample11();
-            boolean fixedFlag$sample17 = system$c.get$fixedFlag$sample17();
+            boolean fixedFlag$sample11 = state.get$fixedFlag$sample11();
+            boolean fixedFlag$sample17 = state.get$fixedFlag$sample17();
             if(fixedFlag$sample11 && fixedFlag$sample17)
                 return Immutability.FIXED;
             else if(fixedFlag$sample11 || fixedFlag$sample17)
@@ -65,7 +290,7 @@ public final class Flip1CoinMK18 extends Model {
 
     private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean[] getValue() { return system$c.get$flips(); }
+        public boolean[] getValue() { return state.get$flips(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {}
@@ -76,7 +301,7 @@ public final class Flip1CoinMK18 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$flips(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$flips(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -94,27 +319,27 @@ public final class Flip1CoinMK18 extends Model {
 
     private final ComputedDoubleInternal $q = new ComputedDoubleInternal(this, "q", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$q(); }
+        public double getValue() { return state.get$q(); }
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$q(value, allocated);
+            state.set$q(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$q(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$q(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample11(fixed, allocated);
+                state.set$fixedFlag$sample11(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample11())
+            if(state.get$fixedFlag$sample11())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -126,27 +351,27 @@ public final class Flip1CoinMK18 extends Model {
 
     private final ComputedDoubleInternal $t = new ComputedDoubleInternal(this, "t", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$t(); }
+        public double getValue() { return state.get$t(); }
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$t(value, allocated);
+            state.set$t(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$t(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$t(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample17(fixed, allocated);
+                state.set$fixedFlag$sample17(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample17())
+            if(state.get$fixedFlag$sample17())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -162,12 +387,12 @@ public final class Flip1CoinMK18 extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$a();
+                return state.get$a();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$a(value, allocated); }
+        protected void setValueInternal(int value) { state.set$a(value, allocated); }
     };
 
 	/** Observed variable representing a of type int from the Sandwood model. */
@@ -177,12 +402,12 @@ public final class Flip1CoinMK18 extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$b();
+                return state.get$b();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$b(value, allocated); }
+        protected void setValueInternal(int value) { state.set$b(value, allocated); }
     };
 
 	/** Observed variable representing b of type int from the Sandwood model. */
@@ -192,12 +417,12 @@ public final class Flip1CoinMK18 extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$c();
+                return state.get$c();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$c(value, allocated); }
+        protected void setValueInternal(int value) { state.set$c(value, allocated); }
     };
 
 	/** Observed variable representing c of type int from the Sandwood model. */
@@ -207,12 +432,12 @@ public final class Flip1CoinMK18 extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$samples();
+                return state.get$samples();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$samples(value, allocated); }
+        protected void setValueInternal(int value) { state.set$samples(value, allocated); }
     };
 
 	/** Observed variable representing samples of type int from the Sandwood model. */
@@ -224,12 +449,12 @@ public final class Flip1CoinMK18 extends Model {
         @Override
         public boolean[] getValue() {
             synchronized(model) {
-                return system$c.get$flipsMeasured();
+                return state.get$flipsMeasured();
             }
         }
 
         @Override
-        protected void setValueInternal(boolean[] value) { system$c.set$flipsMeasured(value, allocated); }
+        protected void setValueInternal(boolean[] value) { state.set$flipsMeasured(value, allocated); }
     };
 
 	/**
@@ -243,7 +468,7 @@ public final class Flip1CoinMK18 extends Model {
     private final RandomVariableInternal $bernoulli = new RandomVariableInternal(this, "bernoulli", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
-            return system$c.get$logProbability$bernoulli();
+            return state.get$logProbability$bernoulli();
         }
     };
 
@@ -256,6 +481,7 @@ public final class Flip1CoinMK18 extends Model {
 	/** A constructor for a model where no variable values are set. */
     public Flip1CoinMK18() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("bias", $bias);
         $computedVariables.put("flips", $flips);
@@ -270,7 +496,9 @@ public final class Flip1CoinMK18 extends Model {
 
         //Observed scalar fields
         $regularObservedValues.put("flipsMeasured", $flipsMeasured);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        Flip1CoinMK18$SingleThreadCPU core = new Flip1CoinMK18$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -309,47 +537,15 @@ public final class Flip1CoinMK18 extends Model {
     }
     
     @Override
-    protected Flip1CoinMK18$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        Flip1CoinMK18$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new Flip1CoinMK18$SingleThreadCPU(target);
-                break;
+                return new Flip1CoinMK18$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new Flip1CoinMK18$MultiThreadCPU(target);
-                break;
+                return new Flip1CoinMK18$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(Flip1CoinMK18$CoreInterface oldCore, Flip1CoinMK18$CoreInterface newCore) {
-        //Model inputs
-        if(a.isSet())
-            newCore.set$a(oldCore.get$a(), false);
-        if(b.isSet())
-            newCore.set$b(oldCore.get$b(), false);
-        if(c.isSet())
-            newCore.set$c(oldCore.get$c(), false);
-        if(samples.isSet())
-            newCore.set$samples(oldCore.get$samples(), false);
-
-        //Observed scalars
-        if(flipsMeasured.isSet())
-            newCore.set$flipsMeasured(oldCore.get$flipsMeasured(), false);
-
-        //ComputedVariables
-        if($q.isSet())
-            newCore.set$q(oldCore.get$q(), false);
-        if($t.isSet())
-            newCore.set$t(oldCore.get$t(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample11(oldCore.get$fixedFlag$sample11(), false);
-        newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17(), false);
     }
 
 	/**

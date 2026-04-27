@@ -1,154 +1,42 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.AlternativeModelMK2$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.AlternativeModelMK2.State;
 import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class AlternativeModelMK2$MultiThreadCPU extends CoreModelMultiThreadCPU implements AlternativeModelMK2$CoreInterface {
+final class AlternativeModelMK2$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double bias;
-	boolean constrainedFlag$sample6 = true;
-	boolean fixedFlag$sample6 = false;
-	boolean fixedProbFlag$sample6 = false;
-	boolean fixedProbFlag$sample8 = false;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$bias;
-	double logProbability$binomial;
-	double logProbability$positiveCount;
-	int observedPositiveCount;
-	int observedSampleCount;
-	int positiveCount;
-	boolean system$gibbsForward = true;
-
-	public AlternativeModelMK2$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	// Getter for bias.
-	@Override
-	public final double get$bias() {
-		return bias;
-	}
 
-	// Setter for bias.
-	@Override
-	public final void set$bias(double cv$value, boolean allocated$) {
-		// Set flags for all the side effects of bias including if probabilities need to be
-		// updated.
-		bias = cv$value;
-		
-		// Unset the fixed probability flag for sample 6 as it depends on bias.
-		fixedProbFlag$sample6 = false;
-		
-		// Unset the fixed probability flag for sample 8 as it depends on bias.
-		fixedProbFlag$sample8 = false;
-	}
-
-	// Getter for fixedFlag$sample6.
-	@Override
-	public final boolean get$fixedFlag$sample6() {
-		return fixedFlag$sample6;
-	}
-
-	// Setter for fixedFlag$sample6.
-	@Override
-	public final void set$fixedFlag$sample6(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample6 including if probabilities
-		// need to be updated.
-		fixedFlag$sample6 = cv$value;
-		
-		// Substituted "fixedFlag$sample6" with its value "cv$value".
-		constrainedFlag$sample6 = (cv$value || constrainedFlag$sample6);
-		
-		// Should the probability of sample 6 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample6" with its value "cv$value".
-		fixedProbFlag$sample6 = (cv$value && fixedProbFlag$sample6);
-		
-		// Should the probability of sample 8 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample6" with its value "cv$value".
-		fixedProbFlag$sample8 = (cv$value && fixedProbFlag$sample8);
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$bias.
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	// Getter for logProbability$binomial.
-	@Override
-	public final double get$logProbability$binomial() {
-		return logProbability$binomial;
-	}
-
-	// Getter for logProbability$positiveCount.
-	@Override
-	public final double get$logProbability$positiveCount() {
-		return logProbability$positiveCount;
-	}
-
-	// Getter for observedPositiveCount.
-	@Override
-	public final int get$observedPositiveCount() {
-		return observedPositiveCount;
-	}
-
-	// Setter for observedPositiveCount.
-	@Override
-	public final void set$observedPositiveCount(int cv$value, boolean allocated$) {
-		observedPositiveCount = cv$value;
-	}
-
-	// Getter for observedSampleCount.
-	@Override
-	public final int get$observedSampleCount() {
-		return observedSampleCount;
-	}
-
-	// Setter for observedSampleCount.
-	@Override
-	public final void set$observedSampleCount(int cv$value, boolean allocated$) {
-		observedSampleCount = cv$value;
-	}
-
-	// Getter for positiveCount.
-	@Override
-	public final int get$positiveCount() {
-		return positiveCount;
+	public AlternativeModelMK2$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample6
 	private final void drawValueSample6() {
-		bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 6 drawn from Beta 5. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void inferSample6() {
-		constrainedFlag$sample6 = false;
+		state.constrainedFlag$sample6 = false;
 		
 		// Mark that the sample has observed constrained data.
-		constrainedFlag$sample6 = true;
+		state.constrainedFlag$sample6 = true;
 		
 		// Write out the new value of the sample.
 		// 
@@ -157,14 +45,14 @@ final class AlternativeModelMK2$MultiThreadCPU extends CoreModelMultiThreadCPU i
 		// Increment the number of booleans sampled.
 		// 
 		// Local variable to record the number of samples.
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, positiveCount, observedSampleCount);
+		state.bias = Conjugates.sampleConjugateBetaBinomial(state.RNG$, 1.0, 1.0, state.positiveCount, state.observedSampleCount);
 	}
 
 	// Calculate the probability of the samples represented by sample6 using sampled values.
 	private final void logProbabilityValue$sample6() {
 		// Determine if we need to calculate the values for sample task 6 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample6) {
+		if(!state.fixedProbFlag$sample6) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -189,10 +77,10 @@ final class AlternativeModelMK2$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(bias, 1.0, 1.0);
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(state.bias, 1.0, 1.0);
 			
 			// Store the sample task probability
-			logProbability$bias = cv$distributionAccumulator;
+			state.logProbability$bias = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -208,11 +96,11 @@ final class AlternativeModelMK2$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample6)
+			if(state.fixedFlag$sample6)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -225,11 +113,11 @@ final class AlternativeModelMK2$MultiThreadCPU extends CoreModelMultiThreadCPU i
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample6 = fixedFlag$sample6;
+			state.fixedProbFlag$sample6 = state.fixedFlag$sample6;
 		} else {
 			// Using cached values.
 			// 
@@ -238,13 +126,13 @@ final class AlternativeModelMK2$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$bias);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$bias);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample6)
+			if(state.fixedFlag$sample6)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$bias);
 		}
 	}
 
@@ -252,7 +140,7 @@ final class AlternativeModelMK2$MultiThreadCPU extends CoreModelMultiThreadCPU i
 	private final void logProbabilityValue$sample8() {
 		// Determine if we need to calculate the values for sample task 8 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample8) {
+		if(!state.fixedProbFlag$sample8) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -277,15 +165,15 @@ final class AlternativeModelMK2$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBinomial(positiveCount, bias, observedSampleCount);
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityBinomial(state.positiveCount, state.bias, state.observedSampleCount);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$binomial = cv$distributionAccumulator;
+			state.logProbability$binomial = cv$distributionAccumulator;
 			
 			// Store the sample task probability
-			logProbability$positiveCount = cv$distributionAccumulator;
+			state.logProbability$positiveCount = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -301,7 +189,7 @@ final class AlternativeModelMK2$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// Variable declaration of cv$accumulator moved.
 			// Declaration comment was:
@@ -315,44 +203,34 @@ final class AlternativeModelMK2$MultiThreadCPU extends CoreModelMultiThreadCPU i
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample8 = fixedFlag$sample6;
+			state.fixedProbFlag$sample8 = state.fixedFlag$sample6;
 		} else {
 			// Using cached values.
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$binomial = logProbability$positiveCount;
+			state.logProbability$binomial = state.logProbability$positiveCount;
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$positiveCount);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$positiveCount);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$positiveCount);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$positiveCount);
 		}
 	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample6)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
+		if(!state.fixedFlag$sample6)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+		state.positiveCount = DistributionSampling.sampleBinomial(state.RNG$, state.bias, state.observedSampleCount);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -360,25 +238,25 @@ final class AlternativeModelMK2$MultiThreadCPU extends CoreModelMultiThreadCPU i
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample6)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample6)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	// Method to execute the model code conventionally with priming of fixed intermediate
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample6)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
+		if(!state.fixedFlag$sample6)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+		state.positiveCount = DistributionSampling.sampleBinomial(state.RNG$, state.bias, state.observedSampleCount);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample6)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample6)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -386,20 +264,20 @@ final class AlternativeModelMK2$MultiThreadCPU extends CoreModelMultiThreadCPU i
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample6)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample6)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	// Method to execute one round of Gibbs sampling.
 	@Override
 	public final void gibbsRound() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample6)
+		if(!state.fixedFlag$sample6)
 			inferSample6();
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample6)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample6)
 			drawValueSample6();
 	}
 
@@ -411,13 +289,13 @@ final class AlternativeModelMK2$MultiThreadCPU extends CoreModelMultiThreadCPU i
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample6)
-			logProbability$bias = Double.NaN;
-		logProbability$binomial = 0.0;
-		if(!fixedProbFlag$sample8)
-			logProbability$positiveCount = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample6)
+			state.logProbability$bias = Double.NaN;
+		state.logProbability$binomial = 0.0;
+		if(!state.fixedProbFlag$sample8)
+			state.logProbability$positiveCount = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
@@ -432,7 +310,7 @@ final class AlternativeModelMK2$MultiThreadCPU extends CoreModelMultiThreadCPU i
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample6)
+		if(state.fixedFlag$sample6)
 			logProbabilityValue$sample6();
 		logProbabilityValue$sample8();
 	}
@@ -478,7 +356,7 @@ final class AlternativeModelMK2$MultiThreadCPU extends CoreModelMultiThreadCPU i
 	@Override
 	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
-		positiveCount = observedPositiveCount;
+		state.positiveCount = state.observedPositiveCount;
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are

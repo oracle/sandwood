@@ -1,273 +1,88 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.DiscreteChoiceRandCoeff$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.DiscreteChoiceRandCoeff.State;
 import org.sandwood.random.internal.Rng;
 import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DiscreteChoiceRandCoeff$MultiThreadCPU extends CoreModelMultiThreadCPU implements DiscreteChoiceRandCoeff$CoreInterface {
-int[] ObsChoices;
-	int[][] Prices;
-	double b;
-	double[] beta;
-	int[] choices;
-	boolean[] constrainedFlag$sample21;
-	boolean constrainedFlag$sample28 = true;
-	boolean constrainedFlag$sample34 = true;
-	boolean[] constrainedFlag$sample47;
-	double[][] exped;
-	boolean fixedFlag$sample21 = false;
-	boolean fixedFlag$sample28 = false;
-	boolean fixedFlag$sample34 = false;
-	boolean fixedFlag$sample47 = false;
-	boolean fixedProbFlag$sample103 = false;
-	boolean fixedProbFlag$sample21 = false;
-	boolean fixedProbFlag$sample28 = false;
-	boolean fixedProbFlag$sample34 = false;
-	boolean fixedProbFlag$sample47 = false;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$b;
-	double logProbability$beta;
-	double logProbability$choices;
-	double logProbability$prob;
-	double[] logProbability$sample103;
-	double[] logProbability$sample21;
-	double[] logProbability$sample47;
-	double logProbability$sigma;
-	double logProbability$ut;
-	int noObs;
-	int noProducts;
-	double[][] prob;
-	double sigma;
-	boolean system$gibbsForward = true;
-	double[] ut;
-	boolean[] guard$sample21categorical102$global;
-	boolean[][] guard$sample21put101$global;
-	boolean[][] guard$sample47categorical102$global;
-	boolean[][][] guard$sample47put101$global;
+final class DiscreteChoiceRandCoeff$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
+boolean[] guard$sample21categorical102$global;
+		boolean[][] guard$sample21put101$global;
+		boolean[][] guard$sample47categorical102$global;
+		boolean[][][] guard$sample47put101$global;
 
-	public DiscreteChoiceRandCoeff$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
-
-	@Override
-	public final int[] get$ObsChoices() {
-		return ObsChoices;
-	}
-
-	@Override
-	public final void set$ObsChoices(int[] cv$value, boolean allocated$) {
-		ObsChoices = cv$value;
-	}
-
-	@Override
-	public final int[][] get$Prices() {
-		return Prices;
-	}
-
-	@Override
-	public final void set$Prices(int[][] cv$value, boolean allocated$) {
-		Prices = cv$value;
-	}
-
-	@Override
-	public final double get$b() {
-		return b;
-	}
-
-	@Override
-	public final void set$b(double cv$value, boolean allocated$) {
-		b = cv$value;
-		fixedProbFlag$sample28 = false;
-		fixedProbFlag$sample47 = false;
-	}
-
-	@Override
-	public final double[] get$beta() {
-		return beta;
-	}
-
-	@Override
-	public final void set$beta(double[] cv$value, boolean allocated$) {
-		beta = cv$value;
-		fixedProbFlag$sample47 = false;
-		fixedProbFlag$sample103 = false;
-	}
-
-	@Override
-	public final int[] get$choices() {
-		return choices;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample21() {
-		return fixedFlag$sample21;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample21(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample21 = cv$value;
-		if(allocated$) {
-			for(int index$constrainedFlag$sample21$1 = 0; index$constrainedFlag$sample21$1 < constrainedFlag$sample21.length; index$constrainedFlag$sample21$1 += 1)
-				constrainedFlag$sample21[index$constrainedFlag$sample21$1] = true;
+		@Override
+		public final void allocateScratch() {
+			{
+				int cv$max_i = 0;
+				int cv$max_j$var97 = 0;
+				for(int i = 0; i < state.noObs; i += 1)
+					cv$max_j$var97 = Math.max(cv$max_j$var97, ((state.noProducts - 0) / 1));
+				cv$max_i = Math.max(cv$max_i, ((state.noObs - 0) / 1));
+				guard$sample21put101$global = new boolean[cv$max_i][cv$max_j$var97];
+			}
+			{
+				int cv$max_i = 0;
+				cv$max_i = Math.max(cv$max_i, ((state.noObs - 0) / 1));
+				guard$sample21categorical102$global = new boolean[cv$max_i];
+			}
+			{
+				int cv$max_i = 0;
+				int cv$max_j$var97 = 0;
+				for(int i = 0; i < state.noObs; i += 1)
+					cv$max_j$var97 = Math.max(cv$max_j$var97, ((state.noProducts - 0) / 1));
+				cv$max_i = Math.max(cv$max_i, ((state.noObs - 0) / 1));
+				{
+					int cv$threadCount = threadCount();
+					guard$sample47put101$global = new boolean[cv$threadCount][][];
+					for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+						guard$sample47put101$global[cv$index] = new boolean[cv$max_i][cv$max_j$var97];
+				}
+			}
+			{
+				int cv$max_i = 0;
+				cv$max_i = Math.max(cv$max_i, ((state.noObs - 0) / 1));
+				{
+					int cv$threadCount = threadCount();
+					guard$sample47categorical102$global = new boolean[cv$threadCount][];
+					for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+						guard$sample47categorical102$global[cv$index] = new boolean[cv$max_i];
+				}
+			}
 		}
-		fixedProbFlag$sample21 = (fixedFlag$sample21 && fixedProbFlag$sample21);
-		fixedProbFlag$sample103 = (fixedFlag$sample21 && fixedProbFlag$sample103);
 	}
 
-	@Override
-	public final boolean get$fixedFlag$sample28() {
-		return fixedFlag$sample28;
-	}
 
-	@Override
-	public final void set$fixedFlag$sample28(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample28 = cv$value;
-		constrainedFlag$sample28 = (fixedFlag$sample28 || constrainedFlag$sample28);
-		fixedProbFlag$sample28 = (fixedFlag$sample28 && fixedProbFlag$sample28);
-		fixedProbFlag$sample47 = (fixedFlag$sample28 && fixedProbFlag$sample47);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample34() {
-		return fixedFlag$sample34;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample34(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample34 = cv$value;
-		constrainedFlag$sample34 = (fixedFlag$sample34 || constrainedFlag$sample34);
-		fixedProbFlag$sample34 = (fixedFlag$sample34 && fixedProbFlag$sample34);
-		fixedProbFlag$sample47 = (fixedFlag$sample34 && fixedProbFlag$sample47);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample47() {
-		return fixedFlag$sample47;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample47(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample47 = cv$value;
-		if(allocated$) {
-			for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
-				constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
-		}
-		fixedProbFlag$sample47 = (fixedFlag$sample47 && fixedProbFlag$sample47);
-		fixedProbFlag$sample103 = (fixedFlag$sample47 && fixedProbFlag$sample103);
-	}
-
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	@Override
-	public final double get$logProbability$b() {
-		return logProbability$b;
-	}
-
-	@Override
-	public final double get$logProbability$beta() {
-		return logProbability$beta;
-	}
-
-	@Override
-	public final double get$logProbability$choices() {
-		return logProbability$choices;
-	}
-
-	@Override
-	public final double get$logProbability$prob() {
-		return logProbability$prob;
-	}
-
-	@Override
-	public final double get$logProbability$sigma() {
-		return logProbability$sigma;
-	}
-
-	@Override
-	public final double get$logProbability$ut() {
-		return logProbability$ut;
-	}
-
-	@Override
-	public final int get$noObs() {
-		return noObs;
-	}
-
-	@Override
-	public final void set$noObs(int cv$value, boolean allocated$) {
-		noObs = cv$value;
-	}
-
-	@Override
-	public final int get$noProducts() {
-		return noProducts;
-	}
-
-	@Override
-	public final void set$noProducts(int cv$value, boolean allocated$) {
-		noProducts = cv$value;
-	}
-
-	@Override
-	public final double[][] get$prob() {
-		return prob;
-	}
-
-	@Override
-	public final double get$sigma() {
-		return sigma;
-	}
-
-	@Override
-	public final void set$sigma(double cv$value, boolean allocated$) {
-		sigma = cv$value;
-		fixedProbFlag$sample34 = false;
-		fixedProbFlag$sample47 = false;
-	}
-
-	@Override
-	public final double[] get$ut() {
-		return ut;
-	}
-
-	@Override
-	public final void set$ut(double[] cv$value, boolean allocated$) {
-		ut = cv$value;
-		fixedProbFlag$sample21 = false;
-		fixedProbFlag$sample103 = false;
+	public DiscreteChoiceRandCoeff$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	private final void drawValueSample21(int var20) {
-		ut[var20] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		state.ut[var20] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		{
 			{
-				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+				for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 					if((var20 == j$var69)) {
-						for(int i = 0; i < noObs; i += 1)
-							exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+						for(int i = 0; i < state.noObs; i += 1)
+							state.exped[((i - 0) / 1)][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 					}
 				}
 			}
 		}
 		{
-			boolean[][] guard$sample21put101 = guard$sample21put101$global;
+			boolean[][] guard$sample21put101 = scratch.guard$sample21put101$global;
 			{
-				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+				for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 					if((var20 == j$var69)) {
-						for(int i = 0; i < noObs; i += 1) {
-							if(((0 <= j$var69) && (j$var69 < noProducts))) {
-								for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+						for(int i = 0; i < state.noObs; i += 1) {
+							if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+								for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
 									guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
 							}
 						}
@@ -275,11 +90,11 @@ int[] ObsChoices;
 				}
 			}
 			{
-				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+				for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 					if((var20 == j$var69)) {
-						for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+						for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 							if((j$var69 == j$var97)) {
-								for(int i = 0; i < noObs; i += 1)
+								for(int i = 0; i < state.noObs; i += 1)
 									guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
 							}
 						}
@@ -287,21 +102,21 @@ int[] ObsChoices;
 				}
 			}
 			{
-				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+				for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 					if((var20 == j$var69)) {
-						for(int i = 0; i < noObs; i += 1) {
-							if(((0 <= j$var69) && (j$var69 < noProducts))) {
-								for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+						for(int i = 0; i < state.noObs; i += 1) {
+							if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+								for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 									if(!guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
 										guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
 										{
 											double reduceVar$sum$30 = 0.0;
-											for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+											for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 												double k = reduceVar$sum$30;
-												double l = exped[((i - 0) / 1)][cv$reduction82Index];
+												double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
 												reduceVar$sum$30 = (k + l);
 											}
-											prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$30);
+											state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$30);
 										}
 									}
 								}
@@ -311,21 +126,21 @@ int[] ObsChoices;
 				}
 			}
 			{
-				for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+				for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 					if((var20 == j$var69)) {
-						for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+						for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 							if((j$var69 == j$var97)) {
-								for(int i = 0; i < noObs; i += 1) {
+								for(int i = 0; i < state.noObs; i += 1) {
 									if(!guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
 										guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
 										{
 											double reduceVar$sum$31 = 0.0;
-											for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+											for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 												double k = reduceVar$sum$31;
-												double l = exped[((i - 0) / 1)][cv$reduction82Index];
+												double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
 												reduceVar$sum$31 = (k + l);
 											}
-											prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$31);
+											state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$31);
 										}
 									}
 								}
@@ -338,33 +153,33 @@ int[] ObsChoices;
 	}
 
 	private final void drawValueSample28() {
-		b = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		state.b = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 	}
 
 	private final void drawValueSample34() {
-		sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
+		state.sigma = DistributionSampling.sampleInverseGamma(state.RNG$, 2.0, 2.0);
 	}
 
 	private final void drawValueSample47(int var46, int threadID$cv$var46, Rng RNG$) {
-		beta[var46] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$)) + b);
+		state.beta[var46] = ((Math.sqrt(state.sigma) * DistributionSampling.sampleGaussian(RNG$)) + state.b);
 		{
 			{
-				for(int i = 0; i < noObs; i += 1) {
+				for(int i = 0; i < state.noObs; i += 1) {
 					if((var46 == i)) {
-						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
-							exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+						for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1)
+							state.exped[((i - 0) / 1)][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 					}
 				}
 			}
 		}
 		{
-			boolean[][] guard$sample47put101 = guard$sample47put101$global[threadID$cv$var46];
+			boolean[][] guard$sample47put101 = scratch.guard$sample47put101$global[threadID$cv$var46];
 			{
-				for(int i = 0; i < noObs; i += 1) {
+				for(int i = 0; i < state.noObs; i += 1) {
 					if((var46 == i)) {
-						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-							if(((0 <= j$var69) && (j$var69 < noProducts))) {
-								for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+						for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+							if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+								for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
 									guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
 							}
 						}
@@ -372,10 +187,10 @@ int[] ObsChoices;
 				}
 			}
 			{
-				for(int i = 0; i < noObs; i += 1) {
+				for(int i = 0; i < state.noObs; i += 1) {
 					if((var46 == i)) {
-						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-							for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+						for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+							for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 								if((j$var69 == j$var97))
 									guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
 							}
@@ -384,21 +199,21 @@ int[] ObsChoices;
 				}
 			}
 			{
-				for(int i = 0; i < noObs; i += 1) {
+				for(int i = 0; i < state.noObs; i += 1) {
 					if((var46 == i)) {
-						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-							if(((0 <= j$var69) && (j$var69 < noProducts))) {
-								for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+						for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+							if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+								for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 									if(!guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
 										guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
 										{
 											double reduceVar$sum$32 = 0.0;
-											for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+											for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 												double k = reduceVar$sum$32;
-												double l = exped[((i - 0) / 1)][cv$reduction82Index];
+												double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
 												reduceVar$sum$32 = (k + l);
 											}
-											prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$32);
+											state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$32);
 										}
 									}
 								}
@@ -408,21 +223,21 @@ int[] ObsChoices;
 				}
 			}
 			{
-				for(int i = 0; i < noObs; i += 1) {
+				for(int i = 0; i < state.noObs; i += 1) {
 					if((var46 == i)) {
-						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-							for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+						for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+							for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 								if((j$var69 == j$var97)) {
 									if(!guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
 										guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
 										{
 											double reduceVar$sum$33 = 0.0;
-											for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+											for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 												double k = reduceVar$sum$33;
-												double l = exped[((i - 0) / 1)][cv$reduction82Index];
+												double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
 												reduceVar$sum$33 = (k + l);
 											}
-											prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$33);
+											state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$33);
 										}
 									}
 								}
@@ -436,20 +251,20 @@ int[] ObsChoices;
 
 	private final void inferSample21(int var20) {
 		if(true) {
-			constrainedFlag$sample21[((var20 - 0) / 1)] = false;
+			state.constrainedFlag$sample21[((var20 - 0) / 1)] = false;
 			int cv$numStates = 0;
 			{
 				cv$numStates = Math.max(cv$numStates, 2);
 			}
-			double cv$originalValue = ut[var20];
+			double cv$originalValue = state.ut[var20];
 			double cv$originalProbability = 0.0;
 			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
 			if((cv$var < (0.1 * 0.1)))
 				cv$var = (0.1 * 0.1);
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample21[((var20 - 0) / 1)] || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample21[((var20 - 0) / 1)] || (cv$valuePos == 0))) {
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					double cv$reachedDistributionSourceRV = 0.0;
 					double cv$accumulatedDistributionProbabilities = 0.0;
@@ -462,28 +277,28 @@ int[] ObsChoices;
 						{
 							{
 								{
-									ut[var20] = cv$currentValue;
+									state.ut[var20] = cv$currentValue;
 								}
 							}
 						}
 						{
 							{
-								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+								for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 									if((var20 == j$var69)) {
-										for(int i = 0; i < noObs; i += 1)
-											exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+										for(int i = 0; i < state.noObs; i += 1)
+											state.exped[((i - 0) / 1)][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 									}
 								}
 							}
 						}
 						{
-							boolean[][] guard$sample21put101 = guard$sample21put101$global;
+							boolean[][] guard$sample21put101 = scratch.guard$sample21put101$global;
 							{
-								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+								for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 									if((var20 == j$var69)) {
-										for(int i = 0; i < noObs; i += 1) {
-											if(((0 <= j$var69) && (j$var69 < noProducts))) {
-												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+										for(int i = 0; i < state.noObs; i += 1) {
+											if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+												for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
 													guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
 											}
 										}
@@ -491,11 +306,11 @@ int[] ObsChoices;
 								}
 							}
 							{
-								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+								for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 									if((var20 == j$var69)) {
-										for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+										for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 											if((j$var69 == j$var97)) {
-												for(int i = 0; i < noObs; i += 1)
+												for(int i = 0; i < state.noObs; i += 1)
 													guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
 											}
 										}
@@ -503,21 +318,21 @@ int[] ObsChoices;
 								}
 							}
 							{
-								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+								for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 									if((var20 == j$var69)) {
-										for(int i = 0; i < noObs; i += 1) {
-											if(((0 <= j$var69) && (j$var69 < noProducts))) {
-												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+										for(int i = 0; i < state.noObs; i += 1) {
+											if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+												for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 													if(!guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
 														guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
 														{
 															double reduceVar$sum$20 = 0.0;
-															for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+															for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 																double k = reduceVar$sum$20;
-																double l = exped[((i - 0) / 1)][cv$reduction82Index];
+																double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
 																reduceVar$sum$20 = (k + l);
 															}
-															prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$20);
+															state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$20);
 														}
 													}
 												}
@@ -527,21 +342,21 @@ int[] ObsChoices;
 								}
 							}
 							{
-								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+								for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 									if((var20 == j$var69)) {
-										for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+										for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 											if((j$var69 == j$var97)) {
-												for(int i = 0; i < noObs; i += 1) {
+												for(int i = 0; i < state.noObs; i += 1) {
 													if(!guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
 														guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
 														{
 															double reduceVar$sum$21 = 0.0;
-															for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+															for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 																double k = reduceVar$sum$21;
-																double l = exped[((i - 0) / 1)][cv$reduction82Index];
+																double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
 																reduceVar$sum$21 = (k + l);
 															}
-															prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$21);
+															state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$21);
 														}
 													}
 												}
@@ -557,23 +372,23 @@ int[] ObsChoices;
 						double cv$accumulatedProbabilities = (Math.log(1.0) + ((0.0 < 10.0)?(DistributionSampling.logProbabilityGaussian(((cv$currentValue - 0.0) / Math.sqrt(10.0))) - (0.5 * Math.log(10.0))):Double.NEGATIVE_INFINITY));
 						{
 							{
-								boolean[] guard$sample21categorical102 = guard$sample21categorical102$global;
+								boolean[] guard$sample21categorical102 = scratch.guard$sample21categorical102$global;
 								{
-									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+									for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 										if((var20 == j$var69)) {
-											for(int i = 0; i < noObs; i += 1) {
-												if(((0 <= j$var69) && (j$var69 < noProducts)))
+											for(int i = 0; i < state.noObs; i += 1) {
+												if(((0 <= j$var69) && (j$var69 < state.noProducts)))
 													guard$sample21categorical102[((i - 0) / 1)] = false;
 											}
 										}
 									}
 								}
 								{
-									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+									for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 										if((var20 == j$var69)) {
-											for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+											for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 												if((j$var69 == j$var97)) {
-													for(int i = 0; i < noObs; i += 1)
+													for(int i = 0; i < state.noObs; i += 1)
 														guard$sample21categorical102[((i - 0) / 1)] = false;
 												}
 											}
@@ -582,21 +397,21 @@ int[] ObsChoices;
 								}
 								{
 									double traceTempVariable$var70$9_1 = cv$currentValue;
-									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+									for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 										if((var20 == j$var69)) {
-											for(int i = 0; i < noObs; i += 1) {
-												double traceTempVariable$k$9_4 = Math.exp((traceTempVariable$var70$9_1 - (beta[i] * Prices[i][j$var69])));
-												if(((0 <= j$var69) && (j$var69 < noProducts))) {
-													if((0 < noProducts)) {
+											for(int i = 0; i < state.noObs; i += 1) {
+												double traceTempVariable$k$9_4 = Math.exp((traceTempVariable$var70$9_1 - (state.beta[i] * state.Prices[i][j$var69])));
+												if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+													if((0 < state.noProducts)) {
 														double reduceVar$sum$22 = 0.0;
 														for(int cv$reduction1617Index = 0; cv$reduction1617Index < j$var69; cv$reduction1617Index += 1) {
 															double k = reduceVar$sum$22;
-															double l = exped[((i - 0) / 1)][cv$reduction1617Index];
+															double l = state.exped[((i - 0) / 1)][cv$reduction1617Index];
 															reduceVar$sum$22 = (k + l);
 														}
-														for(int cv$reduction1617Index = (j$var69 + 1); cv$reduction1617Index < noProducts; cv$reduction1617Index += 1) {
+														for(int cv$reduction1617Index = (j$var69 + 1); cv$reduction1617Index < state.noProducts; cv$reduction1617Index += 1) {
 															double k = reduceVar$sum$22;
-															double l = exped[((i - 0) / 1)][cv$reduction1617Index];
+															double l = state.exped[((i - 0) / 1)][cv$reduction1617Index];
 															reduceVar$sum$22 = (k + l);
 														}
 														double cv$reduced82 = reduceVar$sum$22;
@@ -608,7 +423,7 @@ int[] ObsChoices;
 																{
 																	boolean cv$sampleConstrained = true;
 																	if(cv$sampleConstrained) {
-																		constrainedFlag$sample21[((var20 - 0) / 1)] = true;
+																		state.constrainedFlag$sample21[((var20 - 0) / 1)] = true;
 																		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 																		double cv$consumerDistributionProbabilityAccumulator = 1.0;
 																		{
@@ -616,13 +431,13 @@ int[] ObsChoices;
 																				{
 																					{
 																						{
-																							if(((Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							if(((Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																							else {
 																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY));
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY));
 																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)));
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY)));
 																							}
 																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																						}
@@ -651,11 +466,11 @@ int[] ObsChoices;
 								}
 								{
 									double traceTempVariable$var70$10_1 = cv$currentValue;
-									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+									for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 										if((var20 == j$var69)) {
-											for(int i = 0; i < noObs; i += 1) {
-												double traceTempVariable$var98$10_4 = Math.exp((traceTempVariable$var70$10_1 - (beta[i] * Prices[i][j$var69])));
-												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+											for(int i = 0; i < state.noObs; i += 1) {
+												double traceTempVariable$var98$10_4 = Math.exp((traceTempVariable$var70$10_1 - (state.beta[i] * state.Prices[i][j$var69])));
+												for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 													if((j$var69 == j$var97)) {
 														if(!guard$sample21categorical102[((i - 0) / 1)]) {
 															guard$sample21categorical102[((i - 0) / 1)] = true;
@@ -663,7 +478,7 @@ int[] ObsChoices;
 																{
 																	boolean cv$sampleConstrained = true;
 																	if(cv$sampleConstrained) {
-																		constrainedFlag$sample21[((var20 - 0) / 1)] = true;
+																		state.constrainedFlag$sample21[((var20 - 0) / 1)] = true;
 																		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 																		double cv$consumerDistributionProbabilityAccumulator = 1.0;
 																		{
@@ -671,13 +486,13 @@ int[] ObsChoices;
 																				{
 																					{
 																						{
-																							if(((Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							if(((Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																							else {
 																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY));
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY));
 																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)));
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY)));
 																							}
 																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																						}
@@ -721,33 +536,33 @@ int[] ObsChoices;
 						cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 					double cv$ratio = (cv$proposedProbability - cv$originalProbability);
 					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$))))) || Double.isNaN(cv$ratio))) {
 							double var21 = cv$originalValue;
 							{
 								{
 									{
-										ut[var20] = var21;
+										state.ut[var20] = var21;
 									}
 								}
 							}
 							{
 								{
-									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+									for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 										if((var20 == j$var69)) {
-											for(int i = 0; i < noObs; i += 1)
-												exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+											for(int i = 0; i < state.noObs; i += 1)
+												state.exped[((i - 0) / 1)][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 										}
 									}
 								}
 							}
 							{
-								boolean[][] guard$sample21put101 = guard$sample21put101$global;
+								boolean[][] guard$sample21put101 = scratch.guard$sample21put101$global;
 								{
-									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+									for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 										if((var20 == j$var69)) {
-											for(int i = 0; i < noObs; i += 1) {
-												if(((0 <= j$var69) && (j$var69 < noProducts))) {
-													for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+											for(int i = 0; i < state.noObs; i += 1) {
+												if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+													for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
 														guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
 												}
 											}
@@ -755,11 +570,11 @@ int[] ObsChoices;
 									}
 								}
 								{
-									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+									for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 										if((var20 == j$var69)) {
-											for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+											for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 												if((j$var69 == j$var97)) {
-													for(int i = 0; i < noObs; i += 1)
+													for(int i = 0; i < state.noObs; i += 1)
 														guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
 												}
 											}
@@ -767,21 +582,21 @@ int[] ObsChoices;
 									}
 								}
 								{
-									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+									for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 										if((var20 == j$var69)) {
-											for(int i = 0; i < noObs; i += 1) {
-												if(((0 <= j$var69) && (j$var69 < noProducts))) {
-													for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+											for(int i = 0; i < state.noObs; i += 1) {
+												if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+													for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 														if(!guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
 															guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
 															{
 																double reduceVar$sum$23 = 0.0;
-																for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+																for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 																	double k = reduceVar$sum$23;
-																	double l = exped[((i - 0) / 1)][cv$reduction82Index];
+																	double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
 																	reduceVar$sum$23 = (k + l);
 																}
-																prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$23);
+																state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$23);
 															}
 														}
 													}
@@ -791,21 +606,21 @@ int[] ObsChoices;
 									}
 								}
 								{
-									for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+									for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 										if((var20 == j$var69)) {
-											for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+											for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 												if((j$var69 == j$var97)) {
-													for(int i = 0; i < noObs; i += 1) {
+													for(int i = 0; i < state.noObs; i += 1) {
 														if(!guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
 															guard$sample21put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
 															{
 																double reduceVar$sum$24 = 0.0;
-																for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+																for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 																	double k = reduceVar$sum$24;
-																	double l = exped[((i - 0) / 1)][cv$reduction82Index];
+																	double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
 																	reduceVar$sum$24 = (k + l);
 																}
-																prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$24);
+																state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$24);
 															}
 														}
 													}
@@ -824,7 +639,7 @@ int[] ObsChoices;
 
 	private final void inferSample28() {
 		if(true) {
-			constrainedFlag$sample28 = false;
+			state.constrainedFlag$sample28 = false;
 			double cv$sum = 0.0;
 			double cv$denominatorSquareSum = 0.0;
 			boolean cv$sigmaNotFound = true;
@@ -835,10 +650,10 @@ int[] ObsChoices;
 						{
 							{
 								{
-									for(int var46 = 0; var46 < noObs; var46 += 1) {
-										boolean cv$sampleConstrained = (fixedFlag$sample47 || constrainedFlag$sample47[((var46 - 0) / 1)]);
+									for(int var46 = 0; var46 < state.noObs; var46 += 1) {
+										boolean cv$sampleConstrained = (state.fixedFlag$sample47 || state.constrainedFlag$sample47[((var46 - 0) / 1)]);
 										if(cv$sampleConstrained) {
-											constrainedFlag$sample28 = true;
+											state.constrainedFlag$sample28 = true;
 											{
 												{
 													{
@@ -847,9 +662,9 @@ int[] ObsChoices;
 																double cv$denominator = 1.0;
 																double cv$numerator = 0.0;
 																cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-																cv$sum = (cv$sum + (cv$denominator * (beta[var46] - cv$numerator)));
+																cv$sum = (cv$sum + (cv$denominator * (state.beta[var46] - cv$numerator)));
 																if(cv$sigmaNotFound) {
-																	cv$sigmaValue = sigma;
+																	cv$sigmaValue = state.sigma;
 																	cv$sigmaNotFound = false;
 																}
 															}
@@ -865,14 +680,14 @@ int[] ObsChoices;
 					}
 				}
 			}
-			if(constrainedFlag$sample28)
-				b = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+			if(state.constrainedFlag$sample28)
+				state.b = Conjugates.sampleConjugateGaussianGaussian(state.RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 		}
 	}
 
 	private final void inferSample34() {
 		if(true) {
-			constrainedFlag$sample34 = false;
+			state.constrainedFlag$sample34 = false;
 			double cv$sum = 0.0;
 			int cv$count = 0;
 			{
@@ -881,17 +696,17 @@ int[] ObsChoices;
 						{
 							{
 								{
-									for(int var46 = 0; var46 < noObs; var46 += 1) {
-										boolean cv$sampleConstrained = (fixedFlag$sample47 || constrainedFlag$sample47[((var46 - 0) / 1)]);
+									for(int var46 = 0; var46 < state.noObs; var46 += 1) {
+										boolean cv$sampleConstrained = (state.fixedFlag$sample47 || state.constrainedFlag$sample47[((var46 - 0) / 1)]);
 										if(cv$sampleConstrained) {
-											constrainedFlag$sample34 = true;
+											state.constrainedFlag$sample34 = true;
 											{
 												{
 													{
 														{
 															{
-																double cv$var35$mu = b;
-																double cv$var35$diff = (cv$var35$mu - beta[var46]);
+																double cv$var35$mu = state.b;
+																double cv$var35$diff = (cv$var35$mu - state.beta[var46]);
 																cv$sum = (cv$sum + (cv$var35$diff * cv$var35$diff));
 																cv$count = (cv$count + 1);
 															}
@@ -907,19 +722,19 @@ int[] ObsChoices;
 					}
 				}
 			}
-			if(constrainedFlag$sample34)
-				sigma = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 2.0, 2.0, cv$sum, cv$count);
+			if(state.constrainedFlag$sample34)
+				state.sigma = Conjugates.sampleConjugateInverseGammaGaussian(state.RNG$, 2.0, 2.0, cv$sum, cv$count);
 		}
 	}
 
 	private final void inferSample47(int var46, int threadID$cv$var46, Rng RNG$) {
 		if(true) {
-			constrainedFlag$sample47[((var46 - 0) / 1)] = false;
+			state.constrainedFlag$sample47[((var46 - 0) / 1)] = false;
 			int cv$numStates = 0;
 			{
 				cv$numStates = Math.max(cv$numStates, 2);
 			}
-			double cv$originalValue = beta[var46];
+			double cv$originalValue = state.beta[var46];
 			double cv$originalProbability = 0.0;
 			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
 			if((cv$var < (0.1 * 0.1)))
@@ -927,7 +742,7 @@ int[] ObsChoices;
 			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample47[((var46 - 0) / 1)] || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample47[((var46 - 0) / 1)] || (cv$valuePos == 0))) {
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					double cv$reachedDistributionSourceRV = 0.0;
 					double cv$accumulatedDistributionProbabilities = 0.0;
@@ -940,28 +755,28 @@ int[] ObsChoices;
 						{
 							{
 								{
-									beta[var46] = cv$currentValue;
+									state.beta[var46] = cv$currentValue;
 								}
 							}
 						}
 						{
 							{
-								for(int i = 0; i < noObs; i += 1) {
+								for(int i = 0; i < state.noObs; i += 1) {
 									if((var46 == i)) {
-										for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
-											exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+										for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1)
+											state.exped[((i - 0) / 1)][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 									}
 								}
 							}
 						}
 						{
-							boolean[][] guard$sample47put101 = guard$sample47put101$global[threadID$cv$var46];
+							boolean[][] guard$sample47put101 = scratch.guard$sample47put101$global[threadID$cv$var46];
 							{
-								for(int i = 0; i < noObs; i += 1) {
+								for(int i = 0; i < state.noObs; i += 1) {
 									if((var46 == i)) {
-										for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-											if(((0 <= j$var69) && (j$var69 < noProducts))) {
-												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+										for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+											if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+												for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
 													guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
 											}
 										}
@@ -969,10 +784,10 @@ int[] ObsChoices;
 								}
 							}
 							{
-								for(int i = 0; i < noObs; i += 1) {
+								for(int i = 0; i < state.noObs; i += 1) {
 									if((var46 == i)) {
-										for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-											for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+										for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+											for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 												if((j$var69 == j$var97))
 													guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
 											}
@@ -981,21 +796,21 @@ int[] ObsChoices;
 								}
 							}
 							{
-								for(int i = 0; i < noObs; i += 1) {
+								for(int i = 0; i < state.noObs; i += 1) {
 									if((var46 == i)) {
-										for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-											if(((0 <= j$var69) && (j$var69 < noProducts))) {
-												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+										for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+											if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+												for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 													if(!guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
 														guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
 														{
 															double reduceVar$sum$25 = 0.0;
-															for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+															for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 																double k = reduceVar$sum$25;
-																double l = exped[((i - 0) / 1)][cv$reduction82Index];
+																double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
 																reduceVar$sum$25 = (k + l);
 															}
-															prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$25);
+															state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$25);
 														}
 													}
 												}
@@ -1005,21 +820,21 @@ int[] ObsChoices;
 								}
 							}
 							{
-								for(int i = 0; i < noObs; i += 1) {
+								for(int i = 0; i < state.noObs; i += 1) {
 									if((var46 == i)) {
-										for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-											for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+										for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+											for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 												if((j$var69 == j$var97)) {
 													if(!guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
 														guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
 														{
 															double reduceVar$sum$26 = 0.0;
-															for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+															for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 																double k = reduceVar$sum$26;
-																double l = exped[((i - 0) / 1)][cv$reduction82Index];
+																double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
 																reduceVar$sum$26 = (k + l);
 															}
-															prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$26);
+															state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$26);
 														}
 													}
 												}
@@ -1032,25 +847,25 @@ int[] ObsChoices;
 					}
 					{
 						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-						double cv$accumulatedProbabilities = (Math.log(1.0) + ((0.0 < sigma)?(DistributionSampling.logProbabilityGaussian(((cv$currentValue - b) / Math.sqrt(sigma))) - (0.5 * Math.log(sigma))):Double.NEGATIVE_INFINITY));
+						double cv$accumulatedProbabilities = (Math.log(1.0) + ((0.0 < state.sigma)?(DistributionSampling.logProbabilityGaussian(((cv$currentValue - state.b) / Math.sqrt(state.sigma))) - (0.5 * Math.log(state.sigma))):Double.NEGATIVE_INFINITY));
 						{
 							{
-								boolean[] guard$sample47categorical102 = guard$sample47categorical102$global[threadID$cv$var46];
+								boolean[] guard$sample47categorical102 = scratch.guard$sample47categorical102$global[threadID$cv$var46];
 								{
-									for(int i = 0; i < noObs; i += 1) {
+									for(int i = 0; i < state.noObs; i += 1) {
 										if((var46 == i)) {
-											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-												if(((0 <= j$var69) && (j$var69 < noProducts)))
+											for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+												if(((0 <= j$var69) && (j$var69 < state.noProducts)))
 													guard$sample47categorical102[((i - 0) / 1)] = false;
 											}
 										}
 									}
 								}
 								{
-									for(int i = 0; i < noObs; i += 1) {
+									for(int i = 0; i < state.noObs; i += 1) {
 										if((var46 == i)) {
-											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+											for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+												for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 													if((j$var69 == j$var97))
 														guard$sample47categorical102[((i - 0) / 1)] = false;
 												}
@@ -1060,21 +875,21 @@ int[] ObsChoices;
 								}
 								{
 									double traceTempVariable$var71$9_1 = cv$currentValue;
-									for(int i = 0; i < noObs; i += 1) {
+									for(int i = 0; i < state.noObs; i += 1) {
 										if((var46 == i)) {
-											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-												double traceTempVariable$k$9_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$9_1 * Prices[i][j$var69])));
-												if(((0 <= j$var69) && (j$var69 < noProducts))) {
-													if((0 < noProducts)) {
+											for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+												double traceTempVariable$k$9_4 = Math.exp((state.ut[j$var69] - (traceTempVariable$var71$9_1 * state.Prices[i][j$var69])));
+												if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+													if((0 < state.noProducts)) {
 														double reduceVar$sum$27 = 0.0;
 														for(int cv$reduction1970Index = 0; cv$reduction1970Index < j$var69; cv$reduction1970Index += 1) {
 															double k = reduceVar$sum$27;
-															double l = exped[((i - 0) / 1)][cv$reduction1970Index];
+															double l = state.exped[((i - 0) / 1)][cv$reduction1970Index];
 															reduceVar$sum$27 = (k + l);
 														}
-														for(int cv$reduction1970Index = (j$var69 + 1); cv$reduction1970Index < noProducts; cv$reduction1970Index += 1) {
+														for(int cv$reduction1970Index = (j$var69 + 1); cv$reduction1970Index < state.noProducts; cv$reduction1970Index += 1) {
 															double k = reduceVar$sum$27;
-															double l = exped[((i - 0) / 1)][cv$reduction1970Index];
+															double l = state.exped[((i - 0) / 1)][cv$reduction1970Index];
 															reduceVar$sum$27 = (k + l);
 														}
 														double cv$reduced82 = reduceVar$sum$27;
@@ -1086,7 +901,7 @@ int[] ObsChoices;
 																{
 																	boolean cv$sampleConstrained = true;
 																	if(cv$sampleConstrained) {
-																		constrainedFlag$sample47[((var46 - 0) / 1)] = true;
+																		state.constrainedFlag$sample47[((var46 - 0) / 1)] = true;
 																		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 																		double cv$consumerDistributionProbabilityAccumulator = 1.0;
 																		{
@@ -1094,13 +909,13 @@ int[] ObsChoices;
 																				{
 																					{
 																						{
-																							if(((Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							if(((Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																							else {
 																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY));
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY));
 																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)));
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY)));
 																							}
 																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																						}
@@ -1129,11 +944,11 @@ int[] ObsChoices;
 								}
 								{
 									double traceTempVariable$var71$10_1 = cv$currentValue;
-									for(int i = 0; i < noObs; i += 1) {
+									for(int i = 0; i < state.noObs; i += 1) {
 										if((var46 == i)) {
-											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-												double traceTempVariable$var98$10_4 = Math.exp((ut[j$var69] - (traceTempVariable$var71$10_1 * Prices[i][j$var69])));
-												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+											for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+												double traceTempVariable$var98$10_4 = Math.exp((state.ut[j$var69] - (traceTempVariable$var71$10_1 * state.Prices[i][j$var69])));
+												for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 													if((j$var69 == j$var97)) {
 														if(!guard$sample47categorical102[((i - 0) / 1)]) {
 															guard$sample47categorical102[((i - 0) / 1)] = true;
@@ -1141,7 +956,7 @@ int[] ObsChoices;
 																{
 																	boolean cv$sampleConstrained = true;
 																	if(cv$sampleConstrained) {
-																		constrainedFlag$sample47[((var46 - 0) / 1)] = true;
+																		state.constrainedFlag$sample47[((var46 - 0) / 1)] = true;
 																		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 																		double cv$consumerDistributionProbabilityAccumulator = 1.0;
 																		{
@@ -1149,13 +964,13 @@ int[] ObsChoices;
 																				{
 																					{
 																						{
-																							if(((Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							if(((Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																							else {
 																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY));
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY));
 																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= choices[i]) && (choices[i] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][choices[i]])) && (prob[((i - 0) / 1)][choices[i]] <= 1.0))?Math.log(prob[((i - 0) / 1)][choices[i]]):Double.NEGATIVE_INFINITY)));
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.choices[i]) && (state.choices[i] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][state.choices[i]])) && (state.prob[((i - 0) / 1)][state.choices[i]] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][state.choices[i]]):Double.NEGATIVE_INFINITY)));
 																							}
 																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																						}
@@ -1204,28 +1019,28 @@ int[] ObsChoices;
 							{
 								{
 									{
-										beta[var46] = var47;
+										state.beta[var46] = var47;
 									}
 								}
 							}
 							{
 								{
-									for(int i = 0; i < noObs; i += 1) {
+									for(int i = 0; i < state.noObs; i += 1) {
 										if((var46 == i)) {
-											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
-												exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+											for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1)
+												state.exped[((i - 0) / 1)][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 										}
 									}
 								}
 							}
 							{
-								boolean[][] guard$sample47put101 = guard$sample47put101$global[threadID$cv$var46];
+								boolean[][] guard$sample47put101 = scratch.guard$sample47put101$global[threadID$cv$var46];
 								{
-									for(int i = 0; i < noObs; i += 1) {
+									for(int i = 0; i < state.noObs; i += 1) {
 										if((var46 == i)) {
-											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-												if(((0 <= j$var69) && (j$var69 < noProducts))) {
-													for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1)
+											for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+												if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+													for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1)
 														guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
 												}
 											}
@@ -1233,10 +1048,10 @@ int[] ObsChoices;
 									}
 								}
 								{
-									for(int i = 0; i < noObs; i += 1) {
+									for(int i = 0; i < state.noObs; i += 1) {
 										if((var46 == i)) {
-											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+											for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+												for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 													if((j$var69 == j$var97))
 														guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = false;
 												}
@@ -1245,21 +1060,21 @@ int[] ObsChoices;
 									}
 								}
 								{
-									for(int i = 0; i < noObs; i += 1) {
+									for(int i = 0; i < state.noObs; i += 1) {
 										if((var46 == i)) {
-											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-												if(((0 <= j$var69) && (j$var69 < noProducts))) {
-													for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+											for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+												if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+													for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 														if(!guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
 															guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
 															{
 																double reduceVar$sum$28 = 0.0;
-																for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+																for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 																	double k = reduceVar$sum$28;
-																	double l = exped[((i - 0) / 1)][cv$reduction82Index];
+																	double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
 																	reduceVar$sum$28 = (k + l);
 																}
-																prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$28);
+																state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$28);
 															}
 														}
 													}
@@ -1269,21 +1084,21 @@ int[] ObsChoices;
 									}
 								}
 								{
-									for(int i = 0; i < noObs; i += 1) {
+									for(int i = 0; i < state.noObs; i += 1) {
 										if((var46 == i)) {
-											for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-												for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+											for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+												for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 													if((j$var69 == j$var97)) {
 														if(!guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)]) {
 															guard$sample47put101[((i - 0) / 1)][((j$var97 - 0) / 1)] = true;
 															{
 																double reduceVar$sum$29 = 0.0;
-																for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+																for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 																	double k = reduceVar$sum$29;
-																	double l = exped[((i - 0) / 1)][cv$reduction82Index];
+																	double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
 																	reduceVar$sum$29 = (k + l);
 																}
-																prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$29);
+																state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$29);
 															}
 														}
 													}
@@ -1301,19 +1116,19 @@ int[] ObsChoices;
 	}
 
 	private final void logProbabilityValue$sample103() {
-		if(!fixedProbFlag$sample103) {
+		if(!state.fixedProbFlag$sample103) {
 			double cv$accumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < noObs; i += 1) {
+			for(int i = 0; i < state.noObs; i += 1) {
 				double cv$sampleAccumulator = 0.0;
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
 					{
-						int cv$sampleValue = choices[i];
+						int cv$sampleValue = state.choices[i];
 						{
 							{
-								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noProducts)) && (0 < noProducts)) && (0.0 <= prob[((i - 0) / 1)][cv$sampleValue])) && (prob[((i - 0) / 1)][cv$sampleValue] <= 1.0))?Math.log(prob[((i - 0) / 1)][cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[((i - 0) / 1)][cv$sampleValue])) && (state.prob[((i - 0) / 1)][cv$sampleValue] <= 1.0))?Math.log(state.prob[((i - 0) / 1)][cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -1335,39 +1150,39 @@ int[] ObsChoices;
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$sample103[((i - 0) / 1)] = cv$sampleProbability;
+				state.logProbability$sample103[((i - 0) / 1)] = cv$sampleProbability;
 			}
-			logProbability$choices = (logProbability$choices + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample103 = (fixedFlag$sample21 && fixedFlag$sample47);
+			state.logProbability$choices = (state.logProbability$choices + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample103 = (state.fixedFlag$sample21 && state.fixedFlag$sample47);
 		} else {
 			double cv$accumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < noObs; i += 1) {
+			for(int i = 0; i < state.noObs; i += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample103[((i - 0) / 1)];
+				double cv$sampleValue = state.logProbability$sample103[((i - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			}
-			logProbability$choices = (logProbability$choices + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$choices = (state.logProbability$choices + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	private final void logProbabilityValue$sample21() {
-		if(!fixedProbFlag$sample21) {
+		if(!state.fixedProbFlag$sample21) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int var20 = 0; var20 < noProducts; var20 += 1) {
+			for(int var20 = 0; var20 < state.noProducts; var20 += 1) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
 					{
-						double cv$sampleValue = ut[var20];
+						double cv$sampleValue = state.ut[var20];
 						{
 							{
 								double var7 = 0.0;
@@ -1393,18 +1208,18 @@ int[] ObsChoices;
 				double cv$sampleProbability = cv$distributionAccumulator;
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				logProbability$sample21[((var20 - 0) / 1)] = cv$sampleProbability;
+				state.logProbability$sample21[((var20 - 0) / 1)] = cv$sampleProbability;
 				boolean cv$guard$prob = false;
 				{
 					{
-						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+						for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 							if((var20 == j$var69)) {
-								for(int i = 0; i < noObs; i += 1) {
-									if(((0 <= j$var69) && (j$var69 < noProducts))) {
-										for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+								for(int i = 0; i < state.noObs; i += 1) {
+									if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+										for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 											if(!cv$guard$prob) {
 												cv$guard$prob = true;
-												logProbability$prob = (logProbability$prob + cv$sampleProbability);
+												state.logProbability$prob = (state.logProbability$prob + cv$sampleProbability);
 											}
 										}
 									}
@@ -1413,14 +1228,14 @@ int[] ObsChoices;
 						}
 					}
 					{
-						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+						for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 							if((var20 == j$var69)) {
-								for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+								for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 									if((j$var69 == j$var97)) {
-										for(int i = 0; i < noObs; i += 1) {
+										for(int i = 0; i < state.noObs; i += 1) {
 											if(!cv$guard$prob) {
 												cv$guard$prob = true;
-												logProbability$prob = (logProbability$prob + cv$sampleProbability);
+												state.logProbability$prob = (state.logProbability$prob + cv$sampleProbability);
 											}
 										}
 									}
@@ -1431,30 +1246,30 @@ int[] ObsChoices;
 				}
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$ut = (logProbability$ut + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample21)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample21 = fixedFlag$sample21;
+			state.logProbability$ut = (state.logProbability$ut + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample21)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample21 = state.fixedFlag$sample21;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int var20 = 0; var20 < noProducts; var20 += 1) {
-				double cv$sampleValue = logProbability$sample21[((var20 - 0) / 1)];
+			for(int var20 = 0; var20 < state.noProducts; var20 += 1) {
+				double cv$sampleValue = state.logProbability$sample21[((var20 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				boolean cv$guard$prob = false;
 				{
 					{
-						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+						for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 							if((var20 == j$var69)) {
-								for(int i = 0; i < noObs; i += 1) {
-									if(((0 <= j$var69) && (j$var69 < noProducts))) {
-										for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+								for(int i = 0; i < state.noObs; i += 1) {
+									if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+										for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 											if(!cv$guard$prob) {
 												cv$guard$prob = true;
-												logProbability$prob = (logProbability$prob + cv$sampleValue);
+												state.logProbability$prob = (state.logProbability$prob + cv$sampleValue);
 											}
 										}
 									}
@@ -1463,14 +1278,14 @@ int[] ObsChoices;
 						}
 					}
 					{
-						for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
+						for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
 							if((var20 == j$var69)) {
-								for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+								for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 									if((j$var69 == j$var97)) {
-										for(int i = 0; i < noObs; i += 1) {
+										for(int i = 0; i < state.noObs; i += 1) {
 											if(!cv$guard$prob) {
 												cv$guard$prob = true;
-												logProbability$prob = (logProbability$prob + cv$sampleValue);
+												state.logProbability$prob = (state.logProbability$prob + cv$sampleValue);
 											}
 										}
 									}
@@ -1481,22 +1296,22 @@ int[] ObsChoices;
 				}
 			}
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$ut = (logProbability$ut + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample21)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$ut = (state.logProbability$ut + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample21)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	private final void logProbabilityValue$sample28() {
-		if(!fixedProbFlag$sample28) {
+		if(!state.fixedProbFlag$sample28) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
 				{
-					double cv$sampleValue = b;
+					double cv$sampleValue = state.b;
 					{
 						{
 							double var25 = 0.0;
@@ -1522,32 +1337,32 @@ int[] ObsChoices;
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$b = cv$sampleProbability;
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample28)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample28 = fixedFlag$sample28;
+			state.logProbability$b = cv$sampleProbability;
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample28)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample28 = state.fixedFlag$sample28;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$b;
+			double cv$sampleValue = state.logProbability$b;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample28)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample28)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	private final void logProbabilityValue$sample34() {
-		if(!fixedProbFlag$sample34) {
+		if(!state.fixedProbFlag$sample34) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
 				{
-					double cv$sampleValue = sigma;
+					double cv$sampleValue = state.sigma;
 					{
 						{
 							double var31 = 2.0;
@@ -1573,37 +1388,37 @@ int[] ObsChoices;
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$sigma = cv$sampleProbability;
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample34)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample34 = fixedFlag$sample34;
+			state.logProbability$sigma = cv$sampleProbability;
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample34)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample34 = state.fixedFlag$sample34;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$sigma;
+			double cv$sampleValue = state.logProbability$sigma;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample34)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample34)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	private final void logProbabilityValue$sample47() {
-		if(!fixedProbFlag$sample47) {
+		if(!state.fixedProbFlag$sample47) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int var46 = 0; var46 < noObs; var46 += 1) {
+			for(int var46 = 0; var46 < state.noObs; var46 += 1) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
 					{
-						double cv$sampleValue = beta[var46];
+						double cv$sampleValue = state.beta[var46];
 						{
 							{
-								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < sigma)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - b) / Math.sqrt(sigma))) - (0.5 * Math.log(sigma))):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < state.sigma)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - state.b) / Math.sqrt(state.sigma))) - (0.5 * Math.log(state.sigma))):Double.NEGATIVE_INFINITY));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -1624,18 +1439,18 @@ int[] ObsChoices;
 				double cv$sampleProbability = cv$distributionAccumulator;
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-				logProbability$sample47[((var46 - 0) / 1)] = cv$sampleProbability;
+				state.logProbability$sample47[((var46 - 0) / 1)] = cv$sampleProbability;
 				boolean cv$guard$prob = false;
 				{
 					{
-						for(int i = 0; i < noObs; i += 1) {
+						for(int i = 0; i < state.noObs; i += 1) {
 							if((var46 == i)) {
-								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-									if(((0 <= j$var69) && (j$var69 < noProducts))) {
-										for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+								for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+									if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+										for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 											if(!cv$guard$prob) {
 												cv$guard$prob = true;
-												logProbability$prob = (logProbability$prob + cv$sampleProbability);
+												state.logProbability$prob = (state.logProbability$prob + cv$sampleProbability);
 											}
 										}
 									}
@@ -1644,14 +1459,14 @@ int[] ObsChoices;
 						}
 					}
 					{
-						for(int i = 0; i < noObs; i += 1) {
+						for(int i = 0; i < state.noObs; i += 1) {
 							if((var46 == i)) {
-								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-									for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+								for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+									for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 										if((j$var69 == j$var97)) {
 											if(!cv$guard$prob) {
 												cv$guard$prob = true;
-												logProbability$prob = (logProbability$prob + cv$sampleProbability);
+												state.logProbability$prob = (state.logProbability$prob + cv$sampleProbability);
 											}
 										}
 									}
@@ -1662,30 +1477,30 @@ int[] ObsChoices;
 				}
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$beta = (logProbability$beta + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample47)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample47 = ((fixedFlag$sample47 && fixedFlag$sample28) && fixedFlag$sample34);
+			state.logProbability$beta = (state.logProbability$beta + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample47)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample47 = ((state.fixedFlag$sample47 && state.fixedFlag$sample28) && state.fixedFlag$sample34);
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int var46 = 0; var46 < noObs; var46 += 1) {
-				double cv$sampleValue = logProbability$sample47[((var46 - 0) / 1)];
+			for(int var46 = 0; var46 < state.noObs; var46 += 1) {
+				double cv$sampleValue = state.logProbability$sample47[((var46 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				boolean cv$guard$prob = false;
 				{
 					{
-						for(int i = 0; i < noObs; i += 1) {
+						for(int i = 0; i < state.noObs; i += 1) {
 							if((var46 == i)) {
-								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-									if(((0 <= j$var69) && (j$var69 < noProducts))) {
-										for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+								for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+									if(((0 <= j$var69) && (j$var69 < state.noProducts))) {
+										for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 											if(!cv$guard$prob) {
 												cv$guard$prob = true;
-												logProbability$prob = (logProbability$prob + cv$sampleValue);
+												state.logProbability$prob = (state.logProbability$prob + cv$sampleValue);
 											}
 										}
 									}
@@ -1694,14 +1509,14 @@ int[] ObsChoices;
 						}
 					}
 					{
-						for(int i = 0; i < noObs; i += 1) {
+						for(int i = 0; i < state.noObs; i += 1) {
 							if((var46 == i)) {
-								for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-									for(int j$var97 = 0; j$var97 < noProducts; j$var97 += 1) {
+								for(int j$var69 = 0; j$var69 < state.noProducts; j$var69 += 1) {
+									for(int j$var97 = 0; j$var97 < state.noProducts; j$var97 += 1) {
 										if((j$var69 == j$var97)) {
 											if(!cv$guard$prob) {
 												cv$guard$prob = true;
-												logProbability$prob = (logProbability$prob + cv$sampleValue);
+												state.logProbability$prob = (state.logProbability$prob + cv$sampleValue);
 											}
 										}
 									}
@@ -1712,148 +1527,65 @@ int[] ObsChoices;
 				}
 			}
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$beta = (logProbability$beta + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample47)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	@Override
-	public final void allocate() {
-		if(!fixedFlag$sample21) {
-			{
-				ut = new double[noProducts];
-			}
-		}
-		if(!fixedFlag$sample47) {
-			{
-				beta = new double[noObs];
-			}
-		}
-		{
-			choices = new int[noObs];
-		}
-		{
-			exped = new double[((((noObs - 1) - 0) / 1) + 1)][];
-			for(int i = 0; i < noObs; i += 1)
-				exped[((i - 0) / 1)] = new double[noProducts];
-		}
-		{
-			prob = new double[((((noObs - 1) - 0) / 1) + 1)][];
-			for(int i = 0; i < noObs; i += 1)
-				prob[((i - 0) / 1)] = new double[noProducts];
-		}
-		{
-			constrainedFlag$sample47 = new boolean[((((noObs - 1) - 0) / 1) + 1)];
-		}
-		{
-			constrainedFlag$sample21 = new boolean[((((noProducts - 1) - 0) / 1) + 1)];
-		}
-		{
-			logProbability$sample21 = new double[((((noProducts - 1) - 0) / 1) + 1)];
-		}
-		{
-			logProbability$sample47 = new double[((((noObs - 1) - 0) / 1) + 1)];
-		}
-		{
-			logProbability$sample103 = new double[((((noObs - 1) - 0) / 1) + 1)];
-		}
-		allocateScratch();
-	}
-
-	@Override
-	public final void allocateScratch() {
-		{
-			int cv$max_i = 0;
-			int cv$max_j$var97 = 0;
-			for(int i = 0; i < noObs; i += 1)
-				cv$max_j$var97 = Math.max(cv$max_j$var97, ((noProducts - 0) / 1));
-			cv$max_i = Math.max(cv$max_i, ((noObs - 0) / 1));
-			guard$sample21put101$global = new boolean[cv$max_i][cv$max_j$var97];
-		}
-		{
-			int cv$max_i = 0;
-			cv$max_i = Math.max(cv$max_i, ((noObs - 0) / 1));
-			guard$sample21categorical102$global = new boolean[cv$max_i];
-		}
-		{
-			int cv$max_i = 0;
-			int cv$max_j$var97 = 0;
-			for(int i = 0; i < noObs; i += 1)
-				cv$max_j$var97 = Math.max(cv$max_j$var97, ((noProducts - 0) / 1));
-			cv$max_i = Math.max(cv$max_i, ((noObs - 0) / 1));
-			{
-				int cv$threadCount = threadCount();
-				guard$sample47put101$global = new boolean[cv$threadCount][][];
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					guard$sample47put101$global[cv$index] = new boolean[cv$max_i][cv$max_j$var97];
-			}
-		}
-		{
-			int cv$max_i = 0;
-			cv$max_i = Math.max(cv$max_i, ((noObs - 0) / 1));
-			{
-				int cv$threadCount = threadCount();
-				guard$sample47categorical102$global = new boolean[cv$threadCount][];
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					guard$sample47categorical102$global[cv$index] = new boolean[cv$max_i];
-			}
+			state.logProbability$beta = (state.logProbability$beta + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample47)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	@Override
 	public final void forwardGeneration() {
-		parallelFor(RNG$, 0, noProducts, 1,
+		parallelFor(state.RNG$, 0, state.noProducts, 1,
 			(int forStart$var20, int forEnd$var20, int threadID$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var20 = forStart$var20; var20 < forEnd$var20; var20 += 1) {
-						if(!fixedFlag$sample21)
-							ut[var20] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
+						if(!state.fixedFlag$sample21)
+							state.ut[var20] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);
-		if(!fixedFlag$sample28)
-			b = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample34)
-			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
-		parallelFor(RNG$, 0, noObs, 1,
+		if(!state.fixedFlag$sample28)
+			state.b = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
+		if(!state.fixedFlag$sample34)
+			state.sigma = DistributionSampling.sampleInverseGamma(state.RNG$, 2.0, 2.0);
+		parallelFor(state.RNG$, 0, state.noObs, 1,
 			(int forStart$var46, int forEnd$var46, int threadID$var46, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var46 = forStart$var46; var46 < forEnd$var46; var46 += 1) {
-						if(!fixedFlag$sample47)
-							beta[var46] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$1)) + b);
+						if(!state.fixedFlag$sample47)
+							state.beta[var46] = ((Math.sqrt(state.sigma) * DistributionSampling.sampleGaussian(RNG$1)) + state.b);
 					}
 			}
 		);
-		parallelFor(RNG$, 0, noObs, 1,
+		parallelFor(state.RNG$, 0, state.noObs, 1,
 			(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
 						int i = index$i;
 						int threadID$i = threadID$index$i;
-						parallelFor(RNG$1, 0, noProducts, 1,
+						parallelFor(RNG$1, 0, state.noProducts, 1,
 							(int forStart$j$var69, int forEnd$j$var69, int threadID$j$var69, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j$var69 = forStart$j$var69; j$var69 < forEnd$j$var69; j$var69 += 1) {
-										if(!(fixedFlag$sample21 && fixedFlag$sample47))
-											exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+										if(!(state.fixedFlag$sample21 && state.fixedFlag$sample47))
+											state.exped[((i - 0) / 1)][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 									}
 							}
 						);
 						double reduceVar$sum$34 = 0.0;
-						for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+						for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 							double k = reduceVar$sum$34;
-							double l = exped[((i - 0) / 1)][cv$reduction82Index];
-							if(!(fixedFlag$sample21 && fixedFlag$sample47))
+							double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
+							if(!(state.fixedFlag$sample21 && state.fixedFlag$sample47))
 								reduceVar$sum$34 = (k + l);
 						}
 						double reduceVar$sum$34$1 = reduceVar$sum$34;
-						parallelFor(RNG$1, 0, noProducts, 1,
+						parallelFor(RNG$1, 0, state.noProducts, 1,
 							(int forStart$j$var97, int forEnd$j$var97, int threadID$j$var97, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j$var97 = forStart$j$var97; j$var97 < forEnd$j$var97; j$var97 += 1) {
-										if(!(fixedFlag$sample21 && fixedFlag$sample47))
-											prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$34$1);
+										if(!(state.fixedFlag$sample21 && state.fixedFlag$sample47))
+											state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$34$1);
 									}
 							}
 						);
-						choices[i] = DistributionSampling.sampleCategorical(RNG$1, prob[((i - 0) / 1)], noProducts);
+						state.choices[i] = DistributionSampling.sampleCategorical(RNG$1, state.prob[((i - 0) / 1)], state.noProducts);
 					}
 			}
 		);
@@ -1861,48 +1593,48 @@ int[] ObsChoices;
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		parallelFor(RNG$, 0, noProducts, 1,
+		parallelFor(state.RNG$, 0, state.noProducts, 1,
 			(int forStart$var20, int forEnd$var20, int threadID$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var20 = forStart$var20; var20 < forEnd$var20; var20 += 1) {
-						if(!fixedFlag$sample21)
-							ut[var20] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
+						if(!state.fixedFlag$sample21)
+							state.ut[var20] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);
-		if(!fixedFlag$sample28)
-			b = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample34)
-			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
-		parallelFor(RNG$, 0, noObs, 1,
+		if(!state.fixedFlag$sample28)
+			state.b = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
+		if(!state.fixedFlag$sample34)
+			state.sigma = DistributionSampling.sampleInverseGamma(state.RNG$, 2.0, 2.0);
+		parallelFor(state.RNG$, 0, state.noObs, 1,
 			(int forStart$var46, int forEnd$var46, int threadID$var46, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var46 = forStart$var46; var46 < forEnd$var46; var46 += 1) {
-						if(!fixedFlag$sample47)
-							beta[var46] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$1)) + b);
+						if(!state.fixedFlag$sample47)
+							state.beta[var46] = ((Math.sqrt(state.sigma) * DistributionSampling.sampleGaussian(RNG$1)) + state.b);
 					}
 			}
 		);
-		parallelFor(RNG$, 0, noObs, 1,
+		parallelFor(state.RNG$, 0, state.noObs, 1,
 			(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
 						int i = index$i;
 						int threadID$i = threadID$index$i;
-						parallelFor(RNG$1, 0, noProducts, 1,
+						parallelFor(RNG$1, 0, state.noProducts, 1,
 							(int forStart$j$var69, int forEnd$j$var69, int threadID$j$var69, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j$var69 = forStart$j$var69; j$var69 < forEnd$j$var69; j$var69 += 1)
-										exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+										state.exped[((i - 0) / 1)][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 							}
 						);
 						double reduceVar$sum$38 = 0.0;
-						for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+						for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 							double k = reduceVar$sum$38;
-							double l = exped[((i - 0) / 1)][cv$reduction82Index];
+							double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
 							reduceVar$sum$38 = (k + l);
 						}
 						double reduceVar$sum$38$1 = reduceVar$sum$38;
-						parallelFor(RNG$1, 0, noProducts, 1,
+						parallelFor(RNG$1, 0, state.noProducts, 1,
 							(int forStart$j$var97, int forEnd$j$var97, int threadID$j$var97, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j$var97 = forStart$j$var97; j$var97 < forEnd$j$var97; j$var97 += 1)
-										prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$38$1);
+										state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$38$1);
 							}
 						);
 					}
@@ -1912,51 +1644,51 @@ int[] ObsChoices;
 
 	@Override
 	public final void forwardGenerationPrime() {
-		parallelFor(RNG$, 0, noProducts, 1,
+		parallelFor(state.RNG$, 0, state.noProducts, 1,
 			(int forStart$var20, int forEnd$var20, int threadID$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var20 = forStart$var20; var20 < forEnd$var20; var20 += 1) {
-						if(!fixedFlag$sample21)
-							ut[var20] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
+						if(!state.fixedFlag$sample21)
+							state.ut[var20] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);
-		if(!fixedFlag$sample28)
-			b = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample34)
-			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
-		parallelFor(RNG$, 0, noObs, 1,
+		if(!state.fixedFlag$sample28)
+			state.b = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
+		if(!state.fixedFlag$sample34)
+			state.sigma = DistributionSampling.sampleInverseGamma(state.RNG$, 2.0, 2.0);
+		parallelFor(state.RNG$, 0, state.noObs, 1,
 			(int forStart$var46, int forEnd$var46, int threadID$var46, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var46 = forStart$var46; var46 < forEnd$var46; var46 += 1) {
-						if(!fixedFlag$sample47)
-							beta[var46] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$1)) + b);
+						if(!state.fixedFlag$sample47)
+							state.beta[var46] = ((Math.sqrt(state.sigma) * DistributionSampling.sampleGaussian(RNG$1)) + state.b);
 					}
 			}
 		);
-		parallelFor(RNG$, 0, noObs, 1,
+		parallelFor(state.RNG$, 0, state.noObs, 1,
 			(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
 						int i = index$i;
 						int threadID$i = threadID$index$i;
-						parallelFor(RNG$1, 0, noProducts, 1,
+						parallelFor(RNG$1, 0, state.noProducts, 1,
 							(int forStart$j$var69, int forEnd$j$var69, int threadID$j$var69, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j$var69 = forStart$j$var69; j$var69 < forEnd$j$var69; j$var69 += 1)
-										exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+										state.exped[((i - 0) / 1)][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 							}
 						);
 						double reduceVar$sum$35 = 0.0;
-						for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+						for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 							double k = reduceVar$sum$35;
-							double l = exped[((i - 0) / 1)][cv$reduction82Index];
+							double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
 							reduceVar$sum$35 = (k + l);
 						}
 						double reduceVar$sum$35$1 = reduceVar$sum$35;
-						parallelFor(RNG$1, 0, noProducts, 1,
+						parallelFor(RNG$1, 0, state.noProducts, 1,
 							(int forStart$j$var97, int forEnd$j$var97, int threadID$j$var97, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j$var97 = forStart$j$var97; j$var97 < forEnd$j$var97; j$var97 += 1)
-										prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$35$1);
+										state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$35$1);
 							}
 						);
-						choices[i] = DistributionSampling.sampleCategorical(RNG$1, prob[((i - 0) / 1)], noProducts);
+						state.choices[i] = DistributionSampling.sampleCategorical(RNG$1, state.prob[((i - 0) / 1)], state.noProducts);
 					}
 			}
 		);
@@ -1964,52 +1696,52 @@ int[] ObsChoices;
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		parallelFor(RNG$, 0, noProducts, 1,
+		parallelFor(state.RNG$, 0, state.noProducts, 1,
 			(int forStart$var20, int forEnd$var20, int threadID$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var20 = forStart$var20; var20 < forEnd$var20; var20 += 1) {
-						if(!fixedFlag$sample21)
-							ut[var20] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
+						if(!state.fixedFlag$sample21)
+							state.ut[var20] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);
-		if(!fixedFlag$sample28)
-			b = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample34)
-			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
-		parallelFor(RNG$, 0, noObs, 1,
+		if(!state.fixedFlag$sample28)
+			state.b = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
+		if(!state.fixedFlag$sample34)
+			state.sigma = DistributionSampling.sampleInverseGamma(state.RNG$, 2.0, 2.0);
+		parallelFor(state.RNG$, 0, state.noObs, 1,
 			(int forStart$var46, int forEnd$var46, int threadID$var46, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var46 = forStart$var46; var46 < forEnd$var46; var46 += 1) {
-						if(!fixedFlag$sample47)
-							beta[var46] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$1)) + b);
+						if(!state.fixedFlag$sample47)
+							state.beta[var46] = ((Math.sqrt(state.sigma) * DistributionSampling.sampleGaussian(RNG$1)) + state.b);
 					}
 			}
 		);
-		parallelFor(RNG$, 0, noObs, 1,
+		parallelFor(state.RNG$, 0, state.noObs, 1,
 			(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
 						int i = index$i;
 						int threadID$i = threadID$index$i;
-						parallelFor(RNG$1, 0, noProducts, 1,
+						parallelFor(RNG$1, 0, state.noProducts, 1,
 							(int forStart$j$var69, int forEnd$j$var69, int threadID$j$var69, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j$var69 = forStart$j$var69; j$var69 < forEnd$j$var69; j$var69 += 1) {
-										if(!(fixedFlag$sample21 && fixedFlag$sample47))
-											exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+										if(!(state.fixedFlag$sample21 && state.fixedFlag$sample47))
+											state.exped[((i - 0) / 1)][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 									}
 							}
 						);
 						double reduceVar$sum$36 = 0.0;
-						for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+						for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 							double k = reduceVar$sum$36;
-							double l = exped[((i - 0) / 1)][cv$reduction82Index];
-							if(!(fixedFlag$sample21 && fixedFlag$sample47))
+							double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
+							if(!(state.fixedFlag$sample21 && state.fixedFlag$sample47))
 								reduceVar$sum$36 = (k + l);
 						}
 						double reduceVar$sum$36$1 = reduceVar$sum$36;
-						parallelFor(RNG$1, 0, noProducts, 1,
+						parallelFor(RNG$1, 0, state.noProducts, 1,
 							(int forStart$j$var97, int forEnd$j$var97, int threadID$j$var97, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j$var97 = forStart$j$var97; j$var97 < forEnd$j$var97; j$var97 += 1) {
-										if(!(fixedFlag$sample21 && fixedFlag$sample47))
-											prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$36$1);
+										if(!(state.fixedFlag$sample21 && state.fixedFlag$sample47))
+											state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$36$1);
 									}
 							}
 						);
@@ -2020,48 +1752,48 @@ int[] ObsChoices;
 
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		parallelFor(RNG$, 0, noProducts, 1,
+		parallelFor(state.RNG$, 0, state.noProducts, 1,
 			(int forStart$var20, int forEnd$var20, int threadID$var20, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var20 = forStart$var20; var20 < forEnd$var20; var20 += 1) {
-						if(!fixedFlag$sample21)
-							ut[var20] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
+						if(!state.fixedFlag$sample21)
+							state.ut[var20] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$1)) + 0.0);
 					}
 			}
 		);
-		if(!fixedFlag$sample28)
-			b = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		if(!fixedFlag$sample34)
-			sigma = DistributionSampling.sampleInverseGamma(RNG$, 2.0, 2.0);
-		parallelFor(RNG$, 0, noObs, 1,
+		if(!state.fixedFlag$sample28)
+			state.b = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
+		if(!state.fixedFlag$sample34)
+			state.sigma = DistributionSampling.sampleInverseGamma(state.RNG$, 2.0, 2.0);
+		parallelFor(state.RNG$, 0, state.noObs, 1,
 			(int forStart$var46, int forEnd$var46, int threadID$var46, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var46 = forStart$var46; var46 < forEnd$var46; var46 += 1) {
-						if(!fixedFlag$sample47)
-							beta[var46] = ((Math.sqrt(sigma) * DistributionSampling.sampleGaussian(RNG$1)) + b);
+						if(!state.fixedFlag$sample47)
+							state.beta[var46] = ((Math.sqrt(state.sigma) * DistributionSampling.sampleGaussian(RNG$1)) + state.b);
 					}
 			}
 		);
-		parallelFor(RNG$, 0, noObs, 1,
+		parallelFor(state.RNG$, 0, state.noObs, 1,
 			(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
 						int i = index$i;
 						int threadID$i = threadID$index$i;
-						parallelFor(RNG$1, 0, noProducts, 1,
+						parallelFor(RNG$1, 0, state.noProducts, 1,
 							(int forStart$j$var69, int forEnd$j$var69, int threadID$j$var69, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j$var69 = forStart$j$var69; j$var69 < forEnd$j$var69; j$var69 += 1)
-										exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+										state.exped[((i - 0) / 1)][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 							}
 						);
 						double reduceVar$sum$37 = 0.0;
-						for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+						for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 							double k = reduceVar$sum$37;
-							double l = exped[((i - 0) / 1)][cv$reduction82Index];
+							double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
 							reduceVar$sum$37 = (k + l);
 						}
 						double reduceVar$sum$37$1 = reduceVar$sum$37;
-						parallelFor(RNG$1, 0, noProducts, 1,
+						parallelFor(RNG$1, 0, state.noProducts, 1,
 							(int forStart$j$var97, int forEnd$j$var97, int threadID$j$var97, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j$var97 = forStart$j$var97; j$var97 < forEnd$j$var97; j$var97 += 1)
-										prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$37$1);
+										state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$37$1);
 							}
 						);
 					}
@@ -2071,54 +1803,54 @@ int[] ObsChoices;
 
 	@Override
 	public final void gibbsRound() {
-		if(system$gibbsForward) {
-			for(int var20 = 0; var20 < noProducts; var20 += 1) {
-				if(!fixedFlag$sample21)
+		if(state.system$gibbsForward) {
+			for(int var20 = 0; var20 < state.noProducts; var20 += 1) {
+				if(!state.fixedFlag$sample21)
 					inferSample21(var20);
 			}
-			if(!fixedFlag$sample28)
+			if(!state.fixedFlag$sample28)
 				inferSample28();
-			if(!fixedFlag$sample34)
+			if(!state.fixedFlag$sample34)
 				inferSample34();
-			parallelFor(RNG$, 0, noObs, 1,
+			parallelFor(state.RNG$, 0, state.noObs, 1,
 				(int forStart$var46, int forEnd$var46, int threadID$var46, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var46 = forStart$var46; var46 < forEnd$var46; var46 += 1) {
-							if(!fixedFlag$sample47)
+							if(!state.fixedFlag$sample47)
 								inferSample47(var46, threadID$var46, RNG$1);
 						}
 				}
 			);
 		} else {
-			parallelFor(RNG$, 0, noObs, 1,
+			parallelFor(state.RNG$, 0, state.noObs, 1,
 				(int forStart$var46, int forEnd$var46, int threadID$var46, org.sandwood.random.internal.Rng RNG$1) -> { 
 					for(int var46 = forStart$var46; var46 < forEnd$var46; var46 += 1) {
-							if(!fixedFlag$sample47)
+							if(!state.fixedFlag$sample47)
 								inferSample47(var46, threadID$var46, RNG$1);
 						}
 				}
 			);
-			if(!fixedFlag$sample34)
+			if(!state.fixedFlag$sample34)
 				inferSample34();
-			if(!fixedFlag$sample28)
+			if(!state.fixedFlag$sample28)
 				inferSample28();
-			for(int var20 = (noProducts - ((((noProducts - 1) - 0) % 1) + 1)); var20 >= ((0 - 1) + 1); var20 -= 1) {
-				if(!fixedFlag$sample21)
+			for(int var20 = (state.noProducts - ((((state.noProducts - 1) - 0) % 1) + 1)); var20 >= ((0 - 1) + 1); var20 -= 1) {
+				if(!state.fixedFlag$sample21)
 					inferSample21(var20);
 			}
 		}
-		system$gibbsForward = !system$gibbsForward;
-		for(int var20 = 0; var20 < noProducts; var20 += 1) {
-			if(!constrainedFlag$sample21[((var20 - 0) / 1)])
+		state.system$gibbsForward = !state.system$gibbsForward;
+		for(int var20 = 0; var20 < state.noProducts; var20 += 1) {
+			if(!state.constrainedFlag$sample21[((var20 - 0) / 1)])
 				drawValueSample21(var20);
 		}
-		if(!constrainedFlag$sample28)
+		if(!state.constrainedFlag$sample28)
 			drawValueSample28();
-		if(!constrainedFlag$sample34)
+		if(!state.constrainedFlag$sample34)
 			drawValueSample34();
-		parallelFor(RNG$, 0, noObs, 1,
+		parallelFor(state.RNG$, 0, state.noObs, 1,
 			(int forStart$var46, int forEnd$var46, int threadID$var46, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var46 = forStart$var46; var46 < forEnd$var46; var46 += 1) {
-						if(!constrainedFlag$sample47[((var46 - 0) / 1)])
+						if(!state.constrainedFlag$sample47[((var46 - 0) / 1)])
 							drawValueSample47(var46, threadID$var46, RNG$1);
 					}
 			}
@@ -2126,48 +1858,48 @@ int[] ObsChoices;
 	}
 
 	private final void initializeLogProbabilityFields() {
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$ut = 0.0;
-		logProbability$prob = 0.0;
-		if(!fixedProbFlag$sample21) {
-			for(int var20 = 0; var20 < noProducts; var20 += 1)
-				logProbability$sample21[((var20 - 0) / 1)] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$ut = 0.0;
+		state.logProbability$prob = 0.0;
+		if(!state.fixedProbFlag$sample21) {
+			for(int var20 = 0; var20 < state.noProducts; var20 += 1)
+				state.logProbability$sample21[((var20 - 0) / 1)] = Double.NaN;
 		}
-		if(!fixedProbFlag$sample28)
-			logProbability$b = Double.NaN;
-		if(!fixedProbFlag$sample34)
-			logProbability$sigma = Double.NaN;
-		logProbability$beta = 0.0;
-		if(!fixedProbFlag$sample47) {
-			for(int var46 = 0; var46 < noObs; var46 += 1)
-				logProbability$sample47[((var46 - 0) / 1)] = Double.NaN;
+		if(!state.fixedProbFlag$sample28)
+			state.logProbability$b = Double.NaN;
+		if(!state.fixedProbFlag$sample34)
+			state.logProbability$sigma = Double.NaN;
+		state.logProbability$beta = 0.0;
+		if(!state.fixedProbFlag$sample47) {
+			for(int var46 = 0; var46 < state.noObs; var46 += 1)
+				state.logProbability$sample47[((var46 - 0) / 1)] = Double.NaN;
 		}
-		logProbability$choices = 0.0;
-		if(!fixedProbFlag$sample103) {
-			for(int i = 0; i < noObs; i += 1)
-				logProbability$sample103[((i - 0) / 1)] = Double.NaN;
+		state.logProbability$choices = 0.0;
+		if(!state.fixedProbFlag$sample103) {
+			for(int i = 0; i < state.noObs; i += 1)
+				state.logProbability$sample103[((i - 0) / 1)] = Double.NaN;
 		}
 	}
 
 	@Override
 	public final void initializeModel() {
-		for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
-			constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
-		for(int index$constrainedFlag$sample21$1 = 0; index$constrainedFlag$sample21$1 < constrainedFlag$sample21.length; index$constrainedFlag$sample21$1 += 1)
-			constrainedFlag$sample21[index$constrainedFlag$sample21$1] = true;
+		for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < state.constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
+			state.constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
+		for(int index$constrainedFlag$sample21$1 = 0; index$constrainedFlag$sample21$1 < state.constrainedFlag$sample21.length; index$constrainedFlag$sample21$1 += 1)
+			state.constrainedFlag$sample21[index$constrainedFlag$sample21$1] = true;
 	}
 
 	@Override
 	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample21)
+		if(state.fixedFlag$sample21)
 			logProbabilityValue$sample21();
-		if(fixedFlag$sample28)
+		if(state.fixedFlag$sample28)
 			logProbabilityValue$sample28();
-		if(fixedFlag$sample34)
+		if(state.fixedFlag$sample34)
 			logProbabilityValue$sample34();
-		if(fixedFlag$sample47)
+		if(state.fixedFlag$sample47)
 			logProbabilityValue$sample47();
 		logProbabilityValue$sample103();
 	}
@@ -2194,8 +1926,8 @@ int[] ObsChoices;
 
 	@Override
 	public final void propagateObservedValues() {
-		int[] cv$source1 = ObsChoices;
-		int[] cv$target1 = choices;
+		int[] cv$source1 = state.ObsChoices;
+		int[] cv$target1 = state.choices;
 		int cv$length1 = cv$target1.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			cv$target1[cv$index1] = cv$source1[cv$index1];
@@ -2203,28 +1935,28 @@ int[] ObsChoices;
 
 	@Override
 	public final void setIntermediates() {
-		parallelFor(RNG$, 0, noObs, 1,
+		parallelFor(state.RNG$, 0, state.noObs, 1,
 			(int forStart$index$i, int forEnd$index$i, int threadID$index$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int index$i = forStart$index$i; index$i < forEnd$index$i; index$i += 1) {
 						int i = index$i;
 						int threadID$i = threadID$index$i;
-						parallelFor(RNG$1, 0, noProducts, 1,
+						parallelFor(RNG$1, 0, state.noProducts, 1,
 							(int forStart$j$var69, int forEnd$j$var69, int threadID$j$var69, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j$var69 = forStart$j$var69; j$var69 < forEnd$j$var69; j$var69 += 1)
-										exped[((i - 0) / 1)][j$var69] = Math.exp((ut[j$var69] - (beta[i] * Prices[i][j$var69])));
+										state.exped[((i - 0) / 1)][j$var69] = Math.exp((state.ut[j$var69] - (state.beta[i] * state.Prices[i][j$var69])));
 							}
 						);
 						double reduceVar$sum$39 = 0.0;
-						for(int cv$reduction82Index = 0; cv$reduction82Index < noProducts; cv$reduction82Index += 1) {
+						for(int cv$reduction82Index = 0; cv$reduction82Index < state.noProducts; cv$reduction82Index += 1) {
 							double k = reduceVar$sum$39;
-							double l = exped[((i - 0) / 1)][cv$reduction82Index];
+							double l = state.exped[((i - 0) / 1)][cv$reduction82Index];
 							reduceVar$sum$39 = (k + l);
 						}
 						double reduceVar$sum$39$1 = reduceVar$sum$39;
-						parallelFor(RNG$1, 0, noProducts, 1,
+						parallelFor(RNG$1, 0, state.noProducts, 1,
 							(int forStart$j$var97, int forEnd$j$var97, int threadID$j$var97, org.sandwood.random.internal.Rng RNG$2) -> { 
 								for(int j$var97 = forStart$j$var97; j$var97 < forEnd$j$var97; j$var97 += 1)
-										prob[((i - 0) / 1)][j$var97] = (exped[((i - 0) / 1)][j$var97] / reduceVar$sum$39$1);
+										state.prob[((i - 0) / 1)][j$var97] = (state.exped[((i - 0) / 1)][j$var97] / reduceVar$sum$39$1);
 							}
 						);
 					}

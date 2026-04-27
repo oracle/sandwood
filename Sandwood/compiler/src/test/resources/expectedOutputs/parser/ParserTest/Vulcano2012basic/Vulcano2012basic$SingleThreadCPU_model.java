@@ -1,242 +1,104 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.Vulcano2012basic$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.Vulcano2012basic.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU implements Vulcano2012basic$CoreInterface {
+final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	int[][] Avail;
-	int[][] ObsSales;
-	int[][] Sales;
-	int T;
-	boolean[] constrainedFlag$sample26;
-	double[] exped;
-	double[] expedNorm;
-	boolean fixedFlag$sample26 = false;
-	boolean fixedProbFlag$sample157 = false;
-	boolean fixedProbFlag$sample26 = false;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$Sales;
-	double logProbability$exped;
-	double logProbability$expedNorm;
-	double[] logProbability$sample157;
-	double[] logProbability$sample26;
-	double logProbability$sum;
-	double logProbability$ut;
-	int noProducts;
-	double r;
-	int[] sales_sum;
-	double sum;
-	boolean system$gibbsForward = true;
-	double[] ut;
-	double[][] weekly_rates;
-	double[][] weekly_ut;
-	boolean[] guard$sample26multinomial156$global;
-	boolean[][] guard$sample26put131$global;
-	boolean[][] guard$sample26put154$global;
-	boolean[] guard$sample26put68$global;
+		// Declare the scratch variables for the model.
+		boolean[] guard$sample26multinomial156$global;
+		boolean[][] guard$sample26put131$global;
+		boolean[][] guard$sample26put154$global;
+		boolean[] guard$sample26put68$global;
 
-	public Vulcano2012basic$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
-
-	// Getter for Avail.
-	@Override
-	public final int[][] get$Avail() {
-		return Avail;
-	}
-
-	// Setter for Avail.
-	@Override
-	public final void set$Avail(int[][] cv$value, boolean allocated$) {
-		Avail = cv$value;
-	}
-
-	// Getter for ObsSales.
-	@Override
-	public final int[][] get$ObsSales() {
-		return ObsSales;
-	}
-
-	// Setter for ObsSales.
-	@Override
-	public final void set$ObsSales(int[][] cv$value, boolean allocated$) {
-		ObsSales = cv$value;
-	}
-
-	// Getter for Sales.
-	@Override
-	public final int[][] get$Sales() {
-		return Sales;
-	}
-
-	// Getter for T.
-	@Override
-	public final int get$T() {
-		return T;
-	}
-
-	// Setter for T.
-	@Override
-	public final void set$T(int cv$value, boolean allocated$) {
-		T = cv$value;
-	}
-
-	// Getter for exped.
-	@Override
-	public final double[] get$exped() {
-		return exped;
-	}
-
-	// Getter for expedNorm.
-	@Override
-	public final double[] get$expedNorm() {
-		return expedNorm;
-	}
-
-	// Getter for fixedFlag$sample26.
-	@Override
-	public final boolean get$fixedFlag$sample26() {
-		return fixedFlag$sample26;
-	}
-
-	// Setter for fixedFlag$sample26.
-	@Override
-	public final void set$fixedFlag$sample26(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample26 including if probabilities
-		// need to be updated.
-		fixedFlag$sample26 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample26$1 = 0; index$constrainedFlag$sample26$1 < constrainedFlag$sample26.length; index$constrainedFlag$sample26$1 += 1)
-				constrainedFlag$sample26[index$constrainedFlag$sample26$1] = true;
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// Constructor for guard$sample26put68$global
+			{
+				// Calculate the largest index of j that is possible and allocate an array to hold
+				// the guard for each of these.
+				int cv$max_j$var63 = 0;
+				cv$max_j$var63 = Math.max(cv$max_j$var63, ((state.noProducts - 0) / 1));
+				
+				// Allocation of guard$sample26put68$global for single threaded execution
+				guard$sample26put68$global = new boolean[cv$max_j$var63];
+			}
+			
+			// Constructor for guard$sample26put131$global
+			{
+				// Calculate the largest index of t that is possible and allocate an array to hold
+				// the guard for each of these.
+				int cv$max_t$var112 = 0;
+				
+				// Calculate the largest index of j that is possible and allocate an array to hold
+				// the guard for each of these.
+				int cv$max_j$var123 = 0;
+				for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
+					cv$max_j$var123 = Math.max(cv$max_j$var123, ((state.noProducts - 0) / 1));
+				cv$max_t$var112 = Math.max(cv$max_t$var112, ((state.T - 0) / 1));
+				
+				// Allocation of guard$sample26put131$global for single threaded execution
+				guard$sample26put131$global = new boolean[cv$max_t$var112][cv$max_j$var123];
+			}
+			
+			// Constructor for guard$sample26put154$global
+			{
+				// Calculate the largest index of t that is possible and allocate an array to hold
+				// the guard for each of these.
+				int cv$max_t$var112 = 0;
+				
+				// Calculate the largest index of j that is possible and allocate an array to hold
+				// the guard for each of these.
+				int cv$max_j$var147 = 0;
+				for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
+					cv$max_j$var147 = Math.max(cv$max_j$var147, ((state.noProducts - 0) / 1));
+				cv$max_t$var112 = Math.max(cv$max_t$var112, ((state.T - 0) / 1));
+				
+				// Allocation of guard$sample26put154$global for single threaded execution
+				guard$sample26put154$global = new boolean[cv$max_t$var112][cv$max_j$var147];
+			}
+			
+			// Constructor for guard$sample26multinomial156$global
+			{
+				// Calculate the largest index of t that is possible and allocate an array to hold
+				// the guard for each of these.
+				int cv$max_t$var112 = 0;
+				cv$max_t$var112 = Math.max(cv$max_t$var112, ((state.T - 0) / 1));
+				
+				// Allocation of guard$sample26multinomial156$global for single threaded execution
+				guard$sample26multinomial156$global = new boolean[cv$max_t$var112];
+			}
 		}
-		
-		// Should the probability of sample 26 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample26 = (fixedFlag$sample26 && fixedProbFlag$sample26);
-		
-		// Should the probability of sample 157 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample157 = (fixedFlag$sample26 && fixedProbFlag$sample157);
 	}
 
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
 
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$Sales.
-	@Override
-	public final double get$logProbability$Sales() {
-		return logProbability$Sales;
-	}
-
-	// Getter for logProbability$exped.
-	@Override
-	public final double get$logProbability$exped() {
-		return logProbability$exped;
-	}
-
-	// Getter for logProbability$expedNorm.
-	@Override
-	public final double get$logProbability$expedNorm() {
-		return logProbability$expedNorm;
-	}
-
-	// Getter for logProbability$sum.
-	@Override
-	public final double get$logProbability$sum() {
-		return logProbability$sum;
-	}
-
-	// Getter for logProbability$ut.
-	@Override
-	public final double get$logProbability$ut() {
-		return logProbability$ut;
-	}
-
-	// Getter for noProducts.
-	@Override
-	public final int get$noProducts() {
-		return noProducts;
-	}
-
-	// Setter for noProducts.
-	@Override
-	public final void set$noProducts(int cv$value, boolean allocated$) {
-		noProducts = cv$value;
-	}
-
-	// Getter for r.
-	@Override
-	public final double get$r() {
-		return r;
-	}
-
-	// Setter for r.
-	@Override
-	public final void set$r(double cv$value, boolean allocated$) {
-		r = cv$value;
-	}
-
-	// Getter for sales_sum.
-	@Override
-	public final int[] get$sales_sum() {
-		return sales_sum;
-	}
-
-	// Getter for sum.
-	@Override
-	public final double get$sum() {
-		return sum;
-	}
-
-	// Getter for ut.
-	@Override
-	public final double[] get$ut() {
-		return ut;
-	}
-
-	// Setter for ut.
-	@Override
-	public final void set$ut(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of ut including if probabilities need to be
-		// updated.
-		ut = cv$value;
-		
-		// Unset the fixed probability flag for sample 26 as it depends on ut.
-		fixedProbFlag$sample26 = false;
-		
-		// Unset the fixed probability flag for sample 157 as it depends on ut.
-		fixedProbFlag$sample157 = false;
+	public Vulcano2012basic$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample26
 	private final void drawValueSample26(int j$var20) {
-		ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		state.ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		
 		// Guards to ensure that exped is only updated when there is a valid path.
 		// 
 		// Looking for a path between Sample 26 and consumer double[] 41.
 		{
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
 						{
-							exped[j$var38] = Math.exp(ut[j$var38]);
+							state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 						}
 					}
 				}
@@ -248,9 +110,9 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		// Looking for a path between Sample 26 and consumer double 52.
 		{
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
 							{
 								// Reduction of array exped
 								// 
@@ -260,12 +122,12 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								double reduceVar$sum$4 = 0.0;
 								
 								// For each index in the array to be reduced
-								for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+								for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 									// Set the left hand term of the reduction function to the return variable value.
 									double k$var49 = reduceVar$sum$4;
 									
 									// Set the right hand term to a value from the array exped
-									double l$var50 = exped[cv$reduction46Index];
+									double l$var50 = state.exped[cv$reduction46Index];
 									
 									// Execute the reduction function, saving the result into the return value.
 									// 
@@ -274,7 +136,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 								
 								// Write out the new sample value.
-								sum = reduceVar$sum$4;
+								state.sum = reduceVar$sum$4;
 							}
 						}
 					}
@@ -288,12 +150,12 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		{
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
-			boolean[] guard$sample26put68 = guard$sample26put68$global;
+			boolean[] guard$sample26put68 = scratch.guard$sample26put68$global;
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+							for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
 								// Set the flags to false
 								guard$sample26put68[((j$var63 - 0) / 1)] = false;
 						}
@@ -301,9 +163,9 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 							if((j$var38 == j$var63))
 								// Set the flags to false
 								guard$sample26put68[((j$var63 - 0) / 1)] = false;
@@ -312,15 +174,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+							for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 								if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
 									// The body will execute, so should not be executed again
 									guard$sample26put68[((j$var63 - 0) / 1)] = true;
 									{
-										expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+										state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
 									}
 								}
 							}
@@ -329,15 +191,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 							if((j$var38 == j$var63)) {
 								if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
 									// The body will execute, so should not be executed again
 									guard$sample26put68[((j$var63 - 0) / 1)] = true;
 									{
-										expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+										state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
 									}
 								}
 							}
@@ -353,15 +215,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		{
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
-			boolean[][] guard$sample26put131 = guard$sample26put131$global;
+			boolean[][] guard$sample26put131 = scratch.guard$sample26put131$global;
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+							for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+								for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 									if((j$var63 == j$var123)) {
-										for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+										for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 											// Set the flags to false
 											guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = false;
 									}
@@ -372,13 +234,13 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 							if((j$var38 == j$var63)) {
-								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+								for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 									if((j$var63 == j$var123)) {
-										for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+										for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 											// Set the flags to false
 											guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = false;
 									}
@@ -389,18 +251,18 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+							for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+								for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 									if((j$var63 == j$var123)) {
-										for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+										for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 											if(!guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)]) {
 												// The body will execute, so should not be executed again
 												guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = true;
 												{
-													weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+													state.weekly_ut[((t$var112 - 0) / 1)][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 												}
 											}
 										}
@@ -412,18 +274,18 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 							if((j$var38 == j$var63)) {
-								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+								for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 									if((j$var63 == j$var123)) {
-										for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+										for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 											if(!guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)]) {
 												// The body will execute, so should not be executed again
 												guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = true;
 												{
-													weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+													state.weekly_ut[((t$var112 - 0) / 1)][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 												}
 											}
 										}
@@ -442,17 +304,17 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		{
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
-			boolean[][] guard$sample26put154 = guard$sample26put154$global;
+			boolean[][] guard$sample26put154 = scratch.guard$sample26put154$global;
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+							for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+								for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 									if((j$var63 == j$var123)) {
-										for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-											if(((0 <= j$var123) && (j$var123 < noProducts))) {
-												for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+										for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+											if(((0 <= j$var123) && (j$var123 < state.noProducts))) {
+												for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
 													// Set the flags to false
 													guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
 											}
@@ -465,15 +327,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+							for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+								for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 									if((j$var63 == j$var123)) {
-										for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+										for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 											if((j$var123 == j$var147)) {
-												for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+												for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 													// Set the flags to false
 													guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
 											}
@@ -486,15 +348,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 							if((j$var38 == j$var63)) {
-								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+								for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 									if((j$var63 == j$var123)) {
-										for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-											if(((0 <= j$var123) && (j$var123 < noProducts))) {
-												for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+										for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+											if(((0 <= j$var123) && (j$var123 < state.noProducts))) {
+												for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
 													// Set the flags to false
 													guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
 											}
@@ -507,15 +369,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 							if((j$var38 == j$var63)) {
-								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+								for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 									if((j$var63 == j$var123)) {
-										for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+										for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 											if((j$var123 == j$var147)) {
-												for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+												for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 													// Set the flags to false
 													guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
 											}
@@ -528,15 +390,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+							for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+								for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 									if((j$var63 == j$var123)) {
-										for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-											if(((0 <= j$var123) && (j$var123 < noProducts))) {
-												for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+										for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+											if(((0 <= j$var123) && (j$var123 < state.noProducts))) {
+												for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 													if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
 														guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
@@ -549,19 +411,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 															double reduceVar$denom$10 = 0.0;
 															
 															// For each index in the array to be reduced
-															for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+															for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 																// Set the left hand term of the reduction function to the return variable value.
 																double k$var135 = reduceVar$denom$10;
 																
 																// Set the right hand term to a value from the array weekly_ut
-																double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 																
 																// Execute the reduction function, saving the result into the return value.
 																// 
 																// Copy the result of the reduction into the variable returned by the reduction.
 																reduceVar$denom$10 = (k$var135 + l$var136);
 															}
-															weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$10);
+															state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$10);
 														}
 													}
 												}
@@ -575,15 +437,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+							for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+								for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 									if((j$var63 == j$var123)) {
-										for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+										for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 											if((j$var123 == j$var147)) {
-												for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+												for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 													if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
 														guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
@@ -596,19 +458,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 															double reduceVar$denom$11 = 0.0;
 															
 															// For each index in the array to be reduced
-															for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+															for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 																// Set the left hand term of the reduction function to the return variable value.
 																double k$var135 = reduceVar$denom$11;
 																
 																// Set the right hand term to a value from the array weekly_ut
-																double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 																
 																// Execute the reduction function, saving the result into the return value.
 																// 
 																// Copy the result of the reduction into the variable returned by the reduction.
 																reduceVar$denom$11 = (k$var135 + l$var136);
 															}
-															weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$11);
+															state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$11);
 														}
 													}
 												}
@@ -622,15 +484,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 							if((j$var38 == j$var63)) {
-								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+								for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 									if((j$var63 == j$var123)) {
-										for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-											if(((0 <= j$var123) && (j$var123 < noProducts))) {
-												for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+										for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+											if(((0 <= j$var123) && (j$var123 < state.noProducts))) {
+												for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 													if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
 														guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
@@ -643,19 +505,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 															double reduceVar$denom$12 = 0.0;
 															
 															// For each index in the array to be reduced
-															for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+															for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 																// Set the left hand term of the reduction function to the return variable value.
 																double k$var135 = reduceVar$denom$12;
 																
 																// Set the right hand term to a value from the array weekly_ut
-																double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 																
 																// Execute the reduction function, saving the result into the return value.
 																// 
 																// Copy the result of the reduction into the variable returned by the reduction.
 																reduceVar$denom$12 = (k$var135 + l$var136);
 															}
-															weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$12);
+															state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$12);
 														}
 													}
 												}
@@ -669,15 +531,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 							if((j$var38 == j$var63)) {
-								for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+								for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 									if((j$var63 == j$var123)) {
-										for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+										for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 											if((j$var123 == j$var147)) {
-												for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+												for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 													if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
 														guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
@@ -690,19 +552,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 															double reduceVar$denom$13 = 0.0;
 															
 															// For each index in the array to be reduced
-															for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+															for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 																// Set the left hand term of the reduction function to the return variable value.
 																double k$var135 = reduceVar$denom$13;
 																
 																// Set the right hand term to a value from the array weekly_ut
-																double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 																
 																// Execute the reduction function, saving the result into the return value.
 																// 
 																// Copy the result of the reduction into the variable returned by the reduction.
 																reduceVar$denom$13 = (k$var135 + l$var136);
 															}
-															weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$13);
+															state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$13);
 														}
 													}
 												}
@@ -722,7 +584,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	// by sample task 26 drawn from Gaussian 25. Inference was performed using Metropolis-Hastings.
 	private final void inferSample26(int j$var20) {
 		if(true) {
-			constrainedFlag$sample26[((j$var20 - 1) / 1)] = false;
+			state.constrainedFlag$sample26[((j$var20 - 1) / 1)] = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -732,7 +594,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			}
 			
 			// The original value of the sample
-			double cv$originalValue = ut[j$var20];
+			double cv$originalValue = state.ut[j$var20];
 			
 			// The probability of the random variable generating the originally sampled value
 			double cv$originalProbability = 0.0;
@@ -745,12 +607,12 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				cv$var = (0.1 * 0.1);
 			
 			// The proposed new value for the sample
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			
 			// The probability of the random variable generating the new sample value.
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample26[((j$var20 - 1) / 1)] || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample26[((j$var20 - 1) / 1)] || (cv$valuePos == 0))) {
 					// Initialize the summed probabilities to 0.
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					
@@ -779,7 +641,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 						{
 							{
 								{
-									ut[j$var20] = cv$currentValue;
+									state.ut[j$var20] = cv$currentValue;
 								}
 							}
 						}
@@ -789,10 +651,10 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 						// Looking for a path between Sample 26 and consumer double[] 41.
 						{
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
 										{
-											exped[j$var38] = Math.exp(ut[j$var38]);
+											state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 										}
 									}
 								}
@@ -804,9 +666,9 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 						// Looking for a path between Sample 26 and consumer double 52.
 						{
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
 											{
 												// Reduction of array exped
 												// 
@@ -816,12 +678,12 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 												double reduceVar$sum$0 = 0.0;
 												
 												// For each index in the array to be reduced
-												for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+												for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double k$var49 = reduceVar$sum$0;
 													
 													// Set the right hand term to a value from the array exped
-													double l$var50 = exped[cv$reduction46Index];
+													double l$var50 = state.exped[cv$reduction46Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
@@ -830,7 +692,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 												}
 												
 												// Write out the new sample value.
-												sum = reduceVar$sum$0;
+												state.sum = reduceVar$sum$0;
 											}
 										}
 									}
@@ -844,12 +706,12 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 						{
 							// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							boolean[] guard$sample26put68 = guard$sample26put68$global;
+							boolean[] guard$sample26put68 = scratch.guard$sample26put68$global;
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
 												// Set the flags to false
 												guard$sample26put68[((j$var63 - 0) / 1)] = false;
 										}
@@ -857,9 +719,9 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 											if((j$var38 == j$var63))
 												// Set the flags to false
 												guard$sample26put68[((j$var63 - 0) / 1)] = false;
@@ -868,15 +730,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
 													// The body will execute, so should not be executed again
 													guard$sample26put68[((j$var63 - 0) / 1)] = true;
 													{
-														expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+														state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
 													}
 												}
 											}
@@ -885,15 +747,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 											if((j$var38 == j$var63)) {
 												if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
 													// The body will execute, so should not be executed again
 													guard$sample26put68[((j$var63 - 0) / 1)] = true;
 													{
-														expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+														state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
 													}
 												}
 											}
@@ -909,15 +771,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 						{
 							// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							boolean[][] guard$sample26put131 = guard$sample26put131$global;
+							boolean[][] guard$sample26put131 = scratch.guard$sample26put131$global;
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+												for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 													if((j$var63 == j$var123)) {
-														for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+														for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 															// Set the flags to false
 															guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = false;
 													}
@@ -928,13 +790,13 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 											if((j$var38 == j$var63)) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+												for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 													if((j$var63 == j$var123)) {
-														for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+														for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 															// Set the flags to false
 															guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = false;
 													}
@@ -945,18 +807,18 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+												for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 													if((j$var63 == j$var123)) {
-														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+														for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 															if(!guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)]) {
 																// The body will execute, so should not be executed again
 																guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = true;
 																{
-																	weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+																	state.weekly_ut[((t$var112 - 0) / 1)][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 																}
 															}
 														}
@@ -968,18 +830,18 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 											if((j$var38 == j$var63)) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+												for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 													if((j$var63 == j$var123)) {
-														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+														for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 															if(!guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)]) {
 																// The body will execute, so should not be executed again
 																guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = true;
 																{
-																	weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+																	state.weekly_ut[((t$var112 - 0) / 1)][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 																}
 															}
 														}
@@ -998,17 +860,17 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 						{
 							// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							boolean[][] guard$sample26put154 = guard$sample26put154$global;
+							boolean[][] guard$sample26put154 = scratch.guard$sample26put154$global;
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+												for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 													if((j$var63 == j$var123)) {
-														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-															if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+														for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+															if(((0 <= j$var123) && (j$var123 < state.noProducts))) {
+																for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
 																	// Set the flags to false
 																	guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
 															}
@@ -1021,15 +883,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+												for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 													if((j$var63 == j$var123)) {
-														for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+														for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 															if((j$var123 == j$var147)) {
-																for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+																for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 																	// Set the flags to false
 																	guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
 															}
@@ -1042,15 +904,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 											if((j$var38 == j$var63)) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+												for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 													if((j$var63 == j$var123)) {
-														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-															if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+														for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+															if(((0 <= j$var123) && (j$var123 < state.noProducts))) {
+																for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
 																	// Set the flags to false
 																	guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
 															}
@@ -1063,15 +925,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 											if((j$var38 == j$var63)) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+												for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 													if((j$var63 == j$var123)) {
-														for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+														for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 															if((j$var123 == j$var147)) {
-																for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+																for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 																	// Set the flags to false
 																	guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
 															}
@@ -1084,15 +946,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+												for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 													if((j$var63 == j$var123)) {
-														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-															if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+														for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+															if(((0 <= j$var123) && (j$var123 < state.noProducts))) {
+																for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 																	if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
 																		// The body will execute, so should not be executed again
 																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
@@ -1105,19 +967,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																			double reduceVar$denom$0 = 0.0;
 																			
 																			// For each index in the array to be reduced
-																			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																			for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 																				// Set the left hand term of the reduction function to the return variable value.
 																				double k$var135 = reduceVar$denom$0;
 																				
 																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																				double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 																				
 																				// Execute the reduction function, saving the result into the return value.
 																				// 
 																				// Copy the result of the reduction into the variable returned by the reduction.
 																				reduceVar$denom$0 = (k$var135 + l$var136);
 																			}
-																			weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$0);
+																			state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$0);
 																		}
 																	}
 																}
@@ -1131,15 +993,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+												for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 													if((j$var63 == j$var123)) {
-														for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+														for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 															if((j$var123 == j$var147)) {
-																for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 																	if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
 																		// The body will execute, so should not be executed again
 																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
@@ -1152,19 +1014,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																			double reduceVar$denom$1 = 0.0;
 																			
 																			// For each index in the array to be reduced
-																			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																			for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 																				// Set the left hand term of the reduction function to the return variable value.
 																				double k$var135 = reduceVar$denom$1;
 																				
 																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																				double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 																				
 																				// Execute the reduction function, saving the result into the return value.
 																				// 
 																				// Copy the result of the reduction into the variable returned by the reduction.
 																				reduceVar$denom$1 = (k$var135 + l$var136);
 																			}
-																			weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$1);
+																			state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$1);
 																		}
 																	}
 																}
@@ -1178,15 +1040,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 											if((j$var38 == j$var63)) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+												for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 													if((j$var63 == j$var123)) {
-														for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-															if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+														for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+															if(((0 <= j$var123) && (j$var123 < state.noProducts))) {
+																for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 																	if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
 																		// The body will execute, so should not be executed again
 																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
@@ -1199,19 +1061,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																			double reduceVar$denom$2 = 0.0;
 																			
 																			// For each index in the array to be reduced
-																			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																			for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 																				// Set the left hand term of the reduction function to the return variable value.
 																				double k$var135 = reduceVar$denom$2;
 																				
 																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																				double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 																				
 																				// Execute the reduction function, saving the result into the return value.
 																				// 
 																				// Copy the result of the reduction into the variable returned by the reduction.
 																				reduceVar$denom$2 = (k$var135 + l$var136);
 																			}
-																			weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$2);
+																			state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$2);
 																		}
 																	}
 																}
@@ -1225,15 +1087,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 											if((j$var38 == j$var63)) {
-												for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+												for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 													if((j$var63 == j$var123)) {
-														for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+														for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 															if((j$var123 == j$var147)) {
-																for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 																	if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
 																		// The body will execute, so should not be executed again
 																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
@@ -1246,19 +1108,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																			double reduceVar$denom$3 = 0.0;
 																			
 																			// For each index in the array to be reduced
-																			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																			for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 																				// Set the left hand term of the reduction function to the return variable value.
 																				double k$var135 = reduceVar$denom$3;
 																				
 																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																				double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 																				
 																				// Execute the reduction function, saving the result into the return value.
 																				// 
 																				// Copy the result of the reduction into the variable returned by the reduction.
 																				reduceVar$denom$3 = (k$var135 + l$var136);
 																			}
-																			weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$3);
+																			state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$3);
 																		}
 																	}
 																}
@@ -1287,16 +1149,16 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 							{
 								// Guard to check that at most one copy of the code is executed for a given random
 								// variable instance.
-								boolean[] guard$sample26multinomial156 = guard$sample26multinomial156$global;
+								boolean[] guard$sample26multinomial156 = scratch.guard$sample26multinomial156$global;
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																if(((0 <= j$var123) && (j$var123 < noProducts)))
+															for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+																if(((0 <= j$var123) && (j$var123 < state.noProducts)))
 																	// Set the flags to false
 																	guard$sample26multinomial156[((t$var112 - 0) / 1)] = false;
 															}
@@ -1308,15 +1170,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+															for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 																if((j$var123 == j$var147)) {
-																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+																	for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 																		// Set the flags to false
 																		guard$sample26multinomial156[((t$var112 - 0) / 1)] = false;
 																}
@@ -1329,14 +1191,14 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																if(((0 <= j$var123) && (j$var123 < noProducts)))
+															for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+																if(((0 <= j$var123) && (j$var123 < state.noProducts)))
 																	// Set the flags to false
 																	guard$sample26multinomial156[((t$var112 - 0) / 1)] = false;
 															}
@@ -1348,15 +1210,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+															for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 																if((j$var123 == j$var147)) {
-																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+																	for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 																		// Set the flags to false
 																		guard$sample26multinomial156[((t$var112 - 0) / 1)] = false;
 																}
@@ -1370,11 +1232,11 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 								{
 									double traceTempVariable$var39$24_1 = cv$currentValue;
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
 											double traceTempVariable$k$24_3 = Math.exp(traceTempVariable$var39$24_1);
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												if((0 < noProducts)) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												if((0 < state.noProducts)) {
 													// Reduction of array exped
 													// 
 													// A generated name to prevent name collisions if the reduction is implemented more
@@ -1388,19 +1250,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 														double k$var49 = reduceVar$sum$1;
 														
 														// Set the right hand term to a value from the array exped
-														double l$var50 = exped[cv$reduction715Index];
+														double l$var50 = state.exped[cv$reduction715Index];
 														
 														// Execute the reduction function, saving the result into the return value.
 														// 
 														// Copy the result of the reduction into the variable returned by the reduction.
 														reduceVar$sum$1 = (k$var49 + l$var50);
 													}
-													for(int cv$reduction715Index = (j$var38 + 1); cv$reduction715Index < noProducts; cv$reduction715Index += 1) {
+													for(int cv$reduction715Index = (j$var38 + 1); cv$reduction715Index < state.noProducts; cv$reduction715Index += 1) {
 														// Set the left hand term of the reduction function to the return variable value.
 														double k$var49 = reduceVar$sum$1;
 														
 														// Set the right hand term to a value from the array exped
-														double l$var50 = exped[cv$reduction715Index];
+														double l$var50 = state.exped[cv$reduction715Index];
 														
 														// Execute the reduction function, saving the result into the return value.
 														// 
@@ -1412,15 +1274,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 													// Copy the result of the reduction into the variable returned by the reduction.
 													reduceVar$sum$1 = (traceTempVariable$k$24_3 + cv$reduced46);
 													double traceTempVariable$sum$24_4 = reduceVar$sum$1;
-													for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+													for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 														double traceTempVariable$sum$24_6 = traceTempVariable$sum$24_4;
-														double traceTempVariable$var124$24_7 = (exped[j$var63] / (r * traceTempVariable$sum$24_6));
-														for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														double traceTempVariable$var124$24_7 = (state.exped[j$var63] / (state.r * traceTempVariable$sum$24_6));
+														for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 															if((j$var63 == j$var123)) {
-																for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																	double traceTempVariable$k$24_10 = (traceTempVariable$var124$24_7 * Avail[t$var112][j$var123]);
-																	if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																		if((0 < noProducts)) {
+																for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+																	double traceTempVariable$k$24_10 = (traceTempVariable$var124$24_7 * state.Avail[t$var112][j$var123]);
+																	if(((0 <= j$var123) && (j$var123 < state.noProducts))) {
+																		if((0 < state.noProducts)) {
 																			// Reduction of array weekly_ut
 																			// 
 																			// A generated name to prevent name collisions if the reduction is implemented more
@@ -1434,19 +1296,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																				double k$var135 = reduceVar$denom$4;
 																				
 																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction749Index];
+																				double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction749Index];
 																				
 																				// Execute the reduction function, saving the result into the return value.
 																				// 
 																				// Copy the result of the reduction into the variable returned by the reduction.
 																				reduceVar$denom$4 = (k$var135 + l$var136);
 																			}
-																			for(int cv$reduction749Index = (j$var123 + 1); cv$reduction749Index < noProducts; cv$reduction749Index += 1) {
+																			for(int cv$reduction749Index = (j$var123 + 1); cv$reduction749Index < state.noProducts; cv$reduction749Index += 1) {
 																				// Set the left hand term of the reduction function to the return variable value.
 																				double k$var135 = reduceVar$denom$4;
 																				
 																				// Set the right hand term to a value from the array weekly_ut
-																				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction749Index];
+																				double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction749Index];
 																				
 																				// Execute the reduction function, saving the result into the return value.
 																				// 
@@ -1469,7 +1331,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																						boolean cv$sampleConstrained = true;
 																						if(cv$sampleConstrained) {
 																							// Mark that the sample has observed constrained data.
-																							constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
+																							state.constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
 																							
 																							// Set an accumulator to sum the probabilities for each possible configuration of
 																							// inputs.
@@ -1484,17 +1346,17 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																										{
 																											{
 																												// Constructing a random variable input for use later.
-																												int var151 = sales_sum[t$var112];
+																												int var151 = state.sales_sum[t$var112];
 																												
 																												// Record the probability of sample task 157 generating output with current configuration.
-																												if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) < cv$accumulatedConsumerProbabilities))
-																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151)) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																												else {
 																													// If the second value is -infinity.
 																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151));
+																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151));
 																													else
-																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)));
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151)));
 																												}
 																												
 																												// Recorded the probability of reaching sample task 157 with the current configuration.
@@ -1537,11 +1399,11 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 								{
 									double traceTempVariable$var39$25_1 = cv$currentValue;
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
 											double traceTempVariable$k$25_3 = Math.exp(traceTempVariable$var39$25_1);
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												if((0 < noProducts)) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												if((0 < state.noProducts)) {
 													// Reduction of array exped
 													// 
 													// A generated name to prevent name collisions if the reduction is implemented more
@@ -1555,19 +1417,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 														double k$var49 = reduceVar$sum$2;
 														
 														// Set the right hand term to a value from the array exped
-														double l$var50 = exped[cv$reduction777Index];
+														double l$var50 = state.exped[cv$reduction777Index];
 														
 														// Execute the reduction function, saving the result into the return value.
 														// 
 														// Copy the result of the reduction into the variable returned by the reduction.
 														reduceVar$sum$2 = (k$var49 + l$var50);
 													}
-													for(int cv$reduction777Index = (j$var38 + 1); cv$reduction777Index < noProducts; cv$reduction777Index += 1) {
+													for(int cv$reduction777Index = (j$var38 + 1); cv$reduction777Index < state.noProducts; cv$reduction777Index += 1) {
 														// Set the left hand term of the reduction function to the return variable value.
 														double k$var49 = reduceVar$sum$2;
 														
 														// Set the right hand term to a value from the array exped
-														double l$var50 = exped[cv$reduction777Index];
+														double l$var50 = state.exped[cv$reduction777Index];
 														
 														// Execute the reduction function, saving the result into the return value.
 														// 
@@ -1579,14 +1441,14 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 													// Copy the result of the reduction into the variable returned by the reduction.
 													reduceVar$sum$2 = (traceTempVariable$k$25_3 + cv$reduced46);
 													double traceTempVariable$sum$25_4 = reduceVar$sum$2;
-													for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+													for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 														double traceTempVariable$sum$25_6 = traceTempVariable$sum$25_4;
-														double traceTempVariable$var124$25_7 = (exped[j$var63] / (r * traceTempVariable$sum$25_6));
-														for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+														double traceTempVariable$var124$25_7 = (state.exped[j$var63] / (state.r * traceTempVariable$sum$25_6));
+														for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 															if((j$var63 == j$var123)) {
-																for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																	double traceTempVariable$var148$25_10 = (traceTempVariable$var124$25_7 * Avail[t$var112][j$var123]);
-																	for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+																for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+																	double traceTempVariable$var148$25_10 = (traceTempVariable$var124$25_7 * state.Avail[t$var112][j$var123]);
+																	for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 																		if((j$var123 == j$var147)) {
 																			if(!guard$sample26multinomial156[((t$var112 - 0) / 1)]) {
 																				// The body will execute, so should not be executed again
@@ -1599,7 +1461,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																						boolean cv$sampleConstrained = true;
 																						if(cv$sampleConstrained) {
 																							// Mark that the sample has observed constrained data.
-																							constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
+																							state.constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
 																							
 																							// Set an accumulator to sum the probabilities for each possible configuration of
 																							// inputs.
@@ -1614,17 +1476,17 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																										{
 																											{
 																												// Constructing a random variable input for use later.
-																												int var151 = sales_sum[t$var112];
+																												int var151 = state.sales_sum[t$var112];
 																												
 																												// Record the probability of sample task 157 generating output with current configuration.
-																												if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) < cv$accumulatedConsumerProbabilities))
-																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151)) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																												else {
 																													// If the second value is -infinity.
 																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151));
+																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151));
 																													else
-																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)));
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151)));
 																												}
 																												
 																												// Recorded the probability of reaching sample task 157 with the current configuration.
@@ -1667,18 +1529,18 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 								{
 									double traceTempVariable$var39$26_1 = cv$currentValue;
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
 											double traceTempVariable$var64$26_3 = Math.exp(traceTempVariable$var39$26_1);
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													double traceTempVariable$var124$26_5 = (traceTempVariable$var64$26_3 / (r * sum));
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													double traceTempVariable$var124$26_5 = (traceTempVariable$var64$26_3 / (state.r * state.sum));
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																double traceTempVariable$k$26_8 = (traceTempVariable$var124$26_5 * Avail[t$var112][j$var123]);
-																if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																	if((0 < noProducts)) {
+															for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+																double traceTempVariable$k$26_8 = (traceTempVariable$var124$26_5 * state.Avail[t$var112][j$var123]);
+																if(((0 <= j$var123) && (j$var123 < state.noProducts))) {
+																	if((0 < state.noProducts)) {
 																		// Reduction of array weekly_ut
 																		// 
 																		// A generated name to prevent name collisions if the reduction is implemented more
@@ -1692,19 +1554,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																			double k$var135 = reduceVar$denom$5;
 																			
 																			// Set the right hand term to a value from the array weekly_ut
-																			double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction833Index];
+																			double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction833Index];
 																			
 																			// Execute the reduction function, saving the result into the return value.
 																			// 
 																			// Copy the result of the reduction into the variable returned by the reduction.
 																			reduceVar$denom$5 = (k$var135 + l$var136);
 																		}
-																		for(int cv$reduction833Index = (j$var123 + 1); cv$reduction833Index < noProducts; cv$reduction833Index += 1) {
+																		for(int cv$reduction833Index = (j$var123 + 1); cv$reduction833Index < state.noProducts; cv$reduction833Index += 1) {
 																			// Set the left hand term of the reduction function to the return variable value.
 																			double k$var135 = reduceVar$denom$5;
 																			
 																			// Set the right hand term to a value from the array weekly_ut
-																			double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction833Index];
+																			double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction833Index];
 																			
 																			// Execute the reduction function, saving the result into the return value.
 																			// 
@@ -1727,7 +1589,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																					boolean cv$sampleConstrained = true;
 																					if(cv$sampleConstrained) {
 																						// Mark that the sample has observed constrained data.
-																						constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
+																						state.constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
 																						
 																						// Set an accumulator to sum the probabilities for each possible configuration of
 																						// inputs.
@@ -1742,17 +1604,17 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																									{
 																										{
 																											// Constructing a random variable input for use later.
-																											int var151 = sales_sum[t$var112];
+																											int var151 = state.sales_sum[t$var112];
 																											
 																											// Record the probability of sample task 157 generating output with current configuration.
-																											if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) < cv$accumulatedConsumerProbabilities))
-																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																											if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151)) < cv$accumulatedConsumerProbabilities))
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																											else {
 																												// If the second value is -infinity.
 																												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151));
+																													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151));
 																												else
-																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)));
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151)));
 																											}
 																											
 																											// Recorded the probability of reaching sample task 157 with the current configuration.
@@ -1794,17 +1656,17 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 								}
 								{
 									double traceTempVariable$var39$27_1 = cv$currentValue;
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
 											double traceTempVariable$var64$27_3 = Math.exp(traceTempVariable$var39$27_1);
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													double traceTempVariable$var124$27_5 = (traceTempVariable$var64$27_3 / (r * sum));
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													double traceTempVariable$var124$27_5 = (traceTempVariable$var64$27_3 / (state.r * state.sum));
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																double traceTempVariable$var148$27_8 = (traceTempVariable$var124$27_5 * Avail[t$var112][j$var123]);
-																for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+															for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+																double traceTempVariable$var148$27_8 = (traceTempVariable$var124$27_5 * state.Avail[t$var112][j$var123]);
+																for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 																	if((j$var123 == j$var147)) {
 																		if(!guard$sample26multinomial156[((t$var112 - 0) / 1)]) {
 																			// The body will execute, so should not be executed again
@@ -1817,7 +1679,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																					boolean cv$sampleConstrained = true;
 																					if(cv$sampleConstrained) {
 																						// Mark that the sample has observed constrained data.
-																						constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
+																						state.constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
 																						
 																						// Set an accumulator to sum the probabilities for each possible configuration of
 																						// inputs.
@@ -1832,17 +1694,17 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																									{
 																										{
 																											// Constructing a random variable input for use later.
-																											int var151 = sales_sum[t$var112];
+																											int var151 = state.sales_sum[t$var112];
 																											
 																											// Record the probability of sample task 157 generating output with current configuration.
-																											if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) < cv$accumulatedConsumerProbabilities))
-																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																											if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151)) < cv$accumulatedConsumerProbabilities))
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																											else {
 																												// If the second value is -infinity.
 																												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151));
+																													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151));
 																												else
-																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[((t$var112 - 0) / 1)], noProducts, var151)));
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151)));
 																											}
 																											
 																											// Recorded the probability of reaching sample task 157 with the current configuration.
@@ -1913,7 +1775,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 					// to be less than or equal as otherwise if the proposed value is not possible and
 					// the random value is 0 an impossible value will be accepted.
 					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$))))) || Double.isNaN(cv$ratio))) {
 							// If it is not revert the changes.
 							// 
 							// Set the sample value
@@ -1925,7 +1787,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 							{
 								{
 									{
-										ut[j$var20] = var26;
+										state.ut[j$var20] = var26;
 									}
 								}
 							}
@@ -1935,10 +1797,10 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 							// Looking for a path between Sample 26 and consumer double[] 41.
 							{
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
 											{
-												exped[j$var38] = Math.exp(ut[j$var38]);
+												state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 											}
 										}
 									}
@@ -1950,9 +1812,9 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 							// Looking for a path between Sample 26 and consumer double 52.
 							{
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
 												{
 													// Reduction of array exped
 													// 
@@ -1962,12 +1824,12 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 													double reduceVar$sum$3 = 0.0;
 													
 													// For each index in the array to be reduced
-													for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+													for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 														// Set the left hand term of the reduction function to the return variable value.
 														double k$var49 = reduceVar$sum$3;
 														
 														// Set the right hand term to a value from the array exped
-														double l$var50 = exped[cv$reduction46Index];
+														double l$var50 = state.exped[cv$reduction46Index];
 														
 														// Execute the reduction function, saving the result into the return value.
 														// 
@@ -1976,7 +1838,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 													}
 													
 													// Write out the new sample value.
-													sum = reduceVar$sum$3;
+													state.sum = reduceVar$sum$3;
 												}
 											}
 										}
@@ -1990,12 +1852,12 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 							{
 								// Guard to check that at most one copy of the code is executed for a given random
 								// variable instance.
-								boolean[] guard$sample26put68 = guard$sample26put68$global;
+								boolean[] guard$sample26put68 = scratch.guard$sample26put68$global;
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
 													// Set the flags to false
 													guard$sample26put68[((j$var63 - 0) / 1)] = false;
 											}
@@ -2003,9 +1865,9 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63))
 													// Set the flags to false
 													guard$sample26put68[((j$var63 - 0) / 1)] = false;
@@ -2014,15 +1876,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 													if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
 														guard$sample26put68[((j$var63 - 0) / 1)] = true;
 														{
-															expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+															state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
 														}
 													}
 												}
@@ -2031,15 +1893,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
 													if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
 														guard$sample26put68[((j$var63 - 0) / 1)] = true;
 														{
-															expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+															state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
 														}
 													}
 												}
@@ -2055,15 +1917,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 							{
 								// Guard to check that at most one copy of the code is executed for a given random
 								// variable instance.
-								boolean[][] guard$sample26put131 = guard$sample26put131$global;
+								boolean[][] guard$sample26put131 = scratch.guard$sample26put131$global;
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+															for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 																// Set the flags to false
 																guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = false;
 														}
@@ -2074,13 +1936,13 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+															for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 																// Set the flags to false
 																guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = false;
 														}
@@ -2091,18 +1953,18 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+															for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 																if(!guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)]) {
 																	// The body will execute, so should not be executed again
 																	guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = true;
 																	{
-																		weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+																		state.weekly_ut[((t$var112 - 0) / 1)][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 																	}
 																}
 															}
@@ -2114,18 +1976,18 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+															for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 																if(!guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)]) {
 																	// The body will execute, so should not be executed again
 																	guard$sample26put131[((t$var112 - 0) / 1)][((j$var123 - 0) / 1)] = true;
 																	{
-																		weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+																		state.weekly_ut[((t$var112 - 0) / 1)][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 																	}
 																}
 															}
@@ -2144,17 +2006,17 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 							{
 								// Guard to check that at most one copy of the code is executed for a given random
 								// variable instance.
-								boolean[][] guard$sample26put154 = guard$sample26put154$global;
+								boolean[][] guard$sample26put154 = scratch.guard$sample26put154$global;
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																	for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+															for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+																if(((0 <= j$var123) && (j$var123 < state.noProducts))) {
+																	for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
 																		// Set the flags to false
 																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
 																}
@@ -2167,15 +2029,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+															for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 																if((j$var123 == j$var147)) {
-																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+																	for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 																		// Set the flags to false
 																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
 																}
@@ -2188,15 +2050,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																	for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+															for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+																if(((0 <= j$var123) && (j$var123 < state.noProducts))) {
+																	for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
 																		// Set the flags to false
 																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
 																}
@@ -2209,15 +2071,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+															for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 																if((j$var123 == j$var147)) {
-																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+																	for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 																		// Set the flags to false
 																		guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = false;
 																}
@@ -2230,15 +2092,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																	for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+															for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+																if(((0 <= j$var123) && (j$var123 < state.noProducts))) {
+																	for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 																		if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
 																			// The body will execute, so should not be executed again
 																			guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
@@ -2251,19 +2113,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																				double reduceVar$denom$6 = 0.0;
 																				
 																				// For each index in the array to be reduced
-																				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																				for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 																					// Set the left hand term of the reduction function to the return variable value.
 																					double k$var135 = reduceVar$denom$6;
 																					
 																					// Set the right hand term to a value from the array weekly_ut
-																					double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																					double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 																					
 																					// Execute the reduction function, saving the result into the return value.
 																					// 
 																					// Copy the result of the reduction into the variable returned by the reduction.
 																					reduceVar$denom$6 = (k$var135 + l$var136);
 																				}
-																				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$6);
+																				state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$6);
 																			}
 																		}
 																	}
@@ -2277,15 +2139,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+															for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 																if((j$var123 == j$var147)) {
-																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																	for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 																		if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
 																			// The body will execute, so should not be executed again
 																			guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
@@ -2298,19 +2160,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																				double reduceVar$denom$7 = 0.0;
 																				
 																				// For each index in the array to be reduced
-																				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																				for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 																					// Set the left hand term of the reduction function to the return variable value.
 																					double k$var135 = reduceVar$denom$7;
 																					
 																					// Set the right hand term to a value from the array weekly_ut
-																					double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																					double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 																					
 																					// Execute the reduction function, saving the result into the return value.
 																					// 
 																					// Copy the result of the reduction into the variable returned by the reduction.
 																					reduceVar$denom$7 = (k$var135 + l$var136);
 																				}
-																				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$7);
+																				state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$7);
 																			}
 																		}
 																	}
@@ -2324,15 +2186,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-																if(((0 <= j$var123) && (j$var123 < noProducts))) {
-																	for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+															for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+																if(((0 <= j$var123) && (j$var123 < state.noProducts))) {
+																	for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 																		if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
 																			// The body will execute, so should not be executed again
 																			guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
@@ -2345,19 +2207,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																				double reduceVar$denom$8 = 0.0;
 																				
 																				// For each index in the array to be reduced
-																				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																				for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 																					// Set the left hand term of the reduction function to the return variable value.
 																					double k$var135 = reduceVar$denom$8;
 																					
 																					// Set the right hand term to a value from the array weekly_ut
-																					double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																					double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 																					
 																					// Execute the reduction function, saving the result into the return value.
 																					// 
 																					// Copy the result of the reduction into the variable returned by the reduction.
 																					reduceVar$denom$8 = (k$var135 + l$var136);
 																				}
-																				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$8);
+																				state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$8);
 																			}
 																		}
 																	}
@@ -2371,15 +2233,15 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
+													for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
 														if((j$var63 == j$var123)) {
-															for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+															for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 																if((j$var123 == j$var147)) {
-																	for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+																	for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 																		if(!guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)]) {
 																			// The body will execute, so should not be executed again
 																			guard$sample26put154[((t$var112 - 0) / 1)][((j$var147 - 0) / 1)] = true;
@@ -2392,19 +2254,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																				double reduceVar$denom$9 = 0.0;
 																				
 																				// For each index in the array to be reduced
-																				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+																				for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 																					// Set the left hand term of the reduction function to the return variable value.
 																					double k$var135 = reduceVar$denom$9;
 																					
 																					// Set the right hand term to a value from the array weekly_ut
-																					double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+																					double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 																					
 																					// Execute the reduction function, saving the result into the return value.
 																					// 
 																					// Copy the result of the reduction into the variable returned by the reduction.
 																					reduceVar$denom$9 = (k$var135 + l$var136);
 																				}
-																				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$9);
+																				state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$9);
 																			}
 																		}
 																	}
@@ -2430,14 +2292,14 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	private final void logProbabilityValue$sample157() {
 		// Determine if we need to calculate the values for sample task 157 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample157) {
+		if(!state.fixedProbFlag$sample157) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
 				
@@ -2449,13 +2311,13 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				{
 					{
 						// The sample value to calculate the probability of generating
-						int[] cv$sampleValue = Sales[t$var112];
+						int[] cv$sampleValue = state.Sales[t$var112];
 						{
 							{
-								int var151 = sales_sum[t$var112];
+								int var151 = state.sales_sum[t$var112];
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(cv$sampleValue, weekly_rates[((t$var112 - 0) / 1)], noProducts, var151));
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(cv$sampleValue, state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, var151));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -2493,19 +2355,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				
 				// Store the sample task probability
-				logProbability$sample157[((t$var112 - 0) / 1)] = cv$sampleProbability;
+				state.logProbability$sample157[((t$var112 - 0) / 1)] = cv$sampleProbability;
 			}
 			
 			// Update the variable probability
-			logProbability$Sales = (logProbability$Sales + cv$accumulator);
+			state.logProbability$Sales = (state.logProbability$Sales + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample157 = fixedFlag$sample26;
+			state.fixedProbFlag$sample157 = state.fixedFlag$sample26;
 		} else {
 			// Using cached values.
 			// 
@@ -2515,9 +2377,9 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample157[((t$var112 - 0) / 1)];
+				double cv$sampleValue = state.logProbability$sample157[((t$var112 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Record that the sample was reached.
@@ -2526,11 +2388,11 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			}
 			
 			// Update the variable probability
-			logProbability$Sales = (logProbability$Sales + cv$accumulator);
+			state.logProbability$Sales = (state.logProbability$Sales + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -2539,14 +2401,14 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	private final void logProbabilityValue$sample26() {
 		// Determine if we need to calculate the values for sample task 26 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample26) {
+		if(!state.fixedProbFlag$sample26) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
+			for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
 				
@@ -2558,7 +2420,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				{
 					{
 						// The sample value to calculate the probability of generating
-						double cv$sampleValue = ut[j$var20];
+						double cv$sampleValue = state.ut[j$var20];
 						{
 							{
 								double var23 = 0.0;
@@ -2603,7 +2465,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				
 				// Store the sample task probability
-				logProbability$sample26[((j$var20 - 1) / 1)] = cv$sampleProbability;
+				state.logProbability$sample26[((j$var20 - 1) / 1)] = cv$sampleProbability;
 				
 				// Guard to ensure that exped is only updated once for this probability.
 				boolean cv$guard$exped = false;
@@ -2620,7 +2482,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				// Looking for a path between Sample 26 and consumer double[] 41.
 				{
 					{
-						for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+						for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 							if((j$var20 == j$var38)) {
 								// If the probability of the variable has not already been updated
 								if(!cv$guard$exped) {
@@ -2628,7 +2490,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									cv$guard$exped = true;
 									
 									// Update the variable probability
-									logProbability$exped = (logProbability$exped + cv$sampleProbability);
+									state.logProbability$exped = (state.logProbability$exped + cv$sampleProbability);
 								}
 							}
 						}
@@ -2638,16 +2500,16 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				// Looking for a path between Sample 26 and consumer double 52.
 				{
 					{
-						for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+						for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 							if((j$var20 == j$var38)) {
-								if(((0 <= j$var38) && (j$var38 < noProducts))) {
+								if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
 									// If the probability of the variable has not already been updated
 									if(!cv$guard$sum) {
 										// Set the guard so the update is only applied once.
 										cv$guard$sum = true;
 										
 										// Update the variable probability
-										logProbability$sum = (logProbability$sum + cv$sampleProbability);
+										state.logProbability$sum = (state.logProbability$sum + cv$sampleProbability);
 									}
 								}
 							}
@@ -2658,17 +2520,17 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				// Looking for a path between Sample 26 and consumer double[] 67.
 				{
 					{
-						for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+						for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 							if((j$var20 == j$var38)) {
-								if(((0 <= j$var38) && (j$var38 < noProducts))) {
-									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+								if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+									for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 										// If the probability of the variable has not already been updated
 										if(!cv$guard$expedNorm) {
 											// Set the guard so the update is only applied once.
 											cv$guard$expedNorm = true;
 											
 											// Update the variable probability
-											logProbability$expedNorm = (logProbability$expedNorm + cv$sampleProbability);
+											state.logProbability$expedNorm = (state.logProbability$expedNorm + cv$sampleProbability);
 										}
 									}
 								}
@@ -2676,9 +2538,9 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 						}
 					}
 					{
-						for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+						for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 							if((j$var20 == j$var38)) {
-								for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+								for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 									if((j$var38 == j$var63)) {
 										// If the probability of the variable has not already been updated
 										if(!cv$guard$expedNorm) {
@@ -2686,7 +2548,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 											cv$guard$expedNorm = true;
 											
 											// Update the variable probability
-											logProbability$expedNorm = (logProbability$expedNorm + cv$sampleProbability);
+											state.logProbability$expedNorm = (state.logProbability$expedNorm + cv$sampleProbability);
 										}
 									}
 								}
@@ -2697,19 +2559,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			}
 			
 			// Update the variable probability
-			logProbability$ut = (logProbability$ut + cv$accumulator);
+			state.logProbability$ut = (state.logProbability$ut + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample26)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample26)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample26 = fixedFlag$sample26;
+			state.fixedProbFlag$sample26 = state.fixedFlag$sample26;
 		} else {
 			// Using cached values.
 			// 
@@ -2719,9 +2581,9 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
+			for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample26[((j$var20 - 1) / 1)];
+				double cv$sampleValue = state.logProbability$sample26[((j$var20 - 1) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Record that the sample was reached.
@@ -2743,7 +2605,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				// Looking for a path between Sample 26 and consumer double[] 41.
 				{
 					{
-						for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+						for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 							if((j$var20 == j$var38)) {
 								// If the probability of the variable has not already been updated
 								if(!cv$guard$exped) {
@@ -2751,7 +2613,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									cv$guard$exped = true;
 									
 									// Update the variable probability
-									logProbability$exped = (logProbability$exped + cv$sampleValue);
+									state.logProbability$exped = (state.logProbability$exped + cv$sampleValue);
 								}
 							}
 						}
@@ -2761,16 +2623,16 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				// Looking for a path between Sample 26 and consumer double 52.
 				{
 					{
-						for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+						for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 							if((j$var20 == j$var38)) {
-								if(((0 <= j$var38) && (j$var38 < noProducts))) {
+								if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
 									// If the probability of the variable has not already been updated
 									if(!cv$guard$sum) {
 										// Set the guard so the update is only applied once.
 										cv$guard$sum = true;
 										
 										// Update the variable probability
-										logProbability$sum = (logProbability$sum + cv$sampleValue);
+										state.logProbability$sum = (state.logProbability$sum + cv$sampleValue);
 									}
 								}
 							}
@@ -2781,17 +2643,17 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				// Looking for a path between Sample 26 and consumer double[] 67.
 				{
 					{
-						for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+						for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 							if((j$var20 == j$var38)) {
-								if(((0 <= j$var38) && (j$var38 < noProducts))) {
-									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+								if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+									for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 										// If the probability of the variable has not already been updated
 										if(!cv$guard$expedNorm) {
 											// Set the guard so the update is only applied once.
 											cv$guard$expedNorm = true;
 											
 											// Update the variable probability
-											logProbability$expedNorm = (logProbability$expedNorm + cv$sampleValue);
+											state.logProbability$expedNorm = (state.logProbability$expedNorm + cv$sampleValue);
 										}
 									}
 								}
@@ -2799,9 +2661,9 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 						}
 					}
 					{
-						for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+						for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 							if((j$var20 == j$var38)) {
-								for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+								for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 									if((j$var38 == j$var63)) {
 										// If the probability of the variable has not already been updated
 										if(!cv$guard$expedNorm) {
@@ -2809,7 +2671,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 											cv$guard$expedNorm = true;
 											
 											// Update the variable probability
-											logProbability$expedNorm = (logProbability$expedNorm + cv$sampleValue);
+											state.logProbability$expedNorm = (state.logProbability$expedNorm + cv$sampleValue);
 										}
 									}
 								}
@@ -2820,159 +2682,28 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			}
 			
 			// Update the variable probability
-			logProbability$ut = (logProbability$ut + cv$accumulator);
+			state.logProbability$ut = (state.logProbability$ut + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample26)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// If ut has not been set already allocate space.
-		if(!fixedFlag$sample26) {
-			// Constructor for ut
-			{
-				ut = new double[noProducts];
-			}
-		}
-		
-		// Constructor for exped
-		{
-			exped = new double[noProducts];
-		}
-		
-		// Constructor for expedNorm
-		{
-			expedNorm = new double[noProducts];
-		}
-		
-		// Constructor for sales_sum
-		{
-			sales_sum = new int[T];
-		}
-		
-		// Constructor for Sales
-		{
-			Sales = new int[T][];
-			for(int var100 = 0; var100 < T; var100 += 1)
-				Sales[var100] = new int[noProducts];
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				Sales[t$var112] = new int[noProducts];
-		}
-		
-		// Constructor for weekly_rates
-		{
-			weekly_rates = new double[((((T - 1) - 0) / 1) + 1)][];
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				weekly_rates[((t$var112 - 0) / 1)] = new double[noProducts];
-		}
-		
-		// Constructor for weekly_ut
-		{
-			weekly_ut = new double[((((T - 1) - 0) / 1) + 1)][];
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				weekly_ut[((t$var112 - 0) / 1)] = new double[noProducts];
-		}
-		
-		// Constructor for constrainedFlag$sample26
-		{
-			constrainedFlag$sample26 = new boolean[((((noProducts - 1) - 1) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample26
-		{
-			logProbability$sample26 = new double[((((noProducts - 1) - 1) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample157
-		{
-			logProbability$sample157 = new double[((((T - 1) - 0) / 1) + 1)];
-		}
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for guard$sample26put68$global
-		{
-			// Calculate the largest index of j that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_j$var63 = 0;
-			cv$max_j$var63 = Math.max(cv$max_j$var63, ((noProducts - 0) / 1));
-			
-			// Allocation of guard$sample26put68$global for single threaded execution
-			guard$sample26put68$global = new boolean[cv$max_j$var63];
-		}
-		
-		// Constructor for guard$sample26put131$global
-		{
-			// Calculate the largest index of t that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_t$var112 = 0;
-			
-			// Calculate the largest index of j that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_j$var123 = 0;
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				cv$max_j$var123 = Math.max(cv$max_j$var123, ((noProducts - 0) / 1));
-			cv$max_t$var112 = Math.max(cv$max_t$var112, ((T - 0) / 1));
-			
-			// Allocation of guard$sample26put131$global for single threaded execution
-			guard$sample26put131$global = new boolean[cv$max_t$var112][cv$max_j$var123];
-		}
-		
-		// Constructor for guard$sample26put154$global
-		{
-			// Calculate the largest index of t that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_t$var112 = 0;
-			
-			// Calculate the largest index of j that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_j$var147 = 0;
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				cv$max_j$var147 = Math.max(cv$max_j$var147, ((noProducts - 0) / 1));
-			cv$max_t$var112 = Math.max(cv$max_t$var112, ((T - 0) / 1));
-			
-			// Allocation of guard$sample26put154$global for single threaded execution
-			guard$sample26put154$global = new boolean[cv$max_t$var112][cv$max_j$var147];
-		}
-		
-		// Constructor for guard$sample26multinomial156$global
-		{
-			// Calculate the largest index of t that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_t$var112 = 0;
-			cv$max_t$var112 = Math.max(cv$max_t$var112, ((T - 0) / 1));
-			
-			// Allocation of guard$sample26multinomial156$global for single threaded execution
-			guard$sample26multinomial156$global = new boolean[cv$max_t$var112];
+			if(state.fixedFlag$sample26)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-			if(!fixedFlag$sample26)
-				ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-			if(!fixedFlag$sample26)
-				exped[j$var38] = Math.exp(ut[j$var38]);
+		for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 		}
 		
 		// Reduction of array exped
@@ -2983,28 +2714,28 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		double reduceVar$sum$5 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+		for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
 			double k$var49 = reduceVar$sum$5;
 			
 			// Set the right hand term to a value from the array exped
-			double l$var50 = exped[cv$reduction46Index];
+			double l$var50 = state.exped[cv$reduction46Index];
 			
 			// Execute the reduction function, saving the result into the return value.
-			if(!fixedFlag$sample26)
+			if(!state.fixedFlag$sample26)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				reduceVar$sum$5 = (k$var49 + l$var50);
 		}
-		if(!fixedFlag$sample26)
-			sum = reduceVar$sum$5;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-			if(!fixedFlag$sample26)
-				expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+		if(!state.fixedFlag$sample26)
+			state.sum = reduceVar$sum$5;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
 		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-				if(!fixedFlag$sample26)
-					weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
+				if(!state.fixedFlag$sample26)
+					state.weekly_ut[((t$var112 - 0) / 1)][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 			}
 			
 			// Reduction of array weekly_ut
@@ -3015,24 +2746,24 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			double reduceVar$denom$14 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+			for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
 				double k$var135 = reduceVar$denom$14;
 				
 				// Set the right hand term to a value from the array weekly_ut
-				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+				double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 				
 				// Execute the reduction function, saving the result into the return value.
-				if(!fixedFlag$sample26)
+				if(!state.fixedFlag$sample26)
 					// Copy the result of the reduction into the variable returned by the reduction.
 					reduceVar$denom$14 = (k$var135 + l$var136);
 			}
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-				if(!fixedFlag$sample26)
-					weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$14);
+			for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
+				if(!state.fixedFlag$sample26)
+					state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$14);
 			}
-			int[] weekly_sales = Sales[t$var112];
-			DistributionSampling.sampleMultinomial(RNG$, weekly_rates[((t$var112 - 0) / 1)], noProducts, sales_sum[t$var112], weekly_sales);
+			int[] weekly_sales = state.Sales[t$var112];
+			DistributionSampling.sampleMultinomial(state.RNG$, state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, state.sales_sum[t$var112], weekly_sales);
 		}
 	}
 
@@ -3041,12 +2772,12 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-			if(!fixedFlag$sample26)
-				ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-			exped[j$var38] = Math.exp(ut[j$var38]);
+		for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1)
+			state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 		
 		// Reduction of array exped
 		// 
@@ -3056,24 +2787,24 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		double reduceVar$sum$9 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+		for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
 			double k$var49 = reduceVar$sum$9;
 			
 			// Set the right hand term to a value from the array exped
-			double l$var50 = exped[cv$reduction46Index];
+			double l$var50 = state.exped[cv$reduction46Index];
 			
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			reduceVar$sum$9 = (k$var49 + l$var50);
 		}
-		sum = reduceVar$sum$9;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-			expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
-				weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+		state.sum = reduceVar$sum$9;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
+			state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1)
+				state.weekly_ut[((t$var112 - 0) / 1)][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 			
 			// Reduction of array weekly_ut
 			// 
@@ -3083,20 +2814,20 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			double reduceVar$denom$18 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+			for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
 				double k$var135 = reduceVar$denom$18;
 				
 				// Set the right hand term to a value from the array weekly_ut
-				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+				double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 				
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				reduceVar$denom$18 = (k$var135 + l$var136);
 			}
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$18);
+			for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
+				state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$18);
 		}
 	}
 
@@ -3104,12 +2835,12 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-			if(!fixedFlag$sample26)
-				ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-			exped[j$var38] = Math.exp(ut[j$var38]);
+		for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1)
+			state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 		
 		// Reduction of array exped
 		// 
@@ -3119,24 +2850,24 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		double reduceVar$sum$6 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+		for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
 			double k$var49 = reduceVar$sum$6;
 			
 			// Set the right hand term to a value from the array exped
-			double l$var50 = exped[cv$reduction46Index];
+			double l$var50 = state.exped[cv$reduction46Index];
 			
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			reduceVar$sum$6 = (k$var49 + l$var50);
 		}
-		sum = reduceVar$sum$6;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-			expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
-				weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+		state.sum = reduceVar$sum$6;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
+			state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1)
+				state.weekly_ut[((t$var112 - 0) / 1)][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 			
 			// Reduction of array weekly_ut
 			// 
@@ -3146,22 +2877,22 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			double reduceVar$denom$15 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+			for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
 				double k$var135 = reduceVar$denom$15;
 				
 				// Set the right hand term to a value from the array weekly_ut
-				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+				double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 				
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				reduceVar$denom$15 = (k$var135 + l$var136);
 			}
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$15);
-			int[] weekly_sales = Sales[t$var112];
-			DistributionSampling.sampleMultinomial(RNG$, weekly_rates[((t$var112 - 0) / 1)], noProducts, sales_sum[t$var112], weekly_sales);
+			for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
+				state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$15);
+			int[] weekly_sales = state.Sales[t$var112];
+			DistributionSampling.sampleMultinomial(state.RNG$, state.weekly_rates[((t$var112 - 0) / 1)], state.noProducts, state.sales_sum[t$var112], weekly_sales);
 		}
 	}
 
@@ -3169,13 +2900,13 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-			if(!fixedFlag$sample26)
-				ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-			if(!fixedFlag$sample26)
-				exped[j$var38] = Math.exp(ut[j$var38]);
+		for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 		}
 		
 		// Reduction of array exped
@@ -3186,28 +2917,28 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		double reduceVar$sum$7 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+		for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
 			double k$var49 = reduceVar$sum$7;
 			
 			// Set the right hand term to a value from the array exped
-			double l$var50 = exped[cv$reduction46Index];
+			double l$var50 = state.exped[cv$reduction46Index];
 			
 			// Execute the reduction function, saving the result into the return value.
-			if(!fixedFlag$sample26)
+			if(!state.fixedFlag$sample26)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				reduceVar$sum$7 = (k$var49 + l$var50);
 		}
-		if(!fixedFlag$sample26)
-			sum = reduceVar$sum$7;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-			if(!fixedFlag$sample26)
-				expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+		if(!state.fixedFlag$sample26)
+			state.sum = reduceVar$sum$7;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
 		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1) {
-				if(!fixedFlag$sample26)
-					weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1) {
+				if(!state.fixedFlag$sample26)
+					state.weekly_ut[((t$var112 - 0) / 1)][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 			}
 			
 			// Reduction of array weekly_ut
@@ -3218,21 +2949,21 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			double reduceVar$denom$16 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+			for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
 				double k$var135 = reduceVar$denom$16;
 				
 				// Set the right hand term to a value from the array weekly_ut
-				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+				double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 				
 				// Execute the reduction function, saving the result into the return value.
-				if(!fixedFlag$sample26)
+				if(!state.fixedFlag$sample26)
 					// Copy the result of the reduction into the variable returned by the reduction.
 					reduceVar$denom$16 = (k$var135 + l$var136);
 			}
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-				if(!fixedFlag$sample26)
-					weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$16);
+			for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
+				if(!state.fixedFlag$sample26)
+					state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$16);
 			}
 		}
 	}
@@ -3242,12 +2973,12 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-			if(!fixedFlag$sample26)
-				ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-			exped[j$var38] = Math.exp(ut[j$var38]);
+		for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1)
+			state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 		
 		// Reduction of array exped
 		// 
@@ -3257,24 +2988,24 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		double reduceVar$sum$8 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+		for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
 			double k$var49 = reduceVar$sum$8;
 			
 			// Set the right hand term to a value from the array exped
-			double l$var50 = exped[cv$reduction46Index];
+			double l$var50 = state.exped[cv$reduction46Index];
 			
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			reduceVar$sum$8 = (k$var49 + l$var50);
 		}
-		sum = reduceVar$sum$8;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-			expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
-				weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+		state.sum = reduceVar$sum$8;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
+			state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1)
+				state.weekly_ut[((t$var112 - 0) / 1)][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 			
 			// Reduction of array weekly_ut
 			// 
@@ -3284,20 +3015,20 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			double reduceVar$denom$17 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+			for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
 				double k$var135 = reduceVar$denom$17;
 				
 				// Set the right hand term to a value from the array weekly_ut
-				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+				double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 				
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				reduceVar$denom$17 = (k$var135 + l$var136);
 			}
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$17);
+			for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
+				state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$17);
 		}
 	}
 
@@ -3305,24 +3036,24 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-				if(!fixedFlag$sample26)
+		if(state.system$gibbsForward) {
+			for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
+				if(!state.fixedFlag$sample26)
 					inferSample26(j$var20);
 			}
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			for(int j$var20 = (noProducts - ((((noProducts - 1) - 1) % 1) + 1)); j$var20 >= ((1 - 1) + 1); j$var20 -= 1) {
-				if(!fixedFlag$sample26)
+			for(int j$var20 = (state.noProducts - ((((state.noProducts - 1) - 1) % 1) + 1)); j$var20 >= ((1 - 1) + 1); j$var20 -= 1) {
+				if(!state.fixedFlag$sample26)
 					inferSample26(j$var20);
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-			if(!constrainedFlag$sample26[((j$var20 - 1) / 1)])
+		state.system$gibbsForward = !state.system$gibbsForward;
+		for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
+			if(!state.constrainedFlag$sample26[((j$var20 - 1) / 1)])
 				drawValueSample26(j$var20);
 		}
 	}
@@ -3335,20 +3066,20 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$ut = 0.0;
-		logProbability$exped = 0.0;
-		logProbability$sum = 0.0;
-		logProbability$expedNorm = 0.0;
-		if(!fixedProbFlag$sample26) {
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-				logProbability$sample26[((j$var20 - 1) / 1)] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$ut = 0.0;
+		state.logProbability$exped = 0.0;
+		state.logProbability$sum = 0.0;
+		state.logProbability$expedNorm = 0.0;
+		if(!state.fixedProbFlag$sample26) {
+			for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1)
+				state.logProbability$sample26[((j$var20 - 1) / 1)] = Double.NaN;
 		}
-		logProbability$Sales = 0.0;
-		if(!fixedProbFlag$sample157) {
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				logProbability$sample157[((t$var112 - 0) / 1)] = Double.NaN;
+		state.logProbability$Sales = 0.0;
+		if(!state.fixedProbFlag$sample157) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
+				state.logProbability$sample157[((t$var112 - 0) / 1)] = Double.NaN;
 		}
 	}
 
@@ -3356,8 +3087,8 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	// etc.
 	@Override
 	public final void initializeModel() {
-		ut[0] = 0.0;
-		for(int t$var78 = 0; t$var78 < T; t$var78 += 1) {
+		state.ut[0] = 0.0;
+		for(int t$var78 = 0; t$var78 < state.T; t$var78 += 1) {
 			// Reduction of array week_sales
 			// 
 			// A generated name to prevent name collisions if the reduction is implemented more
@@ -3366,24 +3097,24 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			int reduceVar$var88$0 = 0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction84Index = 0; cv$reduction84Index < ObsSales[t$var78].length; cv$reduction84Index += 1) {
+			for(int cv$reduction84Index = 0; cv$reduction84Index < state.ObsSales[t$var78].length; cv$reduction84Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
 				int k$var85 = reduceVar$var88$0;
 				
 				// Set the right hand term to a value from the array week_sales
-				int l$var86 = ObsSales[t$var78][cv$reduction84Index];
+				int l$var86 = state.ObsSales[t$var78][cv$reduction84Index];
 				
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				reduceVar$var88$0 = (k$var85 + l$var86);
 			}
-			sales_sum[t$var78] = reduceVar$var88$0;
+			state.sales_sum[t$var78] = reduceVar$var88$0;
 		}
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample26$1 = 0; index$constrainedFlag$sample26$1 < constrainedFlag$sample26.length; index$constrainedFlag$sample26$1 += 1)
-			constrainedFlag$sample26[index$constrainedFlag$sample26$1] = true;
+		for(int index$constrainedFlag$sample26$1 = 0; index$constrainedFlag$sample26$1 < state.constrainedFlag$sample26.length; index$constrainedFlag$sample26$1 += 1)
+			state.constrainedFlag$sample26[index$constrainedFlag$sample26$1] = true;
 	}
 
 	// Construct the evidence probabilities.
@@ -3393,7 +3124,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample26)
+		if(state.fixedFlag$sample26)
 			logProbabilityValue$sample26();
 		logProbabilityValue$sample157();
 	}
@@ -3439,8 +3170,8 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	@Override
 	public final void propagateObservedValues() {
 		// Deep copy between arrays
-		int[][] cv$source1 = ObsSales;
-		int[][] cv$target1 = Sales;
+		int[][] cv$source1 = state.ObsSales;
+		int[][] cv$target1 = state.Sales;
 		int cv$length1 = cv$target1.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 			int[] cv$source2 = cv$source1[cv$index1];
@@ -3457,8 +3188,8 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-			exped[j$var38] = Math.exp(ut[j$var38]);
+		for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1)
+			state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 		
 		// Reduction of array exped
 		// 
@@ -3468,24 +3199,24 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		double reduceVar$sum$10 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+		for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
 			double k$var49 = reduceVar$sum$10;
 			
 			// Set the right hand term to a value from the array exped
-			double l$var50 = exped[cv$reduction46Index];
+			double l$var50 = state.exped[cv$reduction46Index];
 			
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			reduceVar$sum$10 = (k$var49 + l$var50);
 		}
-		sum = reduceVar$sum$10;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-			expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
-				weekly_ut[((t$var112 - 0) / 1)][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+		state.sum = reduceVar$sum$10;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
+			state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1)
+				state.weekly_ut[((t$var112 - 0) / 1)][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 			
 			// Reduction of array weekly_ut
 			// 
@@ -3495,20 +3226,20 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			double reduceVar$denom$19 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1) {
+			for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1) {
 				// Set the left hand term of the reduction function to the return variable value.
 				double k$var135 = reduceVar$denom$19;
 				
 				// Set the right hand term to a value from the array weekly_ut
-				double l$var136 = weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
+				double l$var136 = state.weekly_ut[((t$var112 - 0) / 1)][cv$reduction136Index];
 				
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				reduceVar$denom$19 = (k$var135 + l$var136);
 			}
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-				weekly_rates[((t$var112 - 0) / 1)][j$var147] = (weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$19);
+			for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
+				state.weekly_rates[((t$var112 - 0) / 1)][j$var147] = (state.weekly_ut[((t$var112 - 0) / 1)][j$var147] / reduceVar$denom$19);
 		}
 	}
 

@@ -1,116 +1,34 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.Conditional5$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.Conditional5.State;
 import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implements Conditional5$CoreInterface {
-double a;
-	double b;
-	boolean fixedProbFlag$sample13 = false;
-	boolean fixedProbFlag$sample5 = false;
-	boolean fixedProbFlag$sample9 = false;
-	boolean guard;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$a;
-	double logProbability$b;
-	double logProbability$bernoulli;
-	double logProbability$guard;
-	double logProbability$value;
-	boolean observedGuard;
-	double observedValue;
-	boolean system$gibbsForward = true;
-	double value;
+final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	public Conditional5$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	@Override
-	public final double get$a() {
-		return a;
-	}
 
-	@Override
-	public final double get$b() {
-		return b;
-	}
-
-	@Override
-	public final boolean get$guard() {
-		return guard;
-	}
-
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	@Override
-	public final double get$logProbability$a() {
-		return logProbability$a;
-	}
-
-	@Override
-	public final double get$logProbability$b() {
-		return logProbability$b;
-	}
-
-	@Override
-	public final double get$logProbability$bernoulli() {
-		return logProbability$bernoulli;
-	}
-
-	@Override
-	public final double get$logProbability$guard() {
-		return logProbability$guard;
-	}
-
-	@Override
-	public final double get$logProbability$value() {
-		return logProbability$value;
-	}
-
-	@Override
-	public final boolean get$observedGuard() {
-		return observedGuard;
-	}
-
-	@Override
-	public final void set$observedGuard(boolean cv$value, boolean allocated$) {
-		observedGuard = cv$value;
-	}
-
-	@Override
-	public final double get$observedValue() {
-		return observedValue;
-	}
-
-	@Override
-	public final void set$observedValue(double cv$value, boolean allocated$) {
-		observedValue = cv$value;
-	}
-
-	@Override
-	public final double get$value() {
-		return value;
+	public Conditional5$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	private final void logProbabilityValue$sample13() {
-		if(!fixedProbFlag$sample13) {
+		if(!state.fixedProbFlag$sample13) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
 				{
-					double cv$sampleValue = b;
+					double cv$sampleValue = state.b;
 					{
 						{
 							double var10 = 0.0;
@@ -136,52 +54,52 @@ double a;
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$b = cv$sampleProbability;
+			state.logProbability$b = cv$sampleProbability;
 			boolean cv$guard$value = false;
 			{
 				{
-					if(!guard) {
+					if(!state.guard) {
 						if(!cv$guard$value) {
 							cv$guard$value = true;
-							logProbability$value = (logProbability$value + cv$accumulator);
+							state.logProbability$value = (state.logProbability$value + cv$accumulator);
 						}
 					}
 				}
 			}
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample13 = true;
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample13 = true;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$b;
+			double cv$sampleValue = state.logProbability$b;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			boolean cv$guard$value = false;
 			{
 				{
-					if(!guard) {
+					if(!state.guard) {
 						if(!cv$guard$value) {
 							cv$guard$value = true;
-							logProbability$value = (logProbability$value + cv$accumulator);
+							state.logProbability$value = (state.logProbability$value + cv$accumulator);
 						}
 					}
 				}
 			}
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	private final void logProbabilityValue$sample5() {
-		if(!fixedProbFlag$sample5) {
+		if(!state.fixedProbFlag$sample5) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
 				{
-					boolean cv$sampleValue = guard;
+					boolean cv$sampleValue = state.guard;
 					{
 						{
 							double var3 = 0.5;
@@ -206,32 +124,32 @@ double a;
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$bernoulli = cv$sampleAccumulator;
-			logProbability$guard = cv$sampleProbability;
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample5 = true;
+			state.logProbability$bernoulli = cv$sampleAccumulator;
+			state.logProbability$guard = cv$sampleProbability;
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample5 = true;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$guard;
+			double cv$sampleValue = state.logProbability$guard;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$bernoulli = cv$rvAccumulator;
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$bernoulli = cv$rvAccumulator;
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	private final void logProbabilityValue$sample9() {
-		if(!fixedProbFlag$sample9) {
+		if(!state.fixedProbFlag$sample9) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
 				{
-					double cv$sampleValue = a;
+					double cv$sampleValue = state.a;
 					{
 						{
 							double var6 = 0.0;
@@ -257,58 +175,52 @@ double a;
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$a = cv$sampleProbability;
+			state.logProbability$a = cv$sampleProbability;
 			boolean cv$guard$value = false;
 			{
 				{
-					if(guard) {
+					if(state.guard) {
 						if(!cv$guard$value) {
 							cv$guard$value = true;
-							logProbability$value = (logProbability$value + cv$accumulator);
+							state.logProbability$value = (state.logProbability$value + cv$accumulator);
 						}
 					}
 				}
 			}
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample9 = true;
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample9 = true;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$a;
+			double cv$sampleValue = state.logProbability$a;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			boolean cv$guard$value = false;
 			{
 				{
-					if(guard) {
+					if(state.guard) {
 						if(!cv$guard$value) {
 							cv$guard$value = true;
-							logProbability$value = (logProbability$value + cv$accumulator);
+							state.logProbability$value = (state.logProbability$value + cv$accumulator);
 						}
 					}
 				}
 			}
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	@Override
-	public final void allocate() {}
-
-	@Override
-	public final void allocateScratch() {}
-
-	@Override
 	public final void forwardGeneration() {
-		guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		a = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
-		b = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
-		if(guard)
-			value = a;
+		state.guard = DistributionSampling.sampleBernoulli(state.RNG$, 0.5);
+		state.a = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$)));
+		state.b = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$)));
+		if(state.guard)
+			state.value = state.a;
 		else
-			value = b;
+			state.value = state.b;
 	}
 
 	@Override
@@ -316,13 +228,13 @@ double a;
 
 	@Override
 	public final void forwardGenerationPrime() {
-		guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		a = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
-		b = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$)));
-		if(guard)
-			value = a;
+		state.guard = DistributionSampling.sampleBernoulli(state.RNG$, 0.5);
+		state.a = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$)));
+		state.b = (0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$)));
+		if(state.guard)
+			state.value = state.a;
 		else
-			value = b;
+			state.value = state.b;
 	}
 
 	@Override
@@ -333,20 +245,20 @@ double a;
 
 	@Override
 	public final void gibbsRound() {
-		system$gibbsForward = !system$gibbsForward;
+		state.system$gibbsForward = !state.system$gibbsForward;
 	}
 
 	private final void initializeLogProbabilityFields() {
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$bernoulli = 0.0;
-		if(!fixedProbFlag$sample5)
-			logProbability$guard = Double.NaN;
-		logProbability$value = 0.0;
-		if(!fixedProbFlag$sample9)
-			logProbability$a = Double.NaN;
-		if(!fixedProbFlag$sample13)
-			logProbability$b = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$bernoulli = 0.0;
+		if(!state.fixedProbFlag$sample5)
+			state.logProbability$guard = Double.NaN;
+		state.logProbability$value = 0.0;
+		if(!state.fixedProbFlag$sample9)
+			state.logProbability$a = Double.NaN;
+		if(!state.fixedProbFlag$sample13)
+			state.logProbability$b = Double.NaN;
 	}
 
 	@Override
@@ -378,15 +290,15 @@ double a;
 
 	@Override
 	public final void propagateObservedValues() {
-		guard = observedGuard;
-		value = observedValue;
+		state.guard = state.observedGuard;
+		state.value = state.observedValue;
 		{
 			{
-				if(guard) {
+				if(state.guard) {
 					{
 						{
-							if(guard)
-								a = observedValue;
+							if(state.guard)
+								state.a = state.observedValue;
 						}
 					}
 				}
@@ -394,11 +306,11 @@ double a;
 		}
 		{
 			{
-				if(!guard) {
+				if(!state.guard) {
 					{
 						{
-							if(!guard)
-								b = observedValue;
+							if(!state.guard)
+								state.b = state.observedValue;
 						}
 					}
 				}

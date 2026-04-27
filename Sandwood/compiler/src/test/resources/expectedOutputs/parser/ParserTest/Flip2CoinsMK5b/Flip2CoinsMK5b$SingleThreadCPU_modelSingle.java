@@ -1,153 +1,32 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.Flip2CoinsMK5b$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.Flip2CoinsMK5b.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU implements Flip2CoinsMK5b$CoreInterface {
+final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double[] bias;
-	int coins;
-	boolean[] constrainedFlag$sample18;
-	boolean fixedFlag$sample18 = false;
-	boolean fixedProbFlag$sample18 = false;
-	boolean fixedProbFlag$sample47 = false;
-	boolean[][] flips;
-	boolean[][] flipsMeasured;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$bernoulli;
-	double logProbability$bias;
-	double logProbability$flips;
-	double logProbability$var18;
-	double logProbability$var47;
-	int[] shape;
-	boolean system$gibbsForward = true;
-
-	public Flip2CoinsMK5b$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	// Getter for bias.
-	@Override
-	public final double[] get$bias() {
-		return bias;
-	}
 
-	// Setter for bias.
-	@Override
-	public final void set$bias(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of bias including if probabilities need to be
-		// updated.
-		bias = cv$value;
-		
-		// Unset the fixed probability flag for sample 18 as it depends on bias.
-		fixedProbFlag$sample18 = false;
-		
-		// Unset the fixed probability flag for sample 47 as it depends on bias.
-		fixedProbFlag$sample47 = false;
-	}
-
-	// Getter for coins.
-	@Override
-	public final int get$coins() {
-		return coins;
-	}
-
-	// Getter for fixedFlag$sample18.
-	@Override
-	public final boolean get$fixedFlag$sample18() {
-		return fixedFlag$sample18;
-	}
-
-	// Setter for fixedFlag$sample18.
-	@Override
-	public final void set$fixedFlag$sample18(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample18 including if probabilities
-		// need to be updated.
-		fixedFlag$sample18 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample18$1 = 0; index$constrainedFlag$sample18$1 < constrainedFlag$sample18.length; index$constrainedFlag$sample18$1 += 1)
-				constrainedFlag$sample18[index$constrainedFlag$sample18$1] = true;
-		}
-		
-		// Should the probability of sample 18 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample18 = (fixedFlag$sample18 && fixedProbFlag$sample18);
-		
-		// Should the probability of sample 47 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample47 = (fixedFlag$sample18 && fixedProbFlag$sample47);
-	}
-
-	// Getter for flips.
-	@Override
-	public final boolean[][] get$flips() {
-		return flips;
-	}
-
-	// Getter for flipsMeasured.
-	@Override
-	public final boolean[][] get$flipsMeasured() {
-		return flipsMeasured;
-	}
-
-	// Setter for flipsMeasured.
-	@Override
-	public final void set$flipsMeasured(boolean[][] cv$value, boolean allocated$) {
-		flipsMeasured = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$bernoulli.
-	@Override
-	public final double get$logProbability$bernoulli() {
-		return logProbability$bernoulli;
-	}
-
-	// Getter for logProbability$bias.
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	// Getter for logProbability$flips.
-	@Override
-	public final double get$logProbability$flips() {
-		return logProbability$flips;
-	}
-
-	// Getter for shape.
-	@Override
-	public final int[] get$shape() {
-		return shape;
-	}
-
-	// Setter for shape.
-	@Override
-	public final void set$shape(int[] cv$value, boolean allocated$) {
-		shape = cv$value;
+	public Flip2CoinsMK5b$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample18
 	private final void drawValueSample18(int i) {
-		bias[i] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		state.bias[i] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -155,7 +34,7 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 	// conjugate prior.
 	private final void inferSample18(int i) {
 		if(true) {
-			constrainedFlag$sample18[((i - 0) / 1)] = false;
+			state.constrainedFlag$sample18[((i - 0) / 1)] = false;
 			
 			// Local variable to record the number of true samples.
 			int cv$sum = 0;
@@ -168,17 +47,17 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 					// Looking for a path between Sample 18 and consumer Bernoulli 36.
 					{
 						{
-							for(int j = 0; j < coins; j += 1) {
-								if((i == (coins - (j + 1)))) {
+							for(int j = 0; j < state.coins; j += 1) {
+								if((i == (state.coins - (j + 1)))) {
 									// Processing sample task 47 of consumer random variable bernoulli.
 									{
 										{
-											for(int var46 = 0; var46 < shape[j]; var46 += 1) {
+											for(int var46 = 0; var46 < state.shape[j]; var46 += 1) {
 												// Flag recording if this sample task of the consuming random variable is constrained.
 												boolean cv$sampleConstrained = true;
 												if(cv$sampleConstrained) {
 													// Mark that the sample has observed constrained data.
-													constrainedFlag$sample18[((i - 0) / 1)] = true;
+													state.constrainedFlag$sample18[((i - 0) / 1)] = true;
 													{
 														{
 															{
@@ -189,7 +68,7 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 																		cv$count = (cv$count + 1);
 																		
 																		// If the sample value was positive increase the count
-																		if(flips[j][var46])
+																		if(state.flips[j][var46])
 																			cv$sum = (cv$sum + 1);
 																	}
 																}
@@ -206,16 +85,16 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 					}
 				}
 			}
-			if(constrainedFlag$sample18[((i - 0) / 1)]) {
+			if(state.constrainedFlag$sample18[((i - 0) / 1)]) {
 				// Write out the value of the sample to a temporary variable prior to updating the
 				// intermediate variables.
-				double var18 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+				double var18 = Conjugates.sampleConjugateBetaBinomial(state.RNG$, 1.0, 1.0, cv$sum, cv$count);
 				
 				// Guards to ensure that bias is only updated when there is a valid path.
 				{
 					{
 						{
-							bias[i] = var18;
+							state.bias[i] = var18;
 						}
 					}
 				}
@@ -228,7 +107,7 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 	private final void logProbabilityValue$sample18() {
 		// Determine if we need to calculate the values for sample task 18 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample18) {
+		if(!state.fixedProbFlag$sample18) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -238,7 +117,7 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < coins; i += 1) {
+			for(int i = 0; i < state.coins; i += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -247,7 +126,7 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 				{
 					{
 						// The sample value to calculate the probability of generating
-						double cv$sampleValue = bias[i];
+						double cv$sampleValue = state.bias[i];
 						{
 							{
 								double var15 = 1.0;
@@ -296,22 +175,22 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var18 = cv$accumulator;
+				state.logProbability$var18 = cv$accumulator;
 			
 			// Update the variable probability
-			logProbability$bias = (logProbability$bias + cv$accumulator);
+			state.logProbability$bias = (state.logProbability$bias + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample18)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample18)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample18 = fixedFlag$sample18;
+			state.fixedProbFlag$sample18 = state.fixedFlag$sample18;
 		} else {
 			// Using cached values.
 			// 
@@ -322,23 +201,23 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < coins; i += 1)
+			for(int i = 0; i < state.coins; i += 1)
 				// Record that the sample was reached.
 				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var18;
+			double cv$sampleValue = state.logProbability$var18;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$bias = (logProbability$bias + cv$accumulator);
+			state.logProbability$bias = (state.logProbability$bias + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample18)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample18)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -347,7 +226,7 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 	private final void logProbabilityValue$sample47() {
 		// Determine if we need to calculate the values for sample task 47 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample47) {
+		if(!state.fixedProbFlag$sample47) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -357,8 +236,8 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int j = 0; j < coins; j += 1) {
-				for(int var46 = 0; var46 < shape[j]; var46 += 1) {
+			for(int j = 0; j < state.coins; j += 1) {
+				for(int var46 = 0; var46 < state.shape[j]; var46 += 1) {
 					// An accumulator for log probabilities.
 					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 					
@@ -367,10 +246,10 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 					{
 						{
 							// The sample value to calculate the probability of generating
-							boolean cv$sampleValue = flips[j][var46];
+							boolean cv$sampleValue = state.flips[j][var46];
 							{
 								{
-									double var35 = bias[(coins - (j + 1))];
+									double var35 = state.bias[(state.coins - (j + 1))];
 									
 									// Store the value of the function call, so the function call is only made once.
 									double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var35) && (var35 <= 1.0))?Math.log((cv$sampleValue?var35:(1.0 - var35))):Double.NEGATIVE_INFINITY));
@@ -412,24 +291,24 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			if(cv$sampleReached)
-				logProbability$bernoulli = cv$sampleAccumulator;
+				state.logProbability$bernoulli = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var47 = cv$accumulator;
+				state.logProbability$var47 = cv$accumulator;
 			
 			// Update the variable probability
-			logProbability$flips = (logProbability$flips + cv$accumulator);
+			state.logProbability$flips = (state.logProbability$flips + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample47 = fixedFlag$sample18;
+			state.fixedProbFlag$sample47 = state.fixedFlag$sample18;
 		} else {
 			// Using cached values.
 			// 
@@ -440,67 +319,37 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int j = 0; j < coins; j += 1) {
-				for(int var46 = 0; var46 < shape[j]; var46 += 1)
+			for(int j = 0; j < state.coins; j += 1) {
+				for(int var46 = 0; var46 < state.shape[j]; var46 += 1)
 					// Record that the sample was reached.
 					cv$sampleReached = true;
 			}
-			double cv$sampleValue = logProbability$var47;
+			double cv$sampleValue = state.logProbability$var47;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			if(cv$sampleReached)
-				logProbability$bernoulli = cv$rvAccumulator;
+				state.logProbability$bernoulli = cv$rvAccumulator;
 			
 			// Update the variable probability
-			logProbability$flips = (logProbability$flips + cv$accumulator);
+			state.logProbability$flips = (state.logProbability$flips + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// If bias has not been set already allocate space.
-		if(!fixedFlag$sample18) {
-			// Constructor for bias
-			{
-				bias = new double[shape.length];
-			}
-		}
-		
-		// Constructor for flips
-		{
-			flips = new boolean[shape.length][];
-			for(int j = 0; j < shape.length; j += 1)
-				flips[j] = new boolean[shape[j]];
-		}
-		
-		// Constructor for constrainedFlag$sample18
-		{
-			constrainedFlag$sample18 = new boolean[((((shape.length - 1) - 0) / 1) + 1)];
-		}
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		for(int i = 0; i < coins; i += 1) {
-			if(!fixedFlag$sample18)
-				bias[i] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		for(int i = 0; i < state.coins; i += 1) {
+			if(!state.fixedFlag$sample18)
+				state.bias[i] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 		}
-		for(int j = 0; j < coins; j += 1) {
-			boolean[] var37 = flips[j];
-			for(int var46 = 0; var46 < shape[j]; var46 += 1)
-				var37[var46] = DistributionSampling.sampleBernoulli(RNG$, bias[(coins - (j + 1))]);
+		for(int j = 0; j < state.coins; j += 1) {
+			boolean[] var37 = state.flips[j];
+			for(int var46 = 0; var46 < state.shape[j]; var46 += 1)
+				var37[var46] = DistributionSampling.sampleBernoulli(state.RNG$, state.bias[(state.coins - (j + 1))]);
 		}
 	}
 
@@ -509,9 +358,9 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		for(int i = 0; i < coins; i += 1) {
-			if(!fixedFlag$sample18)
-				bias[i] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		for(int i = 0; i < state.coins; i += 1) {
+			if(!state.fixedFlag$sample18)
+				state.bias[i] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 		}
 	}
 
@@ -519,14 +368,14 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		for(int i = 0; i < coins; i += 1) {
-			if(!fixedFlag$sample18)
-				bias[i] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		for(int i = 0; i < state.coins; i += 1) {
+			if(!state.fixedFlag$sample18)
+				state.bias[i] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 		}
-		for(int j = 0; j < coins; j += 1) {
-			boolean[] var37 = flips[j];
-			for(int var46 = 0; var46 < shape[j]; var46 += 1)
-				var37[var46] = DistributionSampling.sampleBernoulli(RNG$, bias[(coins - (j + 1))]);
+		for(int j = 0; j < state.coins; j += 1) {
+			boolean[] var37 = state.flips[j];
+			for(int var46 = 0; var46 < state.shape[j]; var46 += 1)
+				var37[var46] = DistributionSampling.sampleBernoulli(state.RNG$, state.bias[(state.coins - (j + 1))]);
 		}
 	}
 
@@ -534,9 +383,9 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		for(int i = 0; i < coins; i += 1) {
-			if(!fixedFlag$sample18)
-				bias[i] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		for(int i = 0; i < state.coins; i += 1) {
+			if(!state.fixedFlag$sample18)
+				state.bias[i] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 		}
 	}
 
@@ -545,9 +394,9 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		for(int i = 0; i < coins; i += 1) {
-			if(!fixedFlag$sample18)
-				bias[i] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		for(int i = 0; i < state.coins; i += 1) {
+			if(!state.fixedFlag$sample18)
+				state.bias[i] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 		}
 	}
 
@@ -555,24 +404,24 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			for(int i = 0; i < coins; i += 1) {
-				if(!fixedFlag$sample18)
+		if(state.system$gibbsForward) {
+			for(int i = 0; i < state.coins; i += 1) {
+				if(!state.fixedFlag$sample18)
 					inferSample18(i);
 			}
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			for(int i = (coins - ((((coins - 1) - 0) % 1) + 1)); i >= ((0 - 1) + 1); i -= 1) {
-				if(!fixedFlag$sample18)
+			for(int i = (state.coins - ((((state.coins - 1) - 0) % 1) + 1)); i >= ((0 - 1) + 1); i -= 1) {
+				if(!state.fixedFlag$sample18)
 					inferSample18(i);
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		for(int i = 0; i < coins; i += 1) {
-			if(!constrainedFlag$sample18[((i - 0) / 1)])
+		state.system$gibbsForward = !state.system$gibbsForward;
+		for(int i = 0; i < state.coins; i += 1) {
+			if(!state.constrainedFlag$sample18[((i - 0) / 1)])
 				drawValueSample18(i);
 		}
 	}
@@ -585,26 +434,26 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample18)
-			logProbability$var18 = Double.NaN;
-		logProbability$bernoulli = Double.NaN;
-		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample47)
-			logProbability$var47 = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$bias = 0.0;
+		if(!state.fixedProbFlag$sample18)
+			state.logProbability$var18 = Double.NaN;
+		state.logProbability$bernoulli = Double.NaN;
+		state.logProbability$flips = 0.0;
+		if(!state.fixedProbFlag$sample47)
+			state.logProbability$var47 = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		coins = shape.length;
+		state.coins = state.shape.length;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample18$1 = 0; index$constrainedFlag$sample18$1 < constrainedFlag$sample18.length; index$constrainedFlag$sample18$1 += 1)
-			constrainedFlag$sample18[index$constrainedFlag$sample18$1] = true;
+		for(int index$constrainedFlag$sample18$1 = 0; index$constrainedFlag$sample18$1 < state.constrainedFlag$sample18.length; index$constrainedFlag$sample18$1 += 1)
+			state.constrainedFlag$sample18[index$constrainedFlag$sample18$1] = true;
 	}
 
 	// Construct the evidence probabilities.
@@ -614,7 +463,7 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample18)
+		if(state.fixedFlag$sample18)
 			logProbabilityValue$sample18();
 		logProbabilityValue$sample47();
 	}
@@ -660,8 +509,8 @@ final class Flip2CoinsMK5b$SingleThreadCPU extends CoreModelSingleThreadCPU impl
 	@Override
 	public final void propagateObservedValues() {
 		// Deep copy between arrays
-		boolean[][] cv$source1 = flipsMeasured;
-		boolean[][] cv$target1 = flips;
+		boolean[][] cv$source1 = state.flipsMeasured;
+		boolean[][] cv$target1 = state.flips;
 		int cv$length1 = cv$target1.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 			boolean[] cv$source2 = cv$source1[cv$index1];

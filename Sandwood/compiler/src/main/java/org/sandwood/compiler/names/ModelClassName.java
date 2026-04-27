@@ -32,10 +32,6 @@ public class ModelClassName extends ClassName {
         return new ClassName(name + prefix + target, true);
     }
 
-    public ClassName interfaceName() {
-        return new ClassName(name + prefix + "CoreInterface", true);
-    }
-
     public Set<ClassName> helperClassNames() {
         Set<ClassName> classNames = new HashSet<>();
         for(String helperClass:helperClasses)

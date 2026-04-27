@@ -1,203 +1,32 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.ReductionTest1$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.ReductionTest1.State;
 import org.sandwood.random.internal.Rng;
 import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implements ReductionTest1$CoreInterface {
+final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	int[][] ObsArr;
-	int T;
-	double[][] TimeFeat;
-	int[][] arr;
-	boolean[][] constrainedFlag$sample101;
-	boolean fixedFlag$sample101 = false;
-	boolean fixedProbFlag$sample101 = false;
-	boolean fixedProbFlag$sample165 = false;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$arr;
-	double[][] logProbability$sample101;
-	double logProbability$sum_t;
-	double logProbability$time_coeff;
-	double logProbability$time_impact;
-	double logProbability$var158;
-	int n_ac;
-	double[][] sum_t;
-	boolean system$gibbsForward = true;
-	double[][] time_coeff;
-	int time_dim;
-	double[][][] time_impact;
-
-	public ReductionTest1$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	// Getter for ObsArr.
-	@Override
-	public final int[][] get$ObsArr() {
-		return ObsArr;
-	}
 
-	// Setter for ObsArr.
-	@Override
-	public final void set$ObsArr(int[][] cv$value, boolean allocated$) {
-		ObsArr = cv$value;
-	}
-
-	// Getter for T.
-	@Override
-	public final int get$T() {
-		return T;
-	}
-
-	// Setter for T.
-	@Override
-	public final void set$T(int cv$value, boolean allocated$) {
-		T = cv$value;
-	}
-
-	// Getter for TimeFeat.
-	@Override
-	public final double[][] get$TimeFeat() {
-		return TimeFeat;
-	}
-
-	// Setter for TimeFeat.
-	@Override
-	public final void set$TimeFeat(double[][] cv$value, boolean allocated$) {
-		TimeFeat = cv$value;
-	}
-
-	// Getter for arr.
-	@Override
-	public final int[][] get$arr() {
-		return arr;
-	}
-
-	// Getter for fixedFlag$sample101.
-	@Override
-	public final boolean get$fixedFlag$sample101() {
-		return fixedFlag$sample101;
-	}
-
-	// Setter for fixedFlag$sample101.
-	@Override
-	public final void set$fixedFlag$sample101(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample101 including if probabilities
-		// need to be updated.
-		fixedFlag$sample101 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample101$1 = 0; index$constrainedFlag$sample101$1 < constrainedFlag$sample101.length; index$constrainedFlag$sample101$1 += 1) {
-				boolean[] cv$constrainedFlag$sample101$1 = constrainedFlag$sample101[index$constrainedFlag$sample101$1];
-				for(int index$constrainedFlag$sample101$2 = 0; index$constrainedFlag$sample101$2 < cv$constrainedFlag$sample101$1.length; index$constrainedFlag$sample101$2 += 1)
-					cv$constrainedFlag$sample101$1[index$constrainedFlag$sample101$2] = true;
-			}
-		}
-		
-		// Should the probability of sample 101 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample101 = (fixedFlag$sample101 && fixedProbFlag$sample101);
-		
-		// Should the probability of sample 165 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample165 = (fixedFlag$sample101 && fixedProbFlag$sample165);
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$arr.
-	@Override
-	public final double get$logProbability$arr() {
-		return logProbability$arr;
-	}
-
-	// Getter for logProbability$sum_t.
-	@Override
-	public final double get$logProbability$sum_t() {
-		return logProbability$sum_t;
-	}
-
-	// Getter for logProbability$time_coeff.
-	@Override
-	public final double get$logProbability$time_coeff() {
-		return logProbability$time_coeff;
-	}
-
-	// Getter for logProbability$time_impact.
-	@Override
-	public final double get$logProbability$time_impact() {
-		return logProbability$time_impact;
-	}
-
-	// Getter for n_ac.
-	@Override
-	public final int get$n_ac() {
-		return n_ac;
-	}
-
-	// Setter for n_ac.
-	@Override
-	public final void set$n_ac(int cv$value, boolean allocated$) {
-		n_ac = cv$value;
-	}
-
-	// Getter for sum_t.
-	@Override
-	public final double[][] get$sum_t() {
-		return sum_t;
-	}
-
-	// Getter for time_coeff.
-	@Override
-	public final double[][] get$time_coeff() {
-		return time_coeff;
-	}
-
-	// Setter for time_coeff.
-	@Override
-	public final void set$time_coeff(double[][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of time_coeff including if probabilities need
-		// to be updated.
-		time_coeff = cv$value;
-		
-		// Unset the fixed probability flag for sample 101 as it depends on time_coeff.
-		fixedProbFlag$sample101 = false;
-		
-		// Unset the fixed probability flag for sample 165 as it depends on time_coeff.
-		fixedProbFlag$sample165 = false;
-	}
-
-	// Getter for time_dim.
-	@Override
-	public final int get$time_dim() {
-		return time_dim;
-	}
-
-	// Getter for time_impact.
-	@Override
-	public final double[][][] get$time_impact() {
-		return time_impact;
+	public ReductionTest1$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample101
 	private final void drawValueSample101(int i$var80, int var95, int threadID$cv$i$var80, Rng RNG$) {
-		double[] var86 = time_coeff[i$var80];
+		double[] var86 = state.time_coeff[i$var80];
 		var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
 		
 		// Guards to ensure that time_impact is only updated when there is a valid path.
@@ -205,14 +34,14 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 		// Looking for a path between Sample 101 and consumer double[][][] 138.
 		{
 			{
-				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+				for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 					if((i$var80 == i$var119)) {
-						for(int j = 0; j < time_dim; j += 1) {
+						for(int j = 0; j < state.time_dim; j += 1) {
 							if((var95 == j)) {
-								for(int t = (0 + 1); t < T; t += 1) {
-									double[][] var129 = time_impact[t];
+								for(int t = (0 + 1); t < state.T; t += 1) {
+									double[][] var129 = state.time_impact[t];
 									double[] var130 = var129[i$var119];
-									var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+									var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 								}
 							}
 						}
@@ -226,18 +55,18 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 		// Looking for a path between Sample 101 and consumer double[][] 153.
 		{
 			{
-				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+				for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 					if((i$var80 == i$var119)) {
-						for(int j = 0; j < time_dim; j += 1) {
+						for(int j = 0; j < state.time_dim; j += 1) {
 							if((var95 == j)) {
-								for(int t = (0 + 1); t < T; t += 1) {
-									for(int index$t$2_4 = (0 + 1); index$t$2_4 < T; index$t$2_4 += 1) {
+								for(int t = (0 + 1); t < state.T; t += 1) {
+									for(int index$t$2_4 = (0 + 1); index$t$2_4 < state.T; index$t$2_4 += 1) {
 										if((t == index$t$2_4)) {
-											for(int index$i$2_5 = 0; index$i$2_5 < n_ac; index$i$2_5 += 1) {
+											for(int index$i$2_5 = 0; index$i$2_5 < state.n_ac; index$i$2_5 += 1) {
 												if((i$var119 == index$i$2_5)) {
-													if(((0 <= j) && (j < time_dim))) {
+													if(((0 <= j) && (j < state.time_dim))) {
 														{
-															double[] var139 = sum_t[index$t$2_4];
+															double[] var139 = state.sum_t[index$t$2_4];
 															
 															// Reduction of array null
 															// 
@@ -247,12 +76,12 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 															double reduceVar$var151$13 = 0.0;
 															
 															// For each index in the array to be reduced
-															for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+															for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 																// Set the left hand term of the reduction function to the return variable value.
 																double x = reduceVar$var151$13;
 																
 																// Set the right hand term to a value from the array var141
-																double y = time_impact[index$t$2_4][index$i$2_5][cv$reduction152Index];
+																double y = state.time_impact[index$t$2_4][index$i$2_5][cv$reduction152Index];
 																
 																// Execute the reduction function, saving the result into the return value.
 																// 
@@ -279,7 +108,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 	// by sample task 101 drawn from Gaussian 85. Inference was performed using Metropolis-Hastings.
 	private final void inferSample101(int i$var80, int var95, int threadID$cv$i$var80, Rng RNG$) {
 		if(true) {
-			constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = false;
+			state.constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -289,7 +118,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 			}
 			
 			// The original value of the sample
-			double cv$originalValue = time_coeff[i$var80][var95];
+			double cv$originalValue = state.time_coeff[i$var80][var95];
 			
 			// The probability of the random variable generating the originally sampled value
 			double cv$originalProbability = 0.0;
@@ -307,7 +136,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 			// The probability of the random variable generating the new sample value.
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] || (cv$valuePos == 0))) {
 					// Initialize the summed probabilities to 0.
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					
@@ -336,7 +165,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 						{
 							{
 								{
-									double[] var86 = time_coeff[i$var80];
+									double[] var86 = state.time_coeff[i$var80];
 									var86[var95] = cv$currentValue;
 								}
 							}
@@ -347,14 +176,14 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 						// Looking for a path between Sample 101 and consumer double[][][] 138.
 						{
 							{
-								for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+								for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 									if((i$var80 == i$var119)) {
-										for(int j = 0; j < time_dim; j += 1) {
+										for(int j = 0; j < state.time_dim; j += 1) {
 											if((var95 == j)) {
-												for(int t = (0 + 1); t < T; t += 1) {
-													double[][] var129 = time_impact[t];
+												for(int t = (0 + 1); t < state.T; t += 1) {
+													double[][] var129 = state.time_impact[t];
 													double[] var130 = var129[i$var119];
-													var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+													var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 												}
 											}
 										}
@@ -368,18 +197,18 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 						// Looking for a path between Sample 101 and consumer double[][] 153.
 						{
 							{
-								for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+								for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 									if((i$var80 == i$var119)) {
-										for(int j = 0; j < time_dim; j += 1) {
+										for(int j = 0; j < state.time_dim; j += 1) {
 											if((var95 == j)) {
-												for(int t = (0 + 1); t < T; t += 1) {
-													for(int index$t$3_4 = (0 + 1); index$t$3_4 < T; index$t$3_4 += 1) {
+												for(int t = (0 + 1); t < state.T; t += 1) {
+													for(int index$t$3_4 = (0 + 1); index$t$3_4 < state.T; index$t$3_4 += 1) {
 														if((t == index$t$3_4)) {
-															for(int index$i$3_5 = 0; index$i$3_5 < n_ac; index$i$3_5 += 1) {
+															for(int index$i$3_5 = 0; index$i$3_5 < state.n_ac; index$i$3_5 += 1) {
 																if((i$var119 == index$i$3_5)) {
-																	if(((0 <= j) && (j < time_dim))) {
+																	if(((0 <= j) && (j < state.time_dim))) {
 																		{
-																			double[] var139 = sum_t[index$t$3_4];
+																			double[] var139 = state.sum_t[index$t$3_4];
 																			
 																			// Reduction of array null
 																			// 
@@ -389,12 +218,12 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 																			double reduceVar$var151$10 = 0.0;
 																			
 																			// For each index in the array to be reduced
-																			for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+																			for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 																				// Set the left hand term of the reduction function to the return variable value.
 																				double x = reduceVar$var151$10;
 																				
 																				// Set the right hand term to a value from the array var141
-																				double y = time_impact[index$t$3_4][index$i$3_5][cv$reduction152Index];
+																				double y = state.time_impact[index$t$3_4][index$i$3_5][cv$reduction152Index];
 																				
 																				// Execute the reduction function, saving the result into the return value.
 																				// 
@@ -430,18 +259,18 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 							{
 								{
 									double traceTempVariable$var134$4_1 = cv$currentValue;
-									for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+									for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 										if((i$var80 == i$var119)) {
-											for(int j = 0; j < time_dim; j += 1) {
+											for(int j = 0; j < state.time_dim; j += 1) {
 												if((var95 == j)) {
-													for(int t = (0 + 1); t < T; t += 1) {
-														double traceTempVariable$x$4_5 = (TimeFeat[t][j] * traceTempVariable$var134$4_1);
-														for(int index$t$4_6 = (0 + 1); index$t$4_6 < T; index$t$4_6 += 1) {
+													for(int t = (0 + 1); t < state.T; t += 1) {
+														double traceTempVariable$x$4_5 = (state.TimeFeat[t][j] * traceTempVariable$var134$4_1);
+														for(int index$t$4_6 = (0 + 1); index$t$4_6 < state.T; index$t$4_6 += 1) {
 															if((t == index$t$4_6)) {
-																for(int index$i$4_7 = 0; index$i$4_7 < n_ac; index$i$4_7 += 1) {
+																for(int index$i$4_7 = 0; index$i$4_7 < state.n_ac; index$i$4_7 += 1) {
 																	if((i$var119 == index$i$4_7)) {
-																		if(((0 <= j) && (j < time_dim))) {
-																			if((0 < time_dim)) {
+																		if(((0 <= j) && (j < state.time_dim))) {
+																			if((0 < state.time_dim)) {
 																				// Reduction of array null
 																				// 
 																				// A generated name to prevent name collisions if the reduction is implemented more
@@ -455,19 +284,19 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 																					double x = reduceVar$var151$11;
 																					
 																					// Set the right hand term to a value from the array var141
-																					double y = time_impact[index$t$4_6][index$i$4_7][cv$reduction728Index];
+																					double y = state.time_impact[index$t$4_6][index$i$4_7][cv$reduction728Index];
 																					
 																					// Execute the reduction function, saving the result into the return value.
 																					// 
 																					// Copy the result of the reduction into the variable returned by the reduction.
 																					reduceVar$var151$11 = (x + y);
 																				}
-																				for(int cv$reduction728Index = (j + 1); cv$reduction728Index < time_dim; cv$reduction728Index += 1) {
+																				for(int cv$reduction728Index = (j + 1); cv$reduction728Index < state.time_dim; cv$reduction728Index += 1) {
 																					// Set the left hand term of the reduction function to the return variable value.
 																					double x = reduceVar$var151$11;
 																					
 																					// Set the right hand term to a value from the array var141
-																					double y = time_impact[index$t$4_6][index$i$4_7][cv$reduction728Index];
+																					double y = state.time_impact[index$t$4_6][index$i$4_7][cv$reduction728Index];
 																					
 																					// Execute the reduction function, saving the result into the return value.
 																					// 
@@ -480,9 +309,9 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 																				reduceVar$var151$11 = (traceTempVariable$x$4_5 + cv$reduced152);
 																				double traceTempVariable$var151$4_8 = reduceVar$var151$11;
 																				double traceTempVariable$var156$4_9 = traceTempVariable$var151$4_8;
-																				for(int index$t$4_10 = (0 + 1); index$t$4_10 < T; index$t$4_10 += 1) {
+																				for(int index$t$4_10 = (0 + 1); index$t$4_10 < state.T; index$t$4_10 += 1) {
 																					if((index$t$4_6 == index$t$4_10)) {
-																						for(int index$i$4_11 = 0; index$i$4_11 < n_ac; index$i$4_11 += 1) {
+																						for(int index$i$4_11 = 0; index$i$4_11 < state.n_ac; index$i$4_11 += 1) {
 																							if((index$i$4_7 == index$i$4_11)) {
 																								// Processing sample task 165 of consumer random variable null.
 																								{
@@ -491,7 +320,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 																										boolean cv$sampleConstrained = true;
 																										if(cv$sampleConstrained) {
 																											// Mark that the sample has observed constrained data.
-																											constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = true;
+																											state.constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = true;
 																											
 																											// Set an accumulator to sum the probabilities for each possible configuration of
 																											// inputs.
@@ -506,14 +335,14 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 																														{
 																															{
 																																// Record the probability of sample task 165 generating output with current configuration.
-																																if(((Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9)) < cv$accumulatedConsumerProbabilities))
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																if(((Math.log(1.0) + DistributionSampling.logProbabilityPoisson(state.arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9)) < cv$accumulatedConsumerProbabilities))
+																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityPoisson(state.arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																else {
 																																	// If the second value is -infinity.
 																																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9));
+																																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(state.arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9));
 																																	else
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9)));
+																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(state.arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(state.arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9)));
 																																}
 																																
 																																// Recorded the probability of reaching sample task 165 with the current configuration.
@@ -601,7 +430,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 							{
 								{
 									{
-										double[] var86 = time_coeff[i$var80];
+										double[] var86 = state.time_coeff[i$var80];
 										var86[var95] = var96;
 									}
 								}
@@ -612,14 +441,14 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 							// Looking for a path between Sample 101 and consumer double[][][] 138.
 							{
 								{
-									for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+									for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 										if((i$var80 == i$var119)) {
-											for(int j = 0; j < time_dim; j += 1) {
+											for(int j = 0; j < state.time_dim; j += 1) {
 												if((var95 == j)) {
-													for(int t = (0 + 1); t < T; t += 1) {
-														double[][] var129 = time_impact[t];
+													for(int t = (0 + 1); t < state.T; t += 1) {
+														double[][] var129 = state.time_impact[t];
 														double[] var130 = var129[i$var119];
-														var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+														var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 													}
 												}
 											}
@@ -633,18 +462,18 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 							// Looking for a path between Sample 101 and consumer double[][] 153.
 							{
 								{
-									for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+									for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 										if((i$var80 == i$var119)) {
-											for(int j = 0; j < time_dim; j += 1) {
+											for(int j = 0; j < state.time_dim; j += 1) {
 												if((var95 == j)) {
-													for(int t = (0 + 1); t < T; t += 1) {
-														for(int index$t$9_4 = (0 + 1); index$t$9_4 < T; index$t$9_4 += 1) {
+													for(int t = (0 + 1); t < state.T; t += 1) {
+														for(int index$t$9_4 = (0 + 1); index$t$9_4 < state.T; index$t$9_4 += 1) {
 															if((t == index$t$9_4)) {
-																for(int index$i$9_5 = 0; index$i$9_5 < n_ac; index$i$9_5 += 1) {
+																for(int index$i$9_5 = 0; index$i$9_5 < state.n_ac; index$i$9_5 += 1) {
 																	if((i$var119 == index$i$9_5)) {
-																		if(((0 <= j) && (j < time_dim))) {
+																		if(((0 <= j) && (j < state.time_dim))) {
 																			{
-																				double[] var139 = sum_t[index$t$9_4];
+																				double[] var139 = state.sum_t[index$t$9_4];
 																				
 																				// Reduction of array null
 																				// 
@@ -654,12 +483,12 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 																				double reduceVar$var151$12 = 0.0;
 																				
 																				// For each index in the array to be reduced
-																				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+																				for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 																					// Set the left hand term of the reduction function to the return variable value.
 																					double x = reduceVar$var151$12;
 																					
 																					// Set the right hand term to a value from the array var141
-																					double y = time_impact[index$t$9_4][index$i$9_5][cv$reduction152Index];
+																					double y = state.time_impact[index$t$9_4][index$i$9_5][cv$reduction152Index];
 																					
 																					// Execute the reduction function, saving the result into the return value.
 																					// 
@@ -692,7 +521,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 	private final void logProbabilityValue$sample101() {
 		// Determine if we need to calculate the values for sample task 101 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample101) {
+		if(!state.fixedProbFlag$sample101) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -702,8 +531,8 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-				for(int var95 = 0; var95 < time_dim; var95 += 1) {
+			for(int i$var80 = 0; i$var80 < state.n_ac; i$var80 += 1) {
+				for(int var95 = 0; var95 < state.time_dim; var95 += 1) {
 					// An accumulator for log probabilities.
 					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 					
@@ -712,7 +541,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 					{
 						{
 							// The sample value to calculate the probability of generating
-							double cv$sampleValue = time_coeff[i$var80][var95];
+							double cv$sampleValue = state.time_coeff[i$var80][var95];
 							{
 								{
 									double var83 = 0.0;
@@ -756,7 +585,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 					// erroneously over written.
 					if(cv$sampleReached)
 						// Store the sample task probability
-						logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = cv$sampleProbability;
+						state.logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = cv$sampleProbability;
 					
 					// Guard to ensure that time_impact is only updated once for this probability.
 					boolean cv$guard$time_impact = false;
@@ -770,18 +599,18 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 					// Looking for a path between Sample 101 and consumer double[][][] 138.
 					{
 						{
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+							for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
+									for(int j = 0; j < state.time_dim; j += 1) {
 										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
+											for(int t = (0 + 1); t < state.T; t += 1) {
 												// If the probability of the variable has not already been updated
 												if(!cv$guard$time_impact) {
 													// Set the guard so the update is only applied once.
 													cv$guard$time_impact = true;
 													
 													// Update the variable probability
-													logProbability$time_impact = (logProbability$time_impact + cv$sampleProbability);
+													state.logProbability$time_impact = (state.logProbability$time_impact + cv$sampleProbability);
 												}
 											}
 										}
@@ -794,23 +623,23 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 					// Looking for a path between Sample 101 and consumer double[][] 153.
 					{
 						{
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+							for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
+									for(int j = 0; j < state.time_dim; j += 1) {
 										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												for(int index$t$3_4 = (0 + 1); index$t$3_4 < T; index$t$3_4 += 1) {
+											for(int t = (0 + 1); t < state.T; t += 1) {
+												for(int index$t$3_4 = (0 + 1); index$t$3_4 < state.T; index$t$3_4 += 1) {
 													if((t == index$t$3_4)) {
-														for(int index$i$3_5 = 0; index$i$3_5 < n_ac; index$i$3_5 += 1) {
+														for(int index$i$3_5 = 0; index$i$3_5 < state.n_ac; index$i$3_5 += 1) {
 															if((i$var119 == index$i$3_5)) {
-																if(((0 <= j) && (j < time_dim))) {
+																if(((0 <= j) && (j < state.time_dim))) {
 																	// If the probability of the variable has not already been updated
 																	if(!cv$guard$sum_t) {
 																		// Set the guard so the update is only applied once.
 																		cv$guard$sum_t = true;
 																		
 																		// Update the variable probability
-																		logProbability$sum_t = (logProbability$sum_t + cv$sampleProbability);
+																		state.logProbability$sum_t = (state.logProbability$sum_t + cv$sampleProbability);
 																	}
 																}
 															}
@@ -832,19 +661,19 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Update the variable probability
-			logProbability$time_coeff = (logProbability$time_coeff + cv$accumulator);
+			state.logProbability$time_coeff = (state.logProbability$time_coeff + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample101)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample101)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample101 = fixedFlag$sample101;
+			state.fixedProbFlag$sample101 = state.fixedFlag$sample101;
 		} else {
 			// Using cached values.
 			// 
@@ -855,9 +684,9 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-				for(int var95 = 0; var95 < time_dim; var95 += 1) {
-					double cv$sampleValue = logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)];
+			for(int i$var80 = 0; i$var80 < state.n_ac; i$var80 += 1) {
+				for(int var95 = 0; var95 < state.time_dim; var95 += 1) {
+					double cv$sampleValue = state.logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)];
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					
 					// Record that the sample was reached.
@@ -875,18 +704,18 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 					// Looking for a path between Sample 101 and consumer double[][][] 138.
 					{
 						{
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+							for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
+									for(int j = 0; j < state.time_dim; j += 1) {
 										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
+											for(int t = (0 + 1); t < state.T; t += 1) {
 												// If the probability of the variable has not already been updated
 												if(!cv$guard$time_impact) {
 													// Set the guard so the update is only applied once.
 													cv$guard$time_impact = true;
 													
 													// Update the variable probability
-													logProbability$time_impact = (logProbability$time_impact + cv$sampleValue);
+													state.logProbability$time_impact = (state.logProbability$time_impact + cv$sampleValue);
 												}
 											}
 										}
@@ -899,23 +728,23 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 					// Looking for a path between Sample 101 and consumer double[][] 153.
 					{
 						{
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+							for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
+									for(int j = 0; j < state.time_dim; j += 1) {
 										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												for(int index$t$5_4 = (0 + 1); index$t$5_4 < T; index$t$5_4 += 1) {
+											for(int t = (0 + 1); t < state.T; t += 1) {
+												for(int index$t$5_4 = (0 + 1); index$t$5_4 < state.T; index$t$5_4 += 1) {
 													if((t == index$t$5_4)) {
-														for(int index$i$5_5 = 0; index$i$5_5 < n_ac; index$i$5_5 += 1) {
+														for(int index$i$5_5 = 0; index$i$5_5 < state.n_ac; index$i$5_5 += 1) {
 															if((i$var119 == index$i$5_5)) {
-																if(((0 <= j) && (j < time_dim))) {
+																if(((0 <= j) && (j < state.time_dim))) {
 																	// If the probability of the variable has not already been updated
 																	if(!cv$guard$sum_t) {
 																		// Set the guard so the update is only applied once.
 																		cv$guard$sum_t = true;
 																		
 																		// Update the variable probability
-																		logProbability$sum_t = (logProbability$sum_t + cv$sampleValue);
+																		state.logProbability$sum_t = (state.logProbability$sum_t + cv$sampleValue);
 																	}
 																}
 															}
@@ -934,15 +763,15 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$time_coeff = (logProbability$time_coeff + cv$accumulator);
+			state.logProbability$time_coeff = (state.logProbability$time_coeff + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample101)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample101)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -951,7 +780,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 	private final void logProbabilityValue$sample165() {
 		// Determine if we need to calculate the values for sample task 165 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample165) {
+		if(!state.fixedProbFlag$sample165) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -961,8 +790,8 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int t = (0 + 1); t < T; t += 1) {
-				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+			for(int t = (0 + 1); t < state.T; t += 1) {
+				for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 					// An accumulator for log probabilities.
 					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 					
@@ -971,10 +800,10 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 					{
 						{
 							// The sample value to calculate the probability of generating
-							int cv$sampleValue = arr[t][i$var119];
+							int cv$sampleValue = state.arr[t][i$var119];
 							{
 								{
-									double var156 = sum_t[t][i$var119];
+									double var156 = state.sum_t[t][i$var119];
 									
 									// Store the value of the function call, so the function call is only made once.
 									double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(cv$sampleValue, var156));
@@ -1020,18 +849,18 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var158 = cv$accumulator;
+				state.logProbability$var158 = cv$accumulator;
 			
 			// Update the variable probability
-			logProbability$arr = (logProbability$arr + cv$accumulator);
+			state.logProbability$arr = (state.logProbability$arr + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample165 = fixedFlag$sample101;
+			state.fixedProbFlag$sample165 = state.fixedFlag$sample101;
 		} else {
 			// Using cached values.
 			// 
@@ -1042,105 +871,44 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int t = (0 + 1); t < T; t += 1) {
-				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1)
+			for(int t = (0 + 1); t < state.T; t += 1) {
+				for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1)
 					// Record that the sample was reached.
 					cv$sampleReached = true;
 			}
-			double cv$sampleValue = logProbability$var158;
+			double cv$sampleValue = state.logProbability$var158;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$arr = (logProbability$arr + cv$accumulator);
+			state.logProbability$arr = (state.logProbability$arr + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// If time_coeff has not been set already allocate space.
-		if(!fixedFlag$sample101) {
-			// Constructor for time_coeff
-			{
-				time_coeff = new double[n_ac][];
-				for(int var18 = 0; var18 < n_ac; var18 += 1)
-					time_coeff[var18] = new double[TimeFeat[0].length];
-				for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
-					time_coeff[i$var80] = new double[TimeFeat[0].length];
-			}
-		}
-		
-		// Constructor for sum_t
-		{
-			sum_t = new double[T][];
-			for(int var31 = 0; var31 < T; var31 += 1)
-				sum_t[var31] = new double[n_ac];
-		}
-		
-		// Constructor for time_impact
-		{
-			time_impact = new double[T][][];
-			for(int var44 = 0; var44 < T; var44 += 1) {
-				double[][] subarray$0 = new double[n_ac][];
-				time_impact[var44] = subarray$0;
-				for(int var54 = 0; var54 < n_ac; var54 += 1)
-					subarray$0[var54] = new double[TimeFeat[0].length];
-			}
-		}
-		
-		// Constructor for arr
-		{
-			arr = new int[T][];
-			for(int var68 = 0; var68 < T; var68 += 1)
-				arr[var68] = new int[n_ac];
-		}
-		
-		// Constructor for constrainedFlag$sample101
-		{
-			constrainedFlag$sample101 = new boolean[((((n_ac - 1) - 0) / 1) + 1)][];
-			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
-				constrainedFlag$sample101[((i$var80 - 0) / 1)] = new boolean[((((TimeFeat[0].length - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample101
-		{
-			logProbability$sample101 = new double[((((n_ac - 1) - 0) / 1) + 1)][];
-			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
-				logProbability$sample101[((i$var80 - 0) / 1)] = new double[((((TimeFeat[0].length - 1) - 0) / 1) + 1)];
-		}
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, n_ac, 1,
+		parallelFor(state.RNG$, 0, state.n_ac, 1,
 			(int forStart$i$var80, int forEnd$i$var80, int threadID$i$var80, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var80 = forStart$i$var80; i$var80 < forEnd$i$var80; i$var80 += 1) {
-						double[] var86 = time_coeff[i$var80];
+						double[] var86 = state.time_coeff[i$var80];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, time_dim, 1,
+						parallelFor(RNG$1, 0, state.time_dim, 1,
 							(int forStart$var95, int forEnd$var95, int threadID$var95, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var95 = forStart$var95; var95 < forEnd$var95; var95 += 1) {
-										if(!fixedFlag$sample101)
+										if(!state.fixedFlag$sample101)
 											var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$2)) + 0.0);
 									}
 							}
@@ -1150,7 +918,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, (0 + 1), T, 1,
+		parallelFor(state.RNG$, (0 + 1), state.T, 1,
 			(int forStart$index$t, int forEnd$index$t, int threadID$index$t, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -1158,12 +926,12 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 					for(int index$t = forStart$index$t; index$t < forEnd$index$t; index$t += 1) {
 						int t = index$t;
 						int threadID$t = threadID$index$t;
-						double[][] var129 = time_impact[t];
-						double[] var139 = sum_t[t];
-						int[] var154 = arr[t];
+						double[][] var129 = state.time_impact[t];
+						double[] var139 = state.sum_t[t];
+						int[] var154 = state.arr[t];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, n_ac, 1,
+						parallelFor(RNG$1, 0, state.n_ac, 1,
 							(int forStart$index$i$var119, int forEnd$index$i$var119, int threadID$index$i$var119, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
@@ -1173,15 +941,15 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 										int threadID$i$var119 = threadID$index$i$var119;
 										
 										//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-										parallelFor(RNG$2, 0, time_dim, 1,
+										parallelFor(RNG$2, 0, state.time_dim, 1,
 											(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$3) -> { 
 												
 													// Inner loop for running batches of iterations, each batch has its own random number
 													// generator.
 													for(int j = forStart$j; j < forEnd$j; j += 1) {
 														double[] var130 = var129[i$var119];
-														if(!fixedFlag$sample101)
-															var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+														if(!state.fixedFlag$sample101)
+															var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 													}
 											}
 										);
@@ -1194,21 +962,21 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 										double reduceVar$var151$14 = 0.0;
 										
 										// For each index in the array to be reduced
-										for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+										for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 											// Set the left hand term of the reduction function to the return variable value.
 											double x = reduceVar$var151$14;
 											
 											// Set the right hand term to a value from the array var141
-											double y = time_impact[t][i$var119][cv$reduction152Index];
+											double y = state.time_impact[t][i$var119][cv$reduction152Index];
 											
 											// Execute the reduction function, saving the result into the return value.
-											if(!fixedFlag$sample101)
+											if(!state.fixedFlag$sample101)
 												// Copy the result of the reduction into the variable returned by the reduction.
 												reduceVar$var151$14 = (x + y);
 										}
-										if(!fixedFlag$sample101)
+										if(!state.fixedFlag$sample101)
 											var139[i$var119] = reduceVar$var151$14;
-										var154[i$var119] = DistributionSampling.samplePoisson(RNG$2, sum_t[t][i$var119]);
+										var154[i$var119] = DistributionSampling.samplePoisson(RNG$2, state.sum_t[t][i$var119]);
 									}
 							}
 						);
@@ -1223,22 +991,22 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, n_ac, 1,
+		parallelFor(state.RNG$, 0, state.n_ac, 1,
 			(int forStart$i$var80, int forEnd$i$var80, int threadID$i$var80, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var80 = forStart$i$var80; i$var80 < forEnd$i$var80; i$var80 += 1) {
-						double[] var86 = time_coeff[i$var80];
+						double[] var86 = state.time_coeff[i$var80];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, time_dim, 1,
+						parallelFor(RNG$1, 0, state.time_dim, 1,
 							(int forStart$var95, int forEnd$var95, int threadID$var95, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var95 = forStart$var95; var95 < forEnd$var95; var95 += 1) {
-										if(!fixedFlag$sample101)
+										if(!state.fixedFlag$sample101)
 											var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$2)) + 0.0);
 									}
 							}
@@ -1248,7 +1016,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, (0 + 1), T, 1,
+		parallelFor(state.RNG$, (0 + 1), state.T, 1,
 			(int forStart$index$t, int forEnd$index$t, int threadID$index$t, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -1256,11 +1024,11 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 					for(int index$t = forStart$index$t; index$t < forEnd$index$t; index$t += 1) {
 						int t = index$t;
 						int threadID$t = threadID$index$t;
-						double[][] var129 = time_impact[t];
-						double[] var139 = sum_t[t];
+						double[][] var129 = state.time_impact[t];
+						double[] var139 = state.sum_t[t];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, n_ac, 1,
+						parallelFor(RNG$1, 0, state.n_ac, 1,
 							(int forStart$index$i$var119, int forEnd$index$i$var119, int threadID$index$i$var119, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
@@ -1270,14 +1038,14 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 										int threadID$i$var119 = threadID$index$i$var119;
 										
 										//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-										parallelFor(RNG$2, 0, time_dim, 1,
+										parallelFor(RNG$2, 0, state.time_dim, 1,
 											(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$3) -> { 
 												
 													// Inner loop for running batches of iterations, each batch has its own random number
 													// generator.
 													for(int j = forStart$j; j < forEnd$j; j += 1) {
 														double[] var130 = var129[i$var119];
-														var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+														var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 													}
 											}
 										);
@@ -1290,12 +1058,12 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 										double reduceVar$var151$18 = 0.0;
 										
 										// For each index in the array to be reduced
-										for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+										for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 											// Set the left hand term of the reduction function to the return variable value.
 											double x = reduceVar$var151$18;
 											
 											// Set the right hand term to a value from the array var141
-											double y = time_impact[t][i$var119][cv$reduction152Index];
+											double y = state.time_impact[t][i$var119][cv$reduction152Index];
 											
 											// Execute the reduction function, saving the result into the return value.
 											// 
@@ -1316,22 +1084,22 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 	@Override
 	public final void forwardGenerationPrime() {
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, n_ac, 1,
+		parallelFor(state.RNG$, 0, state.n_ac, 1,
 			(int forStart$i$var80, int forEnd$i$var80, int threadID$i$var80, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var80 = forStart$i$var80; i$var80 < forEnd$i$var80; i$var80 += 1) {
-						double[] var86 = time_coeff[i$var80];
+						double[] var86 = state.time_coeff[i$var80];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, time_dim, 1,
+						parallelFor(RNG$1, 0, state.time_dim, 1,
 							(int forStart$var95, int forEnd$var95, int threadID$var95, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var95 = forStart$var95; var95 < forEnd$var95; var95 += 1) {
-										if(!fixedFlag$sample101)
+										if(!state.fixedFlag$sample101)
 											var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$2)) + 0.0);
 									}
 							}
@@ -1341,7 +1109,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, (0 + 1), T, 1,
+		parallelFor(state.RNG$, (0 + 1), state.T, 1,
 			(int forStart$index$t, int forEnd$index$t, int threadID$index$t, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -1349,12 +1117,12 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 					for(int index$t = forStart$index$t; index$t < forEnd$index$t; index$t += 1) {
 						int t = index$t;
 						int threadID$t = threadID$index$t;
-						double[][] var129 = time_impact[t];
-						double[] var139 = sum_t[t];
-						int[] var154 = arr[t];
+						double[][] var129 = state.time_impact[t];
+						double[] var139 = state.sum_t[t];
+						int[] var154 = state.arr[t];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, n_ac, 1,
+						parallelFor(RNG$1, 0, state.n_ac, 1,
 							(int forStart$index$i$var119, int forEnd$index$i$var119, int threadID$index$i$var119, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
@@ -1364,14 +1132,14 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 										int threadID$i$var119 = threadID$index$i$var119;
 										
 										//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-										parallelFor(RNG$2, 0, time_dim, 1,
+										parallelFor(RNG$2, 0, state.time_dim, 1,
 											(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$3) -> { 
 												
 													// Inner loop for running batches of iterations, each batch has its own random number
 													// generator.
 													for(int j = forStart$j; j < forEnd$j; j += 1) {
 														double[] var130 = var129[i$var119];
-														var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+														var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 													}
 											}
 										);
@@ -1384,12 +1152,12 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 										double reduceVar$var151$15 = 0.0;
 										
 										// For each index in the array to be reduced
-										for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+										for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 											// Set the left hand term of the reduction function to the return variable value.
 											double x = reduceVar$var151$15;
 											
 											// Set the right hand term to a value from the array var141
-											double y = time_impact[t][i$var119][cv$reduction152Index];
+											double y = state.time_impact[t][i$var119][cv$reduction152Index];
 											
 											// Execute the reduction function, saving the result into the return value.
 											// 
@@ -1397,7 +1165,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 											reduceVar$var151$15 = (x + y);
 										}
 										var139[i$var119] = reduceVar$var151$15;
-										var154[i$var119] = DistributionSampling.samplePoisson(RNG$2, sum_t[t][i$var119]);
+										var154[i$var119] = DistributionSampling.samplePoisson(RNG$2, state.sum_t[t][i$var119]);
 									}
 							}
 						);
@@ -1411,22 +1179,22 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, n_ac, 1,
+		parallelFor(state.RNG$, 0, state.n_ac, 1,
 			(int forStart$i$var80, int forEnd$i$var80, int threadID$i$var80, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var80 = forStart$i$var80; i$var80 < forEnd$i$var80; i$var80 += 1) {
-						double[] var86 = time_coeff[i$var80];
+						double[] var86 = state.time_coeff[i$var80];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, time_dim, 1,
+						parallelFor(RNG$1, 0, state.time_dim, 1,
 							(int forStart$var95, int forEnd$var95, int threadID$var95, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var95 = forStart$var95; var95 < forEnd$var95; var95 += 1) {
-										if(!fixedFlag$sample101)
+										if(!state.fixedFlag$sample101)
 											var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$2)) + 0.0);
 									}
 							}
@@ -1436,7 +1204,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, (0 + 1), T, 1,
+		parallelFor(state.RNG$, (0 + 1), state.T, 1,
 			(int forStart$index$t, int forEnd$index$t, int threadID$index$t, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -1444,11 +1212,11 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 					for(int index$t = forStart$index$t; index$t < forEnd$index$t; index$t += 1) {
 						int t = index$t;
 						int threadID$t = threadID$index$t;
-						double[][] var129 = time_impact[t];
-						double[] var139 = sum_t[t];
+						double[][] var129 = state.time_impact[t];
+						double[] var139 = state.sum_t[t];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, n_ac, 1,
+						parallelFor(RNG$1, 0, state.n_ac, 1,
 							(int forStart$index$i$var119, int forEnd$index$i$var119, int threadID$index$i$var119, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
@@ -1458,15 +1226,15 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 										int threadID$i$var119 = threadID$index$i$var119;
 										
 										//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-										parallelFor(RNG$2, 0, time_dim, 1,
+										parallelFor(RNG$2, 0, state.time_dim, 1,
 											(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$3) -> { 
 												
 													// Inner loop for running batches of iterations, each batch has its own random number
 													// generator.
 													for(int j = forStart$j; j < forEnd$j; j += 1) {
 														double[] var130 = var129[i$var119];
-														if(!fixedFlag$sample101)
-															var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+														if(!state.fixedFlag$sample101)
+															var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 													}
 											}
 										);
@@ -1479,19 +1247,19 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 										double reduceVar$var151$16 = 0.0;
 										
 										// For each index in the array to be reduced
-										for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+										for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 											// Set the left hand term of the reduction function to the return variable value.
 											double x = reduceVar$var151$16;
 											
 											// Set the right hand term to a value from the array var141
-											double y = time_impact[t][i$var119][cv$reduction152Index];
+											double y = state.time_impact[t][i$var119][cv$reduction152Index];
 											
 											// Execute the reduction function, saving the result into the return value.
-											if(!fixedFlag$sample101)
+											if(!state.fixedFlag$sample101)
 												// Copy the result of the reduction into the variable returned by the reduction.
 												reduceVar$var151$16 = (x + y);
 										}
-										if(!fixedFlag$sample101)
+										if(!state.fixedFlag$sample101)
 											var139[i$var119] = reduceVar$var151$16;
 									}
 							}
@@ -1507,22 +1275,22 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, n_ac, 1,
+		parallelFor(state.RNG$, 0, state.n_ac, 1,
 			(int forStart$i$var80, int forEnd$i$var80, int threadID$i$var80, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var80 = forStart$i$var80; i$var80 < forEnd$i$var80; i$var80 += 1) {
-						double[] var86 = time_coeff[i$var80];
+						double[] var86 = state.time_coeff[i$var80];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, time_dim, 1,
+						parallelFor(RNG$1, 0, state.time_dim, 1,
 							(int forStart$var95, int forEnd$var95, int threadID$var95, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var95 = forStart$var95; var95 < forEnd$var95; var95 += 1) {
-										if(!fixedFlag$sample101)
+										if(!state.fixedFlag$sample101)
 											var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$2)) + 0.0);
 									}
 							}
@@ -1532,7 +1300,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, (0 + 1), T, 1,
+		parallelFor(state.RNG$, (0 + 1), state.T, 1,
 			(int forStart$index$t, int forEnd$index$t, int threadID$index$t, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -1540,11 +1308,11 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 					for(int index$t = forStart$index$t; index$t < forEnd$index$t; index$t += 1) {
 						int t = index$t;
 						int threadID$t = threadID$index$t;
-						double[][] var129 = time_impact[t];
-						double[] var139 = sum_t[t];
+						double[][] var129 = state.time_impact[t];
+						double[] var139 = state.sum_t[t];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, n_ac, 1,
+						parallelFor(RNG$1, 0, state.n_ac, 1,
 							(int forStart$index$i$var119, int forEnd$index$i$var119, int threadID$index$i$var119, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
@@ -1554,14 +1322,14 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 										int threadID$i$var119 = threadID$index$i$var119;
 										
 										//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-										parallelFor(RNG$2, 0, time_dim, 1,
+										parallelFor(RNG$2, 0, state.time_dim, 1,
 											(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$3) -> { 
 												
 													// Inner loop for running batches of iterations, each batch has its own random number
 													// generator.
 													for(int j = forStart$j; j < forEnd$j; j += 1) {
 														double[] var130 = var129[i$var119];
-														var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+														var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 													}
 											}
 										);
@@ -1574,12 +1342,12 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 										double reduceVar$var151$17 = 0.0;
 										
 										// For each index in the array to be reduced
-										for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+										for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 											// Set the left hand term of the reduction function to the return variable value.
 											double x = reduceVar$var151$17;
 											
 											// Set the right hand term to a value from the array var141
-											double y = time_impact[t][i$var119][cv$reduction152Index];
+											double y = state.time_impact[t][i$var119][cv$reduction152Index];
 											
 											// Execute the reduction function, saving the result into the return value.
 											// 
@@ -1599,16 +1367,16 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward)
+		if(state.system$gibbsForward)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, n_ac, 1,
+			parallelFor(state.RNG$, 0, state.n_ac, 1,
 				(int forStart$i$var80, int forEnd$i$var80, int threadID$i$var80, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int i$var80 = forStart$i$var80; i$var80 < forEnd$i$var80; i$var80 += 1) {
-							for(int var95 = 0; var95 < time_dim; var95 += 1) {
-								if(!fixedFlag$sample101)
+							for(int var95 = 0; var95 < state.time_dim; var95 += 1) {
+								if(!state.fixedFlag$sample101)
 									inferSample101(i$var80, var95, threadID$i$var80, RNG$1);
 							}
 						}
@@ -1617,14 +1385,14 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 		// Infer the samples in reverse chronological order.
 		else
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, n_ac, 1,
+			parallelFor(state.RNG$, 0, state.n_ac, 1,
 				(int forStart$i$var80, int forEnd$i$var80, int threadID$i$var80, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int i$var80 = forStart$i$var80; i$var80 < forEnd$i$var80; i$var80 += 1) {
-							for(int var95 = (time_dim - ((((time_dim - 1) - 0) % 1) + 1)); var95 >= ((0 - 1) + 1); var95 -= 1) {
-								if(!fixedFlag$sample101)
+							for(int var95 = (state.time_dim - ((((state.time_dim - 1) - 0) % 1) + 1)); var95 >= ((0 - 1) + 1); var95 -= 1) {
+								if(!state.fixedFlag$sample101)
 									inferSample101(i$var80, var95, threadID$i$var80, RNG$1);
 							}
 						}
@@ -1632,17 +1400,17 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 			);
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
+		state.system$gibbsForward = !state.system$gibbsForward;
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, n_ac, 1,
+		parallelFor(state.RNG$, 0, state.n_ac, 1,
 			(int forStart$i$var80, int forEnd$i$var80, int threadID$i$var80, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var80 = forStart$i$var80; i$var80 < forEnd$i$var80; i$var80 += 1) {
-						for(int var95 = 0; var95 < time_dim; var95 += 1) {
-							if(!constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)])
+						for(int var95 = 0; var95 < state.time_dim; var95 += 1) {
+							if(!state.constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)])
 								drawValueSample101(i$var80, var95, threadID$i$var80, RNG$1);
 						}
 					}
@@ -1658,31 +1426,31 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$time_coeff = 0.0;
-		logProbability$time_impact = 0.0;
-		logProbability$sum_t = 0.0;
-		if(!fixedProbFlag$sample101) {
-			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-				for(int var95 = 0; var95 < time_dim; var95 += 1)
-					logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$time_coeff = 0.0;
+		state.logProbability$time_impact = 0.0;
+		state.logProbability$sum_t = 0.0;
+		if(!state.fixedProbFlag$sample101) {
+			for(int i$var80 = 0; i$var80 < state.n_ac; i$var80 += 1) {
+				for(int var95 = 0; var95 < state.time_dim; var95 += 1)
+					state.logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = Double.NaN;
 			}
 		}
-		logProbability$arr = 0.0;
-		if(!fixedProbFlag$sample165)
-			logProbability$var158 = Double.NaN;
+		state.logProbability$arr = 0.0;
+		if(!state.fixedProbFlag$sample165)
+			state.logProbability$var158 = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		time_dim = TimeFeat[0].length;
+		state.time_dim = state.TimeFeat[0].length;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample101$1 = 0; index$constrainedFlag$sample101$1 < constrainedFlag$sample101.length; index$constrainedFlag$sample101$1 += 1) {
-			boolean[] cv$constrainedFlag$sample101$1 = constrainedFlag$sample101[index$constrainedFlag$sample101$1];
+		for(int index$constrainedFlag$sample101$1 = 0; index$constrainedFlag$sample101$1 < state.constrainedFlag$sample101.length; index$constrainedFlag$sample101$1 += 1) {
+			boolean[] cv$constrainedFlag$sample101$1 = state.constrainedFlag$sample101[index$constrainedFlag$sample101$1];
 			for(int index$constrainedFlag$sample101$2 = 0; index$constrainedFlag$sample101$2 < cv$constrainedFlag$sample101$1.length; index$constrainedFlag$sample101$2 += 1)
 				cv$constrainedFlag$sample101$1[index$constrainedFlag$sample101$2] = true;
 		}
@@ -1695,7 +1463,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample101)
+		if(state.fixedFlag$sample101)
 			logProbabilityValue$sample101();
 		logProbabilityValue$sample165();
 	}
@@ -1741,8 +1509,8 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 	@Override
 	public final void propagateObservedValues() {
 		// Deep copy between arrays
-		int[][] cv$source1 = ObsArr;
-		int[][] cv$target1 = arr;
+		int[][] cv$source1 = state.ObsArr;
+		int[][] cv$target1 = state.arr;
 		int cv$length1 = cv$target1.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 			int[] cv$source2 = cv$source1[cv$index1];
@@ -1760,7 +1528,7 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 	@Override
 	public final void setIntermediates() {
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, (0 + 1), T, 1,
+		parallelFor(state.RNG$, (0 + 1), state.T, 1,
 			(int forStart$index$t, int forEnd$index$t, int threadID$index$t, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -1768,11 +1536,11 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 					for(int index$t = forStart$index$t; index$t < forEnd$index$t; index$t += 1) {
 						int t = index$t;
 						int threadID$t = threadID$index$t;
-						double[][] var129 = time_impact[t];
-						double[] var139 = sum_t[t];
+						double[][] var129 = state.time_impact[t];
+						double[] var139 = state.sum_t[t];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, n_ac, 1,
+						parallelFor(RNG$1, 0, state.n_ac, 1,
 							(int forStart$index$i$var119, int forEnd$index$i$var119, int threadID$index$i$var119, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
@@ -1782,14 +1550,14 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 										int threadID$i$var119 = threadID$index$i$var119;
 										
 										//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-										parallelFor(RNG$2, 0, time_dim, 1,
+										parallelFor(RNG$2, 0, state.time_dim, 1,
 											(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$3) -> { 
 												
 													// Inner loop for running batches of iterations, each batch has its own random number
 													// generator.
 													for(int j = forStart$j; j < forEnd$j; j += 1) {
 														double[] var130 = var129[i$var119];
-														var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+														var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 													}
 											}
 										);
@@ -1802,12 +1570,12 @@ final class ReductionTest1$MultiThreadCPU extends CoreModelMultiThreadCPU implem
 										double reduceVar$var151$19 = 0.0;
 										
 										// For each index in the array to be reduced
-										for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+										for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 											// Set the left hand term of the reduction function to the return variable value.
 											double x = reduceVar$var151$19;
 											
 											// Set the right hand term to a value from the array var141
-											double y = time_impact[t][i$var119][cv$reduction152Index];
+											double y = state.time_impact[t][i$var119][cv$reduction152Index];
 											
 											// Execute the reduction function, saving the result into the return value.
 											// 

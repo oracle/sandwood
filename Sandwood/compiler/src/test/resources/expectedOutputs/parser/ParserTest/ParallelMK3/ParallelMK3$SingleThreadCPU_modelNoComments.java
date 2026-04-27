@@ -1,137 +1,49 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.ParallelMK3$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.ParallelMK3.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU implements ParallelMK3$CoreInterface {
-boolean constrainedFlag$sample21 = true;
-	boolean fixedFlag$sample21 = false;
-	boolean fixedProbFlag$sample21 = false;
-	boolean fixedProbFlag$sample38 = false;
-	double[] generated;
-	double[] indirection;
-	int length$observed;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$generated;
-	double logProbability$indirection;
-	double logProbability$sample;
-	double[] logProbability$sample38;
-	double[] observed;
-	double[] sample;
-	boolean system$gibbsForward = true;
-	double[] v;
-	boolean[] guard$sample21gaussian37$global;
+final class ParallelMK3$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
+boolean[] guard$sample21gaussian37$global;
 
-	public ParallelMK3$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
+		@Override
+		public final void allocateScratch() {
+			int cv$max_i = 0;
+			cv$max_i = Math.max(cv$max_i, ((state.length$observed - 0) / 1));
+			guard$sample21gaussian37$global = new boolean[cv$max_i];
+		}
 	}
 
-	@Override
-	public final boolean get$fixedFlag$sample21() {
-		return fixedFlag$sample21;
-	}
 
-	@Override
-	public final void set$fixedFlag$sample21(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample21 = cv$value;
-		constrainedFlag$sample21 = (fixedFlag$sample21 || constrainedFlag$sample21);
-		fixedProbFlag$sample21 = (fixedFlag$sample21 && fixedProbFlag$sample21);
-		fixedProbFlag$sample38 = (fixedFlag$sample21 && fixedProbFlag$sample38);
-	}
-
-	@Override
-	public final double[] get$generated() {
-		return generated;
-	}
-
-	@Override
-	public final double[] get$indirection() {
-		return indirection;
-	}
-
-	@Override
-	public final int get$length$observed() {
-		return length$observed;
-	}
-
-	@Override
-	public final void set$length$observed(int cv$value, boolean allocated$) {
-		length$observed = cv$value;
-	}
-
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	@Override
-	public final double get$logProbability$generated() {
-		return logProbability$generated;
-	}
-
-	@Override
-	public final double get$logProbability$indirection() {
-		return logProbability$indirection;
-	}
-
-	@Override
-	public final double get$logProbability$sample() {
-		return logProbability$sample;
-	}
-
-	@Override
-	public final double[] get$observed() {
-		return observed;
-	}
-
-	@Override
-	public final void set$observed(double[] cv$value, boolean allocated$) {
-		observed = cv$value;
-	}
-
-	@Override
-	public final double[] get$sample() {
-		return sample;
-	}
-
-	@Override
-	public final void set$sample(double[] cv$value, boolean allocated$) {
-		sample = cv$value;
-		fixedProbFlag$sample21 = false;
-		fixedProbFlag$sample38 = false;
-	}
-
-	@Override
-	public final double[] get$v() {
-		return v;
+	public ParallelMK3$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	private final void drawValueSample21() {
-		DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
+		DistributionSampling.sampleDirichlet(state.RNG$, state.v, 10, state.sample);
 		{
 			{
-				for(int i = 0; i < length$observed; i += 1)
-					indirection[i] = sample[i];
+				for(int i = 0; i < state.length$observed; i += 1)
+					state.indirection[i] = state.sample[i];
 			}
 		}
 	}
 
 	private final void inferSample21() {
 		if(true) {
-			constrainedFlag$sample21 = false;
-			double[] cv$targetLocal = sample;
+			state.constrainedFlag$sample21 = false;
+			double[] cv$targetLocal = state.sample;
 			double cv$originalProbability = 0.0;
 			double cv$proposedProbability = 0.0;
 			int cv$arrayLength = 10;
-			int cv$indexToChange = (int)(0.0 + ((cv$arrayLength - 0.0) * DistributionSampling.sampleUniform(RNG$)));
-			double cv$movementRatio = ((DistributionSampling.sampleBeta(RNG$, 5, 5) * 1.9999) - 1);
+			int cv$indexToChange = (int)(0.0 + ((cv$arrayLength - 0.0) * DistributionSampling.sampleUniform(state.RNG$)));
+			double cv$movementRatio = ((DistributionSampling.sampleBeta(state.RNG$, 5, 5) * 1.9999) - 1);
 			double cv$proposedDifference;
 			if((cv$movementRatio < 0))
 				cv$proposedDifference = cv$targetLocal[cv$indexToChange];
@@ -151,7 +63,7 @@ boolean constrainedFlag$sample21 = true;
 			cv$proposedDifference = (cv$movementRatio * cv$proposedDifference);
 			double cv$rebalanceValue = (cv$proposedDifference / (cv$arrayLength - 1));
 			for(int cv$valuePos = 0; cv$valuePos < 2; cv$valuePos += 1) {
-				if((constrainedFlag$sample21 || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample21 || (cv$valuePos == 0))) {
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					double cv$reachedDistributionSourceRV = 0.0;
 					double cv$accumulatedDistributionProbabilities = 0.0;
@@ -164,39 +76,39 @@ boolean constrainedFlag$sample21 = true;
 								cv$targetLocal[cv$loopIndex] = (cv$targetLocal[cv$loopIndex] - cv$rebalanceValue);
 							{
 								{
-									for(int i = 0; i < length$observed; i += 1)
-										indirection[i] = sample[i];
+									for(int i = 0; i < state.length$observed; i += 1)
+										state.indirection[i] = state.sample[i];
 								}
 							}
 						}
 					}
 					{
 						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-						double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, v, 10));
+						double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$targetLocal, state.v, 10));
 						{
 							{
-								boolean[] guard$sample21gaussian37 = guard$sample21gaussian37$global;
+								boolean[] guard$sample21gaussian37 = scratch.guard$sample21gaussian37$global;
 								{
-									for(int i = 0; i < length$observed; i += 1)
+									for(int i = 0; i < state.length$observed; i += 1)
 										guard$sample21gaussian37[((i - 0) / 1)] = false;
 								}
 								{
-									for(int i = 0; i < length$observed; i += 1) {
-										for(int index$i$3_2 = 0; index$i$3_2 < length$observed; index$i$3_2 += 1) {
+									for(int i = 0; i < state.length$observed; i += 1) {
+										for(int index$i$3_2 = 0; index$i$3_2 < state.length$observed; index$i$3_2 += 1) {
 											if((i == index$i$3_2))
 												guard$sample21gaussian37[((i - 0) / 1)] = false;
 										}
 									}
 								}
 								{
-									for(int i = 0; i < length$observed; i += 1) {
+									for(int i = 0; i < state.length$observed; i += 1) {
 										if(!guard$sample21gaussian37[((i - 0) / 1)]) {
 											guard$sample21gaussian37[((i - 0) / 1)] = true;
 											{
 												{
 													boolean cv$sampleConstrained = true;
 													if(cv$sampleConstrained) {
-														constrainedFlag$sample21 = true;
+														state.constrainedFlag$sample21 = true;
 														double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 														double cv$consumerDistributionProbabilityAccumulator = 1.0;
 														{
@@ -204,15 +116,15 @@ boolean constrainedFlag$sample21 = true;
 																{
 																	{
 																		{
-																			double var35 = sample[i];
-																			double var36 = indirection[i];
-																			if(((Math.log(1.0) + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			double var35 = state.sample[i];
+																			double var36 = state.indirection[i];
+																			if(((Math.log(1.0) + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((state.generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((state.generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))):Double.NEGATIVE_INFINITY));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((state.generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))):Double.NEGATIVE_INFINITY));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))):Double.NEGATIVE_INFINITY)));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((state.generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((state.generated[i] - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))):Double.NEGATIVE_INFINITY)));
 																			}
 																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																		}
@@ -236,9 +148,9 @@ boolean constrainedFlag$sample21 = true;
 									}
 								}
 								{
-									for(int i = 0; i < length$observed; i += 1) {
-										double traceTempVariable$var36$5_2 = sample[i];
-										for(int index$i$5_3 = 0; index$i$5_3 < length$observed; index$i$5_3 += 1) {
+									for(int i = 0; i < state.length$observed; i += 1) {
+										double traceTempVariable$var36$5_2 = state.sample[i];
+										for(int index$i$5_3 = 0; index$i$5_3 < state.length$observed; index$i$5_3 += 1) {
 											if((i == index$i$5_3)) {
 												if(!guard$sample21gaussian37[((i - 0) / 1)]) {
 													guard$sample21gaussian37[((i - 0) / 1)] = true;
@@ -246,7 +158,7 @@ boolean constrainedFlag$sample21 = true;
 														{
 															boolean cv$sampleConstrained = true;
 															if(cv$sampleConstrained) {
-																constrainedFlag$sample21 = true;
+																state.constrainedFlag$sample21 = true;
 																double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 																double cv$consumerDistributionProbabilityAccumulator = 1.0;
 																{
@@ -254,14 +166,14 @@ boolean constrainedFlag$sample21 = true;
 																		{
 																			{
 																				{
-																					double var35 = sample[index$i$5_3];
-																					if(((Math.log(1.0) + ((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																					double var35 = state.sample[index$i$5_3];
+																					if(((Math.log(1.0) + ((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((state.generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((state.generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																					else {
 																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																							cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2))):Double.NEGATIVE_INFINITY));
+																							cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((state.generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2))):Double.NEGATIVE_INFINITY));
 																						else
-																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2))):Double.NEGATIVE_INFINITY)));
+																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((state.generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$var36$5_2)?(DistributionSampling.logProbabilityGaussian(((state.generated[index$i$5_3] - var35) / Math.sqrt(traceTempVariable$var36$5_2))) - (0.5 * Math.log(traceTempVariable$var36$5_2))):Double.NEGATIVE_INFINITY)));
 																					}
 																					cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																				}
@@ -303,7 +215,7 @@ boolean constrainedFlag$sample21 = true;
 						cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 					double cv$ratio = (cv$proposedProbability - cv$originalProbability);
 					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$))))) || Double.isNaN(cv$ratio))) {
 							for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
 								cv$targetLocal[cv$loopIndex] = (cv$targetLocal[cv$loopIndex] + cv$rebalanceValue);
 							cv$targetLocal[cv$indexToChange] = (cv$targetLocal[cv$indexToChange] - cv$proposedDifference);
@@ -311,8 +223,8 @@ boolean constrainedFlag$sample21 = true;
 								cv$targetLocal[cv$loopIndex] = (cv$targetLocal[cv$loopIndex] + cv$rebalanceValue);
 							{
 								{
-									for(int i = 0; i < length$observed; i += 1)
-										indirection[i] = sample[i];
+									for(int i = 0; i < state.length$observed; i += 1)
+										state.indirection[i] = state.sample[i];
 								}
 							}
 						}
@@ -323,17 +235,17 @@ boolean constrainedFlag$sample21 = true;
 	}
 
 	private final void logProbabilityValue$sample21() {
-		if(!fixedProbFlag$sample21) {
+		if(!state.fixedProbFlag$sample21) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
 				{
-					double[] cv$sampleValue = sample;
+					double[] cv$sampleValue = state.sample;
 					{
 						{
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, v, 10));
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, state.v, 10));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -354,60 +266,60 @@ boolean constrainedFlag$sample21 = true;
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$sample = cv$sampleProbability;
+			state.logProbability$sample = cv$sampleProbability;
 			boolean cv$guard$indirection = false;
 			{
 				{
-					for(int i = 0; i < length$observed; i += 1) {
+					for(int i = 0; i < state.length$observed; i += 1) {
 						if(!cv$guard$indirection) {
 							cv$guard$indirection = true;
-							logProbability$indirection = (logProbability$indirection + cv$accumulator);
+							state.logProbability$indirection = (state.logProbability$indirection + cv$accumulator);
 						}
 					}
 				}
 			}
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample21)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample21 = fixedFlag$sample21;
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample21)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample21 = state.fixedFlag$sample21;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$sample;
+			double cv$sampleValue = state.logProbability$sample;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			boolean cv$guard$indirection = false;
 			{
 				{
-					for(int i = 0; i < length$observed; i += 1) {
+					for(int i = 0; i < state.length$observed; i += 1) {
 						if(!cv$guard$indirection) {
 							cv$guard$indirection = true;
-							logProbability$indirection = (logProbability$indirection + cv$accumulator);
+							state.logProbability$indirection = (state.logProbability$indirection + cv$accumulator);
 						}
 					}
 				}
 			}
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample21)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample21)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	private final void logProbabilityValue$sample38() {
-		if(!fixedProbFlag$sample38) {
+		if(!state.fixedProbFlag$sample38) {
 			double cv$accumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < length$observed; i += 1) {
+			for(int i = 0; i < state.length$observed; i += 1) {
 				double cv$sampleAccumulator = 0.0;
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
 					{
-						double cv$sampleValue = generated[i];
+						double cv$sampleValue = state.generated[i];
 						{
 							{
-								double var35 = sample[i];
-								double var36 = indirection[i];
+								double var35 = state.sample[i];
+								double var36 = state.indirection[i];
 								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var36)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var35) / Math.sqrt(var36))) - (0.5 * Math.log(var36))):Double.NEGATIVE_INFINITY));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
@@ -430,141 +342,112 @@ boolean constrainedFlag$sample21 = true;
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$sample38[((i - 0) / 1)] = cv$sampleProbability;
+				state.logProbability$sample38[((i - 0) / 1)] = cv$sampleProbability;
 			}
-			logProbability$generated = (logProbability$generated + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample38 = fixedFlag$sample21;
+			state.logProbability$generated = (state.logProbability$generated + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample38 = state.fixedFlag$sample21;
 		} else {
 			double cv$accumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < length$observed; i += 1) {
+			for(int i = 0; i < state.length$observed; i += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample38[((i - 0) / 1)];
+				double cv$sampleValue = state.logProbability$sample38[((i - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			}
-			logProbability$generated = (logProbability$generated + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$generated = (state.logProbability$generated + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
-	}
-
-	@Override
-	public final void allocate() {
-		{
-			generated = new double[length$observed];
-		}
-		{
-			indirection = new double[length$observed];
-		}
-		{
-			v = new double[10];
-		}
-		if(!fixedFlag$sample21) {
-			{
-				sample = new double[10];
-			}
-		}
-		{
-			logProbability$sample38 = new double[((((length$observed - 1) - 0) / 1) + 1)];
-		}
-		allocateScratch();
-	}
-
-	@Override
-	public final void allocateScratch() {
-		int cv$max_i = 0;
-		cv$max_i = Math.max(cv$max_i, ((length$observed - 0) / 1));
-		guard$sample21gaussian37$global = new boolean[cv$max_i];
 	}
 
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample21)
-			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
-		for(int i = 0; i < length$observed; i += 1) {
-			if(!fixedFlag$sample21)
-				indirection[i] = sample[i];
-			generated[i] = ((Math.sqrt(indirection[i]) * DistributionSampling.sampleGaussian(RNG$)) + sample[i]);
+		if(!state.fixedFlag$sample21)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 10, state.sample);
+		for(int i = 0; i < state.length$observed; i += 1) {
+			if(!state.fixedFlag$sample21)
+				state.indirection[i] = state.sample[i];
+			state.generated[i] = ((Math.sqrt(state.indirection[i]) * DistributionSampling.sampleGaussian(state.RNG$)) + state.sample[i]);
 		}
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample21)
-			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
-		for(int i = 0; i < length$observed; i += 1)
-			indirection[i] = sample[i];
+		if(!state.fixedFlag$sample21)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 10, state.sample);
+		for(int i = 0; i < state.length$observed; i += 1)
+			state.indirection[i] = state.sample[i];
 	}
 
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample21)
-			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
-		for(int i = 0; i < length$observed; i += 1) {
-			indirection[i] = sample[i];
-			generated[i] = ((Math.sqrt(indirection[i]) * DistributionSampling.sampleGaussian(RNG$)) + sample[i]);
+		if(!state.fixedFlag$sample21)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 10, state.sample);
+		for(int i = 0; i < state.length$observed; i += 1) {
+			state.indirection[i] = state.sample[i];
+			state.generated[i] = ((Math.sqrt(state.indirection[i]) * DistributionSampling.sampleGaussian(state.RNG$)) + state.sample[i]);
 		}
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample21)
-			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
-		for(int i = 0; i < length$observed; i += 1) {
-			if(!fixedFlag$sample21)
-				indirection[i] = sample[i];
+		if(!state.fixedFlag$sample21)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 10, state.sample);
+		for(int i = 0; i < state.length$observed; i += 1) {
+			if(!state.fixedFlag$sample21)
+				state.indirection[i] = state.sample[i];
 		}
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample21)
-			DistributionSampling.sampleDirichlet(RNG$, v, 10, sample);
-		for(int i = 0; i < length$observed; i += 1)
-			indirection[i] = sample[i];
+		if(!state.fixedFlag$sample21)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 10, state.sample);
+		for(int i = 0; i < state.length$observed; i += 1)
+			state.indirection[i] = state.sample[i];
 	}
 
 	@Override
 	public final void gibbsRound() {
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample21)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample21)
 				inferSample21();
 		} else {
-			if(!fixedFlag$sample21)
+			if(!state.fixedFlag$sample21)
 				inferSample21();
 		}
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample21)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample21)
 			drawValueSample21();
 	}
 
 	private final void initializeLogProbabilityFields() {
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$indirection = 0.0;
-		if(!fixedProbFlag$sample21)
-			logProbability$sample = Double.NaN;
-		logProbability$generated = 0.0;
-		if(!fixedProbFlag$sample38) {
-			for(int i = 0; i < length$observed; i += 1)
-				logProbability$sample38[((i - 0) / 1)] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$indirection = 0.0;
+		if(!state.fixedProbFlag$sample21)
+			state.logProbability$sample = Double.NaN;
+		state.logProbability$generated = 0.0;
+		if(!state.fixedProbFlag$sample38) {
+			for(int i = 0; i < state.length$observed; i += 1)
+				state.logProbability$sample38[((i - 0) / 1)] = Double.NaN;
 		}
 	}
 
 	@Override
 	public final void initializeModel() {
 		for(int var17 = 0; var17 < 10; var17 += 1)
-			v[var17] = 0.1;
+			state.v[var17] = 0.1;
 	}
 
 	@Override
 	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample21)
+		if(state.fixedFlag$sample21)
 			logProbabilityValue$sample21();
 		logProbabilityValue$sample38();
 	}
@@ -585,8 +468,8 @@ boolean constrainedFlag$sample21 = true;
 
 	@Override
 	public final void propagateObservedValues() {
-		double[] cv$source1 = observed;
-		double[] cv$target1 = generated;
+		double[] cv$source1 = state.observed;
+		double[] cv$target1 = state.generated;
 		int cv$length1 = cv$target1.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			cv$target1[cv$index1] = cv$source1[cv$index1];
@@ -594,8 +477,8 @@ boolean constrainedFlag$sample21 = true;
 
 	@Override
 	public final void setIntermediates() {
-		for(int i = 0; i < length$observed; i += 1)
-			indirection[i] = sample[i];
+		for(int i = 0; i < state.length$observed; i += 1)
+			state.indirection[i] = state.sample[i];
 	}
 
 	@Override

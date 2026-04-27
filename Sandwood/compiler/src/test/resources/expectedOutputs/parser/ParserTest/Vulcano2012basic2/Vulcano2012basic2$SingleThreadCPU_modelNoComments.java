@@ -1,211 +1,64 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.Vulcano2012basic2$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.Vulcano2012basic2.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Vulcano2012basic2$SingleThreadCPU extends CoreModelSingleThreadCPU implements Vulcano2012basic2$CoreInterface {
-int[][] Avail;
-	int[][] ObsSales;
-	int[][] Sales;
-	int T;
-	boolean[] constrainedFlag$sample26;
-	double[] exped;
-	double[] expedNorm;
-	boolean fixedFlag$sample26 = false;
-	boolean fixedFlag$sample82 = false;
-	boolean fixedProbFlag$sample149 = false;
-	boolean fixedProbFlag$sample26 = false;
-	boolean fixedProbFlag$sample82 = false;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$Sales;
-	double logProbability$exped;
-	double logProbability$expedNorm;
-	double logProbability$sales_sum;
-	double[] logProbability$sample149;
-	double[] logProbability$sample26;
-	double[] logProbability$sample82;
-	double logProbability$sum;
-	double logProbability$ut;
-	int noProducts;
-	double r;
-	int[] sales_sum;
-	double sum;
-	boolean system$gibbsForward = true;
-	double[] ut;
-	double[][] weekly_rates;
-	double[][] weekly_ut;
-	boolean[] guard$sample26multinomial148$global;
-	boolean[][] guard$sample26put123$global;
-	boolean[][] guard$sample26put146$global;
-	boolean[] guard$sample26put68$global;
+final class Vulcano2012basic2$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
+boolean[] guard$sample26multinomial148$global;
+		boolean[][] guard$sample26put123$global;
+		boolean[][] guard$sample26put146$global;
+		boolean[] guard$sample26put68$global;
 
-	public Vulcano2012basic2$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
-
-	@Override
-	public final int[][] get$Avail() {
-		return Avail;
-	}
-
-	@Override
-	public final void set$Avail(int[][] cv$value, boolean allocated$) {
-		Avail = cv$value;
-	}
-
-	@Override
-	public final int[][] get$ObsSales() {
-		return ObsSales;
-	}
-
-	@Override
-	public final void set$ObsSales(int[][] cv$value, boolean allocated$) {
-		ObsSales = cv$value;
-	}
-
-	@Override
-	public final int[][] get$Sales() {
-		return Sales;
-	}
-
-	@Override
-	public final int get$T() {
-		return T;
-	}
-
-	@Override
-	public final void set$T(int cv$value, boolean allocated$) {
-		T = cv$value;
-	}
-
-	@Override
-	public final double[] get$exped() {
-		return exped;
-	}
-
-	@Override
-	public final double[] get$expedNorm() {
-		return expedNorm;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample26() {
-		return fixedFlag$sample26;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample26(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample26 = cv$value;
-		if(allocated$) {
-			for(int index$constrainedFlag$sample26$1 = 0; index$constrainedFlag$sample26$1 < constrainedFlag$sample26.length; index$constrainedFlag$sample26$1 += 1)
-				constrainedFlag$sample26[index$constrainedFlag$sample26$1] = true;
+		@Override
+		public final void allocateScratch() {
+			{
+				int cv$max_j$var63 = 0;
+				cv$max_j$var63 = Math.max(cv$max_j$var63, ((state.noProducts - 0) / 1));
+				guard$sample26put68$global = new boolean[cv$max_j$var63];
+			}
+			{
+				int cv$max_t$var105 = 0;
+				int cv$max_j$var116 = 0;
+				for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1)
+					cv$max_j$var116 = Math.max(cv$max_j$var116, ((state.noProducts - 0) / 1));
+				cv$max_t$var105 = Math.max(cv$max_t$var105, ((state.T - 0) / 1));
+				guard$sample26put123$global = new boolean[cv$max_t$var105][cv$max_j$var116];
+			}
+			{
+				int cv$max_t$var105 = 0;
+				int cv$max_j$var140 = 0;
+				for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1)
+					cv$max_j$var140 = Math.max(cv$max_j$var140, ((state.noProducts - 0) / 1));
+				cv$max_t$var105 = Math.max(cv$max_t$var105, ((state.T - 0) / 1));
+				guard$sample26put146$global = new boolean[cv$max_t$var105][cv$max_j$var140];
+			}
+			{
+				int cv$max_t$var105 = 0;
+				cv$max_t$var105 = Math.max(cv$max_t$var105, ((state.T - 0) / 1));
+				guard$sample26multinomial148$global = new boolean[cv$max_t$var105];
+			}
 		}
-		fixedProbFlag$sample26 = (fixedFlag$sample26 && fixedProbFlag$sample26);
-		fixedProbFlag$sample149 = (fixedFlag$sample26 && fixedProbFlag$sample149);
 	}
 
-	@Override
-	public final boolean get$fixedFlag$sample82() {
-		return fixedFlag$sample82;
-	}
 
-	@Override
-	public final void set$fixedFlag$sample82(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample82 = cv$value;
-	}
-
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	@Override
-	public final double get$logProbability$Sales() {
-		return logProbability$Sales;
-	}
-
-	@Override
-	public final double get$logProbability$exped() {
-		return logProbability$exped;
-	}
-
-	@Override
-	public final double get$logProbability$expedNorm() {
-		return logProbability$expedNorm;
-	}
-
-	@Override
-	public final double get$logProbability$sales_sum() {
-		return logProbability$sales_sum;
-	}
-
-	@Override
-	public final double get$logProbability$sum() {
-		return logProbability$sum;
-	}
-
-	@Override
-	public final double get$logProbability$ut() {
-		return logProbability$ut;
-	}
-
-	@Override
-	public final int get$noProducts() {
-		return noProducts;
-	}
-
-	@Override
-	public final void set$noProducts(int cv$value, boolean allocated$) {
-		noProducts = cv$value;
-	}
-
-	@Override
-	public final double get$r() {
-		return r;
-	}
-
-	@Override
-	public final void set$r(double cv$value, boolean allocated$) {
-		r = cv$value;
-	}
-
-	@Override
-	public final int[] get$sales_sum() {
-		return sales_sum;
-	}
-
-	@Override
-	public final double get$sum() {
-		return sum;
-	}
-
-	@Override
-	public final double[] get$ut() {
-		return ut;
-	}
-
-	@Override
-	public final void set$ut(double[] cv$value, boolean allocated$) {
-		ut = cv$value;
-		fixedProbFlag$sample26 = false;
-		fixedProbFlag$sample149 = false;
+	public Vulcano2012basic2$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	private final void drawValueSample26(int j$var20) {
-		ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		state.ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		{
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
 						{
-							exped[j$var38] = Math.exp(ut[j$var38]);
+							state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 						}
 					}
 				}
@@ -213,17 +66,17 @@ int[][] Avail;
 		}
 		{
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
 							{
 								double reduceVar$sum$4 = 0.0;
-								for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+								for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 									double k$var49 = reduceVar$sum$4;
-									double l$var50 = exped[cv$reduction46Index];
+									double l$var50 = state.exped[cv$reduction46Index];
 									reduceVar$sum$4 = (k$var49 + l$var50);
 								}
-								sum = reduceVar$sum$4;
+								state.sum = reduceVar$sum$4;
 							}
 						}
 					}
@@ -231,21 +84,21 @@ int[][] Avail;
 			}
 		}
 		{
-			boolean[] guard$sample26put68 = guard$sample26put68$global;
+			boolean[] guard$sample26put68 = scratch.guard$sample26put68$global;
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+							for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
 								guard$sample26put68[((j$var63 - 0) / 1)] = false;
 						}
 					}
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 							if((j$var38 == j$var63))
 								guard$sample26put68[((j$var63 - 0) / 1)] = false;
 						}
@@ -253,14 +106,14 @@ int[][] Avail;
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+							for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 								if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
 									guard$sample26put68[((j$var63 - 0) / 1)] = true;
 									{
-										expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+										state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
 									}
 								}
 							}
@@ -269,14 +122,14 @@ int[][] Avail;
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 							if((j$var38 == j$var63)) {
 								if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
 									guard$sample26put68[((j$var63 - 0) / 1)] = true;
 									{
-										expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+										state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
 									}
 								}
 							}
@@ -286,15 +139,15 @@ int[][] Avail;
 			}
 		}
 		{
-			boolean[][] guard$sample26put123 = guard$sample26put123$global;
+			boolean[][] guard$sample26put123 = scratch.guard$sample26put123$global;
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+							for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+								for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 									if((j$var63 == j$var116)) {
-										for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+										for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1)
 											guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)] = false;
 									}
 								}
@@ -304,13 +157,13 @@ int[][] Avail;
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 							if((j$var38 == j$var63)) {
-								for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+								for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 									if((j$var63 == j$var116)) {
-										for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+										for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1)
 											guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)] = false;
 									}
 								}
@@ -320,17 +173,17 @@ int[][] Avail;
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+							for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+								for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 									if((j$var63 == j$var116)) {
-										for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
+										for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
 											if(!guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)]) {
 												guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)] = true;
 												{
-													weekly_ut[((t$var105 - 0) / 1)][j$var116] = (expedNorm[j$var116] * Avail[t$var105][j$var116]);
+													state.weekly_ut[((t$var105 - 0) / 1)][j$var116] = (state.expedNorm[j$var116] * state.Avail[t$var105][j$var116]);
 												}
 											}
 										}
@@ -342,17 +195,17 @@ int[][] Avail;
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 							if((j$var38 == j$var63)) {
-								for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+								for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 									if((j$var63 == j$var116)) {
-										for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
+										for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
 											if(!guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)]) {
 												guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)] = true;
 												{
-													weekly_ut[((t$var105 - 0) / 1)][j$var116] = (expedNorm[j$var116] * Avail[t$var105][j$var116]);
+													state.weekly_ut[((t$var105 - 0) / 1)][j$var116] = (state.expedNorm[j$var116] * state.Avail[t$var105][j$var116]);
 												}
 											}
 										}
@@ -365,17 +218,17 @@ int[][] Avail;
 			}
 		}
 		{
-			boolean[][] guard$sample26put146 = guard$sample26put146$global;
+			boolean[][] guard$sample26put146 = scratch.guard$sample26put146$global;
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+							for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+								for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 									if((j$var63 == j$var116)) {
-										for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-											if(((0 <= j$var116) && (j$var116 < noProducts))) {
-												for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1)
+										for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+											if(((0 <= j$var116) && (j$var116 < state.noProducts))) {
+												for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1)
 													guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = false;
 											}
 										}
@@ -387,15 +240,15 @@ int[][] Avail;
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+							for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+								for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 									if((j$var63 == j$var116)) {
-										for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+										for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 											if((j$var116 == j$var140)) {
-												for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+												for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1)
 													guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = false;
 											}
 										}
@@ -407,15 +260,15 @@ int[][] Avail;
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 							if((j$var38 == j$var63)) {
-								for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+								for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 									if((j$var63 == j$var116)) {
-										for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-											if(((0 <= j$var116) && (j$var116 < noProducts))) {
-												for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1)
+										for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+											if(((0 <= j$var116) && (j$var116 < state.noProducts))) {
+												for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1)
 													guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = false;
 											}
 										}
@@ -427,15 +280,15 @@ int[][] Avail;
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 							if((j$var38 == j$var63)) {
-								for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+								for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 									if((j$var63 == j$var116)) {
-										for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+										for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 											if((j$var116 == j$var140)) {
-												for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+												for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1)
 													guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = false;
 											}
 										}
@@ -447,25 +300,25 @@ int[][] Avail;
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+							for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+								for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 									if((j$var63 == j$var116)) {
-										for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-											if(((0 <= j$var116) && (j$var116 < noProducts))) {
-												for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+										for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+											if(((0 <= j$var116) && (j$var116 < state.noProducts))) {
+												for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 													if(!guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)]) {
 														guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = true;
 														{
 															double reduceVar$denom$10 = 0.0;
-															for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+															for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 																double k$var128 = reduceVar$denom$10;
-																double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+																double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
 																reduceVar$denom$10 = (k$var128 + l$var129);
 															}
-															weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$10);
+															state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$10);
 														}
 													}
 												}
@@ -479,25 +332,25 @@ int[][] Avail;
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						if(((0 <= j$var38) && (j$var38 < noProducts))) {
-							for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-								for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+						if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+							for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+								for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 									if((j$var63 == j$var116)) {
-										for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+										for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 											if((j$var116 == j$var140)) {
-												for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
+												for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
 													if(!guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)]) {
 														guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = true;
 														{
 															double reduceVar$denom$11 = 0.0;
-															for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+															for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 																double k$var128 = reduceVar$denom$11;
-																double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+																double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
 																reduceVar$denom$11 = (k$var128 + l$var129);
 															}
-															weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$11);
+															state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$11);
 														}
 													}
 												}
@@ -511,25 +364,25 @@ int[][] Avail;
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 							if((j$var38 == j$var63)) {
-								for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+								for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 									if((j$var63 == j$var116)) {
-										for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-											if(((0 <= j$var116) && (j$var116 < noProducts))) {
-												for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+										for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+											if(((0 <= j$var116) && (j$var116 < state.noProducts))) {
+												for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 													if(!guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)]) {
 														guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = true;
 														{
 															double reduceVar$denom$12 = 0.0;
-															for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+															for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 																double k$var128 = reduceVar$denom$12;
-																double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+																double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
 																reduceVar$denom$12 = (k$var128 + l$var129);
 															}
-															weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$12);
+															state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$12);
 														}
 													}
 												}
@@ -543,25 +396,25 @@ int[][] Avail;
 				}
 			}
 			{
-				for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+				for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 					if((j$var20 == j$var38)) {
-						for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+						for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 							if((j$var38 == j$var63)) {
-								for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+								for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 									if((j$var63 == j$var116)) {
-										for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+										for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 											if((j$var116 == j$var140)) {
-												for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
+												for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
 													if(!guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)]) {
 														guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = true;
 														{
 															double reduceVar$denom$13 = 0.0;
-															for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+															for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 																double k$var128 = reduceVar$denom$13;
-																double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+																double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
 																reduceVar$denom$13 = (k$var128 + l$var129);
 															}
-															weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$13);
+															state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$13);
 														}
 													}
 												}
@@ -579,20 +432,20 @@ int[][] Avail;
 
 	private final void inferSample26(int j$var20) {
 		if(true) {
-			constrainedFlag$sample26[((j$var20 - 1) / 1)] = false;
+			state.constrainedFlag$sample26[((j$var20 - 1) / 1)] = false;
 			int cv$numStates = 0;
 			{
 				cv$numStates = Math.max(cv$numStates, 2);
 			}
-			double cv$originalValue = ut[j$var20];
+			double cv$originalValue = state.ut[j$var20];
 			double cv$originalProbability = 0.0;
 			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
 			if((cv$var < (0.1 * 0.1)))
 				cv$var = (0.1 * 0.1);
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample26[((j$var20 - 1) / 1)] || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample26[((j$var20 - 1) / 1)] || (cv$valuePos == 0))) {
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					double cv$reachedDistributionSourceRV = 0.0;
 					double cv$accumulatedDistributionProbabilities = 0.0;
@@ -605,16 +458,16 @@ int[][] Avail;
 						{
 							{
 								{
-									ut[j$var20] = cv$currentValue;
+									state.ut[j$var20] = cv$currentValue;
 								}
 							}
 						}
 						{
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
 										{
-											exped[j$var38] = Math.exp(ut[j$var38]);
+											state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 										}
 									}
 								}
@@ -622,17 +475,17 @@ int[][] Avail;
 						}
 						{
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
 											{
 												double reduceVar$sum$0 = 0.0;
-												for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+												for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 													double k$var49 = reduceVar$sum$0;
-													double l$var50 = exped[cv$reduction46Index];
+													double l$var50 = state.exped[cv$reduction46Index];
 													reduceVar$sum$0 = (k$var49 + l$var50);
 												}
-												sum = reduceVar$sum$0;
+												state.sum = reduceVar$sum$0;
 											}
 										}
 									}
@@ -640,21 +493,21 @@ int[][] Avail;
 							}
 						}
 						{
-							boolean[] guard$sample26put68 = guard$sample26put68$global;
+							boolean[] guard$sample26put68 = scratch.guard$sample26put68$global;
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
 												guard$sample26put68[((j$var63 - 0) / 1)] = false;
 										}
 									}
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 											if((j$var38 == j$var63))
 												guard$sample26put68[((j$var63 - 0) / 1)] = false;
 										}
@@ -662,14 +515,14 @@ int[][] Avail;
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
 													guard$sample26put68[((j$var63 - 0) / 1)] = true;
 													{
-														expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+														state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
 													}
 												}
 											}
@@ -678,14 +531,14 @@ int[][] Avail;
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 											if((j$var38 == j$var63)) {
 												if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
 													guard$sample26put68[((j$var63 - 0) / 1)] = true;
 													{
-														expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+														state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
 													}
 												}
 											}
@@ -695,15 +548,15 @@ int[][] Avail;
 							}
 						}
 						{
-							boolean[][] guard$sample26put123 = guard$sample26put123$global;
+							boolean[][] guard$sample26put123 = scratch.guard$sample26put123$global;
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+												for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 													if((j$var63 == j$var116)) {
-														for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+														for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1)
 															guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)] = false;
 													}
 												}
@@ -713,13 +566,13 @@ int[][] Avail;
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 											if((j$var38 == j$var63)) {
-												for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+												for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 													if((j$var63 == j$var116)) {
-														for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+														for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1)
 															guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)] = false;
 													}
 												}
@@ -729,17 +582,17 @@ int[][] Avail;
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+												for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 													if((j$var63 == j$var116)) {
-														for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
+														for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
 															if(!guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)]) {
 																guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)] = true;
 																{
-																	weekly_ut[((t$var105 - 0) / 1)][j$var116] = (expedNorm[j$var116] * Avail[t$var105][j$var116]);
+																	state.weekly_ut[((t$var105 - 0) / 1)][j$var116] = (state.expedNorm[j$var116] * state.Avail[t$var105][j$var116]);
 																}
 															}
 														}
@@ -751,17 +604,17 @@ int[][] Avail;
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 											if((j$var38 == j$var63)) {
-												for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+												for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 													if((j$var63 == j$var116)) {
-														for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
+														for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
 															if(!guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)]) {
 																guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)] = true;
 																{
-																	weekly_ut[((t$var105 - 0) / 1)][j$var116] = (expedNorm[j$var116] * Avail[t$var105][j$var116]);
+																	state.weekly_ut[((t$var105 - 0) / 1)][j$var116] = (state.expedNorm[j$var116] * state.Avail[t$var105][j$var116]);
 																}
 															}
 														}
@@ -774,17 +627,17 @@ int[][] Avail;
 							}
 						}
 						{
-							boolean[][] guard$sample26put146 = guard$sample26put146$global;
+							boolean[][] guard$sample26put146 = scratch.guard$sample26put146$global;
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+												for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 													if((j$var63 == j$var116)) {
-														for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-															if(((0 <= j$var116) && (j$var116 < noProducts))) {
-																for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1)
+														for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+															if(((0 <= j$var116) && (j$var116 < state.noProducts))) {
+																for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1)
 																	guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = false;
 															}
 														}
@@ -796,15 +649,15 @@ int[][] Avail;
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+												for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 													if((j$var63 == j$var116)) {
-														for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+														for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 															if((j$var116 == j$var140)) {
-																for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+																for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1)
 																	guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = false;
 															}
 														}
@@ -816,15 +669,15 @@ int[][] Avail;
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 											if((j$var38 == j$var63)) {
-												for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+												for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 													if((j$var63 == j$var116)) {
-														for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-															if(((0 <= j$var116) && (j$var116 < noProducts))) {
-																for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1)
+														for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+															if(((0 <= j$var116) && (j$var116 < state.noProducts))) {
+																for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1)
 																	guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = false;
 															}
 														}
@@ -836,15 +689,15 @@ int[][] Avail;
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 											if((j$var38 == j$var63)) {
-												for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+												for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 													if((j$var63 == j$var116)) {
-														for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+														for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 															if((j$var116 == j$var140)) {
-																for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+																for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1)
 																	guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = false;
 															}
 														}
@@ -856,25 +709,25 @@ int[][] Avail;
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+												for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 													if((j$var63 == j$var116)) {
-														for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-															if(((0 <= j$var116) && (j$var116 < noProducts))) {
-																for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+														for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+															if(((0 <= j$var116) && (j$var116 < state.noProducts))) {
+																for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 																	if(!guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)]) {
 																		guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = true;
 																		{
 																			double reduceVar$denom$0 = 0.0;
-																			for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+																			for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 																				double k$var128 = reduceVar$denom$0;
-																				double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+																				double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
 																				reduceVar$denom$0 = (k$var128 + l$var129);
 																			}
-																			weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$0);
+																			state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$0);
 																		}
 																	}
 																}
@@ -888,25 +741,25 @@ int[][] Avail;
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										if(((0 <= j$var38) && (j$var38 < noProducts))) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-												for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+										if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+												for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 													if((j$var63 == j$var116)) {
-														for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+														for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 															if((j$var116 == j$var140)) {
-																for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
+																for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
 																	if(!guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)]) {
 																		guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = true;
 																		{
 																			double reduceVar$denom$1 = 0.0;
-																			for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+																			for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 																				double k$var128 = reduceVar$denom$1;
-																				double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+																				double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
 																				reduceVar$denom$1 = (k$var128 + l$var129);
 																			}
-																			weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$1);
+																			state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$1);
 																		}
 																	}
 																}
@@ -920,25 +773,25 @@ int[][] Avail;
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 											if((j$var38 == j$var63)) {
-												for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+												for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 													if((j$var63 == j$var116)) {
-														for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-															if(((0 <= j$var116) && (j$var116 < noProducts))) {
-																for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+														for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+															if(((0 <= j$var116) && (j$var116 < state.noProducts))) {
+																for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 																	if(!guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)]) {
 																		guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = true;
 																		{
 																			double reduceVar$denom$2 = 0.0;
-																			for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+																			for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 																				double k$var128 = reduceVar$denom$2;
-																				double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+																				double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
 																				reduceVar$denom$2 = (k$var128 + l$var129);
 																			}
-																			weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$2);
+																			state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$2);
 																		}
 																	}
 																}
@@ -952,25 +805,25 @@ int[][] Avail;
 								}
 							}
 							{
-								for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+								for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 									if((j$var20 == j$var38)) {
-										for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+										for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 											if((j$var38 == j$var63)) {
-												for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+												for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 													if((j$var63 == j$var116)) {
-														for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+														for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 															if((j$var116 == j$var140)) {
-																for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
+																for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
 																	if(!guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)]) {
 																		guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = true;
 																		{
 																			double reduceVar$denom$3 = 0.0;
-																			for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+																			for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 																				double k$var128 = reduceVar$denom$3;
-																				double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+																				double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
 																				reduceVar$denom$3 = (k$var128 + l$var129);
 																			}
-																			weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$3);
+																			state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$3);
 																		}
 																	}
 																}
@@ -990,16 +843,16 @@ int[][] Avail;
 						double cv$accumulatedProbabilities = (Math.log(1.0) + ((0.0 < 2.0)?(DistributionSampling.logProbabilityGaussian(((cv$currentValue - 0.0) / Math.sqrt(2.0))) - (0.5 * Math.log(2.0))):Double.NEGATIVE_INFINITY));
 						{
 							{
-								boolean[] guard$sample26multinomial148 = guard$sample26multinomial148$global;
+								boolean[] guard$sample26multinomial148 = scratch.guard$sample26multinomial148$global;
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-																if(((0 <= j$var116) && (j$var116 < noProducts)))
+															for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+																if(((0 <= j$var116) && (j$var116 < state.noProducts)))
 																	guard$sample26multinomial148[((t$var105 - 0) / 1)] = false;
 															}
 														}
@@ -1010,15 +863,15 @@ int[][] Avail;
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+															for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 																if((j$var116 == j$var140)) {
-																	for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+																	for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1)
 																		guard$sample26multinomial148[((t$var105 - 0) / 1)] = false;
 																}
 															}
@@ -1030,14 +883,14 @@ int[][] Avail;
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-																if(((0 <= j$var116) && (j$var116 < noProducts)))
+															for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+																if(((0 <= j$var116) && (j$var116 < state.noProducts)))
 																	guard$sample26multinomial148[((t$var105 - 0) / 1)] = false;
 															}
 														}
@@ -1048,15 +901,15 @@ int[][] Avail;
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+															for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 																if((j$var116 == j$var140)) {
-																	for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+																	for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1)
 																		guard$sample26multinomial148[((t$var105 - 0) / 1)] = false;
 																}
 															}
@@ -1069,43 +922,43 @@ int[][] Avail;
 								}
 								{
 									double traceTempVariable$var39$24_1 = cv$currentValue;
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
 											double traceTempVariable$k$24_3 = Math.exp(traceTempVariable$var39$24_1);
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												if((0 < noProducts)) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												if((0 < state.noProducts)) {
 													double reduceVar$sum$1 = 0.0;
 													for(int cv$reduction707Index = 0; cv$reduction707Index < j$var38; cv$reduction707Index += 1) {
 														double k$var49 = reduceVar$sum$1;
-														double l$var50 = exped[cv$reduction707Index];
+														double l$var50 = state.exped[cv$reduction707Index];
 														reduceVar$sum$1 = (k$var49 + l$var50);
 													}
-													for(int cv$reduction707Index = (j$var38 + 1); cv$reduction707Index < noProducts; cv$reduction707Index += 1) {
+													for(int cv$reduction707Index = (j$var38 + 1); cv$reduction707Index < state.noProducts; cv$reduction707Index += 1) {
 														double k$var49 = reduceVar$sum$1;
-														double l$var50 = exped[cv$reduction707Index];
+														double l$var50 = state.exped[cv$reduction707Index];
 														reduceVar$sum$1 = (k$var49 + l$var50);
 													}
 													double cv$reduced46 = reduceVar$sum$1;
 													reduceVar$sum$1 = (traceTempVariable$k$24_3 + cv$reduced46);
 													double traceTempVariable$sum$24_4 = reduceVar$sum$1;
-													for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+													for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 														double traceTempVariable$sum$24_6 = traceTempVariable$sum$24_4;
-														double traceTempVariable$var117$24_7 = (exped[j$var63] / (r * traceTempVariable$sum$24_6));
-														for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+														double traceTempVariable$var117$24_7 = (state.exped[j$var63] / (state.r * traceTempVariable$sum$24_6));
+														for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 															if((j$var63 == j$var116)) {
-																for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-																	double traceTempVariable$k$24_10 = (traceTempVariable$var117$24_7 * Avail[t$var105][j$var116]);
-																	if(((0 <= j$var116) && (j$var116 < noProducts))) {
-																		if((0 < noProducts)) {
+																for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+																	double traceTempVariable$k$24_10 = (traceTempVariable$var117$24_7 * state.Avail[t$var105][j$var116]);
+																	if(((0 <= j$var116) && (j$var116 < state.noProducts))) {
+																		if((0 < state.noProducts)) {
 																			double reduceVar$denom$4 = 0.0;
 																			for(int cv$reduction741Index = 0; cv$reduction741Index < j$var116; cv$reduction741Index += 1) {
 																				double k$var128 = reduceVar$denom$4;
-																				double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction741Index];
+																				double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction741Index];
 																				reduceVar$denom$4 = (k$var128 + l$var129);
 																			}
-																			for(int cv$reduction741Index = (j$var116 + 1); cv$reduction741Index < noProducts; cv$reduction741Index += 1) {
+																			for(int cv$reduction741Index = (j$var116 + 1); cv$reduction741Index < state.noProducts; cv$reduction741Index += 1) {
 																				double k$var128 = reduceVar$denom$4;
-																				double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction741Index];
+																				double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction741Index];
 																				reduceVar$denom$4 = (k$var128 + l$var129);
 																			}
 																			double cv$reduced128 = reduceVar$denom$4;
@@ -1117,7 +970,7 @@ int[][] Avail;
 																					{
 																						boolean cv$sampleConstrained = true;
 																						if(cv$sampleConstrained) {
-																							constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
+																							state.constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
 																							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 																							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 																							{
@@ -1125,14 +978,14 @@ int[][] Avail;
 																									{
 																										{
 																											{
-																												int var144 = sales_sum[t$var105];
-																												if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144)) < cv$accumulatedConsumerProbabilities))
-																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												int var144 = state.sales_sum[t$var105];
+																												if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144)) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																												else {
 																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144));
+																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144));
 																													else
-																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144)));
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144)));
 																												}
 																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																											}
@@ -1166,33 +1019,33 @@ int[][] Avail;
 								}
 								{
 									double traceTempVariable$var39$25_1 = cv$currentValue;
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
 											double traceTempVariable$k$25_3 = Math.exp(traceTempVariable$var39$25_1);
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												if((0 < noProducts)) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												if((0 < state.noProducts)) {
 													double reduceVar$sum$2 = 0.0;
 													for(int cv$reduction769Index = 0; cv$reduction769Index < j$var38; cv$reduction769Index += 1) {
 														double k$var49 = reduceVar$sum$2;
-														double l$var50 = exped[cv$reduction769Index];
+														double l$var50 = state.exped[cv$reduction769Index];
 														reduceVar$sum$2 = (k$var49 + l$var50);
 													}
-													for(int cv$reduction769Index = (j$var38 + 1); cv$reduction769Index < noProducts; cv$reduction769Index += 1) {
+													for(int cv$reduction769Index = (j$var38 + 1); cv$reduction769Index < state.noProducts; cv$reduction769Index += 1) {
 														double k$var49 = reduceVar$sum$2;
-														double l$var50 = exped[cv$reduction769Index];
+														double l$var50 = state.exped[cv$reduction769Index];
 														reduceVar$sum$2 = (k$var49 + l$var50);
 													}
 													double cv$reduced46 = reduceVar$sum$2;
 													reduceVar$sum$2 = (traceTempVariable$k$25_3 + cv$reduced46);
 													double traceTempVariable$sum$25_4 = reduceVar$sum$2;
-													for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+													for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 														double traceTempVariable$sum$25_6 = traceTempVariable$sum$25_4;
-														double traceTempVariable$var117$25_7 = (exped[j$var63] / (r * traceTempVariable$sum$25_6));
-														for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+														double traceTempVariable$var117$25_7 = (state.exped[j$var63] / (state.r * traceTempVariable$sum$25_6));
+														for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 															if((j$var63 == j$var116)) {
-																for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-																	double traceTempVariable$var141$25_10 = (traceTempVariable$var117$25_7 * Avail[t$var105][j$var116]);
-																	for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+																for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+																	double traceTempVariable$var141$25_10 = (traceTempVariable$var117$25_7 * state.Avail[t$var105][j$var116]);
+																	for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 																		if((j$var116 == j$var140)) {
 																			if(!guard$sample26multinomial148[((t$var105 - 0) / 1)]) {
 																				guard$sample26multinomial148[((t$var105 - 0) / 1)] = true;
@@ -1200,7 +1053,7 @@ int[][] Avail;
 																					{
 																						boolean cv$sampleConstrained = true;
 																						if(cv$sampleConstrained) {
-																							constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
+																							state.constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
 																							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 																							double cv$consumerDistributionProbabilityAccumulator = 1.0;
 																							{
@@ -1208,14 +1061,14 @@ int[][] Avail;
 																									{
 																										{
 																											{
-																												int var144 = sales_sum[t$var105];
-																												if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144)) < cv$accumulatedConsumerProbabilities))
-																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												int var144 = state.sales_sum[t$var105];
+																												if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144)) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																												else {
 																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144));
+																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144));
 																													else
-																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144)));
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144)));
 																												}
 																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																											}
@@ -1249,27 +1102,27 @@ int[][] Avail;
 								}
 								{
 									double traceTempVariable$var39$26_1 = cv$currentValue;
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
 											double traceTempVariable$var64$26_3 = Math.exp(traceTempVariable$var39$26_1);
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													double traceTempVariable$var117$26_5 = (traceTempVariable$var64$26_3 / (r * sum));
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+													double traceTempVariable$var117$26_5 = (traceTempVariable$var64$26_3 / (state.r * state.sum));
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-																double traceTempVariable$k$26_8 = (traceTempVariable$var117$26_5 * Avail[t$var105][j$var116]);
-																if(((0 <= j$var116) && (j$var116 < noProducts))) {
-																	if((0 < noProducts)) {
+															for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+																double traceTempVariable$k$26_8 = (traceTempVariable$var117$26_5 * state.Avail[t$var105][j$var116]);
+																if(((0 <= j$var116) && (j$var116 < state.noProducts))) {
+																	if((0 < state.noProducts)) {
 																		double reduceVar$denom$5 = 0.0;
 																		for(int cv$reduction825Index = 0; cv$reduction825Index < j$var116; cv$reduction825Index += 1) {
 																			double k$var128 = reduceVar$denom$5;
-																			double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction825Index];
+																			double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction825Index];
 																			reduceVar$denom$5 = (k$var128 + l$var129);
 																		}
-																		for(int cv$reduction825Index = (j$var116 + 1); cv$reduction825Index < noProducts; cv$reduction825Index += 1) {
+																		for(int cv$reduction825Index = (j$var116 + 1); cv$reduction825Index < state.noProducts; cv$reduction825Index += 1) {
 																			double k$var128 = reduceVar$denom$5;
-																			double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction825Index];
+																			double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction825Index];
 																			reduceVar$denom$5 = (k$var128 + l$var129);
 																		}
 																		double cv$reduced128 = reduceVar$denom$5;
@@ -1281,7 +1134,7 @@ int[][] Avail;
 																				{
 																					boolean cv$sampleConstrained = true;
 																					if(cv$sampleConstrained) {
-																						constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
+																						state.constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
 																						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 																						double cv$consumerDistributionProbabilityAccumulator = 1.0;
 																						{
@@ -1289,14 +1142,14 @@ int[][] Avail;
 																								{
 																									{
 																										{
-																											int var144 = sales_sum[t$var105];
-																											if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144)) < cv$accumulatedConsumerProbabilities))
-																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																											int var144 = state.sales_sum[t$var105];
+																											if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144)) < cv$accumulatedConsumerProbabilities))
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																											else {
 																												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144));
+																													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144));
 																												else
-																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144)));
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144)));
 																											}
 																											cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																										}
@@ -1329,17 +1182,17 @@ int[][] Avail;
 								}
 								{
 									double traceTempVariable$var39$27_1 = cv$currentValue;
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
 											double traceTempVariable$var64$27_3 = Math.exp(traceTempVariable$var39$27_1);
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													double traceTempVariable$var117$27_5 = (traceTempVariable$var64$27_3 / (r * sum));
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+													double traceTempVariable$var117$27_5 = (traceTempVariable$var64$27_3 / (state.r * state.sum));
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-																double traceTempVariable$var141$27_8 = (traceTempVariable$var117$27_5 * Avail[t$var105][j$var116]);
-																for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+															for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+																double traceTempVariable$var141$27_8 = (traceTempVariable$var117$27_5 * state.Avail[t$var105][j$var116]);
+																for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 																	if((j$var116 == j$var140)) {
 																		if(!guard$sample26multinomial148[((t$var105 - 0) / 1)]) {
 																			guard$sample26multinomial148[((t$var105 - 0) / 1)] = true;
@@ -1347,7 +1200,7 @@ int[][] Avail;
 																				{
 																					boolean cv$sampleConstrained = true;
 																					if(cv$sampleConstrained) {
-																						constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
+																						state.constrainedFlag$sample26[((j$var20 - 1) / 1)] = true;
 																						double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 																						double cv$consumerDistributionProbabilityAccumulator = 1.0;
 																						{
@@ -1355,14 +1208,14 @@ int[][] Avail;
 																								{
 																									{
 																										{
-																											int var144 = sales_sum[t$var105];
-																											if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144)) < cv$accumulatedConsumerProbabilities))
-																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																											int var144 = state.sales_sum[t$var105];
+																											if(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144)) < cv$accumulatedConsumerProbabilities))
+																												cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																											else {
 																												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144));
+																													cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144));
 																												else
-																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(Sales[t$var105], weekly_rates[((t$var105 - 0) / 1)], noProducts, var144)));
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(state.Sales[t$var105], state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144)));
 																											}
 																											cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																										}
@@ -1410,21 +1263,21 @@ int[][] Avail;
 						cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 					double cv$ratio = (cv$proposedProbability - cv$originalProbability);
 					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$))))) || Double.isNaN(cv$ratio))) {
 							double var26 = cv$originalValue;
 							{
 								{
 									{
-										ut[j$var20] = var26;
+										state.ut[j$var20] = var26;
 									}
 								}
 							}
 							{
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
 											{
-												exped[j$var38] = Math.exp(ut[j$var38]);
+												state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 											}
 										}
 									}
@@ -1432,17 +1285,17 @@ int[][] Avail;
 							}
 							{
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
 												{
 													double reduceVar$sum$3 = 0.0;
-													for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+													for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 														double k$var49 = reduceVar$sum$3;
-														double l$var50 = exped[cv$reduction46Index];
+														double l$var50 = state.exped[cv$reduction46Index];
 														reduceVar$sum$3 = (k$var49 + l$var50);
 													}
-													sum = reduceVar$sum$3;
+													state.sum = reduceVar$sum$3;
 												}
 											}
 										}
@@ -1450,21 +1303,21 @@ int[][] Avail;
 								}
 							}
 							{
-								boolean[] guard$sample26put68 = guard$sample26put68$global;
+								boolean[] guard$sample26put68 = scratch.guard$sample26put68$global;
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
 													guard$sample26put68[((j$var63 - 0) / 1)] = false;
 											}
 										}
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63))
 													guard$sample26put68[((j$var63 - 0) / 1)] = false;
 											}
@@ -1472,14 +1325,14 @@ int[][] Avail;
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 													if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
 														guard$sample26put68[((j$var63 - 0) / 1)] = true;
 														{
-															expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+															state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
 														}
 													}
 												}
@@ -1488,14 +1341,14 @@ int[][] Avail;
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
 													if(!guard$sample26put68[((j$var63 - 0) / 1)]) {
 														guard$sample26put68[((j$var63 - 0) / 1)] = true;
 														{
-															expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+															state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
 														}
 													}
 												}
@@ -1505,15 +1358,15 @@ int[][] Avail;
 								}
 							}
 							{
-								boolean[][] guard$sample26put123 = guard$sample26put123$global;
+								boolean[][] guard$sample26put123 = scratch.guard$sample26put123$global;
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+															for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1)
 																guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)] = false;
 														}
 													}
@@ -1523,13 +1376,13 @@ int[][] Avail;
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+															for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1)
 																guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)] = false;
 														}
 													}
@@ -1539,17 +1392,17 @@ int[][] Avail;
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
+															for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
 																if(!guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)]) {
 																	guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)] = true;
 																	{
-																		weekly_ut[((t$var105 - 0) / 1)][j$var116] = (expedNorm[j$var116] * Avail[t$var105][j$var116]);
+																		state.weekly_ut[((t$var105 - 0) / 1)][j$var116] = (state.expedNorm[j$var116] * state.Avail[t$var105][j$var116]);
 																	}
 																}
 															}
@@ -1561,17 +1414,17 @@ int[][] Avail;
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
+															for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
 																if(!guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)]) {
 																	guard$sample26put123[((t$var105 - 0) / 1)][((j$var116 - 0) / 1)] = true;
 																	{
-																		weekly_ut[((t$var105 - 0) / 1)][j$var116] = (expedNorm[j$var116] * Avail[t$var105][j$var116]);
+																		state.weekly_ut[((t$var105 - 0) / 1)][j$var116] = (state.expedNorm[j$var116] * state.Avail[t$var105][j$var116]);
 																	}
 																}
 															}
@@ -1584,17 +1437,17 @@ int[][] Avail;
 								}
 							}
 							{
-								boolean[][] guard$sample26put146 = guard$sample26put146$global;
+								boolean[][] guard$sample26put146 = scratch.guard$sample26put146$global;
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-																if(((0 <= j$var116) && (j$var116 < noProducts))) {
-																	for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1)
+															for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+																if(((0 <= j$var116) && (j$var116 < state.noProducts))) {
+																	for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1)
 																		guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = false;
 																}
 															}
@@ -1606,15 +1459,15 @@ int[][] Avail;
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+															for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 																if((j$var116 == j$var140)) {
-																	for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+																	for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1)
 																		guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = false;
 																}
 															}
@@ -1626,15 +1479,15 @@ int[][] Avail;
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-																if(((0 <= j$var116) && (j$var116 < noProducts))) {
-																	for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1)
+															for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+																if(((0 <= j$var116) && (j$var116 < state.noProducts))) {
+																	for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1)
 																		guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = false;
 																}
 															}
@@ -1646,15 +1499,15 @@ int[][] Avail;
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+															for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 																if((j$var116 == j$var140)) {
-																	for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+																	for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1)
 																		guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = false;
 																}
 															}
@@ -1666,25 +1519,25 @@ int[][] Avail;
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-																if(((0 <= j$var116) && (j$var116 < noProducts))) {
-																	for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+															for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+																if(((0 <= j$var116) && (j$var116 < state.noProducts))) {
+																	for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 																		if(!guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)]) {
 																			guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = true;
 																			{
 																				double reduceVar$denom$6 = 0.0;
-																				for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+																				for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 																					double k$var128 = reduceVar$denom$6;
-																					double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+																					double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
 																					reduceVar$denom$6 = (k$var128 + l$var129);
 																				}
-																				weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$6);
+																				state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$6);
 																			}
 																		}
 																	}
@@ -1698,25 +1551,25 @@ int[][] Avail;
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											if(((0 <= j$var38) && (j$var38 < noProducts))) {
-												for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+											if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+												for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+															for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 																if((j$var116 == j$var140)) {
-																	for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
+																	for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
 																		if(!guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)]) {
 																			guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = true;
 																			{
 																				double reduceVar$denom$7 = 0.0;
-																				for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+																				for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 																					double k$var128 = reduceVar$denom$7;
-																					double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+																					double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
 																					reduceVar$denom$7 = (k$var128 + l$var129);
 																				}
-																				weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$7);
+																				state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$7);
 																			}
 																		}
 																	}
@@ -1730,25 +1583,25 @@ int[][] Avail;
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-																if(((0 <= j$var116) && (j$var116 < noProducts))) {
-																	for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+															for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+																if(((0 <= j$var116) && (j$var116 < state.noProducts))) {
+																	for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 																		if(!guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)]) {
 																			guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = true;
 																			{
 																				double reduceVar$denom$8 = 0.0;
-																				for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+																				for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 																					double k$var128 = reduceVar$denom$8;
-																					double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+																					double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
 																					reduceVar$denom$8 = (k$var128 + l$var129);
 																				}
-																				weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$8);
+																				state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$8);
 																			}
 																		}
 																	}
@@ -1762,25 +1615,25 @@ int[][] Avail;
 									}
 								}
 								{
-									for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+									for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 										if((j$var20 == j$var38)) {
-											for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+											for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 												if((j$var38 == j$var63)) {
-													for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
+													for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
 														if((j$var63 == j$var116)) {
-															for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
+															for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
 																if((j$var116 == j$var140)) {
-																	for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
+																	for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
 																		if(!guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)]) {
 																			guard$sample26put146[((t$var105 - 0) / 1)][((j$var140 - 0) / 1)] = true;
 																			{
 																				double reduceVar$denom$9 = 0.0;
-																				for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+																				for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 																					double k$var128 = reduceVar$denom$9;
-																					double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+																					double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
 																					reduceVar$denom$9 = (k$var128 + l$var129);
 																				}
-																				weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$9);
+																				state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$9);
 																			}
 																		}
 																	}
@@ -1802,20 +1655,20 @@ int[][] Avail;
 	}
 
 	private final void logProbabilityValue$sample149() {
-		if(!fixedProbFlag$sample149) {
+		if(!state.fixedProbFlag$sample149) {
 			double cv$accumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
+			for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
 				double cv$sampleAccumulator = 0.0;
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
 					{
-						int[] cv$sampleValue = Sales[t$var105];
+						int[] cv$sampleValue = state.Sales[t$var105];
 						{
 							{
-								int var144 = sales_sum[t$var105];
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(cv$sampleValue, weekly_rates[((t$var105 - 0) / 1)], noProducts, var144));
+								int var144 = state.sales_sum[t$var105];
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityMultinomial(cv$sampleValue, state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, var144));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -1837,39 +1690,39 @@ int[][] Avail;
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$sample149[((t$var105 - 0) / 1)] = cv$sampleProbability;
+				state.logProbability$sample149[((t$var105 - 0) / 1)] = cv$sampleProbability;
 			}
-			logProbability$Sales = (logProbability$Sales + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample149 = fixedFlag$sample26;
+			state.logProbability$Sales = (state.logProbability$Sales + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample149 = state.fixedFlag$sample26;
 		} else {
 			double cv$accumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
+			for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample149[((t$var105 - 0) / 1)];
+				double cv$sampleValue = state.logProbability$sample149[((t$var105 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			}
-			logProbability$Sales = (logProbability$Sales + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$Sales = (state.logProbability$Sales + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	private final void logProbabilityValue$sample26() {
-		if(!fixedProbFlag$sample26) {
+		if(!state.fixedProbFlag$sample26) {
 			double cv$accumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
+			for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
 				double cv$sampleAccumulator = 0.0;
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
 					{
-						double cv$sampleValue = ut[j$var20];
+						double cv$sampleValue = state.ut[j$var20];
 						{
 							{
 								double var23 = 0.0;
@@ -1896,17 +1749,17 @@ int[][] Avail;
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$sample26[((j$var20 - 1) / 1)] = cv$sampleProbability;
+				state.logProbability$sample26[((j$var20 - 1) / 1)] = cv$sampleProbability;
 				boolean cv$guard$exped = false;
 				boolean cv$guard$sum = false;
 				boolean cv$guard$expedNorm = false;
 				{
 					{
-						for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+						for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 							if((j$var20 == j$var38)) {
 								if(!cv$guard$exped) {
 									cv$guard$exped = true;
-									logProbability$exped = (logProbability$exped + cv$sampleProbability);
+									state.logProbability$exped = (state.logProbability$exped + cv$sampleProbability);
 								}
 							}
 						}
@@ -1914,12 +1767,12 @@ int[][] Avail;
 				}
 				{
 					{
-						for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+						for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 							if((j$var20 == j$var38)) {
-								if(((0 <= j$var38) && (j$var38 < noProducts))) {
+								if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
 									if(!cv$guard$sum) {
 										cv$guard$sum = true;
-										logProbability$sum = (logProbability$sum + cv$sampleProbability);
+										state.logProbability$sum = (state.logProbability$sum + cv$sampleProbability);
 									}
 								}
 							}
@@ -1928,13 +1781,13 @@ int[][] Avail;
 				}
 				{
 					{
-						for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+						for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 							if((j$var20 == j$var38)) {
-								if(((0 <= j$var38) && (j$var38 < noProducts))) {
-									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+								if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+									for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 										if(!cv$guard$expedNorm) {
 											cv$guard$expedNorm = true;
-											logProbability$expedNorm = (logProbability$expedNorm + cv$sampleProbability);
+											state.logProbability$expedNorm = (state.logProbability$expedNorm + cv$sampleProbability);
 										}
 									}
 								}
@@ -1942,13 +1795,13 @@ int[][] Avail;
 						}
 					}
 					{
-						for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+						for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 							if((j$var20 == j$var38)) {
-								for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+								for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 									if((j$var38 == j$var63)) {
 										if(!cv$guard$expedNorm) {
 											cv$guard$expedNorm = true;
-											logProbability$expedNorm = (logProbability$expedNorm + cv$sampleProbability);
+											state.logProbability$expedNorm = (state.logProbability$expedNorm + cv$sampleProbability);
 										}
 									}
 								}
@@ -1957,17 +1810,17 @@ int[][] Avail;
 					}
 				}
 			}
-			logProbability$ut = (logProbability$ut + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample26)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample26 = fixedFlag$sample26;
+			state.logProbability$ut = (state.logProbability$ut + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample26)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample26 = state.fixedFlag$sample26;
 		} else {
 			double cv$accumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
+			for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample26[((j$var20 - 1) / 1)];
+				double cv$sampleValue = state.logProbability$sample26[((j$var20 - 1) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
@@ -1976,11 +1829,11 @@ int[][] Avail;
 				boolean cv$guard$expedNorm = false;
 				{
 					{
-						for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+						for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 							if((j$var20 == j$var38)) {
 								if(!cv$guard$exped) {
 									cv$guard$exped = true;
-									logProbability$exped = (logProbability$exped + cv$sampleValue);
+									state.logProbability$exped = (state.logProbability$exped + cv$sampleValue);
 								}
 							}
 						}
@@ -1988,12 +1841,12 @@ int[][] Avail;
 				}
 				{
 					{
-						for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+						for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 							if((j$var20 == j$var38)) {
-								if(((0 <= j$var38) && (j$var38 < noProducts))) {
+								if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
 									if(!cv$guard$sum) {
 										cv$guard$sum = true;
-										logProbability$sum = (logProbability$sum + cv$sampleValue);
+										state.logProbability$sum = (state.logProbability$sum + cv$sampleValue);
 									}
 								}
 							}
@@ -2002,13 +1855,13 @@ int[][] Avail;
 				}
 				{
 					{
-						for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+						for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 							if((j$var20 == j$var38)) {
-								if(((0 <= j$var38) && (j$var38 < noProducts))) {
-									for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+								if(((0 <= j$var38) && (j$var38 < state.noProducts))) {
+									for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 										if(!cv$guard$expedNorm) {
 											cv$guard$expedNorm = true;
-											logProbability$expedNorm = (logProbability$expedNorm + cv$sampleValue);
+											state.logProbability$expedNorm = (state.logProbability$expedNorm + cv$sampleValue);
 										}
 									}
 								}
@@ -2016,13 +1869,13 @@ int[][] Avail;
 						}
 					}
 					{
-						for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
+						for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
 							if((j$var20 == j$var38)) {
-								for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+								for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 									if((j$var38 == j$var63)) {
 										if(!cv$guard$expedNorm) {
 											cv$guard$expedNorm = true;
-											logProbability$expedNorm = (logProbability$expedNorm + cv$sampleValue);
+											state.logProbability$expedNorm = (state.logProbability$expedNorm + cv$sampleValue);
 										}
 									}
 								}
@@ -2031,24 +1884,24 @@ int[][] Avail;
 					}
 				}
 			}
-			logProbability$ut = (logProbability$ut + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample26)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$ut = (state.logProbability$ut + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample26)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	private final void logProbabilityValue$sample82() {
-		if(!fixedProbFlag$sample82) {
+		if(!state.fixedProbFlag$sample82) {
 			double cv$accumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int t$var78 = 0; t$var78 < T; t$var78 += 1) {
+			for(int t$var78 = 0; t$var78 < state.T; t$var78 += 1) {
 				double cv$sampleAccumulator = 0.0;
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
 					{
-						int cv$sampleValue = sales_sum[t$var78];
+						int cv$sampleValue = state.sales_sum[t$var78];
 						{
 							{
 								double var79 = 0.5;
@@ -2074,375 +1927,297 @@ int[][] Avail;
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$sample82[((t$var78 - 0) / 1)] = cv$sampleProbability;
+				state.logProbability$sample82[((t$var78 - 0) / 1)] = cv$sampleProbability;
 				boolean cv$guard$Sales = false;
 				{
 					{
-						for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
+						for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
 							if((t$var78 == t$var105)) {
 								if(!cv$guard$Sales) {
 									cv$guard$Sales = true;
-									logProbability$Sales = (logProbability$Sales + cv$sampleProbability);
+									state.logProbability$Sales = (state.logProbability$Sales + cv$sampleProbability);
 								}
 							}
 						}
 					}
 				}
 			}
-			logProbability$sales_sum = (logProbability$sales_sum + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample82 = true;
+			state.logProbability$sales_sum = (state.logProbability$sales_sum + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample82 = true;
 		} else {
 			double cv$accumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int t$var78 = 0; t$var78 < T; t$var78 += 1) {
+			for(int t$var78 = 0; t$var78 < state.T; t$var78 += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample82[((t$var78 - 0) / 1)];
+				double cv$sampleValue = state.logProbability$sample82[((t$var78 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				boolean cv$guard$Sales = false;
 				{
 					{
-						for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
+						for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
 							if((t$var78 == t$var105)) {
 								if(!cv$guard$Sales) {
 									cv$guard$Sales = true;
-									logProbability$Sales = (logProbability$Sales + cv$sampleValue);
+									state.logProbability$Sales = (state.logProbability$Sales + cv$sampleValue);
 								}
 							}
 						}
 					}
 				}
 			}
-			logProbability$sales_sum = (logProbability$sales_sum + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	@Override
-	public final void allocate() {
-		if(!fixedFlag$sample26) {
-			{
-				ut = new double[noProducts];
-			}
-		}
-		{
-			exped = new double[noProducts];
-		}
-		{
-			expedNorm = new double[noProducts];
-		}
-		{
-			sales_sum = new int[T];
-		}
-		{
-			Sales = new int[T][];
-			for(int var93 = 0; var93 < T; var93 += 1)
-				Sales[var93] = new int[noProducts];
-			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-				Sales[t$var105] = new int[noProducts];
-		}
-		{
-			weekly_rates = new double[((((T - 1) - 0) / 1) + 1)][];
-			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-				weekly_rates[((t$var105 - 0) / 1)] = new double[noProducts];
-		}
-		{
-			weekly_ut = new double[((((T - 1) - 0) / 1) + 1)][];
-			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-				weekly_ut[((t$var105 - 0) / 1)] = new double[noProducts];
-		}
-		{
-			constrainedFlag$sample26 = new boolean[((((noProducts - 1) - 1) / 1) + 1)];
-		}
-		{
-			logProbability$sample26 = new double[((((noProducts - 1) - 1) / 1) + 1)];
-		}
-		{
-			logProbability$sample82 = new double[((((T - 1) - 0) / 1) + 1)];
-		}
-		{
-			logProbability$sample149 = new double[((((T - 1) - 0) / 1) + 1)];
-		}
-		allocateScratch();
-	}
-
-	@Override
-	public final void allocateScratch() {
-		{
-			int cv$max_j$var63 = 0;
-			cv$max_j$var63 = Math.max(cv$max_j$var63, ((noProducts - 0) / 1));
-			guard$sample26put68$global = new boolean[cv$max_j$var63];
-		}
-		{
-			int cv$max_t$var105 = 0;
-			int cv$max_j$var116 = 0;
-			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-				cv$max_j$var116 = Math.max(cv$max_j$var116, ((noProducts - 0) / 1));
-			cv$max_t$var105 = Math.max(cv$max_t$var105, ((T - 0) / 1));
-			guard$sample26put123$global = new boolean[cv$max_t$var105][cv$max_j$var116];
-		}
-		{
-			int cv$max_t$var105 = 0;
-			int cv$max_j$var140 = 0;
-			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-				cv$max_j$var140 = Math.max(cv$max_j$var140, ((noProducts - 0) / 1));
-			cv$max_t$var105 = Math.max(cv$max_t$var105, ((T - 0) / 1));
-			guard$sample26put146$global = new boolean[cv$max_t$var105][cv$max_j$var140];
-		}
-		{
-			int cv$max_t$var105 = 0;
-			cv$max_t$var105 = Math.max(cv$max_t$var105, ((T - 0) / 1));
-			guard$sample26multinomial148$global = new boolean[cv$max_t$var105];
+			state.logProbability$sales_sum = (state.logProbability$sales_sum + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	@Override
 	public final void forwardGeneration() {
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-			if(!fixedFlag$sample26)
-				ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-			if(!fixedFlag$sample26)
-				exped[j$var38] = Math.exp(ut[j$var38]);
+		for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 		}
 		double reduceVar$sum$5 = 0.0;
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+		for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 			double k$var49 = reduceVar$sum$5;
-			double l$var50 = exped[cv$reduction46Index];
-			if(!fixedFlag$sample26)
+			double l$var50 = state.exped[cv$reduction46Index];
+			if(!state.fixedFlag$sample26)
 				reduceVar$sum$5 = (k$var49 + l$var50);
 		}
-		if(!fixedFlag$sample26)
-			sum = reduceVar$sum$5;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-			if(!fixedFlag$sample26)
-				expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+		if(!state.fixedFlag$sample26)
+			state.sum = reduceVar$sum$5;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
 		}
-		for(int t$var78 = 0; t$var78 < T; t$var78 += 1) {
-			if(!fixedFlag$sample82)
-				sales_sum[t$var78] = DistributionSampling.samplePoisson(RNG$, 0.5);
+		for(int t$var78 = 0; t$var78 < state.T; t$var78 += 1) {
+			if(!state.fixedFlag$sample82)
+				state.sales_sum[t$var78] = DistributionSampling.samplePoisson(state.RNG$, 0.5);
 		}
-		for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-			for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-				if(!fixedFlag$sample26)
-					weekly_ut[((t$var105 - 0) / 1)][j$var116] = (expedNorm[j$var116] * Avail[t$var105][j$var116]);
+		for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+			for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
+				if(!state.fixedFlag$sample26)
+					state.weekly_ut[((t$var105 - 0) / 1)][j$var116] = (state.expedNorm[j$var116] * state.Avail[t$var105][j$var116]);
 			}
 			double reduceVar$denom$14 = 0.0;
-			for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+			for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 				double k$var128 = reduceVar$denom$14;
-				double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
-				if(!fixedFlag$sample26)
+				double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+				if(!state.fixedFlag$sample26)
 					reduceVar$denom$14 = (k$var128 + l$var129);
 			}
-			for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-				if(!fixedFlag$sample26)
-					weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$14);
+			for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
+				if(!state.fixedFlag$sample26)
+					state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$14);
 			}
-			int[] weekly_sales = Sales[t$var105];
-			DistributionSampling.sampleMultinomial(RNG$, weekly_rates[((t$var105 - 0) / 1)], noProducts, sales_sum[t$var105], weekly_sales);
+			int[] weekly_sales = state.Sales[t$var105];
+			DistributionSampling.sampleMultinomial(state.RNG$, state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, state.sales_sum[t$var105], weekly_sales);
 		}
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-			if(!fixedFlag$sample26)
-				ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-			exped[j$var38] = Math.exp(ut[j$var38]);
+		for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1)
+			state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 		double reduceVar$sum$9 = 0.0;
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+		for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 			double k$var49 = reduceVar$sum$9;
-			double l$var50 = exped[cv$reduction46Index];
+			double l$var50 = state.exped[cv$reduction46Index];
 			reduceVar$sum$9 = (k$var49 + l$var50);
 		}
-		sum = reduceVar$sum$9;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-			expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-		for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-			for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1)
-				weekly_ut[((t$var105 - 0) / 1)][j$var116] = (expedNorm[j$var116] * Avail[t$var105][j$var116]);
+		state.sum = reduceVar$sum$9;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
+			state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
+		for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+			for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1)
+				state.weekly_ut[((t$var105 - 0) / 1)][j$var116] = (state.expedNorm[j$var116] * state.Avail[t$var105][j$var116]);
 			double reduceVar$denom$18 = 0.0;
-			for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+			for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 				double k$var128 = reduceVar$denom$18;
-				double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+				double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
 				reduceVar$denom$18 = (k$var128 + l$var129);
 			}
-			for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1)
-				weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$18);
+			for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1)
+				state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$18);
 		}
 	}
 
 	@Override
 	public final void forwardGenerationPrime() {
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-			if(!fixedFlag$sample26)
-				ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-			exped[j$var38] = Math.exp(ut[j$var38]);
+		for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1)
+			state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 		double reduceVar$sum$6 = 0.0;
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+		for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 			double k$var49 = reduceVar$sum$6;
-			double l$var50 = exped[cv$reduction46Index];
+			double l$var50 = state.exped[cv$reduction46Index];
 			reduceVar$sum$6 = (k$var49 + l$var50);
 		}
-		sum = reduceVar$sum$6;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-			expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-		for(int t$var78 = 0; t$var78 < T; t$var78 += 1) {
-			if(!fixedFlag$sample82)
-				sales_sum[t$var78] = DistributionSampling.samplePoisson(RNG$, 0.5);
+		state.sum = reduceVar$sum$6;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
+			state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
+		for(int t$var78 = 0; t$var78 < state.T; t$var78 += 1) {
+			if(!state.fixedFlag$sample82)
+				state.sales_sum[t$var78] = DistributionSampling.samplePoisson(state.RNG$, 0.5);
 		}
-		for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-			for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1)
-				weekly_ut[((t$var105 - 0) / 1)][j$var116] = (expedNorm[j$var116] * Avail[t$var105][j$var116]);
+		for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+			for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1)
+				state.weekly_ut[((t$var105 - 0) / 1)][j$var116] = (state.expedNorm[j$var116] * state.Avail[t$var105][j$var116]);
 			double reduceVar$denom$15 = 0.0;
-			for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+			for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 				double k$var128 = reduceVar$denom$15;
-				double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+				double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
 				reduceVar$denom$15 = (k$var128 + l$var129);
 			}
-			for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1)
-				weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$15);
-			int[] weekly_sales = Sales[t$var105];
-			DistributionSampling.sampleMultinomial(RNG$, weekly_rates[((t$var105 - 0) / 1)], noProducts, sales_sum[t$var105], weekly_sales);
+			for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1)
+				state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$15);
+			int[] weekly_sales = state.Sales[t$var105];
+			DistributionSampling.sampleMultinomial(state.RNG$, state.weekly_rates[((t$var105 - 0) / 1)], state.noProducts, state.sales_sum[t$var105], weekly_sales);
 		}
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-			if(!fixedFlag$sample26)
-				ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1) {
-			if(!fixedFlag$sample26)
-				exped[j$var38] = Math.exp(ut[j$var38]);
+		for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 		}
 		double reduceVar$sum$7 = 0.0;
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+		for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 			double k$var49 = reduceVar$sum$7;
-			double l$var50 = exped[cv$reduction46Index];
-			if(!fixedFlag$sample26)
+			double l$var50 = state.exped[cv$reduction46Index];
+			if(!state.fixedFlag$sample26)
 				reduceVar$sum$7 = (k$var49 + l$var50);
 		}
-		if(!fixedFlag$sample26)
-			sum = reduceVar$sum$7;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-			if(!fixedFlag$sample26)
-				expedNorm[j$var63] = (exped[j$var63] / (r * sum));
+		if(!state.fixedFlag$sample26)
+			state.sum = reduceVar$sum$7;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
 		}
-		for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-			for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1) {
-				if(!fixedFlag$sample26)
-					weekly_ut[((t$var105 - 0) / 1)][j$var116] = (expedNorm[j$var116] * Avail[t$var105][j$var116]);
+		for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+			for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1) {
+				if(!state.fixedFlag$sample26)
+					state.weekly_ut[((t$var105 - 0) / 1)][j$var116] = (state.expedNorm[j$var116] * state.Avail[t$var105][j$var116]);
 			}
 			double reduceVar$denom$16 = 0.0;
-			for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+			for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 				double k$var128 = reduceVar$denom$16;
-				double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
-				if(!fixedFlag$sample26)
+				double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+				if(!state.fixedFlag$sample26)
 					reduceVar$denom$16 = (k$var128 + l$var129);
 			}
-			for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1) {
-				if(!fixedFlag$sample26)
-					weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$16);
+			for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1) {
+				if(!state.fixedFlag$sample26)
+					state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$16);
 			}
 		}
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-			if(!fixedFlag$sample26)
-				ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
+			if(!state.fixedFlag$sample26)
+				state.ut[j$var20] = ((Math.sqrt(2.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-			exped[j$var38] = Math.exp(ut[j$var38]);
+		for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1)
+			state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 		double reduceVar$sum$8 = 0.0;
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+		for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 			double k$var49 = reduceVar$sum$8;
-			double l$var50 = exped[cv$reduction46Index];
+			double l$var50 = state.exped[cv$reduction46Index];
 			reduceVar$sum$8 = (k$var49 + l$var50);
 		}
-		sum = reduceVar$sum$8;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-			expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-		for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-			for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1)
-				weekly_ut[((t$var105 - 0) / 1)][j$var116] = (expedNorm[j$var116] * Avail[t$var105][j$var116]);
+		state.sum = reduceVar$sum$8;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
+			state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
+		for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+			for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1)
+				state.weekly_ut[((t$var105 - 0) / 1)][j$var116] = (state.expedNorm[j$var116] * state.Avail[t$var105][j$var116]);
 			double reduceVar$denom$17 = 0.0;
-			for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+			for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 				double k$var128 = reduceVar$denom$17;
-				double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+				double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
 				reduceVar$denom$17 = (k$var128 + l$var129);
 			}
-			for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1)
-				weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$17);
+			for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1)
+				state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$17);
 		}
 	}
 
 	@Override
 	public final void gibbsRound() {
-		if(system$gibbsForward) {
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-				if(!fixedFlag$sample26)
+		if(state.system$gibbsForward) {
+			for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
+				if(!state.fixedFlag$sample26)
 					inferSample26(j$var20);
 			}
 		} else {
-			for(int j$var20 = (noProducts - ((((noProducts - 1) - 1) % 1) + 1)); j$var20 >= ((1 - 1) + 1); j$var20 -= 1) {
-				if(!fixedFlag$sample26)
+			for(int j$var20 = (state.noProducts - ((((state.noProducts - 1) - 1) % 1) + 1)); j$var20 >= ((1 - 1) + 1); j$var20 -= 1) {
+				if(!state.fixedFlag$sample26)
 					inferSample26(j$var20);
 			}
 		}
-		system$gibbsForward = !system$gibbsForward;
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-			if(!constrainedFlag$sample26[((j$var20 - 1) / 1)])
+		state.system$gibbsForward = !state.system$gibbsForward;
+		for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
+			if(!state.constrainedFlag$sample26[((j$var20 - 1) / 1)])
 				drawValueSample26(j$var20);
 		}
 	}
 
 	private final void initializeLogProbabilityFields() {
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$ut = 0.0;
-		logProbability$exped = 0.0;
-		logProbability$sum = 0.0;
-		logProbability$expedNorm = 0.0;
-		if(!fixedProbFlag$sample26) {
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-				logProbability$sample26[((j$var20 - 1) / 1)] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$ut = 0.0;
+		state.logProbability$exped = 0.0;
+		state.logProbability$sum = 0.0;
+		state.logProbability$expedNorm = 0.0;
+		if(!state.fixedProbFlag$sample26) {
+			for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1)
+				state.logProbability$sample26[((j$var20 - 1) / 1)] = Double.NaN;
 		}
-		logProbability$sales_sum = 0.0;
-		logProbability$Sales = 0.0;
-		if(!fixedProbFlag$sample82) {
-			for(int t$var78 = 0; t$var78 < T; t$var78 += 1)
-				logProbability$sample82[((t$var78 - 0) / 1)] = Double.NaN;
+		state.logProbability$sales_sum = 0.0;
+		state.logProbability$Sales = 0.0;
+		if(!state.fixedProbFlag$sample82) {
+			for(int t$var78 = 0; t$var78 < state.T; t$var78 += 1)
+				state.logProbability$sample82[((t$var78 - 0) / 1)] = Double.NaN;
 		}
-		if(!fixedProbFlag$sample149) {
-			for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
-				logProbability$sample149[((t$var105 - 0) / 1)] = Double.NaN;
+		if(!state.fixedProbFlag$sample149) {
+			for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1)
+				state.logProbability$sample149[((t$var105 - 0) / 1)] = Double.NaN;
 		}
 	}
 
 	@Override
 	public final void initializeModel() {
-		ut[0] = 0.0;
-		for(int index$constrainedFlag$sample26$1 = 0; index$constrainedFlag$sample26$1 < constrainedFlag$sample26.length; index$constrainedFlag$sample26$1 += 1)
-			constrainedFlag$sample26[index$constrainedFlag$sample26$1] = true;
+		state.ut[0] = 0.0;
+		for(int index$constrainedFlag$sample26$1 = 0; index$constrainedFlag$sample26$1 < state.constrainedFlag$sample26.length; index$constrainedFlag$sample26$1 += 1)
+			state.constrainedFlag$sample26[index$constrainedFlag$sample26$1] = true;
 	}
 
 	@Override
 	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample26)
+		if(state.fixedFlag$sample26)
 			logProbabilityValue$sample26();
 		logProbabilityValue$sample82();
 		logProbabilityValue$sample149();
@@ -2466,11 +2241,11 @@ int[][] Avail;
 
 	@Override
 	public final void propagateObservedValues() {
-		fixedFlag$sample82 = false;
+		state.fixedFlag$sample82 = false;
 		{
 			{
-				int[][] cv$source1 = ObsSales;
-				int[][] cv$target1 = Sales;
+				int[][] cv$source1 = state.ObsSales;
+				int[][] cv$target1 = state.Sales;
 				int cv$length1 = cv$target1.length;
 				for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 					int[] cv$source2 = cv$source1[cv$index1];
@@ -2480,41 +2255,41 @@ int[][] Avail;
 						cv$target2[cv$index2] = cv$source2[cv$index2];
 				}
 			}
-			for(int t$var105 = (T - ((((T - 1) - 0) % 1) + 1)); t$var105 >= ((0 - 1) + 1); t$var105 -= 1) {
+			for(int t$var105 = (state.T - ((((state.T - 1) - 0) % 1) + 1)); t$var105 >= ((0 - 1) + 1); t$var105 -= 1) {
 				int[] weekly_sales;
-				weekly_sales = Sales[t$var105];
+				weekly_sales = state.Sales[t$var105];
 				int cv$multinomialSum148 = 0;
 				for(int cv$multinomialIndex148 = 0; cv$multinomialIndex148 < weekly_sales.length; cv$multinomialIndex148 += 1)
 					cv$multinomialSum148 = (weekly_sales[cv$multinomialIndex148] + cv$multinomialSum148);
-				sales_sum[t$var105] = cv$multinomialSum148;
+				state.sales_sum[t$var105] = cv$multinomialSum148;
 			}
 		}
 	}
 
 	@Override
 	public final void setIntermediates() {
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-			exped[j$var38] = Math.exp(ut[j$var38]);
+		for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1)
+			state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 		double reduceVar$sum$10 = 0.0;
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1) {
+		for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1) {
 			double k$var49 = reduceVar$sum$10;
-			double l$var50 = exped[cv$reduction46Index];
+			double l$var50 = state.exped[cv$reduction46Index];
 			reduceVar$sum$10 = (k$var49 + l$var50);
 		}
-		sum = reduceVar$sum$10;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-			expedNorm[j$var63] = (exped[j$var63] / (r * sum));
-		for(int t$var105 = 0; t$var105 < T; t$var105 += 1) {
-			for(int j$var116 = 0; j$var116 < noProducts; j$var116 += 1)
-				weekly_ut[((t$var105 - 0) / 1)][j$var116] = (expedNorm[j$var116] * Avail[t$var105][j$var116]);
+		state.sum = reduceVar$sum$10;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
+			state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * state.sum));
+		for(int t$var105 = 0; t$var105 < state.T; t$var105 += 1) {
+			for(int j$var116 = 0; j$var116 < state.noProducts; j$var116 += 1)
+				state.weekly_ut[((t$var105 - 0) / 1)][j$var116] = (state.expedNorm[j$var116] * state.Avail[t$var105][j$var116]);
 			double reduceVar$denom$19 = 0.0;
-			for(int cv$reduction128Index = 0; cv$reduction128Index < noProducts; cv$reduction128Index += 1) {
+			for(int cv$reduction128Index = 0; cv$reduction128Index < state.noProducts; cv$reduction128Index += 1) {
 				double k$var128 = reduceVar$denom$19;
-				double l$var129 = weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
+				double l$var129 = state.weekly_ut[((t$var105 - 0) / 1)][cv$reduction128Index];
 				reduceVar$denom$19 = (k$var128 + l$var129);
 			}
-			for(int j$var140 = 0; j$var140 < noProducts; j$var140 += 1)
-				weekly_rates[((t$var105 - 0) / 1)][j$var140] = (weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$19);
+			for(int j$var140 = 0; j$var140 < state.noProducts; j$var140 += 1)
+				state.weekly_rates[((t$var105 - 0) / 1)][j$var140] = (state.weekly_ut[((t$var105 - 0) / 1)][j$var140] / reduceVar$denom$19);
 		}
 	}
 

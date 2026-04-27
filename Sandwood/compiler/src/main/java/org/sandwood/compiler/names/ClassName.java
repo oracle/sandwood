@@ -15,9 +15,15 @@ public class ClassName extends Name {
     public static final ClassName coreBase = new ClassName("org.sandwood.runtime.internal.model.CoreModel", true);
 
     public static final ClassName wrapperBase = new ClassName("org.sandwood.runtime.model.Model", true);
+    public static final ClassName scratchClass = new ClassName("Scratch", false);
+    public static final ClassName scratchInterface = new ClassName(
+            "org.sandwood.runtime.internal.model.state.CoreModelScratch", true);
+    public static final ClassName stateClass = new ClassName("State", false);
+    public static final ClassName stateClassBase = new ClassName(
+            "org.sandwood.runtime.internal.model.state.CoreModelState", true);
 
     public final boolean useInImport;
-
+    
     public ClassName(String name, boolean useInImport) {
         super(name);
         if(name == null)

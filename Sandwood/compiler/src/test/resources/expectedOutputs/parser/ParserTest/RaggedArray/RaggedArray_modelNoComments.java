@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,32 +16,147 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model RaggedArray This is the class that all user
  * interactions with the model should occur through.
  */
-public final class RaggedArray extends Model {
-    private RaggedArray$CoreInterface system$c = new RaggedArray$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class RaggedArray extends Model<RaggedArray.State> {
+	final class State extends CoreModelState {
+double[][] a;
+		double[][] b;
+		boolean constrainedFlag$sample73 = true;
+		boolean fixedFlag$sample73 = false;
+		boolean fixedProbFlag$sample73 = false;
+		boolean fixedProbFlag$sample89 = false;
+		int i;
+		int length$obs_measured;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$i;
+		double logProbability$obs;
+		double logProbability$var85;
+		boolean[] obs;
+		boolean[] obs_measured;
+		double p;
+		boolean system$gibbsForward = true;
+		int y;
+
+		@Override
+		public final void allocate() {
+			{
+				a = new double[2][];
+				a[0] = new double[2];
+				a[1] = new double[3];
+			}
+			{
+				b = new double[2][];
+				b[0] = new double[2];
+				b[1] = new double[3];
+			}
+			{
+				obs = new boolean[length$obs_measured];
+			}
+		}
+
+		final double[][] get$a() {
+			return a;
+		}
+
+		final double[][] get$b() {
+			return b;
+		}
+
+		final boolean get$fixedFlag$sample73() {
+			return fixedFlag$sample73;
+		}
+
+		final void set$fixedFlag$sample73(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample73 = cv$value;
+			constrainedFlag$sample73 = (fixedFlag$sample73 || constrainedFlag$sample73);
+			fixedProbFlag$sample73 = (fixedFlag$sample73 && fixedProbFlag$sample73);
+			fixedProbFlag$sample89 = (fixedFlag$sample73 && fixedProbFlag$sample89);
+		}
+
+		final int get$i() {
+			return i;
+		}
+
+		final void set$i(int cv$value, boolean allocated$) {
+			i = cv$value;
+			fixedProbFlag$sample73 = false;
+			fixedProbFlag$sample89 = false;
+		}
+
+		final int get$length$obs_measured() {
+			return length$obs_measured;
+		}
+
+		final void set$length$obs_measured(int cv$value, boolean allocated$) {
+			length$obs_measured = cv$value;
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$i() {
+			return logProbability$i;
+		}
+
+		final double get$logProbability$obs() {
+			return logProbability$obs;
+		}
+
+		final boolean[] get$obs() {
+			return obs;
+		}
+
+		final boolean[] get$obs_measured() {
+			return obs_measured;
+		}
+
+		final void set$obs_measured(boolean[] cv$value, boolean allocated$) {
+			obs_measured = cv$value;
+		}
+
+		final double get$p() {
+			return p;
+		}
+
+		final int get$y() {
+			return y;
+		}
+
+		final void set$y(int cv$value, boolean allocated$) {
+			y = cv$value;
+		}
+	}
 
     private final ComputedIntegerInternal $i = new ComputedIntegerInternal(this, "i", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int getValue() { return system$c.get$i(); }
+        public int getValue() { return state.get$i(); }
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$i(value, allocated);
+            state.set$i(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$i(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$i(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample73(fixed, allocated);
+                state.set$fixedFlag$sample73(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample73())
+            if(state.get$fixedFlag$sample73())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -51,7 +168,7 @@ public final class RaggedArray extends Model {
 
     private final ComputedBooleanArrayInternal $obs = new ComputedBooleanArrayInternal(this, "obs", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean[] getValue() { return system$c.get$obs(); }
+        public boolean[] getValue() { return state.get$obs(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {}
@@ -62,7 +179,7 @@ public final class RaggedArray extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$obs(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$obs(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -80,7 +197,7 @@ public final class RaggedArray extends Model {
 
     private final ComputedDoubleInternal $p = new ComputedDoubleInternal(this, "p", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$p(); }
+        public double getValue() { return state.get$p(); }
 
         @Override
         protected void setValueInternal(double value) {}
@@ -96,13 +213,13 @@ public final class RaggedArray extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample73(fixed, allocated);
+                state.set$fixedFlag$sample73(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample73())
+            if(state.get$fixedFlag$sample73())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -118,12 +235,12 @@ public final class RaggedArray extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$y();
+                return state.get$y();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$y(value, allocated); }
+        protected void setValueInternal(int value) { state.set$y(value, allocated); }
     };
 
 	/** Observed variable representing y of type int from the Sandwood model. */
@@ -135,24 +252,24 @@ public final class RaggedArray extends Model {
         @Override
         public boolean[] getValue() {
             synchronized(model) {
-                return system$c.get$obs_measured();
+                return state.get$obs_measured();
             }
         }
 
         @Override
         public void setValueInternal(boolean[] value) {
-            system$c.set$obs_measured(value, allocated);
-            system$c.set$length$obs_measured(value.length, allocated);
+            state.set$obs_measured(value, allocated);
+            state.set$length$obs_measured(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$obs_measured(shape, allocated);
+            state.set$length$obs_measured(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$obs_measured();
+            return state.get$length$obs_measured();
         }
     };
 
@@ -170,6 +287,7 @@ public final class RaggedArray extends Model {
 	/** A constructor for a model where no variable values are set. */
     public RaggedArray() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("i", $i);
         $computedVariables.put("obs", $obs);
@@ -180,7 +298,9 @@ public final class RaggedArray extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("obs_measured", $obs_measured);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        RaggedArray$SingleThreadCPU core = new RaggedArray$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -210,42 +330,15 @@ public final class RaggedArray extends Model {
     }
     
     @Override
-    protected RaggedArray$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        RaggedArray$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new RaggedArray$SingleThreadCPU(target);
-                break;
+                return new RaggedArray$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new RaggedArray$MultiThreadCPU(target);
-                break;
+                return new RaggedArray$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(RaggedArray$CoreInterface oldCore, RaggedArray$CoreInterface newCore) {
-        //Model inputs
-        if(y.isSet())
-            newCore.set$y(oldCore.get$y(), false);
-
-        //Observed arrays
-        if(obs_measured.isSet()) {
-            newCore.set$obs_measured(oldCore.get$obs_measured(), false);
-            newCore.set$length$obs_measured(oldCore.get$length$obs_measured(), false);
-        }
-        else if(obs_measured.shapeSet())
-            newCore.set$length$obs_measured(oldCore.get$length$obs_measured(), false);
-
-        //ComputedVariables
-        if($i.isSet())
-            newCore.set$i(oldCore.get$i(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample73(oldCore.get$fixedFlag$sample73(), false);
     }
 
 	/**

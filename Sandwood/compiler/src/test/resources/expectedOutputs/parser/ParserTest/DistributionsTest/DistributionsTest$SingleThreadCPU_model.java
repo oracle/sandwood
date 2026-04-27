@@ -1,204 +1,43 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.DistributionsTest$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.DistributionsTest.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU implements DistributionsTest$CoreInterface {
+final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double b0;
-	double b1;
-	boolean constrainedFlag$sample11 = true;
-	boolean constrainedFlag$sample7 = true;
-	boolean fixedFlag$sample11 = false;
-	boolean fixedFlag$sample7 = false;
-	boolean fixedProbFlag$sample11 = false;
-	boolean fixedProbFlag$sample27 = false;
-	boolean fixedProbFlag$sample7 = false;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$b0;
-	double logProbability$b1;
-	double[] logProbability$sample27;
-	double logProbability$y;
-	int noSamples;
-	boolean system$gibbsForward = true;
-	double[] x;
-	double[] y;
-	double[] yMeasured;
-
-	public DistributionsTest$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	// Getter for b0.
-	@Override
-	public final double get$b0() {
-		return b0;
-	}
 
-	// Setter for b0.
-	@Override
-	public final void set$b0(double cv$value, boolean allocated$) {
-		// Set flags for all the side effects of b0 including if probabilities need to be
-		// updated.
-		b0 = cv$value;
-		
-		// Unset the fixed probability flag for sample 7 as it depends on b0.
-		fixedProbFlag$sample7 = false;
-		
-		// Unset the fixed probability flag for sample 27 as it depends on b0.
-		fixedProbFlag$sample27 = false;
-	}
-
-	// Getter for b1.
-	@Override
-	public final double get$b1() {
-		return b1;
-	}
-
-	// Setter for b1.
-	@Override
-	public final void set$b1(double cv$value, boolean allocated$) {
-		// Set flags for all the side effects of b1 including if probabilities need to be
-		// updated.
-		b1 = cv$value;
-		
-		// Unset the fixed probability flag for sample 11 as it depends on b1.
-		fixedProbFlag$sample11 = false;
-		
-		// Unset the fixed probability flag for sample 27 as it depends on b1.
-		fixedProbFlag$sample27 = false;
-	}
-
-	// Getter for fixedFlag$sample11.
-	@Override
-	public final boolean get$fixedFlag$sample11() {
-		return fixedFlag$sample11;
-	}
-
-	// Setter for fixedFlag$sample11.
-	@Override
-	public final void set$fixedFlag$sample11(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample11 including if probabilities
-		// need to be updated.
-		fixedFlag$sample11 = cv$value;
-		constrainedFlag$sample11 = (fixedFlag$sample11 || constrainedFlag$sample11);
-		
-		// Should the probability of sample 11 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample11 = (fixedFlag$sample11 && fixedProbFlag$sample11);
-		
-		// Should the probability of sample 27 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample27 = (fixedFlag$sample11 && fixedProbFlag$sample27);
-	}
-
-	// Getter for fixedFlag$sample7.
-	@Override
-	public final boolean get$fixedFlag$sample7() {
-		return fixedFlag$sample7;
-	}
-
-	// Setter for fixedFlag$sample7.
-	@Override
-	public final void set$fixedFlag$sample7(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample7 including if probabilities
-		// need to be updated.
-		fixedFlag$sample7 = cv$value;
-		constrainedFlag$sample7 = (fixedFlag$sample7 || constrainedFlag$sample7);
-		
-		// Should the probability of sample 7 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample7 = (fixedFlag$sample7 && fixedProbFlag$sample7);
-		
-		// Should the probability of sample 27 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample27 = (fixedFlag$sample7 && fixedProbFlag$sample27);
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$b0.
-	@Override
-	public final double get$logProbability$b0() {
-		return logProbability$b0;
-	}
-
-	// Getter for logProbability$b1.
-	@Override
-	public final double get$logProbability$b1() {
-		return logProbability$b1;
-	}
-
-	// Getter for logProbability$y.
-	@Override
-	public final double get$logProbability$y() {
-		return logProbability$y;
-	}
-
-	// Getter for noSamples.
-	@Override
-	public final int get$noSamples() {
-		return noSamples;
-	}
-
-	// Getter for x.
-	@Override
-	public final double[] get$x() {
-		return x;
-	}
-
-	// Setter for x.
-	@Override
-	public final void set$x(double[] cv$value, boolean allocated$) {
-		x = cv$value;
-	}
-
-	// Getter for y.
-	@Override
-	public final double[] get$y() {
-		return y;
-	}
-
-	// Getter for yMeasured.
-	@Override
-	public final double[] get$yMeasured() {
-		return yMeasured;
-	}
-
-	// Setter for yMeasured.
-	@Override
-	public final void set$yMeasured(double[] cv$value, boolean allocated$) {
-		yMeasured = cv$value;
+	public DistributionsTest$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample11
 	private final void drawValueSample11() {
-		b1 = DistributionSampling.sampleHalfCauchy(RNG$, 1.0, 5.0);
+		state.b1 = DistributionSampling.sampleHalfCauchy(state.RNG$, 1.0, 5.0);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample7
 	private final void drawValueSample7() {
-		b0 = DistributionSampling.sampleCauchy(RNG$, 0.0, 2.0);
+		state.b0 = DistributionSampling.sampleCauchy(state.RNG$, 0.0, 2.0);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 11 drawn from HalfCauchy 10. Inference was performed using Metropolis-Hastings.
 	private final void inferSample11() {
 		if(true) {
-			constrainedFlag$sample11 = false;
+			state.constrainedFlag$sample11 = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -208,7 +47,7 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 			}
 			
 			// The original value of the sample
-			double cv$originalValue = b1;
+			double cv$originalValue = state.b1;
 			
 			// The probability of the random variable generating the originally sampled value
 			double cv$originalProbability = 0.0;
@@ -221,12 +60,12 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 				cv$var = (0.1 * 0.1);
 			
 			// The proposed new value for the sample
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			
 			// The probability of the random variable generating the new sample value.
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample11 || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample11 || (cv$valuePos == 0))) {
 					// Initialize the summed probabilities to 0.
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					
@@ -248,7 +87,7 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 						// Update Sample and intermediate values
 						// 
 						// Write out the new value of the sample.
-						b1 = cv$proposedValue;
+						state.b1 = cv$proposedValue;
 					}
 					{
 						// Record the reached probability density.
@@ -262,7 +101,7 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 						{
 							{
 								{
-									for(int i = 0; i < noSamples; i += 1) {
+									for(int i = 0; i < state.noSamples; i += 1) {
 										double traceTempVariable$b1$1_2 = cv$currentValue;
 										
 										// Processing sample task 27 of consumer random variable null.
@@ -272,7 +111,7 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 												boolean cv$sampleConstrained = true;
 												if(cv$sampleConstrained) {
 													// Mark that the sample has observed constrained data.
-													constrainedFlag$sample11 = true;
+													state.constrainedFlag$sample11 = true;
 													
 													// Set an accumulator to sum the probabilities for each possible configuration of
 													// inputs.
@@ -287,17 +126,17 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 																{
 																	{
 																		// Constructing a random variable input for use later.
-																		double var25 = (b0 + (traceTempVariable$b1$1_2 * x[i]));
+																		double var25 = (state.b0 + (traceTempVariable$b1$1_2 * state.x[i]));
 																		
 																		// Record the probability of sample task 27 generating output with current configuration.
-																		if(((Math.log(1.0) + DistributionSampling.logProbabilityStudentT(y[i], var25)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityStudentT(y[i], var25)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		if(((Math.log(1.0) + DistributionSampling.logProbabilityStudentT(state.y[i], var25)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityStudentT(state.y[i], var25)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																		else {
 																			// If the second value is -infinity.
 																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityStudentT(y[i], var25));
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityStudentT(state.y[i], var25));
 																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityStudentT(y[i], var25)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityStudentT(y[i], var25)));
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityStudentT(state.y[i], var25)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityStudentT(state.y[i], var25)));
 																		}
 																		
 																		// Recorded the probability of reaching sample task 27 with the current configuration.
@@ -359,13 +198,13 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 					// to be less than or equal as otherwise if the proposed value is not possible and
 					// the random value is 0 an impossible value will be accepted.
 					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio)))
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$))))) || Double.isNaN(cv$ratio)))
 							// If it is not revert the changes.
 							// 
 							// Set the sample value
 							// 
 							// Write out the new value of the sample.
-							b1 = cv$originalValue;
+							state.b1 = cv$originalValue;
 					}
 				}
 			}
@@ -376,7 +215,7 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 	// by sample task 7 drawn from Cauchy 6. Inference was performed using Metropolis-Hastings.
 	private final void inferSample7() {
 		if(true) {
-			constrainedFlag$sample7 = false;
+			state.constrainedFlag$sample7 = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -386,7 +225,7 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 			}
 			
 			// The original value of the sample
-			double cv$originalValue = b0;
+			double cv$originalValue = state.b0;
 			
 			// The probability of the random variable generating the originally sampled value
 			double cv$originalProbability = 0.0;
@@ -399,12 +238,12 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 				cv$var = (0.1 * 0.1);
 			
 			// The proposed new value for the sample
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			
 			// The probability of the random variable generating the new sample value.
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample7 || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample7 || (cv$valuePos == 0))) {
 					// Initialize the summed probabilities to 0.
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					
@@ -426,7 +265,7 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 						// Update Sample and intermediate values
 						// 
 						// Write out the new value of the sample.
-						b0 = cv$proposedValue;
+						state.b0 = cv$proposedValue;
 					}
 					{
 						// Record the reached probability density.
@@ -440,7 +279,7 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 						{
 							{
 								{
-									for(int i = 0; i < noSamples; i += 1) {
+									for(int i = 0; i < state.noSamples; i += 1) {
 										double traceTempVariable$b0$1_2 = cv$currentValue;
 										
 										// Processing sample task 27 of consumer random variable null.
@@ -450,7 +289,7 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 												boolean cv$sampleConstrained = true;
 												if(cv$sampleConstrained) {
 													// Mark that the sample has observed constrained data.
-													constrainedFlag$sample7 = true;
+													state.constrainedFlag$sample7 = true;
 													
 													// Set an accumulator to sum the probabilities for each possible configuration of
 													// inputs.
@@ -465,17 +304,17 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 																{
 																	{
 																		// Constructing a random variable input for use later.
-																		double var25 = (traceTempVariable$b0$1_2 + (b1 * x[i]));
+																		double var25 = (traceTempVariable$b0$1_2 + (state.b1 * state.x[i]));
 																		
 																		// Record the probability of sample task 27 generating output with current configuration.
-																		if(((Math.log(1.0) + DistributionSampling.logProbabilityStudentT(y[i], var25)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityStudentT(y[i], var25)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		if(((Math.log(1.0) + DistributionSampling.logProbabilityStudentT(state.y[i], var25)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityStudentT(state.y[i], var25)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																		else {
 																			// If the second value is -infinity.
 																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityStudentT(y[i], var25));
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityStudentT(state.y[i], var25));
 																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityStudentT(y[i], var25)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityStudentT(y[i], var25)));
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityStudentT(state.y[i], var25)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityStudentT(state.y[i], var25)));
 																		}
 																		
 																		// Recorded the probability of reaching sample task 27 with the current configuration.
@@ -537,13 +376,13 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 					// to be less than or equal as otherwise if the proposed value is not possible and
 					// the random value is 0 an impossible value will be accepted.
 					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio)))
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$))))) || Double.isNaN(cv$ratio)))
 							// If it is not revert the changes.
 							// 
 							// Set the sample value
 							// 
 							// Write out the new value of the sample.
-							b0 = cv$originalValue;
+							state.b0 = cv$originalValue;
 					}
 				}
 			}
@@ -555,7 +394,7 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 	private final void logProbabilityValue$sample11() {
 		// Determine if we need to calculate the values for sample task 11 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample11) {
+		if(!state.fixedProbFlag$sample11) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -571,7 +410,7 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 			{
 				{
 					// The sample value to calculate the probability of generating
-					double cv$sampleValue = b1;
+					double cv$sampleValue = state.b1;
 					{
 						{
 							double var8 = 1.0;
@@ -613,19 +452,19 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$b1 = cv$sampleProbability;
+			state.logProbability$b1 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample11)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample11)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample11 = fixedFlag$sample11;
+			state.fixedProbFlag$sample11 = state.fixedFlag$sample11;
 		} else {
 			// Using cached values.
 			// 
@@ -633,17 +472,17 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$b1;
+			double cv$sampleValue = state.logProbability$b1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample11)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample11)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -652,14 +491,14 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 	private final void logProbabilityValue$sample27() {
 		// Determine if we need to calculate the values for sample task 27 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample27) {
+		if(!state.fixedProbFlag$sample27) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < noSamples; i += 1) {
+			for(int i = 0; i < state.noSamples; i += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
 				
@@ -671,10 +510,10 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 				{
 					{
 						// The sample value to calculate the probability of generating
-						double cv$sampleValue = y[i];
+						double cv$sampleValue = state.y[i];
 						{
 							{
-								double var25 = (b0 + (b1 * x[i]));
+								double var25 = (state.b0 + (state.b1 * state.x[i]));
 								
 								// Store the value of the function call, so the function call is only made once.
 								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityStudentT(cv$sampleValue, var25));
@@ -715,19 +554,19 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				
 				// Store the sample task probability
-				logProbability$sample27[((i - 0) / 1)] = cv$sampleProbability;
+				state.logProbability$sample27[((i - 0) / 1)] = cv$sampleProbability;
 			}
 			
 			// Update the variable probability
-			logProbability$y = (logProbability$y + cv$accumulator);
+			state.logProbability$y = (state.logProbability$y + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample27 = (fixedFlag$sample7 && fixedFlag$sample11);
+			state.fixedProbFlag$sample27 = (state.fixedFlag$sample7 && state.fixedFlag$sample11);
 		} else {
 			// Using cached values.
 			// 
@@ -737,9 +576,9 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < noSamples; i += 1) {
+			for(int i = 0; i < state.noSamples; i += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample27[((i - 0) / 1)];
+				double cv$sampleValue = state.logProbability$sample27[((i - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Record that the sample was reached.
@@ -748,11 +587,11 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 			}
 			
 			// Update the variable probability
-			logProbability$y = (logProbability$y + cv$accumulator);
+			state.logProbability$y = (state.logProbability$y + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -760,7 +599,7 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 	private final void logProbabilityValue$sample7() {
 		// Determine if we need to calculate the values for sample task 7 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample7) {
+		if(!state.fixedProbFlag$sample7) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -776,7 +615,7 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 			{
 				{
 					// The sample value to calculate the probability of generating
-					double cv$sampleValue = b0;
+					double cv$sampleValue = state.b0;
 					{
 						{
 							double var4 = 0.0;
@@ -818,19 +657,19 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$b0 = cv$sampleProbability;
+			state.logProbability$b0 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample7)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample7)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample7 = fixedFlag$sample7;
+			state.fixedProbFlag$sample7 = state.fixedFlag$sample7;
 		} else {
 			// Using cached values.
 			// 
@@ -838,49 +677,29 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$b0;
+			double cv$sampleValue = state.logProbability$b0;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample7)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample7)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// Constructor for y
-		{
-			y = new double[x.length];
-		}
-		
-		// Constructor for logProbability$sample27
-		{
-			logProbability$sample27 = new double[((((x.length - 1) - 0) / 1) + 1)];
-		}
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample7)
-			b0 = DistributionSampling.sampleCauchy(RNG$, 0.0, 2.0);
-		if(!fixedFlag$sample11)
-			b1 = DistributionSampling.sampleHalfCauchy(RNG$, 1.0, 5.0);
-		for(int i = 0; i < noSamples; i += 1)
-			y[i] = DistributionSampling.sampleStudentT(RNG$, (b0 + (b1 * x[i])));
+		if(!state.fixedFlag$sample7)
+			state.b0 = DistributionSampling.sampleCauchy(state.RNG$, 0.0, 2.0);
+		if(!state.fixedFlag$sample11)
+			state.b1 = DistributionSampling.sampleHalfCauchy(state.RNG$, 1.0, 5.0);
+		for(int i = 0; i < state.noSamples; i += 1)
+			state.y[i] = DistributionSampling.sampleStudentT(state.RNG$, (state.b0 + (state.b1 * state.x[i])));
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -888,32 +707,32 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample7)
-			b0 = DistributionSampling.sampleCauchy(RNG$, 0.0, 2.0);
-		if(!fixedFlag$sample11)
-			b1 = DistributionSampling.sampleHalfCauchy(RNG$, 1.0, 5.0);
+		if(!state.fixedFlag$sample7)
+			state.b0 = DistributionSampling.sampleCauchy(state.RNG$, 0.0, 2.0);
+		if(!state.fixedFlag$sample11)
+			state.b1 = DistributionSampling.sampleHalfCauchy(state.RNG$, 1.0, 5.0);
 	}
 
 	// Method to execute the model code conventionally with priming of fixed intermediate
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample7)
-			b0 = DistributionSampling.sampleCauchy(RNG$, 0.0, 2.0);
-		if(!fixedFlag$sample11)
-			b1 = DistributionSampling.sampleHalfCauchy(RNG$, 1.0, 5.0);
-		for(int i = 0; i < noSamples; i += 1)
-			y[i] = DistributionSampling.sampleStudentT(RNG$, (b0 + (b1 * x[i])));
+		if(!state.fixedFlag$sample7)
+			state.b0 = DistributionSampling.sampleCauchy(state.RNG$, 0.0, 2.0);
+		if(!state.fixedFlag$sample11)
+			state.b1 = DistributionSampling.sampleHalfCauchy(state.RNG$, 1.0, 5.0);
+		for(int i = 0; i < state.noSamples; i += 1)
+			state.y[i] = DistributionSampling.sampleStudentT(state.RNG$, (state.b0 + (state.b1 * state.x[i])));
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample7)
-			b0 = DistributionSampling.sampleCauchy(RNG$, 0.0, 2.0);
-		if(!fixedFlag$sample11)
-			b1 = DistributionSampling.sampleHalfCauchy(RNG$, 1.0, 5.0);
+		if(!state.fixedFlag$sample7)
+			state.b0 = DistributionSampling.sampleCauchy(state.RNG$, 0.0, 2.0);
+		if(!state.fixedFlag$sample11)
+			state.b1 = DistributionSampling.sampleHalfCauchy(state.RNG$, 1.0, 5.0);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -921,35 +740,35 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample7)
-			b0 = DistributionSampling.sampleCauchy(RNG$, 0.0, 2.0);
-		if(!fixedFlag$sample11)
-			b1 = DistributionSampling.sampleHalfCauchy(RNG$, 1.0, 5.0);
+		if(!state.fixedFlag$sample7)
+			state.b0 = DistributionSampling.sampleCauchy(state.RNG$, 0.0, 2.0);
+		if(!state.fixedFlag$sample11)
+			state.b1 = DistributionSampling.sampleHalfCauchy(state.RNG$, 1.0, 5.0);
 	}
 
 	// Method to execute one round of Gibbs sampling.
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample7)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample7)
 				inferSample7();
-			if(!fixedFlag$sample11)
+			if(!state.fixedFlag$sample11)
 				inferSample11();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample11)
+			if(!state.fixedFlag$sample11)
 				inferSample11();
-			if(!fixedFlag$sample7)
+			if(!state.fixedFlag$sample7)
 				inferSample7();
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample7)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample7)
 			drawValueSample7();
-		if(!constrainedFlag$sample11)
+		if(!state.constrainedFlag$sample11)
 			drawValueSample11();
 	}
 
@@ -961,16 +780,16 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample7)
-			logProbability$b0 = Double.NaN;
-		if(!fixedProbFlag$sample11)
-			logProbability$b1 = Double.NaN;
-		logProbability$y = 0.0;
-		if(!fixedProbFlag$sample27) {
-			for(int i = 0; i < noSamples; i += 1)
-				logProbability$sample27[((i - 0) / 1)] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample7)
+			state.logProbability$b0 = Double.NaN;
+		if(!state.fixedProbFlag$sample11)
+			state.logProbability$b1 = Double.NaN;
+		state.logProbability$y = 0.0;
+		if(!state.fixedProbFlag$sample27) {
+			for(int i = 0; i < state.noSamples; i += 1)
+				state.logProbability$sample27[((i - 0) / 1)] = Double.NaN;
 		}
 	}
 
@@ -978,7 +797,7 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 	// etc.
 	@Override
 	public final void initializeModel() {
-		noSamples = x.length;
+		state.noSamples = state.x.length;
 	}
 
 	// Construct the evidence probabilities.
@@ -988,9 +807,9 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample7)
+		if(state.fixedFlag$sample7)
 			logProbabilityValue$sample7();
-		if(fixedFlag$sample11)
+		if(state.fixedFlag$sample11)
 			logProbabilityValue$sample11();
 		logProbabilityValue$sample27();
 	}
@@ -1038,8 +857,8 @@ final class DistributionsTest$SingleThreadCPU extends CoreModelSingleThreadCPU i
 	@Override
 	public final void propagateObservedValues() {
 		// Deep copy between arrays
-		double[] cv$source1 = yMeasured;
-		double[] cv$target1 = y;
+		double[] cv$source1 = state.yMeasured;
+		double[] cv$target1 = state.y;
 		int cv$length1 = cv$target1.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			cv$target1[cv$index1] = cv$source1[cv$index1];

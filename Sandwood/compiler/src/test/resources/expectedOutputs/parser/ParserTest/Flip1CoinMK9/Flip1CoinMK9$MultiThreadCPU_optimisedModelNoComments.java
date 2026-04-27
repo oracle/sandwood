@@ -1,243 +1,149 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.Flip1CoinMK9$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.Flip1CoinMK9.State;
 import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip1CoinMK9$MultiThreadCPU extends CoreModelMultiThreadCPU implements Flip1CoinMK9$CoreInterface {
-double bias;
-	boolean constrainedFlag$sample7 = true;
-	boolean fixedFlag$sample7 = false;
-	boolean fixedProbFlag$sample20 = false;
-	boolean fixedProbFlag$sample7 = false;
-	boolean[] flips;
-	boolean[] flipsMeasured;
-	int length$flipsMeasured;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$bernoulli;
-	double logProbability$bias;
-	double logProbability$flips;
-	double logProbability$var20;
-	int samples;
-	boolean system$gibbsForward = true;
+final class Flip1CoinMK9$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	public Flip1CoinMK9$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	@Override
-	public final double get$bias() {
-		return bias;
-	}
 
-	@Override
-	public final void set$bias(double cv$value, boolean allocated$) {
-		bias = cv$value;
-		fixedProbFlag$sample7 = false;
-		fixedProbFlag$sample20 = false;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample7() {
-		return fixedFlag$sample7;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample7(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample7 = cv$value;
-		constrainedFlag$sample7 = (cv$value || constrainedFlag$sample7);
-		fixedProbFlag$sample7 = (cv$value && fixedProbFlag$sample7);
-		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
-	}
-
-	@Override
-	public final boolean[] get$flips() {
-		return flips;
-	}
-
-	@Override
-	public final boolean[] get$flipsMeasured() {
-		return flipsMeasured;
-	}
-
-	@Override
-	public final void set$flipsMeasured(boolean[] cv$value, boolean allocated$) {
-		flipsMeasured = cv$value;
-	}
-
-	@Override
-	public final int get$length$flipsMeasured() {
-		return length$flipsMeasured;
-	}
-
-	@Override
-	public final void set$length$flipsMeasured(int cv$value, boolean allocated$) {
-		length$flipsMeasured = cv$value;
-	}
-
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	@Override
-	public final double get$logProbability$bernoulli() {
-		return logProbability$bernoulli;
-	}
-
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	@Override
-	public final double get$logProbability$flips() {
-		return logProbability$flips;
-	}
-
-	@Override
-	public final int get$samples() {
-		return samples;
+	public Flip1CoinMK9$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	private final void drawValueSample7() {
-		bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	private final void inferSample7() {
-		constrainedFlag$sample7 = false;
+		state.constrainedFlag$sample7 = false;
 		int cv$sum = 0;
 		int cv$count = 0;
-		for(int var19 = 0; var19 < samples; var19 += 1) {
-			constrainedFlag$sample7 = true;
+		for(int var19 = 0; var19 < state.samples; var19 += 1) {
+			state.constrainedFlag$sample7 = true;
 			cv$count = (cv$count + 1);
-			if(flips[var19])
+			if(state.flips[var19])
 				cv$sum = (cv$sum + 1);
 		}
-		if(constrainedFlag$sample7)
-			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		if(state.constrainedFlag$sample7)
+			state.bias = Conjugates.sampleConjugateBetaBinomial(state.RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	private final void logProbabilityValue$sample20() {
-		if(!fixedProbFlag$sample20) {
+		if(!state.fixedProbFlag$sample20) {
 			double cv$sampleAccumulator = 0.0;
-			for(int var19 = 0; var19 < samples; var19 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= bias) && (bias <= 1.0))?Math.log((flips[var19]?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY));
-			logProbability$bernoulli = cv$sampleAccumulator;
-			logProbability$var20 = cv$sampleAccumulator;
-			logProbability$flips = (logProbability$flips + cv$sampleAccumulator);
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample20 = fixedFlag$sample7;
+			for(int var19 = 0; var19 < state.samples; var19 += 1)
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= state.bias) && (state.bias <= 1.0))?Math.log((state.flips[var19]?state.bias:(1.0 - state.bias))):Double.NEGATIVE_INFINITY));
+			state.logProbability$bernoulli = cv$sampleAccumulator;
+			state.logProbability$var20 = cv$sampleAccumulator;
+			state.logProbability$flips = (state.logProbability$flips + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
+			state.fixedProbFlag$sample20 = state.fixedFlag$sample7;
 		} else {
-			logProbability$bernoulli = logProbability$var20;
-			logProbability$flips = (logProbability$flips + logProbability$var20);
-			logProbability$$model = (logProbability$$model + logProbability$var20);
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var20);
+			state.logProbability$bernoulli = state.logProbability$var20;
+			state.logProbability$flips = (state.logProbability$flips + state.logProbability$var20);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var20);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var20);
 		}
 	}
 
 	private final void logProbabilityValue$sample7() {
-		if(!fixedProbFlag$sample7) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(bias, 1.0, 1.0);
-			logProbability$bias = cv$distributionAccumulator;
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			if(fixedFlag$sample7)
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample7 = fixedFlag$sample7;
+		if(!state.fixedProbFlag$sample7) {
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(state.bias, 1.0, 1.0);
+			state.logProbability$bias = cv$distributionAccumulator;
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
+			if(state.fixedFlag$sample7)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
+			state.fixedProbFlag$sample7 = state.fixedFlag$sample7;
 		} else {
-			logProbability$$model = (logProbability$$model + logProbability$bias);
-			if(fixedFlag$sample7)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$bias);
+			if(state.fixedFlag$sample7)
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$bias);
 		}
 	}
 
 	@Override
-	public final void allocate() {
-		flips = new boolean[length$flipsMeasured];
-	}
-
-	@Override
-	public final void allocateScratch() {}
-
-	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample7)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		parallelFor(RNG$, 0, samples, 1,
+		if(!state.fixedFlag$sample7)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+		parallelFor(state.RNG$, 0, state.samples, 1,
 			(int forStart$var19, int forEnd$var19, int threadID$var19, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var19 = forStart$var19; var19 < forEnd$var19; var19 += 1)
-						flips[var19] = DistributionSampling.sampleBernoulli(RNG$1, bias);
+						state.flips[var19] = DistributionSampling.sampleBernoulli(RNG$1, state.bias);
 			}
 		);
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample7)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample7)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample7)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		parallelFor(RNG$, 0, samples, 1,
+		if(!state.fixedFlag$sample7)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+		parallelFor(state.RNG$, 0, state.samples, 1,
 			(int forStart$var19, int forEnd$var19, int threadID$var19, org.sandwood.random.internal.Rng RNG$1) -> { 
 				for(int var19 = forStart$var19; var19 < forEnd$var19; var19 += 1)
-						flips[var19] = DistributionSampling.sampleBernoulli(RNG$1, bias);
+						state.flips[var19] = DistributionSampling.sampleBernoulli(RNG$1, state.bias);
 			}
 		);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample7)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample7)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample7)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample7)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	@Override
 	public final void gibbsRound() {
-		if(!fixedFlag$sample7)
+		if(!state.fixedFlag$sample7)
 			inferSample7();
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample7)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample7)
 			drawValueSample7();
 	}
 
 	private final void initializeLogProbabilityFields() {
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample7)
-			logProbability$bias = Double.NaN;
-		logProbability$bernoulli = Double.NaN;
-		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample20)
-			logProbability$var20 = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample7)
+			state.logProbability$bias = Double.NaN;
+		state.logProbability$bernoulli = Double.NaN;
+		state.logProbability$flips = 0.0;
+		if(!state.fixedProbFlag$sample20)
+			state.logProbability$var20 = Double.NaN;
 	}
 
 	@Override
 	public final void initializeModel() {
-		samples = length$flipsMeasured;
+		state.samples = state.length$flipsMeasured;
 	}
 
 	@Override
 	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample7)
+		if(state.fixedFlag$sample7)
 			logProbabilityValue$sample7();
 		logProbabilityValue$sample20();
 	}
@@ -258,8 +164,8 @@ double bias;
 
 	@Override
 	public final void propagateObservedValues() {
-		for(int i = (samples - 1); i >= 0; i -= 1)
-			flips[i] = flipsMeasured[i];
+		for(int i = (state.samples - 1); i >= 0; i -= 1)
+			state.flips[i] = state.flipsMeasured[i];
 	}
 
 	@Override

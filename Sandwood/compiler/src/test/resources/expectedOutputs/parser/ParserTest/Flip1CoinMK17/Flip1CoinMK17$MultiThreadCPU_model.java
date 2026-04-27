@@ -1,125 +1,32 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.Flip1CoinMK17$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.Flip1CoinMK17.State;
 import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.internal.numericTools.Gaussian;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU implements Flip1CoinMK17$CoreInterface {
+final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double bias;
-	boolean constrainedFlag$sample7 = true;
-	boolean fixedFlag$sample7 = false;
-	boolean fixedProbFlag$sample7 = false;
-	boolean fixedProbFlag$sample9 = false;
-	boolean flip;
-	boolean flipMeasured;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$bernoulli;
-	double logProbability$bias;
-	double logProbability$flip;
-	boolean system$gibbsForward = true;
-
-	public Flip1CoinMK17$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	// Getter for bias.
-	@Override
-	public final double get$bias() {
-		return bias;
-	}
 
-	// Setter for bias.
-	@Override
-	public final void set$bias(double cv$value, boolean allocated$) {
-		// Set flags for all the side effects of bias including if probabilities need to be
-		// updated.
-		bias = cv$value;
-		
-		// Unset the fixed probability flag for sample 7 as it depends on bias.
-		fixedProbFlag$sample7 = false;
-		
-		// Unset the fixed probability flag for sample 9 as it depends on bias.
-		fixedProbFlag$sample9 = false;
-	}
-
-	// Getter for fixedFlag$sample7.
-	@Override
-	public final boolean get$fixedFlag$sample7() {
-		return fixedFlag$sample7;
-	}
-
-	// Setter for fixedFlag$sample7.
-	@Override
-	public final void set$fixedFlag$sample7(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample7 including if probabilities
-		// need to be updated.
-		fixedFlag$sample7 = cv$value;
-		constrainedFlag$sample7 = (fixedFlag$sample7 || constrainedFlag$sample7);
-		
-		// Should the probability of sample 7 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample7 = (fixedFlag$sample7 && fixedProbFlag$sample7);
-		
-		// Should the probability of sample 9 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample9 = (fixedFlag$sample7 && fixedProbFlag$sample9);
-	}
-
-	// Getter for flip.
-	@Override
-	public final boolean get$flip() {
-		return flip;
-	}
-
-	// Getter for flipMeasured.
-	@Override
-	public final boolean get$flipMeasured() {
-		return flipMeasured;
-	}
-
-	// Setter for flipMeasured.
-	@Override
-	public final void set$flipMeasured(boolean cv$value, boolean allocated$) {
-		flipMeasured = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$bernoulli.
-	@Override
-	public final double get$logProbability$bernoulli() {
-		return logProbability$bernoulli;
-	}
-
-	// Getter for logProbability$bias.
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	// Getter for logProbability$flip.
-	@Override
-	public final double get$logProbability$flip() {
-		return logProbability$flip;
+	public Flip1CoinMK17$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample7
 	private final void drawValueSample7() {
-		bias = ((Math.sqrt(1.0) * DistributionSampling.sampleTruncatedGaussian(RNG$, ((0.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((0.0 - 0.5) / Math.sqrt(1.0))), ((1.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((1.0 - 0.5) / Math.sqrt(1.0))))) + 0.5);
+		state.bias = ((Math.sqrt(1.0) * DistributionSampling.sampleTruncatedGaussian(state.RNG$, ((0.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((0.0 - 0.5) / Math.sqrt(1.0))), ((1.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((1.0 - 0.5) / Math.sqrt(1.0))))) + 0.5);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -127,7 +34,7 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 	// Metropolis-Hastings.
 	private final void inferSample7() {
 		if(true) {
-			constrainedFlag$sample7 = false;
+			state.constrainedFlag$sample7 = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -137,7 +44,7 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 			}
 			
 			// The original value of the sample
-			double cv$originalValue = bias;
+			double cv$originalValue = state.bias;
 			
 			// The probability of the random variable generating the originally sampled value
 			double cv$originalProbability = 0.0;
@@ -150,12 +57,12 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 				cv$var = (0.1 * 0.1);
 			
 			// The proposed new value for the sample
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			
 			// The probability of the random variable generating the new sample value.
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample7 || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample7 || (cv$valuePos == 0))) {
 					// Initialize the summed probabilities to 0.
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					
@@ -177,7 +84,7 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 						// Update Sample and intermediate values
 						// 
 						// Write out the new value of the sample.
-						bias = cv$proposedValue;
+						state.bias = cv$proposedValue;
 					}
 					{
 						// Record the reached probability density.
@@ -200,7 +107,7 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 											boolean cv$sampleConstrained = true;
 											if(cv$sampleConstrained) {
 												// Mark that the sample has observed constrained data.
-												constrainedFlag$sample7 = true;
+												state.constrainedFlag$sample7 = true;
 												
 												// Set an accumulator to sum the probabilities for each possible configuration of
 												// inputs.
@@ -215,14 +122,14 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 															{
 																{
 																	// Record the probability of sample task 9 generating output with current configuration.
-																	if(((Math.log(1.0) + (((0.0 <= traceTempVariable$bias$1_1) && (traceTempVariable$bias$1_1 <= 1.0))?Math.log((flip?traceTempVariable$bias$1_1:(1.0 - traceTempVariable$bias$1_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= traceTempVariable$bias$1_1) && (traceTempVariable$bias$1_1 <= 1.0))?Math.log((flip?traceTempVariable$bias$1_1:(1.0 - traceTempVariable$bias$1_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																	if(((Math.log(1.0) + (((0.0 <= traceTempVariable$bias$1_1) && (traceTempVariable$bias$1_1 <= 1.0))?Math.log((state.flip?traceTempVariable$bias$1_1:(1.0 - traceTempVariable$bias$1_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= traceTempVariable$bias$1_1) && (traceTempVariable$bias$1_1 <= 1.0))?Math.log((state.flip?traceTempVariable$bias$1_1:(1.0 - traceTempVariable$bias$1_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																	else {
 																		// If the second value is -infinity.
 																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= traceTempVariable$bias$1_1) && (traceTempVariable$bias$1_1 <= 1.0))?Math.log((flip?traceTempVariable$bias$1_1:(1.0 - traceTempVariable$bias$1_1))):Double.NEGATIVE_INFINITY));
+																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= traceTempVariable$bias$1_1) && (traceTempVariable$bias$1_1 <= 1.0))?Math.log((state.flip?traceTempVariable$bias$1_1:(1.0 - traceTempVariable$bias$1_1))):Double.NEGATIVE_INFINITY));
 																		else
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= traceTempVariable$bias$1_1) && (traceTempVariable$bias$1_1 <= 1.0))?Math.log((flip?traceTempVariable$bias$1_1:(1.0 - traceTempVariable$bias$1_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= traceTempVariable$bias$1_1) && (traceTempVariable$bias$1_1 <= 1.0))?Math.log((flip?traceTempVariable$bias$1_1:(1.0 - traceTempVariable$bias$1_1))):Double.NEGATIVE_INFINITY)));
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= traceTempVariable$bias$1_1) && (traceTempVariable$bias$1_1 <= 1.0))?Math.log((state.flip?traceTempVariable$bias$1_1:(1.0 - traceTempVariable$bias$1_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= traceTempVariable$bias$1_1) && (traceTempVariable$bias$1_1 <= 1.0))?Math.log((state.flip?traceTempVariable$bias$1_1:(1.0 - traceTempVariable$bias$1_1))):Double.NEGATIVE_INFINITY)));
 																	}
 																	
 																	// Recorded the probability of reaching sample task 9 with the current configuration.
@@ -283,13 +190,13 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 					// to be less than or equal as otherwise if the proposed value is not possible and
 					// the random value is 0 an impossible value will be accepted.
 					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio)))
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$))))) || Double.isNaN(cv$ratio)))
 							// If it is not revert the changes.
 							// 
 							// Set the sample value
 							// 
 							// Write out the new value of the sample.
-							bias = cv$originalValue;
+							state.bias = cv$originalValue;
 					}
 				}
 			}
@@ -300,7 +207,7 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 	private final void logProbabilityValue$sample7() {
 		// Determine if we need to calculate the values for sample task 7 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample7) {
+		if(!state.fixedProbFlag$sample7) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -316,7 +223,7 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 			{
 				{
 					// The sample value to calculate the probability of generating
-					double cv$sampleValue = bias;
+					double cv$sampleValue = state.bias;
 					{
 						{
 							double var2 = 0.5;
@@ -360,19 +267,19 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$bias = cv$sampleProbability;
+			state.logProbability$bias = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample7)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample7)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample7 = fixedFlag$sample7;
+			state.fixedProbFlag$sample7 = state.fixedFlag$sample7;
 		} else {
 			// Using cached values.
 			// 
@@ -380,17 +287,17 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$bias;
+			double cv$sampleValue = state.logProbability$bias;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample7)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample7)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -398,7 +305,7 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 	private final void logProbabilityValue$sample9() {
 		// Determine if we need to calculate the values for sample task 9 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample9) {
+		if(!state.fixedProbFlag$sample9) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -414,11 +321,11 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 			{
 				{
 					// The sample value to calculate the probability of generating
-					boolean cv$sampleValue = flip;
+					boolean cv$sampleValue = state.flip;
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= bias) && (bias <= 1.0))?Math.log((cv$sampleValue?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= state.bias) && (state.bias <= 1.0))?Math.log((cv$sampleValue?state.bias:(1.0 - state.bias))):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -451,18 +358,18 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$bernoulli = cv$sampleAccumulator;
+			state.logProbability$bernoulli = cv$sampleAccumulator;
 			
 			// Store the sample task probability
-			logProbability$flip = cv$sampleProbability;
+			state.logProbability$flip = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample9 = fixedFlag$sample7;
+			state.fixedProbFlag$sample9 = state.fixedFlag$sample7;
 		} else {
 			// Using cached values.
 			// 
@@ -470,33 +377,23 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$flip;
+			double cv$sampleValue = state.logProbability$flip;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$bernoulli = cv$rvAccumulator;
+			state.logProbability$bernoulli = cv$rvAccumulator;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample7)
-			bias = ((Math.sqrt(1.0) * DistributionSampling.sampleTruncatedGaussian(RNG$, ((0.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((0.0 - 0.5) / Math.sqrt(1.0))), ((1.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((1.0 - 0.5) / Math.sqrt(1.0))))) + 0.5);
-		flip = DistributionSampling.sampleBernoulli(RNG$, bias);
+		if(!state.fixedFlag$sample7)
+			state.bias = ((Math.sqrt(1.0) * DistributionSampling.sampleTruncatedGaussian(state.RNG$, ((0.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((0.0 - 0.5) / Math.sqrt(1.0))), ((1.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((1.0 - 0.5) / Math.sqrt(1.0))))) + 0.5);
+		state.flip = DistributionSampling.sampleBernoulli(state.RNG$, state.bias);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -504,25 +401,25 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample7)
-			bias = ((Math.sqrt(1.0) * DistributionSampling.sampleTruncatedGaussian(RNG$, ((0.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((0.0 - 0.5) / Math.sqrt(1.0))), ((1.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((1.0 - 0.5) / Math.sqrt(1.0))))) + 0.5);
+		if(!state.fixedFlag$sample7)
+			state.bias = ((Math.sqrt(1.0) * DistributionSampling.sampleTruncatedGaussian(state.RNG$, ((0.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((0.0 - 0.5) / Math.sqrt(1.0))), ((1.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((1.0 - 0.5) / Math.sqrt(1.0))))) + 0.5);
 	}
 
 	// Method to execute the model code conventionally with priming of fixed intermediate
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample7)
-			bias = ((Math.sqrt(1.0) * DistributionSampling.sampleTruncatedGaussian(RNG$, ((0.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((0.0 - 0.5) / Math.sqrt(1.0))), ((1.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((1.0 - 0.5) / Math.sqrt(1.0))))) + 0.5);
-		flip = DistributionSampling.sampleBernoulli(RNG$, bias);
+		if(!state.fixedFlag$sample7)
+			state.bias = ((Math.sqrt(1.0) * DistributionSampling.sampleTruncatedGaussian(state.RNG$, ((0.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((0.0 - 0.5) / Math.sqrt(1.0))), ((1.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((1.0 - 0.5) / Math.sqrt(1.0))))) + 0.5);
+		state.flip = DistributionSampling.sampleBernoulli(state.RNG$, state.bias);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample7)
-			bias = ((Math.sqrt(1.0) * DistributionSampling.sampleTruncatedGaussian(RNG$, ((0.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((0.0 - 0.5) / Math.sqrt(1.0))), ((1.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((1.0 - 0.5) / Math.sqrt(1.0))))) + 0.5);
+		if(!state.fixedFlag$sample7)
+			state.bias = ((Math.sqrt(1.0) * DistributionSampling.sampleTruncatedGaussian(state.RNG$, ((0.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((0.0 - 0.5) / Math.sqrt(1.0))), ((1.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((1.0 - 0.5) / Math.sqrt(1.0))))) + 0.5);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -530,27 +427,27 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample7)
-			bias = ((Math.sqrt(1.0) * DistributionSampling.sampleTruncatedGaussian(RNG$, ((0.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((0.0 - 0.5) / Math.sqrt(1.0))), ((1.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((1.0 - 0.5) / Math.sqrt(1.0))))) + 0.5);
+		if(!state.fixedFlag$sample7)
+			state.bias = ((Math.sqrt(1.0) * DistributionSampling.sampleTruncatedGaussian(state.RNG$, ((0.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((0.0 - 0.5) / Math.sqrt(1.0))), ((1.0 - 0.5) / Math.sqrt(1.0)), Gaussian.cdf(((1.0 - 0.5) / Math.sqrt(1.0))))) + 0.5);
 	}
 
 	// Method to execute one round of Gibbs sampling.
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample7)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample7)
 				inferSample7();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample7)
+			if(!state.fixedFlag$sample7)
 				inferSample7();
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample7)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample7)
 			drawValueSample7();
 	}
 
@@ -562,13 +459,13 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample7)
-			logProbability$bias = Double.NaN;
-		logProbability$bernoulli = 0.0;
-		if(!fixedProbFlag$sample9)
-			logProbability$flip = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample7)
+			state.logProbability$bias = Double.NaN;
+		state.logProbability$bernoulli = 0.0;
+		if(!state.fixedProbFlag$sample9)
+			state.logProbability$flip = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
@@ -583,7 +480,7 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample7)
+		if(state.fixedFlag$sample7)
 			logProbabilityValue$sample7();
 		logProbabilityValue$sample9();
 	}
@@ -628,7 +525,7 @@ final class Flip1CoinMK17$MultiThreadCPU extends CoreModelMultiThreadCPU impleme
 	// Method to propagate observed values back into the model.
 	@Override
 	public final void propagateObservedValues() {
-		flip = flipMeasured;
+		state.flip = state.flipMeasured;
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are

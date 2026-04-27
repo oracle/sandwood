@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,12 +16,119 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model PoissonDecayMK1 This is the class that all
  * user interactions with the model should occur through.
  */
-public final class PoissonDecayMK1 extends Model {
-    private PoissonDecayMK1$CoreInterface system$c = new PoissonDecayMK1$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class PoissonDecayMK1 extends Model<PoissonDecayMK1.State> {
+	final class State extends CoreModelState {
+double a;
+		double b;
+		boolean constrainedFlag$sample6 = true;
+		int[] decay;
+		int[] decayDetected;
+		boolean fixedFlag$sample6 = false;
+		boolean fixedProbFlag$sample19 = false;
+		boolean fixedProbFlag$sample6 = false;
+		int length$decayDetected;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$decay;
+		double logProbability$poisson;
+		double logProbability$rate;
+		double logProbability$var19;
+		double rate;
+		int samples;
+		boolean system$gibbsForward = true;
+
+		@Override
+		public final void allocate() {
+			decay = new int[length$decayDetected];
+		}
+
+		final double get$a() {
+			return a;
+		}
+
+		final void set$a(double cv$value, boolean allocated$) {
+			a = cv$value;
+		}
+
+		final double get$b() {
+			return b;
+		}
+
+		final void set$b(double cv$value, boolean allocated$) {
+			b = cv$value;
+		}
+
+		final int[] get$decay() {
+			return decay;
+		}
+
+		final int[] get$decayDetected() {
+			return decayDetected;
+		}
+
+		final void set$decayDetected(int[] cv$value, boolean allocated$) {
+			decayDetected = cv$value;
+		}
+
+		final boolean get$fixedFlag$sample6() {
+			return fixedFlag$sample6;
+		}
+
+		final void set$fixedFlag$sample6(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample6 = cv$value;
+			constrainedFlag$sample6 = (fixedFlag$sample6 || constrainedFlag$sample6);
+			fixedProbFlag$sample6 = (fixedFlag$sample6 && fixedProbFlag$sample6);
+			fixedProbFlag$sample19 = (fixedFlag$sample6 && fixedProbFlag$sample19);
+		}
+
+		final int get$length$decayDetected() {
+			return length$decayDetected;
+		}
+
+		final void set$length$decayDetected(int cv$value, boolean allocated$) {
+			length$decayDetected = cv$value;
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$decay() {
+			return logProbability$decay;
+		}
+
+		final double get$logProbability$poisson() {
+			return logProbability$poisson;
+		}
+
+		final double get$logProbability$rate() {
+			return logProbability$rate;
+		}
+
+		final double get$rate() {
+			return rate;
+		}
+
+		final void set$rate(double cv$value, boolean allocated$) {
+			rate = cv$value;
+			fixedProbFlag$sample6 = false;
+			fixedProbFlag$sample19 = false;
+		}
+
+		final int get$samples() {
+			return samples;
+		}
+	}
 
     private final ComputedIntegerArrayInternal $decay = new ComputedIntegerArrayInternal(this, "decay", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int[] getValue() { return system$c.get$decay(); }
+        public int[] getValue() { return state.get$decay(); }
 
         @Override
         protected void setValueInternal(int[] value) {}
@@ -30,7 +139,7 @@ public final class PoissonDecayMK1 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$decay(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$decay(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -48,27 +157,27 @@ public final class PoissonDecayMK1 extends Model {
 
     private final ComputedDoubleInternal $rate = new ComputedDoubleInternal(this, "rate", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$rate(); }
+        public double getValue() { return state.get$rate(); }
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$rate(value, allocated);
+            state.set$rate(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$rate(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$rate(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample6(fixed, allocated);
+                state.set$fixedFlag$sample6(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample6())
+            if(state.get$fixedFlag$sample6())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -84,12 +193,12 @@ public final class PoissonDecayMK1 extends Model {
         @Override
         public double getValue() {
             synchronized(model) {
-                return system$c.get$a();
+                return state.get$a();
             }
         }
 
         @Override
-        protected void setValueInternal(double value) { system$c.set$a(value, allocated); }
+        protected void setValueInternal(double value) { state.set$a(value, allocated); }
     };
 
 	/** Observed variable representing a of type double from the Sandwood model. */
@@ -99,12 +208,12 @@ public final class PoissonDecayMK1 extends Model {
         @Override
         public double getValue() {
             synchronized(model) {
-                return system$c.get$b();
+                return state.get$b();
             }
         }
 
         @Override
-        protected void setValueInternal(double value) { system$c.set$b(value, allocated); }
+        protected void setValueInternal(double value) { state.set$b(value, allocated); }
     };
 
 	/** Observed variable representing b of type double from the Sandwood model. */
@@ -116,24 +225,24 @@ public final class PoissonDecayMK1 extends Model {
         @Override
         public int[] getValue() {
             synchronized(model) {
-                return system$c.get$decayDetected();
+                return state.get$decayDetected();
             }
         }
 
         @Override
         public void setValueInternal(int[] value) {
-            system$c.set$decayDetected(value, allocated);
-            system$c.set$length$decayDetected(value.length, allocated);
+            state.set$decayDetected(value, allocated);
+            state.set$length$decayDetected(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$decayDetected(shape, allocated);
+            state.set$length$decayDetected(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$decayDetected();
+            return state.get$length$decayDetected();
         }
     };
 
@@ -147,7 +256,7 @@ public final class PoissonDecayMK1 extends Model {
     private final RandomVariableInternal $poisson = new RandomVariableInternal(this, "poisson", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
-            return system$c.get$logProbability$poisson();
+            return state.get$logProbability$poisson();
         }
     };
 
@@ -160,6 +269,7 @@ public final class PoissonDecayMK1 extends Model {
 	/** A constructor for a model where no variable values are set. */
     public PoissonDecayMK1() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("decay", $decay);
         $computedVariables.put("rate", $rate);
@@ -170,7 +280,9 @@ public final class PoissonDecayMK1 extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("decayDetected", $decayDetected);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        PoissonDecayMK1$SingleThreadCPU core = new PoissonDecayMK1$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -204,44 +316,15 @@ public final class PoissonDecayMK1 extends Model {
     }
     
     @Override
-    protected PoissonDecayMK1$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        PoissonDecayMK1$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new PoissonDecayMK1$SingleThreadCPU(target);
-                break;
+                return new PoissonDecayMK1$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new PoissonDecayMK1$MultiThreadCPU(target);
-                break;
+                return new PoissonDecayMK1$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(PoissonDecayMK1$CoreInterface oldCore, PoissonDecayMK1$CoreInterface newCore) {
-        //Model inputs
-        if(a.isSet())
-            newCore.set$a(oldCore.get$a(), false);
-        if(b.isSet())
-            newCore.set$b(oldCore.get$b(), false);
-
-        //Observed arrays
-        if(decayDetected.isSet()) {
-            newCore.set$decayDetected(oldCore.get$decayDetected(), false);
-            newCore.set$length$decayDetected(oldCore.get$length$decayDetected(), false);
-        }
-        else if(decayDetected.shapeSet())
-            newCore.set$length$decayDetected(oldCore.get$length$decayDetected(), false);
-
-        //ComputedVariables
-        if($rate.isSet())
-            newCore.set$rate(oldCore.get$rate(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6(), false);
     }
 
 	/**

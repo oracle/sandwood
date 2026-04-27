@@ -1,245 +1,90 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.LDATest$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.LDATest.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements LDATest$CoreInterface {
-double[] alpha;
-	double[] beta;
-	boolean[] constrainedFlag$sample42;
-	boolean[] constrainedFlag$sample58;
-	boolean[][] constrainedFlag$sample90;
-	int[][] documents;
-	boolean fixedFlag$sample42 = false;
-	boolean fixedFlag$sample58 = false;
-	boolean fixedProbFlag$sample42 = false;
-	boolean fixedProbFlag$sample58 = false;
-	int[] length$documents;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$phi;
-	double[][] logProbability$sample90;
-	double[][] logProbability$sample93;
-	double logProbability$theta;
-	double logProbability$var42;
-	double logProbability$var57;
-	double logProbability$w;
-	int noTopics;
-	double[][] phi;
-	boolean system$gibbsForward = true;
-	double[][] theta;
-	int vocabSize;
-	int[][] w;
-	int[][] z;
-	double[] cv$var42$countGlobal;
-	double[] cv$var57$countGlobal;
-	double[] cv$var88$stateProbabilityGlobal;
+final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
+double[] cv$var42$countGlobal;
+		double[] cv$var57$countGlobal;
+		double[] cv$var88$stateProbabilityGlobal;
 
-	public LDATest$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
-
-	@Override
-	public final double[] get$alpha() {
-		return alpha;
-	}
-
-	@Override
-	public final double[] get$beta() {
-		return beta;
-	}
-
-	@Override
-	public final int[][] get$documents() {
-		return documents;
-	}
-
-	@Override
-	public final void set$documents(int[][] cv$value, boolean allocated$) {
-		documents = cv$value;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample42() {
-		return fixedFlag$sample42;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample42(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample42 = cv$value;
-		if(allocated$) {
-			for(int index$constrainedFlag$sample42$1 = 0; index$constrainedFlag$sample42$1 < constrainedFlag$sample42.length; index$constrainedFlag$sample42$1 += 1)
-				constrainedFlag$sample42[index$constrainedFlag$sample42$1] = true;
+		@Override
+		public final void allocateScratch() {
+			cv$var42$countGlobal = new double[state.vocabSize];
+			cv$var57$countGlobal = new double[state.noTopics];
+			cv$var88$stateProbabilityGlobal = new double[state.noTopics];
 		}
-		fixedProbFlag$sample42 = (cv$value && fixedProbFlag$sample42);
 	}
 
-	@Override
-	public final boolean get$fixedFlag$sample58() {
-		return fixedFlag$sample58;
-	}
 
-	@Override
-	public final void set$fixedFlag$sample58(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample58 = cv$value;
-		if(allocated$) {
-			for(int index$constrainedFlag$sample58$1 = 0; index$constrainedFlag$sample58$1 < constrainedFlag$sample58.length; index$constrainedFlag$sample58$1 += 1)
-				constrainedFlag$sample58[index$constrainedFlag$sample58$1] = true;
-		}
-		fixedProbFlag$sample58 = (cv$value && fixedProbFlag$sample58);
-	}
-
-	@Override
-	public final int[] get$length$documents() {
-		return length$documents;
-	}
-
-	@Override
-	public final void set$length$documents(int[] cv$value, boolean allocated$) {
-		length$documents = cv$value;
-	}
-
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	@Override
-	public final double get$logProbability$phi() {
-		return logProbability$phi;
-	}
-
-	@Override
-	public final double get$logProbability$theta() {
-		return logProbability$theta;
-	}
-
-	@Override
-	public final double get$logProbability$w() {
-		return logProbability$w;
-	}
-
-	@Override
-	public final int get$noTopics() {
-		return noTopics;
-	}
-
-	@Override
-	public final void set$noTopics(int cv$value, boolean allocated$) {
-		noTopics = cv$value;
-	}
-
-	@Override
-	public final double[][] get$phi() {
-		return phi;
-	}
-
-	@Override
-	public final void set$phi(double[][] cv$value, boolean allocated$) {
-		phi = cv$value;
-		fixedProbFlag$sample42 = false;
-	}
-
-	@Override
-	public final double[][] get$theta() {
-		return theta;
-	}
-
-	@Override
-	public final void set$theta(double[][] cv$value, boolean allocated$) {
-		theta = cv$value;
-		fixedProbFlag$sample58 = false;
-	}
-
-	@Override
-	public final int get$vocabSize() {
-		return vocabSize;
-	}
-
-	@Override
-	public final void set$vocabSize(int cv$value, boolean allocated$) {
-		vocabSize = cv$value;
-	}
-
-	@Override
-	public final int[][] get$w() {
-		return w;
-	}
-
-	@Override
-	public final int[][] get$z() {
-		return z;
-	}
-
-	@Override
-	public final void set$z(int[][] cv$value, boolean allocated$) {
-		z = cv$value;
+	public LDATest$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	private final void drawValueSample42(int var41) {
-		DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, phi[var41]);
+		DistributionSampling.sampleDirichlet(state.RNG$, state.beta, state.vocabSize, state.phi[var41]);
 	}
 
 	private final void drawValueSample58(int var56) {
-		DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, theta[var56]);
+		DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.noTopics, state.theta[var56]);
 	}
 
 	private final void drawValueSample90(int i$var71, int j) {
-		z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
+		state.z[i$var71][j] = DistributionSampling.sampleCategorical(state.RNG$, state.theta[i$var71], state.noTopics);
 	}
 
 	private final void inferSample42(int var41) {
-		constrainedFlag$sample42[var41] = false;
-		for(int cv$loopIndex = 0; cv$loopIndex < vocabSize; cv$loopIndex += 1)
-			cv$var42$countGlobal[cv$loopIndex] = 0.0;
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1) {
-				if((var41 == z[i$var71][j])) {
-					constrainedFlag$sample42[var41] = true;
-					cv$var42$countGlobal[w[i$var71][j]] = (cv$var42$countGlobal[w[i$var71][j]] + 1.0);
+		state.constrainedFlag$sample42[var41] = false;
+		for(int cv$loopIndex = 0; cv$loopIndex < state.vocabSize; cv$loopIndex += 1)
+			scratch.cv$var42$countGlobal[cv$loopIndex] = 0.0;
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1) {
+				if((var41 == state.z[i$var71][j])) {
+					state.constrainedFlag$sample42[var41] = true;
+					scratch.cv$var42$countGlobal[state.w[i$var71][j]] = (scratch.cv$var42$countGlobal[state.w[i$var71][j]] + 1.0);
 				}
 			}
 		}
-		if(constrainedFlag$sample42[var41])
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, beta, cv$var42$countGlobal, phi[var41], vocabSize);
+		if(state.constrainedFlag$sample42[var41])
+			Conjugates.sampleConjugateDirichletCategorical(state.RNG$, state.beta, scratch.cv$var42$countGlobal, state.phi[var41], state.vocabSize);
 	}
 
 	private final void inferSample58(int var56) {
-		constrainedFlag$sample58[var56] = false;
-		for(int cv$loopIndex = 0; cv$loopIndex < noTopics; cv$loopIndex += 1)
-			cv$var57$countGlobal[cv$loopIndex] = 0.0;
-		for(int j = 0; j < length$documents[var56]; j += 1) {
-			if(constrainedFlag$sample90[var56][j]) {
-				constrainedFlag$sample58[var56] = true;
-				cv$var57$countGlobal[z[var56][j]] = (cv$var57$countGlobal[z[var56][j]] + 1.0);
+		state.constrainedFlag$sample58[var56] = false;
+		for(int cv$loopIndex = 0; cv$loopIndex < state.noTopics; cv$loopIndex += 1)
+			scratch.cv$var57$countGlobal[cv$loopIndex] = 0.0;
+		for(int j = 0; j < state.length$documents[var56]; j += 1) {
+			if(state.constrainedFlag$sample90[var56][j]) {
+				state.constrainedFlag$sample58[var56] = true;
+				scratch.cv$var57$countGlobal[state.z[var56][j]] = (scratch.cv$var57$countGlobal[state.z[var56][j]] + 1.0);
 			}
 		}
-		if(constrainedFlag$sample58[var56])
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$var57$countGlobal, theta[var56], noTopics);
+		if(state.constrainedFlag$sample58[var56])
+			Conjugates.sampleConjugateDirichletCategorical(state.RNG$, state.alpha, scratch.cv$var57$countGlobal, state.theta[var56], state.noTopics);
 	}
 
 	private final void inferSample90(int i$var71, int j) {
-		constrainedFlag$sample90[i$var71][j] = false;
-		int cv$numStates = Math.max(0, noTopics);
+		state.constrainedFlag$sample90[i$var71][j] = false;
+		int cv$numStates = Math.max(0, state.noTopics);
 		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-			z[i$var71][j] = cv$valuePos;
-			double[] var86 = theta[i$var71];
-			constrainedFlag$sample90[i$var71][j] = true;
-			double[] var89 = phi[cv$valuePos];
-			cv$var88$stateProbabilityGlobal[cv$valuePos] = (((((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[w[i$var71][j]])) && (var89[w[i$var71][j]] <= 1.0))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY) + (((((cv$valuePos < noTopics) && (0 < noTopics)) && (0.0 <= var86[cv$valuePos])) && (var86[cv$valuePos] <= 1.0))?Math.log(var86[cv$valuePos]):Double.NEGATIVE_INFINITY));
+			state.z[i$var71][j] = cv$valuePos;
+			double[] var86 = state.theta[i$var71];
+			state.constrainedFlag$sample90[i$var71][j] = true;
+			double[] var89 = state.phi[cv$valuePos];
+			scratch.cv$var88$stateProbabilityGlobal[cv$valuePos] = (((((((0.0 <= state.w[i$var71][j]) && (state.w[i$var71][j] < state.vocabSize)) && (0 < state.vocabSize)) && (0.0 <= var89[state.w[i$var71][j]])) && (var89[state.w[i$var71][j]] <= 1.0))?Math.log(var89[state.w[i$var71][j]]):Double.NEGATIVE_INFINITY) + (((((cv$valuePos < state.noTopics) && (0 < state.noTopics)) && (0.0 <= var86[cv$valuePos])) && (var86[cv$valuePos] <= 1.0))?Math.log(var86[cv$valuePos]):Double.NEGATIVE_INFINITY));
 		}
-		if(constrainedFlag$sample90[i$var71][j]) {
+		if(state.constrainedFlag$sample90[i$var71][j]) {
 			double cv$logSum;
-			double cv$lseMax = cv$var88$stateProbabilityGlobal[0];
+			double cv$lseMax = scratch.cv$var88$stateProbabilityGlobal[0];
 			for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
-				double cv$lseElementValue = cv$var88$stateProbabilityGlobal[cv$lseIndex];
+				double cv$lseElementValue = scratch.cv$var88$stateProbabilityGlobal[cv$lseIndex];
 				if((cv$lseMax < cv$lseElementValue))
 					cv$lseMax = cv$lseElementValue;
 			}
@@ -248,306 +93,265 @@ double[] alpha;
 			else {
 				double cv$lseSum = 0.0;
 				for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
-					cv$lseSum = (cv$lseSum + Math.exp((cv$var88$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
+					cv$lseSum = (cv$lseSum + Math.exp((scratch.cv$var88$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 				cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
 			}
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					cv$var88$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
+					scratch.cv$var88$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
 			} else {
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					cv$var88$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var88$stateProbabilityGlobal[cv$indexName] - cv$logSum));
+					scratch.cv$var88$stateProbabilityGlobal[cv$indexName] = Math.exp((scratch.cv$var88$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
-			for(int cv$indexName = cv$numStates; cv$indexName < cv$var88$stateProbabilityGlobal.length; cv$indexName += 1)
-				cv$var88$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
-			z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, cv$var88$stateProbabilityGlobal, cv$numStates);
+			for(int cv$indexName = cv$numStates; cv$indexName < scratch.cv$var88$stateProbabilityGlobal.length; cv$indexName += 1)
+				scratch.cv$var88$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+			state.z[i$var71][j] = DistributionSampling.sampleCategorical(state.RNG$, scratch.cv$var88$stateProbabilityGlobal, cv$numStates);
 		}
 	}
 
 	private final void logProbabilityValue$sample42() {
-		if(!fixedProbFlag$sample42) {
+		if(!state.fixedProbFlag$sample42) {
 			double cv$sampleAccumulator = 0.0;
-			for(int var41 = 0; var41 < noTopics; var41 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(phi[var41], beta, vocabSize));
-			logProbability$var42 = cv$sampleAccumulator;
-			logProbability$phi = (logProbability$phi + cv$sampleAccumulator);
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			if(fixedFlag$sample42)
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample42 = fixedFlag$sample42;
+			for(int var41 = 0; var41 < state.noTopics; var41 += 1)
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(state.phi[var41], state.beta, state.vocabSize));
+			state.logProbability$var42 = cv$sampleAccumulator;
+			state.logProbability$phi = (state.logProbability$phi + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
+			if(state.fixedFlag$sample42)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
+			state.fixedProbFlag$sample42 = state.fixedFlag$sample42;
 		} else {
-			logProbability$phi = (logProbability$phi + logProbability$var42);
-			logProbability$$model = (logProbability$$model + logProbability$var42);
-			if(fixedFlag$sample42)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var42);
+			state.logProbability$phi = (state.logProbability$phi + state.logProbability$var42);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var42);
+			if(state.fixedFlag$sample42)
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var42);
 		}
 	}
 
 	private final void logProbabilityValue$sample58() {
-		if(!fixedProbFlag$sample58) {
+		if(!state.fixedProbFlag$sample58) {
 			double cv$sampleAccumulator = 0.0;
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(theta[var56], alpha, noTopics));
-			logProbability$var57 = cv$sampleAccumulator;
-			logProbability$theta = (logProbability$theta + cv$sampleAccumulator);
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
-			if(fixedFlag$sample58)
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
-			fixedProbFlag$sample58 = fixedFlag$sample58;
+			for(int var56 = 0; var56 < state.length$documents.length; var56 += 1)
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(state.theta[var56], state.alpha, state.noTopics));
+			state.logProbability$var57 = cv$sampleAccumulator;
+			state.logProbability$theta = (state.logProbability$theta + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
+			if(state.fixedFlag$sample58)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
+			state.fixedProbFlag$sample58 = state.fixedFlag$sample58;
 		} else {
-			logProbability$theta = (logProbability$theta + logProbability$var57);
-			logProbability$$model = (logProbability$$model + logProbability$var57);
-			if(fixedFlag$sample58)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var57);
+			state.logProbability$theta = (state.logProbability$theta + state.logProbability$var57);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var57);
+			if(state.fixedFlag$sample58)
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var57);
 		}
 	}
 
 	private final void logProbabilityValue$sample90() {
 		double cv$accumulator = 0.0;
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1) {
-				int cv$sampleValue = z[i$var71][j];
-				double[] var86 = theta[i$var71];
-				double cv$distributionAccumulator = ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noTopics)) && (0 < noTopics)) && (0.0 <= var86[cv$sampleValue])) && (var86[cv$sampleValue] <= 1.0))?Math.log(var86[cv$sampleValue]):Double.NEGATIVE_INFINITY);
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1) {
+				int cv$sampleValue = state.z[i$var71][j];
+				double[] var86 = state.theta[i$var71];
+				double cv$distributionAccumulator = ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noTopics)) && (0 < state.noTopics)) && (0.0 <= var86[cv$sampleValue])) && (var86[cv$sampleValue] <= 1.0))?Math.log(var86[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$sample90[i$var71][j] = cv$distributionAccumulator;
+				state.logProbability$sample90[i$var71][j] = cv$distributionAccumulator;
 			}
 		}
-		logProbability$$model = (logProbability$$model + cv$accumulator);
+		state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 	}
 
 	private final void logProbabilityValue$sample93() {
 		double cv$accumulator = 0.0;
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1) {
-				int cv$sampleValue = w[i$var71][j];
-				double[] var89 = phi[z[i$var71][j]];
-				double cv$distributionAccumulator = ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[cv$sampleValue])) && (var89[cv$sampleValue] <= 1.0))?Math.log(var89[cv$sampleValue]):Double.NEGATIVE_INFINITY);
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1) {
+				int cv$sampleValue = state.w[i$var71][j];
+				double[] var89 = state.phi[state.z[i$var71][j]];
+				double cv$distributionAccumulator = ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.vocabSize)) && (0 < state.vocabSize)) && (0.0 <= var89[cv$sampleValue])) && (var89[cv$sampleValue] <= 1.0))?Math.log(var89[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$sample93[i$var71][j] = cv$distributionAccumulator;
+				state.logProbability$sample93[i$var71][j] = cv$distributionAccumulator;
 			}
 		}
-		logProbability$w = (logProbability$w + cv$accumulator);
-		logProbability$$model = (logProbability$$model + cv$accumulator);
-		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-	}
-
-	@Override
-	public final void allocate() {
-		alpha = new double[noTopics];
-		beta = new double[vocabSize];
-		if(!fixedFlag$sample42) {
-			phi = new double[noTopics][];
-			for(int var41 = 0; var41 < noTopics; var41 += 1)
-				phi[var41] = new double[vocabSize];
-		}
-		if(!fixedFlag$sample58) {
-			theta = new double[length$documents.length][];
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
-				theta[var56] = new double[noTopics];
-		}
-		w = new int[length$documents.length][];
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-			w[i$var71] = new int[length$documents[i$var71]];
-		z = new int[length$documents.length][];
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-			z[i$var71] = new int[length$documents[i$var71]];
-		constrainedFlag$sample90 = new boolean[length$documents.length][];
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-			constrainedFlag$sample90[i$var71] = new boolean[length$documents[i$var71]];
-		constrainedFlag$sample42 = new boolean[noTopics];
-		constrainedFlag$sample58 = new boolean[length$documents.length];
-		logProbability$sample90 = new double[length$documents.length][];
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-			logProbability$sample90[i$var71] = new double[length$documents[i$var71]];
-		logProbability$sample93 = new double[length$documents.length][];
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-			logProbability$sample93[i$var71] = new double[length$documents[i$var71]];
-		allocateScratch();
-	}
-
-	@Override
-	public final void allocateScratch() {
-		cv$var42$countGlobal = new double[vocabSize];
-		cv$var57$countGlobal = new double[noTopics];
-		cv$var88$stateProbabilityGlobal = new double[noTopics];
+		state.logProbability$w = (state.logProbability$w + cv$accumulator);
+		state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+		state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 	}
 
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample42) {
-			for(int var41 = 0; var41 < noTopics; var41 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, phi[var41]);
+		if(!state.fixedFlag$sample42) {
+			for(int var41 = 0; var41 < state.noTopics; var41 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.beta, state.vocabSize, state.phi[var41]);
 		}
-		if(!fixedFlag$sample58) {
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, theta[var56]);
+		if(!state.fixedFlag$sample58) {
+			for(int var56 = 0; var56 < state.length$documents.length; var56 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.noTopics, state.theta[var56]);
 		}
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			int[] t = w[i$var71];
-			for(int j = 0; j < length$documents[i$var71]; j += 1) {
-				z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
-				t[j] = DistributionSampling.sampleCategorical(RNG$, phi[z[i$var71][j]], vocabSize);
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			int[] t = state.w[i$var71];
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1) {
+				state.z[i$var71][j] = DistributionSampling.sampleCategorical(state.RNG$, state.theta[i$var71], state.noTopics);
+				t[j] = DistributionSampling.sampleCategorical(state.RNG$, state.phi[state.z[i$var71][j]], state.vocabSize);
 			}
 		}
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample42) {
-			for(int var41 = 0; var41 < noTopics; var41 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, phi[var41]);
+		if(!state.fixedFlag$sample42) {
+			for(int var41 = 0; var41 < state.noTopics; var41 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.beta, state.vocabSize, state.phi[var41]);
 		}
-		if(!fixedFlag$sample58) {
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, theta[var56]);
+		if(!state.fixedFlag$sample58) {
+			for(int var56 = 0; var56 < state.length$documents.length; var56 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.noTopics, state.theta[var56]);
 		}
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1)
+				state.z[i$var71][j] = DistributionSampling.sampleCategorical(state.RNG$, state.theta[i$var71], state.noTopics);
 		}
 	}
 
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample42) {
-			for(int var41 = 0; var41 < noTopics; var41 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, phi[var41]);
+		if(!state.fixedFlag$sample42) {
+			for(int var41 = 0; var41 < state.noTopics; var41 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.beta, state.vocabSize, state.phi[var41]);
 		}
-		if(!fixedFlag$sample58) {
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, theta[var56]);
+		if(!state.fixedFlag$sample58) {
+			for(int var56 = 0; var56 < state.length$documents.length; var56 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.noTopics, state.theta[var56]);
 		}
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			int[] t = w[i$var71];
-			for(int j = 0; j < length$documents[i$var71]; j += 1) {
-				z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
-				t[j] = DistributionSampling.sampleCategorical(RNG$, phi[z[i$var71][j]], vocabSize);
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			int[] t = state.w[i$var71];
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1) {
+				state.z[i$var71][j] = DistributionSampling.sampleCategorical(state.RNG$, state.theta[i$var71], state.noTopics);
+				t[j] = DistributionSampling.sampleCategorical(state.RNG$, state.phi[state.z[i$var71][j]], state.vocabSize);
 			}
 		}
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample42) {
-			for(int var41 = 0; var41 < noTopics; var41 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, phi[var41]);
+		if(!state.fixedFlag$sample42) {
+			for(int var41 = 0; var41 < state.noTopics; var41 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.beta, state.vocabSize, state.phi[var41]);
 		}
-		if(!fixedFlag$sample58) {
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, theta[var56]);
+		if(!state.fixedFlag$sample58) {
+			for(int var56 = 0; var56 < state.length$documents.length; var56 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.noTopics, state.theta[var56]);
 		}
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1)
+				state.z[i$var71][j] = DistributionSampling.sampleCategorical(state.RNG$, state.theta[i$var71], state.noTopics);
 		}
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample42) {
-			for(int var41 = 0; var41 < noTopics; var41 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, phi[var41]);
+		if(!state.fixedFlag$sample42) {
+			for(int var41 = 0; var41 < state.noTopics; var41 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.beta, state.vocabSize, state.phi[var41]);
 		}
-		if(!fixedFlag$sample58) {
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, theta[var56]);
+		if(!state.fixedFlag$sample58) {
+			for(int var56 = 0; var56 < state.length$documents.length; var56 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.noTopics, state.theta[var56]);
 		}
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1)
+				state.z[i$var71][j] = DistributionSampling.sampleCategorical(state.RNG$, state.theta[i$var71], state.noTopics);
 		}
 	}
 
 	@Override
 	public final void gibbsRound() {
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample42) {
-				for(int var41 = 0; var41 < noTopics; var41 += 1)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample42) {
+				for(int var41 = 0; var41 < state.noTopics; var41 += 1)
 					inferSample42(var41);
 			}
-			if(!fixedFlag$sample58) {
-				for(int var56 = 0; var56 < length$documents.length; var56 += 1)
+			if(!state.fixedFlag$sample58) {
+				for(int var56 = 0; var56 < state.length$documents.length; var56 += 1)
 					inferSample58(var56);
 			}
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-				for(int j = 0; j < length$documents[i$var71]; j += 1)
+			for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+				for(int j = 0; j < state.length$documents[i$var71]; j += 1)
 					inferSample90(i$var71, j);
 			}
 		} else {
-			for(int i$var71 = (length$documents.length - 1); i$var71 >= 0; i$var71 -= 1) {
-				for(int j = (length$documents[i$var71] - 1); j >= 0; j -= 1)
+			for(int i$var71 = (state.length$documents.length - 1); i$var71 >= 0; i$var71 -= 1) {
+				for(int j = (state.length$documents[i$var71] - 1); j >= 0; j -= 1)
 					inferSample90(i$var71, j);
 			}
-			if(!fixedFlag$sample58) {
-				for(int var56 = (length$documents.length - 1); var56 >= 0; var56 -= 1)
+			if(!state.fixedFlag$sample58) {
+				for(int var56 = (state.length$documents.length - 1); var56 >= 0; var56 -= 1)
 					inferSample58(var56);
 			}
-			if(!fixedFlag$sample42) {
-				for(int var41 = (noTopics - 1); var41 >= 0; var41 -= 1)
+			if(!state.fixedFlag$sample42) {
+				for(int var41 = (state.noTopics - 1); var41 >= 0; var41 -= 1)
 					inferSample42(var41);
 			}
 		}
-		system$gibbsForward = !system$gibbsForward;
-		for(int var41 = 0; var41 < noTopics; var41 += 1) {
-			if(!constrainedFlag$sample42[var41])
+		state.system$gibbsForward = !state.system$gibbsForward;
+		for(int var41 = 0; var41 < state.noTopics; var41 += 1) {
+			if(!state.constrainedFlag$sample42[var41])
 				drawValueSample42(var41);
 		}
-		for(int var56 = 0; var56 < length$documents.length; var56 += 1) {
-			if(!constrainedFlag$sample58[var56])
+		for(int var56 = 0; var56 < state.length$documents.length; var56 += 1) {
+			if(!state.constrainedFlag$sample58[var56])
 				drawValueSample58(var56);
 		}
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1) {
-				if(!constrainedFlag$sample90[i$var71][j])
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1) {
+				if(!state.constrainedFlag$sample90[i$var71][j])
 					drawValueSample90(i$var71, j);
 			}
 		}
 	}
 
 	private final void initializeLogProbabilityFields() {
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$phi = 0.0;
-		if(!fixedProbFlag$sample42)
-			logProbability$var42 = Double.NaN;
-		logProbability$theta = 0.0;
-		if(!fixedProbFlag$sample58)
-			logProbability$var57 = Double.NaN;
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				logProbability$sample90[i$var71][j] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$phi = 0.0;
+		if(!state.fixedProbFlag$sample42)
+			state.logProbability$var42 = Double.NaN;
+		state.logProbability$theta = 0.0;
+		if(!state.fixedProbFlag$sample58)
+			state.logProbability$var57 = Double.NaN;
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1)
+				state.logProbability$sample90[i$var71][j] = Double.NaN;
 		}
-		logProbability$w = 0.0;
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				logProbability$sample93[i$var71][j] = Double.NaN;
+		state.logProbability$w = 0.0;
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1)
+				state.logProbability$sample93[i$var71][j] = Double.NaN;
 		}
 	}
 
 	@Override
 	public final void initializeModel() {
-		for(int i$var14 = 0; i$var14 < noTopics; i$var14 += 1)
-			alpha[i$var14] = 0.1;
-		for(int i$var27 = 0; i$var27 < vocabSize; i$var27 += 1)
-			beta[i$var27] = 0.1;
-		for(int index$constrainedFlag$sample90$1 = 0; index$constrainedFlag$sample90$1 < constrainedFlag$sample90.length; index$constrainedFlag$sample90$1 += 1) {
-			boolean[] cv$constrainedFlag$sample90$1 = constrainedFlag$sample90[index$constrainedFlag$sample90$1];
+		for(int i$var14 = 0; i$var14 < state.noTopics; i$var14 += 1)
+			state.alpha[i$var14] = 0.1;
+		for(int i$var27 = 0; i$var27 < state.vocabSize; i$var27 += 1)
+			state.beta[i$var27] = 0.1;
+		for(int index$constrainedFlag$sample90$1 = 0; index$constrainedFlag$sample90$1 < state.constrainedFlag$sample90.length; index$constrainedFlag$sample90$1 += 1) {
+			boolean[] cv$constrainedFlag$sample90$1 = state.constrainedFlag$sample90[index$constrainedFlag$sample90$1];
 			for(int index$constrainedFlag$sample90$2 = 0; index$constrainedFlag$sample90$2 < cv$constrainedFlag$sample90$1.length; index$constrainedFlag$sample90$2 += 1)
 				cv$constrainedFlag$sample90$1[index$constrainedFlag$sample90$2] = true;
 		}
-		for(int index$constrainedFlag$sample42$1 = 0; index$constrainedFlag$sample42$1 < constrainedFlag$sample42.length; index$constrainedFlag$sample42$1 += 1)
-			constrainedFlag$sample42[index$constrainedFlag$sample42$1] = true;
-		for(int index$constrainedFlag$sample58$1 = 0; index$constrainedFlag$sample58$1 < constrainedFlag$sample58.length; index$constrainedFlag$sample58$1 += 1)
-			constrainedFlag$sample58[index$constrainedFlag$sample58$1] = true;
+		for(int index$constrainedFlag$sample42$1 = 0; index$constrainedFlag$sample42$1 < state.constrainedFlag$sample42.length; index$constrainedFlag$sample42$1 += 1)
+			state.constrainedFlag$sample42[index$constrainedFlag$sample42$1] = true;
+		for(int index$constrainedFlag$sample58$1 = 0; index$constrainedFlag$sample58$1 < state.constrainedFlag$sample58.length; index$constrainedFlag$sample58$1 += 1)
+			state.constrainedFlag$sample58[index$constrainedFlag$sample58$1] = true;
 	}
 
 	@Override
 	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample42)
+		if(state.fixedFlag$sample42)
 			logProbabilityValue$sample42();
-		if(fixedFlag$sample58)
+		if(state.fixedFlag$sample58)
 			logProbabilityValue$sample58();
 		logProbabilityValue$sample93();
 	}
@@ -572,10 +376,10 @@ double[] alpha;
 
 	@Override
 	public final void propagateObservedValues() {
-		int cv$length1 = w.length;
+		int cv$length1 = state.w.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
-			int[] cv$source2 = documents[cv$index1];
-			int[] cv$target2 = w[cv$index1];
+			int[] cv$source2 = state.documents[cv$index1];
+			int[] cv$target2 = state.w[cv$index1];
 			int cv$length2 = cv$target2.length;
 			for(int cv$index2 = 0; cv$index2 < cv$length2; cv$index2 += 1)
 				cv$target2[cv$index2] = cv$source2[cv$index2];

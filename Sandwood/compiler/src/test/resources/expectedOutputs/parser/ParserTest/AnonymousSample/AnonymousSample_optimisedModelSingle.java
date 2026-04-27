@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,12 +16,285 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model AnonymousSample This is the class that all
  * user interactions with the model should occur through.
  */
-public final class AnonymousSample extends Model {
-    private AnonymousSample$CoreInterface system$c = new AnonymousSample$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class AnonymousSample extends Model<AnonymousSample.State> {
+	final class State extends CoreModelState {
+
+		// Declare the variables for the model.
+		double[] amounts1;
+		double[] amounts2;
+		boolean constrainedFlag$sample15 = true;
+		boolean constrainedFlag$sample21 = true;
+		boolean constrainedFlag$sample9 = true;
+		boolean fixedFlag$sample15 = false;
+		boolean fixedFlag$sample21 = false;
+		boolean fixedFlag$sample9 = false;
+		boolean fixedProbFlag$sample15 = false;
+		boolean fixedProbFlag$sample21 = false;
+		boolean fixedProbFlag$sample35 = false;
+		boolean fixedProbFlag$sample39 = false;
+		boolean fixedProbFlag$sample9 = false;
+		int length$obsAmounts1;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$amounts1;
+		double logProbability$amounts2;
+		double logProbability$mean1;
+		double logProbability$mean2;
+		double logProbability$priorSigma2;
+		double logProbability$var35;
+		double logProbability$var39;
+		double mean1;
+		double mean2;
+		int n;
+		double[] obsAmounts1;
+		double[] obsAmounts2;
+		double priorSigma2;
+		boolean system$gibbsForward = true;
+		double[] var39;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// Constructor for amounts1
+			amounts1 = new double[length$obsAmounts1];
+			
+			// Constructor for amounts2
+			amounts2 = new double[length$obsAmounts1];
+			
+			// Constructor for var39
+			var39 = new double[length$obsAmounts1];
+		}
+
+		// Getter for amounts1.
+		final double[] get$amounts1() {
+			return amounts1;
+		}
+
+		// Getter for amounts2.
+		final double[] get$amounts2() {
+			return amounts2;
+		}
+
+		// Getter for fixedFlag$sample15.
+		final boolean get$fixedFlag$sample15() {
+			return fixedFlag$sample15;
+		}
+
+		// Setter for fixedFlag$sample15.
+		final void set$fixedFlag$sample15(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample15 including if probabilities
+			// need to be updated.
+			fixedFlag$sample15 = cv$value;
+			
+			// Substituted "fixedFlag$sample15" with its value "cv$value".
+			constrainedFlag$sample15 = (cv$value || constrainedFlag$sample15);
+			
+			// Should the probability of sample 15 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample15" with its value "cv$value".
+			fixedProbFlag$sample15 = (cv$value && fixedProbFlag$sample15);
+			
+			// Should the probability of sample 35 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample15" with its value "cv$value".
+			fixedProbFlag$sample35 = (cv$value && fixedProbFlag$sample35);
+		}
+
+		// Getter for fixedFlag$sample21.
+		final boolean get$fixedFlag$sample21() {
+			return fixedFlag$sample21;
+		}
+
+		// Setter for fixedFlag$sample21.
+		final void set$fixedFlag$sample21(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample21 including if probabilities
+			// need to be updated.
+			fixedFlag$sample21 = cv$value;
+			
+			// Substituted "fixedFlag$sample21" with its value "cv$value".
+			constrainedFlag$sample21 = (cv$value || constrainedFlag$sample21);
+			
+			// Should the probability of sample 21 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample21" with its value "cv$value".
+			fixedProbFlag$sample21 = (cv$value && fixedProbFlag$sample21);
+			
+			// Should the probability of sample 39 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample21" with its value "cv$value".
+			fixedProbFlag$sample39 = (cv$value && fixedProbFlag$sample39);
+		}
+
+		// Getter for fixedFlag$sample9.
+		final boolean get$fixedFlag$sample9() {
+			return fixedFlag$sample9;
+		}
+
+		// Setter for fixedFlag$sample9.
+		final void set$fixedFlag$sample9(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample9 including if probabilities
+			// need to be updated.
+			fixedFlag$sample9 = cv$value;
+			
+			// Substituted "fixedFlag$sample9" with its value "cv$value".
+			constrainedFlag$sample9 = (cv$value || constrainedFlag$sample9);
+			
+			// Should the probability of sample 9 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample9" with its value "cv$value".
+			fixedProbFlag$sample9 = (cv$value && fixedProbFlag$sample9);
+			
+			// Should the probability of sample 35 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample9" with its value "cv$value".
+			fixedProbFlag$sample35 = (cv$value && fixedProbFlag$sample35);
+			
+			// Should the probability of sample 39 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample9" with its value "cv$value".
+			fixedProbFlag$sample39 = (cv$value && fixedProbFlag$sample39);
+		}
+
+		// Getter for length$obsAmounts1.
+		final int get$length$obsAmounts1() {
+			return length$obsAmounts1;
+		}
+
+		// Setter for length$obsAmounts1.
+		final void set$length$obsAmounts1(int cv$value, boolean allocated$) {
+			length$obsAmounts1 = cv$value;
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$amounts1.
+		final double get$logProbability$amounts1() {
+			return logProbability$amounts1;
+		}
+
+		// Getter for logProbability$amounts2.
+		final double get$logProbability$amounts2() {
+			return logProbability$amounts2;
+		}
+
+		// Getter for logProbability$mean1.
+		final double get$logProbability$mean1() {
+			return logProbability$mean1;
+		}
+
+		// Getter for logProbability$mean2.
+		final double get$logProbability$mean2() {
+			return logProbability$mean2;
+		}
+
+		// Getter for logProbability$priorSigma2.
+		final double get$logProbability$priorSigma2() {
+			return logProbability$priorSigma2;
+		}
+
+		// Getter for mean1.
+		final double get$mean1() {
+			return mean1;
+		}
+
+		// Setter for mean1.
+		final void set$mean1(double cv$value, boolean allocated$) {
+			// Set flags for all the side effects of mean1 including if probabilities need to
+			// be updated.
+			mean1 = cv$value;
+			
+			// Unset the fixed probability flag for sample 15 as it depends on mean1.
+			fixedProbFlag$sample15 = false;
+			
+			// Unset the fixed probability flag for sample 35 as it depends on mean1.
+			fixedProbFlag$sample35 = false;
+		}
+
+		// Getter for mean2.
+		final double get$mean2() {
+			return mean2;
+		}
+
+		// Setter for mean2.
+		final void set$mean2(double cv$value, boolean allocated$) {
+			// Set flags for all the side effects of mean2 including if probabilities need to
+			// be updated.
+			mean2 = cv$value;
+			
+			// Unset the fixed probability flag for sample 21 as it depends on mean2.
+			fixedProbFlag$sample21 = false;
+			
+			// Unset the fixed probability flag for sample 39 as it depends on mean2.
+			fixedProbFlag$sample39 = false;
+		}
+
+		// Getter for n.
+		final int get$n() {
+			return n;
+		}
+
+		// Getter for obsAmounts1.
+		final double[] get$obsAmounts1() {
+			return obsAmounts1;
+		}
+
+		// Setter for obsAmounts1.
+		final void set$obsAmounts1(double[] cv$value, boolean allocated$) {
+			obsAmounts1 = cv$value;
+		}
+
+		// Getter for obsAmounts2.
+		final double[] get$obsAmounts2() {
+			return obsAmounts2;
+		}
+
+		// Setter for obsAmounts2.
+		final void set$obsAmounts2(double[] cv$value, boolean allocated$) {
+			obsAmounts2 = cv$value;
+		}
+
+		// Getter for priorSigma2.
+		final double get$priorSigma2() {
+			return priorSigma2;
+		}
+
+		// Setter for priorSigma2.
+		final void set$priorSigma2(double cv$value, boolean allocated$) {
+			// Set flags for all the side effects of priorSigma2 including if probabilities need
+			// to be updated.
+			priorSigma2 = cv$value;
+			
+			// Unset the fixed probability flag for sample 9 as it depends on priorSigma2.
+			fixedProbFlag$sample9 = false;
+			
+			// Unset the fixed probability flag for sample 35 as it depends on priorSigma2.
+			fixedProbFlag$sample35 = false;
+			
+			// Unset the fixed probability flag for sample 39 as it depends on priorSigma2.
+			fixedProbFlag$sample39 = false;
+		}
+	}
 
     private final ComputedDoubleArrayInternal $amounts1 = new ComputedDoubleArrayInternal(this, "amounts1", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$amounts1(); }
+        public double[] getValue() { return state.get$amounts1(); }
 
         @Override
         protected void setValueInternal(double[] value) {}
@@ -30,7 +305,7 @@ public final class AnonymousSample extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$amounts1(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$amounts1(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -50,7 +325,7 @@ public final class AnonymousSample extends Model {
 
     private final ComputedDoubleArrayInternal $amounts2 = new ComputedDoubleArrayInternal(this, "amounts2", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$amounts2(); }
+        public double[] getValue() { return state.get$amounts2(); }
 
         @Override
         protected void setValueInternal(double[] value) {}
@@ -61,7 +336,7 @@ public final class AnonymousSample extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$amounts2(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$amounts2(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -81,27 +356,27 @@ public final class AnonymousSample extends Model {
 
     private final ComputedDoubleInternal $mean1 = new ComputedDoubleInternal(this, "mean1", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$mean1(); }
+        public double getValue() { return state.get$mean1(); }
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$mean1(value, allocated);
+            state.set$mean1(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$mean1(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$mean1(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample15(fixed, allocated);
+                state.set$fixedFlag$sample15(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample15())
+            if(state.get$fixedFlag$sample15())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -113,27 +388,27 @@ public final class AnonymousSample extends Model {
 
     private final ComputedDoubleInternal $mean2 = new ComputedDoubleInternal(this, "mean2", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$mean2(); }
+        public double getValue() { return state.get$mean2(); }
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$mean2(value, allocated);
+            state.set$mean2(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$mean2(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$mean2(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample21(fixed, allocated);
+                state.set$fixedFlag$sample21(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample21())
+            if(state.get$fixedFlag$sample21())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -145,27 +420,27 @@ public final class AnonymousSample extends Model {
 
     private final ComputedDoubleInternal $priorSigma2 = new ComputedDoubleInternal(this, "priorSigma2", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$priorSigma2(); }
+        public double getValue() { return state.get$priorSigma2(); }
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$priorSigma2(value, allocated);
+            state.set$priorSigma2(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$priorSigma2(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$priorSigma2(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample9(fixed, allocated);
+                state.set$fixedFlag$sample9(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample9())
+            if(state.get$fixedFlag$sample9())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -185,12 +460,12 @@ public final class AnonymousSample extends Model {
         @Override
         public double[] getValue() {
             synchronized(model) {
-                return system$c.get$obsAmounts2();
+                return state.get$obsAmounts2();
             }
         }
 
         @Override
-        protected void setValueInternal(double[] value) { system$c.set$obsAmounts2(value, allocated); }
+        protected void setValueInternal(double[] value) { state.set$obsAmounts2(value, allocated); }
     };
 
 	/**
@@ -202,24 +477,24 @@ public final class AnonymousSample extends Model {
         @Override
         public double[] getValue() {
             synchronized(model) {
-                return system$c.get$obsAmounts1();
+                return state.get$obsAmounts1();
             }
         }
 
         @Override
         public void setValueInternal(double[] value) {
-            system$c.set$obsAmounts1(value, allocated);
-            system$c.set$length$obsAmounts1(value.length, allocated);
+            state.set$obsAmounts1(value, allocated);
+            state.set$length$obsAmounts1(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$obsAmounts1(shape, allocated);
+            state.set$length$obsAmounts1(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$obsAmounts1();
+            return state.get$length$obsAmounts1();
         }
     };
 
@@ -236,6 +511,7 @@ public final class AnonymousSample extends Model {
 	/** A constructor for a model where no variable values are set. */
     public AnonymousSample() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("amounts1", $amounts1);
         $computedVariables.put("amounts2", $amounts2);
@@ -248,7 +524,9 @@ public final class AnonymousSample extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("obsAmounts1", $obsAmounts1);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        AnonymousSample$SingleThreadCPU core = new AnonymousSample$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -276,49 +554,15 @@ public final class AnonymousSample extends Model {
     }
     
     @Override
-    protected AnonymousSample$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        AnonymousSample$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new AnonymousSample$SingleThreadCPU(target);
-                break;
+                return new AnonymousSample$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new AnonymousSample$MultiThreadCPU(target);
-                break;
+                return new AnonymousSample$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(AnonymousSample$CoreInterface oldCore, AnonymousSample$CoreInterface newCore) {
-
-        //Observed scalars
-        if(obsAmounts2.isSet())
-            newCore.set$obsAmounts2(oldCore.get$obsAmounts2(), false);
-
-        //Observed arrays
-        if(obsAmounts1.isSet()) {
-            newCore.set$obsAmounts1(oldCore.get$obsAmounts1(), false);
-            newCore.set$length$obsAmounts1(oldCore.get$length$obsAmounts1(), false);
-        }
-        else if(obsAmounts1.shapeSet())
-            newCore.set$length$obsAmounts1(oldCore.get$length$obsAmounts1(), false);
-
-        //ComputedVariables
-        if($mean1.isSet())
-            newCore.set$mean1(oldCore.get$mean1(), false);
-        if($mean2.isSet())
-            newCore.set$mean2(oldCore.get$mean2(), false);
-        if($priorSigma2.isSet())
-            newCore.set$priorSigma2(oldCore.get$priorSigma2(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample15(oldCore.get$fixedFlag$sample15(), false);
-        newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21(), false);
-        newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9(), false);
     }
 
 	/**

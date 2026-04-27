@@ -1,362 +1,72 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.HMMTestPart4$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.HMMTestPart4.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implements HMMTestPart4$CoreInterface {
+final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double[] bias;
-	boolean[][][] constrainedFlag$sample124;
-	boolean[] constrainedFlag$sample28;
-	boolean[] constrainedFlag$sample45;
-	boolean constrainedFlag$sample84 = true;
-	boolean fixedFlag$sample124 = false;
-	boolean fixedFlag$sample28 = false;
-	boolean fixedFlag$sample45 = false;
-	boolean fixedFlag$sample84 = false;
-	boolean fixedProbFlag$sample124 = false;
-	boolean fixedProbFlag$sample191 = false;
-	boolean fixedProbFlag$sample28 = false;
-	boolean fixedProbFlag$sample45 = false;
-	boolean fixedProbFlag$sample84 = false;
-	boolean[][][] flips;
-	boolean[][][] flipsMeasured;
-	int[][] length$flipsMeasured;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$bias;
-	double logProbability$flips;
-	double logProbability$m;
-	double logProbability$st;
-	double logProbability$var121;
-	double logProbability$var186;
-	double logProbability$var28;
-	double logProbability$var44;
-	double logProbability$var81;
-	double[][] m;
-	int samples;
-	int[][][] st;
-	int states;
-	boolean system$gibbsForward = true;
-	double[] v;
-	double[] cv$var121$stateProbabilityGlobal;
-	double[] cv$var28$countGlobal;
-	double[] cv$var81$stateProbabilityGlobal;
+		// Declare the scratch variables for the model.
+		double[] cv$var121$stateProbabilityGlobal;
+		double[] cv$var28$countGlobal;
+		double[] cv$var81$stateProbabilityGlobal;
 
-	public HMMTestPart4$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
-
-	// Getter for bias.
-	@Override
-	public final double[] get$bias() {
-		return bias;
-	}
-
-	// Setter for bias.
-	@Override
-	public final void set$bias(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of bias including if probabilities need to be
-		// updated.
-		bias = cv$value;
-		
-		// Unset the fixed probability flag for sample 45 as it depends on bias.
-		fixedProbFlag$sample45 = false;
-		
-		// Unset the fixed probability flag for sample 191 as it depends on bias.
-		fixedProbFlag$sample191 = false;
-	}
-
-	// Getter for fixedFlag$sample124.
-	@Override
-	public final boolean get$fixedFlag$sample124() {
-		return fixedFlag$sample124;
-	}
-
-	// Setter for fixedFlag$sample124.
-	@Override
-	public final void set$fixedFlag$sample124(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample124 including if probabilities
-		// need to be updated.
-		fixedFlag$sample124 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample124$1 = 0; index$constrainedFlag$sample124$1 < constrainedFlag$sample124.length; index$constrainedFlag$sample124$1 += 1) {
-				boolean[][] cv$constrainedFlag$sample124$1 = constrainedFlag$sample124[index$constrainedFlag$sample124$1];
-				for(int index$constrainedFlag$sample124$2 = 0; index$constrainedFlag$sample124$2 < cv$constrainedFlag$sample124$1.length; index$constrainedFlag$sample124$2 += 1) {
-					boolean[] cv$constrainedFlag$sample124$2 = cv$constrainedFlag$sample124$1[index$constrainedFlag$sample124$2];
-					for(int index$constrainedFlag$sample124$3 = 0; index$constrainedFlag$sample124$3 < cv$constrainedFlag$sample124$2.length; index$constrainedFlag$sample124$3 += 1)
-						cv$constrainedFlag$sample124$2[index$constrainedFlag$sample124$3] = true;
-				}
-			}
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// Constructor for cv$var28$countGlobal
+			// 
+			// Allocation of cv$var28$countGlobal for single threaded execution
+			cv$var28$countGlobal = new double[2];
+			
+			// Constructor for cv$var81$stateProbabilityGlobal
+			// 
+			// Allocation of cv$var81$stateProbabilityGlobal for single threaded execution
+			// 
+			// Variable to record the maximum value of Task Get 82. Initially set to the value
+			// of putTask 29.
+			cv$var81$stateProbabilityGlobal = new double[2];
+			
+			// Allocation of cv$var121$stateProbabilityGlobal for single threaded execution
+			// 
+			// Variable to record the maximum value of Task Get 122. Initially set to the value
+			// of putTask 29.
+			cv$var121$stateProbabilityGlobal = new double[2];
 		}
-		
-		// Should the probability of sample 124 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample124" with its value "cv$value".
-		fixedProbFlag$sample124 = (cv$value && fixedProbFlag$sample124);
-		
-		// Should the probability of sample 191 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample124" with its value "cv$value".
-		fixedProbFlag$sample191 = (cv$value && fixedProbFlag$sample191);
 	}
 
-	// Getter for fixedFlag$sample28.
-	@Override
-	public final boolean get$fixedFlag$sample28() {
-		return fixedFlag$sample28;
-	}
 
-	// Setter for fixedFlag$sample28.
-	@Override
-	public final void set$fixedFlag$sample28(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample28 including if probabilities
-		// need to be updated.
-		fixedFlag$sample28 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample28$1 = 0; index$constrainedFlag$sample28$1 < constrainedFlag$sample28.length; index$constrainedFlag$sample28$1 += 1)
-				constrainedFlag$sample28[index$constrainedFlag$sample28$1] = true;
-		}
-		
-		// Should the probability of sample 28 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample28" with its value "cv$value".
-		fixedProbFlag$sample28 = (cv$value && fixedProbFlag$sample28);
-		
-		// Should the probability of sample 84 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample28" with its value "cv$value".
-		fixedProbFlag$sample84 = (cv$value && fixedProbFlag$sample84);
-		
-		// Should the probability of sample 124 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample28" with its value "cv$value".
-		fixedProbFlag$sample124 = (cv$value && fixedProbFlag$sample124);
-	}
-
-	// Getter for fixedFlag$sample45.
-	@Override
-	public final boolean get$fixedFlag$sample45() {
-		return fixedFlag$sample45;
-	}
-
-	// Setter for fixedFlag$sample45.
-	@Override
-	public final void set$fixedFlag$sample45(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample45 including if probabilities
-		// need to be updated.
-		fixedFlag$sample45 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample45$1 = 0; index$constrainedFlag$sample45$1 < constrainedFlag$sample45.length; index$constrainedFlag$sample45$1 += 1)
-				constrainedFlag$sample45[index$constrainedFlag$sample45$1] = true;
-		}
-		
-		// Should the probability of sample 45 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample45" with its value "cv$value".
-		fixedProbFlag$sample45 = (cv$value && fixedProbFlag$sample45);
-		
-		// Should the probability of sample 191 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample45" with its value "cv$value".
-		fixedProbFlag$sample191 = (cv$value && fixedProbFlag$sample191);
-	}
-
-	// Getter for fixedFlag$sample84.
-	@Override
-	public final boolean get$fixedFlag$sample84() {
-		return fixedFlag$sample84;
-	}
-
-	// Setter for fixedFlag$sample84.
-	@Override
-	public final void set$fixedFlag$sample84(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample84 including if probabilities
-		// need to be updated.
-		fixedFlag$sample84 = cv$value;
-		
-		// Substituted "fixedFlag$sample84" with its value "cv$value".
-		constrainedFlag$sample84 = (cv$value || constrainedFlag$sample84);
-		
-		// Should the probability of sample 84 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample84" with its value "cv$value".
-		fixedProbFlag$sample84 = (cv$value && fixedProbFlag$sample84);
-		
-		// Should the probability of sample 191 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample84" with its value "cv$value".
-		fixedProbFlag$sample191 = (cv$value && fixedProbFlag$sample191);
-	}
-
-	// Getter for flips.
-	@Override
-	public final boolean[][][] get$flips() {
-		return flips;
-	}
-
-	// Getter for flipsMeasured.
-	@Override
-	public final boolean[][][] get$flipsMeasured() {
-		return flipsMeasured;
-	}
-
-	// Setter for flipsMeasured.
-	@Override
-	public final void set$flipsMeasured(boolean[][][] cv$value, boolean allocated$) {
-		flipsMeasured = cv$value;
-	}
-
-	// Getter for length$flipsMeasured.
-	@Override
-	public final int[][] get$length$flipsMeasured() {
-		return length$flipsMeasured;
-	}
-
-	// Setter for length$flipsMeasured.
-	@Override
-	public final void set$length$flipsMeasured(int[][] cv$value, boolean allocated$) {
-		length$flipsMeasured = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$bias.
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	// Getter for logProbability$flips.
-	@Override
-	public final double get$logProbability$flips() {
-		return logProbability$flips;
-	}
-
-	// Getter for logProbability$m.
-	@Override
-	public final double get$logProbability$m() {
-		return logProbability$m;
-	}
-
-	// Getter for logProbability$st.
-	@Override
-	public final double get$logProbability$st() {
-		return logProbability$st;
-	}
-
-	// Getter for m.
-	@Override
-	public final double[][] get$m() {
-		return m;
-	}
-
-	// Setter for m.
-	@Override
-	public final void set$m(double[][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of m including if probabilities need to be updated.
-		m = cv$value;
-		
-		// Unset the fixed probability flag for sample 28 as it depends on m.
-		fixedProbFlag$sample28 = false;
-		
-		// Unset the fixed probability flag for sample 84 as it depends on m.
-		fixedProbFlag$sample84 = false;
-		
-		// Unset the fixed probability flag for sample 124 as it depends on m.
-		fixedProbFlag$sample124 = false;
-	}
-
-	// Getter for samples.
-	@Override
-	public final int get$samples() {
-		return samples;
-	}
-
-	// Getter for st.
-	@Override
-	public final int[][][] get$st() {
-		return st;
-	}
-
-	// Setter for st.
-	@Override
-	public final void set$st(int[][][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of st including if probabilities need to be
-		// updated.
-		st = cv$value;
-		
-		// Unset the fixed probability flag for sample 84 as it depends on st.
-		fixedProbFlag$sample84 = false;
-		
-		// Unset the fixed probability flag for sample 124 as it depends on st.
-		fixedProbFlag$sample124 = false;
-		
-		// Unset the fixed probability flag for sample 191 as it depends on st.
-		fixedProbFlag$sample191 = false;
-	}
-
-	// Getter for states.
-	@Override
-	public final int get$states() {
-		return 2;
-	}
-
-	// Getter for v.
-	@Override
-	public final double[] get$v() {
-		return v;
+	public HMMTestPart4$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample124
 	private final void drawValueSample124(int i1, int j1, int k1) {
-		st[i1][j1][k1] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		state.st[i1][j1][k1] = DistributionSampling.sampleCategorical(state.RNG$, state.m[0], 2);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample28
 	private final void drawValueSample28(int var27) {
-		DistributionSampling.sampleDirichlet(RNG$, v, 2, m[var27]);
+		DistributionSampling.sampleDirichlet(state.RNG$, state.v, 2, state.m[var27]);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample45
 	private final void drawValueSample45(int var43) {
-		bias[var43] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		state.bias[var43] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample84
 	private final void drawValueSample84() {
-		st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		state.st[0][0][0] = DistributionSampling.sampleCategorical(state.RNG$, state.m[0], 2);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -366,7 +76,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Unrolled loop
 		{
 			// Constructing a random variable input for use later.
-			double[] var119 = m[0];
+			double[] var119 = state.m[0];
 			
 			// Constructing a random variable input for use later.
 			// 
@@ -375,7 +85,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "0".
-			double var184 = bias[0];
+			double var184 = state.bias[0];
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
@@ -399,19 +109,19 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 									// Value of the variable at this index
 			// 
 									// Substituted "cv$valuePos" with its value "0".
-			cv$var121$stateProbabilityGlobal[0] = ((((0.0 <= var184) && (var184 <= 1.0))?Math.log((flips[j1][k1][i1]?var184:(1.0 - var184))):Double.NEGATIVE_INFINITY) + (((0.0 <= var119[0]) && (var119[0] <= 1.0))?Math.log(var119[0]):Double.NEGATIVE_INFINITY));
+			scratch.cv$var121$stateProbabilityGlobal[0] = ((((0.0 <= var184) && (var184 <= 1.0))?Math.log((state.flips[j1][k1][i1]?var184:(1.0 - var184))):Double.NEGATIVE_INFINITY) + (((0.0 <= var119[0]) && (var119[0] <= 1.0))?Math.log(var119[0]):Double.NEGATIVE_INFINITY));
 		}
 		
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
-		st[i1][j1][k1] = 1;
+		state.st[i1][j1][k1] = 1;
 		
 		// Constructing a random variable input for use later.
-		double[] var119 = m[0];
+		double[] var119 = state.m[0];
 		
 		// Mark that the sample has observed constrained data.
-		constrainedFlag$sample124[(i1 - 1)][j1][k1] = true;
+		state.constrainedFlag$sample124[(i1 - 1)][j1][k1] = true;
 		
 		// Constructing a random variable input for use later.
 		// 
@@ -420,7 +130,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
-		double var184 = bias[1];
+		double var184 = state.bias[1];
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
@@ -444,8 +154,8 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 						// Value of the variable at this index
 		// 
 						// Substituted "cv$valuePos" with its value "1".
-		cv$var121$stateProbabilityGlobal[1] = ((((0.0 <= var184) && (var184 <= 1.0))?Math.log((flips[j1][k1][i1]?var184:(1.0 - var184))):Double.NEGATIVE_INFINITY) + (((0.0 <= var119[1]) && (var119[1] <= 1.0))?Math.log(var119[1]):Double.NEGATIVE_INFINITY));
-		if(constrainedFlag$sample124[(i1 - 1)][j1][k1]) {
+		scratch.cv$var121$stateProbabilityGlobal[1] = ((((0.0 <= var184) && (var184 <= 1.0))?Math.log((state.flips[j1][k1][i1]?var184:(1.0 - var184))):Double.NEGATIVE_INFINITY) + (((0.0 <= var119[1]) && (var119[1] <= 1.0))?Math.log(var119[1]):Double.NEGATIVE_INFINITY));
+		if(state.constrainedFlag$sample124[(i1 - 1)][j1][k1]) {
 			// This value is not used before it is set again, so removing the value declaration.
 			// 
 			// The sum of all the probabilities in log space
@@ -456,12 +166,12 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Initialize the max to the first element.
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseMax = cv$var121$stateProbabilityGlobal[0];
+			double cv$lseMax = scratch.cv$var121$stateProbabilityGlobal[0];
 			
 			// Unrolled loop
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var121$stateProbabilityGlobal[1];
+			double cv$lseElementValue = scratch.cv$var121$stateProbabilityGlobal[1];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
 			
@@ -480,38 +190,38 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 				// Get a local reference to the scratch space.
 				// 
 				// Initialize the sum of the array elements
-				cv$logSum = (Math.log((Math.exp((cv$var121$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var121$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
+				cv$logSum = (Math.log((Math.exp((scratch.cv$var121$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((scratch.cv$var121$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
 			
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
 												// Get a local reference to the scratch space.
-				cv$var121$stateProbabilityGlobal[0] = 0.5;
+				scratch.cv$var121$stateProbabilityGlobal[0] = 0.5;
 				
 												// Get a local reference to the scratch space.
-				cv$var121$stateProbabilityGlobal[1] = 0.5;
+				scratch.cv$var121$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
 												// Get a local reference to the scratch space.
-				cv$var121$stateProbabilityGlobal[0] = Math.exp((cv$var121$stateProbabilityGlobal[0] - cv$logSum));
+				scratch.cv$var121$stateProbabilityGlobal[0] = Math.exp((scratch.cv$var121$stateProbabilityGlobal[0] - cv$logSum));
 				
 												// Get a local reference to the scratch space.
-				cv$var121$stateProbabilityGlobal[1] = Math.exp((cv$var121$stateProbabilityGlobal[1] - cv$logSum));
+				scratch.cv$var121$stateProbabilityGlobal[1] = Math.exp((scratch.cv$var121$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
 									// Get a local reference to the scratch space.
-			for(int cv$indexName = 2; cv$indexName < cv$var121$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = 2; cv$indexName < scratch.cv$var121$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var121$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+				scratch.cv$var121$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			// 
 												// cv$numStates's comment
 			// variable marginalization
-			st[i1][j1][k1] = DistributionSampling.sampleCategorical(RNG$, cv$var121$stateProbabilityGlobal, 2);
+			state.st[i1][j1][k1] = DistributionSampling.sampleCategorical(state.RNG$, scratch.cv$var121$stateProbabilityGlobal, 2);
 		}
 	}
 
@@ -519,66 +229,66 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	// by sample task 28 drawn from Dirichlet 16. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
 	private final void inferSample28(int var27) {
-		constrainedFlag$sample28[var27] = false;
+		state.constrainedFlag$sample28[var27] = false;
 		
 		// A local reference to the scratch space.
-		cv$var28$countGlobal[0] = 0.0;
+		scratch.cv$var28$countGlobal[0] = 0.0;
 		
 		// A local reference to the scratch space.
-		cv$var28$countGlobal[1] = 0.0;
+		scratch.cv$var28$countGlobal[1] = 0.0;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var27 == 0)) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((fixedFlag$sample84 || constrainedFlag$sample84)) {
+			if((state.fixedFlag$sample84 || state.constrainedFlag$sample84)) {
 				// Looking for a path between Sample 28 and consumer Categorical 80.
 				// 
 				// Processing sample task 84 of consumer random variable null.
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample28[0] = true;
+				state.constrainedFlag$sample28[0] = true;
 				
 				// Increment the sample counter with the value sampled by sample task 84 of random
 				// variable var80
 				// 
 												// A local reference to the scratch space.
-				cv$var28$countGlobal[st[0][0][0]] = (cv$var28$countGlobal[st[0][0][0]] + 1.0);
+				scratch.cv$var28$countGlobal[state.st[0][0][0]] = (scratch.cv$var28$countGlobal[state.st[0][0][0]] + 1.0);
 			}
 			
 			// Processing random variable 120.
 			// 
 			// Looking for a path between Sample 28 and consumer Categorical 120.
-			for(int i1 = 1; i1 < samples; i1 += 1) {
-				for(int j1 = 0; j1 < samples; j1 += 1) {
-					for(int k1 = 0; k1 < samples; k1 += 1) {
+			for(int i1 = 1; i1 < state.samples; i1 += 1) {
+				for(int j1 = 0; j1 < state.samples; j1 += 1) {
+					for(int k1 = 0; k1 < state.samples; k1 += 1) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((fixedFlag$sample124 || constrainedFlag$sample124[(i1 - 1)][j1][k1])) {
+						if((state.fixedFlag$sample124 || state.constrainedFlag$sample124[(i1 - 1)][j1][k1])) {
 							// Mark that the sample has observed constrained data.
-							constrainedFlag$sample28[0] = true;
+							state.constrainedFlag$sample28[0] = true;
 							
 							// Increment the sample counter with the value sampled by sample task 124 of random
 							// variable var120
 							// 
 																					// A local reference to the scratch space.
-							cv$var28$countGlobal[st[i1][j1][k1]] = (cv$var28$countGlobal[st[i1][j1][k1]] + 1.0);
+							scratch.cv$var28$countGlobal[state.st[i1][j1][k1]] = (scratch.cv$var28$countGlobal[state.st[i1][j1][k1]] + 1.0);
 						}
 					}
 				}
 			}
 		}
-		if(constrainedFlag$sample28[var27])
+		if(state.constrainedFlag$sample28[var27])
 			// Calculate the new sample value
 			// 
 			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
 									// A reference local to the function for the sample variable.
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var28$countGlobal, m[var27], 2);
+			Conjugates.sampleConjugateDirichletCategorical(state.RNG$, state.v, scratch.cv$var28$countGlobal, state.m[var27], 2);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 45 drawn from Beta 32. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void inferSample45(int var43) {
-		constrainedFlag$sample45[var43] = false;
+		state.constrainedFlag$sample45[var43] = false;
 		
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
@@ -589,13 +299,13 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Processing random variable 185.
 		// 
 		// Looking for a path between Sample 45 and consumer Bernoulli 185.
-		for(int l = 0; l < samples; l += 1) {
-			for(int p = 0; p < samples; p += 1) {
-				for(int n = 0; n < samples; n += 1) {
-					if((var43 == st[p][l][n])) {
+		for(int l = 0; l < state.samples; l += 1) {
+			for(int p = 0; p < state.samples; p += 1) {
+				for(int n = 0; n < state.samples; n += 1) {
+					if((var43 == state.st[p][l][n])) {
 						// Processing sample task 191 of consumer random variable null.
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample45[var43] = true;
+						state.constrainedFlag$sample45[var43] = true;
 						
 						// Include the value sampled by task 191 from random variable var185.
 						// 
@@ -603,30 +313,30 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 						cv$count = (cv$count + 1);
 						
 						// If the sample value was positive increase the count
-						if(flips[l][n][p])
+						if(state.flips[l][n][p])
 							cv$sum = (cv$sum + 1);
 					}
 				}
 			}
 		}
-		if(constrainedFlag$sample45[var43])
+		if(state.constrainedFlag$sample45[var43])
 			// Guards to ensure that bias is only updated when there is a valid path.
 			// 
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
-			bias[var43] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			state.bias[var43] = Conjugates.sampleConjugateBetaBinomial(state.RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 84 drawn from Categorical 80. Inference was performed using variable
 	// marginalization.
 	private final void inferSample84() {
-		constrainedFlag$sample84 = false;
+		state.constrainedFlag$sample84 = false;
 		
 		// Unrolled loop
 		{
 			// Constructing a random variable input for use later.
-			double[] var79 = m[0];
+			double[] var79 = state.m[0];
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
@@ -637,9 +347,9 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			double cv$accumulatedProbabilities = (((0.0 <= var79[0]) && (var79[0] <= 1.0))?Math.log(var79[0]):Double.NEGATIVE_INFINITY);
 			
 			// Substituted "p" with its value "0".
-			if((0 < samples)) {
+			if((0 < state.samples)) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample84 = true;
+				state.constrainedFlag$sample84 = true;
 				
 				// Constructing a random variable input for use later.
 				// 
@@ -648,7 +358,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 				// Value of the variable at this index
 				// 
 				// Substituted "cv$valuePos" with its value "0".
-				double var184 = bias[0];
+				double var184 = state.bias[0];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -664,7 +374,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 				// inputs.
 				// 
 												// Substituted "l" with its value "0".
-				cv$accumulatedProbabilities = ((((0.0 <= var184) && (var184 <= 1.0))?Math.log((flips[0][0][0]?var184:(1.0 - var184))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var184) && (var184 <= 1.0))?Math.log((state.flips[0][0][0]?var184:(1.0 - var184))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Save the calculated index value into the array of index value probabilities
@@ -674,16 +384,16 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
-			cv$var81$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
+			scratch.cv$var81$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
 		
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
-		st[0][0][0] = 1;
+		state.st[0][0][0] = 1;
 		
 		// Constructing a random variable input for use later.
-		double[] var79 = m[0];
+		double[] var79 = state.m[0];
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
@@ -694,9 +404,9 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		double cv$accumulatedProbabilities = (((0.0 <= var79[1]) && (var79[1] <= 1.0))?Math.log(var79[1]):Double.NEGATIVE_INFINITY);
 		
 		// Substituted "p" with its value "0".
-		if((0 < samples)) {
+		if((0 < state.samples)) {
 			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample84 = true;
+			state.constrainedFlag$sample84 = true;
 			
 			// Constructing a random variable input for use later.
 			// 
@@ -705,7 +415,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "1".
-			double var184 = bias[1];
+			double var184 = state.bias[1];
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -721,7 +431,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// inputs.
 			// 
 									// Substituted "l" with its value "0".
-			cv$accumulatedProbabilities = ((((0.0 <= var184) && (var184 <= 1.0))?Math.log((flips[0][0][0]?var184:(1.0 - var184))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = ((((0.0 <= var184) && (var184 <= 1.0))?Math.log((state.flips[0][0][0]?var184:(1.0 - var184))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		}
 		
 		// Save the calculated index value into the array of index value probabilities
@@ -731,8 +441,8 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		cv$var81$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
-		if(constrainedFlag$sample84) {
+		scratch.cv$var81$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
+		if(state.constrainedFlag$sample84) {
 			// This value is not used before it is set again, so removing the value declaration.
 			// 
 			// The sum of all the probabilities in log space
@@ -743,12 +453,12 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Initialize the max to the first element.
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseMax = cv$var81$stateProbabilityGlobal[0];
+			double cv$lseMax = scratch.cv$var81$stateProbabilityGlobal[0];
 			
 			// Unrolled loop
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var81$stateProbabilityGlobal[1];
+			double cv$lseElementValue = scratch.cv$var81$stateProbabilityGlobal[1];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
 			
@@ -767,38 +477,38 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 				// Get a local reference to the scratch space.
 				// 
 				// Initialize the sum of the array elements
-				cv$logSum = (Math.log((Math.exp((cv$var81$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var81$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
+				cv$logSum = (Math.log((Math.exp((scratch.cv$var81$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((scratch.cv$var81$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
 			
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
 												// Get a local reference to the scratch space.
-				cv$var81$stateProbabilityGlobal[0] = 0.5;
+				scratch.cv$var81$stateProbabilityGlobal[0] = 0.5;
 				
 												// Get a local reference to the scratch space.
-				cv$var81$stateProbabilityGlobal[1] = 0.5;
+				scratch.cv$var81$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
 												// Get a local reference to the scratch space.
-				cv$var81$stateProbabilityGlobal[0] = Math.exp((cv$var81$stateProbabilityGlobal[0] - cv$logSum));
+				scratch.cv$var81$stateProbabilityGlobal[0] = Math.exp((scratch.cv$var81$stateProbabilityGlobal[0] - cv$logSum));
 				
 												// Get a local reference to the scratch space.
-				cv$var81$stateProbabilityGlobal[1] = Math.exp((cv$var81$stateProbabilityGlobal[1] - cv$logSum));
+				scratch.cv$var81$stateProbabilityGlobal[1] = Math.exp((scratch.cv$var81$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
 									// Get a local reference to the scratch space.
-			for(int cv$indexName = 2; cv$indexName < cv$var81$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = 2; cv$indexName < scratch.cv$var81$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var81$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+				scratch.cv$var81$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
 			// 
 												// cv$numStates's comment
 			// variable marginalization
-			st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, cv$var81$stateProbabilityGlobal, 2);
+			state.st[0][0][0] = DistributionSampling.sampleCategorical(state.RNG$, scratch.cv$var81$stateProbabilityGlobal, 2);
 		}
 	}
 
@@ -807,19 +517,19 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	private final void logProbabilityValue$sample124() {
 		// Determine if we need to calculate the values for sample task 124 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample124) {
+		if(!state.fixedProbFlag$sample124) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i1 = 1; i1 < samples; i1 += 1) {
-				for(int j1 = 0; j1 < samples; j1 += 1) {
-					for(int k1 = 0; k1 < samples; k1 += 1) {
+			for(int i1 = 1; i1 < state.samples; i1 += 1) {
+				for(int j1 = 0; j1 < state.samples; j1 += 1) {
+					for(int k1 = 0; k1 < state.samples; k1 += 1) {
 						// The sample value to calculate the probability of generating
-						int cv$sampleValue = st[i1][j1][k1];
-						double[] var119 = m[0];
+						int cv$sampleValue = state.st[i1][j1][k1];
+						double[] var119 = state.m[0];
 						
 						// Record that the sample was reached.
 						cv$sampleReached = true;
@@ -851,7 +561,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$var121 = cv$sampleAccumulator;
+				state.logProbability$var121 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -859,7 +569,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$st = (logProbability$st + cv$sampleAccumulator);
+			state.logProbability$st = (state.logProbability$st + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -867,20 +577,20 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample124)
+			if(state.fixedFlag$sample124)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample124 = (fixedFlag$sample124 && fixedFlag$sample28);
+			state.fixedProbFlag$sample124 = (state.fixedFlag$sample124 && state.fixedFlag$sample28);
 		} else {
 			// Using cached values.
 			// 
@@ -889,18 +599,18 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$st = (logProbability$st + logProbability$var121);
+			state.logProbability$st = (state.logProbability$st + state.logProbability$var121);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var121);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var121);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample124)
+			if(state.fixedFlag$sample124)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var121);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var121);
 		}
 	}
 
@@ -909,17 +619,17 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	private final void logProbabilityValue$sample191() {
 		// Determine if we need to calculate the values for sample task 191 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample191) {
+		if(!state.fixedProbFlag$sample191) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int l = 0; l < samples; l += 1) {
-				for(int p = 0; p < samples; p += 1) {
-					for(int n = 0; n < samples; n += 1) {
-						double var184 = bias[st[p][l][n]];
+			for(int l = 0; l < state.samples; l += 1) {
+				for(int p = 0; p < state.samples; p += 1) {
+					for(int n = 0; n < state.samples; n += 1) {
+						double var184 = state.bias[state.st[p][l][n]];
 						
 						// Record that the sample was reached.
 						cv$sampleReached = true;
@@ -939,7 +649,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 						// Store the value of the function call, so the function call is only made once.
 						// 
 						// The sample value to calculate the probability of generating
-						cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var184) && (var184 <= 1.0))?Math.log((flips[l][n][p]?var184:(1.0 - var184))):Double.NEGATIVE_INFINITY));
+						cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var184) && (var184 <= 1.0))?Math.log((state.flips[l][n][p]?var184:(1.0 - var184))):Double.NEGATIVE_INFINITY));
 					}
 				}
 			}
@@ -953,7 +663,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$var186 = cv$sampleAccumulator;
+				state.logProbability$var186 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -961,7 +671,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$flips = (logProbability$flips + cv$sampleAccumulator);
+			state.logProbability$flips = (state.logProbability$flips + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -969,17 +679,17 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample191 = ((fixedFlag$sample45 && fixedFlag$sample84) && fixedFlag$sample124);
+			state.fixedProbFlag$sample191 = ((state.fixedFlag$sample45 && state.fixedFlag$sample84) && state.fixedFlag$sample124);
 		} else {
 			// Using cached values.
 			// 
@@ -988,15 +698,15 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$flips = (logProbability$flips + logProbability$var186);
+			state.logProbability$flips = (state.logProbability$flips + state.logProbability$var186);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var186);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var186);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var186);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var186);
 		}
 	}
 
@@ -1005,7 +715,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	private final void logProbabilityValue$sample28() {
 		// Determine if we need to calculate the values for sample task 28 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample28) {
+		if(!state.fixedProbFlag$sample28) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$sampleAccumulator moved.
 			// Declaration comment was:
@@ -1054,10 +764,10 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$sampleAccumulator = (DistributionSampling.logProbabilityDirichlet(m[0], v, 2) + DistributionSampling.logProbabilityDirichlet(m[1], v, 2));
+			double cv$sampleAccumulator = (DistributionSampling.logProbabilityDirichlet(state.m[0], state.v, 2) + DistributionSampling.logProbabilityDirichlet(state.m[1], state.v, 2));
 			
 			// Store the random variable instance probability
-			logProbability$var28 = cv$sampleAccumulator;
+			state.logProbability$var28 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -1065,7 +775,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$m = (logProbability$m + cv$sampleAccumulator);
+			state.logProbability$m = (state.logProbability$m + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -1073,20 +783,20 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample28)
+			if(state.fixedFlag$sample28)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample28 = fixedFlag$sample28;
+			state.fixedProbFlag$sample28 = state.fixedFlag$sample28;
 		} else {
 			// Using cached values.
 			// 
@@ -1095,18 +805,18 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$m = (logProbability$m + logProbability$var28);
+			state.logProbability$m = (state.logProbability$m + state.logProbability$var28);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var28);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var28);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample28)
+			if(state.fixedFlag$sample28)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var28);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var28);
 		}
 	}
 
@@ -1115,7 +825,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	private final void logProbabilityValue$sample45() {
 		// Determine if we need to calculate the values for sample task 45 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample45) {
+		if(!state.fixedProbFlag$sample45) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$sampleAccumulator moved.
 			// Declaration comment was:
@@ -1164,10 +874,10 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$sampleAccumulator = (DistributionSampling.logProbabilityBeta(bias[0], 1.0, 1.0) + DistributionSampling.logProbabilityBeta(bias[1], 1.0, 1.0));
+			double cv$sampleAccumulator = (DistributionSampling.logProbabilityBeta(state.bias[0], 1.0, 1.0) + DistributionSampling.logProbabilityBeta(state.bias[1], 1.0, 1.0));
 			
 			// Store the random variable instance probability
-			logProbability$var44 = cv$sampleAccumulator;
+			state.logProbability$var44 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -1175,7 +885,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$bias = (logProbability$bias + cv$sampleAccumulator);
+			state.logProbability$bias = (state.logProbability$bias + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -1183,20 +893,20 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample45)
+			if(state.fixedFlag$sample45)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample45 = fixedFlag$sample45;
+			state.fixedProbFlag$sample45 = state.fixedFlag$sample45;
 		} else {
 			// Using cached values.
 			// 
@@ -1205,18 +915,18 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$bias = (logProbability$bias + logProbability$var44);
+			state.logProbability$bias = (state.logProbability$bias + state.logProbability$var44);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var44);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var44);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample45)
+			if(state.fixedFlag$sample45)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var44);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var44);
 		}
 	}
 
@@ -1225,11 +935,11 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	private final void logProbabilityValue$sample84() {
 		// Determine if we need to calculate the values for sample task 84 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample84) {
+		if(!state.fixedProbFlag$sample84) {
 			// Generating probabilities for sample task
 			// The sample value to calculate the probability of generating
-			int cv$sampleValue = st[0][0][0];
-			double[] var79 = m[0];
+			int cv$sampleValue = state.st[0][0][0];
+			double[] var79 = state.m[0];
 			
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -1253,7 +963,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			double cv$distributionAccumulator = (((((0.0 <= cv$sampleValue) && (cv$sampleValue < 2)) && (0.0 <= var79[cv$sampleValue])) && (var79[cv$sampleValue] <= 1.0))?Math.log(var79[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
-			logProbability$var81 = cv$distributionAccumulator;
+			state.logProbability$var81 = cv$distributionAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -1269,7 +979,7 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$st = (logProbability$st + cv$distributionAccumulator);
+			state.logProbability$st = (state.logProbability$st + cv$distributionAccumulator);
 			
 			// Add probability to model
 			// 
@@ -1285,11 +995,11 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample84)
+			if(state.fixedFlag$sample84)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -1302,11 +1012,11 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample84 = (fixedFlag$sample84 && fixedFlag$sample28);
+			state.fixedProbFlag$sample84 = (state.fixedFlag$sample84 && state.fixedFlag$sample28);
 		} else {
 			// Using cached values.
 			// 
@@ -1315,142 +1025,57 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$st = (logProbability$st + logProbability$var81);
+			state.logProbability$st = (state.logProbability$st + state.logProbability$var81);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var81);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var81);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample84)
+			if(state.fixedFlag$sample84)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var81);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var81);
 		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// Constructor for v
-		v = new double[2];
-		
-		// If m has not been set already allocate space.
-		if(!fixedFlag$sample28) {
-			// Constructor for m
-			m = new double[2][];
-			m[0] = new double[2];
-			m[1] = new double[2];
-		}
-		
-		// If bias has not been set already allocate space.
-		if(!fixedFlag$sample45)
-			// Constructor for bias
-			bias = new double[2];
-		
-		// If st has not been set already allocate space.
-		if((!fixedFlag$sample84 || !fixedFlag$sample124)) {
-			// Constructor for st
-			st = new int[length$flipsMeasured.length][][];
-			for(int i$var57 = 0; i$var57 < length$flipsMeasured.length; i$var57 += 1) {
-				int[][] subarray$0 = new int[length$flipsMeasured.length][];
-				st[i$var57] = subarray$0;
-				for(int j = 0; j < length$flipsMeasured.length; j += 1)
-					subarray$0[j] = new int[length$flipsMeasured.length];
-			}
-		}
-		
-		// Constructor for flips
-		flips = new boolean[length$flipsMeasured.length][][];
-		for(int i2 = 0; i2 < length$flipsMeasured.length; i2 += 1) {
-			boolean[][] subarray$0 = new boolean[length$flipsMeasured.length][];
-			flips[i2] = subarray$0;
-			for(int j2 = 0; j2 < length$flipsMeasured.length; j2 += 1)
-				subarray$0[j2] = new boolean[length$flipsMeasured.length];
-		}
-		
-		// Constructor for constrainedFlag$sample45
-		constrainedFlag$sample45 = new boolean[2];
-		
-		// Constructor for constrainedFlag$sample28
-		constrainedFlag$sample28 = new boolean[2];
-		
-		// Constructor for constrainedFlag$sample124
-		constrainedFlag$sample124 = new boolean[(length$flipsMeasured.length - 1)][][];
-		for(int i1 = 1; i1 < length$flipsMeasured.length; i1 += 1) {
-			boolean[][] subarray$0 = new boolean[length$flipsMeasured.length][];
-			constrainedFlag$sample124[(i1 - 1)] = subarray$0;
-			for(int j1 = 0; j1 < length$flipsMeasured.length; j1 += 1)
-				subarray$0[j1] = new boolean[length$flipsMeasured.length];
-		}
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var28$countGlobal
-		// 
-		// Allocation of cv$var28$countGlobal for single threaded execution
-		cv$var28$countGlobal = new double[2];
-		
-		// Constructor for cv$var81$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var81$stateProbabilityGlobal for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 82. Initially set to the value
-		// of putTask 29.
-		cv$var81$stateProbabilityGlobal = new double[2];
-		
-		// Allocation of cv$var121$stateProbabilityGlobal for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 122. Initially set to the value
-		// of putTask 29.
-		cv$var121$stateProbabilityGlobal = new double[2];
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample28) {
-			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
-			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
+		if(!state.fixedFlag$sample28) {
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 2, state.m[0]);
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 2, state.m[1]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		// 
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample45) {
-			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			bias[1] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample45) {
+			state.bias[0] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+			state.bias[1] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample84)
-			st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		if(!state.fixedFlag$sample84)
+			state.st[0][0][0] = DistributionSampling.sampleCategorical(state.RNG$, state.m[0], 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample124) {
-			for(int i1 = 1; i1 < samples; i1 += 1) {
-				int[][] var116 = st[i1];
-				for(int j1 = 0; j1 < samples; j1 += 1) {
-					for(int k1 = 0; k1 < samples; k1 += 1)
-						var116[j1][k1] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		if(!state.fixedFlag$sample124) {
+			for(int i1 = 1; i1 < state.samples; i1 += 1) {
+				int[][] var116 = state.st[i1];
+				for(int j1 = 0; j1 < state.samples; j1 += 1) {
+					for(int k1 = 0; k1 < state.samples; k1 += 1)
+						var116[j1][k1] = DistributionSampling.sampleCategorical(state.RNG$, state.m[0], 2);
 				}
 			}
 		}
-		for(int l = 0; l < samples; l += 1) {
-			boolean[][] var179 = flips[l];
-			for(int p = 0; p < samples; p += 1) {
-				for(int n = 0; n < samples; n += 1)
-					var179[n][p] = DistributionSampling.sampleBernoulli(RNG$, bias[st[p][l][n]]);
+		for(int l = 0; l < state.samples; l += 1) {
+			boolean[][] var179 = state.flips[l];
+			for(int p = 0; p < state.samples; p += 1) {
+				for(int n = 0; n < state.samples; n += 1)
+					var179[n][p] = DistributionSampling.sampleBernoulli(state.RNG$, state.bias[state.st[p][l][n]]);
 			}
 		}
 	}
@@ -1461,30 +1086,30 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample28) {
-			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
-			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
+		if(!state.fixedFlag$sample28) {
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 2, state.m[0]);
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 2, state.m[1]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		// 
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample45) {
-			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			bias[1] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample45) {
+			state.bias[0] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+			state.bias[1] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample84)
-			st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		if(!state.fixedFlag$sample84)
+			state.st[0][0][0] = DistributionSampling.sampleCategorical(state.RNG$, state.m[0], 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample124) {
-			for(int i1 = 1; i1 < samples; i1 += 1) {
-				int[][] var116 = st[i1];
-				for(int j1 = 0; j1 < samples; j1 += 1) {
-					for(int k1 = 0; k1 < samples; k1 += 1)
-						var116[j1][k1] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		if(!state.fixedFlag$sample124) {
+			for(int i1 = 1; i1 < state.samples; i1 += 1) {
+				int[][] var116 = state.st[i1];
+				for(int j1 = 0; j1 < state.samples; j1 += 1) {
+					for(int k1 = 0; k1 < state.samples; k1 += 1)
+						var116[j1][k1] = DistributionSampling.sampleCategorical(state.RNG$, state.m[0], 2);
 				}
 			}
 		}
@@ -1495,38 +1120,38 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	@Override
 	public final void forwardGenerationPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample28) {
-			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
-			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
+		if(!state.fixedFlag$sample28) {
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 2, state.m[0]);
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 2, state.m[1]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		// 
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample45) {
-			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			bias[1] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample45) {
+			state.bias[0] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+			state.bias[1] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample84)
-			st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		if(!state.fixedFlag$sample84)
+			state.st[0][0][0] = DistributionSampling.sampleCategorical(state.RNG$, state.m[0], 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample124) {
-			for(int i1 = 1; i1 < samples; i1 += 1) {
-				int[][] var116 = st[i1];
-				for(int j1 = 0; j1 < samples; j1 += 1) {
-					for(int k1 = 0; k1 < samples; k1 += 1)
-						var116[j1][k1] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		if(!state.fixedFlag$sample124) {
+			for(int i1 = 1; i1 < state.samples; i1 += 1) {
+				int[][] var116 = state.st[i1];
+				for(int j1 = 0; j1 < state.samples; j1 += 1) {
+					for(int k1 = 0; k1 < state.samples; k1 += 1)
+						var116[j1][k1] = DistributionSampling.sampleCategorical(state.RNG$, state.m[0], 2);
 				}
 			}
 		}
-		for(int l = 0; l < samples; l += 1) {
-			boolean[][] var179 = flips[l];
-			for(int p = 0; p < samples; p += 1) {
-				for(int n = 0; n < samples; n += 1)
-					var179[n][p] = DistributionSampling.sampleBernoulli(RNG$, bias[st[p][l][n]]);
+		for(int l = 0; l < state.samples; l += 1) {
+			boolean[][] var179 = state.flips[l];
+			for(int p = 0; p < state.samples; p += 1) {
+				for(int n = 0; n < state.samples; n += 1)
+					var179[n][p] = DistributionSampling.sampleBernoulli(state.RNG$, state.bias[state.st[p][l][n]]);
 			}
 		}
 	}
@@ -1536,30 +1161,30 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample28) {
-			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
-			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
+		if(!state.fixedFlag$sample28) {
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 2, state.m[0]);
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 2, state.m[1]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		// 
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample45) {
-			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			bias[1] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample45) {
+			state.bias[0] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+			state.bias[1] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample84)
-			st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		if(!state.fixedFlag$sample84)
+			state.st[0][0][0] = DistributionSampling.sampleCategorical(state.RNG$, state.m[0], 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample124) {
-			for(int i1 = 1; i1 < samples; i1 += 1) {
-				int[][] var116 = st[i1];
-				for(int j1 = 0; j1 < samples; j1 += 1) {
-					for(int k1 = 0; k1 < samples; k1 += 1)
-						var116[j1][k1] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		if(!state.fixedFlag$sample124) {
+			for(int i1 = 1; i1 < state.samples; i1 += 1) {
+				int[][] var116 = state.st[i1];
+				for(int j1 = 0; j1 < state.samples; j1 += 1) {
+					for(int k1 = 0; k1 < state.samples; k1 += 1)
+						var116[j1][k1] = DistributionSampling.sampleCategorical(state.RNG$, state.m[0], 2);
 				}
 			}
 		}
@@ -1571,30 +1196,30 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample28) {
-			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[0]);
-			DistributionSampling.sampleDirichlet(RNG$, v, 2, m[1]);
+		if(!state.fixedFlag$sample28) {
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 2, state.m[0]);
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, 2, state.m[1]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		// 
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample45) {
-			bias[0] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			bias[1] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample45) {
+			state.bias[0] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+			state.bias[1] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample84)
-			st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		if(!state.fixedFlag$sample84)
+			state.st[0][0][0] = DistributionSampling.sampleCategorical(state.RNG$, state.m[0], 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample124) {
-			for(int i1 = 1; i1 < samples; i1 += 1) {
-				int[][] var116 = st[i1];
-				for(int j1 = 0; j1 < samples; j1 += 1) {
-					for(int k1 = 0; k1 < samples; k1 += 1)
-						var116[j1][k1] = DistributionSampling.sampleCategorical(RNG$, m[0], 2);
+		if(!state.fixedFlag$sample124) {
+			for(int i1 = 1; i1 < state.samples; i1 += 1) {
+				int[][] var116 = state.st[i1];
+				for(int j1 = 0; j1 < state.samples; j1 += 1) {
+					for(int k1 = 0; k1 < state.samples; k1 += 1)
+						var116[j1][k1] = DistributionSampling.sampleCategorical(state.RNG$, state.m[0], 2);
 				}
 			}
 		}
@@ -1604,9 +1229,9 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
+		if(state.system$gibbsForward) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample28) {
+			if(!state.fixedFlag$sample28) {
 				inferSample28(0);
 				inferSample28(1);
 			}
@@ -1614,18 +1239,18 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			// 
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample45) {
+			if(!state.fixedFlag$sample45) {
 				inferSample45(0);
 				inferSample45(1);
 			}
-			if(!fixedFlag$sample84)
+			if(!state.fixedFlag$sample84)
 				inferSample84();
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample124) {
-				for(int i1 = 1; i1 < samples; i1 += 1) {
-					for(int j1 = 0; j1 < samples; j1 += 1) {
-						for(int k1 = 0; k1 < samples; k1 += 1)
+			if(!state.fixedFlag$sample124) {
+				for(int i1 = 1; i1 < state.samples; i1 += 1) {
+					for(int j1 = 0; j1 < state.samples; j1 += 1) {
+						for(int k1 = 0; k1 < state.samples; k1 += 1)
 							inferSample124(i1, j1, k1);
 					}
 				}
@@ -1634,19 +1259,19 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Infer the samples in reverse chronological order.
 		else {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample124) {
-				for(int i1 = (samples - 1); i1 >= 1; i1 -= 1) {
-					for(int j1 = (samples - 1); j1 >= 0; j1 -= 1) {
-						for(int k1 = (samples - 1); k1 >= 0; k1 -= 1)
+			if(!state.fixedFlag$sample124) {
+				for(int i1 = (state.samples - 1); i1 >= 1; i1 -= 1) {
+					for(int j1 = (state.samples - 1); j1 >= 0; j1 -= 1) {
+						for(int k1 = (state.samples - 1); k1 >= 0; k1 -= 1)
 							inferSample124(i1, j1, k1);
 					}
 				}
 			}
-			if(!fixedFlag$sample84)
+			if(!state.fixedFlag$sample84)
 				inferSample84();
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample45) {
+			if(!state.fixedFlag$sample45) {
 				inferSample45(1);
 				inferSample45(0);
 			}
@@ -1654,36 +1279,36 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			// 
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample28) {
+			if(!state.fixedFlag$sample28) {
 				inferSample28(1);
 				inferSample28(0);
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
+		state.system$gibbsForward = !state.system$gibbsForward;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!constrainedFlag$sample28[0])
+		if(!state.constrainedFlag$sample28[0])
 			drawValueSample28(0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!constrainedFlag$sample28[1])
+		if(!state.constrainedFlag$sample28[1])
 			drawValueSample28(1);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!constrainedFlag$sample45[0])
+		if(!state.constrainedFlag$sample45[0])
 			drawValueSample45(0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!constrainedFlag$sample45[1])
+		if(!state.constrainedFlag$sample45[1])
 			drawValueSample45(1);
-		if(!constrainedFlag$sample84)
+		if(!state.constrainedFlag$sample84)
 			drawValueSample84();
-		for(int i1 = 1; i1 < samples; i1 += 1) {
-			for(int j1 = 0; j1 < samples; j1 += 1) {
-				for(int k1 = 0; k1 < samples; k1 += 1) {
-					if(!constrainedFlag$sample124[(i1 - 1)][j1][k1])
+		for(int i1 = 1; i1 < state.samples; i1 += 1) {
+			for(int j1 = 0; j1 < state.samples; j1 += 1) {
+				for(int k1 = 0; k1 < state.samples; k1 += 1) {
+					if(!state.constrainedFlag$sample124[(i1 - 1)][j1][k1])
 						drawValueSample124(i1, j1, k1);
 				}
 			}
@@ -1698,22 +1323,22 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$m = 0.0;
-		if(!fixedProbFlag$sample28)
-			logProbability$var28 = Double.NaN;
-		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample45)
-			logProbability$var44 = Double.NaN;
-		logProbability$st = 0.0;
-		if(!fixedProbFlag$sample84)
-			logProbability$var81 = Double.NaN;
-		if(!fixedProbFlag$sample124)
-			logProbability$var121 = Double.NaN;
-		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample191)
-			logProbability$var186 = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$m = 0.0;
+		if(!state.fixedProbFlag$sample28)
+			state.logProbability$var28 = Double.NaN;
+		state.logProbability$bias = 0.0;
+		if(!state.fixedProbFlag$sample45)
+			state.logProbability$var44 = Double.NaN;
+		state.logProbability$st = 0.0;
+		if(!state.fixedProbFlag$sample84)
+			state.logProbability$var81 = Double.NaN;
+		if(!state.fixedProbFlag$sample124)
+			state.logProbability$var121 = Double.NaN;
+		state.logProbability$flips = 0.0;
+		if(!state.fixedProbFlag$sample191)
+			state.logProbability$var186 = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
@@ -1721,23 +1346,23 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	@Override
 	public final void initializeModel() {
 		// Substituted "i$var13" with its value "0".
-		v[0] = 0.1;
+		state.v[0] = 0.1;
 		
 		// Substituted "i$var13" with its value "1".
-		v[1] = 0.1;
-		samples = length$flipsMeasured.length;
+		state.v[1] = 0.1;
+		state.samples = state.length$flipsMeasured.length;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample45$1 = 0; index$constrainedFlag$sample45$1 < constrainedFlag$sample45.length; index$constrainedFlag$sample45$1 += 1)
-			constrainedFlag$sample45[index$constrainedFlag$sample45$1] = true;
+		for(int index$constrainedFlag$sample45$1 = 0; index$constrainedFlag$sample45$1 < state.constrainedFlag$sample45.length; index$constrainedFlag$sample45$1 += 1)
+			state.constrainedFlag$sample45[index$constrainedFlag$sample45$1] = true;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample28$1 = 0; index$constrainedFlag$sample28$1 < constrainedFlag$sample28.length; index$constrainedFlag$sample28$1 += 1)
-			constrainedFlag$sample28[index$constrainedFlag$sample28$1] = true;
+		for(int index$constrainedFlag$sample28$1 = 0; index$constrainedFlag$sample28$1 < state.constrainedFlag$sample28.length; index$constrainedFlag$sample28$1 += 1)
+			state.constrainedFlag$sample28[index$constrainedFlag$sample28$1] = true;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample124$1 = 0; index$constrainedFlag$sample124$1 < constrainedFlag$sample124.length; index$constrainedFlag$sample124$1 += 1) {
-			boolean[][] cv$constrainedFlag$sample124$1 = constrainedFlag$sample124[index$constrainedFlag$sample124$1];
+		for(int index$constrainedFlag$sample124$1 = 0; index$constrainedFlag$sample124$1 < state.constrainedFlag$sample124.length; index$constrainedFlag$sample124$1 += 1) {
+			boolean[][] cv$constrainedFlag$sample124$1 = state.constrainedFlag$sample124[index$constrainedFlag$sample124$1];
 			for(int index$constrainedFlag$sample124$2 = 0; index$constrainedFlag$sample124$2 < cv$constrainedFlag$sample124$1.length; index$constrainedFlag$sample124$2 += 1) {
 				boolean[] cv$constrainedFlag$sample124$2 = cv$constrainedFlag$sample124$1[index$constrainedFlag$sample124$2];
 				for(int index$constrainedFlag$sample124$3 = 0; index$constrainedFlag$sample124$3 < cv$constrainedFlag$sample124$2.length; index$constrainedFlag$sample124$3 += 1)
@@ -1753,13 +1378,13 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample28)
+		if(state.fixedFlag$sample28)
 			logProbabilityValue$sample28();
-		if(fixedFlag$sample45)
+		if(state.fixedFlag$sample45)
 			logProbabilityValue$sample45();
-		if(fixedFlag$sample84)
+		if(state.fixedFlag$sample84)
 			logProbabilityValue$sample84();
-		if(fixedFlag$sample124)
+		if(state.fixedFlag$sample124)
 			logProbabilityValue$sample124();
 		logProbabilityValue$sample191();
 	}
@@ -1813,10 +1438,10 @@ final class HMMTestPart4$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
-		int cv$length1 = flips.length;
+		int cv$length1 = state.flips.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
-			boolean[][] cv$source2 = flipsMeasured[cv$index1];
-			boolean[][] cv$target2 = flips[cv$index1];
+			boolean[][] cv$source2 = state.flipsMeasured[cv$index1];
+			boolean[][] cv$target2 = state.flips[cv$index1];
 			int cv$length2 = cv$target2.length;
 			for(int cv$index2 = 0; cv$index2 < cv$length2; cv$index2 += 1) {
 				boolean[] cv$source3 = cv$source2[cv$index2];

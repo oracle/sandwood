@@ -1,243 +1,89 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.Vulcano2012basic$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.Vulcano2012basic.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU implements Vulcano2012basic$CoreInterface {
+final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	int[][] Avail;
-	int[][] ObsSales;
-	int[][] Sales;
-	int T;
-	boolean[] constrainedFlag$sample26;
-	double[] exped;
-	double[] expedNorm;
-	boolean fixedFlag$sample26 = false;
-	boolean fixedProbFlag$sample157 = false;
-	boolean fixedProbFlag$sample26 = false;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$Sales;
-	double logProbability$exped;
-	double logProbability$expedNorm;
-	double[] logProbability$sample157;
-	double[] logProbability$sample26;
-	double logProbability$sum;
-	double logProbability$ut;
-	int noProducts;
-	double r;
-	int[] sales_sum;
-	double sum;
-	boolean system$gibbsForward = true;
-	double[] ut;
-	double[][] weekly_rates;
-	double[][] weekly_ut;
-	boolean[] guard$sample26multinomial156$global;
-	boolean[][] guard$sample26put131$global;
-	boolean[][] guard$sample26put154$global;
-	boolean[] guard$sample26put68$global;
+		// Declare the scratch variables for the model.
+		boolean[] guard$sample26multinomial156$global;
+		boolean[][] guard$sample26put131$global;
+		boolean[][] guard$sample26put154$global;
+		boolean[] guard$sample26put68$global;
 
-	public Vulcano2012basic$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
-
-	// Getter for Avail.
-	@Override
-	public final int[][] get$Avail() {
-		return Avail;
-	}
-
-	// Setter for Avail.
-	@Override
-	public final void set$Avail(int[][] cv$value, boolean allocated$) {
-		Avail = cv$value;
-	}
-
-	// Getter for ObsSales.
-	@Override
-	public final int[][] get$ObsSales() {
-		return ObsSales;
-	}
-
-	// Setter for ObsSales.
-	@Override
-	public final void set$ObsSales(int[][] cv$value, boolean allocated$) {
-		ObsSales = cv$value;
-	}
-
-	// Getter for Sales.
-	@Override
-	public final int[][] get$Sales() {
-		return Sales;
-	}
-
-	// Getter for T.
-	@Override
-	public final int get$T() {
-		return T;
-	}
-
-	// Setter for T.
-	@Override
-	public final void set$T(int cv$value, boolean allocated$) {
-		T = cv$value;
-	}
-
-	// Getter for exped.
-	@Override
-	public final double[] get$exped() {
-		return exped;
-	}
-
-	// Getter for expedNorm.
-	@Override
-	public final double[] get$expedNorm() {
-		return expedNorm;
-	}
-
-	// Getter for fixedFlag$sample26.
-	@Override
-	public final boolean get$fixedFlag$sample26() {
-		return fixedFlag$sample26;
-	}
-
-	// Setter for fixedFlag$sample26.
-	@Override
-	public final void set$fixedFlag$sample26(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample26 including if probabilities
-		// need to be updated.
-		fixedFlag$sample26 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample26$1 = 0; index$constrainedFlag$sample26$1 < constrainedFlag$sample26.length; index$constrainedFlag$sample26$1 += 1)
-				constrainedFlag$sample26[index$constrainedFlag$sample26$1] = true;
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// Allocation of guard$sample26put68$global for single threaded execution
+			// 
+			// Calculate the largest index of j that is possible and allocate an array to hold
+			// the guard for each of these.
+			guard$sample26put68$global = new boolean[Math.max(0, state.noProducts)];
+			
+			// Constructor for guard$sample26put131$global
+			// 
+			// Calculate the largest index of j that is possible and allocate an array to hold
+			// the guard for each of these.
+			int cv$max_j$var123 = 0;
+			if((0 < state.T))
+				// Calculate the largest index of j that is possible and allocate an array to hold
+				// the guard for each of these.
+				cv$max_j$var123 = Math.max(0, state.noProducts);
+			
+			// Allocation of guard$sample26put131$global for single threaded execution
+			// 
+			// Calculate the largest index of t that is possible and allocate an array to hold
+			// the guard for each of these.
+			guard$sample26put131$global = new boolean[Math.max(0, state.T)][cv$max_j$var123];
+			
+			// Constructor for guard$sample26put154$global
+			// 
+			// Calculate the largest index of j that is possible and allocate an array to hold
+			// the guard for each of these.
+			int cv$max_j$var147 = 0;
+			if((0 < state.T))
+				// Calculate the largest index of j that is possible and allocate an array to hold
+				// the guard for each of these.
+				cv$max_j$var147 = Math.max(0, state.noProducts);
+			
+			// Allocation of guard$sample26put154$global for single threaded execution
+			// 
+			// Calculate the largest index of t that is possible and allocate an array to hold
+			// the guard for each of these.
+			guard$sample26put154$global = new boolean[Math.max(0, state.T)][cv$max_j$var147];
+			
+			// Allocation of guard$sample26multinomial156$global for single threaded execution
+			// 
+			// Calculate the largest index of t that is possible and allocate an array to hold
+			// the guard for each of these.
+			guard$sample26multinomial156$global = new boolean[Math.max(0, state.T)];
 		}
-		
-		// Should the probability of sample 26 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample26" with its value "cv$value".
-		fixedProbFlag$sample26 = (cv$value && fixedProbFlag$sample26);
-		
-		// Should the probability of sample 157 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample26" with its value "cv$value".
-		fixedProbFlag$sample157 = (cv$value && fixedProbFlag$sample157);
 	}
 
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
 
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$Sales.
-	@Override
-	public final double get$logProbability$Sales() {
-		return logProbability$Sales;
-	}
-
-	// Getter for logProbability$exped.
-	@Override
-	public final double get$logProbability$exped() {
-		return logProbability$exped;
-	}
-
-	// Getter for logProbability$expedNorm.
-	@Override
-	public final double get$logProbability$expedNorm() {
-		return logProbability$expedNorm;
-	}
-
-	// Getter for logProbability$sum.
-	@Override
-	public final double get$logProbability$sum() {
-		return logProbability$sum;
-	}
-
-	// Getter for logProbability$ut.
-	@Override
-	public final double get$logProbability$ut() {
-		return logProbability$ut;
-	}
-
-	// Getter for noProducts.
-	@Override
-	public final int get$noProducts() {
-		return noProducts;
-	}
-
-	// Setter for noProducts.
-	@Override
-	public final void set$noProducts(int cv$value, boolean allocated$) {
-		noProducts = cv$value;
-	}
-
-	// Getter for r.
-	@Override
-	public final double get$r() {
-		return r;
-	}
-
-	// Setter for r.
-	@Override
-	public final void set$r(double cv$value, boolean allocated$) {
-		r = cv$value;
-	}
-
-	// Getter for sales_sum.
-	@Override
-	public final int[] get$sales_sum() {
-		return sales_sum;
-	}
-
-	// Getter for sum.
-	@Override
-	public final double get$sum() {
-		return sum;
-	}
-
-	// Getter for ut.
-	@Override
-	public final double[] get$ut() {
-		return ut;
-	}
-
-	// Setter for ut.
-	@Override
-	public final void set$ut(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of ut including if probabilities need to be
-		// updated.
-		ut = cv$value;
-		
-		// Unset the fixed probability flag for sample 26 as it depends on ut.
-		fixedProbFlag$sample26 = false;
-		
-		// Unset the fixed probability flag for sample 157 as it depends on ut.
-		fixedProbFlag$sample157 = false;
+	public Vulcano2012basic$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample26
 	private final void drawValueSample26(int j$var20) {
-		ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
+		state.ut[j$var20] = (DistributionSampling.sampleGaussian(state.RNG$) * 1.4142135623730951);
 		
 		// Guards to ensure that exped is only updated when there is a valid path.
 		// 
 		// Looking for a path between Sample 26 and consumer double[] 41.
 		// 
 						// Substituted "j$var38" with its value "j$var20".
-		exped[j$var20] = Math.exp(ut[j$var20]);
+		state.exped[j$var20] = Math.exp(state.ut[j$var20]);
 		
 		// Guards to ensure that sum is only updated when there is a valid path.
 		// 
@@ -251,27 +97,27 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		double reduceVar$sum$4 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+		for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1)
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
 												// l$var50's comment
 			// Set the right hand term to a value from the array exped
-			reduceVar$sum$4 = (reduceVar$sum$4 + exped[cv$reduction46Index]);
+			reduceVar$sum$4 = (reduceVar$sum$4 + state.exped[cv$reduction46Index]);
 		
 		// Write out the new sample value.
-		sum = reduceVar$sum$4;
+		state.sum = reduceVar$sum$4;
 		
 		// Guards to ensure that expedNorm is only updated when there is a valid path.
 		// 
 		// Looking for a path between Sample 26 and consumer double[] 67.
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
 			// Set the flags to false
 			// 
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
-			guard$sample26put68$global[j$var63] = false;
+			scratch.guard$sample26put68$global[j$var63] = false;
 		
 		// Set the flags to false
 		// 
@@ -279,116 +125,116 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		// variable instance.
 		// 
 		// Substituted "j$var63" with its value "j$var20".
-		guard$sample26put68$global[j$var20] = false;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+		scratch.guard$sample26put68$global[j$var20] = false;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
-			if(!guard$sample26put68$global[j$var63]) {
+			if(!scratch.guard$sample26put68$global[j$var63]) {
 				// The body will execute, so should not be executed again
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample26put68$global[j$var63] = true;
+				scratch.guard$sample26put68$global[j$var63] = true;
 				
 								// sum's comment
 				// Write out the new sample value.
-				expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$4));
+				state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * reduceVar$sum$4));
 			}
 		}
 		
 						// Substituted "j$var38" with its value "j$var20".
 		// 
 		// Substituted "j$var63" with its value "j$var20".
-		if(!guard$sample26put68$global[j$var20]) {
+		if(!scratch.guard$sample26put68$global[j$var20]) {
 			// The body will execute, so should not be executed again
 			// 
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
 			// 
 			// Substituted "j$var63" with its value "j$var20".
-			guard$sample26put68$global[j$var20] = true;
+			scratch.guard$sample26put68$global[j$var20] = true;
 			
 									// Substituted "j$var63" with its value "j$var20".
 			// 
 						// sum's comment
 			// Write out the new sample value.
-			expedNorm[j$var20] = (exped[j$var20] / (r * reduceVar$sum$4));
+			state.expedNorm[j$var20] = (state.exped[j$var20] / (state.r * reduceVar$sum$4));
 		}
 		
 		// Guards to ensure that weekly_ut is only updated when there is a valid path.
 		// 
 		// Looking for a path between Sample 26 and consumer double[] 128.
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample26put131$global[t$var112][j$var63] = false;
+				scratch.guard$sample26put131$global[t$var112][j$var63] = false;
 		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 			// Set the flags to false
 			// 
 									// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
 			// 
 			// Substituted "j$var63" with its value "j$var20".
-			guard$sample26put131$global[t$var112][j$var20] = false;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			scratch.guard$sample26put131$global[t$var112][j$var20] = false;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample26put131$global[t$var112][j$var63]) {
+				if(!scratch.guard$sample26put131$global[t$var112][j$var63]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample26put131$global[t$var112][j$var63] = true;
+					scratch.guard$sample26put131$global[t$var112][j$var63] = true;
 					
 															// Substituted "j$var123" with its value "j$var63".
-					weekly_ut[t$var112][j$var63] = (expedNorm[j$var63] * Avail[t$var112][j$var63]);
+					state.weekly_ut[t$var112][j$var63] = (state.expedNorm[j$var63] * state.Avail[t$var112][j$var63]);
 				}
 			}
 		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 									// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
 			// 
 			// Substituted "j$var63" with its value "j$var20".
-			if(!guard$sample26put131$global[t$var112][j$var20]) {
+			if(!scratch.guard$sample26put131$global[t$var112][j$var20]) {
 				// The body will execute, so should not be executed again
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				// 
 				// Substituted "j$var63" with its value "j$var20".
-				guard$sample26put131$global[t$var112][j$var20] = true;
+				scratch.guard$sample26put131$global[t$var112][j$var20] = true;
 				
 												// Substituted "j$var123" with its value "j$var63".
 				// 
 												// Substituted "j$var63" with its value "j$var20".
-				weekly_ut[t$var112][j$var20] = (expedNorm[j$var20] * Avail[t$var112][j$var20]);
+				state.weekly_ut[t$var112][j$var20] = (state.expedNorm[j$var20] * state.Avail[t$var112][j$var20]);
 			}
 		}
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				// 
 				// Substituted "j$var147" with its value "j$var63".
-				guard$sample26put154$global[t$var112][j$var63] = false;
+				scratch.guard$sample26put154$global[t$var112][j$var63] = false;
 		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+			for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample26put154$global[t$var112][j$var147] = false;
+				scratch.guard$sample26put154$global[t$var112][j$var147] = false;
 		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 			// Set the flags to false
 			// 
 			// Guard to check that at most one copy of the code is executed for a given random
@@ -396,17 +242,17 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			// 
 						// j$var147's comment
 			// Substituted "j$var63" with its value "j$var20".
-			guard$sample26put154$global[t$var112][j$var20] = false;
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+			scratch.guard$sample26put154$global[t$var112][j$var20] = false;
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+			for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample26put154$global[t$var112][j$var147]) {
+				if(!scratch.guard$sample26put154$global[t$var112][j$var147]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample26put154$global[t$var112][j$var147] = true;
+					scratch.guard$sample26put154$global[t$var112][j$var147] = true;
 					
 					// Reduction of array weekly_ut
 					// 
@@ -416,32 +262,32 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 					double reduceVar$denom$10 = 0.0;
 					
 					// For each index in the array to be reduced
-					for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+					for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 						// Execute the reduction function, saving the result into the return value.
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
 						// 
 																								// l$var136's comment
 						// Set the right hand term to a value from the array weekly_ut
-						reduceVar$denom$10 = (reduceVar$denom$10 + weekly_ut[t$var112][cv$reduction136Index]);
-					weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$10);
+						reduceVar$denom$10 = (reduceVar$denom$10 + state.weekly_ut[t$var112][cv$reduction136Index]);
+					state.weekly_rates[t$var112][j$var147] = (state.weekly_ut[t$var112][j$var147] / reduceVar$denom$10);
 				}
 			}
 		}
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				// 
 				// Substituted "j$var147" with its value "j$var63".
-				if(!guard$sample26put154$global[t$var112][j$var63]) {
+				if(!scratch.guard$sample26put154$global[t$var112][j$var63]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					// 
 					// Substituted "j$var147" with its value "j$var63".
-					guard$sample26put154$global[t$var112][j$var63] = true;
+					scratch.guard$sample26put154$global[t$var112][j$var63] = true;
 					
 					// Reduction of array weekly_ut
 					// 
@@ -451,30 +297,30 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 					double reduceVar$denom$11 = 0.0;
 					
 					// For each index in the array to be reduced
-					for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+					for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 						// Execute the reduction function, saving the result into the return value.
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
 						// 
 																								// l$var136's comment
 						// Set the right hand term to a value from the array weekly_ut
-						reduceVar$denom$11 = (reduceVar$denom$11 + weekly_ut[t$var112][cv$reduction136Index]);
+						reduceVar$denom$11 = (reduceVar$denom$11 + state.weekly_ut[t$var112][cv$reduction136Index]);
 					
 															// Substituted "j$var147" with its value "j$var63".
-					weekly_rates[t$var112][j$var63] = (weekly_ut[t$var112][j$var63] / reduceVar$denom$11);
+					state.weekly_rates[t$var112][j$var63] = (state.weekly_ut[t$var112][j$var63] / reduceVar$denom$11);
 				}
 			}
 		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+			for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample26put154$global[t$var112][j$var147]) {
+				if(!scratch.guard$sample26put154$global[t$var112][j$var147]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample26put154$global[t$var112][j$var147] = true;
+					scratch.guard$sample26put154$global[t$var112][j$var147] = true;
 					
 					// Reduction of array weekly_ut
 					// 
@@ -484,25 +330,25 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 					double reduceVar$denom$12 = 0.0;
 					
 					// For each index in the array to be reduced
-					for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+					for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 						// Execute the reduction function, saving the result into the return value.
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
 						// 
 																								// l$var136's comment
 						// Set the right hand term to a value from the array weekly_ut
-						reduceVar$denom$12 = (reduceVar$denom$12 + weekly_ut[t$var112][cv$reduction136Index]);
-					weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$12);
+						reduceVar$denom$12 = (reduceVar$denom$12 + state.weekly_ut[t$var112][cv$reduction136Index]);
+					state.weekly_rates[t$var112][j$var147] = (state.weekly_ut[t$var112][j$var147] / reduceVar$denom$12);
 				}
 			}
 		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
 			// 
 						// j$var147's comment
 			// Substituted "j$var63" with its value "j$var20".
-			if(!guard$sample26put154$global[t$var112][j$var20]) {
+			if(!scratch.guard$sample26put154$global[t$var112][j$var20]) {
 				// The body will execute, so should not be executed again
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
@@ -510,7 +356,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				// 
 								// j$var147's comment
 				// Substituted "j$var63" with its value "j$var20".
-				guard$sample26put154$global[t$var112][j$var20] = true;
+				scratch.guard$sample26put154$global[t$var112][j$var20] = true;
 				
 				// Reduction of array weekly_ut
 				// 
@@ -520,18 +366,18 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				double reduceVar$denom$13 = 0.0;
 				
 				// For each index in the array to be reduced
-				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+				for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 					// Execute the reduction function, saving the result into the return value.
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
 																				// l$var136's comment
 					// Set the right hand term to a value from the array weekly_ut
-					reduceVar$denom$13 = (reduceVar$denom$13 + weekly_ut[t$var112][cv$reduction136Index]);
+					reduceVar$denom$13 = (reduceVar$denom$13 + state.weekly_ut[t$var112][cv$reduction136Index]);
 				
 																// j$var147's comment
 				// Substituted "j$var63" with its value "j$var20".
-				weekly_rates[t$var112][j$var20] = (weekly_ut[t$var112][j$var20] / reduceVar$denom$13);
+				state.weekly_rates[t$var112][j$var20] = (state.weekly_ut[t$var112][j$var20] / reduceVar$denom$13);
 			}
 		}
 	}
@@ -539,10 +385,10 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 26 drawn from Gaussian 25. Inference was performed using Metropolis-Hastings.
 	private final void inferSample26(int j$var20) {
-		constrainedFlag$sample26[(j$var20 - 1)] = false;
+		state.constrainedFlag$sample26[(j$var20 - 1)] = false;
 		
 		// The original value of the sample
-		double cv$originalValue = ut[j$var20];
+		double cv$originalValue = state.ut[j$var20];
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -557,30 +403,30 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			cv$var = 0.010000000000000002;
 		
 		// The proposed new value for the sample
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 		{
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
 			// Set the current value to the current state of the tree.
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 1.4142135623730951)) - 0.34657359027997264);
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample26multinomial156$global[t$var112] = false;
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				scratch.guard$sample26multinomial156$global[t$var112] = false;
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample26multinomial156$global[t$var112]) {
+				if(!scratch.guard$sample26multinomial156$global[t$var112]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample26multinomial156$global[t$var112] = true;
+					scratch.guard$sample26multinomial156$global[t$var112] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample26[(j$var20 - 1)] = true;
+					state.constrainedFlag$sample26[(j$var20 - 1)] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -596,20 +442,20 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 					// inputs.
 					// 
 					// Constructing a random variable input for use later.
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[t$var112], state.noProducts, state.sales_sum[t$var112]) + cv$accumulatedProbabilities);
 				}
 			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 												// Substituted "j$var123" with its value "j$var63".
-				if(!guard$sample26multinomial156$global[t$var112]) {
+				if(!scratch.guard$sample26multinomial156$global[t$var112]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample26multinomial156$global[t$var112] = true;
+					scratch.guard$sample26multinomial156$global[t$var112] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample26[(j$var20 - 1)] = true;
+					state.constrainedFlag$sample26[(j$var20 - 1)] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -625,20 +471,20 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 					// inputs.
 					// 
 					// Constructing a random variable input for use later.
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[t$var112], state.noProducts, state.sales_sum[t$var112]) + cv$accumulatedProbabilities);
 				}
 			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample26multinomial156$global[t$var112]) {
+				if(!scratch.guard$sample26multinomial156$global[t$var112]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample26multinomial156$global[t$var112] = true;
+					scratch.guard$sample26multinomial156$global[t$var112] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample26[(j$var20 - 1)] = true;
+					state.constrainedFlag$sample26[(j$var20 - 1)] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -654,20 +500,20 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 					// inputs.
 					// 
 					// Constructing a random variable input for use later.
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[t$var112], state.noProducts, state.sales_sum[t$var112]) + cv$accumulatedProbabilities);
 				}
 			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample26multinomial156$global[t$var112]) {
+				if(!scratch.guard$sample26multinomial156$global[t$var112]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample26multinomial156$global[t$var112] = true;
+					scratch.guard$sample26multinomial156$global[t$var112] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample26[(j$var20 - 1)] = true;
+					state.constrainedFlag$sample26[(j$var20 - 1)] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -683,7 +529,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 					// inputs.
 					// 
 					// Constructing a random variable input for use later.
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[t$var112], state.noProducts, state.sales_sum[t$var112]) + cv$accumulatedProbabilities);
 				}
 			}
 			
@@ -697,16 +543,16 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(constrainedFlag$sample26[(j$var20 - 1)]) {
+		if(state.constrainedFlag$sample26[(j$var20 - 1)]) {
 			// Guards to ensure that ut is only updated when there is a valid path.
-			ut[j$var20] = cv$proposedValue;
+			state.ut[j$var20] = cv$proposedValue;
 			
 			// Guards to ensure that exped is only updated when there is a valid path.
 			// 
 			// Looking for a path between Sample 26 and consumer double[] 41.
 			// 
 									// Substituted "j$var38" with its value "j$var20".
-			exped[j$var20] = Math.exp(ut[j$var20]);
+			state.exped[j$var20] = Math.exp(state.ut[j$var20]);
 			
 			// Guards to ensure that sum is only updated when there is a valid path.
 			// 
@@ -720,27 +566,27 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			double reduceVar$sum$0 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+			for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 																// l$var50's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$0 = (reduceVar$sum$0 + exped[cv$reduction46Index]);
+				reduceVar$sum$0 = (reduceVar$sum$0 + state.exped[cv$reduction46Index]);
 			
 			// Write out the new sample value.
-			sum = reduceVar$sum$0;
+			state.sum = reduceVar$sum$0;
 			
 			// Guards to ensure that expedNorm is only updated when there is a valid path.
 			// 
 			// Looking for a path between Sample 26 and consumer double[] 67.
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+			for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample26put68$global[j$var63] = false;
+				scratch.guard$sample26put68$global[j$var63] = false;
 			
 			// Set the flags to false
 			// 
@@ -748,116 +594,116 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			// variable instance.
 			// 
 			// Substituted "j$var63" with its value "j$var20".
-			guard$sample26put68$global[j$var20] = false;
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+			scratch.guard$sample26put68$global[j$var20] = false;
+			for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample26put68$global[j$var63]) {
+				if(!scratch.guard$sample26put68$global[j$var63]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample26put68$global[j$var63] = true;
+					scratch.guard$sample26put68$global[j$var63] = true;
 					
 										// sum's comment
 					// Write out the new sample value.
-					expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$0));
+					state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * reduceVar$sum$0));
 				}
 			}
 			
 									// Substituted "j$var38" with its value "j$var20".
 			// 
 			// Substituted "j$var63" with its value "j$var20".
-			if(!guard$sample26put68$global[j$var20]) {
+			if(!scratch.guard$sample26put68$global[j$var20]) {
 				// The body will execute, so should not be executed again
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				// 
 				// Substituted "j$var63" with its value "j$var20".
-				guard$sample26put68$global[j$var20] = true;
+				scratch.guard$sample26put68$global[j$var20] = true;
 				
 												// Substituted "j$var63" with its value "j$var20".
 				// 
 								// sum's comment
 				// Write out the new sample value.
-				expedNorm[j$var20] = (exped[j$var20] / (r * reduceVar$sum$0));
+				state.expedNorm[j$var20] = (state.exped[j$var20] / (state.r * reduceVar$sum$0));
 			}
 			
 			// Guards to ensure that weekly_ut is only updated when there is a valid path.
 			// 
 			// Looking for a path between Sample 26 and consumer double[] 128.
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-				for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+			for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+				for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample26put131$global[t$var112][j$var63] = false;
+					scratch.guard$sample26put131$global[t$var112][j$var63] = false;
 			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				// 
 				// Substituted "j$var63" with its value "j$var20".
-				guard$sample26put131$global[t$var112][j$var20] = false;
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-				for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				scratch.guard$sample26put131$global[t$var112][j$var20] = false;
+			for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+				for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					if(!guard$sample26put131$global[t$var112][j$var63]) {
+					if(!scratch.guard$sample26put131$global[t$var112][j$var63]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample26put131$global[t$var112][j$var63] = true;
+						scratch.guard$sample26put131$global[t$var112][j$var63] = true;
 						
 																		// Substituted "j$var123" with its value "j$var63".
-						weekly_ut[t$var112][j$var63] = (expedNorm[j$var63] * Avail[t$var112][j$var63]);
+						state.weekly_ut[t$var112][j$var63] = (state.expedNorm[j$var63] * state.Avail[t$var112][j$var63]);
 					}
 				}
 			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				// 
 				// Substituted "j$var63" with its value "j$var20".
-				if(!guard$sample26put131$global[t$var112][j$var20]) {
+				if(!scratch.guard$sample26put131$global[t$var112][j$var20]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					// 
 					// Substituted "j$var63" with its value "j$var20".
-					guard$sample26put131$global[t$var112][j$var20] = true;
+					scratch.guard$sample26put131$global[t$var112][j$var20] = true;
 					
 															// Substituted "j$var123" with its value "j$var63".
 					// 
 															// Substituted "j$var63" with its value "j$var20".
-					weekly_ut[t$var112][j$var20] = (expedNorm[j$var20] * Avail[t$var112][j$var20]);
+					state.weekly_ut[t$var112][j$var20] = (state.expedNorm[j$var20] * state.Avail[t$var112][j$var20]);
 				}
 			}
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-				for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+			for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+				for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					// 
 					// Substituted "j$var147" with its value "j$var63".
-					guard$sample26put154$global[t$var112][j$var63] = false;
+					scratch.guard$sample26put154$global[t$var112][j$var63] = false;
 			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+				for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample26put154$global[t$var112][j$var147] = false;
+					scratch.guard$sample26put154$global[t$var112][j$var147] = false;
 			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
@@ -865,17 +711,17 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				// 
 								// j$var147's comment
 				// Substituted "j$var63" with its value "j$var20".
-				guard$sample26put154$global[t$var112][j$var20] = false;
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+				scratch.guard$sample26put154$global[t$var112][j$var20] = false;
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+				for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					if(!guard$sample26put154$global[t$var112][j$var147]) {
+					if(!scratch.guard$sample26put154$global[t$var112][j$var147]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample26put154$global[t$var112][j$var147] = true;
+						scratch.guard$sample26put154$global[t$var112][j$var147] = true;
 						
 						// Reduction of array weekly_ut
 						// 
@@ -885,32 +731,32 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 						double reduceVar$denom$0 = 0.0;
 						
 						// For each index in the array to be reduced
-						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+						for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
 																												// l$var136's comment
 							// Set the right hand term to a value from the array weekly_ut
-							reduceVar$denom$0 = (reduceVar$denom$0 + weekly_ut[t$var112][cv$reduction136Index]);
-						weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$0);
+							reduceVar$denom$0 = (reduceVar$denom$0 + state.weekly_ut[t$var112][cv$reduction136Index]);
+						state.weekly_rates[t$var112][j$var147] = (state.weekly_ut[t$var112][j$var147] / reduceVar$denom$0);
 					}
 				}
 			}
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-				for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+				for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					// 
 					// Substituted "j$var147" with its value "j$var63".
-					if(!guard$sample26put154$global[t$var112][j$var63]) {
+					if(!scratch.guard$sample26put154$global[t$var112][j$var63]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
 						// 
 						// Substituted "j$var147" with its value "j$var63".
-						guard$sample26put154$global[t$var112][j$var63] = true;
+						scratch.guard$sample26put154$global[t$var112][j$var63] = true;
 						
 						// Reduction of array weekly_ut
 						// 
@@ -920,30 +766,30 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 						double reduceVar$denom$1 = 0.0;
 						
 						// For each index in the array to be reduced
-						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+						for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
 																												// l$var136's comment
 							// Set the right hand term to a value from the array weekly_ut
-							reduceVar$denom$1 = (reduceVar$denom$1 + weekly_ut[t$var112][cv$reduction136Index]);
+							reduceVar$denom$1 = (reduceVar$denom$1 + state.weekly_ut[t$var112][cv$reduction136Index]);
 						
 																		// Substituted "j$var147" with its value "j$var63".
-						weekly_rates[t$var112][j$var63] = (weekly_ut[t$var112][j$var63] / reduceVar$denom$1);
+						state.weekly_rates[t$var112][j$var63] = (state.weekly_ut[t$var112][j$var63] / reduceVar$denom$1);
 					}
 				}
 			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+				for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					if(!guard$sample26put154$global[t$var112][j$var147]) {
+					if(!scratch.guard$sample26put154$global[t$var112][j$var147]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample26put154$global[t$var112][j$var147] = true;
+						scratch.guard$sample26put154$global[t$var112][j$var147] = true;
 						
 						// Reduction of array weekly_ut
 						// 
@@ -953,25 +799,25 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 						double reduceVar$denom$2 = 0.0;
 						
 						// For each index in the array to be reduced
-						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+						for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
 																												// l$var136's comment
 							// Set the right hand term to a value from the array weekly_ut
-							reduceVar$denom$2 = (reduceVar$denom$2 + weekly_ut[t$var112][cv$reduction136Index]);
-						weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$2);
+							reduceVar$denom$2 = (reduceVar$denom$2 + state.weekly_ut[t$var112][cv$reduction136Index]);
+						state.weekly_rates[t$var112][j$var147] = (state.weekly_ut[t$var112][j$var147] / reduceVar$denom$2);
 					}
 				}
 			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
 				// 
 								// j$var147's comment
 				// Substituted "j$var63" with its value "j$var20".
-				if(!guard$sample26put154$global[t$var112][j$var20]) {
+				if(!scratch.guard$sample26put154$global[t$var112][j$var20]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
@@ -979,7 +825,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 					// 
 										// j$var147's comment
 					// Substituted "j$var63" with its value "j$var20".
-					guard$sample26put154$global[t$var112][j$var20] = true;
+					scratch.guard$sample26put154$global[t$var112][j$var20] = true;
 					
 					// Reduction of array weekly_ut
 					// 
@@ -989,41 +835,41 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 					double reduceVar$denom$3 = 0.0;
 					
 					// For each index in the array to be reduced
-					for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+					for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 						// Execute the reduction function, saving the result into the return value.
 						// 
 						// Copy the result of the reduction into the variable returned by the reduction.
 						// 
 																								// l$var136's comment
 						// Set the right hand term to a value from the array weekly_ut
-						reduceVar$denom$3 = (reduceVar$denom$3 + weekly_ut[t$var112][cv$reduction136Index]);
+						reduceVar$denom$3 = (reduceVar$denom$3 + state.weekly_ut[t$var112][cv$reduction136Index]);
 					
 																				// j$var147's comment
 					// Substituted "j$var63" with its value "j$var20".
-					weekly_rates[t$var112][j$var20] = (weekly_ut[t$var112][j$var20] / reduceVar$denom$3);
+					state.weekly_rates[t$var112][j$var20] = (state.weekly_ut[t$var112][j$var20] / reduceVar$denom$3);
 				}
 			}
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 1.4142135623730951)) - 0.34657359027997264);
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 				// Set the flags to false
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample26multinomial156$global[t$var112] = false;
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				scratch.guard$sample26multinomial156$global[t$var112] = false;
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample26multinomial156$global[t$var112]) {
+				if(!scratch.guard$sample26multinomial156$global[t$var112]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample26multinomial156$global[t$var112] = true;
+					scratch.guard$sample26multinomial156$global[t$var112] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample26[(j$var20 - 1)] = true;
+					state.constrainedFlag$sample26[(j$var20 - 1)] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1039,20 +885,20 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 					// inputs.
 					// 
 					// Constructing a random variable input for use later.
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[t$var112], state.noProducts, state.sales_sum[t$var112]) + cv$accumulatedProbabilities);
 				}
 			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 												// Substituted "j$var123" with its value "j$var63".
-				if(!guard$sample26multinomial156$global[t$var112]) {
+				if(!scratch.guard$sample26multinomial156$global[t$var112]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample26multinomial156$global[t$var112] = true;
+					scratch.guard$sample26multinomial156$global[t$var112] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample26[(j$var20 - 1)] = true;
+					state.constrainedFlag$sample26[(j$var20 - 1)] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1068,20 +914,20 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 					// inputs.
 					// 
 					// Constructing a random variable input for use later.
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[t$var112], state.noProducts, state.sales_sum[t$var112]) + cv$accumulatedProbabilities);
 				}
 			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample26multinomial156$global[t$var112]) {
+				if(!scratch.guard$sample26multinomial156$global[t$var112]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample26multinomial156$global[t$var112] = true;
+					scratch.guard$sample26multinomial156$global[t$var112] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample26[(j$var20 - 1)] = true;
+					state.constrainedFlag$sample26[(j$var20 - 1)] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1097,20 +943,20 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 					// inputs.
 					// 
 					// Constructing a random variable input for use later.
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[t$var112], state.noProducts, state.sales_sum[t$var112]) + cv$accumulatedProbabilities);
 				}
 			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample26multinomial156$global[t$var112]) {
+				if(!scratch.guard$sample26multinomial156$global[t$var112]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample26multinomial156$global[t$var112] = true;
+					scratch.guard$sample26multinomial156$global[t$var112] = true;
 					
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample26[(j$var20 - 1)] = true;
+					state.constrainedFlag$sample26[(j$var20 - 1)] = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -1126,7 +972,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 					// inputs.
 					// 
 					// Constructing a random variable input for use later.
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[t$var112], state.noProducts, state.sales_sum[t$var112]) + cv$accumulatedProbabilities);
 				}
 			}
 			
@@ -1143,7 +989,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			// Test if the probability of the sample is sufficient to keep the value. This needs
 			// to be less than or equal as otherwise if the proposed value is not possible and
 			// the random value is 0 an impossible value will be accepted.
-			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(state.RNG$))) || Double.isNaN(cv$ratio))) {
 				// If it is not revert the changes.
 				// 
 				// Set the sample value
@@ -1151,14 +997,14 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				// 
 				// Write out the value of the sample to a temporary variable prior to updating the
 				// intermediate variables.
-				ut[j$var20] = cv$originalValue;
+				state.ut[j$var20] = cv$originalValue;
 				
 				// Guards to ensure that exped is only updated when there is a valid path.
 				// 
 				// Looking for a path between Sample 26 and consumer double[] 41.
 				// 
 												// Substituted "j$var38" with its value "j$var20".
-				exped[j$var20] = Math.exp(ut[j$var20]);
+				state.exped[j$var20] = Math.exp(state.ut[j$var20]);
 				
 				// Guards to ensure that sum is only updated when there is a valid path.
 				// 
@@ -1172,27 +1018,27 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				double reduceVar$sum$3 = 0.0;
 				
 				// For each index in the array to be reduced
-				for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+				for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1)
 					// Execute the reduction function, saving the result into the return value.
 					// 
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
 																				// l$var50's comment
 					// Set the right hand term to a value from the array exped
-					reduceVar$sum$3 = (reduceVar$sum$3 + exped[cv$reduction46Index]);
+					reduceVar$sum$3 = (reduceVar$sum$3 + state.exped[cv$reduction46Index]);
 				
 				// Write out the new sample value.
-				sum = reduceVar$sum$3;
+				state.sum = reduceVar$sum$3;
 				
 				// Guards to ensure that expedNorm is only updated when there is a valid path.
 				// 
 				// Looking for a path between Sample 26 and consumer double[] 67.
-				for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+				for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample26put68$global[j$var63] = false;
+					scratch.guard$sample26put68$global[j$var63] = false;
 				
 				// Set the flags to false
 				// 
@@ -1200,116 +1046,116 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				// variable instance.
 				// 
 				// Substituted "j$var63" with its value "j$var20".
-				guard$sample26put68$global[j$var20] = false;
-				for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+				scratch.guard$sample26put68$global[j$var20] = false;
+				for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					if(!guard$sample26put68$global[j$var63]) {
+					if(!scratch.guard$sample26put68$global[j$var63]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample26put68$global[j$var63] = true;
+						scratch.guard$sample26put68$global[j$var63] = true;
 						
 												// sum's comment
 						// Write out the new sample value.
-						expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$3));
+						state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * reduceVar$sum$3));
 					}
 				}
 				
 												// Substituted "j$var38" with its value "j$var20".
 				// 
 				// Substituted "j$var63" with its value "j$var20".
-				if(!guard$sample26put68$global[j$var20]) {
+				if(!scratch.guard$sample26put68$global[j$var20]) {
 					// The body will execute, so should not be executed again
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					// 
 					// Substituted "j$var63" with its value "j$var20".
-					guard$sample26put68$global[j$var20] = true;
+					scratch.guard$sample26put68$global[j$var20] = true;
 					
 															// Substituted "j$var63" with its value "j$var20".
 					// 
 										// sum's comment
 					// Write out the new sample value.
-					expedNorm[j$var20] = (exped[j$var20] / (r * reduceVar$sum$3));
+					state.expedNorm[j$var20] = (state.exped[j$var20] / (state.r * reduceVar$sum$3));
 				}
 				
 				// Guards to ensure that weekly_ut is only updated when there is a valid path.
 				// 
 				// Looking for a path between Sample 26 and consumer double[] 128.
-				for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-					for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+					for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 						// Set the flags to false
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample26put131$global[t$var112][j$var63] = false;
+						scratch.guard$sample26put131$global[t$var112][j$var63] = false;
 				}
-				for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					// 
 					// Substituted "j$var63" with its value "j$var20".
-					guard$sample26put131$global[t$var112][j$var20] = false;
-				for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-					for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+					scratch.guard$sample26put131$global[t$var112][j$var20] = false;
+				for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+					for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						if(!guard$sample26put131$global[t$var112][j$var63]) {
+						if(!scratch.guard$sample26put131$global[t$var112][j$var63]) {
 							// The body will execute, so should not be executed again
 							// 
 																					// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							guard$sample26put131$global[t$var112][j$var63] = true;
+							scratch.guard$sample26put131$global[t$var112][j$var63] = true;
 							
 																					// Substituted "j$var123" with its value "j$var63".
-							weekly_ut[t$var112][j$var63] = (expedNorm[j$var63] * Avail[t$var112][j$var63]);
+							state.weekly_ut[t$var112][j$var63] = (state.expedNorm[j$var63] * state.Avail[t$var112][j$var63]);
 						}
 					}
 				}
-				for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					// 
 					// Substituted "j$var63" with its value "j$var20".
-					if(!guard$sample26put131$global[t$var112][j$var20]) {
+					if(!scratch.guard$sample26put131$global[t$var112][j$var20]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
 						// 
 						// Substituted "j$var63" with its value "j$var20".
-						guard$sample26put131$global[t$var112][j$var20] = true;
+						scratch.guard$sample26put131$global[t$var112][j$var20] = true;
 						
 																		// Substituted "j$var123" with its value "j$var63".
 						// 
 																		// Substituted "j$var63" with its value "j$var20".
-						weekly_ut[t$var112][j$var20] = (expedNorm[j$var20] * Avail[t$var112][j$var20]);
+						state.weekly_ut[t$var112][j$var20] = (state.expedNorm[j$var20] * state.Avail[t$var112][j$var20]);
 					}
 				}
-				for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-					for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+					for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 						// Set the flags to false
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
 						// 
 						// Substituted "j$var147" with its value "j$var63".
-						guard$sample26put154$global[t$var112][j$var63] = false;
+						scratch.guard$sample26put154$global[t$var112][j$var63] = false;
 				}
-				for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-					for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+				for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+					for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
 						// Set the flags to false
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample26put154$global[t$var112][j$var147] = false;
+						scratch.guard$sample26put154$global[t$var112][j$var147] = false;
 				}
-				for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
 					// Set the flags to false
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
@@ -1317,17 +1163,17 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 					// 
 										// j$var147's comment
 					// Substituted "j$var63" with its value "j$var20".
-					guard$sample26put154$global[t$var112][j$var20] = false;
-				for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-					for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+					scratch.guard$sample26put154$global[t$var112][j$var20] = false;
+				for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+					for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						if(!guard$sample26put154$global[t$var112][j$var147]) {
+						if(!scratch.guard$sample26put154$global[t$var112][j$var147]) {
 							// The body will execute, so should not be executed again
 							// 
 							// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							guard$sample26put154$global[t$var112][j$var147] = true;
+							scratch.guard$sample26put154$global[t$var112][j$var147] = true;
 							
 							// Reduction of array weekly_ut
 							// 
@@ -1337,32 +1183,32 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 							double reduceVar$denom$6 = 0.0;
 							
 							// For each index in the array to be reduced
-							for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+							for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 								// Execute the reduction function, saving the result into the return value.
 								// 
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
 																																// l$var136's comment
 								// Set the right hand term to a value from the array weekly_ut
-								reduceVar$denom$6 = (reduceVar$denom$6 + weekly_ut[t$var112][cv$reduction136Index]);
-							weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$6);
+								reduceVar$denom$6 = (reduceVar$denom$6 + state.weekly_ut[t$var112][cv$reduction136Index]);
+							state.weekly_rates[t$var112][j$var147] = (state.weekly_ut[t$var112][j$var147] / reduceVar$denom$6);
 						}
 					}
 				}
-				for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-					for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1) {
+					for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
 						// 
 						// Substituted "j$var147" with its value "j$var63".
-						if(!guard$sample26put154$global[t$var112][j$var63]) {
+						if(!scratch.guard$sample26put154$global[t$var112][j$var63]) {
 							// The body will execute, so should not be executed again
 							// 
 							// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
 							// 
 							// Substituted "j$var147" with its value "j$var63".
-							guard$sample26put154$global[t$var112][j$var63] = true;
+							scratch.guard$sample26put154$global[t$var112][j$var63] = true;
 							
 							// Reduction of array weekly_ut
 							// 
@@ -1372,30 +1218,30 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 							double reduceVar$denom$7 = 0.0;
 							
 							// For each index in the array to be reduced
-							for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+							for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 								// Execute the reduction function, saving the result into the return value.
 								// 
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
 																																// l$var136's comment
 								// Set the right hand term to a value from the array weekly_ut
-								reduceVar$denom$7 = (reduceVar$denom$7 + weekly_ut[t$var112][cv$reduction136Index]);
+								reduceVar$denom$7 = (reduceVar$denom$7 + state.weekly_ut[t$var112][cv$reduction136Index]);
 							
 																					// Substituted "j$var147" with its value "j$var63".
-							weekly_rates[t$var112][j$var63] = (weekly_ut[t$var112][j$var63] / reduceVar$denom$7);
+							state.weekly_rates[t$var112][j$var63] = (state.weekly_ut[t$var112][j$var63] / reduceVar$denom$7);
 						}
 					}
 				}
-				for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-					for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+				for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+					for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1) {
 						// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						if(!guard$sample26put154$global[t$var112][j$var147]) {
+						if(!scratch.guard$sample26put154$global[t$var112][j$var147]) {
 							// The body will execute, so should not be executed again
 							// 
 							// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							guard$sample26put154$global[t$var112][j$var147] = true;
+							scratch.guard$sample26put154$global[t$var112][j$var147] = true;
 							
 							// Reduction of array weekly_ut
 							// 
@@ -1405,25 +1251,25 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 							double reduceVar$denom$8 = 0.0;
 							
 							// For each index in the array to be reduced
-							for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+							for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 								// Execute the reduction function, saving the result into the return value.
 								// 
 								// Copy the result of the reduction into the variable returned by the reduction.
 								// 
 																																// l$var136's comment
 								// Set the right hand term to a value from the array weekly_ut
-								reduceVar$denom$8 = (reduceVar$denom$8 + weekly_ut[t$var112][cv$reduction136Index]);
-							weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$8);
+								reduceVar$denom$8 = (reduceVar$denom$8 + state.weekly_ut[t$var112][cv$reduction136Index]);
+							state.weekly_rates[t$var112][j$var147] = (state.weekly_ut[t$var112][j$var147] / reduceVar$denom$8);
 						}
 					}
 				}
-				for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
 					// 
 										// j$var147's comment
 					// Substituted "j$var63" with its value "j$var20".
-					if(!guard$sample26put154$global[t$var112][j$var20]) {
+					if(!scratch.guard$sample26put154$global[t$var112][j$var20]) {
 						// The body will execute, so should not be executed again
 						// 
 						// Guard to check that at most one copy of the code is executed for a given random
@@ -1431,7 +1277,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 						// 
 												// j$var147's comment
 						// Substituted "j$var63" with its value "j$var20".
-						guard$sample26put154$global[t$var112][j$var20] = true;
+						scratch.guard$sample26put154$global[t$var112][j$var20] = true;
 						
 						// Reduction of array weekly_ut
 						// 
@@ -1441,18 +1287,18 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 						double reduceVar$denom$9 = 0.0;
 						
 						// For each index in the array to be reduced
-						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+						for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 							// Execute the reduction function, saving the result into the return value.
 							// 
 							// Copy the result of the reduction into the variable returned by the reduction.
 							// 
 																												// l$var136's comment
 							// Set the right hand term to a value from the array weekly_ut
-							reduceVar$denom$9 = (reduceVar$denom$9 + weekly_ut[t$var112][cv$reduction136Index]);
+							reduceVar$denom$9 = (reduceVar$denom$9 + state.weekly_ut[t$var112][cv$reduction136Index]);
 						
 																								// j$var147's comment
 						// Substituted "j$var63" with its value "j$var20".
-						weekly_rates[t$var112][j$var20] = (weekly_ut[t$var112][j$var20] / reduceVar$denom$9);
+						state.weekly_rates[t$var112][j$var20] = (state.weekly_ut[t$var112][j$var20] / reduceVar$denom$9);
 					}
 				}
 			}
@@ -1464,11 +1310,11 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	private final void logProbabilityValue$sample157() {
 		// Determine if we need to calculate the values for sample task 157 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample157) {
+		if(!state.fixedProbFlag$sample157) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
 				// Variable declaration of cv$distributionAccumulator moved.
@@ -1492,7 +1338,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]);
+				double cv$distributionAccumulator = DistributionSampling.logProbabilityMultinomial(state.Sales[t$var112], state.weekly_rates[t$var112], state.noProducts, state.sales_sum[t$var112]);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -1503,34 +1349,34 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
 				// Store the sample task probability
-				logProbability$sample157[t$var112] = cv$distributionAccumulator;
+				state.logProbability$sample157[t$var112] = cv$distributionAccumulator;
 			}
 			
 			// Update the variable probability
-			logProbability$Sales = (logProbability$Sales + cv$accumulator);
+			state.logProbability$Sales = (state.logProbability$Sales + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample157 = fixedFlag$sample26;
+			state.fixedProbFlag$sample157 = state.fixedFlag$sample26;
 		} else {
 			// Using cached values.
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				cv$accumulator = (cv$accumulator + logProbability$sample157[t$var112]);
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
+				cv$accumulator = (cv$accumulator + state.logProbability$sample157[t$var112]);
 			
 			// Update the variable probability
-			logProbability$Sales = (logProbability$Sales + cv$accumulator);
+			state.logProbability$Sales = (state.logProbability$Sales + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -1539,11 +1385,11 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	private final void logProbabilityValue$sample26() {
 		// Determine if we need to calculate the values for sample task 26 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample26) {
+		if(!state.fixedProbFlag$sample26) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
+			for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
 				// Variable declaration of cv$distributionAccumulator moved.
@@ -1567,7 +1413,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((ut[j$var20] / 1.4142135623730951)) - 0.34657359027997264);
+				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((state.ut[j$var20] / 1.4142135623730951)) - 0.34657359027997264);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -1578,7 +1424,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
 				// Store the sample task probability
-				logProbability$sample26[(j$var20 - 1)] = cv$distributionAccumulator;
+				state.logProbability$sample26[(j$var20 - 1)] = cv$distributionAccumulator;
 				
 				// Add probability to constructed variables that have guards, so need per sample probabilities
 				// from the combined probability
@@ -1586,39 +1432,39 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				// Looking for a path between Sample 26 and consumer double[] 41.
 				// 
 				// Update the variable probability
-				logProbability$exped = (logProbability$exped + cv$distributionAccumulator);
+				state.logProbability$exped = (state.logProbability$exped + cv$distributionAccumulator);
 				
 				// Looking for a path between Sample 26 and consumer double 52.
 				// 
 				// Update the variable probability
-				logProbability$sum = (logProbability$sum + cv$distributionAccumulator);
+				state.logProbability$sum = (state.logProbability$sum + cv$distributionAccumulator);
 				
 				// Update the variable probability
-				logProbability$expedNorm = (logProbability$expedNorm + cv$distributionAccumulator);
+				state.logProbability$expedNorm = (state.logProbability$expedNorm + cv$distributionAccumulator);
 			}
 			
 			// Update the variable probability
-			logProbability$ut = (logProbability$ut + cv$accumulator);
+			state.logProbability$ut = (state.logProbability$ut + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample26)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample26)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample26 = fixedFlag$sample26;
+			state.fixedProbFlag$sample26 = state.fixedFlag$sample26;
 		} else {
 			// Using cached values.
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-				double cv$sampleValue = logProbability$sample26[(j$var20 - 1)];
+			for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
+				double cv$sampleValue = state.logProbability$sample26[(j$var20 - 1)];
 				cv$accumulator = (cv$accumulator + cv$sampleValue);
 				
 				// Add probability to constructed variables that have guards, so need per sample probabilities
@@ -1627,137 +1473,39 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				// Looking for a path between Sample 26 and consumer double[] 41.
 				// 
 				// Update the variable probability
-				logProbability$exped = (logProbability$exped + cv$sampleValue);
+				state.logProbability$exped = (state.logProbability$exped + cv$sampleValue);
 				
 				// Looking for a path between Sample 26 and consumer double 52.
 				// 
 				// Update the variable probability
-				logProbability$sum = (logProbability$sum + cv$sampleValue);
+				state.logProbability$sum = (state.logProbability$sum + cv$sampleValue);
 				
 				// Update the variable probability
-				logProbability$expedNorm = (logProbability$expedNorm + cv$sampleValue);
+				state.logProbability$expedNorm = (state.logProbability$expedNorm + cv$sampleValue);
 			}
 			
 			// Update the variable probability
-			logProbability$ut = (logProbability$ut + cv$accumulator);
+			state.logProbability$ut = (state.logProbability$ut + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample26)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample26)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// If ut has not been set already allocate space.
-		if(!fixedFlag$sample26)
-			// Constructor for ut
-			ut = new double[noProducts];
-		
-		// Constructor for exped
-		exped = new double[noProducts];
-		
-		// Constructor for expedNorm
-		expedNorm = new double[noProducts];
-		
-		// Constructor for sales_sum
-		sales_sum = new int[T];
-		
-		// Constructor for Sales
-		Sales = new int[T][];
-		for(int var100 = 0; var100 < T; var100 += 1)
-			Sales[var100] = new int[noProducts];
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-			Sales[t$var112] = new int[noProducts];
-		
-		// Constructor for weekly_rates
-		weekly_rates = new double[T][];
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-			weekly_rates[t$var112] = new double[noProducts];
-		
-		// Constructor for weekly_ut
-		weekly_ut = new double[T][];
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-			weekly_ut[t$var112] = new double[noProducts];
-		
-		// Constructor for constrainedFlag$sample26
-		constrainedFlag$sample26 = new boolean[(noProducts - 1)];
-		
-		// Constructor for logProbability$sample26
-		logProbability$sample26 = new double[(noProducts - 1)];
-		
-		// Constructor for logProbability$sample157
-		logProbability$sample157 = new double[T];
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Allocation of guard$sample26put68$global for single threaded execution
-		// 
-		// Calculate the largest index of j that is possible and allocate an array to hold
-		// the guard for each of these.
-		guard$sample26put68$global = new boolean[Math.max(0, noProducts)];
-		
-		// Constructor for guard$sample26put131$global
-		// 
-		// Calculate the largest index of j that is possible and allocate an array to hold
-		// the guard for each of these.
-		int cv$max_j$var123 = 0;
-		if((0 < T))
-			// Calculate the largest index of j that is possible and allocate an array to hold
-			// the guard for each of these.
-			cv$max_j$var123 = Math.max(0, noProducts);
-		
-		// Allocation of guard$sample26put131$global for single threaded execution
-		// 
-		// Calculate the largest index of t that is possible and allocate an array to hold
-		// the guard for each of these.
-		guard$sample26put131$global = new boolean[Math.max(0, T)][cv$max_j$var123];
-		
-		// Constructor for guard$sample26put154$global
-		// 
-		// Calculate the largest index of j that is possible and allocate an array to hold
-		// the guard for each of these.
-		int cv$max_j$var147 = 0;
-		if((0 < T))
-			// Calculate the largest index of j that is possible and allocate an array to hold
-			// the guard for each of these.
-			cv$max_j$var147 = Math.max(0, noProducts);
-		
-		// Allocation of guard$sample26put154$global for single threaded execution
-		// 
-		// Calculate the largest index of t that is possible and allocate an array to hold
-		// the guard for each of these.
-		guard$sample26put154$global = new boolean[Math.max(0, T)][cv$max_j$var147];
-		
-		// Allocation of guard$sample26multinomial156$global for single threaded execution
-		// 
-		// Calculate the largest index of t that is possible and allocate an array to hold
-		// the guard for each of these.
-		guard$sample26multinomial156$global = new boolean[Math.max(0, T)];
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample26) {
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-				ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
-			for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-				exped[j$var38] = Math.exp(ut[j$var38]);
+		if(!state.fixedFlag$sample26) {
+			for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1)
+				state.ut[j$var20] = (DistributionSampling.sampleGaussian(state.RNG$) * 1.4142135623730951);
+			for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1)
+				state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 			
 			// Reduction of array exped
 			// 
@@ -1767,22 +1515,22 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			double reduceVar$sum$5 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+			for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 																// l$var50's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$5 = (reduceVar$sum$5 + exped[cv$reduction46Index]);
-			sum = reduceVar$sum$5;
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+				reduceVar$sum$5 = (reduceVar$sum$5 + state.exped[cv$reduction46Index]);
+			state.sum = reduceVar$sum$5;
+			for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
 				// Substituted "sum" with its value "reduceVar$sum$5".
-				expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$5));
+				state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * reduceVar$sum$5));
 		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample26) {
-				for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
-					weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+			if(!state.fixedFlag$sample26) {
+				for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1)
+					state.weekly_ut[t$var112][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 				
 				// Reduction of array weekly_ut
 				// 
@@ -1792,18 +1540,18 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				double reduceVar$denom$14 = 0.0;
 				
 				// For each index in the array to be reduced
-				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+				for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
 																				// l$var136's comment
 					// Set the right hand term to a value from the array weekly_ut
-					reduceVar$denom$14 = (reduceVar$denom$14 + weekly_ut[t$var112][cv$reduction136Index]);
-				for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-					weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$14);
+					reduceVar$denom$14 = (reduceVar$denom$14 + state.weekly_ut[t$var112][cv$reduction136Index]);
+				for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
+					state.weekly_rates[t$var112][j$var147] = (state.weekly_ut[t$var112][j$var147] / reduceVar$denom$14);
 			}
 			
 			// Substituted "weekly_sales" with its value "Sales[t$var112]".
-			DistributionSampling.sampleMultinomial(RNG$, weekly_rates[t$var112], noProducts, sales_sum[t$var112], Sales[t$var112]);
+			DistributionSampling.sampleMultinomial(state.RNG$, state.weekly_rates[t$var112], state.noProducts, state.sales_sum[t$var112], state.Sales[t$var112]);
 		}
 	}
 
@@ -1813,12 +1561,12 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample26) {
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-				ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
+		if(!state.fixedFlag$sample26) {
+			for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1)
+				state.ut[j$var20] = (DistributionSampling.sampleGaussian(state.RNG$) * 1.4142135623730951);
 		}
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-			exped[j$var38] = Math.exp(ut[j$var38]);
+		for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1)
+			state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 		
 		// Reduction of array exped
 		// 
@@ -1828,21 +1576,21 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		double reduceVar$sum$9 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+		for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1)
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
 												// l$var50's comment
 			// Set the right hand term to a value from the array exped
-			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction46Index]);
-		sum = reduceVar$sum$9;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+			reduceVar$sum$9 = (reduceVar$sum$9 + state.exped[cv$reduction46Index]);
+		state.sum = reduceVar$sum$9;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
 			// Substituted "sum" with its value "reduceVar$sum$9".
-			expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$9));
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
-				weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+			state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * reduceVar$sum$9));
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1)
+				state.weekly_ut[t$var112][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 			
 			// Reduction of array weekly_ut
 			// 
@@ -1852,16 +1600,16 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			double reduceVar$denom$18 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+			for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 																// l$var136's comment
 				// Set the right hand term to a value from the array weekly_ut
-				reduceVar$denom$18 = (reduceVar$denom$18 + weekly_ut[t$var112][cv$reduction136Index]);
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-				weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$18);
+				reduceVar$denom$18 = (reduceVar$denom$18 + state.weekly_ut[t$var112][cv$reduction136Index]);
+			for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
+				state.weekly_rates[t$var112][j$var147] = (state.weekly_ut[t$var112][j$var147] / reduceVar$denom$18);
 		}
 	}
 
@@ -1870,12 +1618,12 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	@Override
 	public final void forwardGenerationPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample26) {
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-				ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
+		if(!state.fixedFlag$sample26) {
+			for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1)
+				state.ut[j$var20] = (DistributionSampling.sampleGaussian(state.RNG$) * 1.4142135623730951);
 		}
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-			exped[j$var38] = Math.exp(ut[j$var38]);
+		for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1)
+			state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 		
 		// Reduction of array exped
 		// 
@@ -1885,21 +1633,21 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		double reduceVar$sum$6 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+		for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1)
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
 												// l$var50's comment
 			// Set the right hand term to a value from the array exped
-			reduceVar$sum$6 = (reduceVar$sum$6 + exped[cv$reduction46Index]);
-		sum = reduceVar$sum$6;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+			reduceVar$sum$6 = (reduceVar$sum$6 + state.exped[cv$reduction46Index]);
+		state.sum = reduceVar$sum$6;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
 			// Substituted "sum" with its value "reduceVar$sum$6".
-			expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$6));
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
-				weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+			state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * reduceVar$sum$6));
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1)
+				state.weekly_ut[t$var112][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 			
 			// Reduction of array weekly_ut
 			// 
@@ -1909,19 +1657,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			double reduceVar$denom$15 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+			for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 																// l$var136's comment
 				// Set the right hand term to a value from the array weekly_ut
-				reduceVar$denom$15 = (reduceVar$denom$15 + weekly_ut[t$var112][cv$reduction136Index]);
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-				weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$15);
+				reduceVar$denom$15 = (reduceVar$denom$15 + state.weekly_ut[t$var112][cv$reduction136Index]);
+			for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
+				state.weekly_rates[t$var112][j$var147] = (state.weekly_ut[t$var112][j$var147] / reduceVar$denom$15);
 			
 			// Substituted "weekly_sales" with its value "Sales[t$var112]".
-			DistributionSampling.sampleMultinomial(RNG$, weekly_rates[t$var112], noProducts, sales_sum[t$var112], Sales[t$var112]);
+			DistributionSampling.sampleMultinomial(state.RNG$, state.weekly_rates[t$var112], state.noProducts, state.sales_sum[t$var112], state.Sales[t$var112]);
 		}
 	}
 
@@ -1930,11 +1678,11 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample26) {
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-				ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
-			for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-				exped[j$var38] = Math.exp(ut[j$var38]);
+		if(!state.fixedFlag$sample26) {
+			for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1)
+				state.ut[j$var20] = (DistributionSampling.sampleGaussian(state.RNG$) * 1.4142135623730951);
+			for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1)
+				state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 			
 			// Reduction of array exped
 			// 
@@ -1944,19 +1692,19 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			double reduceVar$sum$7 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+			for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 																// l$var50's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$7 = (reduceVar$sum$7 + exped[cv$reduction46Index]);
-			sum = reduceVar$sum$7;
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+				reduceVar$sum$7 = (reduceVar$sum$7 + state.exped[cv$reduction46Index]);
+			state.sum = reduceVar$sum$7;
+			for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
 				// Substituted "sum" with its value "reduceVar$sum$7".
-				expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$7));
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
-					weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+				state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * reduceVar$sum$7));
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+				for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1)
+					state.weekly_ut[t$var112][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 				
 				// Reduction of array weekly_ut
 				// 
@@ -1966,14 +1714,14 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				double reduceVar$denom$16 = 0.0;
 				
 				// For each index in the array to be reduced
-				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+				for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 					// Copy the result of the reduction into the variable returned by the reduction.
 					// 
 																				// l$var136's comment
 					// Set the right hand term to a value from the array weekly_ut
-					reduceVar$denom$16 = (reduceVar$denom$16 + weekly_ut[t$var112][cv$reduction136Index]);
-				for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-					weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$16);
+					reduceVar$denom$16 = (reduceVar$denom$16 + state.weekly_ut[t$var112][cv$reduction136Index]);
+				for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
+					state.weekly_rates[t$var112][j$var147] = (state.weekly_ut[t$var112][j$var147] / reduceVar$denom$16);
 			}
 		}
 	}
@@ -1984,12 +1732,12 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample26) {
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-				ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
+		if(!state.fixedFlag$sample26) {
+			for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1)
+				state.ut[j$var20] = (DistributionSampling.sampleGaussian(state.RNG$) * 1.4142135623730951);
 		}
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-			exped[j$var38] = Math.exp(ut[j$var38]);
+		for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1)
+			state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 		
 		// Reduction of array exped
 		// 
@@ -1999,21 +1747,21 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		double reduceVar$sum$8 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+		for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1)
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
 												// l$var50's comment
 			// Set the right hand term to a value from the array exped
-			reduceVar$sum$8 = (reduceVar$sum$8 + exped[cv$reduction46Index]);
-		sum = reduceVar$sum$8;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+			reduceVar$sum$8 = (reduceVar$sum$8 + state.exped[cv$reduction46Index]);
+		state.sum = reduceVar$sum$8;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
 			// Substituted "sum" with its value "reduceVar$sum$8".
-			expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$8));
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
-				weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+			state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * reduceVar$sum$8));
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1)
+				state.weekly_ut[t$var112][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 			
 			// Reduction of array weekly_ut
 			// 
@@ -2023,16 +1771,16 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			double reduceVar$denom$17 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+			for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 																// l$var136's comment
 				// Set the right hand term to a value from the array weekly_ut
-				reduceVar$denom$17 = (reduceVar$denom$17 + weekly_ut[t$var112][cv$reduction136Index]);
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-				weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$17);
+				reduceVar$denom$17 = (reduceVar$denom$17 + state.weekly_ut[t$var112][cv$reduction136Index]);
+			for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
+				state.weekly_rates[t$var112][j$var147] = (state.weekly_ut[t$var112][j$var147] / reduceVar$denom$17);
 		}
 	}
 
@@ -2040,23 +1788,23 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(!fixedFlag$sample26) {
+		if(!state.fixedFlag$sample26) {
 			// Infer the samples in chronological order.
-			if(system$gibbsForward) {
-				for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
+			if(state.system$gibbsForward) {
+				for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1)
 					inferSample26(j$var20);
 			}
 			// Infer the samples in reverse chronological order.
 			else {
-				for(int j$var20 = (noProducts - 1); j$var20 >= 1; j$var20 -= 1)
+				for(int j$var20 = (state.noProducts - 1); j$var20 >= 1; j$var20 -= 1)
 					inferSample26(j$var20);
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
-			if(!constrainedFlag$sample26[(j$var20 - 1)])
+		state.system$gibbsForward = !state.system$gibbsForward;
+		for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1) {
+			if(!state.constrainedFlag$sample26[(j$var20 - 1)])
 				drawValueSample26(j$var20);
 		}
 	}
@@ -2069,20 +1817,20 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$ut = 0.0;
-		logProbability$exped = 0.0;
-		logProbability$sum = 0.0;
-		logProbability$expedNorm = 0.0;
-		if(!fixedProbFlag$sample26) {
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-				logProbability$sample26[(j$var20 - 1)] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$ut = 0.0;
+		state.logProbability$exped = 0.0;
+		state.logProbability$sum = 0.0;
+		state.logProbability$expedNorm = 0.0;
+		if(!state.fixedProbFlag$sample26) {
+			for(int j$var20 = 1; j$var20 < state.noProducts; j$var20 += 1)
+				state.logProbability$sample26[(j$var20 - 1)] = Double.NaN;
 		}
-		logProbability$Sales = 0.0;
-		if(!fixedProbFlag$sample157) {
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				logProbability$sample157[t$var112] = Double.NaN;
+		state.logProbability$Sales = 0.0;
+		if(!state.fixedProbFlag$sample157) {
+			for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1)
+				state.logProbability$sample157[t$var112] = Double.NaN;
 		}
 	}
 
@@ -2090,8 +1838,8 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	// etc.
 	@Override
 	public final void initializeModel() {
-		ut[0] = 0.0;
-		for(int t$var78 = 0; t$var78 < T; t$var78 += 1) {
+		state.ut[0] = 0.0;
+		for(int t$var78 = 0; t$var78 < state.T; t$var78 += 1) {
 			// Reduction of array week_sales
 			// 
 			// A generated name to prevent name collisions if the reduction is implemented more
@@ -2100,20 +1848,20 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			int reduceVar$var88$0 = 0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction84Index = 0; cv$reduction84Index < ObsSales[t$var78].length; cv$reduction84Index += 1)
+			for(int cv$reduction84Index = 0; cv$reduction84Index < state.ObsSales[t$var78].length; cv$reduction84Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 																// l$var86's comment
 				// Set the right hand term to a value from the array week_sales
-				reduceVar$var88$0 = (reduceVar$var88$0 + ObsSales[t$var78][cv$reduction84Index]);
-			sales_sum[t$var78] = reduceVar$var88$0;
+				reduceVar$var88$0 = (reduceVar$var88$0 + state.ObsSales[t$var78][cv$reduction84Index]);
+			state.sales_sum[t$var78] = reduceVar$var88$0;
 		}
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample26$1 = 0; index$constrainedFlag$sample26$1 < constrainedFlag$sample26.length; index$constrainedFlag$sample26$1 += 1)
-			constrainedFlag$sample26[index$constrainedFlag$sample26$1] = true;
+		for(int index$constrainedFlag$sample26$1 = 0; index$constrainedFlag$sample26$1 < state.constrainedFlag$sample26.length; index$constrainedFlag$sample26$1 += 1)
+			state.constrainedFlag$sample26[index$constrainedFlag$sample26$1] = true;
 	}
 
 	// Construct the evidence probabilities.
@@ -2123,7 +1871,7 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample26)
+		if(state.fixedFlag$sample26)
 			logProbabilityValue$sample26();
 		logProbabilityValue$sample157();
 	}
@@ -2171,10 +1919,10 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
-		int cv$length1 = Sales.length;
+		int cv$length1 = state.Sales.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
-			int[] cv$source2 = ObsSales[cv$index1];
-			int[] cv$target2 = Sales[cv$index1];
+			int[] cv$source2 = state.ObsSales[cv$index1];
+			int[] cv$target2 = state.Sales[cv$index1];
 			int cv$length2 = cv$target2.length;
 			for(int cv$index2 = 0; cv$index2 < cv$length2; cv$index2 += 1)
 				cv$target2[cv$index2] = cv$source2[cv$index2];
@@ -2187,8 +1935,8 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-			exped[j$var38] = Math.exp(ut[j$var38]);
+		for(int j$var38 = 0; j$var38 < state.noProducts; j$var38 += 1)
+			state.exped[j$var38] = Math.exp(state.ut[j$var38]);
 		
 		// Reduction of array exped
 		// 
@@ -2198,21 +1946,21 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		double reduceVar$sum$10 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+		for(int cv$reduction46Index = 0; cv$reduction46Index < state.noProducts; cv$reduction46Index += 1)
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
 												// l$var50's comment
 			// Set the right hand term to a value from the array exped
-			reduceVar$sum$10 = (reduceVar$sum$10 + exped[cv$reduction46Index]);
-		sum = reduceVar$sum$10;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+			reduceVar$sum$10 = (reduceVar$sum$10 + state.exped[cv$reduction46Index]);
+		state.sum = reduceVar$sum$10;
+		for(int j$var63 = 0; j$var63 < state.noProducts; j$var63 += 1)
 			// Substituted "sum" with its value "reduceVar$sum$10".
-			expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$10));
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
-				weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+			state.expedNorm[j$var63] = (state.exped[j$var63] / (state.r * reduceVar$sum$10));
+		for(int t$var112 = 0; t$var112 < state.T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < state.noProducts; j$var123 += 1)
+				state.weekly_ut[t$var112][j$var123] = (state.expedNorm[j$var123] * state.Avail[t$var112][j$var123]);
 			
 			// Reduction of array weekly_ut
 			// 
@@ -2222,16 +1970,16 @@ final class Vulcano2012basic$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			double reduceVar$denom$19 = 0.0;
 			
 			// For each index in the array to be reduced
-			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+			for(int cv$reduction136Index = 0; cv$reduction136Index < state.noProducts; cv$reduction136Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 																// l$var136's comment
 				// Set the right hand term to a value from the array weekly_ut
-				reduceVar$denom$19 = (reduceVar$denom$19 + weekly_ut[t$var112][cv$reduction136Index]);
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-				weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$19);
+				reduceVar$denom$19 = (reduceVar$denom$19 + state.weekly_ut[t$var112][cv$reduction136Index]);
+			for(int j$var147 = 0; j$var147 < state.noProducts; j$var147 += 1)
+				state.weekly_rates[t$var112][j$var147] = (state.weekly_ut[t$var112][j$var147] / reduceVar$denom$19);
 		}
 	}
 

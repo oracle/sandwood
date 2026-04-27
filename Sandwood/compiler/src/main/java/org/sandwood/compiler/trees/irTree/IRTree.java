@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.compilation.ExternalFunction;
 import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.dataflowGraph.variables.ClassVariableDescription;
@@ -225,9 +224,7 @@ public abstract class IRTree extends Tree<IRTree> {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        toTransformationTree().toOutputTree(ExecutionType.SingleThreadCPU).toJava(sb, new HashSet<>());
-        return sb.toString();
+        return toTransformationTree().toString();
     }
 
     // Factory Methods
@@ -314,7 +311,7 @@ public abstract class IRTree extends Tree<IRTree> {
         return new IRLocalFunctionCallReturn<>(outputType, name, args);
     }
 
-    public static <A extends ObjectVariable<A>, X extends Variable<X>> IRGetField<A,X> getField(IRTreeReturn<A> tree,
+    public static <A extends ObjectVariable<A>, X extends Variable<X>> IRGetField<A, X> getField(IRTreeReturn<A> tree,
             VariableDescription<X> varDesc) {
         return new IRGetField<>(tree, varDesc);
     }

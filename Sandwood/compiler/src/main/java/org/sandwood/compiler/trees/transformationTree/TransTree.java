@@ -39,6 +39,7 @@ import org.sandwood.compiler.trees.Tag;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.Visibility;
 import org.sandwood.compiler.trees.outputTree.OutputTree;
+import org.sandwood.compiler.trees.transformationTree.TransTree.RNGLocation;
 import org.sandwood.compiler.trees.transformationTree.binop.TransAdd;
 import org.sandwood.compiler.trees.transformationTree.binop.TransAnd;
 import org.sandwood.compiler.trees.transformationTree.binop.TransBinOp;
@@ -52,12 +53,14 @@ import org.sandwood.compiler.trees.transformationTree.binop.TransMultiply;
 import org.sandwood.compiler.trees.transformationTree.binop.TransOr;
 import org.sandwood.compiler.trees.transformationTree.binop.TransRemainder;
 import org.sandwood.compiler.trees.transformationTree.binop.TransSubtract;
+import org.sandwood.compiler.trees.transformationTree.transformers.AccessRedirection;
 import org.sandwood.compiler.trees.transformationTree.transformers.ApplyConstantsTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.ApplyConstraintsTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.CollapseConstantsTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.CollapseUnrequiredForLoopsTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.CopyTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.ExtractCommonContraintsTransformer;
+import org.sandwood.compiler.trees.transformationTree.transformers.LocalRng;
 import org.sandwood.compiler.trees.transformationTree.transformers.LoopUnrollingTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.MoveConstraintsOutTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.MoveNegationTransformer;
@@ -170,6 +173,18 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
         SEQUENTIAL,
         STORE,
         SUBTRACT
+    }
+    
+    public enum TreeLocation {
+        STATE,
+        SCRATCH,
+        CORE,
+        UNKNOWN
+    }
+    
+    public enum RNGLocation {
+        LOCAL,
+        GLOBAL
     }
 
     public final TransTreeType type;
@@ -455,18 +470,20 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
 
     public abstract OutputTree toOutputTreeInternal();
 
-    public OutputTree toOutputTree(ExecutionType target) {
-        switch(target) {
-            case SingleThreadCPU:
-                return toOutputTreeInternal();
-            case MultiThreadCPU:
-                T tree = new ParallelIndexes().transform(this);
-                tree = new ParFor(tree.getVariableTracking()).transform(tree);
-                return tree.toOutputTreeInternal();
-            case GPU:
-            default:
-                throw new CompilerException("Unable to transform for target: " + target);
-        }
+    public OutputTree toOutputTree(RNGLocation rngLocation, TreeLocation treeLocation, ExecutionType target) {
+        TransTree<T> tree = switch(target) {
+            case SingleThreadCPU -> this;
+            case MultiThreadCPU -> {
+                T t = new ParallelIndexes().transform(this);
+                if(rngLocation == RNGLocation.LOCAL)
+                    t = new LocalRng().transform(t);
+                yield new ParFor(t.getVariableTracking()).transform(t);
+            }
+            case GPU -> throw new CompilerException("Unable to transform for target: " + target);
+        };
+        AccessRedirection ar = new AccessRedirection(treeLocation);
+        tree = ar.transform(tree);
+        return tree.toOutputTreeInternal();
     }
 
     @Override

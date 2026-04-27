@@ -1,516 +1,325 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.AnonymousSample$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.AnonymousSample.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class AnonymousSample$SingleThreadCPU extends CoreModelSingleThreadCPU implements AnonymousSample$CoreInterface {
-double[] amounts1;
-	double[] amounts2;
-	boolean constrainedFlag$sample15 = true;
-	boolean constrainedFlag$sample21 = true;
-	boolean constrainedFlag$sample9 = true;
-	boolean fixedFlag$sample15 = false;
-	boolean fixedFlag$sample21 = false;
-	boolean fixedFlag$sample9 = false;
-	boolean fixedProbFlag$sample15 = false;
-	boolean fixedProbFlag$sample21 = false;
-	boolean fixedProbFlag$sample35 = false;
-	boolean fixedProbFlag$sample39 = false;
-	boolean fixedProbFlag$sample9 = false;
-	int length$obsAmounts1;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$amounts1;
-	double logProbability$amounts2;
-	double logProbability$mean1;
-	double logProbability$mean2;
-	double logProbability$priorSigma2;
-	double[] logProbability$sample35;
-	double[] logProbability$sample39;
-	double logProbability$var39;
-	double mean1;
-	double mean2;
-	int n;
-	double[] obsAmounts1;
-	double[] obsAmounts2;
-	double priorSigma2;
-	boolean system$gibbsForward = true;
-	double[] var39;
+final class AnonymousSample$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	public AnonymousSample$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	@Override
-	public final double[] get$amounts1() {
-		return amounts1;
-	}
 
-	@Override
-	public final double[] get$amounts2() {
-		return amounts2;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample15() {
-		return fixedFlag$sample15;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample15(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample15 = cv$value;
-		constrainedFlag$sample15 = (cv$value || constrainedFlag$sample15);
-		fixedProbFlag$sample15 = (cv$value && fixedProbFlag$sample15);
-		fixedProbFlag$sample35 = (cv$value && fixedProbFlag$sample35);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample21() {
-		return fixedFlag$sample21;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample21(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample21 = cv$value;
-		constrainedFlag$sample21 = (cv$value || constrainedFlag$sample21);
-		fixedProbFlag$sample21 = (cv$value && fixedProbFlag$sample21);
-		fixedProbFlag$sample39 = (cv$value && fixedProbFlag$sample39);
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample9() {
-		return fixedFlag$sample9;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample9(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample9 = cv$value;
-		constrainedFlag$sample9 = (cv$value || constrainedFlag$sample9);
-		fixedProbFlag$sample9 = (cv$value && fixedProbFlag$sample9);
-		fixedProbFlag$sample35 = (cv$value && fixedProbFlag$sample35);
-		fixedProbFlag$sample39 = (cv$value && fixedProbFlag$sample39);
-	}
-
-	@Override
-	public final int get$length$obsAmounts1() {
-		return length$obsAmounts1;
-	}
-
-	@Override
-	public final void set$length$obsAmounts1(int cv$value, boolean allocated$) {
-		length$obsAmounts1 = cv$value;
-	}
-
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	@Override
-	public final double get$logProbability$amounts1() {
-		return logProbability$amounts1;
-	}
-
-	@Override
-	public final double get$logProbability$amounts2() {
-		return logProbability$amounts2;
-	}
-
-	@Override
-	public final double get$logProbability$mean1() {
-		return logProbability$mean1;
-	}
-
-	@Override
-	public final double get$logProbability$mean2() {
-		return logProbability$mean2;
-	}
-
-	@Override
-	public final double get$logProbability$priorSigma2() {
-		return logProbability$priorSigma2;
-	}
-
-	@Override
-	public final double get$mean1() {
-		return mean1;
-	}
-
-	@Override
-	public final void set$mean1(double cv$value, boolean allocated$) {
-		mean1 = cv$value;
-		fixedProbFlag$sample15 = false;
-		fixedProbFlag$sample35 = false;
-	}
-
-	@Override
-	public final double get$mean2() {
-		return mean2;
-	}
-
-	@Override
-	public final void set$mean2(double cv$value, boolean allocated$) {
-		mean2 = cv$value;
-		fixedProbFlag$sample21 = false;
-		fixedProbFlag$sample39 = false;
-	}
-
-	@Override
-	public final int get$n() {
-		return n;
-	}
-
-	@Override
-	public final double[] get$obsAmounts1() {
-		return obsAmounts1;
-	}
-
-	@Override
-	public final void set$obsAmounts1(double[] cv$value, boolean allocated$) {
-		obsAmounts1 = cv$value;
-	}
-
-	@Override
-	public final double[] get$obsAmounts2() {
-		return obsAmounts2;
-	}
-
-	@Override
-	public final void set$obsAmounts2(double[] cv$value, boolean allocated$) {
-		obsAmounts2 = cv$value;
-	}
-
-	@Override
-	public final double get$priorSigma2() {
-		return priorSigma2;
-	}
-
-	@Override
-	public final void set$priorSigma2(double cv$value, boolean allocated$) {
-		priorSigma2 = cv$value;
-		fixedProbFlag$sample9 = false;
-		fixedProbFlag$sample35 = false;
-		fixedProbFlag$sample39 = false;
+	public AnonymousSample$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	private final void drawValueSample15() {
-		mean1 = ((DistributionSampling.sampleGaussian(RNG$) * 100.0) + 2000.0);
+		state.mean1 = ((DistributionSampling.sampleGaussian(state.RNG$) * 100.0) + 2000.0);
 	}
 
 	private final void drawValueSample21() {
-		mean2 = ((DistributionSampling.sampleGaussian(RNG$) * 100.0) + 2000.0);
+		state.mean2 = ((DistributionSampling.sampleGaussian(state.RNG$) * 100.0) + 2000.0);
 	}
 
 	private final void drawValueSample9() {
-		priorSigma2 = ((DistributionSampling.sampleGaussian(RNG$) * 30.0) + 10000.0);
+		state.priorSigma2 = ((DistributionSampling.sampleGaussian(state.RNG$) * 30.0) + 10000.0);
 	}
 
 	private final void inferSample15() {
-		constrainedFlag$sample15 = false;
+		state.constrainedFlag$sample15 = false;
 		double cv$sum = 0.0;
 		double cv$denominatorSquareSum = 0.0;
 		boolean cv$sigmaNotFound = true;
 		double cv$sigmaValue = 1.0;
-		for(int i = 0; i < n; i += 1) {
-			constrainedFlag$sample15 = true;
+		for(int i = 0; i < state.n; i += 1) {
+			state.constrainedFlag$sample15 = true;
 			cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
-			cv$sum = (cv$sum + amounts1[i]);
+			cv$sum = (cv$sum + state.amounts1[i]);
 			if(cv$sigmaNotFound) {
-				cv$sigmaValue = priorSigma2;
+				cv$sigmaValue = state.priorSigma2;
 				cv$sigmaNotFound = false;
 			}
 		}
-		if(constrainedFlag$sample15)
-			mean1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		if(state.constrainedFlag$sample15)
+			state.mean1 = Conjugates.sampleConjugateGaussianGaussian(state.RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
 	private final void inferSample21() {
-		constrainedFlag$sample21 = false;
+		state.constrainedFlag$sample21 = false;
 		double cv$sum = 0.0;
 		double cv$denominatorSquareSum = 0.0;
 		boolean cv$sigmaNotFound = true;
 		double cv$sigmaValue = 1.0;
-		for(int i = 0; i < n; i += 1) {
-			constrainedFlag$sample21 = true;
+		for(int i = 0; i < state.n; i += 1) {
+			state.constrainedFlag$sample21 = true;
 			cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
-			cv$sum = (cv$sum + var39[i]);
+			cv$sum = (cv$sum + state.var39[i]);
 			if(cv$sigmaNotFound) {
-				cv$sigmaValue = priorSigma2;
+				cv$sigmaValue = state.priorSigma2;
 				cv$sigmaNotFound = false;
 			}
 		}
-		if(constrainedFlag$sample21)
-			mean2 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		if(state.constrainedFlag$sample21)
+			state.mean2 = Conjugates.sampleConjugateGaussianGaussian(state.RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 	}
 
 	private final void inferSample9() {
-		constrainedFlag$sample9 = false;
-		double cv$originalValue = priorSigma2;
+		state.constrainedFlag$sample9 = false;
+		double cv$originalValue = state.priorSigma2;
 		double cv$originalProbability;
-		double cv$var = ((priorSigma2 * priorSigma2) * 0.010000000000000002);
+		double cv$var = ((state.priorSigma2 * state.priorSigma2) * 0.010000000000000002);
 		if((cv$var < 0.010000000000000002))
 			cv$var = 0.010000000000000002;
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + priorSigma2);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + state.priorSigma2);
 		{
-			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((priorSigma2 - 10000.0) / 30.0)) - 3.4011973816621555);
-			for(int i = 0; i < n; i += 1) {
-				constrainedFlag$sample9 = true;
-				cv$accumulatedProbabilities = (((0.0 < priorSigma2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((state.priorSigma2 - 10000.0) / 30.0)) - 3.4011973816621555);
+			for(int i = 0; i < state.n; i += 1) {
+				state.constrainedFlag$sample9 = true;
+				cv$accumulatedProbabilities = (((0.0 < state.priorSigma2)?(DistributionSampling.logProbabilityGaussian(((state.amounts1[i] - state.mean1) / Math.sqrt(state.priorSigma2))) - (Math.log(state.priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
-			for(int i = 0; i < n; i += 1) {
-				constrainedFlag$sample9 = true;
-				cv$accumulatedProbabilities = (((0.0 < priorSigma2)?(DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			for(int i = 0; i < state.n; i += 1) {
+				state.constrainedFlag$sample9 = true;
+				cv$accumulatedProbabilities = (((0.0 < state.priorSigma2)?(DistributionSampling.logProbabilityGaussian(((state.var39[i] - state.mean2) / Math.sqrt(state.priorSigma2))) - (Math.log(state.priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
-		if(constrainedFlag$sample9) {
-			priorSigma2 = cv$proposedValue;
+		if(state.constrainedFlag$sample9) {
+			state.priorSigma2 = cv$proposedValue;
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((cv$proposedValue - 10000.0) / 30.0)) - 3.4011973816621555);
-			for(int i = 0; i < n; i += 1) {
-				constrainedFlag$sample9 = true;
-				cv$accumulatedProbabilities = (((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			for(int i = 0; i < state.n; i += 1) {
+				state.constrainedFlag$sample9 = true;
+				cv$accumulatedProbabilities = (((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((state.amounts1[i] - state.mean1) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
-			for(int i = 0; i < n; i += 1) {
-				constrainedFlag$sample9 = true;
-				cv$accumulatedProbabilities = (((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			for(int i = 0; i < state.n; i += 1) {
+				state.constrainedFlag$sample9 = true;
+				cv$accumulatedProbabilities = (((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((state.var39[i] - state.mean2) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
-				priorSigma2 = cv$originalValue;
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(state.RNG$))) || Double.isNaN(cv$ratio)))
+				state.priorSigma2 = cv$originalValue;
 		}
 	}
 
 	private final void logProbabilityValue$sample15() {
-		if(!fixedProbFlag$sample15) {
-			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((mean1 - 2000.0) / 100.0)) - 4.605170185988092);
-			logProbability$mean1 = cv$distributionAccumulator;
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			if(fixedFlag$sample15)
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample15 = fixedFlag$sample15;
+		if(!state.fixedProbFlag$sample15) {
+			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((state.mean1 - 2000.0) / 100.0)) - 4.605170185988092);
+			state.logProbability$mean1 = cv$distributionAccumulator;
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
+			if(state.fixedFlag$sample15)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
+			state.fixedProbFlag$sample15 = state.fixedFlag$sample15;
 		} else {
-			logProbability$$model = (logProbability$$model + logProbability$mean1);
-			if(fixedFlag$sample15)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$mean1);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$mean1);
+			if(state.fixedFlag$sample15)
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$mean1);
 		}
 	}
 
 	private final void logProbabilityValue$sample21() {
-		if(!fixedProbFlag$sample21) {
-			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((mean2 - 2000.0) / 100.0)) - 4.605170185988092);
-			logProbability$mean2 = cv$distributionAccumulator;
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			if(fixedFlag$sample21)
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample21 = fixedFlag$sample21;
+		if(!state.fixedProbFlag$sample21) {
+			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((state.mean2 - 2000.0) / 100.0)) - 4.605170185988092);
+			state.logProbability$mean2 = cv$distributionAccumulator;
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
+			if(state.fixedFlag$sample21)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
+			state.fixedProbFlag$sample21 = state.fixedFlag$sample21;
 		} else {
-			logProbability$$model = (logProbability$$model + logProbability$mean2);
-			if(fixedFlag$sample21)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$mean2);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$mean2);
+			if(state.fixedFlag$sample21)
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$mean2);
 		}
 	}
 
 	private final void logProbabilityValue$sample35() {
-		if(!fixedProbFlag$sample35) {
+		if(!state.fixedProbFlag$sample35) {
 			double cv$accumulator = 0.0;
-			for(int i = 0; i < n; i += 1) {
-				double cv$distributionAccumulator = ((0.0 < priorSigma2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY);
+			for(int i = 0; i < state.n; i += 1) {
+				double cv$distributionAccumulator = ((0.0 < state.priorSigma2)?(DistributionSampling.logProbabilityGaussian(((state.amounts1[i] - state.mean1) / Math.sqrt(state.priorSigma2))) - (Math.log(state.priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$sample35[i] = cv$distributionAccumulator;
+				state.logProbability$sample35[i] = cv$distributionAccumulator;
 			}
-			logProbability$amounts1 = (logProbability$amounts1 + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample35 = (fixedFlag$sample9 && fixedFlag$sample15);
+			state.logProbability$amounts1 = (state.logProbability$amounts1 + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample35 = (state.fixedFlag$sample9 && state.fixedFlag$sample15);
 		} else {
 			double cv$accumulator = 0.0;
-			for(int i = 0; i < n; i += 1)
-				cv$accumulator = (cv$accumulator + logProbability$sample35[i]);
-			logProbability$amounts1 = (logProbability$amounts1 + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			for(int i = 0; i < state.n; i += 1)
+				cv$accumulator = (cv$accumulator + state.logProbability$sample35[i]);
+			state.logProbability$amounts1 = (state.logProbability$amounts1 + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	private final void logProbabilityValue$sample39() {
-		if(!fixedProbFlag$sample39) {
+		if(!state.fixedProbFlag$sample39) {
 			double cv$accumulator = 0.0;
-			for(int i = 0; i < n; i += 1) {
-				double cv$distributionAccumulator = ((0.0 < priorSigma2)?(DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY);
+			for(int i = 0; i < state.n; i += 1) {
+				double cv$distributionAccumulator = ((0.0 < state.priorSigma2)?(DistributionSampling.logProbabilityGaussian(((state.var39[i] - state.mean2) / Math.sqrt(state.priorSigma2))) - (Math.log(state.priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$sample39[i] = cv$distributionAccumulator;
+				state.logProbability$sample39[i] = cv$distributionAccumulator;
 			}
-			logProbability$var39 = (logProbability$var39 + cv$accumulator);
-			logProbability$amounts2 = (logProbability$amounts2 + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample39 = (fixedFlag$sample9 && fixedFlag$sample21);
+			state.logProbability$var39 = (state.logProbability$var39 + cv$accumulator);
+			state.logProbability$amounts2 = (state.logProbability$amounts2 + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample39 = (state.fixedFlag$sample9 && state.fixedFlag$sample21);
 		} else {
 			double cv$accumulator = 0.0;
-			for(int i = 0; i < n; i += 1)
-				cv$accumulator = (cv$accumulator + logProbability$sample39[i]);
-			logProbability$var39 = (logProbability$var39 + cv$accumulator);
-			logProbability$amounts2 = (logProbability$amounts2 + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			for(int i = 0; i < state.n; i += 1)
+				cv$accumulator = (cv$accumulator + state.logProbability$sample39[i]);
+			state.logProbability$var39 = (state.logProbability$var39 + cv$accumulator);
+			state.logProbability$amounts2 = (state.logProbability$amounts2 + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	private final void logProbabilityValue$sample9() {
-		if(!fixedProbFlag$sample9) {
-			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((priorSigma2 - 10000.0) / 30.0)) - 3.4011973816621555);
-			logProbability$priorSigma2 = cv$distributionAccumulator;
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			if(fixedFlag$sample9)
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample9 = fixedFlag$sample9;
+		if(!state.fixedProbFlag$sample9) {
+			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((state.priorSigma2 - 10000.0) / 30.0)) - 3.4011973816621555);
+			state.logProbability$priorSigma2 = cv$distributionAccumulator;
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
+			if(state.fixedFlag$sample9)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
+			state.fixedProbFlag$sample9 = state.fixedFlag$sample9;
 		} else {
-			logProbability$$model = (logProbability$$model + logProbability$priorSigma2);
-			if(fixedFlag$sample9)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$priorSigma2);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$priorSigma2);
+			if(state.fixedFlag$sample9)
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$priorSigma2);
 		}
 	}
 
 	@Override
-	public final void allocate() {
-		amounts1 = new double[length$obsAmounts1];
-		amounts2 = new double[length$obsAmounts1];
-		var39 = new double[length$obsAmounts1];
-		logProbability$sample35 = new double[length$obsAmounts1];
-		logProbability$sample39 = new double[length$obsAmounts1];
-	}
-
-	@Override
-	public final void allocateScratch() {}
-
-	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample9)
-			priorSigma2 = ((DistributionSampling.sampleGaussian(RNG$) * 30.0) + 10000.0);
-		if(!fixedFlag$sample15)
-			mean1 = ((DistributionSampling.sampleGaussian(RNG$) * 100.0) + 2000.0);
-		if(!fixedFlag$sample21)
-			mean2 = ((DistributionSampling.sampleGaussian(RNG$) * 100.0) + 2000.0);
-		for(int i = 0; i < n; i += 1) {
-			amounts1[i] = ((Math.sqrt(priorSigma2) * DistributionSampling.sampleGaussian(RNG$)) + mean1);
-			var39[i] = ((Math.sqrt(priorSigma2) * DistributionSampling.sampleGaussian(RNG$)) + mean2);
-			amounts2[i] = (amounts1[i] + var39[i]);
+		if(!state.fixedFlag$sample9)
+			state.priorSigma2 = ((DistributionSampling.sampleGaussian(state.RNG$) * 30.0) + 10000.0);
+		if(!state.fixedFlag$sample15)
+			state.mean1 = ((DistributionSampling.sampleGaussian(state.RNG$) * 100.0) + 2000.0);
+		if(!state.fixedFlag$sample21)
+			state.mean2 = ((DistributionSampling.sampleGaussian(state.RNG$) * 100.0) + 2000.0);
+		for(int i = 0; i < state.n; i += 1) {
+			state.amounts1[i] = ((Math.sqrt(state.priorSigma2) * DistributionSampling.sampleGaussian(state.RNG$)) + state.mean1);
+			state.var39[i] = ((Math.sqrt(state.priorSigma2) * DistributionSampling.sampleGaussian(state.RNG$)) + state.mean2);
+			state.amounts2[i] = (state.amounts1[i] + state.var39[i]);
 		}
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample9)
-			priorSigma2 = ((DistributionSampling.sampleGaussian(RNG$) * 30.0) + 10000.0);
-		if(!fixedFlag$sample15)
-			mean1 = ((DistributionSampling.sampleGaussian(RNG$) * 100.0) + 2000.0);
-		if(!fixedFlag$sample21)
-			mean2 = ((DistributionSampling.sampleGaussian(RNG$) * 100.0) + 2000.0);
+		if(!state.fixedFlag$sample9)
+			state.priorSigma2 = ((DistributionSampling.sampleGaussian(state.RNG$) * 30.0) + 10000.0);
+		if(!state.fixedFlag$sample15)
+			state.mean1 = ((DistributionSampling.sampleGaussian(state.RNG$) * 100.0) + 2000.0);
+		if(!state.fixedFlag$sample21)
+			state.mean2 = ((DistributionSampling.sampleGaussian(state.RNG$) * 100.0) + 2000.0);
 	}
 
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample9)
-			priorSigma2 = ((DistributionSampling.sampleGaussian(RNG$) * 30.0) + 10000.0);
-		if(!fixedFlag$sample15)
-			mean1 = ((DistributionSampling.sampleGaussian(RNG$) * 100.0) + 2000.0);
-		if(!fixedFlag$sample21)
-			mean2 = ((DistributionSampling.sampleGaussian(RNG$) * 100.0) + 2000.0);
-		for(int i = 0; i < n; i += 1) {
-			amounts1[i] = ((Math.sqrt(priorSigma2) * DistributionSampling.sampleGaussian(RNG$)) + mean1);
-			var39[i] = ((Math.sqrt(priorSigma2) * DistributionSampling.sampleGaussian(RNG$)) + mean2);
-			amounts2[i] = (amounts1[i] + var39[i]);
+		if(!state.fixedFlag$sample9)
+			state.priorSigma2 = ((DistributionSampling.sampleGaussian(state.RNG$) * 30.0) + 10000.0);
+		if(!state.fixedFlag$sample15)
+			state.mean1 = ((DistributionSampling.sampleGaussian(state.RNG$) * 100.0) + 2000.0);
+		if(!state.fixedFlag$sample21)
+			state.mean2 = ((DistributionSampling.sampleGaussian(state.RNG$) * 100.0) + 2000.0);
+		for(int i = 0; i < state.n; i += 1) {
+			state.amounts1[i] = ((Math.sqrt(state.priorSigma2) * DistributionSampling.sampleGaussian(state.RNG$)) + state.mean1);
+			state.var39[i] = ((Math.sqrt(state.priorSigma2) * DistributionSampling.sampleGaussian(state.RNG$)) + state.mean2);
+			state.amounts2[i] = (state.amounts1[i] + state.var39[i]);
 		}
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample9)
-			priorSigma2 = ((DistributionSampling.sampleGaussian(RNG$) * 30.0) + 10000.0);
-		if(!fixedFlag$sample15)
-			mean1 = ((DistributionSampling.sampleGaussian(RNG$) * 100.0) + 2000.0);
-		if(!fixedFlag$sample21)
-			mean2 = ((DistributionSampling.sampleGaussian(RNG$) * 100.0) + 2000.0);
+		if(!state.fixedFlag$sample9)
+			state.priorSigma2 = ((DistributionSampling.sampleGaussian(state.RNG$) * 30.0) + 10000.0);
+		if(!state.fixedFlag$sample15)
+			state.mean1 = ((DistributionSampling.sampleGaussian(state.RNG$) * 100.0) + 2000.0);
+		if(!state.fixedFlag$sample21)
+			state.mean2 = ((DistributionSampling.sampleGaussian(state.RNG$) * 100.0) + 2000.0);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample9)
-			priorSigma2 = ((DistributionSampling.sampleGaussian(RNG$) * 30.0) + 10000.0);
-		if(!fixedFlag$sample15)
-			mean1 = ((DistributionSampling.sampleGaussian(RNG$) * 100.0) + 2000.0);
-		if(!fixedFlag$sample21)
-			mean2 = ((DistributionSampling.sampleGaussian(RNG$) * 100.0) + 2000.0);
+		if(!state.fixedFlag$sample9)
+			state.priorSigma2 = ((DistributionSampling.sampleGaussian(state.RNG$) * 30.0) + 10000.0);
+		if(!state.fixedFlag$sample15)
+			state.mean1 = ((DistributionSampling.sampleGaussian(state.RNG$) * 100.0) + 2000.0);
+		if(!state.fixedFlag$sample21)
+			state.mean2 = ((DistributionSampling.sampleGaussian(state.RNG$) * 100.0) + 2000.0);
 	}
 
 	@Override
 	public final void gibbsRound() {
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample9)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample9)
 				inferSample9();
-			if(!fixedFlag$sample15)
+			if(!state.fixedFlag$sample15)
 				inferSample15();
-			if(!fixedFlag$sample21)
+			if(!state.fixedFlag$sample21)
 				inferSample21();
 		} else {
-			if(!fixedFlag$sample21)
+			if(!state.fixedFlag$sample21)
 				inferSample21();
-			if(!fixedFlag$sample15)
+			if(!state.fixedFlag$sample15)
 				inferSample15();
-			if(!fixedFlag$sample9)
+			if(!state.fixedFlag$sample9)
 				inferSample9();
 		}
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample9)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample9)
 			drawValueSample9();
-		if(!constrainedFlag$sample15)
+		if(!state.constrainedFlag$sample15)
 			drawValueSample15();
-		if(!constrainedFlag$sample21)
+		if(!state.constrainedFlag$sample21)
 			drawValueSample21();
 	}
 
 	private final void initializeLogProbabilityFields() {
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample9)
-			logProbability$priorSigma2 = Double.NaN;
-		if(!fixedProbFlag$sample15)
-			logProbability$mean1 = Double.NaN;
-		if(!fixedProbFlag$sample21)
-			logProbability$mean2 = Double.NaN;
-		logProbability$amounts1 = 0.0;
-		if(!fixedProbFlag$sample35) {
-			for(int i = 0; i < n; i += 1)
-				logProbability$sample35[i] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample9)
+			state.logProbability$priorSigma2 = Double.NaN;
+		if(!state.fixedProbFlag$sample15)
+			state.logProbability$mean1 = Double.NaN;
+		if(!state.fixedProbFlag$sample21)
+			state.logProbability$mean2 = Double.NaN;
+		state.logProbability$amounts1 = 0.0;
+		if(!state.fixedProbFlag$sample35) {
+			for(int i = 0; i < state.n; i += 1)
+				state.logProbability$sample35[i] = Double.NaN;
 		}
-		logProbability$var39 = 0.0;
-		logProbability$amounts2 = 0.0;
-		if(!fixedProbFlag$sample39) {
-			for(int i = 0; i < n; i += 1)
-				logProbability$sample39[i] = Double.NaN;
+		state.logProbability$var39 = 0.0;
+		state.logProbability$amounts2 = 0.0;
+		if(!state.fixedProbFlag$sample39) {
+			for(int i = 0; i < state.n; i += 1)
+				state.logProbability$sample39[i] = Double.NaN;
 		}
 	}
 
 	@Override
 	public final void initializeModel() {
-		n = length$obsAmounts1;
+		state.n = state.length$obsAmounts1;
 	}
 
 	@Override
 	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample9)
+		if(state.fixedFlag$sample9)
 			logProbabilityValue$sample9();
-		if(fixedFlag$sample15)
+		if(state.fixedFlag$sample15)
 			logProbabilityValue$sample15();
-		if(fixedFlag$sample21)
+		if(state.fixedFlag$sample21)
 			logProbabilityValue$sample21();
 		logProbabilityValue$sample35();
 		logProbabilityValue$sample39();
@@ -539,15 +348,15 @@ double[] amounts1;
 	@Override
 	public final void propagateObservedValues() {
 		{
-			int cv$length1 = amounts1.length;
+			int cv$length1 = state.amounts1.length;
 			for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
-				amounts1[cv$index1] = obsAmounts1[cv$index1];
+				state.amounts1[cv$index1] = state.obsAmounts1[cv$index1];
 		}
-		int cv$length1 = amounts2.length;
+		int cv$length1 = state.amounts2.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
-			amounts2[cv$index1] = obsAmounts2[cv$index1];
-		for(int i = (n - 1); i >= 0; i -= 1)
-			var39[i] = (amounts2[i] - amounts1[i]);
+			state.amounts2[cv$index1] = state.obsAmounts2[cv$index1];
+		for(int i = (state.n - 1); i >= 0; i -= 1)
+			state.var39[i] = (state.amounts2[i] - state.amounts1[i]);
 	}
 
 	@Override

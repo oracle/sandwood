@@ -1,141 +1,33 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.ExponentialDecayMK1$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.ExponentialDecayMK1.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class ExponentialDecayMK1$SingleThreadCPU extends CoreModelSingleThreadCPU implements ExponentialDecayMK1$CoreInterface {
-double a;
-	double b;
-	boolean constrainedFlag$sample6 = true;
-	double[] decay;
-	double[] decayDetected;
-	boolean fixedFlag$sample6 = false;
-	boolean fixedProbFlag$sample19 = false;
-	boolean fixedProbFlag$sample6 = false;
-	int length$decayDetected;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$decay;
-	double logProbability$exponential;
-	double logProbability$rate;
-	double logProbability$var19;
-	double rate;
-	int samples;
-	boolean system$gibbsForward = true;
+final class ExponentialDecayMK1$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	public ExponentialDecayMK1$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	@Override
-	public final double get$a() {
-		return a;
-	}
 
-	@Override
-	public final void set$a(double cv$value, boolean allocated$) {
-		a = cv$value;
-	}
-
-	@Override
-	public final double get$b() {
-		return b;
-	}
-
-	@Override
-	public final void set$b(double cv$value, boolean allocated$) {
-		b = cv$value;
-	}
-
-	@Override
-	public final double[] get$decay() {
-		return decay;
-	}
-
-	@Override
-	public final double[] get$decayDetected() {
-		return decayDetected;
-	}
-
-	@Override
-	public final void set$decayDetected(double[] cv$value, boolean allocated$) {
-		decayDetected = cv$value;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample6() {
-		return fixedFlag$sample6;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample6(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample6 = cv$value;
-		constrainedFlag$sample6 = (fixedFlag$sample6 || constrainedFlag$sample6);
-		fixedProbFlag$sample6 = (fixedFlag$sample6 && fixedProbFlag$sample6);
-		fixedProbFlag$sample19 = (fixedFlag$sample6 && fixedProbFlag$sample19);
-	}
-
-	@Override
-	public final int get$length$decayDetected() {
-		return length$decayDetected;
-	}
-
-	@Override
-	public final void set$length$decayDetected(int cv$value, boolean allocated$) {
-		length$decayDetected = cv$value;
-	}
-
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	@Override
-	public final double get$logProbability$decay() {
-		return logProbability$decay;
-	}
-
-	@Override
-	public final double get$logProbability$exponential() {
-		return logProbability$exponential;
-	}
-
-	@Override
-	public final double get$logProbability$rate() {
-		return logProbability$rate;
-	}
-
-	@Override
-	public final double get$rate() {
-		return rate;
-	}
-
-	@Override
-	public final void set$rate(double cv$value, boolean allocated$) {
-		rate = cv$value;
-		fixedProbFlag$sample6 = false;
-		fixedProbFlag$sample19 = false;
-	}
-
-	@Override
-	public final int get$samples() {
-		return samples;
+	public ExponentialDecayMK1$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	private final void drawValueSample6() {
-		rate = DistributionSampling.sampleGamma(RNG$, a, b);
+		state.rate = DistributionSampling.sampleGamma(state.RNG$, state.a, state.b);
 	}
 
 	private final void inferSample6() {
 		if(true) {
-			constrainedFlag$sample6 = false;
+			state.constrainedFlag$sample6 = false;
 			double cv$sum = 0.0;
 			int cv$count = 0;
 			{
@@ -144,16 +36,16 @@ double a;
 						{
 							{
 								{
-									for(int var18 = 0; var18 < samples; var18 += 1) {
+									for(int var18 = 0; var18 < state.samples; var18 += 1) {
 										boolean cv$sampleConstrained = true;
 										if(cv$sampleConstrained) {
-											constrainedFlag$sample6 = true;
+											state.constrainedFlag$sample6 = true;
 											{
 												{
 													{
 														{
 															{
-																cv$sum = (cv$sum + decay[var18]);
+																cv$sum = (cv$sum + state.decay[var18]);
 																cv$count = (cv$count + 1);
 															}
 														}
@@ -168,25 +60,25 @@ double a;
 					}
 				}
 			}
-			if(constrainedFlag$sample6)
-				rate = Conjugates.sampleConjugateGammaExponential(RNG$, a, b, cv$sum, cv$count);
+			if(state.constrainedFlag$sample6)
+				state.rate = Conjugates.sampleConjugateGammaExponential(state.RNG$, state.a, state.b, cv$sum, cv$count);
 		}
 	}
 
 	private final void logProbabilityValue$sample19() {
-		if(!fixedProbFlag$sample19) {
+		if(!state.fixedProbFlag$sample19) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int var18 = 0; var18 < samples; var18 += 1) {
+			for(int var18 = 0; var18 < state.samples; var18 += 1) {
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
 					{
-						double cv$sampleValue = decay[var18];
+						double cv$sampleValue = state.decay[var18];
 						{
 							{
-								double cv$weightedProbability = (Math.log(1.0) + ((((0.0 <= cv$sampleValue) && !(cv$sampleValue == Double.POSITIVE_INFINITY)) && (0.0 < rate))?(Math.log(rate) - (rate * cv$sampleValue)):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((((0.0 <= cv$sampleValue) && !(cv$sampleValue == Double.POSITIVE_INFINITY)) && (0.0 < state.rate))?(Math.log(state.rate) - (state.rate * cv$sampleValue)):Double.NEGATIVE_INFINITY));
 								if((cv$weightedProbability < cv$distributionAccumulator))
 									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 								else {
@@ -209,40 +101,40 @@ double a;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$exponential = cv$sampleAccumulator;
-			logProbability$var19 = cv$sampleAccumulator;
-			logProbability$decay = (logProbability$decay + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample19 = fixedFlag$sample6;
+			state.logProbability$exponential = cv$sampleAccumulator;
+			state.logProbability$var19 = cv$sampleAccumulator;
+			state.logProbability$decay = (state.logProbability$decay + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample19 = state.fixedFlag$sample6;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int var18 = 0; var18 < samples; var18 += 1)
+			for(int var18 = 0; var18 < state.samples; var18 += 1)
 				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var19;
+			double cv$sampleValue = state.logProbability$var19;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$exponential = cv$rvAccumulator;
-			logProbability$decay = (logProbability$decay + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$exponential = cv$rvAccumulator;
+			state.logProbability$decay = (state.logProbability$decay + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	private final void logProbabilityValue$sample6() {
-		if(!fixedProbFlag$sample6) {
+		if(!state.fixedProbFlag$sample6) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
 				{
-					double cv$sampleValue = rate;
+					double cv$sampleValue = state.rate;
 					{
 						{
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGamma(cv$sampleValue, a, b));
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGamma(cv$sampleValue, state.a, state.b));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -263,99 +155,91 @@ double a;
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$rate = cv$sampleProbability;
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample6)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample6 = fixedFlag$sample6;
+			state.logProbability$rate = cv$sampleProbability;
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample6)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample6 = state.fixedFlag$sample6;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$rate;
+			double cv$sampleValue = state.logProbability$rate;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample6)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample6)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	@Override
-	public final void allocate() {
-		decay = new double[length$decayDetected];
-	}
-
-	@Override
-	public final void allocateScratch() {}
-
-	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample6)
-			rate = DistributionSampling.sampleGamma(RNG$, a, b);
-		for(int var18 = 0; var18 < samples; var18 += 1)
-			decay[var18] = (DistributionSampling.sampleExponential(RNG$) / rate);
+		if(!state.fixedFlag$sample6)
+			state.rate = DistributionSampling.sampleGamma(state.RNG$, state.a, state.b);
+		for(int var18 = 0; var18 < state.samples; var18 += 1)
+			state.decay[var18] = (DistributionSampling.sampleExponential(state.RNG$) / state.rate);
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample6)
-			rate = DistributionSampling.sampleGamma(RNG$, a, b);
+		if(!state.fixedFlag$sample6)
+			state.rate = DistributionSampling.sampleGamma(state.RNG$, state.a, state.b);
 	}
 
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample6)
-			rate = DistributionSampling.sampleGamma(RNG$, a, b);
-		for(int var18 = 0; var18 < samples; var18 += 1)
-			decay[var18] = (DistributionSampling.sampleExponential(RNG$) / rate);
+		if(!state.fixedFlag$sample6)
+			state.rate = DistributionSampling.sampleGamma(state.RNG$, state.a, state.b);
+		for(int var18 = 0; var18 < state.samples; var18 += 1)
+			state.decay[var18] = (DistributionSampling.sampleExponential(state.RNG$) / state.rate);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample6)
-			rate = DistributionSampling.sampleGamma(RNG$, a, b);
+		if(!state.fixedFlag$sample6)
+			state.rate = DistributionSampling.sampleGamma(state.RNG$, state.a, state.b);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample6)
-			rate = DistributionSampling.sampleGamma(RNG$, a, b);
+		if(!state.fixedFlag$sample6)
+			state.rate = DistributionSampling.sampleGamma(state.RNG$, state.a, state.b);
 	}
 
 	@Override
 	public final void gibbsRound() {
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample6)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample6)
 				inferSample6();
 		} else {
-			if(!fixedFlag$sample6)
+			if(!state.fixedFlag$sample6)
 				inferSample6();
 		}
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample6)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample6)
 			drawValueSample6();
 	}
 
 	private final void initializeLogProbabilityFields() {
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample6)
-			logProbability$rate = Double.NaN;
-		logProbability$exponential = Double.NaN;
-		logProbability$decay = 0.0;
-		if(!fixedProbFlag$sample19)
-			logProbability$var19 = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample6)
+			state.logProbability$rate = Double.NaN;
+		state.logProbability$exponential = Double.NaN;
+		state.logProbability$decay = 0.0;
+		if(!state.fixedProbFlag$sample19)
+			state.logProbability$var19 = Double.NaN;
 	}
 
 	@Override
 	public final void initializeModel() {
-		samples = length$decayDetected;
+		state.samples = state.length$decayDetected;
 	}
 
 	@Override
 	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample6)
+		if(state.fixedFlag$sample6)
 			logProbabilityValue$sample6();
 		logProbabilityValue$sample19();
 	}
@@ -376,8 +260,8 @@ double a;
 
 	@Override
 	public final void propagateObservedValues() {
-		double[] cv$source1 = decayDetected;
-		double[] cv$target1 = decay;
+		double[] cv$source1 = state.decayDetected;
+		double[] cv$target1 = state.decay;
 		int cv$length1 = cv$target1.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			cv$target1[cv$index1] = cv$source1[cv$index1];

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,12 +16,95 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model Conditional5 This is the class that all user
  * interactions with the model should occur through.
  */
-public final class Conditional5 extends Model {
-    private Conditional5$CoreInterface system$c = new Conditional5$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class Conditional5 extends Model<Conditional5.State> {
+	final class State extends CoreModelState {
+double a;
+		double b;
+		boolean fixedProbFlag$sample13 = false;
+		boolean fixedProbFlag$sample5 = false;
+		boolean fixedProbFlag$sample9 = false;
+		boolean guard;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$a;
+		double logProbability$b;
+		double logProbability$bernoulli;
+		double logProbability$guard;
+		double logProbability$value;
+		boolean observedGuard;
+		double observedValue;
+		boolean system$gibbsForward = true;
+		double value;
+
+		@Override
+		public final void allocate() {}
+
+		final double get$a() {
+			return a;
+		}
+
+		final double get$b() {
+			return b;
+		}
+
+		final boolean get$guard() {
+			return guard;
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$a() {
+			return logProbability$a;
+		}
+
+		final double get$logProbability$b() {
+			return logProbability$b;
+		}
+
+		final double get$logProbability$bernoulli() {
+			return logProbability$bernoulli;
+		}
+
+		final double get$logProbability$guard() {
+			return logProbability$guard;
+		}
+
+		final double get$logProbability$value() {
+			return logProbability$value;
+		}
+
+		final boolean get$observedGuard() {
+			return observedGuard;
+		}
+
+		final void set$observedGuard(boolean cv$value, boolean allocated$) {
+			observedGuard = cv$value;
+		}
+
+		final double get$observedValue() {
+			return observedValue;
+		}
+
+		final void set$observedValue(double cv$value, boolean allocated$) {
+			observedValue = cv$value;
+		}
+
+		final double get$value() {
+			return value;
+		}
+	}
 
     private final ComputedDoubleInternal $a = new ComputedDoubleInternal(this, "a", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$a(); }
+        public double getValue() { return state.get$a(); }
 
         @Override
         protected void setValueInternal(double value) {}
@@ -30,7 +115,7 @@ public final class Conditional5 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$a(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$a(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -48,7 +133,7 @@ public final class Conditional5 extends Model {
 
     private final ComputedDoubleInternal $b = new ComputedDoubleInternal(this, "b", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$b(); }
+        public double getValue() { return state.get$b(); }
 
         @Override
         protected void setValueInternal(double value) {}
@@ -59,7 +144,7 @@ public final class Conditional5 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$b(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$b(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -77,7 +162,7 @@ public final class Conditional5 extends Model {
 
     private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean getValue() { return system$c.get$guard(); }
+        public boolean getValue() { return state.get$guard(); }
 
         @Override
         protected void setValueInternal(boolean value) {}
@@ -88,7 +173,7 @@ public final class Conditional5 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$guard(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$guard(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -106,7 +191,7 @@ public final class Conditional5 extends Model {
 
     private final ComputedDoubleInternal $value = new ComputedDoubleInternal(this, "value", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$value(); }
+        public double getValue() { return state.get$value(); }
 
         @Override
         protected void setValueInternal(double value) {}
@@ -117,7 +202,7 @@ public final class Conditional5 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$value(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$value(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -141,12 +226,12 @@ public final class Conditional5 extends Model {
         @Override
         public boolean getValue() {
             synchronized(model) {
-                return system$c.get$observedGuard();
+                return state.get$observedGuard();
             }
         }
 
         @Override
-        protected void setValueInternal(boolean value) { system$c.set$observedGuard(value, allocated); }
+        protected void setValueInternal(boolean value) { state.set$observedGuard(value, allocated); }
     };
 
 	/**
@@ -159,12 +244,12 @@ public final class Conditional5 extends Model {
         @Override
         public double getValue() {
             synchronized(model) {
-                return system$c.get$observedValue();
+                return state.get$observedValue();
             }
         }
 
         @Override
-        protected void setValueInternal(double value) { system$c.set$observedValue(value, allocated); }
+        protected void setValueInternal(double value) { state.set$observedValue(value, allocated); }
     };
 
 	/**
@@ -177,7 +262,7 @@ public final class Conditional5 extends Model {
     private final RandomVariableInternal $bernoulli = new RandomVariableInternal(this, "bernoulli", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
-            return system$c.get$logProbability$bernoulli();
+            return state.get$logProbability$bernoulli();
         }
     };
 
@@ -190,6 +275,7 @@ public final class Conditional5 extends Model {
 	/** A constructor for a model where no variable values are set. */
     public Conditional5() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("a", $a);
         $computedVariables.put("b", $b);
@@ -199,7 +285,9 @@ public final class Conditional5 extends Model {
         //Observed scalar fields
         $regularObservedValues.put("observedGuard", $observedGuard);
         $regularObservedValues.put("observedValue", $observedValue);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        Conditional5$SingleThreadCPU core = new Conditional5$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -215,30 +303,15 @@ public final class Conditional5 extends Model {
     }
     
     @Override
-    protected Conditional5$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        Conditional5$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new Conditional5$SingleThreadCPU(target);
-                break;
+                return new Conditional5$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new Conditional5$MultiThreadCPU(target);
-                break;
+                return new Conditional5$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(Conditional5$CoreInterface oldCore, Conditional5$CoreInterface newCore) {
-
-        //Observed scalars
-        if(observedGuard.isSet())
-            newCore.set$observedGuard(oldCore.get$observedGuard(), false);
-        if(observedValue.isSet())
-            newCore.set$observedValue(oldCore.get$observedValue(), false);
     }
 
 	/**

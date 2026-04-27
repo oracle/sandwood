@@ -17,6 +17,7 @@ import org.sandwood.compiler.trees.ArgDesc;
 import org.sandwood.compiler.trees.Visibility;
 import org.sandwood.compiler.trees.outputTree.OutputFunction;
 import org.sandwood.compiler.trees.outputTree.OutputTree;
+import org.sandwood.compiler.trees.transformationTree.TransTree.TreeLocation;
 import org.sandwood.compiler.trees.transformationTree.transformers.Transformer;
 import org.sandwood.compiler.trees.transformationTree.util.KnownValuesTrans;
 
@@ -31,8 +32,9 @@ public class TransConstructorFunction extends TransFunction<TransTreeVoid> {
     }
 
     @Override
-    public OutputFunction toOutputTree(ExecutionType target) {
-        return OutputTree.constructorFunction(visibility, name, args, body.toOutputTree(target), comment);
+    public OutputFunction toOutputTree(TreeLocation treeLocation, ExecutionType target) {
+        return OutputTree.constructorFunction(visibility, name, args,
+                body.toOutputTree(localRng(args), treeLocation, target), comment);
     }
 
     @Override

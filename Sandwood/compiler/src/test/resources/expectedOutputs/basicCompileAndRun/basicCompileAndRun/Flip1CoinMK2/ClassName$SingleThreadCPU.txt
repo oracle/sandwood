@@ -1,158 +1,35 @@
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implements ClassName$CoreInterface {
+final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU<ClassName.State, ClassName$SingleThreadCPU.Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double a;
-	double b;
-	double bias;
-	boolean constrainedFlag$sample5 = true;
-	boolean fixedFlag$sample5 = false;
-	boolean fixedProbFlag$sample18 = false;
-	boolean fixedProbFlag$sample5 = false;
-	boolean[] flips;
-	boolean[] flipsMeasured;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double[] logProbability$bernoulli;
-	double logProbability$bias;
-	double logProbability$flips;
-	double[] logProbability$sample18;
-	int samples;
-	boolean system$gibbsForward = true;
-
-	public ClassName$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	// Getter for a.
-	@Override
-	public final double get$a() {
-		return 1.0;
-	}
 
-	// Getter for b.
-	@Override
-	public final double get$b() {
-		return 1.0;
-	}
-
-	// Getter for bias.
-	@Override
-	public final double get$bias() {
-		return bias;
-	}
-
-	// Setter for bias.
-	@Override
-	public final void set$bias(double cv$value, boolean allocated$) {
-		// Set flags for all the side effects of bias including if probabilities need to be
-		// updated.
-		bias = cv$value;
-		
-		// Unset the fixed probability flag for sample 5 as it depends on bias.
-		fixedProbFlag$sample5 = false;
-		
-		// Unset the fixed probability flag for sample 18 as it depends on bias.
-		fixedProbFlag$sample18 = false;
-	}
-
-	// Getter for fixedFlag$sample5.
-	@Override
-	public final boolean get$fixedFlag$sample5() {
-		return fixedFlag$sample5;
-	}
-
-	// Setter for fixedFlag$sample5.
-	@Override
-	public final void set$fixedFlag$sample5(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample5 including if probabilities
-		// need to be updated.
-		fixedFlag$sample5 = cv$value;
-		
-		// Substituted "fixedFlag$sample5" with its value "cv$value".
-		constrainedFlag$sample5 = (cv$value || constrainedFlag$sample5);
-		
-		// Should the probability of sample 5 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample5" with its value "cv$value".
-		fixedProbFlag$sample5 = (cv$value && fixedProbFlag$sample5);
-		
-		// Should the probability of sample 18 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample5" with its value "cv$value".
-		fixedProbFlag$sample18 = (cv$value && fixedProbFlag$sample18);
-	}
-
-	// Getter for flips.
-	@Override
-	public final boolean[] get$flips() {
-		return flips;
-	}
-
-	// Getter for flipsMeasured.
-	@Override
-	public final boolean[] get$flipsMeasured() {
-		return flipsMeasured;
-	}
-
-	// Setter for flipsMeasured.
-	@Override
-	public final void set$flipsMeasured(boolean[] cv$value, boolean allocated$) {
-		flipsMeasured = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$bernoulli.
-	@Override
-	public final double[] get$logProbability$bernoulli() {
-		return logProbability$bernoulli;
-	}
-
-	// Getter for logProbability$bias.
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	// Getter for logProbability$flips.
-	@Override
-	public final double get$logProbability$flips() {
-		return logProbability$flips;
-	}
-
-	// Getter for samples.
-	@Override
-	public final int get$samples() {
-		return 100000;
+	public ClassName$SingleThreadCPU(ClassName.State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample5
 	private final void drawValueSample5() {
-		bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 5 drawn from Beta 4. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void inferSample5() {
-		constrainedFlag$sample5 = false;
+		state.constrainedFlag$sample5 = false;
 		
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
@@ -164,7 +41,7 @@ final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implement
 		for(int i = 0; i < 100000; i += 1) {
 			// Processing sample task 18 of consumer random variable bernoulli.
 			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample5 = true;
+			state.constrainedFlag$sample5 = true;
 			
 			// Include the value sampled by task 18 from random variable bernoulli.
 			// 
@@ -172,12 +49,12 @@ final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implement
 			cv$count = (cv$count + 1);
 			
 			// If the sample value was positive increase the count
-			if(flips[i])
+			if(state.flips[i])
 				cv$sum = (cv$sum + 1);
 		}
-		if(constrainedFlag$sample5)
+		if(state.constrainedFlag$sample5)
 			// Write out the new value of the sample.
-			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			state.bias = Conjugates.sampleConjugateBetaBinomial(state.RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Calculate the probability of the samples represented by sample18 using sampled
@@ -185,7 +62,7 @@ final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implement
 	private final void logProbabilityValue$sample18() {
 		// Determine if we need to calculate the values for sample task 18 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample18) {
+		if(!state.fixedProbFlag$sample18) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -213,7 +90,7 @@ final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implement
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = (((0.0 <= bias) && (bias <= 1.0))?Math.log((flips[i]?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY);
+				double cv$distributionAccumulator = (((0.0 <= state.bias) && (state.bias <= 1.0))?Math.log((state.flips[i]?state.bias:(1.0 - state.bias))):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -226,22 +103,22 @@ final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implement
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$bernoulli[i] = cv$distributionAccumulator;
+				state.logProbability$bernoulli[i] = cv$distributionAccumulator;
 				
 				// Store the sample task probability
-				logProbability$sample18[i] = cv$distributionAccumulator;
+				state.logProbability$sample18[i] = cv$distributionAccumulator;
 			}
 			
 			// Update the variable probability
-			logProbability$flips = (logProbability$flips + cv$accumulator);
+			state.logProbability$flips = (state.logProbability$flips + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample18 = fixedFlag$sample5;
+			state.fixedProbFlag$sample18 = state.fixedFlag$sample5;
 		} else {
 			// Using cached values.
 			// 
@@ -250,17 +127,17 @@ final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implement
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < 100000; i += 1) {
 				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample18[i];
+				double cv$rvAccumulator = state.logProbability$sample18[i];
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$bernoulli[i] = cv$rvAccumulator;
+				state.logProbability$bernoulli[i] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
-			logProbability$flips = (logProbability$flips + cv$accumulator);
+			state.logProbability$flips = (state.logProbability$flips + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -268,7 +145,7 @@ final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implement
 	private final void logProbabilityValue$sample5() {
 		// Determine if we need to calculate the values for sample task 5 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample5) {
+		if(!state.fixedProbFlag$sample5) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -293,10 +170,10 @@ final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implement
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(bias, 1.0, 1.0);
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(state.bias, 1.0, 1.0);
 			
 			// Store the sample task probability
-			logProbability$bias = cv$distributionAccumulator;
+			state.logProbability$bias = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -312,11 +189,11 @@ final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implement
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample5)
+			if(state.fixedFlag$sample5)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -329,11 +206,11 @@ final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implement
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample5 = fixedFlag$sample5;
+			state.fixedProbFlag$sample5 = state.fixedFlag$sample5;
 		} else {
 			// Using cached values.
 			// 
@@ -342,42 +219,23 @@ final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implement
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$bias);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$bias);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample5)
+			if(state.fixedFlag$sample5)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$bias);
 		}
 	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// Constructor for flips
-		flips = new boolean[100000];
-		
-		// Constructor for logProbability$bernoulli
-		logProbability$bernoulli = new double[100000];
-		
-		// Constructor for logProbability$sample18
-		logProbability$sample18 = new double[100000];
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample5)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample5)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 		for(int i = 0; i < 100000; i += 1)
-			flips[i] = DistributionSampling.sampleBernoulli(RNG$, bias);
+			state.flips[i] = DistributionSampling.sampleBernoulli(state.RNG$, state.bias);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -385,26 +243,26 @@ final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implement
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample5)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample5)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	// Method to execute the model code conventionally with priming of fixed intermediate
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample5)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample5)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 		for(int i = 0; i < 100000; i += 1)
-			flips[i] = DistributionSampling.sampleBernoulli(RNG$, bias);
+			state.flips[i] = DistributionSampling.sampleBernoulli(state.RNG$, state.bias);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample5)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample5)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -412,20 +270,20 @@ final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implement
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample5)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample5)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	// Method to execute one round of Gibbs sampling.
 	@Override
 	public final void gibbsRound() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample5)
+		if(!state.fixedFlag$sample5)
 			inferSample5();
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample5)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample5)
 			drawValueSample5();
 	}
 
@@ -437,16 +295,16 @@ final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implement
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample5)
-			logProbability$bias = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample5)
+			state.logProbability$bias = Double.NaN;
 		for(int i = 0; i < 100000; i += 1)
-			logProbability$bernoulli[i] = Double.NaN;
-		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample18) {
+			state.logProbability$bernoulli[i] = Double.NaN;
+		state.logProbability$flips = 0.0;
+		if(!state.fixedProbFlag$sample18) {
 			for(int i = 0; i < 100000; i += 1)
-				logProbability$sample18[i] = Double.NaN;
+				state.logProbability$sample18[i] = Double.NaN;
 		}
 	}
 
@@ -462,7 +320,7 @@ final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implement
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample5)
+		if(state.fixedFlag$sample5)
 			logProbabilityValue$sample5();
 		logProbabilityValue$sample18();
 	}
@@ -510,9 +368,9 @@ final class ClassName$SingleThreadCPU extends CoreModelSingleThreadCPU implement
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
-		int cv$length1 = flips.length;
+		int cv$length1 = state.flips.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
-			flips[cv$index1] = flipsMeasured[cv$index1];
+			state.flips[cv$index1] = state.flipsMeasured[cv$index1];
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are

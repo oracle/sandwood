@@ -19,6 +19,7 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 import org.sandwood.common.execution.ExecutionType;
+import org.sandwood.compiler.compilation.CompilationContext.AuxFunctionType;
 import org.sandwood.compiler.compilation.CompilationContext.FieldDesc;
 import org.sandwood.compiler.compilation.CompilationContext.FieldType;
 import org.sandwood.compiler.compilation.util.CompilationDesc;
@@ -40,6 +41,9 @@ import org.sandwood.compiler.names.ModelClassName;
 import org.sandwood.compiler.names.PackageName;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.Traces;
+import org.sandwood.compiler.trees.ArgDesc;
+import org.sandwood.compiler.trees.Tree;
+import org.sandwood.compiler.trees.Visibility;
 
 public class OutputSandwoodClassWrapper extends OutputSandwoodOuterClass {
     private static class RandomVariableDesc implements Comparable<RandomVariableDesc> {
@@ -88,6 +92,13 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodOuterClass {
         }
     }
 
+    private static final class StateClass extends OutputSandwoodInnerClass {
+        public StateClass(OutputTree fieldsTree, List<OutputFunction> functions) {
+            super(ClassName.stateClass, ClassName.stateClassBase, Collections.emptyList(), Collections.emptyList(),
+                    fieldsTree, functions);
+        }
+    }
+
     private final ModelClassName className;
     private final String comment;
     private final VariableName[] constructorArgs;
@@ -107,15 +118,40 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodOuterClass {
     private final String probabilityOutputs;
     private final String logProbabilityOutputs;
     private final String allInputs;
-    private final VariableName coreName = VariableNames.internalSystemName("c");
+    private final VariableName state = VariableNames.stateName().name;
     private final VariableName modelParam = VariableNames.internalSystemName("model");
     private final CompilationDesc compDesc;
 
-    public OutputSandwoodClassWrapper(ModelClassName name, PackageName packageName, VariableName[] constructorArgs,
+    public static OutputSandwoodClassWrapper getClass(OutputSandwoodClassGenerated source, ModelClassName name,
+            PackageName packageName, VariableName[] constructorArgs, Map<VariableName, FieldDesc<?>> classFields,
+            Traces traces, CompilationDesc compDesc, String comment, ExecutionType[] targets) {
+
+        OutputTree fieldsTree = source.getClassFields();
+
+        List<OutputFunction> functions = new ArrayList<>();
+
+        FunctionName allocatorName = AuxFunctionType.VAR_ALLOCATOR.functionName;
+        OutputFunction allocator = source.getFunctions().get(allocatorName);
+        if(allocator == null)
+            allocator = OutputTree.voidFunction(Visibility.DEFAULT, allocatorName, new ArgDesc<?>[0], OutputTree.nop(),
+                    true, Tree.NoComment);
+
+        functions.add(allocator);
+        functions.addAll(source.getGettersAndSetters());
+
+        StateClass state = new StateClass(fieldsTree, functions);
+
+        return new OutputSandwoodClassWrapper(name, packageName, constructorArgs, classFields, traces, compDesc,
+                comment, targets, state);
+    }
+
+    private OutputSandwoodClassWrapper(ModelClassName name, PackageName packageName, VariableName[] constructorArgs,
             Map<VariableName, FieldDesc<?>> classFields, Traces traces, CompilationDesc compDesc, String comment,
-            ExecutionType[] targets) {
-        super(packageName, name, Map.of(ClassName.wrapperBase, Collections.emptyList()), Collections.emptyList(),
-                Collections.emptyList());
+            ExecutionType[] targets, StateClass state) {
+        super(packageName, name,
+                Map.of(ClassName.wrapperBase,
+                        List.of(ClassName.QualifiedName(name, ClassName.stateClass))),
+                Collections.emptyList(), List.of(state));
         this.className = name;
         this.constructorArgs = constructorArgs;
         fieldDescs.putAll(classFields);
@@ -191,17 +227,13 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodOuterClass {
         requiredImports.add("org.sandwood.runtime.model.Model");
         requiredImports.add("org.sandwood.runtime.model.ExecutionTarget");
         requiredImports.add("org.sandwood.runtime.model.variables.*");
+        requiredImports.add("org.sandwood.runtime.internal.model.CoreModelBase");
         requiredImports.add("org.sandwood.runtime.internal.model.variables.*");
         requiredImports.add("org.sandwood.runtime.internal.model.variables.probability.ProbabilityType");
         requiredImports.add("org.sandwood.common.exceptions.SandwoodException");
         requiredImports.add("org.sandwood.runtime.exceptions.SandwoodRuntimeException");
         requiredImports.add("java.util.Map");
         requiredImports.add("java.util.HashMap");
-
-        ClassName interfaceName = className.interfaceName();
-
-        sb.append("    private " + interfaceName + " " + coreName + " = new "
-                + className.backendName(ExecutionType.SingleThreadCPU) + "(ExecutionTarget.singleThread);\n\n");
 
         // Construct computed fields
         {
@@ -302,94 +334,17 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodOuterClass {
     }
 
     private void constructSetExecutionTarget(StringBuilder sb) {
-        ClassName interfaceName = className.interfaceName();
         sb.append("    \n    @Override\n");
-        sb.append("    protected " + interfaceName + " setExecutionTargetInternal(ExecutionTarget target) {\n");
-        sb.append("        " + interfaceName + " newCore;\n");
+        sb.append("    protected CoreModelBase<" + ClassName.stateClass
+                + ",?> setExecutionTargetInternal(ExecutionTarget target) {\n");
         sb.append("        switch(target.executionType) {\n");
         for(ExecutionType t:targets) {
             sb.append("            case " + t + ":\n");
-            sb.append("                newCore = new " + className.backendName(t) + "(target);\n");
-            sb.append("                break;\n");
+            sb.append("                return new " + className.backendName(t) + "(state, target);\n");
         }
         sb.append("            default:\n");
         sb.append("                throw new SandwoodException(\"Unsupported execution type: \" + target);\n");
         sb.append("        }\n");
-        sb.append("        transferData(" + coreName + ", newCore);\n");
-        sb.append("        " + coreName + " = newCore;\n");
-        sb.append("        return newCore;\n");
-        sb.append("    }\n\n");
-
-        // Now construct the transferData method.
-        sb.append("    private void transferData(" + interfaceName + " oldCore, " + interfaceName + " newCore) {\n");
-        if(!modelInputs.isEmpty()) {
-            sb.append("        //Model inputs\n");
-            for(VariableName name:modelInputs) {
-                sb.append("        if(" + name + ".isSet())\n");
-                sb.append("            newCore" + setMethod(name) + "(oldCore" + getMethod(name) + "(), false);\n");
-            }
-        }
-        if(!observedOnlyInputs.isEmpty()) {
-            sb.append("\n        //Observed scalars\n");
-            for(VariableName name:observedOnlyInputs) {
-                sb.append("        if(" + name + ".isSet())\n");
-                sb.append("            newCore" + setMethod(name) + "(oldCore" + getMethod(name) + "(), false);\n");
-            }
-        }
-
-        if(!observedShapeableInputs.isEmpty()) {
-            sb.append("\n        //Observed arrays\n");
-            for(VariableName name:observedShapeableInputs) {
-                VariableName lengthName = VariableNames.lengthName(name);
-                VariableName lengthUniqueName = traces.getVariable(lengthName).getUniqueVarDesc().name;
-                sb.append("        if(" + name + ".isSet()) {\n");
-                sb.append("            newCore" + setMethod(name) + "(oldCore" + getMethod(name) + "(), false);\n");
-                sb.append("            newCore" + setMethod(lengthUniqueName) + "(oldCore" + getMethod(lengthUniqueName)
-                        + "(), false);\n");
-                sb.append("        }\n");
-                sb.append("        else if(" + name + ".shapeSet())\n");
-                sb.append("            newCore" + setMethod(lengthUniqueName) + "(oldCore" + getMethod(lengthUniqueName)
-                        + "(), false);\n");
-            }
-        }
-
-        boolean valuesToCopy = false;
-        for(VariableName name:computedVariables) {
-            if(fieldDescs.get(name).fieldType.setter) {
-                valuesToCopy = true;
-                break;
-            }
-        }
-
-        if(valuesToCopy) {
-            sb.append("\n        //ComputedVariables\n");
-            for(VariableName name:computedVariables) {
-                if(fieldDescs.get(name).fieldType.setter) {
-                    sb.append("        if($" + name + ".isSet())\n");
-                    sb.append("            newCore" + setMethod(name) + "(oldCore" + getMethod(name) + "(), false);\n");
-                }
-            }
-        }
-
-        Set<VariableDescription<BooleanVariable>> flags = new HashSet<>();
-        for(VariableName name:computedVariables) {
-            FieldDesc<?> f = fieldDescs.get(name);
-            if(f.fieldType.isSample && !f.fieldType.isPrivate) {
-                Variable<?> v = traces.getVariable(name);
-                flags.addAll(getFlags(traces, v));
-            }
-        }
-
-        if(!flags.isEmpty()) {
-            sb.append("\n        //Set fixed flags\n");
-            PriorityQueue<VariableDescription<BooleanVariable>> p = new PriorityQueue<>(flags);
-            while(!p.isEmpty()) {
-                VariableDescription<BooleanVariable> flag = p.poll();
-                sb.append(
-                        "        newCore" + setMethod(flag.name) + "(oldCore" + getMethod(flag.name) + "(), false);\n");
-            }
-        }
-
         sb.append("    }\n");
     }
 
@@ -817,6 +772,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodOuterClass {
         // Empty constructor
         sb.append("    public " + className + "() {\n");
         sb.append("        super();\n");
+        sb.append("        state = new " + ClassName.stateClass + "();\n");
 
         // Add computed fields to the map of computed fields.
         sb.append("        //ComputedVariable\n");
@@ -847,7 +803,10 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodOuterClass {
                         + VariableNames.internalName(oVar) + ");\n");
         }
 
-        sb.append("        init(" + coreName + ", " + VariableNames.internalName("modelInputs") + ", "
+        ClassName coreName = className.backendName(ExecutionType.SingleThreadCPU);
+        sb.append("\n");
+        sb.append("        " + coreName + " core = new " + coreName + "(state, ExecutionTarget.singleThread);\n");
+        sb.append("        init(core, " + VariableNames.internalName("modelInputs") + ", "
                 + VariableNames.internalName("regularObservedValues") + ", "
                 + VariableNames.internalName("shapedObservedValues") + ", "
                 + VariableNames.internalName("computedVariables") + ", "
@@ -1046,13 +1005,12 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodOuterClass {
                 + constructorArgs + ") {\n");
 
         sb.append("        @Override\n");
-        sb.append(
-                "        public " + javaType + " getValue() { return " + coreName + getMethod(fieldName) + "(); }\n\n");
+        sb.append("        public " + javaType + " getValue() { return " + state + getMethod(fieldName) + "(); }\n\n");
 
         if(ft.setter) {
             sb.append("        @Override\n");
             sb.append("        protected void setValueInternal(" + javaType + " value) {\n");
-            sb.append("            " + coreName + setMethod(fieldName) + "(value, allocated);\n");
+            sb.append("            " + state + setMethod(fieldName) + "(value, allocated);\n");
             sb.append("            intermediatesPrimed = false;\n");
             sb.append("        }\n\n");
 
@@ -1127,7 +1085,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodOuterClass {
         sb.append("        @Override\n");
         VariableDescription<?> probFieldName = VariableNames.logProbabilityName(fieldName);
         if(fieldDescs.containsKey(probFieldName.name) && !ft.isPrivate)
-            sb.append("        public double getCurrentLogProbability() { return " + coreName
+            sb.append("        public double getCurrentLogProbability() { return " + state
                     + getMethod(probFieldName.name) + "(); }\n");
         else
             sb.append(
@@ -1158,7 +1116,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodOuterClass {
         } else {
             sb.append("            synchronized(model) {\n");
             for(VariableDescription<BooleanVariable> flag:flags)
-                sb.append("                " + coreName + setMethod(flag.name) + "(fixed, allocated);\n");
+                sb.append("                " + state + setMethod(flag.name) + "(fixed, allocated);\n");
             sb.append("            }\n");
         }
         sb.append("        }\n\n");
@@ -1181,7 +1139,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodOuterClass {
             } else if(flags.size() == 1) {
                 VariableDescription<BooleanVariable> flag = flags.iterator().next();
                 // construct the outputs.
-                sb.append("            if(" + coreName + getMethod(flag.name) + "())\n");
+                sb.append("            if(" + state + getMethod(flag.name) + "())\n");
                 sb.append("                return Immutability.FIXED;\n");
                 sb.append("            else\n");
                 sb.append("                return Immutability.FREE;\n");
@@ -1191,7 +1149,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodOuterClass {
                 String orGuard = "";
                 boolean first = true;
                 for(VariableDescription<BooleanVariable> flag:flags) {
-                    sb.append("            boolean " + flag + " = " + coreName + getMethod(flag.name) + "();\n");
+                    sb.append("            boolean " + flag + " = " + state + getMethod(flag.name) + "();\n");
                     if(first)
                         first = false;
                     else {
@@ -1338,12 +1296,12 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodOuterClass {
 
         sb.append("        @Override\n");
         sb.append("        public " + javaType + " getValue() {\n" + "            synchronized(model) {\n"
-                + "                return " + coreName + getMethod(uniqueName) + "();\n" + "            }\n"
+                + "                return " + state + getMethod(uniqueName) + "();\n" + "            }\n"
                 + "        }\n\n");
 
         sb.append("        @Override\n");
-        sb.append("        protected void setValueInternal(" + javaType + " value) { " + coreName
-                + setMethod(uniqueName) + "(value, allocated); }\n");
+        sb.append("        protected void setValueInternal(" + javaType + " value) { " + state + setMethod(uniqueName)
+                + "(value, allocated); }\n");
 
         sb.append("    };\n\n");
 
@@ -1410,29 +1368,29 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodOuterClass {
 
         sb.append("        @Override\n");
         sb.append("        public " + javaType + " getValue() {\n" + "            synchronized(model) {\n"
-                + "                return " + coreName + getMethod(uniqueName) + "();\n" + "            }\n"
+                + "                return " + state + getMethod(uniqueName) + "();\n" + "            }\n"
                 + "        }\n\n");
 
         sb.append("        @Override\n");
-        sb.append("        public void setValueInternal(" + javaType + " value) {\n" + "            " + coreName
+        sb.append("        public void setValueInternal(" + javaType + " value) {\n" + "            " + state
                 + setMethod(uniqueName) + "(value, allocated);\n");
 
         VariableName lengthName = VariableNames.lengthName(fieldName);
         VariableName lengthUniqueName = traces.getVariable(lengthName).getUniqueVarDesc().name;
 
         if(simple)
-            sb.append("            " + coreName + setMethod(lengthUniqueName) + "(value.length, allocated);\n");
+            sb.append("            " + state + setMethod(lengthUniqueName) + "(value.length, allocated);\n");
         else
-            sb.append("            " + coreName + setMethod(lengthUniqueName) + "("
+            sb.append("            " + state + setMethod(lengthUniqueName) + "("
                     + ((dims == 0) ? "value.length" : "getDims(value)") + ", allocated);\n");
         sb.append("        }\n\n");
 
         sb.append("        @Override\n");
-        sb.append("        public void setShapeInternal(" + shapeType + " shape) {\n" + "            " + coreName
+        sb.append("        public void setShapeInternal(" + shapeType + " shape) {\n" + "            " + state
                 + setMethod(lengthUniqueName) + "(shape, allocated);\n" + "        }\n\n");
 
         sb.append("        @Override\n");
-        sb.append("        public " + shapeType + " getShape() {\n" + "            return " + coreName
+        sb.append("        public " + shapeType + " getShape() {\n" + "            return " + state
                 + getMethod(lengthUniqueName) + "();\n" + "        }\n");
 
         if(!simple) {
@@ -1501,7 +1459,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodOuterClass {
 
         sb.append("        @Override\n");
         sb.append("        public " + javaType + " getCurrentLogProbability() {\n");
-        sb.append("            return " + coreName + getMethod(VariableNames.logProbabilityName(desc.uniqueName).name)
+        sb.append("            return " + state + getMethod(VariableNames.logProbabilityName(desc.uniqueName).name)
                 + "();\n");
         sb.append("        }\n");
 

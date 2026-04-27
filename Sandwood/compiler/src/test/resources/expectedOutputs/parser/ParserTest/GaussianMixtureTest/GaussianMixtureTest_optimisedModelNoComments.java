@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,32 +16,206 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model GaussianMixtureTest This is the class that
  * all user interactions with the model should occur through.
  */
-public final class GaussianMixtureTest extends Model {
-    private GaussianMixtureTest$CoreInterface system$c = new GaussianMixtureTest$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class GaussianMixtureTest extends Model<GaussianMixtureTest.State> {
+	final class State extends CoreModelState {
+double[] alpha;
+		boolean constrainedFlag$sample17 = true;
+		boolean[] constrainedFlag$sample34;
+		boolean[] constrainedFlag$sample52;
+		boolean[] constrainedFlag$sample68;
+		boolean fixedFlag$sample17 = false;
+		boolean fixedFlag$sample34 = false;
+		boolean fixedFlag$sample52 = false;
+		boolean fixedProbFlag$sample17 = false;
+		boolean fixedProbFlag$sample34 = false;
+		boolean fixedProbFlag$sample52 = false;
+		int k;
+		int length$xMeasured;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$mu;
+		double logProbability$phi;
+		double[] logProbability$sample68;
+		double[] logProbability$sample72;
+		double logProbability$sigma;
+		double logProbability$var34;
+		double logProbability$var52;
+		double logProbability$x;
+		double[] mu;
+		double[] phi;
+		double[] sigma;
+		boolean system$gibbsForward = true;
+		double[] x;
+		double[] xMeasured;
+		int[] z;
+
+		@Override
+		public final void allocate() {
+			alpha = new double[5];
+			if(!fixedFlag$sample17)
+				phi = new double[5];
+			if(!fixedFlag$sample34)
+				mu = new double[5];
+			if(!fixedFlag$sample52)
+				sigma = new double[5];
+			x = new double[length$xMeasured];
+			z = new int[length$xMeasured];
+			constrainedFlag$sample52 = new boolean[5];
+			constrainedFlag$sample68 = new boolean[length$xMeasured];
+			constrainedFlag$sample34 = new boolean[5];
+			logProbability$sample68 = new double[length$xMeasured];
+			logProbability$sample72 = new double[length$xMeasured];
+		}
+
+		final double[] get$alpha() {
+			return alpha;
+		}
+
+		final boolean get$fixedFlag$sample17() {
+			return fixedFlag$sample17;
+		}
+
+		final void set$fixedFlag$sample17(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample17 = cv$value;
+			constrainedFlag$sample17 = (cv$value || constrainedFlag$sample17);
+			fixedProbFlag$sample17 = (cv$value && fixedProbFlag$sample17);
+		}
+
+		final boolean get$fixedFlag$sample34() {
+			return fixedFlag$sample34;
+		}
+
+		final void set$fixedFlag$sample34(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample34 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample34$1 = 0; index$constrainedFlag$sample34$1 < constrainedFlag$sample34.length; index$constrainedFlag$sample34$1 += 1)
+					constrainedFlag$sample34[index$constrainedFlag$sample34$1] = true;
+			}
+			fixedProbFlag$sample34 = (cv$value && fixedProbFlag$sample34);
+		}
+
+		final boolean get$fixedFlag$sample52() {
+			return fixedFlag$sample52;
+		}
+
+		final void set$fixedFlag$sample52(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample52 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample52$1 = 0; index$constrainedFlag$sample52$1 < constrainedFlag$sample52.length; index$constrainedFlag$sample52$1 += 1)
+					constrainedFlag$sample52[index$constrainedFlag$sample52$1] = true;
+			}
+			fixedProbFlag$sample52 = (cv$value && fixedProbFlag$sample52);
+		}
+
+		final int get$k() {
+			return 5;
+		}
+
+		final int get$length$xMeasured() {
+			return length$xMeasured;
+		}
+
+		final void set$length$xMeasured(int cv$value, boolean allocated$) {
+			length$xMeasured = cv$value;
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$mu() {
+			return logProbability$mu;
+		}
+
+		final double get$logProbability$phi() {
+			return logProbability$phi;
+		}
+
+		final double get$logProbability$sigma() {
+			return logProbability$sigma;
+		}
+
+		final double get$logProbability$x() {
+			return logProbability$x;
+		}
+
+		final double[] get$mu() {
+			return mu;
+		}
+
+		final void set$mu(double[] cv$value, boolean allocated$) {
+			mu = cv$value;
+			fixedProbFlag$sample34 = false;
+		}
+
+		final double[] get$phi() {
+			return phi;
+		}
+
+		final void set$phi(double[] cv$value, boolean allocated$) {
+			phi = cv$value;
+			fixedProbFlag$sample17 = false;
+		}
+
+		final double[] get$sigma() {
+			return sigma;
+		}
+
+		final void set$sigma(double[] cv$value, boolean allocated$) {
+			sigma = cv$value;
+			fixedProbFlag$sample52 = false;
+		}
+
+		final double[] get$x() {
+			return x;
+		}
+
+		final double[] get$xMeasured() {
+			return xMeasured;
+		}
+
+		final void set$xMeasured(double[] cv$value, boolean allocated$) {
+			xMeasured = cv$value;
+		}
+
+		final int[] get$z() {
+			return z;
+		}
+
+		final void set$z(int[] cv$value, boolean allocated$) {
+			z = cv$value;
+		}
+	}
 
     private final ComputedDoubleArrayInternal $mu = new ComputedDoubleArrayInternal(this, "mu", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$mu(); }
+        public double[] getValue() { return state.get$mu(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$mu(value, allocated);
+            state.set$mu(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$mu(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$mu(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample34(fixed, allocated);
+                state.set$fixedFlag$sample34(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample34())
+            if(state.get$fixedFlag$sample34())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -51,27 +227,27 @@ public final class GaussianMixtureTest extends Model {
 
     private final ComputedDoubleArrayInternal $phi = new ComputedDoubleArrayInternal(this, "phi", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$phi(); }
+        public double[] getValue() { return state.get$phi(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$phi(value, allocated);
+            state.set$phi(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$phi(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$phi(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample17(fixed, allocated);
+                state.set$fixedFlag$sample17(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample17())
+            if(state.get$fixedFlag$sample17())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -83,27 +259,27 @@ public final class GaussianMixtureTest extends Model {
 
     private final ComputedDoubleArrayInternal $sigma = new ComputedDoubleArrayInternal(this, "sigma", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$sigma(); }
+        public double[] getValue() { return state.get$sigma(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$sigma(value, allocated);
+            state.set$sigma(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$sigma(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$sigma(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample52(fixed, allocated);
+                state.set$fixedFlag$sample52(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample52())
+            if(state.get$fixedFlag$sample52())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -115,7 +291,7 @@ public final class GaussianMixtureTest extends Model {
 
     private final ComputedDoubleArrayInternal $x = new ComputedDoubleArrayInternal(this, "x", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$x(); }
+        public double[] getValue() { return state.get$x(); }
 
         @Override
         protected void setValueInternal(double[] value) {}
@@ -126,7 +302,7 @@ public final class GaussianMixtureTest extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$x(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$x(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -144,11 +320,11 @@ public final class GaussianMixtureTest extends Model {
 
     private final ComputedIntegerArrayInternal $z = new ComputedIntegerArrayInternal(this, "z", true, true, true, ProbabilityType.SKIPPABLE) {
         @Override
-        public int[] getValue() { return system$c.get$z(); }
+        public int[] getValue() { return state.get$z(); }
 
         @Override
         protected void setValueInternal(int[] value) {
-            system$c.set$z(value, allocated);
+            state.set$z(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -174,24 +350,24 @@ public final class GaussianMixtureTest extends Model {
         @Override
         public double[] getValue() {
             synchronized(model) {
-                return system$c.get$xMeasured();
+                return state.get$xMeasured();
             }
         }
 
         @Override
         public void setValueInternal(double[] value) {
-            system$c.set$xMeasured(value, allocated);
-            system$c.set$length$xMeasured(value.length, allocated);
+            state.set$xMeasured(value, allocated);
+            state.set$length$xMeasured(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$xMeasured(shape, allocated);
+            state.set$length$xMeasured(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$xMeasured();
+            return state.get$length$xMeasured();
         }
     };
 
@@ -208,6 +384,7 @@ public final class GaussianMixtureTest extends Model {
 	/** A constructor for a model where no variable values are set. */
     public GaussianMixtureTest() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("mu", $mu);
         $computedVariables.put("phi", $phi);
@@ -217,7 +394,9 @@ public final class GaussianMixtureTest extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("xMeasured", $xMeasured);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        GaussianMixtureTest$SingleThreadCPU core = new GaussianMixtureTest$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -243,47 +422,15 @@ public final class GaussianMixtureTest extends Model {
     }
     
     @Override
-    protected GaussianMixtureTest$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        GaussianMixtureTest$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new GaussianMixtureTest$SingleThreadCPU(target);
-                break;
+                return new GaussianMixtureTest$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new GaussianMixtureTest$MultiThreadCPU(target);
-                break;
+                return new GaussianMixtureTest$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(GaussianMixtureTest$CoreInterface oldCore, GaussianMixtureTest$CoreInterface newCore) {
-
-        //Observed arrays
-        if(xMeasured.isSet()) {
-            newCore.set$xMeasured(oldCore.get$xMeasured(), false);
-            newCore.set$length$xMeasured(oldCore.get$length$xMeasured(), false);
-        }
-        else if(xMeasured.shapeSet())
-            newCore.set$length$xMeasured(oldCore.get$length$xMeasured(), false);
-
-        //ComputedVariables
-        if($mu.isSet())
-            newCore.set$mu(oldCore.get$mu(), false);
-        if($phi.isSet())
-            newCore.set$phi(oldCore.get$phi(), false);
-        if($sigma.isSet())
-            newCore.set$sigma(oldCore.get$sigma(), false);
-        if($z.isSet())
-            newCore.set$z(oldCore.get$z(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17(), false);
-        newCore.set$fixedFlag$sample34(oldCore.get$fixedFlag$sample34(), false);
-        newCore.set$fixedFlag$sample52(oldCore.get$fixedFlag$sample52(), false);
     }
 
 	/**

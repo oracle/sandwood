@@ -11,11 +11,9 @@ package org.sandwood.compiler.trees.transformationTree;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Set;
 import java.util.concurrent.RecursiveTask;
 
 import org.sandwood.common.execution.ExecutionType;
@@ -29,6 +27,8 @@ import org.sandwood.compiler.names.PackageName;
 import org.sandwood.compiler.trees.outputTree.OutputFunction;
 import org.sandwood.compiler.trees.outputTree.OutputSandwoodClassGenerated;
 import org.sandwood.compiler.trees.outputTree.OutputTree;
+import org.sandwood.compiler.trees.transformationTree.TransTree.RNGLocation;
+import org.sandwood.compiler.trees.transformationTree.TransTree.TreeLocation;
 import org.sandwood.compiler.trees.transformationTree.visitors.TreeVisitor;
 
 public class TransSandwoodClassGenerated {
@@ -162,45 +162,33 @@ public class TransSandwoodClassGenerated {
         List<TransTreeVoid> declarations = new ArrayList<>();
         while(!fieldNames.isEmpty())
             declarations.add(classFieldTrees.get(fieldNames.poll()));
-        
+        OutputTree classFieldsTree = TransTree.sequential(declarations, "Declare the variables for the model.")
+                .toOutputTree(RNGLocation.GLOBAL, TreeLocation.STATE, target);
+
+        declarations = new ArrayList<>();
         fieldNames.addAll(scratchFieldTrees.keySet());
         while(!fieldNames.isEmpty())
             declarations.add(scratchFieldTrees.get(fieldNames.poll()));
-        
-        OutputTree fieldsTree = TransTree.sequential(declarations, "Declare the variables for the model.")
-                .toOutputTree(target);
+        OutputTree scratchFieldsTree = TransTree
+                .sequential(declarations, "Declare the scratch variables for the model.")
+                .toOutputTree(RNGLocation.GLOBAL, TreeLocation.SCRATCH, target);
 
-        // Convert the functions.
-        PriorityQueue<FunctionName> samples = new PriorityQueue<>();
-        PriorityQueue<FunctionName> aux = new PriorityQueue<>();
-
-        Set<FunctionName> auxNames = new HashSet<>();
-        for(AuxFunctionType t:AuxFunctionType.values())
-            auxNames.add(t.functionName);
-
+        Map<FunctionName, OutputFunction> functionMap = new HashMap<>();
         for(FunctionName name:functions.keySet()) {
-            if(auxNames.contains(name))
-                aux.add(name);
+            TransFunction<?> f = functions.get(name);
+            if(name.equals(AuxFunctionType.VAR_ALLOCATOR.functionName))
+                functionMap.put(f.name, f.toOutputTree(TreeLocation.STATE, target));
+            else if(name.equals(AuxFunctionType.SCRATCH_ALLOCATOR.functionName))
+                functionMap.put(f.name, f.toOutputTree(TreeLocation.SCRATCH, target));
             else
-                samples.add(name);
+                functionMap.put(f.name, f.toOutputTree(TreeLocation.CORE, target));
         }
 
-        List<OutputFunction> functionList = new ArrayList<>();
-        while(!samples.isEmpty()) {
-            TransFunction<?> f = functions.get(samples.poll());
-            functionList.add(f.toOutputTree(target));
-        }
+        List<OutputFunction> outputGettersAndSetters = new ArrayList<>();
+        for(TransFunction<?> f:gettersAndSetters)
+            outputGettersAndSetters.add(f.toOutputTree(TreeLocation.STATE, target));
 
-        while(!aux.isEmpty()) {
-            TransFunction<?> f = functions.get(aux.poll());
-            functionList.add(f.toOutputTree(target));
-        }
-
-        List<OutputFunction> gettersAndSetters = new ArrayList<>();
-        for(TransFunction<?> f:this.gettersAndSetters)
-            gettersAndSetters.add(f.toOutputTree(target));
-
-        return OutputSandwoodClassGenerated.getClass(target, name, packageName, functionList, fieldsTree,
-                modelCode, gettersAndSetters);
+        return OutputSandwoodClassGenerated.getClass(target, name, packageName, functionMap, classFieldsTree,
+                scratchFieldsTree, modelCode, outputGettersAndSetters);
     }
 }

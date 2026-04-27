@@ -1,141 +1,45 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.NullModelMK2$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.NullModelMK2.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class NullModelMK2$SingleThreadCPU extends CoreModelSingleThreadCPU implements NullModelMK2$CoreInterface {
-double bias;
-	boolean constrainedFlag$sample10 = true;
-	double eta;
-	boolean fixedFlag$sample10 = false;
-	boolean fixedProbFlag$sample10 = false;
-	boolean fixedProbFlag$sample12 = false;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$bias;
-	double logProbability$binomial;
-	double logProbability$positiveCount;
-	double min;
-	int observedPositiveCount;
-	int observedSampleCount;
-	int positiveCount;
-	boolean system$gibbsForward = true;
+final class NullModelMK2$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	public NullModelMK2$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	@Override
-	public final double get$bias() {
-		return bias;
-	}
 
-	@Override
-	public final void set$bias(double cv$value, boolean allocated$) {
-		bias = cv$value;
-		fixedProbFlag$sample10 = false;
-		fixedProbFlag$sample12 = false;
-	}
-
-	@Override
-	public final double get$eta() {
-		return eta;
-	}
-
-	@Override
-	public final void set$eta(double cv$value, boolean allocated$) {
-		eta = cv$value;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample10() {
-		return fixedFlag$sample10;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample10(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample10 = cv$value;
-		constrainedFlag$sample10 = (fixedFlag$sample10 || constrainedFlag$sample10);
-		fixedProbFlag$sample10 = (fixedFlag$sample10 && fixedProbFlag$sample10);
-		fixedProbFlag$sample12 = (fixedFlag$sample10 && fixedProbFlag$sample12);
-	}
-
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	@Override
-	public final double get$logProbability$binomial() {
-		return logProbability$binomial;
-	}
-
-	@Override
-	public final double get$logProbability$positiveCount() {
-		return logProbability$positiveCount;
-	}
-
-	@Override
-	public final double get$min() {
-		return min;
-	}
-
-	@Override
-	public final int get$observedPositiveCount() {
-		return observedPositiveCount;
-	}
-
-	@Override
-	public final void set$observedPositiveCount(int cv$value, boolean allocated$) {
-		observedPositiveCount = cv$value;
-	}
-
-	@Override
-	public final int get$observedSampleCount() {
-		return observedSampleCount;
-	}
-
-	@Override
-	public final void set$observedSampleCount(int cv$value, boolean allocated$) {
-		observedSampleCount = cv$value;
-	}
-
-	@Override
-	public final int get$positiveCount() {
-		return positiveCount;
+	public NullModelMK2$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	private final void drawValueSample10() {
-		bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
+		state.bias = (state.min + ((1.0 - state.min) * DistributionSampling.sampleUniform(state.RNG$)));
 	}
 
 	private final void inferSample10() {
 		if(true) {
-			constrainedFlag$sample10 = false;
+			state.constrainedFlag$sample10 = false;
 			int cv$numStates = 0;
 			{
 				cv$numStates = Math.max(cv$numStates, 2);
 			}
-			double cv$originalValue = bias;
+			double cv$originalValue = state.bias;
 			double cv$originalProbability = 0.0;
 			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
 			if((cv$var < (0.1 * 0.1)))
 				cv$var = (0.1 * 0.1);
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample10 || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample10 || (cv$valuePos == 0))) {
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					double cv$reachedDistributionSourceRV = 0.0;
 					double cv$accumulatedDistributionProbabilities = 0.0;
@@ -144,11 +48,11 @@ double bias;
 						cv$currentValue = cv$originalValue;
 					else {
 						cv$currentValue = cv$proposedValue;
-						bias = cv$proposedValue;
+						state.bias = cv$proposedValue;
 					}
 					{
 						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-						double cv$accumulatedProbabilities = (Math.log(1.0) + (((min <= cv$currentValue) && (cv$currentValue < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY));
+						double cv$accumulatedProbabilities = (Math.log(1.0) + (((state.min <= cv$currentValue) && (cv$currentValue < 1.0))?(-Math.log((1.0 - state.min))):Double.NEGATIVE_INFINITY));
 						{
 							{
 								{
@@ -157,7 +61,7 @@ double bias;
 										{
 											boolean cv$sampleConstrained = true;
 											if(cv$sampleConstrained) {
-												constrainedFlag$sample10 = true;
+												state.constrainedFlag$sample10 = true;
 												double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 												double cv$consumerDistributionProbabilityAccumulator = 1.0;
 												{
@@ -165,13 +69,13 @@ double bias;
 														{
 															{
 																{
-																	if(((Math.log(1.0) + DistributionSampling.logProbabilityBinomial(positiveCount, traceTempVariable$bias$1_1, observedSampleCount)) < cv$accumulatedConsumerProbabilities))
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBinomial(positiveCount, traceTempVariable$bias$1_1, observedSampleCount)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																	if(((Math.log(1.0) + DistributionSampling.logProbabilityBinomial(state.positiveCount, traceTempVariable$bias$1_1, state.observedSampleCount)) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBinomial(state.positiveCount, traceTempVariable$bias$1_1, state.observedSampleCount)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																	else {
 																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBinomial(positiveCount, traceTempVariable$bias$1_1, observedSampleCount));
+																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBinomial(state.positiveCount, traceTempVariable$bias$1_1, state.observedSampleCount));
 																		else
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBinomial(positiveCount, traceTempVariable$bias$1_1, observedSampleCount)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBinomial(positiveCount, traceTempVariable$bias$1_1, observedSampleCount)));
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBinomial(state.positiveCount, traceTempVariable$bias$1_1, state.observedSampleCount)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBinomial(state.positiveCount, traceTempVariable$bias$1_1, state.observedSampleCount)));
 																	}
 																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																}
@@ -209,8 +113,8 @@ double bias;
 						cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 					double cv$ratio = (cv$proposedProbability - cv$originalProbability);
 					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio)))
-							bias = cv$originalValue;
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$))))) || Double.isNaN(cv$ratio)))
+							state.bias = cv$originalValue;
 					}
 				}
 			}
@@ -218,18 +122,18 @@ double bias;
 	}
 
 	private final void logProbabilityValue$sample10() {
-		if(!fixedProbFlag$sample10) {
+		if(!state.fixedProbFlag$sample10) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
 				{
-					double cv$sampleValue = bias;
+					double cv$sampleValue = state.bias;
 					{
 						{
 							double var8 = 1.0;
-							double cv$weightedProbability = (Math.log(1.0) + (((min <= cv$sampleValue) && (cv$sampleValue < var8))?(-Math.log((var8 - min))):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + (((state.min <= cv$sampleValue) && (cv$sampleValue < var8))?(-Math.log((var8 - state.min))):Double.NEGATIVE_INFINITY));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -250,35 +154,35 @@ double bias;
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$bias = cv$sampleProbability;
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample10)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample10 = fixedFlag$sample10;
+			state.logProbability$bias = cv$sampleProbability;
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample10)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample10 = state.fixedFlag$sample10;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$bias;
+			double cv$sampleValue = state.logProbability$bias;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample10)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample10)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	private final void logProbabilityValue$sample12() {
-		if(!fixedProbFlag$sample12) {
+		if(!state.fixedProbFlag$sample12) {
 			double cv$accumulator = 0.0;
 			double cv$sampleAccumulator = 0.0;
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
 				{
-					int cv$sampleValue = positiveCount;
+					int cv$sampleValue = state.positiveCount;
 					{
 						{
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBinomial(cv$sampleValue, bias, observedSampleCount));
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBinomial(cv$sampleValue, state.bias, state.observedSampleCount));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -299,94 +203,88 @@ double bias;
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$binomial = cv$sampleAccumulator;
-			logProbability$positiveCount = cv$sampleProbability;
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample12 = fixedFlag$sample10;
+			state.logProbability$binomial = cv$sampleAccumulator;
+			state.logProbability$positiveCount = cv$sampleProbability;
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample12 = state.fixedFlag$sample10;
 		} else {
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$positiveCount;
+			double cv$sampleValue = state.logProbability$positiveCount;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$binomial = cv$rvAccumulator;
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$binomial = cv$rvAccumulator;
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	@Override
-	public final void allocate() {}
-
-	@Override
-	public final void allocateScratch() {}
-
-	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample10)
-			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
-		positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
+		if(!state.fixedFlag$sample10)
+			state.bias = (state.min + ((1.0 - state.min) * DistributionSampling.sampleUniform(state.RNG$)));
+		state.positiveCount = DistributionSampling.sampleBinomial(state.RNG$, state.bias, state.observedSampleCount);
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample10)
-			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
+		if(!state.fixedFlag$sample10)
+			state.bias = (state.min + ((1.0 - state.min) * DistributionSampling.sampleUniform(state.RNG$)));
 	}
 
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample10)
-			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
-		positiveCount = DistributionSampling.sampleBinomial(RNG$, bias, observedSampleCount);
+		if(!state.fixedFlag$sample10)
+			state.bias = (state.min + ((1.0 - state.min) * DistributionSampling.sampleUniform(state.RNG$)));
+		state.positiveCount = DistributionSampling.sampleBinomial(state.RNG$, state.bias, state.observedSampleCount);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample10)
-			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
+		if(!state.fixedFlag$sample10)
+			state.bias = (state.min + ((1.0 - state.min) * DistributionSampling.sampleUniform(state.RNG$)));
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample10)
-			bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
+		if(!state.fixedFlag$sample10)
+			state.bias = (state.min + ((1.0 - state.min) * DistributionSampling.sampleUniform(state.RNG$)));
 	}
 
 	@Override
 	public final void gibbsRound() {
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample10)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample10)
 				inferSample10();
 		} else {
-			if(!fixedFlag$sample10)
+			if(!state.fixedFlag$sample10)
 				inferSample10();
 		}
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample10)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample10)
 			drawValueSample10();
 	}
 
 	private final void initializeLogProbabilityFields() {
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample10)
-			logProbability$bias = Double.NaN;
-		logProbability$binomial = 0.0;
-		if(!fixedProbFlag$sample12)
-			logProbability$positiveCount = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample10)
+			state.logProbability$bias = Double.NaN;
+		state.logProbability$binomial = 0.0;
+		if(!state.fixedProbFlag$sample12)
+			state.logProbability$positiveCount = Double.NaN;
 	}
 
 	@Override
 	public final void initializeModel() {
-		min = ((eta * 4.0) / 5.0);
+		state.min = ((state.eta * 4.0) / 5.0);
 	}
 
 	@Override
 	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample10)
+		if(state.fixedFlag$sample10)
 			logProbabilityValue$sample10();
 		logProbabilityValue$sample12();
 	}
@@ -407,7 +305,7 @@ double bias;
 
 	@Override
 	public final void propagateObservedValues() {
-		positiveCount = observedPositiveCount;
+		state.positiveCount = state.observedPositiveCount;
 	}
 
 	@Override

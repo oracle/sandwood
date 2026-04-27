@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,32 +16,149 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model Flip1CoinMK20 This is the class that all
  * user interactions with the model should occur through.
  */
-public final class Flip1CoinMK20 extends Model {
-    private Flip1CoinMK20$CoreInterface system$c = new Flip1CoinMK20$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class Flip1CoinMK20 extends Model<Flip1CoinMK20.State> {
+	final class State extends CoreModelState {
+double bias;
+		boolean constrainedFlag$sample8 = true;
+		int count1;
+		int count2;
+		boolean fixedFlag$sample11 = false;
+		boolean fixedFlag$sample12 = false;
+		boolean fixedFlag$sample8 = false;
+		boolean fixedProbFlag$sample11 = false;
+		boolean fixedProbFlag$sample12 = false;
+		boolean fixedProbFlag$sample8 = false;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$bias;
+		double logProbability$binomial;
+		double logProbability$count1;
+		double logProbability$count2;
+		int obs1;
+		int obs2;
+		boolean system$gibbsForward = true;
+		int total;
+
+		@Override
+		public final void allocate() {}
+
+		final double get$bias() {
+			return bias;
+		}
+
+		final void set$bias(double cv$value, boolean allocated$) {
+			bias = cv$value;
+			fixedProbFlag$sample8 = false;
+			fixedProbFlag$sample11 = false;
+			fixedProbFlag$sample12 = false;
+		}
+
+		final int get$count1() {
+			return count1;
+		}
+
+		final int get$count2() {
+			return count2;
+		}
+
+		final boolean get$fixedFlag$sample11() {
+			return fixedFlag$sample11;
+		}
+
+		final void set$fixedFlag$sample11(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample11 = cv$value;
+		}
+
+		final boolean get$fixedFlag$sample12() {
+			return fixedFlag$sample12;
+		}
+
+		final void set$fixedFlag$sample12(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample12 = cv$value;
+		}
+
+		final boolean get$fixedFlag$sample8() {
+			return fixedFlag$sample8;
+		}
+
+		final void set$fixedFlag$sample8(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample8 = cv$value;
+			constrainedFlag$sample8 = (fixedFlag$sample8 || constrainedFlag$sample8);
+			fixedProbFlag$sample8 = (fixedFlag$sample8 && fixedProbFlag$sample8);
+			fixedProbFlag$sample11 = (fixedFlag$sample8 && fixedProbFlag$sample11);
+			fixedProbFlag$sample12 = (fixedFlag$sample8 && fixedProbFlag$sample12);
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$bias() {
+			return logProbability$bias;
+		}
+
+		final double get$logProbability$binomial() {
+			return logProbability$binomial;
+		}
+
+		final double get$logProbability$count1() {
+			return logProbability$count1;
+		}
+
+		final double get$logProbability$count2() {
+			return logProbability$count2;
+		}
+
+		final int get$obs1() {
+			return obs1;
+		}
+
+		final void set$obs1(int cv$value, boolean allocated$) {
+			obs1 = cv$value;
+		}
+
+		final int get$obs2() {
+			return obs2;
+		}
+
+		final void set$obs2(int cv$value, boolean allocated$) {
+			obs2 = cv$value;
+		}
+
+		final int get$total() {
+			return total;
+		}
+	}
 
     private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$bias(); }
+        public double getValue() { return state.get$bias(); }
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$bias(value, allocated);
+            state.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$bias(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$bias(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample8(fixed, allocated);
+                state.set$fixedFlag$sample8(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample8())
+            if(state.get$fixedFlag$sample8())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -51,7 +170,7 @@ public final class Flip1CoinMK20 extends Model {
 
     private final ComputedIntegerInternal $count1 = new ComputedIntegerInternal(this, "count1", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int getValue() { return system$c.get$count1(); }
+        public int getValue() { return state.get$count1(); }
 
         @Override
         protected void setValueInternal(int value) {}
@@ -62,7 +181,7 @@ public final class Flip1CoinMK20 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$count1(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$count1(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -80,7 +199,7 @@ public final class Flip1CoinMK20 extends Model {
 
     private final ComputedIntegerInternal $count2 = new ComputedIntegerInternal(this, "count2", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int getValue() { return system$c.get$count2(); }
+        public int getValue() { return state.get$count2(); }
 
         @Override
         protected void setValueInternal(int value) {}
@@ -91,7 +210,7 @@ public final class Flip1CoinMK20 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$count2(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$count2(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -109,7 +228,7 @@ public final class Flip1CoinMK20 extends Model {
 
     private final ComputedIntegerInternal $total = new ComputedIntegerInternal(this, "total", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int getValue() { return system$c.get$total(); }
+        public int getValue() { return state.get$total(); }
 
         @Override
         protected void setValueInternal(int value) {}
@@ -144,12 +263,12 @@ public final class Flip1CoinMK20 extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$obs1();
+                return state.get$obs1();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$obs1(value, allocated); }
+        protected void setValueInternal(int value) { state.set$obs1(value, allocated); }
     };
 
 	/** Observed variable representing obs1 of type int from the Sandwood model. */
@@ -159,12 +278,12 @@ public final class Flip1CoinMK20 extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$obs2();
+                return state.get$obs2();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$obs2(value, allocated); }
+        protected void setValueInternal(int value) { state.set$obs2(value, allocated); }
     };
 
 	/** Observed variable representing obs2 of type int from the Sandwood model. */
@@ -175,7 +294,7 @@ public final class Flip1CoinMK20 extends Model {
     private final RandomVariableInternal $binomial = new RandomVariableInternal(this, "binomial", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
-            return system$c.get$logProbability$binomial();
+            return state.get$logProbability$binomial();
         }
     };
 
@@ -188,6 +307,7 @@ public final class Flip1CoinMK20 extends Model {
 	/** A constructor for a model where no variable values are set. */
     public Flip1CoinMK20() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("bias", $bias);
         $computedVariables.put("count1", $count1);
@@ -197,7 +317,9 @@ public final class Flip1CoinMK20 extends Model {
         //Observed scalar fields
         $regularObservedValues.put("obs1", $obs1);
         $regularObservedValues.put("obs2", $obs2);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        Flip1CoinMK20$SingleThreadCPU core = new Flip1CoinMK20$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -213,37 +335,15 @@ public final class Flip1CoinMK20 extends Model {
     }
     
     @Override
-    protected Flip1CoinMK20$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        Flip1CoinMK20$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new Flip1CoinMK20$SingleThreadCPU(target);
-                break;
+                return new Flip1CoinMK20$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new Flip1CoinMK20$MultiThreadCPU(target);
-                break;
+                return new Flip1CoinMK20$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(Flip1CoinMK20$CoreInterface oldCore, Flip1CoinMK20$CoreInterface newCore) {
-
-        //Observed scalars
-        if(obs1.isSet())
-            newCore.set$obs1(oldCore.get$obs1(), false);
-        if(obs2.isSet())
-            newCore.set$obs2(oldCore.get$obs2(), false);
-
-        //ComputedVariables
-        if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample8(oldCore.get$fixedFlag$sample8(), false);
     }
 
 	/**

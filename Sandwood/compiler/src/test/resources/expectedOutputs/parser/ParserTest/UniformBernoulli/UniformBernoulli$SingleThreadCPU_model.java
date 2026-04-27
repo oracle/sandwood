@@ -1,159 +1,38 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.UniformBernoulli$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.UniformBernoulli.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU implements UniformBernoulli$CoreInterface {
+final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double a;
-	double b;
-	boolean constrainedFlag$sample5 = true;
-	boolean fixedFlag$sample5 = false;
-	boolean fixedProbFlag$sample19 = false;
-	boolean fixedProbFlag$sample5 = false;
-	int length$observed;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$bernoulli;
-	double logProbability$output;
-	double logProbability$prior;
-	double logProbability$var19;
-	boolean[] observed;
-	boolean[] output;
-	double prior;
-	boolean system$gibbsForward = true;
-
-	public UniformBernoulli$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	// Getter for a.
-	@Override
-	public final double get$a() {
-		return a;
-	}
 
-	// Getter for b.
-	@Override
-	public final double get$b() {
-		return b;
-	}
-
-	// Getter for fixedFlag$sample5.
-	@Override
-	public final boolean get$fixedFlag$sample5() {
-		return fixedFlag$sample5;
-	}
-
-	// Setter for fixedFlag$sample5.
-	@Override
-	public final void set$fixedFlag$sample5(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample5 including if probabilities
-		// need to be updated.
-		fixedFlag$sample5 = cv$value;
-		constrainedFlag$sample5 = (fixedFlag$sample5 || constrainedFlag$sample5);
-		
-		// Should the probability of sample 5 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample5 = (fixedFlag$sample5 && fixedProbFlag$sample5);
-		
-		// Should the probability of sample 19 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample19 = (fixedFlag$sample5 && fixedProbFlag$sample19);
-	}
-
-	// Getter for length$observed.
-	@Override
-	public final int get$length$observed() {
-		return length$observed;
-	}
-
-	// Setter for length$observed.
-	@Override
-	public final void set$length$observed(int cv$value, boolean allocated$) {
-		length$observed = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$bernoulli.
-	@Override
-	public final double get$logProbability$bernoulli() {
-		return logProbability$bernoulli;
-	}
-
-	// Getter for logProbability$output.
-	@Override
-	public final double get$logProbability$output() {
-		return logProbability$output;
-	}
-
-	// Getter for logProbability$prior.
-	@Override
-	public final double get$logProbability$prior() {
-		return logProbability$prior;
-	}
-
-	// Getter for observed.
-	@Override
-	public final boolean[] get$observed() {
-		return observed;
-	}
-
-	// Setter for observed.
-	@Override
-	public final void set$observed(boolean[] cv$value, boolean allocated$) {
-		observed = cv$value;
-	}
-
-	// Getter for output.
-	@Override
-	public final boolean[] get$output() {
-		return output;
-	}
-
-	// Getter for prior.
-	@Override
-	public final double get$prior() {
-		return prior;
-	}
-
-	// Setter for prior.
-	@Override
-	public final void set$prior(double cv$value, boolean allocated$) {
-		// Set flags for all the side effects of prior including if probabilities need to
-		// be updated.
-		prior = cv$value;
-		
-		// Unset the fixed probability flag for sample 5 as it depends on prior.
-		fixedProbFlag$sample5 = false;
-		
-		// Unset the fixed probability flag for sample 19 as it depends on prior.
-		fixedProbFlag$sample19 = false;
+	public UniformBernoulli$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample5
 	private final void drawValueSample5() {
-		prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
+		state.prior = (state.a + ((state.b - state.a) * DistributionSampling.sampleUniform(state.RNG$)));
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 5 drawn from Uniform 4. Inference was performed using Metropolis-Hastings.
 	private final void inferSample5() {
 		if(true) {
-			constrainedFlag$sample5 = false;
+			state.constrainedFlag$sample5 = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -163,7 +42,7 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			}
 			
 			// The original value of the sample
-			double cv$originalValue = prior;
+			double cv$originalValue = state.prior;
 			
 			// The probability of the random variable generating the originally sampled value
 			double cv$originalProbability = 0.0;
@@ -176,12 +55,12 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				cv$var = (0.1 * 0.1);
 			
 			// The proposed new value for the sample
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			
 			// The probability of the random variable generating the new sample value.
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample5 || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample5 || (cv$valuePos == 0))) {
 					// Initialize the summed probabilities to 0.
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					
@@ -203,7 +82,7 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 						// Update Sample and intermediate values
 						// 
 						// Write out the new value of the sample.
-						prior = cv$proposedValue;
+						state.prior = cv$proposedValue;
 					}
 					{
 						// Record the reached probability density.
@@ -211,7 +90,7 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 						
 						// An accumulator to allow the value for each distribution to be constructed before
 						// it is added to the index probabilities.
-						double cv$accumulatedProbabilities = (Math.log(1.0) + (((a <= cv$currentValue) && (cv$currentValue < b))?(-Math.log((b - a))):Double.NEGATIVE_INFINITY));
+						double cv$accumulatedProbabilities = (Math.log(1.0) + (((state.a <= cv$currentValue) && (cv$currentValue < state.b))?(-Math.log((state.b - state.a))):Double.NEGATIVE_INFINITY));
 						
 						// Processing random variable 6.
 						{
@@ -222,12 +101,12 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 									// Processing sample task 19 of consumer random variable bernoulli.
 									{
 										{
-											for(int var18 = 0; var18 < length$observed; var18 += 1) {
+											for(int var18 = 0; var18 < state.length$observed; var18 += 1) {
 												// Flag recording if this sample task of the consuming random variable is constrained.
 												boolean cv$sampleConstrained = true;
 												if(cv$sampleConstrained) {
 													// Mark that the sample has observed constrained data.
-													constrainedFlag$sample5 = true;
+													state.constrainedFlag$sample5 = true;
 													
 													// Set an accumulator to sum the probabilities for each possible configuration of
 													// inputs.
@@ -242,14 +121,14 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 																{
 																	{
 																		// Record the probability of sample task 19 generating output with current configuration.
-																		if(((Math.log(1.0) + (((0.0 <= traceTempVariable$prior$1_1) && (traceTempVariable$prior$1_1 <= 1.0))?Math.log((output[var18]?traceTempVariable$prior$1_1:(1.0 - traceTempVariable$prior$1_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= traceTempVariable$prior$1_1) && (traceTempVariable$prior$1_1 <= 1.0))?Math.log((output[var18]?traceTempVariable$prior$1_1:(1.0 - traceTempVariable$prior$1_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		if(((Math.log(1.0) + (((0.0 <= traceTempVariable$prior$1_1) && (traceTempVariable$prior$1_1 <= 1.0))?Math.log((state.output[var18]?traceTempVariable$prior$1_1:(1.0 - traceTempVariable$prior$1_1))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= traceTempVariable$prior$1_1) && (traceTempVariable$prior$1_1 <= 1.0))?Math.log((state.output[var18]?traceTempVariable$prior$1_1:(1.0 - traceTempVariable$prior$1_1))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																		else {
 																			// If the second value is -infinity.
 																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= traceTempVariable$prior$1_1) && (traceTempVariable$prior$1_1 <= 1.0))?Math.log((output[var18]?traceTempVariable$prior$1_1:(1.0 - traceTempVariable$prior$1_1))):Double.NEGATIVE_INFINITY));
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= traceTempVariable$prior$1_1) && (traceTempVariable$prior$1_1 <= 1.0))?Math.log((state.output[var18]?traceTempVariable$prior$1_1:(1.0 - traceTempVariable$prior$1_1))):Double.NEGATIVE_INFINITY));
 																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= traceTempVariable$prior$1_1) && (traceTempVariable$prior$1_1 <= 1.0))?Math.log((output[var18]?traceTempVariable$prior$1_1:(1.0 - traceTempVariable$prior$1_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= traceTempVariable$prior$1_1) && (traceTempVariable$prior$1_1 <= 1.0))?Math.log((output[var18]?traceTempVariable$prior$1_1:(1.0 - traceTempVariable$prior$1_1))):Double.NEGATIVE_INFINITY)));
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= traceTempVariable$prior$1_1) && (traceTempVariable$prior$1_1 <= 1.0))?Math.log((state.output[var18]?traceTempVariable$prior$1_1:(1.0 - traceTempVariable$prior$1_1))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= traceTempVariable$prior$1_1) && (traceTempVariable$prior$1_1 <= 1.0))?Math.log((state.output[var18]?traceTempVariable$prior$1_1:(1.0 - traceTempVariable$prior$1_1))):Double.NEGATIVE_INFINITY)));
 																		}
 																		
 																		// Recorded the probability of reaching sample task 19 with the current configuration.
@@ -311,13 +190,13 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 					// to be less than or equal as otherwise if the proposed value is not possible and
 					// the random value is 0 an impossible value will be accepted.
 					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio)))
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$))))) || Double.isNaN(cv$ratio)))
 							// If it is not revert the changes.
 							// 
 							// Set the sample value
 							// 
 							// Write out the new value of the sample.
-							prior = cv$originalValue;
+							state.prior = cv$originalValue;
 					}
 				}
 			}
@@ -329,7 +208,7 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	private final void logProbabilityValue$sample19() {
 		// Determine if we need to calculate the values for sample task 19 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample19) {
+		if(!state.fixedProbFlag$sample19) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -339,7 +218,7 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var18 = 0; var18 < length$observed; var18 += 1) {
+			for(int var18 = 0; var18 < state.length$observed; var18 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -348,11 +227,11 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 				{
 					{
 						// The sample value to calculate the probability of generating
-						boolean cv$sampleValue = output[var18];
+						boolean cv$sampleValue = state.output[var18];
 						{
 							{
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= prior) && (prior <= 1.0))?Math.log((cv$sampleValue?prior:(1.0 - prior))):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= state.prior) && (state.prior <= 1.0))?Math.log((cv$sampleValue?state.prior:(1.0 - state.prior))):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -389,21 +268,21 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$bernoulli = cv$sampleAccumulator;
+			state.logProbability$bernoulli = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var19 = cv$sampleAccumulator;
+			state.logProbability$var19 = cv$sampleAccumulator;
 			
 			// Update the variable probability
-			logProbability$output = (logProbability$output + cv$accumulator);
+			state.logProbability$output = (state.logProbability$output + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample19 = fixedFlag$sample5;
+			state.fixedProbFlag$sample19 = state.fixedFlag$sample5;
 		} else {
 			// Using cached values.
 			// 
@@ -414,20 +293,20 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var18 = 0; var18 < length$observed; var18 += 1)
+			for(int var18 = 0; var18 < state.length$observed; var18 += 1)
 				// Record that the sample was reached.
 				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var19;
+			double cv$sampleValue = state.logProbability$var19;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$bernoulli = cv$rvAccumulator;
+			state.logProbability$bernoulli = cv$rvAccumulator;
 			
 			// Update the variable probability
-			logProbability$output = (logProbability$output + cv$accumulator);
+			state.logProbability$output = (state.logProbability$output + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -435,7 +314,7 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	private final void logProbabilityValue$sample5() {
 		// Determine if we need to calculate the values for sample task 5 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample5) {
+		if(!state.fixedProbFlag$sample5) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -451,11 +330,11 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			{
 				{
 					// The sample value to calculate the probability of generating
-					double cv$sampleValue = prior;
+					double cv$sampleValue = state.prior;
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (((a <= cv$sampleValue) && (cv$sampleValue < b))?(-Math.log((b - a))):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + (((state.a <= cv$sampleValue) && (cv$sampleValue < state.b))?(-Math.log((state.b - state.a))):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -490,19 +369,19 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$prior = cv$sampleProbability;
+			state.logProbability$prior = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample5)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample5)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample5 = fixedFlag$sample5;
+			state.fixedProbFlag$sample5 = state.fixedFlag$sample5;
 		} else {
 			// Using cached values.
 			// 
@@ -510,39 +389,27 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$prior;
+			double cv$sampleValue = state.logProbability$prior;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample5)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample5)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		output = new boolean[length$observed];
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample5)
-			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
-		for(int var18 = 0; var18 < length$observed; var18 += 1)
-			output[var18] = DistributionSampling.sampleBernoulli(RNG$, prior);
+		if(!state.fixedFlag$sample5)
+			state.prior = (state.a + ((state.b - state.a) * DistributionSampling.sampleUniform(state.RNG$)));
+		for(int var18 = 0; var18 < state.length$observed; var18 += 1)
+			state.output[var18] = DistributionSampling.sampleBernoulli(state.RNG$, state.prior);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -550,26 +417,26 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample5)
-			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
+		if(!state.fixedFlag$sample5)
+			state.prior = (state.a + ((state.b - state.a) * DistributionSampling.sampleUniform(state.RNG$)));
 	}
 
 	// Method to execute the model code conventionally with priming of fixed intermediate
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample5)
-			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
-		for(int var18 = 0; var18 < length$observed; var18 += 1)
-			output[var18] = DistributionSampling.sampleBernoulli(RNG$, prior);
+		if(!state.fixedFlag$sample5)
+			state.prior = (state.a + ((state.b - state.a) * DistributionSampling.sampleUniform(state.RNG$)));
+		for(int var18 = 0; var18 < state.length$observed; var18 += 1)
+			state.output[var18] = DistributionSampling.sampleBernoulli(state.RNG$, state.prior);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample5)
-			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
+		if(!state.fixedFlag$sample5)
+			state.prior = (state.a + ((state.b - state.a) * DistributionSampling.sampleUniform(state.RNG$)));
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -577,27 +444,27 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample5)
-			prior = (a + ((b - a) * DistributionSampling.sampleUniform(RNG$)));
+		if(!state.fixedFlag$sample5)
+			state.prior = (state.a + ((state.b - state.a) * DistributionSampling.sampleUniform(state.RNG$)));
 	}
 
 	// Method to execute one round of Gibbs sampling.
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample5)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample5)
 				inferSample5();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample5)
+			if(!state.fixedFlag$sample5)
 				inferSample5();
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample5)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample5)
 			drawValueSample5();
 	}
 
@@ -609,22 +476,22 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample5)
-			logProbability$prior = Double.NaN;
-		logProbability$bernoulli = Double.NaN;
-		logProbability$output = 0.0;
-		if(!fixedProbFlag$sample19)
-			logProbability$var19 = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample5)
+			state.logProbability$prior = Double.NaN;
+		state.logProbability$bernoulli = Double.NaN;
+		state.logProbability$output = 0.0;
+		if(!state.fixedProbFlag$sample19)
+			state.logProbability$var19 = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		a = 0.0;
-		b = 1.0;
+		state.a = 0.0;
+		state.b = 1.0;
 	}
 
 	// Construct the evidence probabilities.
@@ -634,7 +501,7 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample5)
+		if(state.fixedFlag$sample5)
 			logProbabilityValue$sample5();
 		logProbabilityValue$sample19();
 	}
@@ -680,8 +547,8 @@ final class UniformBernoulli$SingleThreadCPU extends CoreModelSingleThreadCPU im
 	@Override
 	public final void propagateObservedValues() {
 		// Deep copy between arrays
-		boolean[] cv$source1 = observed;
-		boolean[] cv$target1 = output;
+		boolean[] cv$source1 = state.observed;
+		boolean[] cv$target1 = state.output;
 		int cv$length1 = cv$target1.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			cv$target1[cv$index1] = cv$source1[cv$index1];

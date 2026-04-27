@@ -1,220 +1,59 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.LogitRegressionTest$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.LogitRegressionTest.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU implements LogitRegressionTest$CoreInterface {
+final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double bias;
-	boolean[] constrainedFlag$sample35;
-	boolean constrainedFlag$sample42 = true;
-	boolean fixedFlag$sample35 = false;
-	boolean fixedFlag$sample42 = false;
-	boolean fixedProbFlag$sample35 = false;
-	boolean fixedProbFlag$sample42 = false;
-	boolean fixedProbFlag$sample94 = false;
-	double[][] indicator;
-	int k;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$bias;
-	double[] logProbability$sample35;
-	double logProbability$var93;
-	double logProbability$weights;
-	double logProbability$y;
-	int n;
-	double[][] p;
-	boolean system$gibbsForward = true;
-	double[] weights;
-	double[][] x;
-	boolean[][] y;
-	boolean[][] yMeasured;
-	boolean[][] guard$sample35bernoulli93$global;
-	boolean[][] guard$sample35put89$global;
+		// Declare the scratch variables for the model.
+		boolean[][] guard$sample35bernoulli93$global;
+		boolean[][] guard$sample35put89$global;
 
-	public LogitRegressionTest$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
-
-	// Getter for bias.
-	@Override
-	public final double get$bias() {
-		return bias;
-	}
-
-	// Setter for bias.
-	@Override
-	public final void set$bias(double cv$value, boolean allocated$) {
-		// Set flags for all the side effects of bias including if probabilities need to be
-		// updated.
-		bias = cv$value;
-		
-		// Unset the fixed probability flag for sample 42 as it depends on bias.
-		fixedProbFlag$sample42 = false;
-		
-		// Unset the fixed probability flag for sample 94 as it depends on bias.
-		fixedProbFlag$sample94 = false;
-	}
-
-	// Getter for fixedFlag$sample35.
-	@Override
-	public final boolean get$fixedFlag$sample35() {
-		return fixedFlag$sample35;
-	}
-
-	// Setter for fixedFlag$sample35.
-	@Override
-	public final void set$fixedFlag$sample35(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample35 including if probabilities
-		// need to be updated.
-		fixedFlag$sample35 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample35$1 = 0; index$constrainedFlag$sample35$1 < constrainedFlag$sample35.length; index$constrainedFlag$sample35$1 += 1)
-				constrainedFlag$sample35[index$constrainedFlag$sample35$1] = true;
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// Constructor for guard$sample35put89$global
+			{
+				// Calculate the largest index of j that is possible and allocate an array to hold
+				// the guard for each of these.
+				int cv$max_j$var85 = 0;
+				if((0 < state.x.length))
+					cv$max_j$var85 = 3;
+				
+				// Allocation of guard$sample35put89$global for single threaded execution
+				guard$sample35put89$global = new boolean[state.x.length][cv$max_j$var85];
+			}
+			
+			// Constructor for guard$sample35bernoulli93$global
+			// 
+			// Calculate the largest index of j that is possible and allocate an array to hold
+			// the guard for each of these.
+			int cv$max_j$var85 = 0;
+			if((0 < state.x.length))
+				cv$max_j$var85 = 3;
+			
+			// Allocation of guard$sample35bernoulli93$global for single threaded execution
+			guard$sample35bernoulli93$global = new boolean[state.x.length][cv$max_j$var85];
 		}
-		
-		// Should the probability of sample 35 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample35" with its value "cv$value".
-		fixedProbFlag$sample35 = (cv$value && fixedProbFlag$sample35);
-		
-		// Should the probability of sample 94 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample35" with its value "cv$value".
-		fixedProbFlag$sample94 = (cv$value && fixedProbFlag$sample94);
 	}
 
-	// Getter for fixedFlag$sample42.
-	@Override
-	public final boolean get$fixedFlag$sample42() {
-		return fixedFlag$sample42;
-	}
 
-	// Setter for fixedFlag$sample42.
-	@Override
-	public final void set$fixedFlag$sample42(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample42 including if probabilities
-		// need to be updated.
-		fixedFlag$sample42 = cv$value;
-		
-		// Substituted "fixedFlag$sample42" with its value "cv$value".
-		constrainedFlag$sample42 = (cv$value || constrainedFlag$sample42);
-		
-		// Should the probability of sample 42 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample42" with its value "cv$value".
-		fixedProbFlag$sample42 = (cv$value && fixedProbFlag$sample42);
-		
-		// Should the probability of sample 94 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample42" with its value "cv$value".
-		fixedProbFlag$sample94 = (cv$value && fixedProbFlag$sample94);
-	}
-
-	// Getter for k.
-	@Override
-	public final int get$k() {
-		return 3;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$bias.
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	// Getter for logProbability$weights.
-	@Override
-	public final double get$logProbability$weights() {
-		return logProbability$weights;
-	}
-
-	// Getter for logProbability$y.
-	@Override
-	public final double get$logProbability$y() {
-		return logProbability$y;
-	}
-
-	// Getter for n.
-	@Override
-	public final int get$n() {
-		return n;
-	}
-
-	// Getter for weights.
-	@Override
-	public final double[] get$weights() {
-		return weights;
-	}
-
-	// Setter for weights.
-	@Override
-	public final void set$weights(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of weights including if probabilities need to
-		// be updated.
-		weights = cv$value;
-		
-		// Unset the fixed probability flag for sample 35 as it depends on weights.
-		fixedProbFlag$sample35 = false;
-		
-		// Unset the fixed probability flag for sample 94 as it depends on weights.
-		fixedProbFlag$sample94 = false;
-	}
-
-	// Getter for x.
-	@Override
-	public final double[][] get$x() {
-		return x;
-	}
-
-	// Setter for x.
-	@Override
-	public final void set$x(double[][] cv$value, boolean allocated$) {
-		x = cv$value;
-	}
-
-	// Getter for y.
-	@Override
-	public final boolean[][] get$y() {
-		return y;
-	}
-
-	// Getter for yMeasured.
-	@Override
-	public final boolean[][] get$yMeasured() {
-		return yMeasured;
-	}
-
-	// Setter for yMeasured.
-	@Override
-	public final void set$yMeasured(boolean[][] cv$value, boolean allocated$) {
-		yMeasured = cv$value;
+	public LogitRegressionTest$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample35
 	private final void drawValueSample35(int var33) {
-		weights[var33] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		state.weights[var33] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
 		
 		// Guards to ensure that indicator is only updated when there is a valid path.
 		// 
@@ -224,97 +63,97 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		// 
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 0)) {
-			for(int i = 0; i < n; i += 1)
+			for(int i = 0; i < state.n; i += 1)
 												// Substituted "j$var61" with its value "0".
-				indicator[i][0] = Math.exp((weights[0] * x[i][0]));
+				state.indicator[i][0] = Math.exp((state.weights[0] * state.x[i][0]));
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 1)) {
-			for(int i = 0; i < n; i += 1)
+			for(int i = 0; i < state.n; i += 1)
 												// Substituted "j$var61" with its value "1".
-				indicator[i][1] = Math.exp((weights[1] * x[i][1]));
+				state.indicator[i][1] = Math.exp((state.weights[1] * state.x[i][1]));
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 2)) {
-			for(int i = 0; i < n; i += 1)
+			for(int i = 0; i < state.n; i += 1)
 												// Substituted "j$var61" with its value "2".
-				indicator[i][2] = Math.exp((weights[2] * x[i][2]));
+				state.indicator[i][2] = Math.exp((state.weights[2] * state.x[i][2]));
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 0)) {
 			// Unrolled loop
-			for(int i = 0; i < n; i += 1) {
+			for(int i = 0; i < state.n; i += 1) {
 				// Unrolled loop
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample35put89$global[i][0] = false;
+				scratch.guard$sample35put89$global[i][0] = false;
 				
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample35put89$global[i][1] = false;
+				scratch.guard$sample35put89$global[i][1] = false;
 				
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample35put89$global[i][2] = false;
+				scratch.guard$sample35put89$global[i][2] = false;
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 1)) {
 			// Unrolled loop
-			for(int i = 0; i < n; i += 1) {
+			for(int i = 0; i < state.n; i += 1) {
 				// Unrolled loop
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample35put89$global[i][0] = false;
+				scratch.guard$sample35put89$global[i][0] = false;
 				
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample35put89$global[i][1] = false;
+				scratch.guard$sample35put89$global[i][1] = false;
 				
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample35put89$global[i][2] = false;
+				scratch.guard$sample35put89$global[i][2] = false;
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 2)) {
 			// Unrolled loop
-			for(int i = 0; i < n; i += 1) {
+			for(int i = 0; i < state.n; i += 1) {
 				// Unrolled loop
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample35put89$global[i][0] = false;
+				scratch.guard$sample35put89$global[i][0] = false;
 				
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample35put89$global[i][1] = false;
+				scratch.guard$sample35put89$global[i][1] = false;
 				
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample35put89$global[i][2] = false;
+				scratch.guard$sample35put89$global[i][2] = false;
 			}
 		}
 		
@@ -323,75 +162,75 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 0)) {
 			// Unrolled loop
-			for(int i = 0; i < n; i += 1)
+			for(int i = 0; i < state.n; i += 1)
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample35put89$global[i][0] = false;
+				scratch.guard$sample35put89$global[i][0] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 1)) {
 			// Unrolled loop
-			for(int i = 0; i < n; i += 1)
+			for(int i = 0; i < state.n; i += 1)
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample35put89$global[i][1] = false;
+				scratch.guard$sample35put89$global[i][1] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 2)) {
 			// Unrolled loop
-			for(int i = 0; i < n; i += 1)
+			for(int i = 0; i < state.n; i += 1)
 				// Set the flags to false
 				// 
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				guard$sample35put89$global[i][2] = false;
+				scratch.guard$sample35put89$global[i][2] = false;
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 0)) {
 			// Unrolled loop
-			for(int i = 0; i < n; i += 1) {
+			for(int i = 0; i < state.n; i += 1) {
 				// Unrolled loop
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample35put89$global[i][0]) {
+				if(!scratch.guard$sample35put89$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][0] = true;
+					scratch.guard$sample35put89$global[i][0] = true;
 					
 															// Substituted "j$var85" with its value "0".
-					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+					state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample35put89$global[i][1]) {
+				if(!scratch.guard$sample35put89$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][1] = true;
+					scratch.guard$sample35put89$global[i][1] = true;
 					
 															// Substituted "j$var85" with its value "1".
-					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+					state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample35put89$global[i][2]) {
+				if(!scratch.guard$sample35put89$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][2] = true;
+					scratch.guard$sample35put89$global[i][2] = true;
 					
 															// Substituted "j$var85" with its value "2".
-					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+					state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 				}
 			}
 		}
@@ -399,42 +238,42 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 1)) {
 			// Unrolled loop
-			for(int i = 0; i < n; i += 1) {
+			for(int i = 0; i < state.n; i += 1) {
 				// Unrolled loop
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample35put89$global[i][0]) {
+				if(!scratch.guard$sample35put89$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][0] = true;
+					scratch.guard$sample35put89$global[i][0] = true;
 					
 															// Substituted "j$var85" with its value "0".
-					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+					state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample35put89$global[i][1]) {
+				if(!scratch.guard$sample35put89$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][1] = true;
+					scratch.guard$sample35put89$global[i][1] = true;
 					
 															// Substituted "j$var85" with its value "1".
-					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+					state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample35put89$global[i][2]) {
+				if(!scratch.guard$sample35put89$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][2] = true;
+					scratch.guard$sample35put89$global[i][2] = true;
 					
 															// Substituted "j$var85" with its value "2".
-					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+					state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 				}
 			}
 		}
@@ -442,42 +281,42 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 2)) {
 			// Unrolled loop
-			for(int i = 0; i < n; i += 1) {
+			for(int i = 0; i < state.n; i += 1) {
 				// Unrolled loop
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample35put89$global[i][0]) {
+				if(!scratch.guard$sample35put89$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][0] = true;
+					scratch.guard$sample35put89$global[i][0] = true;
 					
 															// Substituted "j$var85" with its value "0".
-					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+					state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample35put89$global[i][1]) {
+				if(!scratch.guard$sample35put89$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][1] = true;
+					scratch.guard$sample35put89$global[i][1] = true;
 					
 															// Substituted "j$var85" with its value "1".
-					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+					state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample35put89$global[i][2]) {
+				if(!scratch.guard$sample35put89$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][2] = true;
+					scratch.guard$sample35put89$global[i][2] = true;
 					
 															// Substituted "j$var85" with its value "2".
-					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+					state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 				}
 			}
 		}
@@ -485,18 +324,18 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 0)) {
 			// Unrolled loop
-			for(int i = 0; i < n; i += 1) {
+			for(int i = 0; i < state.n; i += 1) {
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample35put89$global[i][0]) {
+				if(!scratch.guard$sample35put89$global[i][0]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][0] = true;
+					scratch.guard$sample35put89$global[i][0] = true;
 					
 															// Substituted "j$var85" with its value "0".
-					p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+					state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 				}
 			}
 		}
@@ -504,18 +343,18 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 1)) {
 			// Unrolled loop
-			for(int i = 0; i < n; i += 1) {
+			for(int i = 0; i < state.n; i += 1) {
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample35put89$global[i][1]) {
+				if(!scratch.guard$sample35put89$global[i][1]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][1] = true;
+					scratch.guard$sample35put89$global[i][1] = true;
 					
 															// Substituted "j$var85" with its value "1".
-					p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+					state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 				}
 			}
 		}
@@ -523,18 +362,18 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((var33 == 2)) {
 			// Unrolled loop
-			for(int i = 0; i < n; i += 1) {
+			for(int i = 0; i < state.n; i += 1) {
 												// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				if(!guard$sample35put89$global[i][2]) {
+				if(!scratch.guard$sample35put89$global[i][2]) {
 					// The body will execute, so should not be executed again
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][2] = true;
+					scratch.guard$sample35put89$global[i][2] = true;
 					
 															// Substituted "j$var85" with its value "2".
-					p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+					state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 				}
 			}
 		}
@@ -542,16 +381,16 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 
 	// Pick a value from the distribution for the unconditioned variable from sample42
 	private final void drawValueSample42() {
-		bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		state.bias = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 35 drawn from Gaussian 22. Inference was performed using Metropolis-Hastings.
 	private final void inferSample35(int var33) {
-		constrainedFlag$sample35[var33] = false;
+		state.constrainedFlag$sample35[var33] = false;
 		
 		// The original value of the sample
-		double cv$originalValue = weights[var33];
+		double cv$originalValue = state.weights[var33];
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -566,7 +405,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			cv$var = 0.010000000000000002;
 		
 		// The proposed new value for the sample
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 		{
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
@@ -578,72 +417,72 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			if((var33 == 0)) {
 				// Unrolled loop
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][0] = false;
-				for(int i = 0; i < n; i += 1)
+					scratch.guard$sample35bernoulli93$global[i][0] = false;
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][1] = false;
-				for(int i = 0; i < n; i += 1)
+					scratch.guard$sample35bernoulli93$global[i][1] = false;
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][2] = false;
+					scratch.guard$sample35bernoulli93$global[i][2] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 1)) {
 				// Unrolled loop
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][0] = false;
-				for(int i = 0; i < n; i += 1)
+					scratch.guard$sample35bernoulli93$global[i][0] = false;
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][1] = false;
-				for(int i = 0; i < n; i += 1)
+					scratch.guard$sample35bernoulli93$global[i][1] = false;
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][2] = false;
+					scratch.guard$sample35bernoulli93$global[i][2] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 2)) {
 				// Unrolled loop
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][0] = false;
-				for(int i = 0; i < n; i += 1)
+					scratch.guard$sample35bernoulli93$global[i][0] = false;
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][1] = false;
-				for(int i = 0; i < n; i += 1)
+					scratch.guard$sample35bernoulli93$global[i][1] = false;
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][2] = false;
+					scratch.guard$sample35bernoulli93$global[i][2] = false;
 			}
 			
 			// Unrolled loop
@@ -651,59 +490,59 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 0)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][0] = false;
+					scratch.guard$sample35bernoulli93$global[i][0] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 1)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][1] = false;
+					scratch.guard$sample35bernoulli93$global[i][1] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 2)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][2] = false;
+					scratch.guard$sample35bernoulli93$global[i][2] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 0)) {
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Substituted "j$var61" with its value "0".
 					// 
 					// Set the current value to the current state of the tree.
-					double traceTempVariable$var69$15_4 = Math.exp((cv$originalValue * x[i][0]));
+					double traceTempVariable$var69$15_4 = Math.exp((cv$originalValue * state.x[i][0]));
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][0]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][0] = true;
+						scratch.guard$sample35bernoulli93$global[i][0] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[0] = true;
+						state.constrainedFlag$sample35[0] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "0".
-						double var91 = ((indicator[i][0] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((state.indicator[i][0] / ((traceTempVariable$var69$15_4 + state.indicator[i][1]) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -719,24 +558,24 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$15_7" with its value "0".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][1]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][1] = true;
+						scratch.guard$sample35bernoulli93$global[i][1] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[0] = true;
+						state.constrainedFlag$sample35[0] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "1".
-						double var91 = ((indicator[i][1] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((state.indicator[i][1] / ((traceTempVariable$var69$15_4 + state.indicator[i][1]) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -752,24 +591,24 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$15_7" with its value "1".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][2]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][2] = true;
+						scratch.guard$sample35bernoulli93$global[i][2] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[0] = true;
+						state.constrainedFlag$sample35[0] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "2".
-						double var91 = ((indicator[i][2] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((state.indicator[i][2] / ((traceTempVariable$var69$15_4 + state.indicator[i][1]) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -785,34 +624,34 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$15_7" with its value "2".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 1)) {
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Substituted "j$var61" with its value "1".
 					// 
 					// Set the current value to the current state of the tree.
-					double traceTempVariable$var71$16_4 = Math.exp((cv$originalValue * x[i][1]));
+					double traceTempVariable$var71$16_4 = Math.exp((cv$originalValue * state.x[i][1]));
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][0]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][0] = true;
+						scratch.guard$sample35bernoulli93$global[i][0] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[1] = true;
+						state.constrainedFlag$sample35[1] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "0".
-						double var91 = ((indicator[i][0] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
+						double var91 = ((state.indicator[i][0] / ((state.indicator[i][0] + traceTempVariable$var71$16_4) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -828,24 +667,24 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$16_7" with its value "0".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][1]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][1] = true;
+						scratch.guard$sample35bernoulli93$global[i][1] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[1] = true;
+						state.constrainedFlag$sample35[1] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "1".
-						double var91 = ((indicator[i][1] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
+						double var91 = ((state.indicator[i][1] / ((state.indicator[i][0] + traceTempVariable$var71$16_4) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -861,24 +700,24 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$16_7" with its value "1".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][2]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][2] = true;
+						scratch.guard$sample35bernoulli93$global[i][2] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[1] = true;
+						state.constrainedFlag$sample35[1] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "2".
-						double var91 = ((indicator[i][2] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
+						double var91 = ((state.indicator[i][2] / ((state.indicator[i][0] + traceTempVariable$var71$16_4) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -894,34 +733,34 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$16_7" with its value "2".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 2)) {
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Substituted "j$var61" with its value "2".
 					// 
 					// Set the current value to the current state of the tree.
-					double traceTempVariable$var74$17_4 = Math.exp((cv$originalValue * x[i][2]));
+					double traceTempVariable$var74$17_4 = Math.exp((cv$originalValue * state.x[i][2]));
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][0]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][0] = true;
+						scratch.guard$sample35bernoulli93$global[i][0] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[2] = true;
+						state.constrainedFlag$sample35[2] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "0".
-						double var91 = ((indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
+						double var91 = ((state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + traceTempVariable$var74$17_4)) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -937,24 +776,24 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$17_7" with its value "0".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][1]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][1] = true;
+						scratch.guard$sample35bernoulli93$global[i][1] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[2] = true;
+						state.constrainedFlag$sample35[2] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "1".
-						double var91 = ((indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
+						double var91 = ((state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + traceTempVariable$var74$17_4)) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -970,24 +809,24 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$17_7" with its value "1".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][2]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][2] = true;
+						scratch.guard$sample35bernoulli93$global[i][2] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[2] = true;
+						state.constrainedFlag$sample35[2] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "2".
-						double var91 = ((indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
+						double var91 = ((state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + traceTempVariable$var74$17_4)) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1003,31 +842,31 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$17_7" with its value "2".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 0)) {
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][0]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][0] = true;
+						scratch.guard$sample35bernoulli93$global[i][0] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[0] = true;
+						state.constrainedFlag$sample35[0] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var61" with its value "0".
 						// 
 						// Set the current value to the current state of the tree.
-						double var91 = ((Math.exp((cv$originalValue * x[i][0])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((Math.exp((cv$originalValue * state.x[i][0])) / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1043,31 +882,31 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$18_7" with its value "0".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 1)) {
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][1]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][1] = true;
+						scratch.guard$sample35bernoulli93$global[i][1] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[1] = true;
+						state.constrainedFlag$sample35[1] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var61" with its value "1".
 						// 
 						// Set the current value to the current state of the tree.
-						double var91 = ((Math.exp((cv$originalValue * x[i][1])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((Math.exp((cv$originalValue * state.x[i][1])) / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1083,31 +922,31 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$18_7" with its value "1".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 2)) {
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][2]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][2] = true;
+						scratch.guard$sample35bernoulli93$global[i][2] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[2] = true;
+						state.constrainedFlag$sample35[2] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var61" with its value "2".
 						// 
 						// Set the current value to the current state of the tree.
-						double var91 = ((Math.exp((cv$originalValue * x[i][2])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((Math.exp((cv$originalValue * state.x[i][2])) / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1123,7 +962,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$18_7" with its value "2".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
@@ -1138,9 +977,9 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(constrainedFlag$sample35[var33]) {
+		if(state.constrainedFlag$sample35[var33]) {
 			// Guards to ensure that weights is only updated when there is a valid path.
-			weights[var33] = cv$proposedValue;
+			state.weights[var33] = cv$proposedValue;
 			
 			// Guards to ensure that indicator is only updated when there is a valid path.
 			// 
@@ -1150,97 +989,97 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// 
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 0)) {
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 															// Substituted "j$var61" with its value "0".
-					indicator[i][0] = Math.exp((weights[0] * x[i][0]));
+					state.indicator[i][0] = Math.exp((state.weights[0] * state.x[i][0]));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 1)) {
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 															// Substituted "j$var61" with its value "1".
-					indicator[i][1] = Math.exp((weights[1] * x[i][1]));
+					state.indicator[i][1] = Math.exp((state.weights[1] * state.x[i][1]));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 2)) {
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 															// Substituted "j$var61" with its value "2".
-					indicator[i][2] = Math.exp((weights[2] * x[i][2]));
+					state.indicator[i][2] = Math.exp((state.weights[2] * state.x[i][2]));
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 0)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Unrolled loop
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][0] = false;
+					scratch.guard$sample35put89$global[i][0] = false;
 					
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][1] = false;
+					scratch.guard$sample35put89$global[i][1] = false;
 					
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][2] = false;
+					scratch.guard$sample35put89$global[i][2] = false;
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 1)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Unrolled loop
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][0] = false;
+					scratch.guard$sample35put89$global[i][0] = false;
 					
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][1] = false;
+					scratch.guard$sample35put89$global[i][1] = false;
 					
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][2] = false;
+					scratch.guard$sample35put89$global[i][2] = false;
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 2)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Unrolled loop
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][0] = false;
+					scratch.guard$sample35put89$global[i][0] = false;
 					
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][1] = false;
+					scratch.guard$sample35put89$global[i][1] = false;
 					
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][2] = false;
+					scratch.guard$sample35put89$global[i][2] = false;
 				}
 			}
 			
@@ -1249,75 +1088,75 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 0)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][0] = false;
+					scratch.guard$sample35put89$global[i][0] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 1)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][1] = false;
+					scratch.guard$sample35put89$global[i][1] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 2)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35put89$global[i][2] = false;
+					scratch.guard$sample35put89$global[i][2] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 0)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Unrolled loop
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35put89$global[i][0]) {
+					if(!scratch.guard$sample35put89$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][0] = true;
+						scratch.guard$sample35put89$global[i][0] = true;
 						
 																		// Substituted "j$var85" with its value "0".
-						p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35put89$global[i][1]) {
+					if(!scratch.guard$sample35put89$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][1] = true;
+						scratch.guard$sample35put89$global[i][1] = true;
 						
 																		// Substituted "j$var85" with its value "1".
-						p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35put89$global[i][2]) {
+					if(!scratch.guard$sample35put89$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][2] = true;
+						scratch.guard$sample35put89$global[i][2] = true;
 						
 																		// Substituted "j$var85" with its value "2".
-						p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 					}
 				}
 			}
@@ -1325,42 +1164,42 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 1)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Unrolled loop
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35put89$global[i][0]) {
+					if(!scratch.guard$sample35put89$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][0] = true;
+						scratch.guard$sample35put89$global[i][0] = true;
 						
 																		// Substituted "j$var85" with its value "0".
-						p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35put89$global[i][1]) {
+					if(!scratch.guard$sample35put89$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][1] = true;
+						scratch.guard$sample35put89$global[i][1] = true;
 						
 																		// Substituted "j$var85" with its value "1".
-						p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35put89$global[i][2]) {
+					if(!scratch.guard$sample35put89$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][2] = true;
+						scratch.guard$sample35put89$global[i][2] = true;
 						
 																		// Substituted "j$var85" with its value "2".
-						p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 					}
 				}
 			}
@@ -1368,42 +1207,42 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 2)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Unrolled loop
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35put89$global[i][0]) {
+					if(!scratch.guard$sample35put89$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][0] = true;
+						scratch.guard$sample35put89$global[i][0] = true;
 						
 																		// Substituted "j$var85" with its value "0".
-						p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35put89$global[i][1]) {
+					if(!scratch.guard$sample35put89$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][1] = true;
+						scratch.guard$sample35put89$global[i][1] = true;
 						
 																		// Substituted "j$var85" with its value "1".
-						p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35put89$global[i][2]) {
+					if(!scratch.guard$sample35put89$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][2] = true;
+						scratch.guard$sample35put89$global[i][2] = true;
 						
 																		// Substituted "j$var85" with its value "2".
-						p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 					}
 				}
 			}
@@ -1411,18 +1250,18 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 0)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					if(!guard$sample35put89$global[i][0]) {
+					if(!scratch.guard$sample35put89$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][0] = true;
+						scratch.guard$sample35put89$global[i][0] = true;
 						
 																		// Substituted "j$var85" with its value "0".
-						p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 					}
 				}
 			}
@@ -1430,18 +1269,18 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 1)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					if(!guard$sample35put89$global[i][1]) {
+					if(!scratch.guard$sample35put89$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][1] = true;
+						scratch.guard$sample35put89$global[i][1] = true;
 						
 																		// Substituted "j$var85" with its value "1".
-						p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 					}
 				}
 			}
@@ -1449,18 +1288,18 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 2)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					if(!guard$sample35put89$global[i][2]) {
+					if(!scratch.guard$sample35put89$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][2] = true;
+						scratch.guard$sample35put89$global[i][2] = true;
 						
 																		// Substituted "j$var85" with its value "2".
-						p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+						state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 					}
 				}
 			}
@@ -1473,72 +1312,72 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			if((var33 == 0)) {
 				// Unrolled loop
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][0] = false;
-				for(int i = 0; i < n; i += 1)
+					scratch.guard$sample35bernoulli93$global[i][0] = false;
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][1] = false;
-				for(int i = 0; i < n; i += 1)
+					scratch.guard$sample35bernoulli93$global[i][1] = false;
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][2] = false;
+					scratch.guard$sample35bernoulli93$global[i][2] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 1)) {
 				// Unrolled loop
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][0] = false;
-				for(int i = 0; i < n; i += 1)
+					scratch.guard$sample35bernoulli93$global[i][0] = false;
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][1] = false;
-				for(int i = 0; i < n; i += 1)
+					scratch.guard$sample35bernoulli93$global[i][1] = false;
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][2] = false;
+					scratch.guard$sample35bernoulli93$global[i][2] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 2)) {
 				// Unrolled loop
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][0] = false;
-				for(int i = 0; i < n; i += 1)
+					scratch.guard$sample35bernoulli93$global[i][0] = false;
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][1] = false;
-				for(int i = 0; i < n; i += 1)
+					scratch.guard$sample35bernoulli93$global[i][1] = false;
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][2] = false;
+					scratch.guard$sample35bernoulli93$global[i][2] = false;
 			}
 			
 			// Unrolled loop
@@ -1546,57 +1385,57 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 0)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][0] = false;
+					scratch.guard$sample35bernoulli93$global[i][0] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 1)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][1] = false;
+					scratch.guard$sample35bernoulli93$global[i][1] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 2)) {
 				// Unrolled loop
-				for(int i = 0; i < n; i += 1)
+				for(int i = 0; i < state.n; i += 1)
 					// Set the flags to false
 					// 
 															// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					guard$sample35bernoulli93$global[i][2] = false;
+					scratch.guard$sample35bernoulli93$global[i][2] = false;
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 0)) {
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Substituted "j$var61" with its value "0".
-					double traceTempVariable$var69$15_4 = Math.exp((cv$proposedValue * x[i][0]));
+					double traceTempVariable$var69$15_4 = Math.exp((cv$proposedValue * state.x[i][0]));
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][0]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][0] = true;
+						scratch.guard$sample35bernoulli93$global[i][0] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[0] = true;
+						state.constrainedFlag$sample35[0] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "0".
-						double var91 = ((indicator[i][0] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((state.indicator[i][0] / ((traceTempVariable$var69$15_4 + state.indicator[i][1]) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1612,24 +1451,24 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$15_7" with its value "0".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][1]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][1] = true;
+						scratch.guard$sample35bernoulli93$global[i][1] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[0] = true;
+						state.constrainedFlag$sample35[0] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "1".
-						double var91 = ((indicator[i][1] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((state.indicator[i][1] / ((traceTempVariable$var69$15_4 + state.indicator[i][1]) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1645,24 +1484,24 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$15_7" with its value "1".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][2]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][2] = true;
+						scratch.guard$sample35bernoulli93$global[i][2] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[0] = true;
+						state.constrainedFlag$sample35[0] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "2".
-						double var91 = ((indicator[i][2] / ((traceTempVariable$var69$15_4 + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((state.indicator[i][2] / ((traceTempVariable$var69$15_4 + state.indicator[i][1]) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1678,32 +1517,32 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$15_7" with its value "2".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 1)) {
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Substituted "j$var61" with its value "1".
-					double traceTempVariable$var71$16_4 = Math.exp((cv$proposedValue * x[i][1]));
+					double traceTempVariable$var71$16_4 = Math.exp((cv$proposedValue * state.x[i][1]));
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][0]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][0] = true;
+						scratch.guard$sample35bernoulli93$global[i][0] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[1] = true;
+						state.constrainedFlag$sample35[1] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "0".
-						double var91 = ((indicator[i][0] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
+						double var91 = ((state.indicator[i][0] / ((state.indicator[i][0] + traceTempVariable$var71$16_4) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1719,24 +1558,24 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$16_7" with its value "0".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][1]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][1] = true;
+						scratch.guard$sample35bernoulli93$global[i][1] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[1] = true;
+						state.constrainedFlag$sample35[1] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "1".
-						double var91 = ((indicator[i][1] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
+						double var91 = ((state.indicator[i][1] / ((state.indicator[i][0] + traceTempVariable$var71$16_4) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1752,24 +1591,24 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$16_7" with its value "1".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][2]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][2] = true;
+						scratch.guard$sample35bernoulli93$global[i][2] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[1] = true;
+						state.constrainedFlag$sample35[1] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "2".
-						double var91 = ((indicator[i][2] / ((indicator[i][0] + traceTempVariable$var71$16_4) + indicator[i][2])) + bias);
+						double var91 = ((state.indicator[i][2] / ((state.indicator[i][0] + traceTempVariable$var71$16_4) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1785,32 +1624,32 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$16_7" with its value "2".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 2)) {
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Substituted "j$var61" with its value "2".
-					double traceTempVariable$var74$17_4 = Math.exp((cv$proposedValue * x[i][2]));
+					double traceTempVariable$var74$17_4 = Math.exp((cv$proposedValue * state.x[i][2]));
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][0]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][0] = true;
+						scratch.guard$sample35bernoulli93$global[i][0] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[2] = true;
+						state.constrainedFlag$sample35[2] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "0".
-						double var91 = ((indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
+						double var91 = ((state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + traceTempVariable$var74$17_4)) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1826,24 +1665,24 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$17_7" with its value "0".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][1]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][1] = true;
+						scratch.guard$sample35bernoulli93$global[i][1] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[2] = true;
+						state.constrainedFlag$sample35[2] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "1".
-						double var91 = ((indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
+						double var91 = ((state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + traceTempVariable$var74$17_4)) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1859,24 +1698,24 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$17_7" with its value "1".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][2]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][2] = true;
+						scratch.guard$sample35bernoulli93$global[i][2] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[2] = true;
+						state.constrainedFlag$sample35[2] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var85" with its value "2".
-						double var91 = ((indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + traceTempVariable$var74$17_4)) + bias);
+						double var91 = ((state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + traceTempVariable$var74$17_4)) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1892,29 +1731,29 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$17_7" with its value "2".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 0)) {
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][0]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][0]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][0] = true;
+						scratch.guard$sample35bernoulli93$global[i][0] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[0] = true;
+						state.constrainedFlag$sample35[0] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var61" with its value "0".
-						double var91 = ((Math.exp((cv$proposedValue * x[i][0])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((Math.exp((cv$proposedValue * state.x[i][0])) / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1930,29 +1769,29 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$18_7" with its value "0".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 1)) {
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][1]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][1]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][1] = true;
+						scratch.guard$sample35bernoulli93$global[i][1] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[1] = true;
+						state.constrainedFlag$sample35[1] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var61" with its value "1".
-						double var91 = ((Math.exp((cv$proposedValue * x[i][1])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((Math.exp((cv$proposedValue * state.x[i][1])) / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -1968,29 +1807,29 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$18_7" with its value "1".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((var33 == 2)) {
-				for(int i = 0; i < n; i += 1) {
+				for(int i = 0; i < state.n; i += 1) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if(!guard$sample35bernoulli93$global[i][2]) {
+					if(!scratch.guard$sample35bernoulli93$global[i][2]) {
 						// The body will execute, so should not be executed again
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35bernoulli93$global[i][2] = true;
+						scratch.guard$sample35bernoulli93$global[i][2] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample35[2] = true;
+						state.constrainedFlag$sample35[2] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "j$var61" with its value "2".
-						double var91 = ((Math.exp((cv$proposedValue * x[i][2])) / ((indicator[i][0] + indicator[i][1]) + indicator[i][2])) + bias);
+						double var91 = ((Math.exp((cv$proposedValue * state.x[i][2])) / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2])) + state.bias);
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -2006,7 +1845,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// inputs.
 						// 
 						// Substituted "index$j$18_7" with its value "2".
-						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+						cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 				}
 			}
@@ -2024,7 +1863,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// Test if the probability of the sample is sufficient to keep the value. This needs
 			// to be less than or equal as otherwise if the proposed value is not possible and
 			// the random value is 0 an impossible value will be accepted.
-			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(state.RNG$))) || Double.isNaN(cv$ratio))) {
 				// If it is not revert the changes.
 				// 
 				// Set the sample value
@@ -2032,7 +1871,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// 
 				// Write out the value of the sample to a temporary variable prior to updating the
 				// intermediate variables.
-				weights[var33] = cv$originalValue;
+				state.weights[var33] = cv$originalValue;
 				
 				// Guards to ensure that indicator is only updated when there is a valid path.
 				// 
@@ -2042,97 +1881,97 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// 
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((var33 == 0)) {
-					for(int i = 0; i < n; i += 1)
+					for(int i = 0; i < state.n; i += 1)
 																		// Substituted "j$var61" with its value "0".
-						indicator[i][0] = Math.exp((weights[0] * x[i][0]));
+						state.indicator[i][0] = Math.exp((state.weights[0] * state.x[i][0]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((var33 == 1)) {
-					for(int i = 0; i < n; i += 1)
+					for(int i = 0; i < state.n; i += 1)
 																		// Substituted "j$var61" with its value "1".
-						indicator[i][1] = Math.exp((weights[1] * x[i][1]));
+						state.indicator[i][1] = Math.exp((state.weights[1] * state.x[i][1]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((var33 == 2)) {
-					for(int i = 0; i < n; i += 1)
+					for(int i = 0; i < state.n; i += 1)
 																		// Substituted "j$var61" with its value "2".
-						indicator[i][2] = Math.exp((weights[2] * x[i][2]));
+						state.indicator[i][2] = Math.exp((state.weights[2] * state.x[i][2]));
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((var33 == 0)) {
 					// Unrolled loop
-					for(int i = 0; i < n; i += 1) {
+					for(int i = 0; i < state.n; i += 1) {
 						// Unrolled loop
 						// Set the flags to false
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][0] = false;
+						scratch.guard$sample35put89$global[i][0] = false;
 						
 						// Set the flags to false
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][1] = false;
+						scratch.guard$sample35put89$global[i][1] = false;
 						
 						// Set the flags to false
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][2] = false;
+						scratch.guard$sample35put89$global[i][2] = false;
 					}
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((var33 == 1)) {
 					// Unrolled loop
-					for(int i = 0; i < n; i += 1) {
+					for(int i = 0; i < state.n; i += 1) {
 						// Unrolled loop
 						// Set the flags to false
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][0] = false;
+						scratch.guard$sample35put89$global[i][0] = false;
 						
 						// Set the flags to false
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][1] = false;
+						scratch.guard$sample35put89$global[i][1] = false;
 						
 						// Set the flags to false
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][2] = false;
+						scratch.guard$sample35put89$global[i][2] = false;
 					}
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((var33 == 2)) {
 					// Unrolled loop
-					for(int i = 0; i < n; i += 1) {
+					for(int i = 0; i < state.n; i += 1) {
 						// Unrolled loop
 						// Set the flags to false
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][0] = false;
+						scratch.guard$sample35put89$global[i][0] = false;
 						
 						// Set the flags to false
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][1] = false;
+						scratch.guard$sample35put89$global[i][1] = false;
 						
 						// Set the flags to false
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][2] = false;
+						scratch.guard$sample35put89$global[i][2] = false;
 					}
 				}
 				
@@ -2141,75 +1980,75 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((var33 == 0)) {
 					// Unrolled loop
-					for(int i = 0; i < n; i += 1)
+					for(int i = 0; i < state.n; i += 1)
 						// Set the flags to false
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][0] = false;
+						scratch.guard$sample35put89$global[i][0] = false;
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((var33 == 1)) {
 					// Unrolled loop
-					for(int i = 0; i < n; i += 1)
+					for(int i = 0; i < state.n; i += 1)
 						// Set the flags to false
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][1] = false;
+						scratch.guard$sample35put89$global[i][1] = false;
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((var33 == 2)) {
 					// Unrolled loop
-					for(int i = 0; i < n; i += 1)
+					for(int i = 0; i < state.n; i += 1)
 						// Set the flags to false
 						// 
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						guard$sample35put89$global[i][2] = false;
+						scratch.guard$sample35put89$global[i][2] = false;
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((var33 == 0)) {
 					// Unrolled loop
-					for(int i = 0; i < n; i += 1) {
+					for(int i = 0; i < state.n; i += 1) {
 						// Unrolled loop
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!guard$sample35put89$global[i][0]) {
+						if(!scratch.guard$sample35put89$global[i][0]) {
 							// The body will execute, so should not be executed again
 							// 
 																					// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							guard$sample35put89$global[i][0] = true;
+							scratch.guard$sample35put89$global[i][0] = true;
 							
 																					// Substituted "j$var85" with its value "0".
-							p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 						}
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!guard$sample35put89$global[i][1]) {
+						if(!scratch.guard$sample35put89$global[i][1]) {
 							// The body will execute, so should not be executed again
 							// 
 																					// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							guard$sample35put89$global[i][1] = true;
+							scratch.guard$sample35put89$global[i][1] = true;
 							
 																					// Substituted "j$var85" with its value "1".
-							p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 						}
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!guard$sample35put89$global[i][2]) {
+						if(!scratch.guard$sample35put89$global[i][2]) {
 							// The body will execute, so should not be executed again
 							// 
 																					// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							guard$sample35put89$global[i][2] = true;
+							scratch.guard$sample35put89$global[i][2] = true;
 							
 																					// Substituted "j$var85" with its value "2".
-							p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 						}
 					}
 				}
@@ -2217,42 +2056,42 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((var33 == 1)) {
 					// Unrolled loop
-					for(int i = 0; i < n; i += 1) {
+					for(int i = 0; i < state.n; i += 1) {
 						// Unrolled loop
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!guard$sample35put89$global[i][0]) {
+						if(!scratch.guard$sample35put89$global[i][0]) {
 							// The body will execute, so should not be executed again
 							// 
 																					// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							guard$sample35put89$global[i][0] = true;
+							scratch.guard$sample35put89$global[i][0] = true;
 							
 																					// Substituted "j$var85" with its value "0".
-							p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 						}
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!guard$sample35put89$global[i][1]) {
+						if(!scratch.guard$sample35put89$global[i][1]) {
 							// The body will execute, so should not be executed again
 							// 
 																					// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							guard$sample35put89$global[i][1] = true;
+							scratch.guard$sample35put89$global[i][1] = true;
 							
 																					// Substituted "j$var85" with its value "1".
-							p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 						}
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!guard$sample35put89$global[i][2]) {
+						if(!scratch.guard$sample35put89$global[i][2]) {
 							// The body will execute, so should not be executed again
 							// 
 																					// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							guard$sample35put89$global[i][2] = true;
+							scratch.guard$sample35put89$global[i][2] = true;
 							
 																					// Substituted "j$var85" with its value "2".
-							p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 						}
 					}
 				}
@@ -2260,42 +2099,42 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((var33 == 2)) {
 					// Unrolled loop
-					for(int i = 0; i < n; i += 1) {
+					for(int i = 0; i < state.n; i += 1) {
 						// Unrolled loop
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!guard$sample35put89$global[i][0]) {
+						if(!scratch.guard$sample35put89$global[i][0]) {
 							// The body will execute, so should not be executed again
 							// 
 																					// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							guard$sample35put89$global[i][0] = true;
+							scratch.guard$sample35put89$global[i][0] = true;
 							
 																					// Substituted "j$var85" with its value "0".
-							p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 						}
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!guard$sample35put89$global[i][1]) {
+						if(!scratch.guard$sample35put89$global[i][1]) {
 							// The body will execute, so should not be executed again
 							// 
 																					// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							guard$sample35put89$global[i][1] = true;
+							scratch.guard$sample35put89$global[i][1] = true;
 							
 																					// Substituted "j$var85" with its value "1".
-							p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 						}
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!guard$sample35put89$global[i][2]) {
+						if(!scratch.guard$sample35put89$global[i][2]) {
 							// The body will execute, so should not be executed again
 							// 
 																					// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							guard$sample35put89$global[i][2] = true;
+							scratch.guard$sample35put89$global[i][2] = true;
 							
 																					// Substituted "j$var85" with its value "2".
-							p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 						}
 					}
 				}
@@ -2303,18 +2142,18 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((var33 == 0)) {
 					// Unrolled loop
-					for(int i = 0; i < n; i += 1) {
+					for(int i = 0; i < state.n; i += 1) {
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						if(!guard$sample35put89$global[i][0]) {
+						if(!scratch.guard$sample35put89$global[i][0]) {
 							// The body will execute, so should not be executed again
 							// 
 																					// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							guard$sample35put89$global[i][0] = true;
+							scratch.guard$sample35put89$global[i][0] = true;
 							
 																					// Substituted "j$var85" with its value "0".
-							p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 						}
 					}
 				}
@@ -2322,18 +2161,18 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((var33 == 1)) {
 					// Unrolled loop
-					for(int i = 0; i < n; i += 1) {
+					for(int i = 0; i < state.n; i += 1) {
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						if(!guard$sample35put89$global[i][1]) {
+						if(!scratch.guard$sample35put89$global[i][1]) {
 							// The body will execute, so should not be executed again
 							// 
 																					// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							guard$sample35put89$global[i][1] = true;
+							scratch.guard$sample35put89$global[i][1] = true;
 							
 																					// Substituted "j$var85" with its value "1".
-							p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 						}
 					}
 				}
@@ -2341,18 +2180,18 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((var33 == 2)) {
 					// Unrolled loop
-					for(int i = 0; i < n; i += 1) {
+					for(int i = 0; i < state.n; i += 1) {
 																		// Guard to check that at most one copy of the code is executed for a given random
 						// variable instance.
-						if(!guard$sample35put89$global[i][2]) {
+						if(!scratch.guard$sample35put89$global[i][2]) {
 							// The body will execute, so should not be executed again
 							// 
 																					// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							guard$sample35put89$global[i][2] = true;
+							scratch.guard$sample35put89$global[i][2] = true;
 							
 																					// Substituted "j$var85" with its value "2".
-							p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+							state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 						}
 					}
 				}
@@ -2363,10 +2202,10 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 42 drawn from Gaussian 40. Inference was performed using Metropolis-Hastings.
 	private final void inferSample42() {
-		constrainedFlag$sample42 = false;
+		state.constrainedFlag$sample42 = false;
 		
 		// The original value of the sample
-		double cv$originalValue = bias;
+		double cv$originalValue = state.bias;
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -2376,7 +2215,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		// Calculate a proposed variance.
 		// 
 						// The original value of the sample
-		double cv$var = ((bias * bias) * 0.010000000000000002);
+		double cv$var = ((state.bias * state.bias) * 0.010000000000000002);
 		
 		// Ensure the variance is at least 0.01
 		if((cv$var < 0.010000000000000002))
@@ -2385,7 +2224,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		// The proposed new value for the sample
 		// 
 		// The original value of the sample
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + bias);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + state.bias);
 		{
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
@@ -2393,14 +2232,14 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// Set the current value to the current state of the tree.
 			// 
 			// The original value of the sample
-			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((bias / 3.1622776601683795)) - 1.151292546497023);
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((state.bias / 3.1622776601683795)) - 1.151292546497023);
 			
 			// Processing random variable 92.
-			for(int i = 0; i < n; i += 1) {
+			for(int i = 0; i < state.n; i += 1) {
 				// Unrolled loop
 				{
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample42 = true;
+					state.constrainedFlag$sample42 = true;
 					
 					// Constructing a random variable input for use later.
 					// 
@@ -2409,7 +2248,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 					// Set the current value to the current state of the tree.
 					// 
 					// The original value of the sample
-					double var91 = (p[i][0] + bias);
+					double var91 = (state.p[i][0] + state.bias);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -2425,11 +2264,11 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 					// inputs.
 					// 
 					// Substituted "j$var85" with its value "0".
-					cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				{
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample42 = true;
+					state.constrainedFlag$sample42 = true;
 					
 					// Constructing a random variable input for use later.
 					// 
@@ -2438,7 +2277,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 					// Set the current value to the current state of the tree.
 					// 
 					// The original value of the sample
-					double var91 = (p[i][1] + bias);
+					double var91 = (state.p[i][1] + state.bias);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -2454,11 +2293,11 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 					// inputs.
 					// 
 					// Substituted "j$var85" with its value "1".
-					cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample42 = true;
+				state.constrainedFlag$sample42 = true;
 				
 				// Constructing a random variable input for use later.
 				// 
@@ -2467,7 +2306,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// Set the current value to the current state of the tree.
 				// 
 				// The original value of the sample
-				double var91 = (p[i][2] + bias);
+				double var91 = (state.p[i][2] + state.bias);
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -2483,7 +2322,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// inputs.
 				// 
 				// Substituted "j$var85" with its value "2".
-				cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Initialize a log space accumulator to take the product of all the distribution
@@ -2496,27 +2335,27 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(constrainedFlag$sample42) {
+		if(state.constrainedFlag$sample42) {
 			// Update Sample and intermediate values
 			// 
 			// Write out the new value of the sample.
-			bias = cv$proposedValue;
+			state.bias = cv$proposedValue;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
 			
 			// Processing random variable 92.
-			for(int i = 0; i < n; i += 1) {
+			for(int i = 0; i < state.n; i += 1) {
 				// Unrolled loop
 				{
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample42 = true;
+					state.constrainedFlag$sample42 = true;
 					
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "j$var85" with its value "0".
-					double var91 = (p[i][0] + cv$proposedValue);
+					double var91 = (state.p[i][0] + cv$proposedValue);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -2532,16 +2371,16 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 					// inputs.
 					// 
 					// Substituted "j$var85" with its value "0".
-					cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				{
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample42 = true;
+					state.constrainedFlag$sample42 = true;
 					
 					// Constructing a random variable input for use later.
 					// 
 					// Substituted "j$var85" with its value "1".
-					double var91 = (p[i][1] + cv$proposedValue);
+					double var91 = (state.p[i][1] + cv$proposedValue);
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -2557,16 +2396,16 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 					// inputs.
 					// 
 					// Substituted "j$var85" with its value "1".
-					cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 				
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample42 = true;
+				state.constrainedFlag$sample42 = true;
 				
 				// Constructing a random variable input for use later.
 				// 
 				// Substituted "j$var85" with its value "2".
-				double var91 = (p[i][2] + cv$proposedValue);
+				double var91 = (state.p[i][2] + cv$proposedValue);
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -2582,7 +2421,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// inputs.
 				// 
 				// Substituted "j$var85" with its value "2".
-				cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// The probability ration for the proposed value and the current value.
@@ -2598,13 +2437,13 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// Test if the probability of the sample is sufficient to keep the value. This needs
 			// to be less than or equal as otherwise if the proposed value is not possible and
 			// the random value is 0 an impossible value will be accepted.
-			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(state.RNG$))) || Double.isNaN(cv$ratio)))
 				// If it is not revert the changes.
 				// 
 				// Set the sample value
 				// 
 				// Write out the new value of the sample.
-				bias = cv$originalValue;
+				state.bias = cv$originalValue;
 		}
 	}
 
@@ -2613,7 +2452,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	private final void logProbabilityValue$sample35() {
 		// Determine if we need to calculate the values for sample task 35 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample35) {
+		if(!state.fixedProbFlag$sample35) {
 			// Generating probabilities for sample task
 			// This value is not used before it is set again, so removing the value declaration.
 			// 
@@ -2623,7 +2462,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[0] / 3.1622776601683795)) - 1.151292546497023);
+				double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((state.weights[0] / 3.1622776601683795)) - 1.151292546497023);
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -2643,13 +2482,13 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// Add the probability of this distribution configuration to the accumulator.
 				// 
 				// An accumulator for the distributed probability space covered.
-				logProbability$sample35[0] = cv$weightedProbability;
+				state.logProbability$sample35[0] = cv$weightedProbability;
 			}
 			{
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[1] / 3.1622776601683795)) - 1.151292546497023);
+				double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((state.weights[1] / 3.1622776601683795)) - 1.151292546497023);
 				
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
@@ -2667,13 +2506,13 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// Add the probability of this distribution configuration to the accumulator.
 				// 
 				// An accumulator for the distributed probability space covered.
-				logProbability$sample35[1] = cv$weightedProbability;
+				state.logProbability$sample35[1] = cv$weightedProbability;
 			}
 			
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((weights[2] / 3.1622776601683795)) - 1.151292546497023);
+			double cv$weightedProbability = (DistributionSampling.logProbabilityGaussian((state.weights[2] / 3.1622776601683795)) - 1.151292546497023);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -2691,7 +2530,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// Add the probability of this distribution configuration to the accumulator.
 			// 
 			// An accumulator for the distributed probability space covered.
-			logProbability$sample35[2] = cv$weightedProbability;
+			state.logProbability$sample35[2] = cv$weightedProbability;
 			
 			// Update the variable probability
 			// 
@@ -2699,7 +2538,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$weights = (logProbability$weights + cv$sampleAccumulator);
+			state.logProbability$weights = (state.logProbability$weights + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -2707,20 +2546,20 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample35)
+			if(state.fixedFlag$sample35)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample35 = fixedFlag$sample35;
+			state.fixedProbFlag$sample35 = state.fixedFlag$sample35;
 		} else {
 			// Using cached values.
 			// 
@@ -2733,18 +2572,18 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// Variable declaration of cv$rvAccumulator moved.
 			// Declaration comment was:
 			// This value is not used before it is set again, so removing the value declaration.
-			double cv$rvAccumulator = ((logProbability$sample35[0] + logProbability$sample35[1]) + logProbability$sample35[2]);
+			double cv$rvAccumulator = ((state.logProbability$sample35[0] + state.logProbability$sample35[1]) + state.logProbability$sample35[2]);
 			
 			// Update the variable probability
-			logProbability$weights = (logProbability$weights + cv$rvAccumulator);
+			state.logProbability$weights = (state.logProbability$weights + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$rvAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample35)
-				logProbability$$evidence = (logProbability$$evidence + cv$rvAccumulator);
+			if(state.fixedFlag$sample35)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$rvAccumulator);
 		}
 	}
 
@@ -2753,7 +2592,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	private final void logProbabilityValue$sample42() {
 		// Determine if we need to calculate the values for sample task 42 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample42) {
+		if(!state.fixedProbFlag$sample42) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -2778,10 +2617,10 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((bias / 3.1622776601683795)) - 1.151292546497023);
+			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((state.bias / 3.1622776601683795)) - 1.151292546497023);
 			
 			// Store the sample task probability
-			logProbability$bias = cv$distributionAccumulator;
+			state.logProbability$bias = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -2797,11 +2636,11 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample42)
+			if(state.fixedFlag$sample42)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -2814,11 +2653,11 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample42 = fixedFlag$sample42;
+			state.fixedProbFlag$sample42 = state.fixedFlag$sample42;
 		} else {
 			// Using cached values.
 			// 
@@ -2827,13 +2666,13 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$bias);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$bias);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample42)
+			if(state.fixedFlag$sample42)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$bias);
 		}
 	}
 
@@ -2842,18 +2681,18 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	private final void logProbabilityValue$sample94() {
 		// Determine if we need to calculate the values for sample task 94 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample94) {
+		if(!state.fixedProbFlag$sample94) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < n; i += 1) {
+			for(int i = 0; i < state.n; i += 1) {
 				// Unrolled loop
 				{
 					// Substituted "j$var85" with its value "0".
-					double var91 = (p[i][0] + bias);
+					double var91 = (state.p[i][0] + state.bias);
 					
 					// Add the probability of this sample task to the sample task accumulator.
 					// 
@@ -2868,11 +2707,11 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 					// The sample value to calculate the probability of generating
 					// 
 					// Substituted "j$var85" with its value "0".
-					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
+					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][0]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
 				}
 				{
 					// Substituted "j$var85" with its value "1".
-					double var91 = (p[i][1] + bias);
+					double var91 = (state.p[i][1] + state.bias);
 					
 					// Add the probability of this sample task to the sample task accumulator.
 					// 
@@ -2887,11 +2726,11 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 					// The sample value to calculate the probability of generating
 					// 
 					// Substituted "j$var85" with its value "1".
-					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
+					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][1]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
 				}
 				
 				// Substituted "j$var85" with its value "2".
-				double var91 = (p[i][2] + bias);
+				double var91 = (state.p[i][2] + state.bias);
 				
 				// Record that the sample was reached.
 				cv$sampleReached = true;
@@ -2909,7 +2748,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// The sample value to calculate the probability of generating
 				// 
 				// Substituted "j$var85" with its value "2".
-				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][2]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
@@ -2921,7 +2760,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$var93 = cv$sampleAccumulator;
+				state.logProbability$var93 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -2929,7 +2768,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$y = (logProbability$y + cv$sampleAccumulator);
+			state.logProbability$y = (state.logProbability$y + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -2937,17 +2776,17 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample94 = (fixedFlag$sample35 && fixedFlag$sample42);
+			state.fixedProbFlag$sample94 = (state.fixedFlag$sample35 && state.fixedFlag$sample42);
 		} else {
 			// Using cached values.
 			// 
@@ -2956,123 +2795,60 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$y = (logProbability$y + logProbability$var93);
+			state.logProbability$y = (state.logProbability$y + state.logProbability$var93);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var93);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var93);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var93);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var93);
 		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// Constructor for y
-		y = new boolean[x.length][];
-		for(int var15 = 0; var15 < x.length; var15 += 1)
-			y[var15] = new boolean[3];
-		
-		// If weights has not been set already allocate space.
-		if(!fixedFlag$sample35)
-			// Constructor for weights
-			weights = new double[3];
-		
-		// Constructor for indicator
-		indicator = new double[x.length][];
-		for(int i = 0; i < x.length; i += 1)
-			indicator[i] = new double[3];
-		
-		// Constructor for p
-		p = new double[x.length][];
-		for(int i = 0; i < x.length; i += 1)
-			p[i] = new double[3];
-		
-		// Constructor for constrainedFlag$sample35
-		constrainedFlag$sample35 = new boolean[3];
-		
-		// Constructor for logProbability$sample35
-		logProbability$sample35 = new double[3];
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for guard$sample35put89$global
-		{
-			// Calculate the largest index of j that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_j$var85 = 0;
-			if((0 < x.length))
-				cv$max_j$var85 = 3;
-			
-			// Allocation of guard$sample35put89$global for single threaded execution
-			guard$sample35put89$global = new boolean[x.length][cv$max_j$var85];
-		}
-		
-		// Constructor for guard$sample35bernoulli93$global
-		// 
-		// Calculate the largest index of j that is possible and allocate an array to hold
-		// the guard for each of these.
-		int cv$max_j$var85 = 0;
-		if((0 < x.length))
-			cv$max_j$var85 = 3;
-		
-		// Allocation of guard$sample35bernoulli93$global for single threaded execution
-		guard$sample35bernoulli93$global = new boolean[x.length][cv$max_j$var85];
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample35) {
-			weights[0] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-			weights[1] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-			weights[2] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		if(!state.fixedFlag$sample35) {
+			state.weights[0] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+			state.weights[1] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+			state.weights[2] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
 		}
-		if(!fixedFlag$sample42)
-			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		for(int i = 0; i < n; i += 1) {
+		if(!state.fixedFlag$sample42)
+			state.bias = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+		for(int i = 0; i < state.n; i += 1) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample35) {
+			if(!state.fixedFlag$sample35) {
 												// Substituted "j$var61" with its value "0".
-				indicator[i][0] = Math.exp((weights[0] * x[i][0]));
+				state.indicator[i][0] = Math.exp((state.weights[0] * state.x[i][0]));
 				
 												// Substituted "j$var61" with its value "1".
-				indicator[i][1] = Math.exp((weights[1] * x[i][1]));
+				state.indicator[i][1] = Math.exp((state.weights[1] * state.x[i][1]));
 				
 												// Substituted "j$var61" with its value "2".
-				indicator[i][2] = Math.exp((weights[2] * x[i][2]));
+				state.indicator[i][2] = Math.exp((state.weights[2] * state.x[i][2]));
 			}
-			boolean[] var89 = y[i];
-			if(!fixedFlag$sample35)
+			boolean[] var89 = state.y[i];
+			if(!state.fixedFlag$sample35)
 												// Substituted "j$var85" with its value "0".
-				p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 			
 									// Substituted "j$var85" with its value "0".
-			var89[0] = DistributionSampling.sampleBernoulli(RNG$, (p[i][0] + bias));
-			if(!fixedFlag$sample35)
+			var89[0] = DistributionSampling.sampleBernoulli(state.RNG$, (state.p[i][0] + state.bias));
+			if(!state.fixedFlag$sample35)
 												// Substituted "j$var85" with its value "1".
-				p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 			
 									// Substituted "j$var85" with its value "1".
-			var89[1] = DistributionSampling.sampleBernoulli(RNG$, (p[i][1] + bias));
-			if(!fixedFlag$sample35)
+			var89[1] = DistributionSampling.sampleBernoulli(state.RNG$, (state.p[i][1] + state.bias));
+			if(!state.fixedFlag$sample35)
 												// Substituted "j$var85" with its value "2".
-				p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 			
 									// Substituted "j$var85" with its value "2".
-			var89[2] = DistributionSampling.sampleBernoulli(RNG$, (p[i][2] + bias));
+			var89[2] = DistributionSampling.sampleBernoulli(state.RNG$, (state.p[i][2] + state.bias));
 		}
 	}
 
@@ -3082,31 +2858,31 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample35) {
-			weights[0] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-			weights[1] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-			weights[2] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		if(!state.fixedFlag$sample35) {
+			state.weights[0] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+			state.weights[1] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+			state.weights[2] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
 		}
-		if(!fixedFlag$sample42)
-			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		for(int i = 0; i < n; i += 1) {
+		if(!state.fixedFlag$sample42)
+			state.bias = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+		for(int i = 0; i < state.n; i += 1) {
 									// Substituted "j$var61" with its value "0".
-			indicator[i][0] = Math.exp((weights[0] * x[i][0]));
+			state.indicator[i][0] = Math.exp((state.weights[0] * state.x[i][0]));
 			
 									// Substituted "j$var61" with its value "1".
-			indicator[i][1] = Math.exp((weights[1] * x[i][1]));
+			state.indicator[i][1] = Math.exp((state.weights[1] * state.x[i][1]));
 			
 									// Substituted "j$var61" with its value "2".
-			indicator[i][2] = Math.exp((weights[2] * x[i][2]));
+			state.indicator[i][2] = Math.exp((state.weights[2] * state.x[i][2]));
 			
 									// Substituted "j$var85" with its value "0".
-			p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 			
 									// Substituted "j$var85" with its value "1".
-			p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 			
 									// Substituted "j$var85" with its value "2".
-			p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 		}
 	}
 
@@ -3115,41 +2891,41 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	@Override
 	public final void forwardGenerationPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample35) {
-			weights[0] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-			weights[1] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-			weights[2] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		if(!state.fixedFlag$sample35) {
+			state.weights[0] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+			state.weights[1] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+			state.weights[2] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
 		}
-		if(!fixedFlag$sample42)
-			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		for(int i = 0; i < n; i += 1) {
+		if(!state.fixedFlag$sample42)
+			state.bias = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+		for(int i = 0; i < state.n; i += 1) {
 									// Substituted "j$var61" with its value "0".
-			indicator[i][0] = Math.exp((weights[0] * x[i][0]));
+			state.indicator[i][0] = Math.exp((state.weights[0] * state.x[i][0]));
 			
 									// Substituted "j$var61" with its value "1".
-			indicator[i][1] = Math.exp((weights[1] * x[i][1]));
+			state.indicator[i][1] = Math.exp((state.weights[1] * state.x[i][1]));
 			
 									// Substituted "j$var61" with its value "2".
-			indicator[i][2] = Math.exp((weights[2] * x[i][2]));
-			boolean[] var89 = y[i];
+			state.indicator[i][2] = Math.exp((state.weights[2] * state.x[i][2]));
+			boolean[] var89 = state.y[i];
 			
 									// Substituted "j$var85" with its value "0".
-			p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 			
 									// Substituted "j$var85" with its value "0".
-			var89[0] = DistributionSampling.sampleBernoulli(RNG$, (p[i][0] + bias));
+			var89[0] = DistributionSampling.sampleBernoulli(state.RNG$, (state.p[i][0] + state.bias));
 			
 									// Substituted "j$var85" with its value "1".
-			p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 			
 									// Substituted "j$var85" with its value "1".
-			var89[1] = DistributionSampling.sampleBernoulli(RNG$, (p[i][1] + bias));
+			var89[1] = DistributionSampling.sampleBernoulli(state.RNG$, (state.p[i][1] + state.bias));
 			
 									// Substituted "j$var85" with its value "2".
-			p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 			
 									// Substituted "j$var85" with its value "2".
-			var89[2] = DistributionSampling.sampleBernoulli(RNG$, (p[i][2] + bias));
+			var89[2] = DistributionSampling.sampleBernoulli(state.RNG$, (state.p[i][2] + state.bias));
 		}
 	}
 
@@ -3158,34 +2934,34 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample35) {
-			weights[0] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-			weights[1] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-			weights[2] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		if(!state.fixedFlag$sample35) {
+			state.weights[0] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+			state.weights[1] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+			state.weights[2] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
 		}
-		if(!fixedFlag$sample42)
-			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		if(!state.fixedFlag$sample42)
+			state.bias = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample35) {
-			for(int i = 0; i < n; i += 1) {
+		if(!state.fixedFlag$sample35) {
+			for(int i = 0; i < state.n; i += 1) {
 												// Substituted "j$var61" with its value "0".
-				indicator[i][0] = Math.exp((weights[0] * x[i][0]));
+				state.indicator[i][0] = Math.exp((state.weights[0] * state.x[i][0]));
 				
 												// Substituted "j$var61" with its value "1".
-				indicator[i][1] = Math.exp((weights[1] * x[i][1]));
+				state.indicator[i][1] = Math.exp((state.weights[1] * state.x[i][1]));
 				
 												// Substituted "j$var61" with its value "2".
-				indicator[i][2] = Math.exp((weights[2] * x[i][2]));
+				state.indicator[i][2] = Math.exp((state.weights[2] * state.x[i][2]));
 				
 												// Substituted "j$var85" with its value "0".
-				p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 				
 												// Substituted "j$var85" with its value "1".
-				p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 				
 												// Substituted "j$var85" with its value "2".
-				p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+				state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 			}
 		}
 	}
@@ -3196,31 +2972,31 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample35) {
-			weights[0] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-			weights[1] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-			weights[2] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		if(!state.fixedFlag$sample35) {
+			state.weights[0] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+			state.weights[1] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+			state.weights[2] = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
 		}
-		if(!fixedFlag$sample42)
-			bias = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
-		for(int i = 0; i < n; i += 1) {
+		if(!state.fixedFlag$sample42)
+			state.bias = (DistributionSampling.sampleGaussian(state.RNG$) * 3.1622776601683795);
+		for(int i = 0; i < state.n; i += 1) {
 									// Substituted "j$var61" with its value "0".
-			indicator[i][0] = Math.exp((weights[0] * x[i][0]));
+			state.indicator[i][0] = Math.exp((state.weights[0] * state.x[i][0]));
 			
 									// Substituted "j$var61" with its value "1".
-			indicator[i][1] = Math.exp((weights[1] * x[i][1]));
+			state.indicator[i][1] = Math.exp((state.weights[1] * state.x[i][1]));
 			
 									// Substituted "j$var61" with its value "2".
-			indicator[i][2] = Math.exp((weights[2] * x[i][2]));
+			state.indicator[i][2] = Math.exp((state.weights[2] * state.x[i][2]));
 			
 									// Substituted "j$var85" with its value "0".
-			p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 			
 									// Substituted "j$var85" with its value "1".
-			p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 			
 									// Substituted "j$var85" with its value "2".
-			p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 		}
 	}
 
@@ -3228,23 +3004,23 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
+		if(state.system$gibbsForward) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample35) {
+			if(!state.fixedFlag$sample35) {
 				inferSample35(0);
 				inferSample35(1);
 				inferSample35(2);
 			}
-			if(!fixedFlag$sample42)
+			if(!state.fixedFlag$sample42)
 				inferSample42();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample42)
+			if(!state.fixedFlag$sample42)
 				inferSample42();
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample35) {
+			if(!state.fixedFlag$sample35) {
 				inferSample35(2);
 				inferSample35(1);
 				inferSample35(0);
@@ -3252,20 +3028,20 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
+		state.system$gibbsForward = !state.system$gibbsForward;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!constrainedFlag$sample35[0])
+		if(!state.constrainedFlag$sample35[0])
 			drawValueSample35(0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!constrainedFlag$sample35[1])
+		if(!state.constrainedFlag$sample35[1])
 			drawValueSample35(1);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!constrainedFlag$sample35[2])
+		if(!state.constrainedFlag$sample35[2])
 			drawValueSample35(2);
-		if(!constrainedFlag$sample42)
+		if(!state.constrainedFlag$sample42)
 			drawValueSample42();
 	}
 
@@ -3277,31 +3053,31 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$weights = 0.0;
-		if(!fixedProbFlag$sample35) {
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$weights = 0.0;
+		if(!state.fixedProbFlag$sample35) {
 			// Unrolled loop
-			logProbability$sample35[0] = Double.NaN;
-			logProbability$sample35[1] = Double.NaN;
-			logProbability$sample35[2] = Double.NaN;
+			state.logProbability$sample35[0] = Double.NaN;
+			state.logProbability$sample35[1] = Double.NaN;
+			state.logProbability$sample35[2] = Double.NaN;
 		}
-		if(!fixedProbFlag$sample42)
-			logProbability$bias = Double.NaN;
-		logProbability$y = 0.0;
-		if(!fixedProbFlag$sample94)
-			logProbability$var93 = Double.NaN;
+		if(!state.fixedProbFlag$sample42)
+			state.logProbability$bias = Double.NaN;
+		state.logProbability$y = 0.0;
+		if(!state.fixedProbFlag$sample94)
+			state.logProbability$var93 = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		n = x.length;
+		state.n = state.x.length;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample35$1 = 0; index$constrainedFlag$sample35$1 < constrainedFlag$sample35.length; index$constrainedFlag$sample35$1 += 1)
-			constrainedFlag$sample35[index$constrainedFlag$sample35$1] = true;
+		for(int index$constrainedFlag$sample35$1 = 0; index$constrainedFlag$sample35$1 < state.constrainedFlag$sample35.length; index$constrainedFlag$sample35$1 += 1)
+			state.constrainedFlag$sample35[index$constrainedFlag$sample35$1] = true;
 	}
 
 	// Construct the evidence probabilities.
@@ -3311,9 +3087,9 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample35)
+		if(state.fixedFlag$sample35)
 			logProbabilityValue$sample35();
-		if(fixedFlag$sample42)
+		if(state.fixedFlag$sample42)
 			logProbabilityValue$sample42();
 		logProbabilityValue$sample94();
 	}
@@ -3363,10 +3139,10 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
-		int cv$length1 = y.length;
+		int cv$length1 = state.y.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
-			boolean[] cv$source2 = yMeasured[cv$index1];
-			boolean[] cv$target2 = y[cv$index1];
+			boolean[] cv$source2 = state.yMeasured[cv$index1];
+			boolean[] cv$target2 = state.y[cv$index1];
 			int cv$length2 = cv$target2.length;
 			for(int cv$index2 = 0; cv$index2 < cv$length2; cv$index2 += 1)
 				cv$target2[cv$index2] = cv$source2[cv$index2];
@@ -3379,24 +3155,24 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		for(int i = 0; i < n; i += 1) {
+		for(int i = 0; i < state.n; i += 1) {
 									// Substituted "j$var61" with its value "0".
-			indicator[i][0] = Math.exp((weights[0] * x[i][0]));
+			state.indicator[i][0] = Math.exp((state.weights[0] * state.x[i][0]));
 			
 									// Substituted "j$var61" with its value "1".
-			indicator[i][1] = Math.exp((weights[1] * x[i][1]));
+			state.indicator[i][1] = Math.exp((state.weights[1] * state.x[i][1]));
 			
 									// Substituted "j$var61" with its value "2".
-			indicator[i][2] = Math.exp((weights[2] * x[i][2]));
+			state.indicator[i][2] = Math.exp((state.weights[2] * state.x[i][2]));
 			
 									// Substituted "j$var85" with its value "0".
-			p[i][0] = (indicator[i][0] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			state.p[i][0] = (state.indicator[i][0] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 			
 									// Substituted "j$var85" with its value "1".
-			p[i][1] = (indicator[i][1] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			state.p[i][1] = (state.indicator[i][1] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 			
 									// Substituted "j$var85" with its value "2".
-			p[i][2] = (indicator[i][2] / ((indicator[i][0] + indicator[i][1]) + indicator[i][2]));
+			state.p[i][2] = (state.indicator[i][2] / ((state.indicator[i][0] + state.indicator[i][1]) + state.indicator[i][2]));
 		}
 	}
 

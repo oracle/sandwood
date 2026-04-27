@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,32 +16,275 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model DiscreteChoiceRandCoeff This is the class
  * that all user interactions with the model should occur through.
  */
-public final class DiscreteChoiceRandCoeff extends Model {
-    private DiscreteChoiceRandCoeff$CoreInterface system$c = new DiscreteChoiceRandCoeff$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class DiscreteChoiceRandCoeff extends Model<DiscreteChoiceRandCoeff.State> {
+	final class State extends CoreModelState {
+int[] ObsChoices;
+		int[][] Prices;
+		double b;
+		double[] beta;
+		int[] choices;
+		boolean[] constrainedFlag$sample21;
+		boolean constrainedFlag$sample28 = true;
+		boolean constrainedFlag$sample34 = true;
+		boolean[] constrainedFlag$sample47;
+		double[][] exped;
+		boolean fixedFlag$sample21 = false;
+		boolean fixedFlag$sample28 = false;
+		boolean fixedFlag$sample34 = false;
+		boolean fixedFlag$sample47 = false;
+		boolean fixedProbFlag$sample103 = false;
+		boolean fixedProbFlag$sample21 = false;
+		boolean fixedProbFlag$sample28 = false;
+		boolean fixedProbFlag$sample34 = false;
+		boolean fixedProbFlag$sample47 = false;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$b;
+		double logProbability$beta;
+		double logProbability$choices;
+		double logProbability$prob;
+		double[] logProbability$sample103;
+		double[] logProbability$sample21;
+		double[] logProbability$sample47;
+		double logProbability$sigma;
+		double logProbability$ut;
+		int noObs;
+		int noProducts;
+		double[][] prob;
+		double sigma;
+		boolean system$gibbsForward = true;
+		double[] ut;
+
+		@Override
+		public final void allocate() {
+			if(!fixedFlag$sample21) {
+				{
+					ut = new double[noProducts];
+				}
+			}
+			if(!fixedFlag$sample47) {
+				{
+					beta = new double[noObs];
+				}
+			}
+			{
+				choices = new int[noObs];
+			}
+			{
+				exped = new double[((((noObs - 1) - 0) / 1) + 1)][];
+				for(int i = 0; i < noObs; i += 1)
+					exped[((i - 0) / 1)] = new double[noProducts];
+			}
+			{
+				prob = new double[((((noObs - 1) - 0) / 1) + 1)][];
+				for(int i = 0; i < noObs; i += 1)
+					prob[((i - 0) / 1)] = new double[noProducts];
+			}
+			{
+				constrainedFlag$sample47 = new boolean[((((noObs - 1) - 0) / 1) + 1)];
+			}
+			{
+				constrainedFlag$sample21 = new boolean[((((noProducts - 1) - 0) / 1) + 1)];
+			}
+			{
+				logProbability$sample21 = new double[((((noProducts - 1) - 0) / 1) + 1)];
+			}
+			{
+				logProbability$sample47 = new double[((((noObs - 1) - 0) / 1) + 1)];
+			}
+			{
+				logProbability$sample103 = new double[((((noObs - 1) - 0) / 1) + 1)];
+			}
+		}
+
+		final int[] get$ObsChoices() {
+			return ObsChoices;
+		}
+
+		final void set$ObsChoices(int[] cv$value, boolean allocated$) {
+			ObsChoices = cv$value;
+		}
+
+		final int[][] get$Prices() {
+			return Prices;
+		}
+
+		final void set$Prices(int[][] cv$value, boolean allocated$) {
+			Prices = cv$value;
+		}
+
+		final double get$b() {
+			return b;
+		}
+
+		final void set$b(double cv$value, boolean allocated$) {
+			b = cv$value;
+			fixedProbFlag$sample28 = false;
+			fixedProbFlag$sample47 = false;
+		}
+
+		final double[] get$beta() {
+			return beta;
+		}
+
+		final void set$beta(double[] cv$value, boolean allocated$) {
+			beta = cv$value;
+			fixedProbFlag$sample47 = false;
+			fixedProbFlag$sample103 = false;
+		}
+
+		final int[] get$choices() {
+			return choices;
+		}
+
+		final boolean get$fixedFlag$sample21() {
+			return fixedFlag$sample21;
+		}
+
+		final void set$fixedFlag$sample21(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample21 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample21$1 = 0; index$constrainedFlag$sample21$1 < constrainedFlag$sample21.length; index$constrainedFlag$sample21$1 += 1)
+					constrainedFlag$sample21[index$constrainedFlag$sample21$1] = true;
+			}
+			fixedProbFlag$sample21 = (fixedFlag$sample21 && fixedProbFlag$sample21);
+			fixedProbFlag$sample103 = (fixedFlag$sample21 && fixedProbFlag$sample103);
+		}
+
+		final boolean get$fixedFlag$sample28() {
+			return fixedFlag$sample28;
+		}
+
+		final void set$fixedFlag$sample28(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample28 = cv$value;
+			constrainedFlag$sample28 = (fixedFlag$sample28 || constrainedFlag$sample28);
+			fixedProbFlag$sample28 = (fixedFlag$sample28 && fixedProbFlag$sample28);
+			fixedProbFlag$sample47 = (fixedFlag$sample28 && fixedProbFlag$sample47);
+		}
+
+		final boolean get$fixedFlag$sample34() {
+			return fixedFlag$sample34;
+		}
+
+		final void set$fixedFlag$sample34(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample34 = cv$value;
+			constrainedFlag$sample34 = (fixedFlag$sample34 || constrainedFlag$sample34);
+			fixedProbFlag$sample34 = (fixedFlag$sample34 && fixedProbFlag$sample34);
+			fixedProbFlag$sample47 = (fixedFlag$sample34 && fixedProbFlag$sample47);
+		}
+
+		final boolean get$fixedFlag$sample47() {
+			return fixedFlag$sample47;
+		}
+
+		final void set$fixedFlag$sample47(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample47 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
+					constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
+			}
+			fixedProbFlag$sample47 = (fixedFlag$sample47 && fixedProbFlag$sample47);
+			fixedProbFlag$sample103 = (fixedFlag$sample47 && fixedProbFlag$sample103);
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$b() {
+			return logProbability$b;
+		}
+
+		final double get$logProbability$beta() {
+			return logProbability$beta;
+		}
+
+		final double get$logProbability$choices() {
+			return logProbability$choices;
+		}
+
+		final double get$logProbability$prob() {
+			return logProbability$prob;
+		}
+
+		final double get$logProbability$sigma() {
+			return logProbability$sigma;
+		}
+
+		final double get$logProbability$ut() {
+			return logProbability$ut;
+		}
+
+		final int get$noObs() {
+			return noObs;
+		}
+
+		final void set$noObs(int cv$value, boolean allocated$) {
+			noObs = cv$value;
+		}
+
+		final int get$noProducts() {
+			return noProducts;
+		}
+
+		final void set$noProducts(int cv$value, boolean allocated$) {
+			noProducts = cv$value;
+		}
+
+		final double[][] get$prob() {
+			return prob;
+		}
+
+		final double get$sigma() {
+			return sigma;
+		}
+
+		final void set$sigma(double cv$value, boolean allocated$) {
+			sigma = cv$value;
+			fixedProbFlag$sample34 = false;
+			fixedProbFlag$sample47 = false;
+		}
+
+		final double[] get$ut() {
+			return ut;
+		}
+
+		final void set$ut(double[] cv$value, boolean allocated$) {
+			ut = cv$value;
+			fixedProbFlag$sample21 = false;
+			fixedProbFlag$sample103 = false;
+		}
+	}
 
     private final ComputedDoubleInternal $b = new ComputedDoubleInternal(this, "b", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$b(); }
+        public double getValue() { return state.get$b(); }
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$b(value, allocated);
+            state.set$b(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$b(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$b(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample28(fixed, allocated);
+                state.set$fixedFlag$sample28(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample28())
+            if(state.get$fixedFlag$sample28())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -51,27 +296,27 @@ public final class DiscreteChoiceRandCoeff extends Model {
 
     private final ComputedDoubleArrayInternal $beta = new ComputedDoubleArrayInternal(this, "beta", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$beta(); }
+        public double[] getValue() { return state.get$beta(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$beta(value, allocated);
+            state.set$beta(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$beta(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$beta(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample47(fixed, allocated);
+                state.set$fixedFlag$sample47(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample47())
+            if(state.get$fixedFlag$sample47())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -83,7 +328,7 @@ public final class DiscreteChoiceRandCoeff extends Model {
 
     private final ComputedIntegerArrayInternal $choices = new ComputedIntegerArrayInternal(this, "choices", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int[] getValue() { return system$c.get$choices(); }
+        public int[] getValue() { return state.get$choices(); }
 
         @Override
         protected void setValueInternal(int[] value) {}
@@ -94,7 +339,7 @@ public final class DiscreteChoiceRandCoeff extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$choices(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$choices(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -112,7 +357,7 @@ public final class DiscreteChoiceRandCoeff extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $prob = new ComputedObjectArrayInternal<double[]>(this, "prob", false, false, false, ProbabilityType.SKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        public double[][] getValue() { return system$c.get$prob(); }
+        public double[][] getValue() { return state.get$prob(); }
 
         @Override
         protected void setValueInternal(double[][] value) {}
@@ -123,7 +368,7 @@ public final class DiscreteChoiceRandCoeff extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$prob(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$prob(); }
 
         @Override
         public double[][][] constructArray(int iterations) {
@@ -133,15 +378,15 @@ public final class DiscreteChoiceRandCoeff extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample21(fixed, allocated);
-                system$c.set$fixedFlag$sample47(fixed, allocated);
+                state.set$fixedFlag$sample21(fixed, allocated);
+                state.set$fixedFlag$sample47(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample21 = system$c.get$fixedFlag$sample21();
-            boolean fixedFlag$sample47 = system$c.get$fixedFlag$sample47();
+            boolean fixedFlag$sample21 = state.get$fixedFlag$sample21();
+            boolean fixedFlag$sample47 = state.get$fixedFlag$sample47();
             if(fixedFlag$sample21 && fixedFlag$sample47)
                 return Immutability.FIXED;
             else if(fixedFlag$sample21 || fixedFlag$sample47)
@@ -156,27 +401,27 @@ public final class DiscreteChoiceRandCoeff extends Model {
 
     private final ComputedDoubleInternal $sigma = new ComputedDoubleInternal(this, "sigma", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$sigma(); }
+        public double getValue() { return state.get$sigma(); }
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$sigma(value, allocated);
+            state.set$sigma(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$sigma(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$sigma(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample34(fixed, allocated);
+                state.set$fixedFlag$sample34(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample34())
+            if(state.get$fixedFlag$sample34())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -188,27 +433,27 @@ public final class DiscreteChoiceRandCoeff extends Model {
 
     private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$ut(); }
+        public double[] getValue() { return state.get$ut(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$ut(value, allocated);
+            state.set$ut(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$ut(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$ut(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample21(fixed, allocated);
+                state.set$fixedFlag$sample21(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample21())
+            if(state.get$fixedFlag$sample21())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -224,12 +469,12 @@ public final class DiscreteChoiceRandCoeff extends Model {
         @Override
         public int[][] getValue() {
             synchronized(model) {
-                return system$c.get$Prices();
+                return state.get$Prices();
             }
         }
 
         @Override
-        protected void setValueInternal(int[][] value) { system$c.set$Prices(value, allocated); }
+        protected void setValueInternal(int[][] value) { state.set$Prices(value, allocated); }
     };
 
 	/** Observed variable representing Prices of type int[][] from the Sandwood model. */
@@ -239,12 +484,12 @@ public final class DiscreteChoiceRandCoeff extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$noObs();
+                return state.get$noObs();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noObs(value, allocated); }
+        protected void setValueInternal(int value) { state.set$noObs(value, allocated); }
     };
 
 	/** Observed variable representing noObs of type int from the Sandwood model. */
@@ -254,12 +499,12 @@ public final class DiscreteChoiceRandCoeff extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$noProducts();
+                return state.get$noProducts();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noProducts(value, allocated); }
+        protected void setValueInternal(int value) { state.set$noProducts(value, allocated); }
     };
 
 	/** Observed variable representing noProducts of type int from the Sandwood model. */
@@ -271,12 +516,12 @@ public final class DiscreteChoiceRandCoeff extends Model {
         @Override
         public int[] getValue() {
             synchronized(model) {
-                return system$c.get$ObsChoices();
+                return state.get$ObsChoices();
             }
         }
 
         @Override
-        protected void setValueInternal(int[] value) { system$c.set$ObsChoices(value, allocated); }
+        protected void setValueInternal(int[] value) { state.set$ObsChoices(value, allocated); }
     };
 
 	/**
@@ -292,6 +537,7 @@ public final class DiscreteChoiceRandCoeff extends Model {
 	/** A constructor for a model where no variable values are set. */
     public DiscreteChoiceRandCoeff() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("b", $b);
         $computedVariables.put("beta", $beta);
@@ -307,7 +553,9 @@ public final class DiscreteChoiceRandCoeff extends Model {
 
         //Observed scalar fields
         $regularObservedValues.put("ObsChoices", $ObsChoices);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        DiscreteChoiceRandCoeff$SingleThreadCPU core = new DiscreteChoiceRandCoeff$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -342,51 +590,15 @@ public final class DiscreteChoiceRandCoeff extends Model {
     }
     
     @Override
-    protected DiscreteChoiceRandCoeff$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        DiscreteChoiceRandCoeff$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new DiscreteChoiceRandCoeff$SingleThreadCPU(target);
-                break;
+                return new DiscreteChoiceRandCoeff$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new DiscreteChoiceRandCoeff$MultiThreadCPU(target);
-                break;
+                return new DiscreteChoiceRandCoeff$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(DiscreteChoiceRandCoeff$CoreInterface oldCore, DiscreteChoiceRandCoeff$CoreInterface newCore) {
-        //Model inputs
-        if(Prices.isSet())
-            newCore.set$Prices(oldCore.get$Prices(), false);
-        if(noObs.isSet())
-            newCore.set$noObs(oldCore.get$noObs(), false);
-        if(noProducts.isSet())
-            newCore.set$noProducts(oldCore.get$noProducts(), false);
-
-        //Observed scalars
-        if(ObsChoices.isSet())
-            newCore.set$ObsChoices(oldCore.get$ObsChoices(), false);
-
-        //ComputedVariables
-        if($b.isSet())
-            newCore.set$b(oldCore.get$b(), false);
-        if($beta.isSet())
-            newCore.set$beta(oldCore.get$beta(), false);
-        if($sigma.isSet())
-            newCore.set$sigma(oldCore.get$sigma(), false);
-        if($ut.isSet())
-            newCore.set$ut(oldCore.get$ut(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21(), false);
-        newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28(), false);
-        newCore.set$fixedFlag$sample34(oldCore.get$fixedFlag$sample34(), false);
-        newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47(), false);
     }
 
 	/**

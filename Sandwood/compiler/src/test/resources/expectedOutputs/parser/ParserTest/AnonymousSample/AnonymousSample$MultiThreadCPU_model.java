@@ -1,295 +1,42 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.AnonymousSample$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.AnonymousSample.State;
 import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU implements AnonymousSample$CoreInterface {
+final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double[] amounts1;
-	double[] amounts2;
-	boolean constrainedFlag$sample15 = true;
-	boolean constrainedFlag$sample21 = true;
-	boolean constrainedFlag$sample9 = true;
-	boolean fixedFlag$sample15 = false;
-	boolean fixedFlag$sample21 = false;
-	boolean fixedFlag$sample9 = false;
-	boolean fixedProbFlag$sample15 = false;
-	boolean fixedProbFlag$sample21 = false;
-	boolean fixedProbFlag$sample35 = false;
-	boolean fixedProbFlag$sample39 = false;
-	boolean fixedProbFlag$sample9 = false;
-	int length$obsAmounts1;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$amounts1;
-	double logProbability$amounts2;
-	double logProbability$mean1;
-	double logProbability$mean2;
-	double logProbability$priorSigma2;
-	double[] logProbability$sample35;
-	double[] logProbability$sample39;
-	double logProbability$var39;
-	double mean1;
-	double mean2;
-	int n;
-	double[] obsAmounts1;
-	double[] obsAmounts2;
-	double priorSigma2;
-	boolean system$gibbsForward = true;
-	double[] var39;
-
-	public AnonymousSample$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	// Getter for amounts1.
-	@Override
-	public final double[] get$amounts1() {
-		return amounts1;
-	}
 
-	// Getter for amounts2.
-	@Override
-	public final double[] get$amounts2() {
-		return amounts2;
-	}
-
-	// Getter for fixedFlag$sample15.
-	@Override
-	public final boolean get$fixedFlag$sample15() {
-		return fixedFlag$sample15;
-	}
-
-	// Setter for fixedFlag$sample15.
-	@Override
-	public final void set$fixedFlag$sample15(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample15 including if probabilities
-		// need to be updated.
-		fixedFlag$sample15 = cv$value;
-		constrainedFlag$sample15 = (fixedFlag$sample15 || constrainedFlag$sample15);
-		
-		// Should the probability of sample 15 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample15 = (fixedFlag$sample15 && fixedProbFlag$sample15);
-		
-		// Should the probability of sample 35 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample35 = (fixedFlag$sample15 && fixedProbFlag$sample35);
-	}
-
-	// Getter for fixedFlag$sample21.
-	@Override
-	public final boolean get$fixedFlag$sample21() {
-		return fixedFlag$sample21;
-	}
-
-	// Setter for fixedFlag$sample21.
-	@Override
-	public final void set$fixedFlag$sample21(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample21 including if probabilities
-		// need to be updated.
-		fixedFlag$sample21 = cv$value;
-		constrainedFlag$sample21 = (fixedFlag$sample21 || constrainedFlag$sample21);
-		
-		// Should the probability of sample 21 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample21 = (fixedFlag$sample21 && fixedProbFlag$sample21);
-		
-		// Should the probability of sample 39 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample39 = (fixedFlag$sample21 && fixedProbFlag$sample39);
-	}
-
-	// Getter for fixedFlag$sample9.
-	@Override
-	public final boolean get$fixedFlag$sample9() {
-		return fixedFlag$sample9;
-	}
-
-	// Setter for fixedFlag$sample9.
-	@Override
-	public final void set$fixedFlag$sample9(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample9 including if probabilities
-		// need to be updated.
-		fixedFlag$sample9 = cv$value;
-		constrainedFlag$sample9 = (fixedFlag$sample9 || constrainedFlag$sample9);
-		
-		// Should the probability of sample 9 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample9 = (fixedFlag$sample9 && fixedProbFlag$sample9);
-		
-		// Should the probability of sample 35 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample35 = (fixedFlag$sample9 && fixedProbFlag$sample35);
-		
-		// Should the probability of sample 39 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample39 = (fixedFlag$sample9 && fixedProbFlag$sample39);
-	}
-
-	// Getter for length$obsAmounts1.
-	@Override
-	public final int get$length$obsAmounts1() {
-		return length$obsAmounts1;
-	}
-
-	// Setter for length$obsAmounts1.
-	@Override
-	public final void set$length$obsAmounts1(int cv$value, boolean allocated$) {
-		length$obsAmounts1 = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$amounts1.
-	@Override
-	public final double get$logProbability$amounts1() {
-		return logProbability$amounts1;
-	}
-
-	// Getter for logProbability$amounts2.
-	@Override
-	public final double get$logProbability$amounts2() {
-		return logProbability$amounts2;
-	}
-
-	// Getter for logProbability$mean1.
-	@Override
-	public final double get$logProbability$mean1() {
-		return logProbability$mean1;
-	}
-
-	// Getter for logProbability$mean2.
-	@Override
-	public final double get$logProbability$mean2() {
-		return logProbability$mean2;
-	}
-
-	// Getter for logProbability$priorSigma2.
-	@Override
-	public final double get$logProbability$priorSigma2() {
-		return logProbability$priorSigma2;
-	}
-
-	// Getter for mean1.
-	@Override
-	public final double get$mean1() {
-		return mean1;
-	}
-
-	// Setter for mean1.
-	@Override
-	public final void set$mean1(double cv$value, boolean allocated$) {
-		// Set flags for all the side effects of mean1 including if probabilities need to
-		// be updated.
-		mean1 = cv$value;
-		
-		// Unset the fixed probability flag for sample 15 as it depends on mean1.
-		fixedProbFlag$sample15 = false;
-		
-		// Unset the fixed probability flag for sample 35 as it depends on mean1.
-		fixedProbFlag$sample35 = false;
-	}
-
-	// Getter for mean2.
-	@Override
-	public final double get$mean2() {
-		return mean2;
-	}
-
-	// Setter for mean2.
-	@Override
-	public final void set$mean2(double cv$value, boolean allocated$) {
-		// Set flags for all the side effects of mean2 including if probabilities need to
-		// be updated.
-		mean2 = cv$value;
-		
-		// Unset the fixed probability flag for sample 21 as it depends on mean2.
-		fixedProbFlag$sample21 = false;
-		
-		// Unset the fixed probability flag for sample 39 as it depends on mean2.
-		fixedProbFlag$sample39 = false;
-	}
-
-	// Getter for n.
-	@Override
-	public final int get$n() {
-		return n;
-	}
-
-	// Getter for obsAmounts1.
-	@Override
-	public final double[] get$obsAmounts1() {
-		return obsAmounts1;
-	}
-
-	// Setter for obsAmounts1.
-	@Override
-	public final void set$obsAmounts1(double[] cv$value, boolean allocated$) {
-		obsAmounts1 = cv$value;
-	}
-
-	// Getter for obsAmounts2.
-	@Override
-	public final double[] get$obsAmounts2() {
-		return obsAmounts2;
-	}
-
-	// Setter for obsAmounts2.
-	@Override
-	public final void set$obsAmounts2(double[] cv$value, boolean allocated$) {
-		obsAmounts2 = cv$value;
-	}
-
-	// Getter for priorSigma2.
-	@Override
-	public final double get$priorSigma2() {
-		return priorSigma2;
-	}
-
-	// Setter for priorSigma2.
-	@Override
-	public final void set$priorSigma2(double cv$value, boolean allocated$) {
-		// Set flags for all the side effects of priorSigma2 including if probabilities need
-		// to be updated.
-		priorSigma2 = cv$value;
-		
-		// Unset the fixed probability flag for sample 9 as it depends on priorSigma2.
-		fixedProbFlag$sample9 = false;
-		
-		// Unset the fixed probability flag for sample 35 as it depends on priorSigma2.
-		fixedProbFlag$sample35 = false;
-		
-		// Unset the fixed probability flag for sample 39 as it depends on priorSigma2.
-		fixedProbFlag$sample39 = false;
+	public AnonymousSample$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample15
 	private final void drawValueSample15() {
-		mean1 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
+		state.mean1 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 2000.0);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample21
 	private final void drawValueSample21() {
-		mean2 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
+		state.mean2 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 2000.0);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample9
 	private final void drawValueSample9() {
-		priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(RNG$)) + 10000.0);
+		state.priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 10000.0);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -297,7 +44,7 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 	// to Gaussian conjugate prior.
 	private final void inferSample15() {
 		if(true) {
-			constrainedFlag$sample15 = false;
+			state.constrainedFlag$sample15 = false;
 			
 			// State to record the weighting of each sample that is consumed. This is the:
 			// sum of the sample denominator*(the sample value - the sample nominator).
@@ -316,12 +63,12 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 				{
 					{
 						{
-							for(int i = 0; i < n; i += 1) {
+							for(int i = 0; i < state.n; i += 1) {
 								// Flag recording if this sample task of the consuming random variable is constrained.
 								boolean cv$sampleConstrained = true;
 								if(cv$sampleConstrained) {
 									// Mark that the sample has observed constrained data.
-									constrainedFlag$sample15 = true;
+									state.constrainedFlag$sample15 = true;
 									{
 										{
 											{
@@ -339,12 +86,12 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
 														
 														// Add the weighting of the sample to the sum.
-														cv$sum = (cv$sum + (cv$denominator * (amounts1[i] - cv$numerator)));
+														cv$sum = (cv$sum + (cv$denominator * (state.amounts1[i] - cv$numerator)));
 														
 														// If we have not got the value of sigma yet record it and set a flag so it is not
 														// recorded again.
 														if(cv$sigmaNotFound) {
-															cv$sigmaValue = priorSigma2;
+															cv$sigmaValue = state.priorSigma2;
 															cv$sigmaNotFound = false;
 														}
 													}
@@ -358,9 +105,9 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 					}
 				}
 			}
-			if(constrainedFlag$sample15)
+			if(state.constrainedFlag$sample15)
 				// Write out the new value of the sample.
-				mean1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+				state.mean1 = Conjugates.sampleConjugateGaussianGaussian(state.RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 		}
 	}
 
@@ -369,7 +116,7 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 	// to Gaussian conjugate prior.
 	private final void inferSample21() {
 		if(true) {
-			constrainedFlag$sample21 = false;
+			state.constrainedFlag$sample21 = false;
 			
 			// State to record the weighting of each sample that is consumed. This is the:
 			// sum of the sample denominator*(the sample value - the sample nominator).
@@ -388,12 +135,12 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 				{
 					{
 						{
-							for(int i = 0; i < n; i += 1) {
+							for(int i = 0; i < state.n; i += 1) {
 								// Flag recording if this sample task of the consuming random variable is constrained.
 								boolean cv$sampleConstrained = true;
 								if(cv$sampleConstrained) {
 									// Mark that the sample has observed constrained data.
-									constrainedFlag$sample21 = true;
+									state.constrainedFlag$sample21 = true;
 									{
 										{
 											{
@@ -411,12 +158,12 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
 														
 														// Add the weighting of the sample to the sum.
-														cv$sum = (cv$sum + (cv$denominator * (var39[((i - 0) / 1)] - cv$numerator)));
+														cv$sum = (cv$sum + (cv$denominator * (state.var39[((i - 0) / 1)] - cv$numerator)));
 														
 														// If we have not got the value of sigma yet record it and set a flag so it is not
 														// recorded again.
 														if(cv$sigmaNotFound) {
-															cv$sigmaValue = priorSigma2;
+															cv$sigmaValue = state.priorSigma2;
 															cv$sigmaNotFound = false;
 														}
 													}
@@ -430,9 +177,9 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 					}
 				}
 			}
-			if(constrainedFlag$sample21)
+			if(state.constrainedFlag$sample21)
 				// Write out the new value of the sample.
-				mean2 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+				state.mean2 = Conjugates.sampleConjugateGaussianGaussian(state.RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 		}
 	}
 
@@ -440,7 +187,7 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 	// by sample task 9 drawn from Gaussian 8. Inference was performed using Metropolis-Hastings.
 	private final void inferSample9() {
 		if(true) {
-			constrainedFlag$sample9 = false;
+			state.constrainedFlag$sample9 = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -450,7 +197,7 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 			}
 			
 			// The original value of the sample
-			double cv$originalValue = priorSigma2;
+			double cv$originalValue = state.priorSigma2;
 			
 			// The probability of the random variable generating the originally sampled value
 			double cv$originalProbability = 0.0;
@@ -463,12 +210,12 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 				cv$var = (0.1 * 0.1);
 			
 			// The proposed new value for the sample
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			
 			// The probability of the random variable generating the new sample value.
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample9 || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample9 || (cv$valuePos == 0))) {
 					// Initialize the summed probabilities to 0.
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					
@@ -490,7 +237,7 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 						// Update Sample and intermediate values
 						// 
 						// Write out the new value of the sample.
-						priorSigma2 = cv$proposedValue;
+						state.priorSigma2 = cv$proposedValue;
 					}
 					{
 						// Record the reached probability density.
@@ -504,7 +251,7 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 						{
 							{
 								{
-									for(int i = 0; i < n; i += 1) {
+									for(int i = 0; i < state.n; i += 1) {
 										double traceTempVariable$priorSigma2$1_2 = cv$currentValue;
 										
 										// Processing sample task 35 of consumer random variable null.
@@ -514,7 +261,7 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 												boolean cv$sampleConstrained = true;
 												if(cv$sampleConstrained) {
 													// Mark that the sample has observed constrained data.
-													constrainedFlag$sample9 = true;
+													state.constrainedFlag$sample9 = true;
 													
 													// Set an accumulator to sum the probabilities for each possible configuration of
 													// inputs.
@@ -529,14 +276,14 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 																{
 																	{
 																		// Record the probability of sample task 35 generating output with current configuration.
-																		if(((Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		if(((Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((state.amounts1[i] - state.mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((state.amounts1[i] - state.mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																		else {
 																			// If the second value is -infinity.
 																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY));
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((state.amounts1[i] - state.mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY));
 																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY)));
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((state.amounts1[i] - state.mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$1_2)?(DistributionSampling.logProbabilityGaussian(((state.amounts1[i] - state.mean1) / Math.sqrt(traceTempVariable$priorSigma2$1_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$1_2))):Double.NEGATIVE_INFINITY)));
 																		}
 																		
 																		// Recorded the probability of reaching sample task 35 with the current configuration.
@@ -574,7 +321,7 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 						{
 							{
 								{
-									for(int i = 0; i < n; i += 1) {
+									for(int i = 0; i < state.n; i += 1) {
 										double traceTempVariable$priorSigma2$4_2 = cv$currentValue;
 										
 										// Processing sample task 39 of consumer random variable null.
@@ -584,7 +331,7 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 												boolean cv$sampleConstrained = true;
 												if(cv$sampleConstrained) {
 													// Mark that the sample has observed constrained data.
-													constrainedFlag$sample9 = true;
+													state.constrainedFlag$sample9 = true;
 													
 													// Set an accumulator to sum the probabilities for each possible configuration of
 													// inputs.
@@ -599,14 +346,14 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 																{
 																	{
 																		// Record the probability of sample task 39 generating output with current configuration.
-																		if(((Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((var39[((i - 0) / 1)] - mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((var39[((i - 0) / 1)] - mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		if(((Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((state.var39[((i - 0) / 1)] - state.mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((state.var39[((i - 0) / 1)] - state.mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																		else {
 																			// If the second value is -infinity.
 																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((var39[((i - 0) / 1)] - mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY));
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((state.var39[((i - 0) / 1)] - state.mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY));
 																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((var39[((i - 0) / 1)] - mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((var39[((i - 0) / 1)] - mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY)));
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((state.var39[((i - 0) / 1)] - state.mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((0.0 < traceTempVariable$priorSigma2$4_2)?(DistributionSampling.logProbabilityGaussian(((state.var39[((i - 0) / 1)] - state.mean2) / Math.sqrt(traceTempVariable$priorSigma2$4_2))) - (0.5 * Math.log(traceTempVariable$priorSigma2$4_2))):Double.NEGATIVE_INFINITY)));
 																		}
 																		
 																		// Recorded the probability of reaching sample task 39 with the current configuration.
@@ -668,13 +415,13 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 					// to be less than or equal as otherwise if the proposed value is not possible and
 					// the random value is 0 an impossible value will be accepted.
 					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio)))
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$))))) || Double.isNaN(cv$ratio)))
 							// If it is not revert the changes.
 							// 
 							// Set the sample value
 							// 
 							// Write out the new value of the sample.
-							priorSigma2 = cv$originalValue;
+							state.priorSigma2 = cv$originalValue;
 					}
 				}
 			}
@@ -686,7 +433,7 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 	private final void logProbabilityValue$sample15() {
 		// Determine if we need to calculate the values for sample task 15 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample15) {
+		if(!state.fixedProbFlag$sample15) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -702,7 +449,7 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 			{
 				{
 					// The sample value to calculate the probability of generating
-					double cv$sampleValue = mean1;
+					double cv$sampleValue = state.mean1;
 					{
 						{
 							double var12 = 2000.0;
@@ -744,19 +491,19 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$mean1 = cv$sampleProbability;
+			state.logProbability$mean1 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample15)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample15)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample15 = fixedFlag$sample15;
+			state.fixedProbFlag$sample15 = state.fixedFlag$sample15;
 		} else {
 			// Using cached values.
 			// 
@@ -764,17 +511,17 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$mean1;
+			double cv$sampleValue = state.logProbability$mean1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample15)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample15)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -783,7 +530,7 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 	private final void logProbabilityValue$sample21() {
 		// Determine if we need to calculate the values for sample task 21 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample21) {
+		if(!state.fixedProbFlag$sample21) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -799,7 +546,7 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 			{
 				{
 					// The sample value to calculate the probability of generating
-					double cv$sampleValue = mean2;
+					double cv$sampleValue = state.mean2;
 					{
 						{
 							double var18 = 2000.0;
@@ -841,19 +588,19 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$mean2 = cv$sampleProbability;
+			state.logProbability$mean2 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample21)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample21)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample21 = fixedFlag$sample21;
+			state.fixedProbFlag$sample21 = state.fixedFlag$sample21;
 		} else {
 			// Using cached values.
 			// 
@@ -861,17 +608,17 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$mean2;
+			double cv$sampleValue = state.logProbability$mean2;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample21)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample21)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -880,14 +627,14 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 	private final void logProbabilityValue$sample35() {
 		// Determine if we need to calculate the values for sample task 35 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample35) {
+		if(!state.fixedProbFlag$sample35) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < n; i += 1) {
+			for(int i = 0; i < state.n; i += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
 				
@@ -899,11 +646,11 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 				{
 					{
 						// The sample value to calculate the probability of generating
-						double cv$sampleValue = amounts1[i];
+						double cv$sampleValue = state.amounts1[i];
 						{
 							{
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < priorSigma2)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - mean1) / Math.sqrt(priorSigma2))) - (0.5 * Math.log(priorSigma2))):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < state.priorSigma2)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - state.mean1) / Math.sqrt(state.priorSigma2))) - (0.5 * Math.log(state.priorSigma2))):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -941,19 +688,19 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				
 				// Store the sample task probability
-				logProbability$sample35[((i - 0) / 1)] = cv$sampleProbability;
+				state.logProbability$sample35[((i - 0) / 1)] = cv$sampleProbability;
 			}
 			
 			// Update the variable probability
-			logProbability$amounts1 = (logProbability$amounts1 + cv$accumulator);
+			state.logProbability$amounts1 = (state.logProbability$amounts1 + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample35 = (fixedFlag$sample9 && fixedFlag$sample15);
+			state.fixedProbFlag$sample35 = (state.fixedFlag$sample9 && state.fixedFlag$sample15);
 		} else {
 			// Using cached values.
 			// 
@@ -963,9 +710,9 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < n; i += 1) {
+			for(int i = 0; i < state.n; i += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample35[((i - 0) / 1)];
+				double cv$sampleValue = state.logProbability$sample35[((i - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Record that the sample was reached.
@@ -974,11 +721,11 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 			}
 			
 			// Update the variable probability
-			logProbability$amounts1 = (logProbability$amounts1 + cv$accumulator);
+			state.logProbability$amounts1 = (state.logProbability$amounts1 + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -987,14 +734,14 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 	private final void logProbabilityValue$sample39() {
 		// Determine if we need to calculate the values for sample task 39 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample39) {
+		if(!state.fixedProbFlag$sample39) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < n; i += 1) {
+			for(int i = 0; i < state.n; i += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
 				
@@ -1006,11 +753,11 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 				{
 					{
 						// The sample value to calculate the probability of generating
-						double cv$sampleValue = var39[((i - 0) / 1)];
+						double cv$sampleValue = state.var39[((i - 0) / 1)];
 						{
 							{
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < priorSigma2)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - mean2) / Math.sqrt(priorSigma2))) - (0.5 * Math.log(priorSigma2))):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < state.priorSigma2)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - state.mean2) / Math.sqrt(state.priorSigma2))) - (0.5 * Math.log(state.priorSigma2))):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1048,14 +795,14 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				
 				// Store the sample task probability
-				logProbability$sample39[((i - 0) / 1)] = cv$sampleProbability;
+				state.logProbability$sample39[((i - 0) / 1)] = cv$sampleProbability;
 			}
 			
 			// Guard to ensure that amounts2 is only updated once for this probability.
 			boolean cv$guard$amounts2 = false;
 			
 			// Update the variable probability
-			logProbability$var39 = (logProbability$var39 + cv$accumulator);
+			state.logProbability$var39 = (state.logProbability$var39 + cv$accumulator);
 			
 			// Add probability to constructed variables from the combined probability
 			{
@@ -1066,18 +813,18 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 						cv$guard$amounts2 = true;
 						
 						// Update the variable probability
-						logProbability$amounts2 = (logProbability$amounts2 + cv$accumulator);
+						state.logProbability$amounts2 = (state.logProbability$amounts2 + cv$accumulator);
 					}
 				}
 			}
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample39 = (fixedFlag$sample9 && fixedFlag$sample21);
+			state.fixedProbFlag$sample39 = (state.fixedFlag$sample9 && state.fixedFlag$sample21);
 		} else {
 			// Using cached values.
 			// 
@@ -1087,9 +834,9 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < n; i += 1) {
+			for(int i = 0; i < state.n; i += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample39[((i - 0) / 1)];
+				double cv$sampleValue = state.logProbability$sample39[((i - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Record that the sample was reached.
@@ -1101,7 +848,7 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 			boolean cv$guard$amounts2 = false;
 			
 			// Update the variable probability
-			logProbability$var39 = (logProbability$var39 + cv$accumulator);
+			state.logProbability$var39 = (state.logProbability$var39 + cv$accumulator);
 			
 			// Add probability to constructed variables from the combined probability
 			{
@@ -1112,14 +859,14 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 						cv$guard$amounts2 = true;
 						
 						// Update the variable probability
-						logProbability$amounts2 = (logProbability$amounts2 + cv$accumulator);
+						state.logProbability$amounts2 = (state.logProbability$amounts2 + cv$accumulator);
 					}
 				}
 			}
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -1127,7 +874,7 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 	private final void logProbabilityValue$sample9() {
 		// Determine if we need to calculate the values for sample task 9 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample9) {
+		if(!state.fixedProbFlag$sample9) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -1143,7 +890,7 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 			{
 				{
 					// The sample value to calculate the probability of generating
-					double cv$sampleValue = priorSigma2;
+					double cv$sampleValue = state.priorSigma2;
 					{
 						{
 							double var6 = 10000.0;
@@ -1185,19 +932,19 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$priorSigma2 = cv$sampleProbability;
+			state.logProbability$priorSigma2 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample9)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample9)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample9 = fixedFlag$sample9;
+			state.fixedProbFlag$sample9 = state.fixedFlag$sample9;
 		} else {
 			// Using cached values.
 			// 
@@ -1205,75 +952,40 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$priorSigma2;
+			double cv$sampleValue = state.logProbability$priorSigma2;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample9)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample9)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// Constructor for amounts1
-		{
-			amounts1 = new double[length$obsAmounts1];
-		}
-		
-		// Constructor for amounts2
-		{
-			amounts2 = new double[length$obsAmounts1];
-		}
-		
-		// Constructor for var39
-		{
-			var39 = new double[((((length$obsAmounts1 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample35
-		{
-			logProbability$sample35 = new double[((((length$obsAmounts1 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample39
-		{
-			logProbability$sample39 = new double[((((length$obsAmounts1 - 1) - 0) / 1) + 1)];
-		}
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample9)
-			priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(RNG$)) + 10000.0);
-		if(!fixedFlag$sample15)
-			mean1 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
-		if(!fixedFlag$sample21)
-			mean2 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
+		if(!state.fixedFlag$sample9)
+			state.priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 10000.0);
+		if(!state.fixedFlag$sample15)
+			state.mean1 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 2000.0);
+		if(!state.fixedFlag$sample21)
+			state.mean2 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 2000.0);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, n, 1,
+		parallelFor(state.RNG$, 0, state.n, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i = forStart$i; i < forEnd$i; i += 1) {
-						amounts1[i] = ((Math.sqrt(priorSigma2) * DistributionSampling.sampleGaussian(RNG$1)) + mean1);
-						var39[((i - 0) / 1)] = ((Math.sqrt(priorSigma2) * DistributionSampling.sampleGaussian(RNG$1)) + mean2);
-						amounts2[i] = (amounts1[i] + var39[((i - 0) / 1)]);
+						state.amounts1[i] = ((Math.sqrt(state.priorSigma2) * DistributionSampling.sampleGaussian(RNG$1)) + state.mean1);
+						state.var39[((i - 0) / 1)] = ((Math.sqrt(state.priorSigma2) * DistributionSampling.sampleGaussian(RNG$1)) + state.mean2);
+						state.amounts2[i] = (state.amounts1[i] + state.var39[((i - 0) / 1)]);
 					}
 			}
 		);
@@ -1284,35 +996,35 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample9)
-			priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(RNG$)) + 10000.0);
-		if(!fixedFlag$sample15)
-			mean1 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
-		if(!fixedFlag$sample21)
-			mean2 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
+		if(!state.fixedFlag$sample9)
+			state.priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 10000.0);
+		if(!state.fixedFlag$sample15)
+			state.mean1 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 2000.0);
+		if(!state.fixedFlag$sample21)
+			state.mean2 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 2000.0);
 	}
 
 	// Method to execute the model code conventionally with priming of fixed intermediate
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample9)
-			priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(RNG$)) + 10000.0);
-		if(!fixedFlag$sample15)
-			mean1 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
-		if(!fixedFlag$sample21)
-			mean2 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
+		if(!state.fixedFlag$sample9)
+			state.priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 10000.0);
+		if(!state.fixedFlag$sample15)
+			state.mean1 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 2000.0);
+		if(!state.fixedFlag$sample21)
+			state.mean2 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 2000.0);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, n, 1,
+		parallelFor(state.RNG$, 0, state.n, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i = forStart$i; i < forEnd$i; i += 1) {
-						amounts1[i] = ((Math.sqrt(priorSigma2) * DistributionSampling.sampleGaussian(RNG$1)) + mean1);
-						var39[((i - 0) / 1)] = ((Math.sqrt(priorSigma2) * DistributionSampling.sampleGaussian(RNG$1)) + mean2);
-						amounts2[i] = (amounts1[i] + var39[((i - 0) / 1)]);
+						state.amounts1[i] = ((Math.sqrt(state.priorSigma2) * DistributionSampling.sampleGaussian(RNG$1)) + state.mean1);
+						state.var39[((i - 0) / 1)] = ((Math.sqrt(state.priorSigma2) * DistributionSampling.sampleGaussian(RNG$1)) + state.mean2);
+						state.amounts2[i] = (state.amounts1[i] + state.var39[((i - 0) / 1)]);
 					}
 			}
 		);
@@ -1322,12 +1034,12 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample9)
-			priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(RNG$)) + 10000.0);
-		if(!fixedFlag$sample15)
-			mean1 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
-		if(!fixedFlag$sample21)
-			mean2 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
+		if(!state.fixedFlag$sample9)
+			state.priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 10000.0);
+		if(!state.fixedFlag$sample15)
+			state.mean1 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 2000.0);
+		if(!state.fixedFlag$sample21)
+			state.mean2 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 2000.0);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -1335,43 +1047,43 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample9)
-			priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(RNG$)) + 10000.0);
-		if(!fixedFlag$sample15)
-			mean1 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
-		if(!fixedFlag$sample21)
-			mean2 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(RNG$)) + 2000.0);
+		if(!state.fixedFlag$sample9)
+			state.priorSigma2 = ((Math.sqrt(900.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 10000.0);
+		if(!state.fixedFlag$sample15)
+			state.mean1 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 2000.0);
+		if(!state.fixedFlag$sample21)
+			state.mean2 = ((Math.sqrt(10000.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 2000.0);
 	}
 
 	// Method to execute one round of Gibbs sampling.
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample9)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample9)
 				inferSample9();
-			if(!fixedFlag$sample15)
+			if(!state.fixedFlag$sample15)
 				inferSample15();
-			if(!fixedFlag$sample21)
+			if(!state.fixedFlag$sample21)
 				inferSample21();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample21)
+			if(!state.fixedFlag$sample21)
 				inferSample21();
-			if(!fixedFlag$sample15)
+			if(!state.fixedFlag$sample15)
 				inferSample15();
-			if(!fixedFlag$sample9)
+			if(!state.fixedFlag$sample9)
 				inferSample9();
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample9)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample9)
 			drawValueSample9();
-		if(!constrainedFlag$sample15)
+		if(!state.constrainedFlag$sample15)
 			drawValueSample15();
-		if(!constrainedFlag$sample21)
+		if(!state.constrainedFlag$sample21)
 			drawValueSample21();
 	}
 
@@ -1383,24 +1095,24 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample9)
-			logProbability$priorSigma2 = Double.NaN;
-		if(!fixedProbFlag$sample15)
-			logProbability$mean1 = Double.NaN;
-		if(!fixedProbFlag$sample21)
-			logProbability$mean2 = Double.NaN;
-		logProbability$amounts1 = 0.0;
-		if(!fixedProbFlag$sample35) {
-			for(int i = 0; i < n; i += 1)
-				logProbability$sample35[((i - 0) / 1)] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample9)
+			state.logProbability$priorSigma2 = Double.NaN;
+		if(!state.fixedProbFlag$sample15)
+			state.logProbability$mean1 = Double.NaN;
+		if(!state.fixedProbFlag$sample21)
+			state.logProbability$mean2 = Double.NaN;
+		state.logProbability$amounts1 = 0.0;
+		if(!state.fixedProbFlag$sample35) {
+			for(int i = 0; i < state.n; i += 1)
+				state.logProbability$sample35[((i - 0) / 1)] = Double.NaN;
 		}
-		logProbability$var39 = 0.0;
-		logProbability$amounts2 = 0.0;
-		if(!fixedProbFlag$sample39) {
-			for(int i = 0; i < n; i += 1)
-				logProbability$sample39[((i - 0) / 1)] = Double.NaN;
+		state.logProbability$var39 = 0.0;
+		state.logProbability$amounts2 = 0.0;
+		if(!state.fixedProbFlag$sample39) {
+			for(int i = 0; i < state.n; i += 1)
+				state.logProbability$sample39[((i - 0) / 1)] = Double.NaN;
 		}
 	}
 
@@ -1408,7 +1120,7 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 	// etc.
 	@Override
 	public final void initializeModel() {
-		n = length$obsAmounts1;
+		state.n = state.length$obsAmounts1;
 	}
 
 	// Construct the evidence probabilities.
@@ -1418,11 +1130,11 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample9)
+		if(state.fixedFlag$sample9)
 			logProbabilityValue$sample9();
-		if(fixedFlag$sample15)
+		if(state.fixedFlag$sample15)
 			logProbabilityValue$sample15();
-		if(fixedFlag$sample21)
+		if(state.fixedFlag$sample21)
 			logProbabilityValue$sample21();
 		logProbabilityValue$sample35();
 		logProbabilityValue$sample39();
@@ -1476,22 +1188,22 @@ final class AnonymousSample$MultiThreadCPU extends CoreModelMultiThreadCPU imple
 	public final void propagateObservedValues() {
 		{
 			// Deep copy between arrays
-			double[] cv$source1 = obsAmounts1;
-			double[] cv$target1 = amounts1;
+			double[] cv$source1 = state.obsAmounts1;
+			double[] cv$target1 = state.amounts1;
 			int cv$length1 = cv$target1.length;
 			for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 				cv$target1[cv$index1] = cv$source1[cv$index1];
 		}
 		{
 			// Deep copy between arrays
-			double[] cv$source1 = obsAmounts2;
-			double[] cv$target1 = amounts2;
+			double[] cv$source1 = state.obsAmounts2;
+			double[] cv$target1 = state.amounts2;
 			int cv$length1 = cv$target1.length;
 			for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 				cv$target1[cv$index1] = cv$source1[cv$index1];
 		}
-		for(int i = (n - ((((n - 1) - 0) % 1) + 1)); i >= ((0 - 1) + 1); i -= 1)
-			var39[((i - 0) / 1)] = (amounts2[i] - amounts1[i]);
+		for(int i = (state.n - ((((state.n - 1) - 0) % 1) + 1)); i >= ((0 - 1) + 1); i -= 1)
+			state.var39[((i - 0) / 1)] = (state.amounts2[i] - state.amounts1[i]);
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
